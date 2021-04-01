@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 
+import styles from './splashScreen.styles';
+
 function SplashScreen() {
   return (
-    <View>
+    <View style={styles.container}>
       <ActivityIndicator />
     </View>
   );

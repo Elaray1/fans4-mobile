@@ -4,31 +4,47 @@ import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   container: {
+    backgroundColor: colors.black,
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 44,
+    paddingHorizontal: 20,
   },
   logo: {
-    marginBottom: 8,
-  },
-  logoText: {
-    marginBottom: 60,
-    color: colors.fontLogo,
-    fontSize: 18,
-    fontWeight: '500',
+    width: 80,
+    height: 80,
+    marginTop: 169,
+    marginBottom: 107,
   },
   title: {
     ...fonts.style.title,
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 38,
   },
   link: {
-    color: colors.mainTheme,
+    color: colors.white,
+    textDecorationLine: 'underline',
+    fontWeight: fonts.weight.bold,
   },
-  signupContainer: {
+  signupTextContainer: {
+    marginTop: 15,
     flexDirection: 'row',
-    width: '100%',
     paddingLeft: 8,
+    alignSelf: 'center',
+    flexGrow: 0,
+  },
+  inputsSeparator: {
+    height: 28,
+  },
+  text: {
+    color: colors.white,
+    fontSize: fonts.size.subtitle,
+    fontWeight: fonts.weight.bold,
+  },
+  mainButtonContainer: {
+    position: 'absolute',
+    bottom: 34,
+    width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
 });

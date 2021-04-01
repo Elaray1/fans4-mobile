@@ -3,15 +3,21 @@
   "example": "Open up App.js to start working on your app!",
 
   "signInScreen": {
-    "title": "Sign in with existing account",
+    "title": "Sign in",
     "noAccount": "Do not have an account?",
-    "signUp": "Sign Up",
+    "signUp": "Sign Up"
   },
 
-  "signUpScreen": {
-    "title": "Create account now!",
+  "signUpAsFollowerScreen": {
+    "title": "Signup as a Follower",
     "haveAccount": "Already have an account?",
-    "signIn": "Sign In"
+    "signIn": "Sign in"
+  },
+
+  "roleSelectionScreen": {
+    "figtherRole": "I'm a Fighter",
+    "followerRole": "I'm a Follower",
+    "title": "Select your role"
   },
 
   "errorMessage": {

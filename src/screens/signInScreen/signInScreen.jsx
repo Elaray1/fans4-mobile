@@ -44,7 +44,7 @@ function SignInScreen({ navigation }) {
   const [form, onChange, onSubmit, setFocus] = useForm({}, onSignIn, validateForm);
 
   const onSignUp = useCallback(() => {
-    navigation.navigate('SignUp');
+    navigation.navigate('RoleSelection');
   }, [navigation]);
 
   return (
@@ -54,18 +54,20 @@ function SignInScreen({ navigation }) {
         style={styles.logo}
         resizeMode="contain"
       />
-      <Text style={styles.logoText}>React Native starter</Text>
+
       <Text style={styles.title}>{i18n.t('signInScreen.title')}</Text>
+
       <Input
         value={form.values.email}
         type="emailAddress"
-        placeholder="Email"
+        placeholder="E-mail"
         onChange={onChange('email')}
         error={form.errors.email && form.errors.email[0]}
         returnKeyType="next"
         blurOnSubmit={false}
         onSubmitEditing={setFocus(passwordInput)}
       />
+      <View style={styles.inputsSeparator} />
       <Input
         getRef={passwordInput}
         value={form.values.password}
@@ -74,21 +76,24 @@ function SignInScreen({ navigation }) {
         onChange={onChange('password')}
         error={form.errors.password && form.errors.password[0]}
       />
-      <MainButton
-        title="Sign In"
-        onPress={onSubmit}
-      />
-      <View style={styles.signupContainer}>
-        <Text style={styles.text}>
-          {i18n.t('signInScreen.noAccount')}
-          &nbsp;
-        </Text>
-        <Text
-          onPress={onSignUp}
-          style={styles.link}
-        >
-          {i18n.t('signInScreen.signUp')}
-        </Text>
+
+      <View style={styles.mainButtonContainer}>
+        <MainButton
+          title="Sign In"
+          onPress={onSubmit}
+        />
+        <View style={styles.signupTextContainer}>
+          <Text style={styles.text}>
+            {i18n.t('signInScreen.noAccount')}
+            &nbsp;
+          </Text>
+          <Text
+            onPress={onSignUp}
+            style={styles.link}
+          >
+            {i18n.t('signInScreen.signUp')}
+          </Text>
+        </View>
       </View>
     </View>
   );

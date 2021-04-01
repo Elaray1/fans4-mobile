@@ -9,7 +9,8 @@ import HomeScreen from 'screens/homeScreen';
 import ContactsScreen from 'screens/contactsScreen';
 import ProfileScreen from 'screens/profileScreen';
 import SignInScreen from 'screens/signInScreen';
-import SignUpScreen from 'screens/signUpScreen';
+import SignUpAsFollowerScreen from 'screens/signUpAsFollowerScreen';
+import RoleSelectionScreen from 'screens/roleSelectionScreen';
 
 import TabIcon from 'components/tabIcon';
 
@@ -62,6 +63,7 @@ const AppNavigation = () => {
   const getToken = useCallback(async () => {
     const token = await getItem('token');
     config.token = token;
+
     setIsLoading(false);
     if (token) {
       dispatch({ type: USER_AUTHENTICATED });
@@ -100,7 +102,8 @@ const AppNavigation = () => {
         : (
           <Stack.Navigator headerMode="none">
             <Stack.Screen name="SignIn" component={SignInScreen} />
-            <Stack.Screen name="SignUp" component={SignUpScreen} />
+            <Stack.Screen name="SignUpAsFollower" component={SignUpAsFollowerScreen} />
+            <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
           </Stack.Navigator>
         )
       }

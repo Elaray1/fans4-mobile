@@ -9,13 +9,18 @@ export default StyleSheet.create({
     width: '100%',
   },
   input: {
-    height: 46,
-    paddingHorizontal: 8,
-    borderWidth: 1,
+    padding: 14,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderBottomWidth: 1,
     borderColor: colors.border,
-    borderRadius: 4,
+    fontSize: fonts.size.regular,
+    color: colors.white,
   },
-  label: {},
+  placeholder: {
+    color: colors.gray,
+  },
   error: {
     ...fonts.style.error,
     position: 'absolute',

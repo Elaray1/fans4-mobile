@@ -6,16 +6,16 @@ import fonts from 'themes/fonts';
 export default StyleSheet.create({
   button: {
     width: '100%',
-    height: 46,
-    backgroundColor: colors.mainTheme,
-    marginBottom: 8,
-    borderRadius: 4,
+    height: 54,
+    backgroundColor: colors.white,
+    marginBottom: 16,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
-    color: colors.white,
-    fontWeight: fonts.weight.semiBold,
+    color: colors.font,
+    fontWeight: fonts.weight.bold,
     fontSize: fonts.size.subtitle,
   },
 });

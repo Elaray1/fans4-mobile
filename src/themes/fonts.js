@@ -6,8 +6,8 @@ const type = {
 
 const size = {
   header: 28,
-  title: 21,
-  subtitle: 16,
+  title: 20,
+  subtitle: 15,
   regular: 14,
   medium: 13,
   small: 12,
@@ -30,7 +30,7 @@ const style = {
   },
   title: {
     fontSize: size.title,
-    fontWeight: weight.semiBold,
+    fontWeight: weight.bold,
     color: colors.fontTitle,
   },
   subtitle: {
@@ -42,7 +42,7 @@ const style = {
     fontWeight: weight.regular,
   },
   error: {
-    fontSize: size.tiny,
+    fontSize: size.small,
     color: colors.error,
   },
 };

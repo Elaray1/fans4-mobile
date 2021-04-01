@@ -25,6 +25,7 @@ function Input({
       <TextInput
         ref={getRef}
         value={value}
+        placeholderTextColor={styles.placeholder.color}
         placeholder={placeholder}
         textContentType={type}
         blurOnSubmit={blurOnSubmit}

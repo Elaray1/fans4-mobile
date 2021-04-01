@@ -12,6 +12,7 @@ const rootReducer = (state, action) => {
     // eslint-disable-next-line no-param-reassign
     state = undefined;
   }
+
   return appReducer(state, action);
 };
 
