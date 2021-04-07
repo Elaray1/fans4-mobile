@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { SafeAreaView, View, StatusBar } from 'react-native';
 // import { useDispatch } from 'react-redux';
+import SplashScreen from 'react-native-splash-screen';
 
 import colors from 'themes/colors';
 
@@ -13,9 +14,9 @@ import Text from 'components/Text';
 // import { STORAGE_KEYS } from 'helpers/constants';
 // import { getItem, setItem } from 'helpers/storage';
 
-import styles from './AuthApp.styles';
+import styles from './AuthAppLoader.styles';
 
-function AuthApp() {
+function AuthAppLoader() {
   // const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,9 +32,13 @@ function AuthApp() {
       //   await setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
       //   dispatch(userActions.setUserAuthenticated());
       // }
+      SplashScreen.hide();
     }
 
     init();
+  }, []);
+
+  useEffect(() => {
   }, []);
 
   return (
@@ -46,4 +51,4 @@ function AuthApp() {
   );
 }
 
-export default AuthApp;
+export default AuthAppLoader;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,6 +11,9 @@ import PersonalInfo from 'screens/PersonalInfo';
 
 import colors from 'themes/colors';
 import commonStyles from 'themes/commonStyles';
+
+import firebasePushNotificationService from 'services/firebase.pushNotification.service';
+import localPushNotificationService from 'services/local.pushNotification.service';
 
 import TabBarIcon from 'components/TabBarIcon';
 
@@ -60,6 +63,52 @@ function Tabs() {
 }
 
 function AppScreens() {
+  useEffect(() => {
+    const onRegister = async (pushNotificationToken) => {
+      // eslint-disable-next-line no-console
+      console.log('[App] onRegister: ', pushNotificationToken);
+      // await userActions.setPushToken(pushNotificationToken);
+    };
+
+    const onNotification = (message) => {
+      // eslint-disable-next-line no-console
+      console.log('[App] onNotification: ', message);
+
+      const options = {
+        soundName: 'default',
+        playSound: true,
+      };
+
+      if (message.notification) {
+        localPushNotificationService.showNotification(
+          Number(Math.random().toString().substr(2, 9)),
+          message.notification.title,
+          message.notification.body,
+          message.data,
+          options,
+        );
+      }
+    };
+
+    const onOpenNotification = async (message) => {
+      // eslint-disable-next-line no-console
+      console.log('[App] onOpenNotification: ', message);
+    };
+
+    (async () => {
+      await firebasePushNotificationService.registerAppWithFCM();
+      await firebasePushNotificationService.register(
+        onRegister, onNotification, onOpenNotification,
+      );
+      localPushNotificationService.configure(onOpenNotification);
+    })();
+
+    return () => {
+      firebasePushNotificationService.unregister();
+      localPushNotificationService.unregister();
+    };
+  }, []);
+
   return (
     <AppStack.Navigator
       headerMode="none"

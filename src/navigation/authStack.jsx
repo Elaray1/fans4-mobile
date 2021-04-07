@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import AuthApp from 'screens/AuthApp';
+import AuthAppLoader from 'screens/AuthAppLoader';
 import colors from 'themes/colors';
 
 
@@ -11,14 +11,14 @@ function AuthScreens() {
   return (
     <AuthStack.Navigator
       headerMode="none"
-      initialRouteName="AuthApp"
+      initialRouteName="AuthAppLoader"
       screenOptions={{
         cardStyle: {
           backgroundColor: colors.main,
         },
       }}
     >
-      <AuthStack.Screen name="AuthApp" component={AuthApp} />
+      <AuthStack.Screen name="AuthAppLoader" component={AuthAppLoader} />
     </AuthStack.Navigator>
   );
 }
