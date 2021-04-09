@@ -11,3 +11,6 @@ export const verifyEmailDev = _signupToken => apiClient
 
 export const signOut = () => apiClient
   .post('account/logout');
+
+export const getUsers = ({ roleType, status }) => apiClient
+  .get(`users?roleType=${roleType}&status=${status}`);
