@@ -12,7 +12,7 @@ import SearchInput from 'components/SeacrhInput';
 import * as userActions from 'resources/user/user.actions';
 
 // import { getMaskedDeviceId } from 'helpers/deviceInfo';
-import { USERS_TYPES } from 'helpers/constants';
+import { USERS_TYPES, USER_STATUSES } from 'helpers/constants';
 // import { getItem, setItem } from 'helpers/storage';
 
 import styles from './AuthAppLoader.styles';
@@ -36,7 +36,10 @@ function AuthAppLoader() {
       //   dispatch(userActions.setUserAuthenticated());
       // }
       try {
-        const fetchedFighters = await dispatch(userActions.getUsers({ role: USERS_TYPES.FIGHTER, status: 'verified' }));
+        const fetchedFighters = await dispatch(userActions.getUsers({
+          role: USERS_TYPES.FIGHTER,
+          status: USER_STATUSES.VERIFIED,
+        }));
         setFighters(fetchedFighters);
       } catch (err) {
         console.error(err);
