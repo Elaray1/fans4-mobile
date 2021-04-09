@@ -73,7 +73,7 @@ export const verifyEmailDev = _signupToken => async () => {
   await api.verifyEmailDev(_signupToken);
 };
 
-export const getUsers = ({ roleType, status }) => async () => {
-  const users = await api.getUsers({ roleType, status });
+export const getUsers = ({ role, status }) => async () => {
+  const users = await api.getUsers({ role, status });
   return users;
 };
