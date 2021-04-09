@@ -72,3 +72,8 @@ export const signOut = () => async (dispatch) => {
 export const verifyEmailDev = _signupToken => async () => {
   await api.verifyEmailDev(_signupToken);
 };
+
+export const getUsers = ({ roleType, status }) => async () => {
+  const users = await api.getUsers({ roleType, status });
+  return users;
+};

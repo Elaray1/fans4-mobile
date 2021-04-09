@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { SafeAreaView, View, StatusBar } from 'react-native';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 
 import colors from 'themes/colors';
 
 import Text from 'components/Text';
+import SearchInput from 'components/SeacrhInput';
 
 // import config from 'resources/config';
-// import * as userActions from 'resources/user/user.actions';
+import * as userActions from 'resources/user/user.actions';
 
 // import { getMaskedDeviceId } from 'helpers/deviceInfo';
 // import { STORAGE_KEYS } from 'helpers/constants';
@@ -17,7 +18,9 @@ import Text from 'components/Text';
 import styles from './AuthAppLoader.styles';
 
 function AuthAppLoader() {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const [inputValue, setInputValue] = useState('');
+  const [fighters, setFighters] = useState([]);
 
   useEffect(() => {
     async function init() {
@@ -32,20 +35,59 @@ function AuthAppLoader() {
       //   await setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
       //   dispatch(userActions.setUserAuthenticated());
       // }
+      try {
+        const fetchedFighters = await dispatch(userActions.getUsers({ roleType: 'fighter', status: 'verified' }));
+        setFighters(fetchedFighters);
+      } catch (err) {
+        console.error(err);
+      }
       SplashScreen.hide();
     }
 
     init();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
   }, []);
+
+  const content = useMemo(() => {
+    if (inputValue) {
+      const activeFighters = fighters.filter(
+        fighter => fighter.fullName
+          .toLowerCase()
+          .includes(inputValue.toLowerCase()),
+      );
+      if (!activeFighters?.length) {
+        return (
+          <Text style={styles.noTransactionsText}>
+            Your search did not match any fighters.
+          </Text>
+        );
+      }
+      return (
+        <>
+          {activeFighters.map(item => (
+            <React.Fragment key={item._id}>
+              <Text>{item.fullName}</Text>
+            </React.Fragment>
+          ))}
+        </>
+      );
+    }
+    return (<Text>Enter your search</Text>);
+  }, [fighters, inputValue]);
 
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.main} />
       <View style={styles.content}>
         <Text>Auth App</Text>
+        <SearchInput
+          value={inputValue}
+          onChangeText={setInputValue}
+          placeholder="Search by fighter's name"
+        />
+        {content}
       </View>
     </SafeAreaView>
   );
