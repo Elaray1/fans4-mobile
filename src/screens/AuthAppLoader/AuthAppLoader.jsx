@@ -12,7 +12,7 @@ import SearchInput from 'components/SeacrhInput';
 import * as userActions from 'resources/user/user.actions';
 
 // import { getMaskedDeviceId } from 'helpers/deviceInfo';
-// import { STORAGE_KEYS } from 'helpers/constants';
+import { USERS_TYPES } from 'helpers/constants';
 // import { getItem, setItem } from 'helpers/storage';
 
 import styles from './AuthAppLoader.styles';
@@ -36,7 +36,7 @@ function AuthAppLoader() {
       //   dispatch(userActions.setUserAuthenticated());
       // }
       try {
-        const fetchedFighters = await dispatch(userActions.getUsers({ roleType: 'fighter', status: 'verified' }));
+        const fetchedFighters = await dispatch(userActions.getUsers({ role: USERS_TYPES.FIGHTER, status: 'verified' }));
         setFighters(fetchedFighters);
       } catch (err) {
         console.error(err);
@@ -67,9 +67,7 @@ function AuthAppLoader() {
       return (
         <>
           {activeFighters.map(item => (
-            <React.Fragment key={item._id}>
-              <Text>{item.fullName}</Text>
-            </React.Fragment>
+            <Text key={item._id}>{item.fullName}</Text>
           ))}
         </>
       );

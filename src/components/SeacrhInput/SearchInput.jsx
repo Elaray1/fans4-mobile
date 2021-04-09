@@ -40,30 +40,29 @@ function SearchInput({
   }, [onChangeText]);
 
   return (
-    <View>
-      <View
-        style={[
-          styles.inputContainer,
-          focused && styles.inputFocused,
-          disabled && styles.disabled,
-        ]}
-      >
-        <SearchIcon />
-        <TextInput
-          style={[styles.input, style]}
-          placeholder={placeholder}
-          placeholderTextColor={colors.disabledText}
-          onChangeText={onChangeText}
-          value={value}
-          focused={focused}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onKeyPress={onKeyPress}
-          editable={!disabled}
-          onSubmitEditing={Keyboard.dismiss}
-          blurOnSubmit={false}
-        />
-        {!!value
+    <View
+      style={[
+        styles.inputContainer,
+        focused && styles.inputFocused,
+        disabled && styles.disabled,
+      ]}
+    >
+      <SearchIcon />
+      <TextInput
+        style={[styles.input, style]}
+        placeholder={placeholder}
+        placeholderTextColor={colors.disabledText}
+        onChangeText={onChangeText}
+        value={value}
+        focused={focused}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onKeyPress={onKeyPress}
+        editable={!disabled}
+        onSubmitEditing={Keyboard.dismiss}
+        blurOnSubmit={false}
+      />
+      {!!value
         && (
           <TouchableOpacity
             activeOpacity={0.7}
@@ -72,7 +71,6 @@ function SearchInput({
             <CancelSearchIcon fill={colors.defaultBlack} />
           </TouchableOpacity>
         )}
-      </View>
     </View>
   );
 }
