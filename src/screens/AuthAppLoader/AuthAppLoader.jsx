@@ -11,6 +11,7 @@ import Text from 'components/Text';
 import SearchInput from 'components/SeacrhInput';
 import QRCode from 'components/QRCode';
 import Share from 'components/Share';
+import UploadPhotoButton from 'components/UploadPhotoButton';
 
 // import config from 'resources/config';
 import * as userActions from 'resources/user/user.actions';
@@ -100,6 +101,7 @@ function AuthAppLoader() {
         <Share message="Message to share" style={styles.button}>
           <Text>Share</Text>
         </Share>
+        <UploadPhotoButton />
       </View>
     </SafeAreaView>
   );
