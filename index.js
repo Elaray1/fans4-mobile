@@ -10,7 +10,6 @@ import { name as appName } from './app.json';
 
 messaging()
   .setBackgroundMessageHandler(async (remoteMessage) => {
-    // eslint-disable-next-line no-console
     console.log('Message handled in the background!', remoteMessage);
   });
 

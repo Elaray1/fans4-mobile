@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Platform } from 'react-native';
 import * as DeviceInfo from 'react-native-device-info';
 import messaging from '@react-native-firebase/messaging';

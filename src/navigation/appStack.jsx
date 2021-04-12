@@ -71,7 +71,6 @@ function AppScreens() {
     };
 
     const onNotification = (message) => {
-      // eslint-disable-next-line no-console
       console.log('[App] onNotification: ', message);
 
       const options = {
@@ -91,7 +90,6 @@ function AppScreens() {
     };
 
     const onOpenNotification = async (message) => {
-      // eslint-disable-next-line no-console
       console.log('[App] onOpenNotification: ', message);
     };
 

@@ -30,11 +30,11 @@ export const connect = async () => {
   });
 
   socket.on('connect', () => {
-    console.log('WS connected'); // eslint-disable-line no-console
+    console.log('WS connected');
   });
 
   socket.on('disconnect', () => {
-    console.log('WS disconnected'); // eslint-disable-line no-console
+    console.log('WS disconnected');
   });
 };
 
