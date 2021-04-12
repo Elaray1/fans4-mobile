@@ -14,3 +14,6 @@ export const signOut = () => apiClient
 
 export const getUsers = ({ role, status }) => apiClient
   .get(`users?role=${role}&status=${status}`);
+
+export const setPushToken = ({ token, deviceId }) => apiClient
+  .put('users/push-token', { token, deviceId });

@@ -3,6 +3,8 @@ import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import * as userActions from 'resources/user/user.actions';
+
 import HomeIcon from 'assets/icons/tab-bar/home.svg';
 
 import AppLoader from 'screens/AppLoader/AppLoader';
@@ -65,9 +67,7 @@ function Tabs() {
 function AppScreens() {
   useEffect(() => {
     const onRegister = async (pushNotificationToken) => {
-      // eslint-disable-next-line no-console
-      console.log('[App] onRegister: ', pushNotificationToken);
-      // await userActions.setPushToken(pushNotificationToken);
+      await userActions.setPushToken(pushNotificationToken);
     };
 
     const onNotification = (message) => {
