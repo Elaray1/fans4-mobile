@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import config from 'resources/config';
 
+import { getMaskedDeviceId } from 'helpers/deviceInfo';
 import ApiError from 'helpers/api/api.error';
 import { setItem, removeItem } from 'helpers/storage';
 
@@ -76,4 +77,9 @@ export const verifyEmailDev = _signupToken => async () => {
 export const getUsers = ({ role, status }) => async () => {
   const users = await api.getUsers({ role, status });
   return users;
+};
+
+export const setPushToken = async (token) => {
+  const deviceId = getMaskedDeviceId();
+  await api.setPushToken({ token, deviceId });
 };
