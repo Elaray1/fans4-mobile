@@ -8,8 +8,16 @@ const getApiUrl = () => {
   return Platform.OS === 'android' ? Config.ANDROID_API_URL : Config.IOS_API_URL;
 };
 
+const getSocketUrl = () => {
+  if (Config.MODE !== 'DEV') {
+    return Config.WEB_SOCKET_URL;
+  }
+  return Platform.OS === 'android' ? Config.ANDROID_WEB_SOCKET_URL : Config.IOS_WEB_SOCKET_URL;
+};
+
 export default {
   apiUrl: getApiUrl(),
+  webSocketUrl: getSocketUrl(),
   mode: Config.MODE,
   applicationId: 'fans4',
 };
