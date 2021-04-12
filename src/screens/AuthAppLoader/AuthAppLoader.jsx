@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { SafeAreaView, View, StatusBar } from 'react-native';
+import {
+  SafeAreaView, View, StatusBar, TouchableOpacity,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 
@@ -7,6 +9,8 @@ import colors from 'themes/colors';
 
 import Text from 'components/Text';
 import SearchInput from 'components/SeacrhInput';
+import QRCode from 'components/QRCode';
+import Share from 'components/Share';
 
 // import config from 'resources/config';
 import * as userActions from 'resources/user/user.actions';
@@ -89,6 +93,15 @@ function AuthAppLoader() {
           placeholder="Search by fighter's name"
         />
         {content}
+        <QRCode
+          link="Link to share"
+          size={300}
+        />
+        <Share message="Message to share">
+          <TouchableOpacity disabled style={styles.button}>
+            <Text>Share</Text>
+          </TouchableOpacity>
+        </Share>
       </View>
     </SafeAreaView>
   );
