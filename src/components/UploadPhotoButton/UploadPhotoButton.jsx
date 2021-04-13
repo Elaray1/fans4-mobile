@@ -5,9 +5,11 @@ import ImagePicker from 'react-native-image-crop-picker';
 
 import Text from 'components/Text';
 
+import PaperclipIcon from 'assets/icons/paperclip.svg';
+
 import styles from './UploadPhotoButton.styles';
 
-function UploadPhotoButton({ handleImageUpload }) {
+function UploadPhotoButton({ handleImageUpload, label }) {
   const onEditProfilePicture = useCallback(async () => {
     const options = {
       mediaType: 'photo',
@@ -23,14 +25,23 @@ function UploadPhotoButton({ handleImageUpload }) {
   }, [handleImageUpload]);
 
   return (
-    <TouchableOpacity style={styles.button} onPress={onEditProfilePicture}>
-      <Text>Upload</Text>
-    </TouchableOpacity>
+    <>
+      <Text style={styles.label}>{label}</Text>
+      <TouchableOpacity style={styles.button} onPress={onEditProfilePicture}>
+        <Text style={styles.text}>Upload</Text>
+        <PaperclipIcon />
+      </TouchableOpacity>
+    </>
   );
 }
 
 UploadPhotoButton.propTypes = {
   handleImageUpload: PropTypes.func.isRequired,
+  label: PropTypes.string,
+};
+
+UploadPhotoButton.defaultProps = {
+  label: '',
 };
 
 export default React.memo(UploadPhotoButton);

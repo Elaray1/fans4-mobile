@@ -21,7 +21,7 @@ const size = {
 
 const weight = {
   regular: '400',
-  madium: '500',
+  medium: '500',
   semiBold: '600',
   bold: '700',
   extraBold: '800',

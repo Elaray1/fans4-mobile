@@ -26,6 +26,8 @@ const colors = {
   disabled: '#ECEFF1',
   disabledText: '#B0BBC5',
   disabledBackground: '#F8F9FA',
+
+  greyInputs: '#1F1F24',
 };
 
 export default colors;

@@ -102,7 +102,7 @@ function AuthAppLoader() {
         <Share message="Message to share" style={styles.button}>
           <Text>Share</Text>
         </Share>
-        <UploadPhotoButton handleImageUpload={setPhoto} />
+        <UploadPhotoButton handleImageUpload={setPhoto} label="Post Media" />
       </View>
     </SafeAreaView>
   );
