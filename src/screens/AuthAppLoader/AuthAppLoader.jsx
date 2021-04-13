@@ -97,10 +97,8 @@ function AuthAppLoader() {
           link="Link to share"
           size={300}
         />
-        <Share message="Message to share">
-          <TouchableOpacity disabled style={styles.button}>
-            <Text>Share</Text>
-          </TouchableOpacity>
+        <Share message="Message to share" style={styles.button}>
+          <Text>Share</Text>
         </Share>
       </View>
     </SafeAreaView>
