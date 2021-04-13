@@ -6,16 +6,11 @@ import ApiError from 'helpers/api/api.error';
 import { setItem, removeItem } from 'helpers/storage';
 
 import {
-  USER_AUTHENTICATED,
   USER_SIGNED_IN,
   USER_LOGGED_OUT,
 } from './user.constants';
 
 import * as api from './user.api';
-
-export const setUserAuthenticated = () => (dispatch) => {
-  dispatch({ type: USER_AUTHENTICATED });
-};
 
 export const signUp = userData => async () => {
   try {
