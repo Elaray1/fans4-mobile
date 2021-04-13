@@ -26,6 +26,7 @@ function AuthAppLoader() {
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState('');
   const [fighters, setFighters] = useState([]);
+  const [photo, setPhoto] = useState(null);
 
   useEffect(() => {
     async function init() {
@@ -101,7 +102,7 @@ function AuthAppLoader() {
         <Share message="Message to share" style={styles.button}>
           <Text>Share</Text>
         </Share>
-        <UploadPhotoButton />
+        <UploadPhotoButton handleImageUpload={setPhoto} />
       </View>
     </SafeAreaView>
   );
