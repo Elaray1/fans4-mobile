@@ -1,5 +1,6 @@
 const family = {
-  base: 'Avenir',
+  base: 'NotoSans-Regular',
+  bold: 'NotoSans-Bold',
 };
 
 const size = {
