@@ -8,10 +8,8 @@
     </style>
 
     <style name="SplashTheme" parent="SplashScreen_SplashTheme">
+        <item name="android:windowBackground">@drawable/background_splash</item>
         <item name="android:statusBarColor">@color/splash_background</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:background">@color/splash_background</item>
-        <item name="android:windowFullscreen">true</item>
     </style>
 
 </resources>
