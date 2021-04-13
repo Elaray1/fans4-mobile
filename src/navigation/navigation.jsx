@@ -15,7 +15,7 @@ import AppScreens from './appStack';
 
 function AppNavigation() {
   const dispatch = useDispatch();
-  const userAuthenticated = useSelector(userSelectors.getUserAuthenticated);
+  const userAuthenticated = useSelector(userSelectors.getAuthenticated);
 
   useEffect(() => {
     (async () => {

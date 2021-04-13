@@ -1,1 +1,1 @@
-export const getUserAuthenticated = ({ user }) => user.authenticated;
+export const getAuthenticated = ({ user }) => user !== null;
