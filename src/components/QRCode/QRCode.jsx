@@ -20,4 +20,4 @@ QRCode.defaultProps = {
   size: 100,
 };
 
-export default QRCode;
+export default React.memo(QRCode);

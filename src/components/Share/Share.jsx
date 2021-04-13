@@ -49,4 +49,4 @@ Share.defaultProps = {
   style: {},
 };
 
-export default Share;
+export default React.memo(Share);
