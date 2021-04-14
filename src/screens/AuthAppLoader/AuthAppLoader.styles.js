@@ -7,10 +7,7 @@ export default StyleSheet.create({
     ...commonStyles.screen,
   },
   content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
+    ...commonStyles.screenContent,
   },
   button: {
     backgroundColor: colors.disabled,

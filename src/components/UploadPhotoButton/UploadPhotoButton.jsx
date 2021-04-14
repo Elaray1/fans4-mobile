@@ -27,7 +27,11 @@ function UploadPhotoButton({ handleImageUpload, label }) {
   return (
     <>
       <Text style={styles.label}>{label}</Text>
-      <TouchableOpacity style={styles.button} onPress={onEditProfilePicture}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={onEditProfilePicture}
+        activeOpacity={0.7}
+      >
         <Text style={styles.text}>Upload</Text>
         <PaperclipIcon />
       </TouchableOpacity>

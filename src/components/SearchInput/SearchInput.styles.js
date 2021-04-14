@@ -26,7 +26,7 @@ export default StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
-    color: colors.black,
+    color: colors.white,
     fontFamily: fonts.family.base,
     fontSize: fonts.size.regular,
     fontWeight: fonts.weight.regular,

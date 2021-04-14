@@ -10,7 +10,7 @@ import styles from './Home.styles';
 function Home() {
   return (
     <SafeAreaView style={styles.screen}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.main} />
+      <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <View style={styles.content}>
         <Text>Home</Text>
       </View>

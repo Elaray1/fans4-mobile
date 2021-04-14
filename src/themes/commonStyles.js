@@ -6,10 +6,10 @@ const commonStyles = {
   screen: {
     flex: 1,
     backgroundColor: colors.main,
+    paddingHorizontal: 20,
   },
   screenContent: {
     flex: 1,
-    marginHorizontal: 20,
   },
   tabBar: {
     borderTopColor: colors.main,

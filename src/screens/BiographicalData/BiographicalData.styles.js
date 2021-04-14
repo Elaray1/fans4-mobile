@@ -1,13 +1,17 @@
 import { StyleSheet } from 'react-native';
 import commonStyles from 'themes/commonStyles';
 
+import colors from 'themes/colors';
+
 export default StyleSheet.create({
   screen: {
     ...commonStyles.screen,
   },
   content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...commonStyles.screenContent,
+  },
+  datepicker: {
+    backgroundColor: colors.main,
+    alignSelf: 'center',
   },
 });

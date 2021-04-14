@@ -6,8 +6,6 @@ export default StyleSheet.create({
     ...commonStyles.screen,
   },
   content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...commonStyles.screenContent,
   },
 });
