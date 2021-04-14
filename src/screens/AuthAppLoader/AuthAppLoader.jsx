@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import {
-  SafeAreaView, View, StatusBar,
-} from 'react-native';
+import { SafeAreaView, View, StatusBar } from 'react-native';
 import { useDispatch } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
+import { useTranslation } from 'react-i18next';
 
 import colors from 'themes/colors';
 
@@ -23,6 +22,8 @@ import { USERS_TYPES, USER_STATUSES } from 'helpers/constants';
 import styles from './AuthAppLoader.styles';
 
 function AuthAppLoader() {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState('');
   const [fighters, setFighters] = useState([]);
@@ -69,7 +70,7 @@ function AuthAppLoader() {
       if (!activeFighters?.length) {
         return (
           <Text style={styles.noTransactionsText}>
-            Your search did not match any fighters.
+            {t('AuthAppLoader.yourSearchDidNotMatchAnyFighters')}
           </Text>
         );
       }
@@ -81,7 +82,7 @@ function AuthAppLoader() {
         </>
       );
     }
-    return (<Text>Enter your search</Text>);
+    return (<Text>{t('enterYourSearch')}</Text>);
   }, [fighters, inputValue]);
 
   return (
@@ -92,17 +93,17 @@ function AuthAppLoader() {
         <SearchInput
           value={inputValue}
           onChangeText={setInputValue}
-          placeholder="Search by fighter's name"
+          placeholder={t('AuthAppLoader.searchByFighterName')}
         />
         {content}
         <QRCode
-          link="Link to share"
+          link={t('AuthAppLoader.linkToShare')}
           size={300}
         />
-        <Share message="Message to share" style={styles.button}>
+        <Share message={t('AuthAppLoader.messageToShare')} style={styles.button}>
           <Text>Share</Text>
         </Share>
-        <UploadPhotoButton handleImageUpload={setPhoto} label="Post Media" />
+        <UploadPhotoButton handleImageUpload={setPhoto} label={t('AuthAppLoader.postMedia')} />
       </View>
     </SafeAreaView>
   );

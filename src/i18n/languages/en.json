@@ -1,0 +1,10 @@
+{
+  "AuthAppLoader": {
+    "searchByFighterName": "Search by fighter's name",
+    "yourSearchDidNotMatchAnyFighters": "Your search did not match any fighters.",
+    "enterYourSearch": "Enter your search",
+    "linkToShare": "Link to share",
+    "messageToShare": "Message to share",
+    "postMedia": "Post Media"
+  }
+}
