@@ -1,5 +1,3 @@
-import colors from './colors';
-
 const family = {
   base: 'Avenir',
 };
@@ -27,34 +25,18 @@ const weight = {
   extraBold: '800',
 };
 
-const style = {
-  header: {
-    fontSize: size.header,
-    fontWeight: weight.bold,
-    color: colors.headerFont,
-  },
-  title: {
-    fontSize: size.title,
-    fontWeight: weight.semiBold,
-    color: colors.fontTitle,
-  },
-  subtitle: {
-    fontSize: size.subtitle,
-    fontWeight: weight.semiBold,
-  },
-  text: {
-    fontSize: size.regular,
-    fontWeight: weight.regular,
-  },
-  error: {
-    fontSize: size.tiny,
-    color: colors.error,
-  },
+const lineHeight = {
+  huge: 56,
+  big: 38,
+  medium: 30,
+  regular: 22,
+  small: 18,
+  caption: 16,
 };
 
 export default {
   family,
   size,
   weight,
-  style,
+  lineHeight,
 };

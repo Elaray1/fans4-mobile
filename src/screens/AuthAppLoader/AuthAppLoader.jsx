@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import {
-  SafeAreaView, View, StatusBar, TouchableOpacity,
+  SafeAreaView, View, StatusBar,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
@@ -8,7 +8,7 @@ import SplashScreen from 'react-native-splash-screen';
 import colors from 'themes/colors';
 
 import Text from 'components/Text';
-import SearchInput from 'components/SeacrhInput';
+import SearchInput from 'components/SearchInput';
 import QRCode from 'components/QRCode';
 import Share from 'components/Share';
 import UploadPhotoButton from 'components/UploadPhotoButton';
@@ -26,7 +26,7 @@ function AuthAppLoader() {
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState('');
   const [fighters, setFighters] = useState([]);
-  const [photo, setPhoto] = useState(null);
+  const [, setPhoto] = useState(null);
 
   useEffect(() => {
     async function init() {
@@ -86,7 +86,7 @@ function AuthAppLoader() {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.main} />
+      <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <View style={styles.content}>
         <Text>Auth App</Text>
         <SearchInput

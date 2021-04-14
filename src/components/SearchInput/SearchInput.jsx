@@ -68,7 +68,7 @@ function SearchInput({
             activeOpacity={0.7}
             onPress={onClearInput}
           >
-            <CancelSearchIcon fill={colors.defaultBlack} />
+            <CancelSearchIcon fill={colors.white} />
           </TouchableOpacity>
         )}
     </View>

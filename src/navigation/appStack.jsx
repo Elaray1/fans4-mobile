@@ -3,13 +3,15 @@ import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import * as RootNavigation from 'helpers/rootNavigation';
+
 import * as userActions from 'resources/user/user.actions';
 
 import HomeIcon from 'assets/icons/tab-bar/home.svg';
 
 import AppLoader from 'screens/AppLoader/AppLoader';
 import Home from 'screens/Home';
-import PersonalInfo from 'screens/PersonalInfo';
+import BiographicalData from 'screens/BiographicalData/BiographicalData';
 
 import colors from 'themes/colors';
 import commonStyles from 'themes/commonStyles';
@@ -65,6 +67,7 @@ function Tabs() {
 }
 
 function AppScreens() {
+  // Initialize Push Notifications
   useEffect(() => {
     const onRegister = async (pushNotificationToken) => {
       await userActions.setPushToken(pushNotificationToken);
@@ -107,6 +110,18 @@ function AppScreens() {
     };
   }, []);
 
+  // Initial navigation
+  useEffect(() => {
+    RootNavigation.reset(({
+      index: 0,
+      routes: [
+        {
+          name: 'BiographicalData',
+        },
+      ],
+    }));
+  }, []);
+
   return (
     <AppStack.Navigator
       headerMode="none"
@@ -124,7 +139,7 @@ function AppScreens() {
       {/* <TABS /> */}
 
       { /* Screens without tabs */}
-      <AppStack.Screen name="PersonalInfo" component={PersonalInfo} />
+      <AppStack.Screen name="BiographicalData" component={BiographicalData} />
 
     </AppStack.Navigator>
   );

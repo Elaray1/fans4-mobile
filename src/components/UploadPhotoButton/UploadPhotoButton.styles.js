@@ -9,7 +9,7 @@ export default StyleSheet.create({
     paddingVertical: 18,
     borderRadius: 5,
     width: '100%',
-    backgroundColor: colors.greyInputs,
+    backgroundColor: colors.gray,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
