@@ -40,7 +40,6 @@ function Header({ title, isBackArrow }) {
 
       <View style={[styles.line, isBackArrow ? { marginTop: 18 } : { marginTop: 23 }]} />
     </View>
-
   );
 }
 

@@ -33,8 +33,8 @@ function AppNavigation() {
     <NavigationContainer
       ref={navigationRef}
     >
-      {userAuthenticated ? <AppScreens /> : <AuthScreens />}
-      {/* {userAuthenticated ? <AuthScreens /> : <AppScreens />} */}
+      {/* {userAuthenticated ? <AppScreens /> : <AuthScreens />} */}
+      {userAuthenticated ? <AuthScreens /> : <AppScreens />}
     </NavigationContainer>
   );
 }

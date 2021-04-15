@@ -1,25 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
-  SafeAreaView, View, StatusBar, Dimensions,
+  SafeAreaView, View, StatusBar, TouchableOpacity,
 } from 'react-native';
-import DatePicker from 'react-native-date-picker';
+import dayjs from 'dayjs';
 
 import colors from 'themes/colors';
 
 import Header from 'components/Header';
 import Input from 'components/Input';
+import Text from 'components/Text';
+import DatePickerModal from 'components/DatePickerModal';
 
 import styles from './BiographicalData.styles';
-
-const { width } = Dimensions.get('window');
 
 function BiographicalData() {
   const [fullName, setFullName] = useState('');
   const [nickname, setNickname] = useState('');
-  const [date, setDate] = useState(new Date('1990-01-01'));
+  const [date, setDate] = useState(null);
+
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+
+  const onBirthDatePress = useCallback(() => {
+    setIsDatePickerVisible(!isDatePickerVisible);
+  }, [isDatePickerVisible]);
+
+  const onCloseDatePickerModal = useCallback(() => {
+    setIsDatePickerVisible(false);
+  }, []);
+
+  const onSubmitDatePickerModal = useCallback((datePickerDate) => {
+    setDate(datePickerDate);
+    setIsDatePickerVisible(false);
+  }, []);
 
   return (
     <SafeAreaView style={styles.screen}>
+      <DatePickerModal
+        visible={isDatePickerVisible}
+        onClose={onCloseDatePickerModal}
+        onSubmit={onSubmitDatePickerModal}
+        {...(date && { date })}
+      />
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <Header isBackArrow title="Biographical Data" />
       <View style={styles.content}>
@@ -28,22 +49,24 @@ function BiographicalData() {
           value={fullName}
           onChange={setFullName}
         />
+
         <Input
           label="Nickname - optional"
           value={nickname}
           onChange={setNickname}
         />
-        <DatePicker
-          style={[styles.datepicker, { width: width - 40 }]} // 40 - is the horizontal padding
-          date={date}
-          maximumDate={new Date()}
-          onDateChange={setDate}
-          androidVariant="iosClone"
-          mode="date"
-          textColor={colors.white}
-          fadeToColor={colors.main}
-          dividerHeight={0}
-        />
+
+        <View>
+          <Text style={styles.inputLabel}>Birth Date</Text>
+          <TouchableOpacity
+            style={styles.inputContainer}
+            onPress={onBirthDatePress}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.input}>{date ? dayjs(date).format('MM/DD/YYYY') : ''}</Text>
+          </TouchableOpacity>
+        </View>
+
       </View>
     </SafeAreaView>
   );

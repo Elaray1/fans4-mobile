@@ -4,7 +4,7 @@ const colors = {
   black: '#000000',
   gray: '#1F1F24',
 
-  primary: '#3EA2E7', // need to change
+  primary: '#6A7DDD',
   error: '#F44336', // need to change
 
   baseFont: '#FFFFFF',
