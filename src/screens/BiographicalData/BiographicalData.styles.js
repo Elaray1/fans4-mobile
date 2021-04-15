@@ -11,6 +11,11 @@ export default StyleSheet.create({
   content: {
     ...commonStyles.screenContent,
   },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    paddingBottom: 50,
+  },
   inputLabel: {
     color: colors.white,
     opacity: 0.4,

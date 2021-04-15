@@ -10,10 +10,10 @@ export const commonStyles = {
   screen: {
     flex: 1,
     backgroundColor: colors.main,
-    paddingHorizontal: variables.paddingHorizontal,
   },
   screenContent: {
     flex: 1,
+    paddingHorizontal: variables.paddingHorizontal,
   },
   tabBar: {
     borderTopColor: colors.main,
