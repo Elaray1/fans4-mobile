@@ -1,6 +1,10 @@
+import { Platform } from 'react-native';
+
+const isIOS = Platform.OS === 'ios';
+
 const family = {
-  base: 'NotoSans-Regular',
-  bold: 'NotoSans-Bold',
+  base: isIOS ? 'Noto Sans' : 'NotoSans-Regular',
+  bold: isIOS ? 'Noto Sans Bold' : 'NotoSans-Bold',
 };
 
 const size = {
