@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import colors from 'themes/colors';
-import commonStyles from 'themes/commonStyles';
+import { commonStyles } from 'themes/commonStyles';
 
 export default StyleSheet.create({
   screen: {

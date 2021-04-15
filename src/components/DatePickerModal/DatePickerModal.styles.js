@@ -2,6 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+import { variables } from 'themes/commonStyles';
 
 const { width } = Dimensions.get('window');
 
@@ -19,12 +20,12 @@ export default StyleSheet.create({
   datepicker: {
     backgroundColor: colors.gray,
     alignSelf: 'center',
-    width: width - 40, // 40 - is the horizontal padding
+    width: width - variables.paddingHorizontal * 2,
   },
   doneButton: {
-    marginVertical: 10,
+    paddingVertical: 10,
     alignSelf: 'flex-end',
-    marginHorizontal: 20,
+    paddingHorizontal: variables.paddingHorizontal,
   },
   doneText: {
     color: colors.primary,

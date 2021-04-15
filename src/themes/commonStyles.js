@@ -2,11 +2,15 @@ import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 import { Platform } from 'react-native';
 
-const commonStyles = {
+export const variables = {
+  paddingHorizontal: 20,
+};
+
+export const commonStyles = {
   screen: {
     flex: 1,
     backgroundColor: colors.main,
-    paddingHorizontal: 20,
+    paddingHorizontal: variables.paddingHorizontal,
   },
   screenContent: {
     flex: 1,
@@ -33,5 +37,3 @@ const commonStyles = {
     fontSize: fonts.size.tiny,
   },
 };
-
-export default commonStyles;

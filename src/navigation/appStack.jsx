@@ -14,7 +14,7 @@ import Home from 'screens/Home';
 import BiographicalData from 'screens/BiographicalData/BiographicalData';
 
 import colors from 'themes/colors';
-import commonStyles from 'themes/commonStyles';
+import { commonStyles } from 'themes/commonStyles';
 
 import firebasePushNotificationService from 'services/firebase.pushNotification.service';
 import localPushNotificationService from 'services/local.pushNotification.service';
