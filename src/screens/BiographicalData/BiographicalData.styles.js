@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { commonStyles } from 'themes/commonStyles';
+import { commonStyles, variables } from 'themes/commonStyles';
 
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
@@ -9,6 +9,7 @@ export default StyleSheet.create({
     ...commonStyles.screen,
   },
   content: {
+    paddingTop: variables.paddingTop,
     ...commonStyles.screenContent,
   },
   scrollContent: {
@@ -19,6 +20,7 @@ export default StyleSheet.create({
   inputLabel: {
     color: colors.white,
     opacity: 0.4,
+    fontFamily: fonts.family.bold,
     fontSize: fonts.size.caption,
     fontWeight: fonts.weight.medium,
     lineHeight: fonts.lineHeight.caption,

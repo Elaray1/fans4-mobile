@@ -2,12 +2,10 @@ import { StyleSheet } from 'react-native';
 
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
-import { variables } from 'themes/commonStyles';
 
 export default StyleSheet.create({
   headerWrapper: {
     flexDirection: 'column',
-    paddingHorizontal: variables.paddingHorizontal,
   },
   header: {
     flexDirection: 'row',
@@ -15,6 +13,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   title: {
+    fontFamily: fonts.family.bold,
     fontSize: fonts.size.regular,
     fontWeight: fonts.weight.bold,
     lineHeight: fonts.lineHeight.regular,

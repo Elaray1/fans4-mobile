@@ -65,8 +65,8 @@ function BiographicalData() {
         {...(hometown && { city: hometown })}
       />
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <Header isBackArrow title="Biographical Data" />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+        <Header isBackArrow title="Biographical Data" />
         <View>
           <Input
             label="First and last name"
