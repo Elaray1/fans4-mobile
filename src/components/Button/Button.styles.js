@@ -44,4 +44,10 @@ export default StyleSheet.create({
   disabledSecondaryButtonTitle: {
     color: colors.disabledText,
   },
+  link: {
+    textDecorationLine: 'underline',
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+    fontSize: fonts.size.small,
+  },
 });

@@ -30,7 +30,7 @@ function Button({
       activeOpacity={0.7}
       disabled={isDisabled}
       style={[
-        styles.button,
+        type !== TYPES.LINK && styles.button,
         type === TYPES.PRIMARY && styles.primaryButton,
         type === TYPES.SECONDARY && styles.secondaryButton,
         isDisabled && type === TYPES.PRIMARY && styles.disabledPrimaryButton,
@@ -41,9 +41,10 @@ function Button({
       {isLoading ? <ActivityIndicator size="large" color={hexToRgba(colors.white, 0.4)} /> : (
         <Text
           style={[
-            styles.buttonTitle,
+            type !== TYPES.LINK && styles.buttonTitle,
             type === TYPES.PRIMARY && styles.primaryButtonTitle,
             type === TYPES.SECONDARY && styles.secondaryButtonTitle,
+            type === TYPES.LINK && styles.link,
             isDisabled && type === TYPES.PRIMARY && styles.disabledPrimaryButtonTitle,
             isDisabled && type === TYPES.SECONDARY && styles.disabledSecondaryButtonTitle,
             buttonTitleStyles,
