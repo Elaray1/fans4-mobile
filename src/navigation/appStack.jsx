@@ -11,7 +11,14 @@ import HomeIcon from 'assets/icons/tab-bar/home.svg';
 
 import AppLoader from 'screens/AppLoader/AppLoader';
 import Home from 'screens/Home';
-import BiographicalData from 'screens/BiographicalData/BiographicalData';
+import BiographicalData from 'screens/BiographicalData';
+import TermsOfUse from 'screens/TermsOfUse';
+import VerificationPending from 'screens/VerificationPending';
+import VerificationSuccessful from 'screens/VerificationSuccessful';
+import VerificationFailed from 'screens/VerificationFailed';
+import OnBoarding1 from 'screens/OnBoarding1';
+import OnBoarding2 from 'screens/OnBoarding2';
+import OnBoarding3 from 'screens/OnBoarding3';
 
 import colors from 'themes/colors';
 import { commonStyles } from 'themes/commonStyles';
@@ -116,7 +123,7 @@ function AppScreens() {
       index: 0,
       routes: [
         {
-          name: 'BiographicalData',
+          name: 'OnBoarding3',
         },
       ],
     }));
@@ -140,7 +147,13 @@ function AppScreens() {
 
       { /* Screens without tabs */}
       <AppStack.Screen name="BiographicalData" component={BiographicalData} />
-
+      <AppStack.Screen name="TermsOfUse" component={TermsOfUse} />
+      <AppStack.Screen name="VerificationPending" component={VerificationPending} />
+      <AppStack.Screen name="VerificationSuccessful" component={VerificationSuccessful} />
+      <AppStack.Screen name="VerificationFailed" component={VerificationFailed} />
+      <AppStack.Screen name="OnBoarding1" component={OnBoarding1} />
+      <AppStack.Screen name="OnBoarding2" component={OnBoarding2} />
+      <AppStack.Screen name="OnBoarding3" component={OnBoarding3} />
     </AppStack.Navigator>
   );
 }

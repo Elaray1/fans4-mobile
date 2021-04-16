@@ -11,6 +11,8 @@ const colors = {
 
   line: '#28282E',
 
+  grayText: '#8B8D98',
+
   tabBarInactive: '#8B8E98', // need to change
   tabBarActive: '#333333', // need to change
 
