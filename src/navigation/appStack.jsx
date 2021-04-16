@@ -123,7 +123,7 @@ function AppScreens() {
       index: 0,
       routes: [
         {
-          name: 'OnBoarding3',
+          name: 'BiographicalData',
         },
       ],
     }));

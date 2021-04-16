@@ -7,16 +7,18 @@ import colors from 'themes/colors';
 import Text from 'components/Text';
 import Button from 'components/Button';
 
-import styles from './Illustration.styles';
+import styles from './IllustrationScreen.styles';
 
-function Illustration({
+function IllustrationScreen({
   buttonText, linkText, title, description, illustration, onButtonPress, onLinkPress,
 }) {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <View style={styles.content}>
-        {illustration ? { illustration } : <View style={styles.imagePlaceholder} />}
+        <View style={styles.illustrationContainer}>
+          {illustration}
+        </View>
         <View style={styles.container}>
           <View style={styles.textContainer}>
             <Text style={styles.title}>{title}</Text>
@@ -34,22 +36,21 @@ function Illustration({
   );
 }
 
-Illustration.propTypes = {
+IllustrationScreen.propTypes = {
   buttonText: PropTypes.string,
   linkText: PropTypes.string,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  illustration: PropTypes.node,
+  illustration: PropTypes.node.isRequired,
   onButtonPress: PropTypes.func,
   onLinkPress: PropTypes.func,
 };
 
-Illustration.defaultProps = {
+IllustrationScreen.defaultProps = {
   buttonText: null,
   linkText: null,
-  illustration: null,
   onButtonPress: () => null,
   onLinkPress: () => null,
 };
 
-export default Illustration;
+export default React.memo(IllustrationScreen);

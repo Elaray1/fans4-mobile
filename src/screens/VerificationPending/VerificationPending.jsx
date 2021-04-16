@@ -1,15 +1,18 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Illustration from 'components/Illustration';
+import IllustrationScreen from 'components/IllustrationScreen';
+
+import PlaceholderIllustration from 'assets/illustrations/placeholder';
 
 function VerificationPending() {
   const { t } = useTranslation();
   return (
-    <Illustration
+    <IllustrationScreen
       linkText={t('VerificationPending.linkText')}
       description={t('VerificationPending.description')}
       title={t('VerificationPending.title')}
+      illustration={<PlaceholderIllustration />}
     />
   );
 }

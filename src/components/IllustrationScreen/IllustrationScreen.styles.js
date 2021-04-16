@@ -13,10 +13,7 @@ export default StyleSheet.create({
     paddingTop: 100,
     paddingBottom: 20,
   },
-  imagePlaceholder: {
-    height: 250,
-    width: 250,
-    backgroundColor: colors.gray,
+  illustrationContainer: {
     marginVertical: 50,
   },
   container: {
