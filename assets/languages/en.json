@@ -7,6 +7,43 @@
     "messageToShare": "Message to share",
     "postMedia": "Post Media"
   },
+  "SelectRole": {
+    "selectYourRole": "Select your role",
+    "ImFighter": "I’m a Fighter",
+    "ImFollower": "I’m a Follower"
+  },
+  "SignUp": {
+    "SignUpAsFighter": "Sign up as a Fighter",
+    "SignUpAsFollower": "Sign up as a Follower",
+    "Email": "Email",
+    "Password": "Password",
+    "SignUp": "Sign up",
+    "AlreadyHaveAccount": "Already have an account?",
+    "SignIn": "Sign in",
+    "EmailIsInvalid": "Email is invalid",
+    "PasswordShouldContainAtLeast6Characters": "Password should contain at least 6 characters"
+  },
+  "EmailConfirmation": {
+    "ConfirmYourEmailAddress": "Confirm your email address",
+    "ResendConfirmationEmail": "Resend Confirmation Email",
+    "BackToSignUpPage": "Back to sign up page",
+    "WeHaveSentYouConfirmationEmailTo": "We have sent you a confirmation email to",
+    "PleaseCheckYourInbox": "Please check your Inbox",
+    "EmailHasBeenSent": "Email has been sent"
+  },
+  "SignIn": {
+    "SignInAsFighter": "Sign in as a Fighter",
+    "SignInAsFollower": "Sign in as a Follower",
+    "Email": "Email",
+    "Password": "Password",
+    "ForgotPassword?": "Forgot password?",
+    "SignIn": "Sign in",
+    "DontHaveAccount?": "Don’t have an account?",
+    "SignUp": "Sign up",
+    "EmailIsInvalid": "Email is invalid",
+    "PasswordShouldContainAtLeast6Characters": "Password should contain at least 6 characters",
+    "InvalidEmailOrAndPassword": "Invalid email or/and password"
+  },
   "CitySelectModal": {
     "noSearchResults": "No search results",
     "showFullList": "Show full list",
