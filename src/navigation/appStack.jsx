@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import * as RootNavigation from 'helpers/rootNavigation';
-
 import * as userActions from 'resources/user/user.actions';
 
-import HomeIcon from 'assets/icons/tab-bar/home.svg';
+import HomeIcon from 'assets/icons/tab-bar/home';
 
 import AppLoader from 'screens/AppLoader/AppLoader';
 import Home from 'screens/Home';
@@ -35,16 +33,18 @@ const Tab = createBottomTabNavigator();
 
 function HomeScreens() {
   return (
-    <HomeStack.Navigator
-      headerMode="none"
-      screenOptions={{
-        cardStyle: {
-          backgroundColor: colors.main,
-        },
-      }}
-    >
-      <HomeStack.Screen name="Home" component={Home} />
-    </HomeStack.Navigator>
+    <View style={{ flex: 1, backgroundColor: colors.main }}>
+      <HomeStack.Navigator
+        headerMode="none"
+        screenOptions={{
+          cardStyle: {
+            backgroundColor: colors.main,
+          },
+        }}
+      >
+        <HomeStack.Screen name="Home" component={Home} />
+      </HomeStack.Navigator>
+    </View>
   );
 }
 
@@ -118,18 +118,6 @@ function AppScreens() {
     };
   }, []);
 
-  // Initial navigation
-  useEffect(() => {
-    RootNavigation.reset(({
-      index: 0,
-      routes: [
-        {
-          name: 'BiographicalData',
-        },
-      ],
-    }));
-  }, []);
-
   return (
     <AppStack.Navigator
       headerMode="none"
@@ -138,7 +126,7 @@ function AppScreens() {
           backgroundColor: colors.main,
         },
       }}
-      initialRouteName="AppLoader"
+      initialRouteName="BiographicalData" // replace on AppLoader
     >
       <AppStack.Screen name="AppLoader" component={AppLoader} />
 
