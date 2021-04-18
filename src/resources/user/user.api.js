@@ -29,7 +29,6 @@ export const getUsers = ({ role, status }) => apiClient
 export const setPushToken = ({ token, deviceId }) => apiClient
   .put('users/push-token', { token, deviceId });
 
-<<<<<<< HEAD
 
 /* Fighters api: start */
 
@@ -41,11 +40,9 @@ export const setPushToken = ({ token, deviceId }) => apiClient
 //   });
 
 /* Fighters api: end */
-=======
 export const emailSignIn = ({
   email, password, userType, deviceId,
 }) => apiClient
   .post('users/signin', {
     email, password, userType, deviceId,
   });
->>>>>>> Add sign up, sign in, email confirmation, fetch access token, get user data, remove verification id to user actions,
