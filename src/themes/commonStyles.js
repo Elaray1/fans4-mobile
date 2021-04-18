@@ -3,7 +3,9 @@ import fonts from 'themes/fonts';
 import { Platform } from 'react-native';
 
 export const variables = {
+  paddingTop: 20,
   paddingHorizontal: 20,
+  paddingTopLogo: 140,
 };
 
 export const commonStyles = {
