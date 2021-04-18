@@ -1,111 +1,118 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { SafeAreaView, View, StatusBar } from 'react-native';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
-import colors from 'themes/colors';
+import config from 'resources/config';
 
-import Text from 'components/Text';
-import SearchInput from 'components/SearchInput';
-import QRCode from 'components/QRCode';
-import Share from 'components/Share';
-import UploadPhotoButton from 'components/UploadPhotoButton';
-
-// import config from 'resources/config';
 import * as userActions from 'resources/user/user.actions';
 
-// import { getMaskedDeviceId } from 'helpers/deviceInfo';
-import { USERS_TYPES, USER_STATUSES } from 'helpers/constants';
-// import { getItem, setItem } from 'helpers/storage';
+import * as socketService from 'services/socket.service';
 
-import styles from './AuthAppLoader.styles';
+import { getMaskedDeviceId } from 'helpers/deviceInfo';
+import { STORAGE_KEYS } from 'helpers/constants';
+import { getItem, setItem, removeItem } from 'helpers/storage';
 
 function AuthAppLoader() {
-  const { t } = useTranslation();
-
+  const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [inputValue, setInputValue] = useState('');
-  const [fighters, setFighters] = useState([]);
-  const [, setPhoto] = useState(null);
 
   useEffect(() => {
-    async function init() {
-      // checker for case when email was verified when app had been closed
-      // const storedAccessToken = await getItem(STORAGE_KEYS.ACCESS_TOKEN);
-      // if (storedAccessToken) {
-      //   return;
-      // }
-      // const accessToken = await userActions.fetchAccessToken({ userType });
-      // if (accessToken) {
-      //   config.accessToken = accessToken;
-      //   await setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-      //   dispatch(userActions.setUserAuthenticated());
-      // }
-      try {
-        const fetchedFighters = await dispatch(userActions.getUsers({
-          role: USERS_TYPES.FIGHTER,
-          status: USER_STATUSES.VERIFIED,
-        }));
-        setFighters(fetchedFighters);
-      } catch (err) {
-        console.error(err);
-      }
+    const bootstrap = async () => {
       SplashScreen.hide();
-    }
-
-    init();
-  }, [dispatch]);
-
-  useEffect(() => {
-  }, []);
-
-  const content = useMemo(() => {
-    if (inputValue) {
-      const activeFighters = fighters.filter(
-        fighter => fighter.fullName
-          .toLowerCase()
-          .includes(inputValue.toLowerCase()),
-      );
-      if (!activeFighters?.length) {
-        return (
-          <Text style={styles.noTransactionsText}>
-            {t('AuthAppLoader.yourSearchDidNotMatchAnyFighters')}
-          </Text>
-        );
+      const storedAccessToken = await getItem(STORAGE_KEYS.ACCESS_TOKEN);
+      if (storedAccessToken) {
+        return;
       }
-      return (
-        <>
-          {activeFighters.map(item => (
-            <Text key={item._id}>{item.fullName}</Text>
-          ))}
-        </>
-      );
-    }
-    return (<Text>{t('enterYourSearch')}</Text>);
-  }, [fighters, inputValue, t]);
+      const fetchedAccessToken = await userActions.fetchAccessToken();
+      if (fetchedAccessToken) {
+        config.accessToken = fetchedAccessToken;
+        await Promise.all([
+          setItem(STORAGE_KEYS.ACCESS_TOKEN, fetchedAccessToken),
+          userActions.removeVerificationDeviceId(),
+          removeItem(STORAGE_KEYS.PREV_SCREEN),
+          removeItem(STORAGE_KEYS.USER_TYPE),
+          removeItem(STORAGE_KEYS.USER_EMAIL),
+        ]);
+        dispatch(userActions.setUserAuthenticated());
+      } else {
+        const [
+          PREV_SCREEN,
+          USER_TYPE,
+          USER_EMAIL,
+        ] = await Promise.all([
+          getItem(STORAGE_KEYS.PREV_SCREEN),
+          getItem(STORAGE_KEYS.USER_TYPE),
+          getItem(STORAGE_KEYS.USER_EMAIL),
+        ]);
+
+        if (PREV_SCREEN) {
+          switch (PREV_SCREEN) {
+            case 'EmailConfirmation':
+              navigation.reset({
+                index: 2,
+                routes: [
+                  {
+                    name: 'SelectUserType',
+                  },
+                  {
+                    name: 'SignUp',
+                    params: {
+                      userType: USER_TYPE,
+                    },
+                  },
+                  {
+                    name: 'EmailConfirmation',
+                    params: {
+                      email: USER_EMAIL,
+                      userType: USER_TYPE,
+                      isResendEmail: true,
+                    },
+                  },
+                ],
+              });
+              break;
+
+            default:
+              break;
+          }
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'SelectUserType',
+              },
+            ],
+          });
+        }
+      }
+
+      if (socketService.disconnected()) {
+        socketService.connect();
+      }
+      socketService.emit('subscribe', `device-${getMaskedDeviceId()}`);
+
+      socketService.on('email:verified', async (accessToken) => {
+        await Promise.all([
+          setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
+          removeItem(STORAGE_KEYS.PREV_SCREEN),
+          removeItem(STORAGE_KEYS.USER_TYPE),
+          removeItem(STORAGE_KEYS.USER_EMAIL),
+        ]);
+        config.accessToken = accessToken;
+        await userActions.removeVerificationDeviceId();
+        dispatch(userActions.setUserAuthenticated());
+      });
+    };
+
+    bootstrap();
+  }, [dispatch, navigation]);
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <View style={styles.content}>
-        <Text>Auth App</Text>
-        <SearchInput
-          value={inputValue}
-          onChangeText={setInputValue}
-          placeholder={t('AuthAppLoader.searchByFighterName')}
-        />
-        {content}
-        <QRCode
-          link={t('AuthAppLoader.linkToShare')}
-          size={300}
-        />
-        <Share message={t('AuthAppLoader.messageToShare')} style={styles.button}>
-          <Text>Share</Text>
-        </Share>
-        <UploadPhotoButton handleImageUpload={setPhoto} label={t('AuthAppLoader.postMedia')} />
-      </View>
-    </SafeAreaView>
+    // TODO: add backgrount image / loader
+    <View />
   );
 }
 
