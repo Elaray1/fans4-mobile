@@ -8,6 +8,7 @@ const colors = {
   error: '#F34C4C',
 
   baseFont: '#FFFFFF',
+  textSecondary: '#8B8E98',
 
   line: '#28282E',
 
@@ -27,6 +28,10 @@ const colors = {
   disabledBackground: '#F8F9FA', // need to change
 
   clearSearch: '#DADADA',
+  buttonNotification: 'rgba(106, 125, 221, 0.12)',
+
+  errorBackground: 'rgba(243, 76, 76, 0.12)',
+  errorText: '#F34C4C',
 };
 
 export default colors;
