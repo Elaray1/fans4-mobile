@@ -54,7 +54,6 @@ export const emailSignIn = ({ email, password, userType }) => async (dispatch) =
   const { user, accessToken } = await api.emailSignIn({
     email, password, userType, deviceId,
   });
-  dispatch({ type: SET_USER_DATA, user });
   config.accessToken = accessToken;
   dispatch({ type: SET_USER_AUTHENTICATED });
   return user;
