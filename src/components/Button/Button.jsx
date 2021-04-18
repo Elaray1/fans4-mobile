@@ -18,8 +18,8 @@ function Button({
   title,
   onPress,
   disabled,
-  buttonStyles,
-  buttonTitleStyles,
+  style,
+  titleStyle,
   isLoading,
 }) {
   const isDisabled = disabled || isLoading;
@@ -35,7 +35,7 @@ function Button({
         type === TYPES.SECONDARY && styles.secondaryButton,
         isDisabled && type === TYPES.PRIMARY && styles.disabledPrimaryButton,
         isDisabled && type === TYPES.SECONDARY && styles.disabledSecondaryButton,
-        buttonStyles,
+        style,
       ]}
     >
       {isLoading ? <ActivityIndicator size="large" color={hexToRgba(colors.white, 0.4)} /> : (
@@ -47,7 +47,7 @@ function Button({
             type === TYPES.LINK && styles.link,
             isDisabled && type === TYPES.PRIMARY && styles.disabledPrimaryButtonTitle,
             isDisabled && type === TYPES.SECONDARY && styles.disabledSecondaryButtonTitle,
-            buttonTitleStyles,
+            titleStyle,
           ]}
         >
           {title}
@@ -60,8 +60,8 @@ function Button({
 Button.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]).isRequired,
   onPress: PropTypes.func,
-  buttonStyles: PropTypes.shape(),
-  buttonTitleStyles: Text.propTypes.style,
+  style: PropTypes.shape(),
+  titleStyle: Text.propTypes.style,
   disabled: PropTypes.bool,
   isLoading: PropTypes.bool,
   type: PropTypes.oneOf(Object.values(TYPES)),
@@ -71,8 +71,8 @@ Button.defaultProps = {
   onPress: () => null,
   disabled: false,
   isLoading: false,
-  buttonStyles: {},
-  buttonTitleStyles: {},
+  style: {},
+  titleStyle: {},
   type: TYPES.PRIMARY,
 };
 
