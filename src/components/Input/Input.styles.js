@@ -12,7 +12,7 @@ export default StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 16,
     marginTop: 6,
-    marginBottom: 20,
+    marginBottom: 5,
     backgroundColor: colors.gray,
   },
   disabled: {
