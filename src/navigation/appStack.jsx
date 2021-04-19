@@ -12,6 +12,7 @@ import HomeIcon from 'assets/icons/tab-bar/home.svg';
 import AppLoader from 'screens/AppLoader/AppLoader';
 import Home from 'screens/Home';
 import BiographicalData from 'screens/BiographicalData';
+import PersonalInfo from 'screens/PersonalInfo';
 import TermsOfUse from 'screens/TermsOfUse';
 import VerificationPending from 'screens/VerificationPending';
 import VerificationSuccessful from 'screens/VerificationSuccessful';
@@ -147,6 +148,7 @@ function AppScreens() {
 
       { /* Screens without tabs */}
       <AppStack.Screen name="BiographicalData" component={BiographicalData} />
+      <AppStack.Screen name="PersonalInfo" component={PersonalInfo} />
       <AppStack.Screen name="TermsOfUse" component={TermsOfUse} />
       <AppStack.Screen name="VerificationPending" component={VerificationPending} />
       <AppStack.Screen name="VerificationSuccessful" component={VerificationSuccessful} />
