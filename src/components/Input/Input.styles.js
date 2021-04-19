@@ -25,10 +25,10 @@ export default StyleSheet.create({
     borderColor: colors.primary,
   },
   label: {
-    fontFamily: fonts.family.bold,
     color: colors.white,
     opacity: 0.4,
     fontSize: fonts.size.caption,
+    fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
     lineHeight: fonts.lineHeight.caption,
   },
@@ -42,10 +42,11 @@ export default StyleSheet.create({
     color: colors.error,
   },
   input: {
+    paddingHorizontal: 0,
     flex: 1,
     color: colors.white,
     fontSize: fonts.size.small,
-    fontFamily: fonts.family.bold,
+    fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
   },
 });
