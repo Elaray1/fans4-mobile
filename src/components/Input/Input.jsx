@@ -18,6 +18,7 @@ function Input({
   type,
   label,
   onChange,
+  maxLength,
   disabled,
   placeholder,
   blurOnSubmit,
@@ -87,6 +88,7 @@ function Input({
           keyboardType={getKeyboardType(type)}
           returnKeyType={returnKeyType}
           style={styles.input}
+          maxLength={maxLength}
         />
         {type === 'password' && (
         <TouchableOpacity
@@ -125,6 +127,7 @@ Input.propTypes = {
   getRef: PropTypes.shape(),
   blurOnSubmit: PropTypes.bool,
   onSubmitEditing: PropTypes.func,
+  maxLength: PropTypes.number,
 };
 
 Input.defaultProps = {
@@ -139,6 +142,7 @@ Input.defaultProps = {
   getRef: { current: null },
   blurOnSubmit: true,
   onSubmitEditing: null,
+  maxLength: null,
   labelStyle: {},
   errorStyle: {},
 };
