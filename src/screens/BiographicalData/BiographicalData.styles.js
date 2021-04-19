@@ -22,7 +22,6 @@ export default StyleSheet.create({
     opacity: 0.4,
     fontFamily: fonts.family.bold,
     fontSize: fonts.size.caption,
-    fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.medium,
     lineHeight: fonts.lineHeight.caption,
   },

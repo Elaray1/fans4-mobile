@@ -12,8 +12,14 @@ import Text from 'components/Text';
 import Button from 'components/Button';
 import DatePickerModal from 'components/DatePickerModal';
 import CitySelectModal from 'components/CitySelectModal';
+import Toggle from 'components/Toggle';
 
 import styles from './BiographicalData.styles';
+
+const GENDERS = {
+  male: 'male',
+  female: 'female',
+};
 
 function BiographicalData() {
   const [fullName, setFullName] = useState('');
@@ -23,6 +29,7 @@ function BiographicalData() {
 
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [isCitySelectVisible, setIsCitySelectVisible] = useState(false);
+  const [gender, setGender] = useState(GENDERS.male);
 
   const onBirthDatePress = useCallback(() => {
     setIsDatePickerVisible(true);
@@ -101,6 +108,16 @@ function BiographicalData() {
               <Text style={styles.input}>{hometown?.cityNameWithState || ''}</Text>
             </TouchableOpacity>
           </View>
+        </View>
+
+        <View>
+          <Text style={styles.inputLabel}>Gender by Birth</Text>
+          <Toggle
+            leftOption={{ id: GENDERS.male, value: GENDERS.male }}
+            rightOption={{ id: GENDERS.female, value: GENDERS.female }}
+            selectedOptionId={gender}
+            onSelect={setGender}
+          />
         </View>
 
         <Button
