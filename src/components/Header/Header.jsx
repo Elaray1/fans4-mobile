@@ -24,7 +24,7 @@ function Header({
 
   return (
     <View style={styles.headerWrapper}>
-      <View style={[styles.header, isBackArrow ? { marginTop: 25 } : { marginTop: 30 }]}>
+      <View style={styles.header}>
         {isBackArrow ? (
           <TouchableOpacity
             activeOpacity={0.7}

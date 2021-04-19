@@ -45,6 +45,9 @@ export default StyleSheet.create({
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
   },
+  headerEmptyBlock: {
+    width: 50,
+  },
   searchWrapper: {
     paddingHorizontal: variables.paddingHorizontal,
     marginTop: 26,
@@ -82,5 +85,8 @@ export default StyleSheet.create({
     fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
     marginBottom: 24,
+  },
+  loader: {
+    paddingVertical: 10,
   },
 });

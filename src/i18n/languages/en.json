@@ -6,5 +6,12 @@
     "linkToShare": "Link to share",
     "messageToShare": "Message to share",
     "postMedia": "Post Media"
+  },
+  "CitySelectModal": {
+    "noSearchResults": "No search results",
+    "showFullList": "Show full list",
+    "cancel": "Cancel",
+    "selectHometown": "Select Hometown",
+    "search": "Search"
   }
 }

@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import debounce from 'lodash.debounce';
+import { useTranslation } from 'react-i18next';
 
 import Text from 'components/Text';
 import SearchInput from 'components/SearchInput';
@@ -24,35 +25,36 @@ import colors from 'themes/colors';
 
 import styles from './CitySelectModal.styles';
 
-const PAGE = 1;
+const INITIAL_PAGE = 1;
 const PER_PAGE = 25;
 
 function CitySelectModal({
   cityId, onClose, onSubmit, visible,
 }) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const [selectedCityId, setSelectedCityId] = useState(cityId);
   const [cities, setCities] = useState([]);
 
-  const [page, setPage] = useState(PAGE);
-  const [loadMore, setLoadMore] = useState(true);
+  const [page, setPage] = useState(INITIAL_PAGE);
+  const [isAllCitiesLoaded, setIsAllCitiesLoaded] = useState(false);
 
   const [search, setSearch] = useState('');
 
   const debounced = useRef(debounce(async (searchValue) => {
     const searchCities = await cityActions.getCities({
-      page: PAGE,
+      page: INITIAL_PAGE,
       perPage: PER_PAGE,
       search: searchValue,
     });
     if (searchCities.length < PER_PAGE) {
-      setLoadMore(false);
+      setIsAllCitiesLoaded(true);
     } else {
-      setLoadMore(true);
+      setIsAllCitiesLoaded(false);
     }
     setCities(searchCities);
-    setPage(PAGE + 1);
+    setPage(INITIAL_PAGE + 1);
   }, 500, { leading: false, trailing: true }));
 
   useEffect(() => {
@@ -86,35 +88,41 @@ function CitySelectModal({
 
   const renderItemSeparator = () => <View style={styles.line} />;
 
+  const keyExtractor = useCallback(item => item._id, []);
+
   const renderFooter = () => {
-    if (!loadMore) {
+    if (isAllCitiesLoaded) {
       return null;
     }
     return (
-      <View style={{ paddingVertical: 10 }}>
+      <View style={styles.loader}>
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   };
 
+  const clearSearchInput = useCallback(() => {
+    setSearch('');
+  }, []);
+
   const renderEmptyComponent = () => {
     return (
       <View style={styles.emptyWrapper}>
-        <Text style={styles.emptyText}>No search results</Text>
-        <TouchableOpacity onPress={onClose} activeOpacity={0.7}>
-          <Text style={styles.headerCancel}>Show full list</Text>
+        <Text style={styles.emptyText}>{t('CitySelectModal.noSearchResults')}</Text>
+        <TouchableOpacity onPress={clearSearchInput} activeOpacity={0.7}>
+          <Text style={styles.headerCancel}>{t('CitySelectModal.showFullList')}</Text>
         </TouchableOpacity>
       </View>
     );
   };
 
   const fetchMoreCities = useCallback(async () => {
-    if (page !== PAGE) {
+    if (page !== INITIAL_PAGE) {
       const newCities = await cityActions.getCities({ page, perPage: PER_PAGE, search });
       if (newCities.length < PER_PAGE) {
-        setLoadMore(false);
+        setIsAllCitiesLoaded(true);
       } else {
-        setLoadMore(true);
+        setIsAllCitiesLoaded(false);
       }
       setCities([...cities, ...newCities]);
     }
@@ -136,25 +144,25 @@ function CitySelectModal({
       <View style={styles.modal}>
         <View style={styles.header}>
           <TouchableOpacity onPress={onClose} activeOpacity={0.7}>
-            <Text style={styles.headerCancel}>Cancel</Text>
+            <Text style={styles.headerCancel}>{t('CitySelectModal.cancel')}</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Select Hometown</Text>
-          <View style={{ width: 50 }} />
+          <Text style={styles.headerTitle}>{t('CitySelectModal.selectHometown')}</Text>
+          <View style={styles.headerEmptyBlock} />
         </View>
         <View style={styles.searchWrapper}>
           <SearchInput
             value={search}
             onChangeText={setSearch}
-            placeholder="Search"
+            placeholder={t('CitySelectModal.search')}
           />
         </View>
         <FlatList
           data={cities}
-          keyExtractor={item => item._id}
+          keyExtractor={keyExtractor}
           renderItem={renderItem}
           ItemSeparatorComponent={renderItemSeparator}
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={0}
+          onEndReachedThreshold={0.3}
           initialNumToRender={25}
           ListFooterComponent={renderFooter}
           ListEmptyComponent={renderEmptyComponent}
