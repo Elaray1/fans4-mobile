@@ -17,4 +17,4 @@ function VerificationPending() {
   );
 }
 
-export default VerificationPending;
+export default React.memo(VerificationPending);

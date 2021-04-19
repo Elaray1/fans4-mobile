@@ -17,4 +17,4 @@ function OnBoarding2() {
   );
 }
 
-export default OnBoarding2;
+export default React.memo(OnBoarding2);

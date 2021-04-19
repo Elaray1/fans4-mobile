@@ -17,4 +17,4 @@ function VerificationSuccessful() {
   );
 }
 
-export default VerificationSuccessful;
+export default React.memo(VerificationSuccessful);

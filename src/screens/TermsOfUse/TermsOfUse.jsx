@@ -17,15 +17,15 @@ function TermsOfUse() {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <View  style={styles.content}>
-      <Header isBackArrow title={t('TermsOfUse.headerTitle')} />
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>{t('TermsOfUse.firstParagraphTitle')}</Text>
-        <Text style={styles.text}>{t('TermsOfUse.firstParagraphText')}</Text>
-        <Text style={styles.title}>{t('TermsOfUse.secondParagraphTitle')}</Text>
-        <Text style={styles.text}>{t('TermsOfUse.secondParagraphText')}</Text>
-      </ScrollView>
-      <Button
+      <View style={styles.content}>
+        <Header isBackArrow title={t('TermsOfUse.headerTitle')} />
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <Text style={styles.title}>{t('TermsOfUse.firstParagraphTitle')}</Text>
+          <Text style={styles.text}>{t('TermsOfUse.firstParagraphText')}</Text>
+          <Text style={styles.title}>{t('TermsOfUse.secondParagraphTitle')}</Text>
+          <Text style={styles.text}>{t('TermsOfUse.secondParagraphText')}</Text>
+        </ScrollView>
+        <Button
           title={t('TermsOfUse.buttonText')}
           onPress={() => {}}
           buttonStyles={styles.button}
@@ -35,4 +35,4 @@ function TermsOfUse() {
   );
 }
 
-export default TermsOfUse;
+export default React.memo(TermsOfUse);

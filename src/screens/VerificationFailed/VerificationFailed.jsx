@@ -24,4 +24,4 @@ function VerificationFailed() {
   );
 }
 
-export default VerificationFailed;
+export default React.memo(VerificationFailed);
