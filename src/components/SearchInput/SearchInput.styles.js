@@ -5,30 +5,29 @@ import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   inputContainer: {
-    alignItems: 'center',
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
-    height: 48,
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: colors.disabledText,
-    paddingHorizontal: 14,
-    marginVertical: 2,
+    height: 36,
+    borderRadius: 5,
+    paddingHorizontal: 11,
+    backgroundColor: colors.gray,
   },
   disabled: {
     backgroundColor: colors.disabledBackground,
     color: colors.disabledText,
-    borderColor: colors.disabled,
   },
   inputFocused: {
-    borderColor: colors.primary,
   },
   input: {
+    marginLeft: 5,
+    height: 36,
+    paddingVertical: 0,
     flex: 1,
-    marginLeft: 10,
     color: colors.white,
+    fontSize: fonts.size.small,
     fontFamily: fonts.family.base,
-    fontSize: fonts.size.regular,
-    fontWeight: fonts.weight.regular,
+    fontWeight: fonts.weight.medium,
   },
 });

@@ -21,9 +21,11 @@ export default StyleSheet.create({
     borderColor: colors.disabled,
   },
   inputFocused: {
+    borderWidth: 1,
     borderColor: colors.primary,
   },
   label: {
+    fontFamily: fonts.family.bold,
     color: colors.white,
     opacity: 0.4,
     fontSize: fonts.size.caption,
@@ -31,7 +33,6 @@ export default StyleSheet.create({
     lineHeight: fonts.lineHeight.caption,
   },
   labelFocused: {
-    color: colors.primary,
   },
   error: {
     borderColor: colors.error,
@@ -43,8 +44,8 @@ export default StyleSheet.create({
   input: {
     flex: 1,
     color: colors.white,
-    fontFamily: fonts.family.base,
     fontSize: fonts.size.small,
+    fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.medium,
   },
 });

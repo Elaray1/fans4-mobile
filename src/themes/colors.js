@@ -15,8 +15,10 @@ const colors = {
   tabBarActive: '#333333', // need to change
 
   disabled: '#ECEFF1', // need to change
-  disabledText: '#B0BBC5', // need to change
+  disabledText: '#8B8D98',
   disabledBackground: '#F8F9FA', // need to change
+
+  clearSearch: '#DADADA',
 };
 
 export default colors;

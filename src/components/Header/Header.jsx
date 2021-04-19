@@ -24,21 +24,18 @@ function Header({
 
   return (
     <View style={styles.headerWrapper}>
-      <View style={[styles.header]}>
-        {isBackArrow
-          ? (
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={onBackNavigation}
-              style={styles.backButtonWrapper}
-            >
-              <View style={styles.backButton}>
-                <BackArrowIcon />
-              </View>
-            </TouchableOpacity>
-          )
-          : <View style={{ width: WIDTH_ICON }} />
-        }
+      <View style={[styles.header, isBackArrow ? { marginTop: 25 } : { marginTop: 30 }]}>
+        {isBackArrow ? (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={onBackNavigation}
+            style={styles.backButtonWrapper}
+          >
+            <View style={styles.backButton}>
+              <BackArrowIcon />
+            </View>
+          </TouchableOpacity>
+        ) : <View style={{ width: WIDTH_ICON }} />}
 
         <Text style={styles.title}>{title}</Text>
 

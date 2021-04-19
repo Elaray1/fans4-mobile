@@ -15,6 +15,7 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   buttonTitle: {
+    fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
     lineHeight: fonts.lineHeight.regular,
     fontSize: fonts.size.regular,

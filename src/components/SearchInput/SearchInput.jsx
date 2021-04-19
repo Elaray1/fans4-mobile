@@ -47,7 +47,7 @@ function SearchInput({
         disabled && styles.disabled,
       ]}
     >
-      <SearchIcon />
+      <SearchIcon fill={value.length ? colors.white : colors.disabledText} />
       <TextInput
         style={[styles.input, style]}
         placeholder={placeholder}
@@ -68,7 +68,7 @@ function SearchInput({
             activeOpacity={0.7}
             onPress={onClearInput}
           >
-            <CancelSearchIcon fill={colors.white} />
+            <CancelSearchIcon fill={colors.clearSearch} />
           </TouchableOpacity>
         )}
     </View>

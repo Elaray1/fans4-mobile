@@ -8,7 +8,8 @@
     "import/extensions": [2, {
         "json": "never",
         "jsx": "never",
-        "js": "never"
+        "js": "never",
+        "svg": "always"
     }]
   }
 }

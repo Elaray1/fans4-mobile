@@ -28,6 +28,7 @@ export default StyleSheet.create({
     paddingHorizontal: variables.paddingHorizontal,
   },
   doneText: {
+    fontFamily: fonts.family.bold,
     color: colors.primary,
     fontSize: fonts.size.small,
     lineHeight: fonts.lineHeight.small,

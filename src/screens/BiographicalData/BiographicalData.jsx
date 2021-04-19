@@ -19,7 +19,7 @@ function BiographicalData() {
   const [fullName, setFullName] = useState('');
   const [nickname, setNickname] = useState('');
   const [birthDate, setBirthDate] = useState(null);
-  const [hometown, setHometown] = useState(null);
+  const [hometown, setHometown] = useState({ cityNameWithState: null, cityId: null });
 
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [isCitySelectVisible, setIsCitySelectVisible] = useState(false);
@@ -45,8 +45,8 @@ function BiographicalData() {
     setIsCitySelectVisible(false);
   }, []);
 
-  const onSubmitCitySelectModal = useCallback((city) => {
-    setHometown(city);
+  const onSubmitCitySelectModal = useCallback(({ cityNameWithState, cityId }) => {
+    setHometown({ cityNameWithState, cityId });
     setIsCitySelectVisible(false);
   }, []);
 
@@ -62,7 +62,7 @@ function BiographicalData() {
         visible={isCitySelectVisible}
         onClose={onCloseCitySelectModal}
         onSubmit={onSubmitCitySelectModal}
-        {...(hometown && { city: hometown })}
+        {...(hometown?.cityId && { cityId: hometown.cityId })}
       />
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
@@ -98,7 +98,7 @@ function BiographicalData() {
               onPress={onHometownPress}
               activeOpacity={0.8}
             >
-              <Text style={styles.input}>{hometown ?? ''}</Text>
+              <Text style={styles.input}>{hometown?.cityNameWithState || ''}</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -35,7 +35,7 @@ const lineHeight = {
   big: 38,
   medium: 30,
   regular: 22,
-  small: 18,
+  small: 19,
   caption: 16,
 };
 

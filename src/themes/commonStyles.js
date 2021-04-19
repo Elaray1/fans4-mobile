@@ -33,6 +33,7 @@ export const commonStyles = {
     ),
   },
   labelStyle: {
+    fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
     fontSize: fonts.size.tiny,
   },
