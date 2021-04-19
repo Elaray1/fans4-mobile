@@ -83,7 +83,7 @@ function AuthAppLoader() {
       );
     }
     return (<Text>{t('enterYourSearch')}</Text>);
-  }, [fighters, inputValue]);
+  }, [fighters, inputValue, t]);
 
   return (
     <SafeAreaView style={styles.screen}>

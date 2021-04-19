@@ -4,6 +4,7 @@ import { commonStyles, variables } from 'themes/commonStyles';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
+
 export default StyleSheet.create({
   screen: {
     ...commonStyles.screen,
@@ -20,8 +21,8 @@ export default StyleSheet.create({
   inputLabel: {
     color: colors.white,
     opacity: 0.4,
-    fontFamily: fonts.family.bold,
     fontSize: fonts.size.caption,
+    fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
     lineHeight: fonts.lineHeight.caption,
   },
@@ -41,7 +42,6 @@ export default StyleSheet.create({
     color: colors.white,
     fontFamily: fonts.family.base,
     fontSize: fonts.size.small,
-    fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.medium,
   },
 });

@@ -5,7 +5,7 @@ const colors = {
   gray: '#1F1F24',
 
   primary: '#6A7DDD',
-  error: '#F44336', // need to change
+  error: '#F34C4C',
 
   baseFont: '#FFFFFF',
 

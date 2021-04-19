@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import {
   SafeAreaView, View, ScrollView, StatusBar, TouchableOpacity,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 
 import colors from 'themes/colors';
@@ -13,6 +14,7 @@ import Button from 'components/Button';
 import DatePickerModal from 'components/DatePickerModal';
 import CitySelectModal from 'components/CitySelectModal';
 import Toggle from 'components/Toggle';
+import UploadPhotoButton from 'components/UploadPhotoButton';
 
 import styles from './BiographicalData.styles';
 
@@ -22,6 +24,8 @@ const GENDERS = {
 };
 
 function BiographicalData() {
+  const navigation = useNavigation();
+
   const [fullName, setFullName] = useState('');
   const [nickname, setNickname] = useState('');
   const [birthDate, setBirthDate] = useState(null);
@@ -30,6 +34,7 @@ function BiographicalData() {
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [isCitySelectVisible, setIsCitySelectVisible] = useState(false);
   const [gender, setGender] = useState(GENDERS.male);
+  const [photo, setPhoto] = useState(null);
 
   const onBirthDatePress = useCallback(() => {
     setIsDatePickerVisible(true);
@@ -57,6 +62,11 @@ function BiographicalData() {
     setIsCitySelectVisible(false);
   }, []);
 
+
+  const onNext = useCallback(() => {
+    navigation.navigate('PersonalInfo');
+  }, [navigation]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <DatePickerModal
@@ -83,6 +93,7 @@ function BiographicalData() {
 
           <Input
             label="Nickname - optional"
+            maxLength={25}
             value={nickname}
             onChange={setNickname}
           />
@@ -108,21 +119,28 @@ function BiographicalData() {
               <Text style={styles.input}>{hometown?.cityNameWithState || ''}</Text>
             </TouchableOpacity>
           </View>
-        </View>
 
-        <View>
-          <Text style={styles.inputLabel}>Gender by Birth</Text>
-          <Toggle
-            leftOption={{ id: GENDERS.male, value: GENDERS.male }}
-            rightOption={{ id: GENDERS.female, value: GENDERS.female }}
-            selectedOptionId={gender}
-            onSelect={setGender}
+          <View>
+            <Text style={styles.inputLabel}>Gender by Birth</Text>
+            <Toggle
+              leftOption={{ id: GENDERS.male, value: GENDERS.male }}
+              rightOption={{ id: GENDERS.female, value: GENDERS.female }}
+              selectedOptionId={gender}
+              onSelect={setGender}
+            />
+          </View>
+
+
+          <UploadPhotoButton
+            label="Profile photo"
+            handleImageUpload={setPhoto}
           />
         </View>
 
         <Button
           title="Next"
-          onPress={() => {}}
+          disabled={!fullName || !birthDate || !hometown?.cityNameWithState || !photo?.data}
+          onPress={onNext}
         />
       </ScrollView>
     </SafeAreaView>
