@@ -12,6 +12,8 @@ import * as userActions from 'resources/user/user.actions';
 
 import config from 'resources/config';
 
+import colors from 'themes/colors';
+
 import AuthScreens from './authStack';
 import AppScreens from './appStack';
 
@@ -32,6 +34,7 @@ function AppNavigation() {
   return (
     <NavigationContainer
       ref={navigationRef}
+      theme={{ colors: { background: colors.main } }}
     >
       {/* {userAuthenticated ? <AppScreens /> : <AuthScreens />} */}
       {userAuthenticated ? <AuthScreens /> : <AppScreens />}
