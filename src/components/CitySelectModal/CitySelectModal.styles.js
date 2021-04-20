@@ -26,7 +26,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingTop: 25,
     paddingBottom: 12,
-    backgroundColor: '#2B2B2B',
+    backgroundColor: colors.bigModalHeader,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     // without it scrollbar is not on the end of the screen

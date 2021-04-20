@@ -15,6 +15,10 @@ const colors = {
   grayBackground: '#f0f0f0',
   borderModal: '#252525',
 
+  bigModalHeader: '#2B2B2B',
+  primaryModalButton: '#3888FF',
+  secondaryModalButton: '#2F80ED',
+
   tabBarInactive: '#8B8E98', // need to change
   tabBarActive: '#333333', // need to change
 

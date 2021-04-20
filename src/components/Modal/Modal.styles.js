@@ -60,13 +60,13 @@ export default StyleSheet.create({
   },
   buttonSecondaryText: {
     textAlign: 'center',
-    color: '#2F80ED',
+    color: colors.secondaryModalButton,
     fontSize: fonts.size.regular,
     lineHeight: fonts.lineHeight.regular,
   },
   buttonPrimaryText: {
     textAlign: 'center',
-    color: '#3888FF',
+    color: colors.primaryModalButton,
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.semiBold,
     fontSize: fonts.size.regular,
