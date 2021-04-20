@@ -4,6 +4,7 @@ import { TouchableOpacity, View, Image } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import Text from 'components/Text';
+import Modal from 'components/Modal';
 
 import PaperclipIcon from 'assets/icons/paperclip.svg';
 import RedBin from 'assets/icons/red-bin.svg';
@@ -13,6 +14,7 @@ import styles from './UploadPhotoButton.styles';
 function UploadPhotoButton({ handleImageUpload, label }) {
   const [errorText, setErrorText] = useState(null);
   const [photo, setPhoto] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const onEditProfilePicture = useCallback(async () => {
     const options = {
@@ -38,47 +40,65 @@ function UploadPhotoButton({ handleImageUpload, label }) {
     }
   }, [handleImageUpload]);
 
+  const onBinPress = useCallback(() => {
+    setIsModalVisible(true);
+  }, []);
+
   const removePhoto = useCallback(() => {
+    setIsModalVisible(false);
     setPhoto(null);
   }, []);
 
+  const closeModal = useCallback(() => {
+    setIsModalVisible(false);
+  }, []);
+
   return (
-    <View style={styles.buttonWrapper}>
-      <Text style={styles.label}>{label}</Text>
-      {photo?.data ? (
-        <View>
-          <Image
-            style={styles.photoImage}
-            source={{ uri: `data:${photo?.mime};base64,${photo?.data}` }}
-          />
-          <TouchableOpacity
-            style={styles.redBin}
-            activeOpacity={0.7}
-            onPress={removePhoto}
-          >
-            <RedBin />
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={onEditProfilePicture}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.text}>Upload</Text>
-            <PaperclipIcon />
-          </TouchableOpacity>
-          {errorText && (
-          <View style={styles.error}>
-            <Text style={styles.errorText}>{errorText}</Text>
+    <>
+      <Modal
+        visible={isModalVisible}
+        onClose={closeModal}
+        onSubmit={removePhoto}
+        title="Delete Media"
+        text="Uploaded media will be deleted."
+        buttonPrimaryText="Delete"
+        buttonSecondaryText="Cancel"
+      />
+      <View style={styles.buttonWrapper}>
+        <Text style={styles.label}>{label}</Text>
+        {photo?.data ? (
+          <View>
+            <Image
+              style={styles.photoImage}
+              source={{ uri: `data:${photo?.mime};base64,${photo?.data}` }}
+            />
+            <TouchableOpacity
+              style={styles.redBin}
+              activeOpacity={0.7}
+              onPress={onBinPress}
+            >
+              <RedBin />
+            </TouchableOpacity>
           </View>
-          )}
-        </>
-      )}
-
-    </View>
-
+        ) : (
+          <>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={onEditProfilePicture}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.text}>Upload</Text>
+              <PaperclipIcon />
+            </TouchableOpacity>
+            {errorText && (
+            <View style={styles.error}>
+              <Text style={styles.errorText}>{errorText}</Text>
+            </View>
+            )}
+          </>
+        )}
+      </View>
+    </>
   );
 }
 
