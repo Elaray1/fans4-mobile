@@ -4,6 +4,7 @@ import {
   View, TouchableOpacity, Modal, Pressable,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import { useTranslation } from 'react-i18next';
 
 import Text from 'components/Text';
 
@@ -14,6 +15,7 @@ import styles from './DatePickerModal.styles';
 function DatePickerModal({
   date, onClose, onSubmit, visible,
 }) {
+  const { t } = useTranslation();
   const [internalDate, setInternalDate] = useState(date);
 
   const onDonePress = useCallback(() => {
@@ -34,7 +36,7 @@ function DatePickerModal({
           onPress={onDonePress}
           activeOpacity={0.8}
         >
-          <Text style={styles.doneText}>Done</Text>
+          <Text style={styles.doneText}>{t('DatePickerModal.done')}</Text>
         </TouchableOpacity>
         <View style={styles.line} />
         <DatePicker

@@ -57,5 +57,28 @@
     "api": {
       "unexpectedErrorOccurred": "Unexpected error occurred."
     }
+  },
+  "BiographicalData": {
+    "BiographicalData": "Biographical Data",
+    "firstAndLastName": "First and last name",
+    "nicknameOptional": "Nickname - optional",
+    "birthDate": "Birth Date",
+    "hometown": "Hometown",
+    "genderByBirth": "Gender by Birth",
+    "male": "male",
+    "female": "female",
+    "profilePhoto": "Profile photo",
+    "next": "Next"
+  },
+  "DatePickerModal": {
+    "done": "Done"
+  },
+  "UploadPhotoButton": {
+    "deleteMedia": "Delete Media",
+    "uploadedMediaWillBeDeleted": "Uploaded media will be deleted.",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "upload": "Upload",
+    "provideAccessToTheLibrary": "Please provide access to the library in mobile settings"
   }
 }

@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import colors from 'themes/colors';
 
@@ -25,6 +26,7 @@ const GENDERS = {
 
 function BiographicalData() {
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   const [fullName, setFullName] = useState('');
   const [nickname, setNickname] = useState('');
@@ -83,23 +85,23 @@ function BiographicalData() {
       />
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
-        <Header isBackArrow title="Biographical Data" />
+        <Header isBackArrow title={t('BiographicalData.BiographicalData')} />
         <View>
           <Input
-            label="First and last name"
+            label={t('BiographicalData.firstAndLastName')}
             value={fullName}
             onChange={setFullName}
           />
 
           <Input
-            label="Nickname - optional"
+            label={t('BiographicalData.nicknameOptional')}
             maxLength={25}
             value={nickname}
             onChange={setNickname}
           />
 
           <View>
-            <Text style={styles.inputLabel}>Birth Date</Text>
+            <Text style={styles.inputLabel}>{t('BiographicalData.birthDate')}</Text>
             <TouchableOpacity
               style={styles.inputContainer}
               onPress={onBirthDatePress}
@@ -110,7 +112,7 @@ function BiographicalData() {
           </View>
 
           <View>
-            <Text style={styles.inputLabel}>Hometown</Text>
+            <Text style={styles.inputLabel}>{t('BiographicalData.hometown')}</Text>
             <TouchableOpacity
               style={styles.inputContainer}
               onPress={onHometownPress}
@@ -121,10 +123,10 @@ function BiographicalData() {
           </View>
 
           <View>
-            <Text style={styles.inputLabel}>Gender by Birth</Text>
+            <Text style={styles.inputLabel}>{t('BiographicalData.genderByBirth')}</Text>
             <Toggle
-              leftOption={{ id: GENDERS.male, value: GENDERS.male }}
-              rightOption={{ id: GENDERS.female, value: GENDERS.female }}
+              leftOption={{ id: GENDERS.male, value: t('BiographicalData.male') }}
+              rightOption={{ id: GENDERS.female, value: t('BiographicalData.female') }}
               selectedOptionId={gender}
               onSelect={setGender}
             />
@@ -132,13 +134,13 @@ function BiographicalData() {
 
 
           <UploadPhotoButton
-            label="Profile photo"
+            label={t('BiographicalData.profilePhoto')}
             handleImageUpload={setPhoto}
           />
         </View>
 
         <Button
-          title="Next"
+          title={t('BiographicalData.next')}
           disabled={!fullName || !birthDate || !hometown?.cityNameWithState || !photo?.data}
           onPress={onNext}
         />

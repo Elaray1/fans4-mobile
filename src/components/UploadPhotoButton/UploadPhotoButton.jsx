@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity, View, Image } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import { useTranslation } from 'react-i18next';
 
 import Text from 'components/Text';
 import Modal from 'components/Modal';
@@ -12,6 +13,8 @@ import RedBin from 'assets/icons/red-bin.svg';
 import styles from './UploadPhotoButton.styles';
 
 function UploadPhotoButton({ handleImageUpload, label }) {
+  const { t } = useTranslation();
+
   const [errorText, setErrorText] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -35,10 +38,10 @@ function UploadPhotoButton({ handleImageUpload, label }) {
       setErrorText(null);
     } catch (error) {
       if (error.code === 'E_NO_LIBRARY_PERMISSION') {
-        setErrorText('Please provide access to the library in mobile settings');
+        setErrorText(t('UploadPhotoButton.provideAccessToTheLibrary'));
       }
     }
-  }, [handleImageUpload]);
+  }, [handleImageUpload, t]);
 
   const onBinPress = useCallback(() => {
     setIsModalVisible(true);
@@ -59,10 +62,10 @@ function UploadPhotoButton({ handleImageUpload, label }) {
         visible={isModalVisible}
         onClose={closeModal}
         onSubmit={removePhoto}
-        title="Delete Media"
-        text="Uploaded media will be deleted."
-        buttonPrimaryText="Delete"
-        buttonSecondaryText="Cancel"
+        title={t('UploadPhotoButton.deleteMedia')}
+        text={t('UploadPhotoButton.uploadedMediaWillBeDeleted')}
+        buttonPrimaryText={t('UploadPhotoButton.delete')}
+        buttonSecondaryText={t('UploadPhotoButton.cancel')}
       />
       <View style={styles.buttonWrapper}>
         <Text style={styles.label}>{label}</Text>
@@ -87,7 +90,7 @@ function UploadPhotoButton({ handleImageUpload, label }) {
               onPress={onEditProfilePicture}
               activeOpacity={0.7}
             >
-              <Text style={styles.text}>Upload</Text>
+              <Text style={styles.text}>{t('UploadPhotoButton.upload')}</Text>
               <PaperclipIcon />
             </TouchableOpacity>
             {errorText && (
