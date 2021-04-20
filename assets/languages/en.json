@@ -80,5 +80,8 @@
     "cancel": "Cancel",
     "upload": "Upload",
     "provideAccessToTheLibrary": "Please provide access to the library in mobile settings"
+  },
+  "PersonalInfo": {
+    "PersonalInfo": "Personal Info"
   }
 }
