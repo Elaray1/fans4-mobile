@@ -4,7 +4,7 @@ import {
   SafeAreaView, View, StatusBar, ScrollView,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 
 import * as userActions from 'resources/user/user.actions';
 
@@ -16,41 +16,25 @@ import Checkmark from 'assets/icons/checkmark';
 import Text from 'components/Text';
 import Button from 'components/Button';
 
-import { setItem, removeItem } from 'helpers/storage';
 import { USER_TYPES } from 'resources/user/user.constants';
-import { STORAGE_KEYS } from 'helpers/constants';
 
 import styles from './EmailConfirmation.styles';
 
 function EmailConfirmation({ route }) {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
-  const navigation = useNavigation();
-  const { email, userType, isResendEmail } = route.params;
+  const { email } = route.params;
 
   let timer = null;
 
-  const [isResendButton, setIsResendButton] = useState(isResendEmail);
+  const [isResendButton, setIsResendButton] = useState(false);
 
   useEffect(() => {
-    const init = async () => {
-      await Promise.all([
-        setItem(STORAGE_KEYS.PREV_SCREEN, 'EmailConfirmation'),
-        setItem(STORAGE_KEYS.USER_TYPE, userType),
-        setItem(STORAGE_KEYS.USER_EMAIL, email),
-      ]);
-    };
-
-    init();
-  }, [userType, email]);
-
-  useEffect(() => {
-    if (!isResendEmail) {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      timer = setTimeout(() => setIsResendButton(true), 10000);
-    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    timer = setTimeout(() => setIsResendButton(true), 10000);
 
     return () => timer && clearTimeout(timer);
-  }, [isResendEmail]);
+  }, [timer]);
 
   const onResendEmail = useCallback(async () => {
     setIsResendButton(false);
@@ -61,27 +45,8 @@ function EmailConfirmation({ route }) {
   }, [email]);
 
   const onBackToSignUp = useCallback(async () => {
-    await Promise.all([
-      removeItem(STORAGE_KEYS.PREV_SCREEN),
-      removeItem(STORAGE_KEYS.USER_TYPE),
-      removeItem(STORAGE_KEYS.USER_EMAIL),
-    ]);
-
-    navigation.reset({
-      index: 1,
-      routes: [
-        {
-          name: 'SelectUserType',
-        },
-        {
-          name: 'SignUp',
-          params: {
-            userType,
-          },
-        },
-      ],
-    });
-  }, [navigation, userType]);
+    await dispatch(userActions.logout());
+  }, [dispatch]);
 
   return (
     <SafeAreaView style={styles.screen}>

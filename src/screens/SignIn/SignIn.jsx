@@ -24,7 +24,7 @@ import { validateEmail, validatePassword } from 'helpers/validate';
 
 import styles from './SignIn.styles';
 
-function SignUp({ route }) {
+function SignIn({ route }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -36,15 +36,10 @@ function SignUp({ route }) {
     email: [],
     password: [],
   });
-  const [isInputFocused, setIsInputFocused] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const onEmailBlur = useCallback(() => {
-    if (isError) {
-      setIsError(false);
-    }
-    setIsInputFocused(false);
     if (validateEmail(emailValue)) {
       setInputErrors({
         ...inputErrors,
@@ -56,13 +51,9 @@ function SignUp({ route }) {
         email: [t('SignIn.EmailIsInvalid')],
       });
     }
-  }, [emailValue, inputErrors, t, isError]);
+  }, [emailValue, inputErrors, t]);
 
   const onPasswordBlur = useCallback(() => {
-    if (isError) {
-      setIsError(false);
-    }
-    setIsInputFocused(false);
     if (validatePassword(passwordValue)) {
       setInputErrors({
         ...inputErrors,
@@ -74,29 +65,62 @@ function SignUp({ route }) {
         password: [t('SignIn.PasswordShouldContainAtLeast6Characters')],
       });
     }
-  }, [passwordValue, inputErrors, t, isError]);
+  }, [passwordValue, inputErrors, t]);
 
   const onPressSignIn = useCallback(async () => {
-    try {
-      setIsLoading(true);
-
-      const email = emailValue;
-
-      await dispatch(userActions.emailSignIn({
-        email,
-        password: passwordValue,
-        userType,
-      }));
-    } catch (err) {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
+    let isErrors = false;
+    if (!validateEmail(emailValue)) {
+      isErrors = true;
+      setInputErrors({
+        ...inputErrors,
+        email: [t('SignIn.EmailIsInvalid')],
+      });
+    } else if (inputErrors.email.length) {
+      setInputErrors({
+        ...inputErrors,
+        email: [],
+      });
     }
-  }, [emailValue, passwordValue, userType, dispatch]);
 
-  const onInputFocused = useCallback(() => {
-    setIsInputFocused(true);
-  }, []);
+    if (!validatePassword(passwordValue)) {
+      isErrors = true;
+      setInputErrors({
+        ...inputErrors,
+        password: [t('SignIn.PasswordShouldContainAtLeast6Characters')],
+      });
+    } else if (inputErrors.password.length) {
+      setInputErrors({
+        ...inputErrors,
+        password: [],
+      });
+    }
+
+    if (!isErrors) {
+      try {
+        setIsLoading(true);
+        await dispatch(userActions.emailSignIn({
+          email: emailValue,
+          password: passwordValue,
+          userType,
+        }));
+      } catch (err) {
+        setIsError(true);
+        setIsLoading(false);
+      }
+    }
+  }, [emailValue, passwordValue, userType, dispatch, inputErrors, t]);
+
+  const onChangeInputValue = useCallback((inputName) => {
+    if (isError) {
+      setIsError(false);
+    }
+    if (inputErrors[inputName].length) {
+      setInputErrors({
+        ...inputErrors,
+        [inputName]: [],
+      });
+    }
+  }, [inputErrors, isError]);
 
   const onPressSignUp = useCallback(() => {
     navigation.navigate('SignUp', { userType });
@@ -127,8 +151,7 @@ function SignUp({ route }) {
               <Input
                 label={t('SignIn.Email')}
                 value={emailValue}
-                onChange={setEmailValue}
-                onFocus={onInputFocused}
+                onChange={(value) => { onChangeInputValue('email'); setEmailValue(value); }}
                 onBlur={onEmailBlur}
                 errors={inputErrors.email}
                 style={styles.input}
@@ -137,9 +160,8 @@ function SignUp({ route }) {
                 <Input
                   label={t('SignIn.Password')}
                   value={passwordValue}
-                  onChange={setPasswordValue}
+                  onChange={(value) => { onChangeInputValue('password'); setPasswordValue(value); }}
                   type="password"
-                  onFocus={onInputFocused}
                   onBlur={onPasswordBlur}
                   errors={inputErrors.password}
                 />
@@ -156,7 +178,6 @@ function SignUp({ route }) {
               title={t('SignIn.SignIn')}
               disabled={!emailValue
                 || !passwordValue
-                || isInputFocused
                 || !!inputErrors.email.length
                 || !!inputErrors.password.length
                 || isError}
@@ -180,7 +201,7 @@ function SignUp({ route }) {
   );
 }
 
-SignUp.propTypes = {
+SignIn.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       userType: PropTypes.oneOf(Object.values(USER_TYPES)),
@@ -188,4 +209,4 @@ SignUp.propTypes = {
   }).isRequired,
 };
 
-export default SignUp;
+export default SignIn;

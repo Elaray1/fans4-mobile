@@ -1,18 +1,11 @@
 import {
-  USER_SIGNED_IN,
   USER_LOGGED_OUT,
   USER_FILLED_REGISTRATION_FORM,
-  SET_USER_AUTHENTICATED,
   SET_USER_DATA,
 } from './user.constants';
 
-export default (state = {}, action) => { // TODO: change to null
+export default (state = null, action) => {
   switch (action.type) {
-    case SET_USER_AUTHENTICATED:
-      return {
-        ...state,
-        authenticated: true,
-      };
     case SET_USER_DATA:
       return {
         ...state,
@@ -29,7 +22,6 @@ export default (state = {}, action) => { // TODO: change to null
         ...state,
         ...action.user,
       };
-
     default:
       return state;
   }

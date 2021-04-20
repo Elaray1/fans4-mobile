@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
+import SplashScreen from 'react-native-splash-screen';
 
 import { STORAGE_KEYS } from 'helpers/constants';
-import { getItem } from 'helpers/storage';
+import { getItem, setItem } from 'helpers/storage';
 import { navigationRef } from 'helpers/rootNavigation';
 
 import * as userSelectors from 'resources/user/user.selectors';
@@ -26,8 +27,19 @@ function AppNavigation() {
       const accessToken = await getItem(STORAGE_KEYS.ACCESS_TOKEN);
       if (accessToken) {
         config.accessToken = accessToken;
-        dispatch(userActions.setUserAuthenticated());
+        await dispatch(userActions.getUserData());
+      } else {
+        const fetchedAccessToken = await userActions.fetchAccessToken();
+        if (fetchedAccessToken) {
+          config.accessToken = fetchedAccessToken;
+          await Promise.all([
+            setItem(STORAGE_KEYS.ACCESS_TOKEN, fetchedAccessToken),
+            userActions.removeVerificationDeviceId(),
+          ]);
+          await dispatch(userActions.getUserData());
+        }
       }
+      SplashScreen.hide();
     })();
   }, [dispatch]);
 

@@ -2,7 +2,9 @@ import { Alert, Platform } from 'react-native';
 import config from 'resources/config';
 import axios from 'axios';
 
+import { STORAGE_KEYS } from 'helpers/constants';
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
+import { setItem, clear } from 'helpers/storage';
 
 import {
   USER_SIGNED_IN,
@@ -10,18 +12,27 @@ import {
   USER_FILLED_REGISTRATION_FORM,
   SET_USER_AUTHENTICATED,
   SET_USER_DATA,
+  USER_LOGGED_OUT,
 } from './user.constants';
 
 import * as api from './user.api';
 
-export const emailSignUp = async ({
+export const emailSignUp = ({
   email, password, userType,
-}) => {
+}) => async (dispatch) => {
   const deviceId = getMaskedDeviceId();
-
-  const user = await api.emailSignUp({
+  const { user, accessToken } = await api.emailSignUp({
     email, password, userType, deviceId,
   });
+  config.accessToken = accessToken;
+
+  await Promise.all([
+    setItem(STORAGE_KEYS.USER_TYPE, userType),
+    setItem(STORAGE_KEYS.USER_EMAIL, email),
+    setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
+    dispatch({ type: SET_USER_DATA, user }),
+  ]);
+
   return user;
 };
 
@@ -39,13 +50,14 @@ export const fetchAccessToken = async () => {
   return accessToken;
 };
 
-export const setUserAuthenticated = () => (dispatch) => {
-  dispatch({ type: SET_USER_AUTHENTICATED });
-};
-
 export const getUserData = () => async (dispatch) => {
   const user = await api.getUserData();
-  dispatch({ type: SET_USER_DATA, user });
+  await dispatch({ type: SET_USER_DATA, user });
+  return user;
+};
+
+export const setUserData = user => async (dispatch) => {
+  await dispatch({ type: SET_USER_DATA, user });
   return user;
 };
 
@@ -60,7 +72,12 @@ export const emailSignIn = ({ email, password, userType }) => async (dispatch) =
     email, password, userType, deviceId,
   });
   config.accessToken = accessToken;
-  dispatch({ type: SET_USER_AUTHENTICATED });
+  await Promise.all([
+    setItem(STORAGE_KEYS.USER_TYPE, userType),
+    setItem(STORAGE_KEYS.USER_EMAIL, email),
+    setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
+    dispatch({ type: SET_USER_DATA, user }),
+  ]);
   return user;
 };
 
@@ -108,3 +125,9 @@ export const fillRegistrationForm = ({
 };
 
 /* Fighters actions: end */
+export const logout = () => async (dispatch) => {
+  // await api.logout(); // add logout endpoint
+  config.accessToken = null;
+  await clear();
+  dispatch({ type: USER_LOGGED_OUT });
+};

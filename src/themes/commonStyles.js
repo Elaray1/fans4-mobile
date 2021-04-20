@@ -9,6 +9,10 @@ export const variables = {
 };
 
 export const commonStyles = {
+  navigator: {
+    flex: 1,
+    backgroundColor: colors.main,
+  },
   screen: {
     flex: 1,
     backgroundColor: colors.main,
