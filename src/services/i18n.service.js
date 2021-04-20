@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import Config from 'react-native-config';
 import { getLocales } from 'react-native-localize';
 
-import en from './languages/en';
+import en from 'assets/languages/en';
 
 const DEFAULT_I18NEXT_NAMESPACE = 'translation';
 

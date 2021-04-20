@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import config from 'resources/config';
+import i18n from 'services/i18n.service';
 
 import ApiError from './api.error';
 
@@ -11,7 +12,7 @@ axios.interceptors.response.use(
 );
 
 const generalError = {
-  _global: ['Unexpected error occurred.'],
+  _global: [i18n.t('helpers.api.unexpectedErrorOccurred')],
 };
 
 const throwApiError = ({ data = {}, status = 500 }) => {
@@ -28,6 +29,7 @@ const httpRequest = method => async (url, data) => {
     headers: {
       Authorization: `Bearer ${config.accessToken}`,
       'X-Application-ID': config.applicationId,
+      'X-Language': i18n.language,
     },
     method,
     url: `${config.apiUrl}${urlWithSlash}`,
