@@ -29,6 +29,7 @@ import AccountInformation from 'screens/AccountInformation';
 import AccountBlocked from 'screens/AccountBlocked';
 import Security from 'screens/Security';
 import PasswordUpdated from 'screens/PasswordUpdated';
+import ChangePassword from 'screens/ChangePassword';
 
 import * as socketService from 'services/socket.service';
 
@@ -202,6 +203,7 @@ function AppScreens() {
       <AppStack.Screen name="AccountBlocked" component={AccountBlocked} />
       <AppStack.Screen name="Security" component={Security} />
       <AppStack.Screen name="PasswordUpdated" component={PasswordUpdated} />
+      <AppStack.Screen name="ChangePassword" component={ChangePassword} />
     </AppStack.Navigator>
   );
 }

@@ -133,6 +133,10 @@ function SignIn({ route }) {
     navigation.navigate('SignUp', { userType });
   }, [navigation, userType]);
 
+  const onPressForgotPassword = useCallback(() => {
+    navigation.navigate('ForgotPassword');
+  }, [navigation]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
@@ -184,7 +188,7 @@ function SignIn({ route }) {
                   onBlur={onPasswordBlur}
                   errors={inputErrors.password}
                 />
-                <TouchableOpacity>
+                <TouchableOpacity onPress={onPressForgotPassword}>
                   <Text style={styles.forgotPassword}>{t('SignIn.ForgotPassword?')}</Text>
                 </TouchableOpacity>
               </View>

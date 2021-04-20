@@ -189,3 +189,12 @@ export const logout = () => async (dispatch) => {
 
   dispatch({ type: USER_LOGGED_OUT });
 };
+
+export const forgotPassword = async (email) => {
+  const deviceId = getMaskedDeviceId();
+  await api.forgotPassword({ email, deviceId });
+};
+
+export const resetPassword = async (password) => {
+  await api.resetPassword({ password });
+};

@@ -61,12 +61,12 @@
   },
   "VerificationPending": {
     "title": "Verification Pending",
-    "description": "Thank you! We are just processing data you have submitted. We will let you know as soon as it is complete.",
+    "description": "Thank you! We are processing the data you submitted. We will let you know as soon as it is complete.",
     "linkText": "Back to sign in page"
   },
   "VerificationSuccessful": {
     "title": "Verification Successful!",
-    "description": "Congratulations! Your account was successfully verified. You can proceed to the next step.",
+    "description": "Congratulations! Your account was successfully verified. Please proceed to the next step.",
     "buttonText": "Next"
   },
   "VerificationFailed": {
@@ -213,5 +213,29 @@
     "buttonText": "Contact Support",
     "linkText": "Back to sign up page",
     "followers": "followers"
+  },
+  "ForgotPassword": {
+    "title": "Forgot password",
+    "inputLabel": "Email",
+    "button": "Send Me a Reset Link",
+    "link": "Back to sign in page",
+    "text": "Please enter your email address"
+  },
+  "ResetPassword": {
+    "title": "Reset Link has been Sent",
+    "description": "A link to reset your password has been sent to [Email Address]. Please check your Inbox.",
+    "linkText": "Back to sign in page"
+  },
+  "PasswordUpdate": {
+    "title": "Password Updated",
+    "description": "Use your new password to log in.",
+    "linkText": "Back to sign in page"
+  },
+  "ChangePassword": {
+    "title": "Change Password",
+    "inputLabel": "New Password",
+    "button": "Save password",
+    "link": "Back to sign in page",
+    "text": "Please enter new password"
   }
 }
