@@ -4,13 +4,11 @@ import { commonStyles, variables } from 'themes/commonStyles';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
-
 export default StyleSheet.create({
   screen: {
     ...commonStyles.screen,
   },
   content: {
-    paddingTop: variables.paddingTop,
     ...commonStyles.screenContent,
   },
   scrollContent: {

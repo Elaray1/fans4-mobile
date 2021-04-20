@@ -1,10 +1,12 @@
 import { StyleSheet } from 'react-native';
 
 import colors from 'themes/colors';
+import { variables } from 'themes/commonStyles';
 import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   headerWrapper: {
+    paddingHorizontal: variables.paddingHorizontal,
     flexDirection: 'column',
   },
   header: {

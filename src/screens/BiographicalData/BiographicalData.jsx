@@ -84,8 +84,8 @@ function BiographicalData() {
         {...(hometown?.cityId && { cityId: hometown.cityId })}
       />
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+      <Header isBackArrow title={t('BiographicalData.BiographicalData')} />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
-        <Header isBackArrow title={t('BiographicalData.BiographicalData')} />
         <View>
           <Input
             label={t('BiographicalData.firstAndLastName')}
