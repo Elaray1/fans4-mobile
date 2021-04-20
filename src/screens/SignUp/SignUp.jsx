@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 
 import * as userActions from 'resources/user/user.actions';
 
@@ -23,6 +24,7 @@ import { validateEmail, validatePassword } from 'helpers/validate';
 import styles from './SignUp.styles';
 
 function SignUp({ route }) {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { userType } = route.params;
@@ -33,11 +35,9 @@ function SignUp({ route }) {
     email: [],
     password: [],
   });
-  const [isInputFocused, setIsInputFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const onEmailBlur = useCallback(() => {
-    setIsInputFocused(false);
     if (validateEmail(emailValue)) {
       setInputErrors({
         ...inputErrors,
@@ -52,7 +52,6 @@ function SignUp({ route }) {
   }, [emailValue, inputErrors, t]);
 
   const onPasswordBlur = useCallback(() => {
-    setIsInputFocused(false);
     if (validatePassword(passwordValue)) {
       setInputErrors({
         ...inputErrors,
@@ -67,36 +66,57 @@ function SignUp({ route }) {
   }, [passwordValue, inputErrors, t]);
 
   const onPressSignUp = useCallback(async () => {
-    try {
-      setIsLoading(true);
-
-      const email = emailValue;
-
-      await userActions.emailSignUp({
-        email,
-        password: passwordValue,
-        userType,
+    let isErrors = false;
+    if (!validateEmail(emailValue)) {
+      isErrors = true;
+      setInputErrors({
+        ...inputErrors,
+        email: [t('SignUp.EmailIsInvalid')],
       });
-
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'EmailConfirmation',
-            params: { email, userType, isResendEmail: false },
-          },
-        ],
+    } else if (inputErrors.email.length) {
+      setInputErrors({
+        ...inputErrors,
+        email: [],
       });
-    } catch (err) {
-      // TODO show error
-    } finally {
-      setIsLoading(false);
     }
-  }, [emailValue, passwordValue, userType, navigation]);
 
-  const onInputFocused = useCallback(() => {
-    setIsInputFocused(true);
-  }, []);
+    if (!validatePassword(passwordValue)) {
+      isErrors = true;
+      setInputErrors({
+        ...inputErrors,
+        password: [t('SignUp.PasswordShouldContainAtLeast6Characters')],
+      });
+    } else if (inputErrors.password.length) {
+      setInputErrors({
+        ...inputErrors,
+        password: [],
+      });
+    }
+
+    if (!isErrors) {
+      try {
+        setIsLoading(true);
+        const email = emailValue;
+        await dispatch(userActions.emailSignUp({
+          email,
+          password: passwordValue,
+          userType,
+        }));
+      } catch (err) {
+        setIsLoading(false);
+        // TODO: show error
+      }
+    }
+  }, [emailValue, passwordValue, userType, inputErrors, t, dispatch]);
+
+  const onChangeInputValue = useCallback((inputName) => {
+    if (inputErrors[inputName].length) {
+      setInputErrors({
+        ...inputErrors,
+        [inputName]: [],
+      });
+    }
+  }, [inputErrors]);
 
   const onPressSignIn = useCallback(() => {
     navigation.navigate('SignIn', { userType });
@@ -121,8 +141,7 @@ function SignUp({ route }) {
               <Input
                 label={t('SignUp.Email')}
                 value={emailValue}
-                onChange={setEmailValue}
-                onFocus={onInputFocused}
+                onChange={(value) => { onChangeInputValue('email'); setEmailValue(value); }}
                 onBlur={onEmailBlur}
                 errors={inputErrors.email}
                 style={styles.input}
@@ -130,9 +149,8 @@ function SignUp({ route }) {
               <Input
                 label={t('SignUp.Password')}
                 value={passwordValue}
-                onChange={setPasswordValue}
+                onChange={(value) => { onChangeInputValue('password'); setPasswordValue(value); }}
                 type="password"
-                onFocus={onInputFocused}
                 onBlur={onPasswordBlur}
                 errors={inputErrors.password}
               />
@@ -143,7 +161,6 @@ function SignUp({ route }) {
               title={t('SignUp.SignUp')}
               disabled={!emailValue
                 || !passwordValue
-                || isInputFocused
                 || !!inputErrors.email.length
                 || !!inputErrors.password.length}
               onPress={onPressSignUp}

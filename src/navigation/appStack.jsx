@@ -2,12 +2,15 @@ import React, { useEffect } from 'react';
 import { Platform, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useDispatch, useSelector } from 'react-redux';
 
-import * as userActions from 'resources/user/user.actions';
+import * as userSelectors from 'resources/user/user.selectors';
+
+import { reset } from 'helpers/rootNavigation';
 
 import HomeIcon from 'assets/icons/tab-bar/home';
 
-import AppLoader from 'screens/AppLoader/AppLoader';
+import EmailConfirmation from 'screens/EmailConfirmation';
 import Home from 'screens/Home';
 import BiographicalData from 'screens/BiographicalData';
 import PersonalInfo from 'screens/PersonalInfo';
@@ -22,8 +25,10 @@ import OnBoarding3 from 'screens/OnBoarding3';
 import colors from 'themes/colors';
 import { commonStyles } from 'themes/commonStyles';
 
-import firebasePushNotificationService from 'services/firebase.pushNotification.service';
-import localPushNotificationService from 'services/local.pushNotification.service';
+import { registerPushNotifications, unregisterPushNotifications, initAppSockets } from 'navigation/helpers/bootstrap';
+
+import { STORAGE_KEYS } from 'helpers/constants';
+import { getItem } from 'helpers/storage';
 
 import TabBarIcon from 'components/TabBarIcon';
 
@@ -33,18 +38,16 @@ const Tab = createBottomTabNavigator();
 
 function HomeScreens() {
   return (
-    <View style={{ flex: 1, backgroundColor: colors.main }}>
-      <HomeStack.Navigator
-        headerMode="none"
-        screenOptions={{
-          cardStyle: {
-            backgroundColor: colors.main,
-          },
-        }}
-      >
-        <HomeStack.Screen name="Home" component={Home} />
-      </HomeStack.Navigator>
-    </View>
+    <HomeStack.Navigator
+      headerMode="none"
+      screenOptions={{
+        cardStyle: {
+          backgroundColor: colors.main,
+        },
+      }}
+    >
+      <HomeStack.Screen name="Home" component={Home} />
+    </HomeStack.Navigator>
   );
 }
 
@@ -75,76 +78,78 @@ function Tabs() {
 }
 
 function AppScreens() {
-  // Initialize Push Notifications
+  const dispatch = useDispatch();
+
+  const user = useSelector(userSelectors.getUserData);
+
   useEffect(() => {
-    const onRegister = async (pushNotificationToken) => {
-      await userActions.setPushToken(pushNotificationToken);
-    };
+    const init = async () => {
+      if (!user.appState.isEmailVerified) {
+        const [
+          USER_EMAIL,
+        ] = await Promise.all([
+          getItem(STORAGE_KEYS.USER_EMAIL),
+        ]);
 
-    const onNotification = (message) => {
-      console.log('[App] onNotification: ', message);
-
-      const options = {
-        soundName: 'default',
-        playSound: true,
-      };
-
-      if (message.notification) {
-        localPushNotificationService.showNotification(
-          Number(Math.random().toString().substr(2, 9)),
-          message.notification.title,
-          message.notification.body,
-          message.data,
-          options,
-        );
+        reset({
+          index: 0,
+          routes: [
+            {
+              name: 'EmailConfirmation',
+              params: {
+                email: USER_EMAIL,
+              },
+            },
+          ],
+        });
+      } else {
+        // check user data and navigate to BiographicalData / Home
       }
     };
 
-    const onOpenNotification = async (message) => {
-      console.log('[App] onOpenNotification: ', message);
-    };
+    init();
+  }, [dispatch, user.appState.isEmailVerified]);
 
-    (async () => {
-      await firebasePushNotificationService.registerAppWithFCM();
-      await firebasePushNotificationService.register(
-        onRegister, onNotification, onOpenNotification,
-      );
-      localPushNotificationService.configure(onOpenNotification);
-    })();
+  // Initialize sockets
+  useEffect(() => {
+    initAppSockets({ dispatch });
+  }, [dispatch]);
 
-    return () => {
-      firebasePushNotificationService.unregister();
-      localPushNotificationService.unregister();
-    };
+  // Initialize Push Notifications
+  useEffect(() => {
+    registerPushNotifications();
+
+    return () => unregisterPushNotifications();
   }, []);
 
   return (
-    <AppStack.Navigator
-      headerMode="none"
-      screenOptions={{
-        cardStyle: {
-          backgroundColor: colors.main,
-        },
-      }}
-      initialRouteName="BiographicalData" // replace on AppLoader
-    >
-      <AppStack.Screen name="AppLoader" component={AppLoader} />
+    <View style={commonStyles.navigator}>
+      <AppStack.Navigator
+        headerMode="none"
+        screenOptions={{
+          cardStyle: {
+            backgroundColor: colors.main,
+          },
+        }}
+      >
 
-      {/* <TABS> */}
-      <AppStack.Screen name="Tabs" component={Tabs} />
-      {/* <TABS /> */}
+        {/* <TABS> */}
+        <AppStack.Screen name="Tabs" component={Tabs} />
+        {/* <TABS /> */}
 
-      { /* Screens without tabs */}
-      <AppStack.Screen name="BiographicalData" component={BiographicalData} />
-      <AppStack.Screen name="PersonalInfo" component={PersonalInfo} />
-      <AppStack.Screen name="TermsOfUse" component={TermsOfUse} />
-      <AppStack.Screen name="VerificationPending" component={VerificationPending} />
-      <AppStack.Screen name="VerificationSuccessful" component={VerificationSuccessful} />
-      <AppStack.Screen name="VerificationFailed" component={VerificationFailed} />
-      <AppStack.Screen name="OnBoarding1" component={OnBoarding1} />
-      <AppStack.Screen name="OnBoarding2" component={OnBoarding2} />
-      <AppStack.Screen name="OnBoarding3" component={OnBoarding3} />
-    </AppStack.Navigator>
+        { /* Screens without tabs */}
+        <AppStack.Screen name="EmailConfirmation" component={EmailConfirmation} />
+        <AppStack.Screen name="BiographicalData" component={BiographicalData} />
+        <AppStack.Screen name="PersonalInfo" component={PersonalInfo} />
+        <AppStack.Screen name="TermsOfUse" component={TermsOfUse} />
+        <AppStack.Screen name="VerificationPending" component={VerificationPending} />
+        <AppStack.Screen name="VerificationSuccessful" component={VerificationSuccessful} />
+        <AppStack.Screen name="VerificationFailed" component={VerificationFailed} />
+        <AppStack.Screen name="OnBoarding1" component={OnBoarding1} />
+        <AppStack.Screen name="OnBoarding2" component={OnBoarding2} />
+        <AppStack.Screen name="OnBoarding3" component={OnBoarding3} />
+      </AppStack.Navigator>
+    </View>
   );
 }
 
