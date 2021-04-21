@@ -35,3 +35,6 @@ export const emailSignIn = ({
   .post('users/signin', {
     email, password, userType, deviceId,
   });
+
+export const logout = ({ deviceId }) => apiClient
+  .post('users/logout', { deviceId });

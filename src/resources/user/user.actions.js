@@ -86,7 +86,8 @@ export const setPushToken = async (token) => {
 };
 
 export const logout = () => async (dispatch) => {
-  // await api.logout(); // add logout endpoint
+  const deviceId = getMaskedDeviceId();
+  await api.logout({ deviceId });
   config.accessToken = null;
   await clear();
   dispatch({ type: USER_LOGGED_OUT });
