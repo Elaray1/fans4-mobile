@@ -17,3 +17,15 @@ export const getUsers = ({ role, status }) => apiClient
 
 export const setPushToken = ({ token, deviceId }) => apiClient
   .put('users/push-token', { token, deviceId });
+
+
+/* Fighters api: start */
+
+// export const fillRegistrationForm = ({
+//   fullName, nickname, birthdate, cityId, weight, height, reach,
+// }) => apiClient
+//   .put('users/registration-form', {
+//     fullName, nickname, birthdate, cityId, weight, height, reach,
+//   });
+
+/* Fighters api: end */

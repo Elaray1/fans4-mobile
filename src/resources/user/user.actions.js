@@ -1,5 +1,6 @@
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import config from 'resources/config';
+import axios from 'axios';
 
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
 import ApiError from 'helpers/api/api.error';
@@ -8,6 +9,7 @@ import { setItem, removeItem } from 'helpers/storage';
 import {
   USER_SIGNED_IN,
   USER_LOGGED_OUT,
+  USER_FILLED_REGISTRATION_FORM,
 } from './user.constants';
 
 import * as api from './user.api';
@@ -78,3 +80,38 @@ export const setPushToken = async (token) => {
   const deviceId = getMaskedDeviceId();
   await api.setPushToken({ token, deviceId });
 };
+
+/* Fighters actions: start */
+
+export const fillRegistrationForm = ({
+  fullName, nickname, gender, birthdate, cityId, weight, height, reach, photo,
+}) => async (dispatch) => {
+  const formData = new FormData();
+
+  formData.append('fullName', fullName);
+  formData.append('nickname', nickname);
+  formData.append('gender', gender);
+  formData.append('birthdate', birthdate);
+  formData.append('cityId', cityId);
+  formData.append('weight', weight);
+  formData.append('height', height);
+  formData.append('reach', reach);
+  formData.append('avatar', {
+    name: 'image',
+    type: photo?.mime,
+    uri: Platform.OS === 'android' ? photo?.path : photo?.path.replace('file://', ''),
+  });
+
+  const response = await axios.request({ // TODO: change to work with api.client
+    method: 'put',
+    url: `${config.apiUrl}/users/registration-form`,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data: formData,
+  });
+
+  dispatch({ type: USER_FILLED_REGISTRATION_FORM, user: response.data });
+};
+
+/* Fighters actions: end */
