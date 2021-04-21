@@ -4,6 +4,7 @@ import {
   SafeAreaView, View, ScrollView, StatusBar, TouchableOpacity,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import * as userActions from 'resources/user/user.actions';
@@ -23,6 +24,7 @@ const INCHES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 const footsToString = (foot, inch) => `${foot}’ ${inch}”`;
 
 function PersonalInfo({ route }) {
+  const navigation = useNavigation();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -119,10 +121,14 @@ function PersonalInfo({ route }) {
         height,
         reach,
       }));
+      navigation.navigate('TermsOfUse');
     } finally {
       setIsLoading(false);
     }
-  }, [dispatch, birthdate, cityId, fullName, gender, height, nickname, photo, reach, weight]);
+  }, [
+    navigation, dispatch, birthdate, cityId, fullName,
+    gender, height, nickname, photo, reach, weight,
+  ]);
 
   return (
     <SafeAreaView style={styles.screen}>
