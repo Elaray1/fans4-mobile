@@ -1,8 +1,12 @@
 import React, { useMemo, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import {
   SafeAreaView, View, ScrollView, StatusBar, TouchableOpacity,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+
+import * as userActions from 'resources/user/user.actions';
 
 import colors from 'themes/colors';
 
@@ -11,7 +15,6 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import WheelModal from 'components/WheelModal';
 
-
 import styles from './PersonalInfo.styles';
 
 const FOOTS = [4, 5, 6, 7];
@@ -19,8 +22,21 @@ const INCHES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 const footsToString = (foot, inch) => `${foot}’ ${inch}”`;
 
-function PersonalInfo() {
+function PersonalInfo({ route }) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const {
+    fullName,
+    nickname,
+    birthdate,
+    cityId,
+    gender,
+    photo,
+  } = route?.params;
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const [weight, setWeight] = useState(null);
   const [isWeightModalVisible, setIsWeightModalVisible] = useState(false);
 
@@ -35,12 +51,19 @@ function PersonalInfo() {
     return [...acc, ...footInches];
   }, []), []);
 
+  const reachOptions = useMemo(() => {
+    // min value 48, max value 90
+    const inches = (new Array(43).fill(48))
+      .map((x, i) => `${x + i}”`);
+    return inches;
+  }, []);
+
   const weightOptions = useMemo(() => {
-    // 200 - length of options; 100 - value of first option
-    const POUNDS = (new Array(200).fill(100))
+    // min value 100, max value 400
+    const pounds = (new Array(301).fill(100))
       .map((x, i) => `${x + i} lbs`);
 
-    return POUNDS;
+    return pounds;
   }, []);
 
   const onCloseWeightModal = useCallback(() => {
@@ -82,12 +105,31 @@ function PersonalInfo() {
     setIsReachModalVisible(true);
   }, []);
 
+  const onNextPress = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await dispatch(userActions.fillRegistrationForm({
+        fullName,
+        nickname,
+        gender,
+        birthdate,
+        cityId,
+        photo,
+        weight,
+        height,
+        reach,
+      }));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [dispatch, birthdate, cityId, fullName, gender, height, nickname, photo, reach, weight]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <WheelModal
         visible={isWeightModalVisible}
         options={weightOptions}
-        initialValue={weightOptions[70]}
+        initialValue={gender === 'male' ? weightOptions[70] : weightOptions[0]}
         onClose={onCloseWeightModal}
         onSubmit={onSubmitWeightModal}
       />
@@ -100,8 +142,8 @@ function PersonalInfo() {
       />
       <WheelModal
         visible={isReachModalVisible}
-        options={heightOptions}
-        initialValue={footsToString(4, 5)}
+        options={reachOptions}
+        initialValue={reachOptions[12]}
         onClose={onCloseReachModal}
         onSubmit={onSubmitReachModal}
       />
@@ -145,11 +187,29 @@ function PersonalInfo() {
 
         <Button
           title="Next"
-          onPress={() => {}}
+          isLoading={isLoading}
+          disabled={!weight || !height || !reach}
+          onPress={onNextPress}
         />
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+PersonalInfo.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      fullName: PropTypes.string.isRequired,
+      nickname: PropTypes.string,
+      birthdate: PropTypes.string.isRequired,
+      cityId: PropTypes.string.isRequired,
+      gender: PropTypes.string.isRequired,
+      photo: PropTypes.shape({
+        path: PropTypes.string.isRequired,
+        mime: PropTypes.string.isRequired,
+      }).isRequired,
+    }),
+  }).isRequired,
+};
 
 export default PersonalInfo;

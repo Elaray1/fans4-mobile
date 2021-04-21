@@ -30,7 +30,7 @@ function BiographicalData() {
 
   const [fullName, setFullName] = useState('');
   const [nickname, setNickname] = useState('');
-  const [birthDate, setBirthDate] = useState(null);
+  const [birthdate, setBirthDate] = useState(null);
   const [hometown, setHometown] = useState({ cityNameWithState: null, cityId: null });
 
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -64,10 +64,21 @@ function BiographicalData() {
     setIsCitySelectVisible(false);
   }, []);
 
-
   const onNext = useCallback(() => {
-    navigation.navigate('PersonalInfo');
-  }, [navigation]);
+    navigation.navigate('PersonalInfo', {
+      fullName,
+      nickname,
+      birthdate: dayjs(birthdate).format('MM/DD/YYYY'),
+      cityId: hometown?.cityId,
+      gender,
+      photo: {
+        path: photo?.path,
+        mime: photo?.mime,
+      },
+    });
+  }, [
+    birthdate, fullName, gender, hometown?.cityId, navigation, nickname, photo?.mime, photo?.path,
+  ]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -75,7 +86,7 @@ function BiographicalData() {
         visible={isDatePickerVisible}
         onClose={onCloseDatePickerModal}
         onSubmit={onSubmitDatePickerModal}
-        {...(birthDate && { date: birthDate })}
+        {...(birthdate && { date: birthdate })}
       />
       <CitySelectModal
         visible={isCitySelectVisible}
@@ -101,13 +112,13 @@ function BiographicalData() {
           />
 
           <View>
-            <Text style={styles.inputLabel}>{t('BiographicalData.birthDate')}</Text>
+            <Text style={styles.inputLabel}>{t('BiographicalData.birthdate')}</Text>
             <TouchableOpacity
               style={styles.inputContainer}
               onPress={onBirthDatePress}
               activeOpacity={0.8}
             >
-              <Text style={styles.input}>{birthDate ? dayjs(birthDate).format('MM/DD/YYYY') : ''}</Text>
+              <Text style={styles.input}>{birthdate ? dayjs(birthdate).format('MM/DD/YYYY') : ''}</Text>
             </TouchableOpacity>
           </View>
 
@@ -141,7 +152,7 @@ function BiographicalData() {
 
         <Button
           title={t('BiographicalData.next')}
-          disabled={!fullName || !birthDate || !hometown?.cityNameWithState || !photo?.data}
+          disabled={!fullName || !birthdate || !hometown?.cityNameWithState || !photo?.data}
           onPress={onNext}
         />
       </ScrollView>

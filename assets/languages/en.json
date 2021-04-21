@@ -62,7 +62,7 @@
     "BiographicalData": "Biographical Data",
     "firstAndLastName": "First and last name",
     "nicknameOptional": "Nickname - optional",
-    "birthDate": "Birth Date",
+    "birthdate": "Birth Date",
     "hometown": "Hometown",
     "genderByBirth": "Gender by Birth",
     "male": "male",
