@@ -36,8 +36,7 @@ function AppNavigation() {
       ref={navigationRef}
       theme={{ colors: { background: colors.main } }}
     >
-      {/* {userAuthenticated ? <AppScreens /> : <AuthScreens />} */}
-      {userAuthenticated ? <AuthScreens /> : <AppScreens />}
+      {userAuthenticated ? <AppScreens /> : <AuthScreens />}
     </NavigationContainer>
   );
 }

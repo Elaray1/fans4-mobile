@@ -4,7 +4,7 @@ import {
   USER_FILLED_REGISTRATION_FORM,
 } from './user.constants';
 
-export default (state = null, action) => {
+export default (state = {}, action) => { // TODO: change to null
   switch (action.type) {
     case USER_SIGNED_IN:
       return {
