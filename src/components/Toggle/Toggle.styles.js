@@ -26,7 +26,7 @@ export default StyleSheet.create({
     borderRadius: 5,
   },
   optionText: {
-    flex: 1,
+    marginVertical: 10,
     textAlign: 'center',
     textAlignVertical: 'center',
     textTransform: 'capitalize',

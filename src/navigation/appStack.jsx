@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -22,6 +22,10 @@ import VerificationFailed from 'screens/VerificationFailed';
 import OnBoarding1 from 'screens/OnBoarding1';
 import OnBoarding2 from 'screens/OnBoarding2';
 import OnBoarding3 from 'screens/OnBoarding3';
+
+import * as socketService from 'services/socket.service';
+
+import * as RootNavigation from 'helpers/rootNavigation';
 
 import colors from 'themes/colors';
 import { commonStyles } from 'themes/commonStyles';
@@ -139,6 +143,30 @@ function Tabs() {
 }
 
 function AppScreens() {
+  useEffect(() => {
+    socketService.on('verification:failed', () => {
+      RootNavigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'VerificationFailed',
+          },
+        ],
+      });
+    });
+
+    socketService.on('verification:successful', () => {
+      RootNavigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'VerificationSuccessful',
+          },
+        ],
+      });
+    });
+  });
+
   return (
     <AppStack.Navigator
       headerMode="none"
