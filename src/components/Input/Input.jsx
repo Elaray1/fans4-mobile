@@ -30,6 +30,9 @@ function Input({
   getRef,
   errorStyle,
   labelStyle,
+  multiline,
+  numberOfLines,
+  style,
 }) {
   const [focused, setFocused] = useState(false);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -66,6 +69,7 @@ function Input({
       <View
         style={[
           styles.inputContainer,
+          style,
           focused && styles.inputFocused,
           !!errors.length && styles.error,
           disabled && styles.disabled,
@@ -87,8 +91,10 @@ function Input({
           secureTextEntry={type === 'password' && !isPasswordVisible}
           keyboardType={getKeyboardType(type)}
           returnKeyType={returnKeyType}
-          style={styles.input}
+          style={[styles.input, style, multiline && { textAlignVertical: 'top' }]}
           maxLength={maxLength}
+          multiline={multiline}
+          numberOfLines={numberOfLines}
         />
         {type === 'password' && (
         <TouchableOpacity
@@ -128,6 +134,9 @@ Input.propTypes = {
   blurOnSubmit: PropTypes.bool,
   onSubmitEditing: PropTypes.func,
   maxLength: PropTypes.number,
+  multiline: PropTypes.bool,
+  numberOfLines: PropTypes.number,
+  style: PropTypes.shape(),
 };
 
 Input.defaultProps = {
@@ -145,6 +154,9 @@ Input.defaultProps = {
   maxLength: null,
   labelStyle: {},
   errorStyle: {},
+  multiline: false,
+  numberOfLines: 1,
+  style: {},
 };
 
 export default Input;
