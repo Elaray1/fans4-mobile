@@ -5,8 +5,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import HomeIcon from 'assets/icons/tab-bar/home';
 
+import * as userActions from 'resources/user/user.actions';
+
+import AccountIcon from 'assets/icons/tab-bar/account.svg';
+import ExploreIcon from 'assets/icons/tab-bar/explore.svg';
+import FightsIcon from 'assets/icons/tab-bar/fights.svg';
+import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
+
+import AppLoader from 'screens/AppLoader/AppLoader';
 import EmailConfirmation from 'screens/EmailConfirmation';
-import Home from 'screens/Home';
+import Account from 'screens/Account';
+import Explore from 'screens/Explore';
+import Fights from 'screens/Fights';
+import NewPost from 'screens/NewPost';
 import BiographicalData from 'screens/BiographicalData';
 import PersonalInfo from 'screens/PersonalInfo';
 import TermsOfUse from 'screens/TermsOfUse';
@@ -23,7 +34,10 @@ import { commonStyles } from 'themes/commonStyles';
 import TabBarIcon from 'components/TabBarIcon';
 
 const AppStack = createStackNavigator();
-const HomeStack = createStackNavigator();
+const ExploreStack = createStackNavigator();
+const FightsStack = createStackNavigator();
+const NewPostStack = createStackNavigator();
+const AccountStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const SCREEN_OPTIONS = {
@@ -32,18 +46,54 @@ const SCREEN_OPTIONS = {
   },
 };
 
-function HomeScreens() {
+function AccountScreens() {
   return (
-    <HomeStack.Navigator headerMode="none" screenOptions={SCREEN_OPTIONS}>
-      <HomeStack.Screen name="Home" component={Home} />
-    </HomeStack.Navigator>
+    <AccountStack.Navigator
+      headerMode="none"
+      screenOptions={SCREEN_OPTIONS}
+    >
+      <AccountStack.Screen name="Account" component={Account} />
+    </AccountStack.Navigator>
+  );
+}
+
+function ExploreScreens() {
+  return (
+    <ExploreStack.Navigator
+      headerMode="none"
+      screenOptions={SCREEN_OPTIONS}
+    >
+      <ExploreStack.Screen name="Explore" component={Explore} />
+    </ExploreStack.Navigator>
+  );
+}
+
+function FightsScreens() {
+  return (
+    <FightsStack.Navigator
+      headerMode="none"
+      screenOptions={SCREEN_OPTIONS}
+    >
+      <FightsStack.Screen name="Fights" component={Fights} />
+    </FightsStack.Navigator>
+  );
+}
+
+function NewPostScreens() {
+  return (
+    <NewPostStack.Navigator
+      headerMode="none"
+      screenOptions={SCREEN_OPTIONS}
+    >
+      <NewPostStack.Screen name="NewPost" component={NewPost} />
+    </NewPostStack.Navigator>
   );
 }
 
 function Tabs() {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Account"
       tabBarOptions={{
         keyboardHidesTabBar: Platform.OS === 'android',
         activeTintColor: colors.tabBarActive,
@@ -54,12 +104,39 @@ function Tabs() {
       }}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreens}
+        name="Explore"
+        component={ExploreScreens}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Explore',
           // eslint-disable-next-line react/prop-types
-          tabBarIcon: ({ focused }) => <TabBarIcon icon={HomeIcon} focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={ExploreIcon} focused={focused} />,
+        }}
+      />
+      <Tab.Screen
+        name="Fights"
+        component={FightsScreens}
+        options={{
+          tabBarLabel: 'Fights',
+          // eslint-disable-next-line react/prop-types
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={FightsIcon} focused={focused} />,
+        }}
+      />
+      <Tab.Screen
+        name="NewPost"
+        component={NewPostScreens}
+        options={{
+          tabBarLabel: 'New post',
+          // eslint-disable-next-line react/prop-types
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={NewPostIcon} focused={focused} />,
+        }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={AccountScreens}
+        options={{
+          tabBarLabel: 'Account',
+          // eslint-disable-next-line react/prop-types
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={AccountIcon} focused={focused} />,
         }}
       />
     </Tab.Navigator>

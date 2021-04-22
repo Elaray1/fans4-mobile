@@ -24,14 +24,14 @@ export const commonStyles = {
   tabBar: {
     borderTopColor: colors.main,
     ...(Platform.OS === 'android' && {
-      height: 70,
+      height: 80,
     }),
   },
   tab: {
     ...(Platform.OS === 'android'
       ? {
-        paddingBottom: 13,
-        paddingTop: 10,
+        marginTop: 20,
+        paddingBottom: 10,
       }
       : {
         marginTop: 10,

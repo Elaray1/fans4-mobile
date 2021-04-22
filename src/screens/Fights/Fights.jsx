@@ -4,17 +4,17 @@ import { SafeAreaView, View, StatusBar } from 'react-native';
 import colors from 'themes/colors';
 import Text from 'components/Text';
 
-import styles from './Home.styles';
+import styles from './Fights.styles';
 
-function Home() {
+function Fights() {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <View style={styles.content}>
-        <Text>Home</Text>
+        <Text>Fights</Text>
       </View>
     </SafeAreaView>
   );
 }
 
-export default Home;
+export default Fights;

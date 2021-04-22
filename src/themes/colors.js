@@ -20,8 +20,8 @@ const colors = {
   primaryModalButton: '#3888FF',
   secondaryModalButton: '#2F80ED',
 
-  tabBarInactive: '#8B8E98', // need to change
-  tabBarActive: '#333333', // need to change
+  tabBarInactive: '#8B8D98',
+  tabBarActive: '#FFFFFF',
 
   disabled: '#ECEFF1', // need to change
   disabledText: '#8B8D98',
