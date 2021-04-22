@@ -1,61 +1,79 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import React, { useCallback } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View } from 'react-native';
 
 import Text from 'components/Text';
 
-import BackArrowIcon from 'assets/icons/back-arrow';
+import { ITEM_TYPES } from './Header.constants';
+import { getHeaderItem } from './Header.helpers';
 
 import styles from './Header.styles';
 
-const WIDTH_ICON = 32;
-
 function Header({
   title,
-  isBackArrow,
+  leftItemType,
+  rightItemType,
+  onLeftItemPress,
+  onRightItemPress,
+  leftItemText,
+  rightItemText,
+  leftItemStyle,
+  rightItemStyle,
   isBottomLine,
 }) {
-  const navigation = useNavigation();
+  const leftItemProps = { onPress: onLeftItemPress, style: leftItemStyle };
+  const rightItemProps = { onPress: onRightItemPress, style: rightItemStyle };
 
-  const onBackNavigation = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+  const leftItem = getHeaderItem({
+    type: leftItemType,
+    props: leftItemProps,
+    text: leftItemText,
+  });
+  const rightItem = getHeaderItem({
+    type: rightItemType,
+    props: rightItemProps,
+    text: rightItemText,
+  });
 
   return (
     <View style={styles.headerWrapper}>
       <View style={styles.header}>
-        {isBackArrow ? (
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={onBackNavigation}
-            style={styles.backButtonWrapper}
-          >
-            <View style={styles.backButton}>
-              <BackArrowIcon />
-            </View>
-          </TouchableOpacity>
-        ) : <View style={{ width: WIDTH_ICON }} />}
-
+        {leftItem}
         <Text style={styles.title}>{title}</Text>
-
-        <View style={{ width: WIDTH_ICON }} />
+        {rightItem}
       </View>
-
-      {isBottomLine && <View style={[styles.line, { marginTop: isBackArrow ? 18 : 23 }]} />}
+      {isBottomLine && (
+      <View
+        style={[styles.line, { marginTop: (leftItemType || rightItemType) ? 18 : 23 }]}
+      />
+      )}
     </View>
   );
 }
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
-  isBackArrow: PropTypes.bool,
+  leftItemType: PropTypes.oneOf([...Object.values(ITEM_TYPES), null]),
+  rightItemType: PropTypes.oneOf([...Object.values(ITEM_TYPES), null]),
+  onLeftItemPress: PropTypes.oneOf([PropTypes.func, null]),
+  onRightItemPress: PropTypes.oneOf([PropTypes.func, null]),
+  leftItemText: PropTypes.string,
+  rightItemText: PropTypes.string,
+  leftItemStyle: PropTypes.shape(),
+  rightItemStyle: PropTypes.shape(),
   isBottomLine: PropTypes.bool,
 };
 
 Header.defaultProps = {
-  isBackArrow: false,
   isBottomLine: true,
+  leftItemType: null,
+  rightItemType: null,
+  onLeftItemPress: null,
+  onRightItemPress: null,
+  leftItemText: '',
+  rightItemText: '',
+  leftItemStyle: {},
+  rightItemStyle: {},
 };
 
 export default React.memo(Header);

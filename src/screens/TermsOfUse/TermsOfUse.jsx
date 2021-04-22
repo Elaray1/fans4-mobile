@@ -17,7 +17,7 @@ function TermsOfUse() {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <Header isBackArrow title={t('TermsOfUse.headerTitle')} />
+      <Header leftItemType="backArrow" title={t('TermsOfUse.headerTitle')} />
       <View style={styles.content}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <Text style={styles.title}>{t('TermsOfUse.firstParagraphTitle')}</Text>
