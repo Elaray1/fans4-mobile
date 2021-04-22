@@ -22,17 +22,6 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
     lineHeight: fonts.lineHeight.regular,
   },
-  backButtonWrapper: {
-    backgroundColor: colors.gray,
-    width: 32,
-    height: 32,
-    borderRadius: 5,
-  },
-  backButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   line: {
     backgroundColor: colors.line,
     height: 1,

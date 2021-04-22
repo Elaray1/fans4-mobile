@@ -154,7 +154,7 @@ function PersonalInfo({ route }) {
         onSubmit={onSubmitReachModal}
       />
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <Header isBackArrow title={t('PersonalInfo.PersonalInfo')} />
+      <Header leftItemType="backArrow" title={t('PersonalInfo.PersonalInfo')} />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View>
           <View>
