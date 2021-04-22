@@ -85,7 +85,8 @@
     "PersonalInfo": "Personal Info",
     "weight": "Weight",
     "height": "Height",
-    "reach": "Reach"
+    "reach": "Reach",
+    "submit": "Submit"
   },
   "WheelModal": {
     "done": "Done"

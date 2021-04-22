@@ -192,7 +192,7 @@ function PersonalInfo({ route }) {
         </View>
 
         <Button
-          title="Next"
+          title={t('PersonalInfo.submit')}
           isLoading={isLoading}
           disabled={!weight || !height || !reach}
           onPress={onNextPress}
