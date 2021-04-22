@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   SafeAreaView, ScrollView, StatusBar, View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 
 import colors from 'themes/colors';
 
@@ -13,7 +14,16 @@ import Button from 'components/Button';
 import styles from './TermsOfUse.styles';
 
 function TermsOfUse() {
+  const navigation = useNavigation();
   const { t } = useTranslation();
+
+  const onAccept = useCallback(() => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'VerificationPending' }],
+    });
+  }, [navigation]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
@@ -27,7 +37,7 @@ function TermsOfUse() {
         </ScrollView>
         <Button
           title={t('TermsOfUse.buttonText')}
-          onPress={() => {}}
+          onPress={onAccept}
           buttonStyles={styles.button}
         />
       </View>
