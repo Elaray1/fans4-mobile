@@ -5,7 +5,6 @@ import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   inputContainer: {
-    alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
     height: 56,
