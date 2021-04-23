@@ -127,5 +127,29 @@
   },
   "WheelModal": {
     "done": "Done"
+  },
+  "ContactAdmin": {
+    "contactAdmin": "Contact Admin",
+    "sendEmail": "Send Email",
+    "updateMyPersonalInfo": "Update my personal info",
+    "changeMyStatus": "Change my status",
+    "updateMyStatus": "Update my fighting status and update my fighting status",
+    "whyMyContentWasBlocked": "Why my content was blocked?",
+    "incomeIssues": "Income issues",
+    "other": "Other"
+  },
+  "Support": {
+    "support": "Support",
+    "contactAdmin": "Contact Admin",
+    "question1": "Question #1",
+    "answer1": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
+    "question2": "Question #2",
+    "answer2": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
+    "question3": "Question #3",
+    "answer3": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
+    "question4": "Question #4",
+    "answer4": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
+    "question5": "Question #5",
+    "answer5": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat."
   }
 }
