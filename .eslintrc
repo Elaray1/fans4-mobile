@@ -4,6 +4,7 @@
     "plugin:react-hooks/recommended"
   ],
   "rules": {
+    "consistent-return": "off",
     "no-console": "off",
     "import/extensions": [
       2,

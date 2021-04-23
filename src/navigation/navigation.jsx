@@ -16,6 +16,8 @@ import * as userActions from 'resources/user/user.actions';
 import config from 'resources/config';
 
 import * as sockets from 'services/socket.service';
+import firebasePushNotificationService from 'services/firebase.pushNotification.service';
+import localPushNotificationService from 'services/local.pushNotification.service';
 
 import colors from 'themes/colors';
 
@@ -56,6 +58,54 @@ const init = async (dispatch, setIsInitialized) => {
   setIsInitialized(true);
 };
 
+const connectPushNotifications = (userAuthenticated) => {
+  if (!userAuthenticated) {
+    return;
+  }
+
+  const onRegister = async (pushNotificationToken) => {
+    await userActions.setPushToken(pushNotificationToken);
+  };
+
+  const onNotification = (message) => {
+    console.log('[App] onNotification: ', message);
+
+    const options = {
+      soundName: 'default',
+      playSound: true,
+    };
+
+    if (message.notification) {
+      localPushNotificationService.showNotification(
+        Number(Math.random().toString().substr(2, 9)),
+        message.notification.title,
+        message.notification.body,
+        message.data,
+        options,
+      );
+    }
+  };
+
+  const onOpenNotification = async (message) => {
+    console.log('[App] onOpenNotification: ', message);
+  };
+
+  (async () => {
+    await firebasePushNotificationService.registerAppWithFCM();
+    await firebasePushNotificationService.register(onRegister, onNotification, onOpenNotification);
+    localPushNotificationService.configure(onOpenNotification);
+  })();
+};
+
+const disconnectPushNotifications = (userAuthenticated) => {
+  if (!userAuthenticated) {
+    return;
+  }
+
+  firebasePushNotificationService.unregister();
+  localPushNotificationService.unregister();
+};
+
 function AppNavigation() {
   const dispatch = useDispatch();
   const [isInitialized, setIsInitialized] = useState(false);
@@ -71,6 +121,11 @@ function AppNavigation() {
       SplashScreen.hide();
     }
   }, [isInitialized]);
+
+  useEffect(() => {
+    connectPushNotifications(userAuthenticated);
+    return disconnectPushNotifications(userAuthenticated);
+  }, [userAuthenticated]);
 
   return (
     <NavigationContainer
