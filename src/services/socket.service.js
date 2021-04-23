@@ -29,6 +29,8 @@ export const connect = async () => {
     },
   });
 
+  socket.connect();
+
   socket.on('connect', () => {
     console.log('WS connected');
   });

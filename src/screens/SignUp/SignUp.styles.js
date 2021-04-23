@@ -1,0 +1,102 @@
+import { StyleSheet } from 'react-native';
+
+import { commonStyles, variables } from 'themes/commonStyles';
+import fonts from 'themes/fonts';
+import colors from 'themes/colors';
+
+const ICON_SIZE = 32;
+const TITLE_CONTAINER_HEIGHT = 20;
+
+export default StyleSheet.create({
+  screen: {
+    ...commonStyles.screen,
+  },
+  content: {
+    ...commonStyles.screenContent,
+  },
+  scrollContent: {
+    paddingTop: variables.paddingTopLogo,
+    flex: 1,
+  },
+  keyboardAvoiding: {
+    flex: 1,
+  },
+  keyboardAvoidingChildContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'space-between',
+  },
+  logo: {
+    marginBottom: 60,
+    alignSelf: 'center',
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: TITLE_CONTAINER_HEIGHT,
+  },
+  backButtonWrapper: {
+    backgroundColor: colors.gray,
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    borderRadius: 5,
+    // this rules center icon vertically without increasing container height
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    transform: [{ translateY: -((ICON_SIZE - TITLE_CONTAINER_HEIGHT) / 2) }],
+  },
+  backButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  signUpButtonWrapper: {
+    width: '100%',
+  },
+  signInTextWrapper: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    marginTop: 15,
+    marginBottom: 15,
+  },
+  signInTextLinkWrapper: {
+    marginLeft: 3,
+  },
+  signInText: {
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+    fontSize: fonts.size.small,
+  },
+  emailInput: {
+    marginBottom: 23,
+  },
+  button: {
+    marginTop: 10,
+  },
+  error: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 6,
+    backgroundColor: colors.errorBackground,
+  },
+  errorText: {
+    marginLeft: 8,
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.medium,
+    color: colors.errorText,
+    fontSize: fonts.size.caption,
+  },
+  title: {
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+  },
+  errorContainer: {
+    marginTop: 10,
+    width: '100%',
+    height: 60,
+    justifyContent: 'center',
+  },
+});

@@ -52,6 +52,7 @@ function Header({
 }
 
 Header.propTypes = {
+  isBottomLine: PropTypes.bool,
   title: PropTypes.string.isRequired,
   leftItemType: PropTypes.oneOf([...Object.values(ITEM_TYPES), null]),
   rightItemType: PropTypes.oneOf([...Object.values(ITEM_TYPES), null]),
@@ -61,7 +62,6 @@ Header.propTypes = {
   rightItemText: PropTypes.string,
   leftItemStyle: PropTypes.shape(),
   rightItemStyle: PropTypes.shape(),
-  isBottomLine: PropTypes.bool,
 };
 
 Header.defaultProps = {

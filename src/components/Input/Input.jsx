@@ -9,8 +9,8 @@ import Text from 'components/Text';
 
 import colors from 'themes/colors';
 
-import OpenedEyeIcon from 'assets/icons/opened-eye.svg';
-import ClosedEyeIcon from 'assets/icons/closed-eye.svg';
+import OpenedEyeIcon from 'assets/icons/opened-eye';
+import ClosedEyeIcon from 'assets/icons/closed-eye';
 
 import styles from './Input.styles';
 
@@ -22,24 +22,27 @@ function Input({
   disabled,
   placeholder,
   blurOnSubmit,
+  onFocus,
   onBlur,
   onSubmitEditing,
   value,
   errors,
   returnKeyType,
   getRef,
+  style,
   errorStyle,
   labelStyle,
   multiline,
   numberOfLines,
-  style,
+  autoCapitalize,
 }) {
   const [focused, setFocused] = useState(false);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
 
   const handleFocus = useCallback(() => {
     setFocused(true);
-  }, [setFocused]);
+    onFocus();
+  }, [setFocused, onFocus]);
 
   const handleBlur = useCallback(() => {
     setFocused(false);
@@ -51,15 +54,13 @@ function Input({
   }, [isPasswordVisible]);
 
   return (
-    <View>
+    <View style={style}>
       {label && (
       <Text
         style={[
           styles.label,
           labelStyle,
           focused && styles.labelFocused,
-          !!errors.length && styles.errorMessage,
-          errorStyle,
           disabled && styles.disabled,
         ]}
       >
@@ -91,10 +92,11 @@ function Input({
           secureTextEntry={type === 'password' && !isPasswordVisible}
           keyboardType={getKeyboardType(type)}
           returnKeyType={returnKeyType}
-          style={[styles.input, style, multiline && { textAlignVertical: 'top' }]}
+          style={[styles.input, multiline && { textAlignVertical: 'top' }]}
           maxLength={maxLength}
           multiline={multiline}
           numberOfLines={numberOfLines}
+          autoCapitalize={autoCapitalize}
         />
         {type === 'password' && (
         <TouchableOpacity
@@ -103,8 +105,8 @@ function Input({
           disabled={disabled}
         >
           {disabled && <ClosedEyeIcon stroke={colors.disabledText} />}
-          {!disabled && isPasswordVisible && <ClosedEyeIcon />}
-          {!disabled && !isPasswordVisible && <OpenedEyeIcon />}
+          {!disabled && !isPasswordVisible && <ClosedEyeIcon />}
+          {!disabled && isPasswordVisible && <OpenedEyeIcon />}
         </TouchableOpacity>
         )}
       </View>
@@ -120,14 +122,17 @@ function Input({
 
 Input.propTypes = {
   type: PropTypes.string,
+  autoCapitalize: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string,
   disabled: PropTypes.bool,
   errors: PropTypes.arrayOf(PropTypes.string),
+  onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   returnKeyType: PropTypes.string,
+  style: PropTypes.shape(),
   labelStyle: RNText.propTypes.style,
   errorStyle: RNText.propTypes.style,
   getRef: PropTypes.shape(),
@@ -136,27 +141,28 @@ Input.propTypes = {
   maxLength: PropTypes.number,
   multiline: PropTypes.bool,
   numberOfLines: PropTypes.number,
-  style: PropTypes.shape(),
 };
 
 Input.defaultProps = {
+  autoCapitalize: 'sentences',
   type: 'none',
   label: null,
   value: '',
   placeholder: '',
   disabled: false,
   errors: [],
+  onFocus: () => {},
   onBlur: () => {},
   returnKeyType: 'done',
   getRef: { current: null },
   blurOnSubmit: true,
   onSubmitEditing: null,
   maxLength: null,
+  style: {},
   labelStyle: {},
   errorStyle: {},
   multiline: false,
   numberOfLines: 1,
-  style: {},
 };
 
 export default Input;

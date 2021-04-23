@@ -1,77 +1,95 @@
-import { Alert, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import config from 'resources/config';
 import axios from 'axios';
 
+import { STORAGE_KEYS } from 'helpers/constants';
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
-import ApiError from 'helpers/api/api.error';
-import { setItem, removeItem } from 'helpers/storage';
+import { setItem, clear } from 'helpers/storage';
+import getInitialScreen from 'helpers/getInitialScreen';
+import * as rootNavigation from 'helpers/rootNavigation';
+
+import * as sockets from 'services/socket.service';
 
 import {
-  USER_SIGNED_IN,
   USER_LOGGED_OUT,
   USER_FILLED_REGISTRATION_FORM,
+  SET_USER_DATA,
 } from './user.constants';
 
 import * as api from './user.api';
 
-export const signUp = userData => async () => {
-  try {
-    const payload = await api.signUp(userData);
-    return payload;
-  } catch (error) {
-    if (error.status === 400) {
-      throw new ApiError(error.data, error.status);
-    } else {
-      Alert.alert(
-        'SignUp Failed',
-        'Sorry, something went wrong.',
-        [{ text: 'OK', style: 'cancel' }],
-      );
-      throw new ApiError({ errors: [] }, error.status);
-    }
-  }
+export const emailSignUp = ({
+  email, password, userType,
+}) => async (dispatch) => {
+  const { user, accessToken } = await api.emailSignUp({
+    email,
+    password,
+    userType,
+  });
+
+  config.accessToken = accessToken;
+
+  sockets.disconnect();
+  sockets.connect();
+  sockets.emit('subscribe', `user-${user._id}`);
+
+  await Promise.all([
+    setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
+    dispatch({ type: SET_USER_DATA, user }),
+  ]);
+
+  rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'EmailConfirmation' } }] });
 };
 
-export const signIn = (email, password) => async (dispatch) => {
-  try {
-    const userInfo = await api.signIn(email, password);
-    config.token = userInfo.accessToken;
-    await setItem('token', userInfo.accessToken);
-    dispatch({ type: USER_SIGNED_IN, userInfo });
-  } catch (error) {
-    if (error.status === 400) {
-      throw new ApiError(error.data, error.status);
-    } else {
-      Alert.alert(
-        'SignIn Failed',
-        'Sorry, something went wrong.',
-        [{ text: 'OK', style: 'cancel' }],
-      );
-      throw new ApiError({ errors: [] }, error.status);
-    }
-  }
+export const sendEmailConfirmation = async ({
+  email,
+}) => {
+  await api.sendEmailConfirmation({
+    email,
+  });
 };
 
-export const signOut = () => async (dispatch) => {
-  try {
-    await api.signOut();
-    config.token = null;
-    await removeItem('token');
-    dispatch({ type: USER_LOGGED_OUT });
-  } catch (error) {
-    Alert.alert(
-      'SignOut Failed',
-      'Sorry, something went wrong.',
-      [{ text: 'OK', style: 'cancel' }],
-    );
-  }
+export const getUserData = () => async (dispatch) => {
+  const user = await api.getUserData();
+
+  await dispatch({ type: SET_USER_DATA, user });
+  return user;
 };
 
-export const verifyEmailDev = _signupToken => async () => {
-  await api.verifyEmailDev(_signupToken);
+export const setUserData = user => async (dispatch) => {
+  await dispatch({ type: SET_USER_DATA, user });
+  return user;
 };
 
-export const getUsers = ({ role, status }) => async () => {
+export const emailSignIn = ({
+  email,
+  password,
+  userType,
+}) => async (dispatch) => {
+  const deviceId = getMaskedDeviceId();
+
+  const { user, accessToken } = await api.emailSignIn({
+    email, password, userType, deviceId,
+  });
+
+  config.accessToken = accessToken;
+
+  sockets.disconnect();
+  sockets.connect();
+  sockets.emit('subscribe', `user-${user._id}`);
+
+  await Promise.all([
+    setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
+    dispatch({ type: SET_USER_DATA, user }),
+  ]);
+
+  const { stack, screen } = getInitialScreen(user);
+  rootNavigation.reset({ routes: [{ name: stack, params: { screen } }] });
+
+  return user;
+};
+
+export const getUsers = async ({ role, status }) => {
   const users = await api.getUsers({ role, status });
   return users;
 };
@@ -115,3 +133,15 @@ export const fillRegistrationForm = ({
 };
 
 /* Fighters actions: end */
+
+export const logout = () => async (dispatch) => {
+  // await api.logout(); // add logout endpoint
+  config.accessToken = null;
+  await clear();
+
+  sockets.disconnect();
+  sockets.connect();
+  sockets.emit('subscribe', `device-${getMaskedDeviceId()}`);
+
+  dispatch({ type: USER_LOGGED_OUT });
+};

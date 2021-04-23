@@ -5,13 +5,14 @@ import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   inputContainer: {
+    alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
     height: 56,
     borderRadius: 5,
     paddingHorizontal: 16,
     marginTop: 6,
-    marginBottom: 20,
+    marginBottom: 5,
     backgroundColor: colors.gray,
   },
   disabled: {
@@ -34,6 +35,7 @@ export default StyleSheet.create({
   labelFocused: {
   },
   error: {
+    borderWidth: 1,
     borderColor: colors.error,
   },
   errorMessage: {

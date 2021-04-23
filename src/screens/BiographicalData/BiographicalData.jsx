@@ -5,6 +5,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 
 import colors from 'themes/colors';
 
@@ -17,6 +18,8 @@ import CitySelectModal from 'components/CitySelectModal';
 import Toggle from 'components/Toggle';
 import UploadPhotoButton from 'components/UploadPhotoButton';
 
+import * as userActions from 'resources/user/user.actions';
+
 import styles from './BiographicalData.styles';
 
 const GENDERS = {
@@ -27,6 +30,7 @@ const GENDERS = {
 function BiographicalData() {
   const navigation = useNavigation();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const [fullName, setFullName] = useState('');
   const [nickname, setNickname] = useState('');
@@ -80,6 +84,11 @@ function BiographicalData() {
     birthdate, fullName, gender, hometown?.cityId, navigation, nickname, photo?.mime, photo?.path,
   ]);
 
+  const goToSelectType = useCallback(async () => {
+    await dispatch(userActions.logout());
+    navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'SelectUserType' } }] });
+  }, [dispatch, navigation]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <DatePickerModal
@@ -98,6 +107,7 @@ function BiographicalData() {
       <Header
         title={t('BiographicalData.BiographicalData')}
         leftItemType="backArrow"
+        onLeftItemPress={goToSelectType}
       />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View>

@@ -1,16 +1,24 @@
 import { apiClient } from 'helpers/api';
 
-export const signUp = userData => apiClient
-  .post('account/signup', userData);
+export const emailSignUp = ({
+  email, password, userType, deviceId,
+}) => apiClient
+  .post('users/signup', {
+    email, password, userType, deviceId,
+  });
 
-export const signIn = (email, password) => apiClient
-  .post('account/signin', { email, password });
+export const sendEmailConfirmation = ({
+  email,
+}) => apiClient
+  .post('users/send-email-confirmation', {
+    email,
+  });
 
-export const verifyEmailDev = _signupToken => apiClient
-  .get(`account/verifyEmail/${_signupToken}`);
+export const fetchAccessToken = ({ deviceId }) => apiClient
+  .get('users/fetch-access-token', { deviceId });
 
-export const signOut = () => apiClient
-  .post('account/logout');
+export const getUserData = () => apiClient
+  .get('users/current');
 
 export const getUsers = ({ role, status }) => apiClient
   .get(`users?role=${role}&status=${status}`);
@@ -29,3 +37,9 @@ export const setPushToken = ({ token, deviceId }) => apiClient
 //   });
 
 /* Fighters api: end */
+export const emailSignIn = ({
+  email, password, userType, deviceId,
+}) => apiClient
+  .post('users/signin', {
+    email, password, userType, deviceId,
+  });

@@ -3,10 +3,16 @@ import fonts from 'themes/fonts';
 import { Platform } from 'react-native';
 
 export const variables = {
+  paddingTop: 20,
   paddingHorizontal: 20,
+  paddingTopLogo: 100,
 };
 
 export const commonStyles = {
+  navigator: {
+    flex: 1,
+    backgroundColor: colors.main,
+  },
   screen: {
     flex: 1,
     backgroundColor: colors.main,
