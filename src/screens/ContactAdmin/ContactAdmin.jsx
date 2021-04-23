@@ -18,7 +18,7 @@ import styles from './ContactAdmin.styles';
 function ContactAdmin() {
   const { t } = useTranslation();
   const [selectedItem, setSelectedItem] = useState(null);
-  const user = useSelector(userSelectors.getUserData);
+  const userName = useSelector(userSelectors.getUserFullName);
 
   const items = useMemo(() => [
     {
@@ -48,8 +48,8 @@ function ContactAdmin() {
   ], [t]);
 
   const onButtonPress = useCallback(() => {
-    Linking.openURL(`mailto:admin@fans4.com?subject=${items[selectedItem - 1].title} ${user?.fullName}`);
-  }, [items, selectedItem]);
+    Linking.openURL(`mailto:admin@fans4.com?subject=${items[selectedItem - 1].title} ${userName}`);
+  }, [items, selectedItem, userName]);
 
   return (
     <SafeAreaView style={styles.screen}>
