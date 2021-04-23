@@ -7,8 +7,10 @@ import { getMaskedDeviceId } from 'helpers/deviceInfo';
 import { setItem, clear } from 'helpers/storage';
 import getInitialScreen from 'helpers/getInitialScreen';
 import * as rootNavigation from 'helpers/rootNavigation';
+import { throwApiError, generalError } from 'helpers/api/api.client';
 
 import * as sockets from 'services/socket.service';
+import i18n from 'services/i18n.service';
 
 import {
   USER_LOGGED_OUT,
@@ -124,12 +126,35 @@ export const fillRegistrationForm = ({
     method: 'put',
     url: `${config.apiUrl}/users/registration-form`,
     headers: {
+      Authorization: `Bearer ${config.accessToken}`,
+      'X-Application-ID': config.applicationId,
+      'X-Language': i18n.language,
       'Content-Type': 'multipart/form-data',
     },
     data: formData,
   });
 
-  dispatch({ type: USER_FILLED_REGISTRATION_FORM, user: response.data });
+  if (!response) {
+    throwApiError({
+      data: { errors: generalError },
+      status: 500,
+    });
+    return null;
+  }
+
+  response.data = response.data || {};
+  response.status = response.status || 500;
+
+  if (response.status >= 200 && response.status < 300) {
+    dispatch({ type: USER_FILLED_REGISTRATION_FORM, user: response.data });
+    return null;
+  }
+  if (response.status === 400) {
+    throwApiError(response);
+  }
+
+  response.data.errors = response.data.errors || generalError;
+  throwApiError(response);
 };
 
 /* Fighters actions: end */

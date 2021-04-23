@@ -11,11 +11,11 @@ axios.interceptors.response.use(
   error => error.response || {},
 );
 
-const generalError = {
+export const generalError = {
   _global: [i18n.t('helpers.api.unexpectedErrorOccurred')],
 };
 
-const throwApiError = ({ data = {}, status = 500 }) => {
+export const throwApiError = ({ data = {}, status = 500 }) => {
   throw new ApiError(data, status);
 };
 

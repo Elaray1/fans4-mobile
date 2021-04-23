@@ -14,6 +14,7 @@ class ApiError extends Error {
 
     this.data = data;
     this.status = status;
+    this.message = `\nstatus: ${this.status}\ndata: ${JSON.stringify(this.data, null, 2)}`;
   }
 }
 
