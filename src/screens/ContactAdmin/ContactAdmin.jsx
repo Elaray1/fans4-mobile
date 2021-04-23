@@ -3,6 +3,7 @@ import {
   SafeAreaView, View, StatusBar, Linking,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import colors from 'themes/colors';
 
@@ -10,11 +11,14 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import RadioButton from 'components/RadioButton';
 
+import * as userSelectors from 'resources/user/user.selectors';
+
 import styles from './ContactAdmin.styles';
 
 function ContactAdmin() {
   const { t } = useTranslation();
   const [selectedItem, setSelectedItem] = useState(null);
+  const user = useSelector(userSelectors.getUserData);
 
   const items = useMemo(() => [
     {
@@ -44,13 +48,13 @@ function ContactAdmin() {
   ], [t]);
 
   const onButtonPress = useCallback(() => {
-    Linking.openURL(`mailto:admin@fans4.com?subject=${items[selectedItem - 1].name}`); // TODO: add user full name to subject
+    Linking.openURL(`mailto:admin@fans4.com?subject=${items[selectedItem - 1].title} ${user?.fullName}`);
   }, [items, selectedItem]);
 
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <Header isBackArrow title={t('ContactAdmin.contactAdmin')} />
+      <Header leftItemType="backArrow" title={t('ContactAdmin.contactAdmin')} />
       <View style={styles.content}>
         <View style={styles.selectList}>
           {items.map(
