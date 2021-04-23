@@ -17,4 +17,4 @@ function Fights() {
   );
 }
 
-export default Fights;
+export default React.memo(Fights);

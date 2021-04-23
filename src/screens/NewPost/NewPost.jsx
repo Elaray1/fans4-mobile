@@ -18,4 +18,4 @@ function NewPost() {
   );
 }
 
-export default NewPost;
+export default React.memo(NewPost);
