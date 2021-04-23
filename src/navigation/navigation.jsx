@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -30,7 +30,7 @@ const NAVIGATOR_CONTAINER_THEME = {
 
 const Stack = createStackNavigator();
 
-const init = async (dispatch) => {
+const init = async (dispatch, setIsInitialized) => {
   let user;
   const accessToken = await getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
@@ -53,16 +53,24 @@ const init = async (dispatch) => {
 
   const { stack, screen } = getInitialScreen(user);
   rootNavigation.reset({ routes: [{ name: stack, params: { screen } }] });
-  SplashScreen.hide();
+  setIsInitialized(true);
 };
 
 function AppNavigation() {
   const dispatch = useDispatch();
+  const [isInitialized, setIsInitialized] = useState(false);
+
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
 
   const onNavigatorReady = useCallback(() => {
-    init(dispatch);
-  }, [dispatch]);
+    init(dispatch, setIsInitialized);
+  }, [dispatch, setIsInitialized]);
+
+  useEffect(() => {
+    if (isInitialized) {
+      SplashScreen.hide();
+    }
+  }, [isInitialized]);
 
   return (
     <NavigationContainer
