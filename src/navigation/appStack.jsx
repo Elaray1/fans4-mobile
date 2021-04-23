@@ -1,8 +1,7 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import PropTypes from 'prop-types';
 
 import HomeIcon from 'assets/icons/tab-bar/home';
 
@@ -69,29 +68,27 @@ function Tabs() {
 
 function AppScreens() {
   return (
-    <View style={commonStyles.navigator}>
-      <AppStack.Navigator
-        headerMode="none"
-        screenOptions={SCREEN_OPTIONS}
-      >
+    <AppStack.Navigator
+      headerMode="none"
+      screenOptions={SCREEN_OPTIONS}
+    >
 
-        {/* <TABS> */}
-        <AppStack.Screen name="Tabs" component={Tabs} />
-        {/* <TABS /> */}
+      {/* <TABS> */}
+      <AppStack.Screen name="Tabs" component={Tabs} />
+      {/* <TABS /> */}
 
-        { /* Screens without tabs */}
-        <AppStack.Screen name="EmailConfirmation" component={EmailConfirmation} />
-        <AppStack.Screen name="BiographicalData" component={BiographicalData} />
-        <AppStack.Screen name="PersonalInfo" component={PersonalInfo} />
-        <AppStack.Screen name="TermsOfUse" component={TermsOfUse} />
-        <AppStack.Screen name="VerificationPending" component={VerificationPending} />
-        <AppStack.Screen name="VerificationSuccessful" component={VerificationSuccessful} />
-        <AppStack.Screen name="VerificationFailed" component={VerificationFailed} />
-        <AppStack.Screen name="OnBoarding1" component={OnBoarding1} />
-        <AppStack.Screen name="OnBoarding2" component={OnBoarding2} />
-        <AppStack.Screen name="OnBoarding3" component={OnBoarding3} />
-      </AppStack.Navigator>
-    </View>
+      { /* Screens without tabs */}
+      <AppStack.Screen name="EmailConfirmation" component={EmailConfirmation} />
+      <AppStack.Screen name="BiographicalData" component={BiographicalData} />
+      <AppStack.Screen name="PersonalInfo" component={PersonalInfo} />
+      <AppStack.Screen name="TermsOfUse" component={TermsOfUse} />
+      <AppStack.Screen name="VerificationPending" component={VerificationPending} />
+      <AppStack.Screen name="VerificationSuccessful" component={VerificationSuccessful} />
+      <AppStack.Screen name="VerificationFailed" component={VerificationFailed} />
+      <AppStack.Screen name="OnBoarding1" component={OnBoarding1} />
+      <AppStack.Screen name="OnBoarding2" component={OnBoarding2} />
+      <AppStack.Screen name="OnBoarding3" component={OnBoarding3} />
+    </AppStack.Navigator>
   );
 }
 
