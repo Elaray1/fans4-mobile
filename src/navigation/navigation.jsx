@@ -124,7 +124,7 @@ function AppNavigation() {
 
   useEffect(() => {
     connectPushNotifications(userAuthenticated);
-    return disconnectPushNotifications(userAuthenticated);
+    return () => disconnectPushNotifications(userAuthenticated);
   }, [userAuthenticated]);
 
   return (
