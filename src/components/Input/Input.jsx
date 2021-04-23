@@ -34,7 +34,7 @@ function Input({
   labelStyle,
   multiline,
   numberOfLines,
-  style,
+  autoCapitalize,
 }) {
   const [focused, setFocused] = useState(false);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -61,7 +61,6 @@ function Input({
           styles.label,
           labelStyle,
           focused && styles.labelFocused,
-          errorStyle,
           disabled && styles.disabled,
         ]}
       >
@@ -93,10 +92,11 @@ function Input({
           secureTextEntry={type === 'password' && !isPasswordVisible}
           keyboardType={getKeyboardType(type)}
           returnKeyType={returnKeyType}
-          style={[styles.input, style, multiline && { textAlignVertical: 'top' }]}
+          style={[styles.input, multiline && { textAlignVertical: 'top' }]}
           maxLength={maxLength}
           multiline={multiline}
           numberOfLines={numberOfLines}
+          autoCapitalize={autoCapitalize}
         />
         {type === 'password' && (
         <TouchableOpacity
@@ -122,6 +122,7 @@ function Input({
 
 Input.propTypes = {
   type: PropTypes.string,
+  autoCapitalize: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
   onChange: PropTypes.func.isRequired,
@@ -140,10 +141,10 @@ Input.propTypes = {
   maxLength: PropTypes.number,
   multiline: PropTypes.bool,
   numberOfLines: PropTypes.number,
-  style: PropTypes.shape(),
 };
 
 Input.defaultProps = {
+  autoCapitalize: 'sentences',
   type: 'none',
   label: null,
   value: '',
@@ -162,7 +163,6 @@ Input.defaultProps = {
   errorStyle: {},
   multiline: false,
   numberOfLines: 1,
-  style: {},
 };
 
 export default Input;

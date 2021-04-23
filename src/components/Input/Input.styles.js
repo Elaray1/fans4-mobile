@@ -5,6 +5,7 @@ import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   inputContainer: {
+    alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
     height: 56,
@@ -34,6 +35,7 @@ export default StyleSheet.create({
   labelFocused: {
   },
   error: {
+    borderWidth: 1,
     borderColor: colors.error,
   },
   errorMessage: {

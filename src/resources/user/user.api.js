@@ -20,9 +20,6 @@ export const fetchAccessToken = ({ deviceId }) => apiClient
 export const getUserData = () => apiClient
   .get('users/current');
 
-export const removeVerificationDeviceId = deviceId => apiClient
-  .put('users/remove-verification-device-id', { deviceId });
-
 export const getUsers = ({ role, status }) => apiClient
   .get(`users?role=${role}&status=${status}`);
 

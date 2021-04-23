@@ -1,54 +1,79 @@
-import React, { useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
+import 'react-native-gesture-handler';
 
 import { STORAGE_KEYS } from 'helpers/constants';
-import { getItem, setItem } from 'helpers/storage';
-import { navigationRef } from 'helpers/rootNavigation';
+import { getItem } from 'helpers/storage';
+import { getMaskedDeviceId } from 'helpers/deviceInfo';
+import getInitialScreen from 'helpers/getInitialScreen';
+import * as rootNavigation from 'helpers/rootNavigation';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
-
 import config from 'resources/config';
+
+import * as sockets from 'services/socket.service';
 
 import colors from 'themes/colors';
 
-import AuthScreens from './authStack';
 import AppScreens from './appStack';
+import AuthScreens from './authStack';
+
+const NAVIGATOR_CONTAINER_THEME = {
+  colors: {
+    background: colors.main,
+  },
+};
+
+const Stack = createStackNavigator();
+
+const init = async (dispatch) => {
+  let user;
+  const accessToken = await getItem(STORAGE_KEYS.ACCESS_TOKEN);
+
+  if (accessToken) {
+    config.accessToken = accessToken;
+
+    try {
+      user = await dispatch(userActions.getUserData());
+      sockets.connect();
+      sockets.emit('subscribe', `user-${user._id}`);
+    } catch (err) {
+      console.log('Fetching user on start error:', err.message);
+    }
+  }
+
+  if (!user) {
+    sockets.connect();
+    sockets.emit('subscribe', `device-${getMaskedDeviceId()}`);
+  }
+
+  const { stack, screen } = getInitialScreen(user);
+  rootNavigation.reset({ routes: [{ name: stack, params: { screen } }] });
+  SplashScreen.hide();
+};
 
 function AppNavigation() {
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
 
-  useEffect(() => {
-    (async () => {
-      const accessToken = await getItem(STORAGE_KEYS.ACCESS_TOKEN);
-      if (accessToken) {
-        config.accessToken = accessToken;
-        await dispatch(userActions.getUserData());
-      } else {
-        const fetchedAccessToken = await userActions.fetchAccessToken();
-        if (fetchedAccessToken) {
-          config.accessToken = fetchedAccessToken;
-          await Promise.all([
-            setItem(STORAGE_KEYS.ACCESS_TOKEN, fetchedAccessToken),
-            userActions.removeVerificationDeviceId(),
-          ]);
-          await dispatch(userActions.getUserData());
-        }
-      }
-      SplashScreen.hide();
-    })();
+  const onNavigatorReady = useCallback(() => {
+    init(dispatch);
   }, [dispatch]);
 
   return (
     <NavigationContainer
-      ref={navigationRef}
-      theme={{ colors: { background: colors.main } }}
+      ref={rootNavigation.navigationRef}
+      theme={NAVIGATOR_CONTAINER_THEME}
+      onReady={onNavigatorReady}
     >
-      {userAuthenticated ? <AppScreens /> : <AuthScreens />}
+      <Stack.Navigator initialRouteName={userAuthenticated ? 'AppStack' : 'AuthStack'} headerMode="none">
+        <Stack.Screen name="AppStack" component={AppScreens} />
+        <Stack.Screen name="AuthStack" component={AuthScreens} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

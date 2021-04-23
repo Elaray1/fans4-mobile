@@ -8,11 +8,8 @@ export default (state = null, action) => {
   switch (action.type) {
     case SET_USER_DATA:
       return {
-        ...state,
-        userData: {
-          ...state.userData,
-          ...action.user,
-        },
+        ...(state || {}),
+        ...action.user,
       };
     case USER_LOGGED_OUT:
       return null;

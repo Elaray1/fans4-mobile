@@ -9,14 +9,16 @@ import { useDispatch } from 'react-redux';
 
 import * as userActions from 'resources/user/user.actions';
 
+import extractApiErrorMessage from 'helpers/extractApiErrorMessage';
+
 import colors from 'themes/colors';
 
 import Logo from 'assets/icons/logo';
 import ErrorIcon from 'assets/icons/error';
+import BackArrowIcon from 'assets/icons/back-arrow';
 
 import Text from 'components/Text';
 import Button from 'components/Button';
-import Header from 'components/Header';
 import Input from 'components/Input';
 
 import { USER_TYPES } from 'resources/user/user.constants';
@@ -36,7 +38,8 @@ function SignIn({ route }) {
     email: [],
     password: [],
   });
-  const [isError, setIsError] = useState(false);
+
+  const [apiError, setApiError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const onEmailBlur = useCallback(() => {
@@ -69,6 +72,7 @@ function SignIn({ route }) {
 
   const onPressSignIn = useCallback(async () => {
     let isErrors = false;
+
     if (!validateEmail(emailValue)) {
       isErrors = true;
       setInputErrors({
@@ -98,29 +102,33 @@ function SignIn({ route }) {
     if (!isErrors) {
       try {
         setIsLoading(true);
+
+
         await dispatch(userActions.emailSignIn({
           email: emailValue,
           password: passwordValue,
           userType,
+          navigation,
         }));
       } catch (err) {
-        setIsError(true);
+        setApiError(extractApiErrorMessage(err));
         setIsLoading(false);
       }
     }
-  }, [emailValue, passwordValue, userType, dispatch, inputErrors, t]);
+  }, [emailValue, passwordValue, userType, dispatch, inputErrors, t, navigation]);
 
   const onChangeInputValue = useCallback((inputName) => {
-    if (isError) {
-      setIsError(false);
+    if (apiError) {
+      setApiError('');
     }
+
     if (inputErrors[inputName].length) {
       setInputErrors({
         ...inputErrors,
         [inputName]: [],
       });
     }
-  }, [inputErrors, isError]);
+  }, [inputErrors, apiError]);
 
   const onPressSignUp = useCallback(() => {
     navigation.navigate('SignUp', { userType });
@@ -130,32 +138,44 @@ function SignIn({ route }) {
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
-        <KeyboardAvoidingView
-          behavior="position"
-          style={styles.keyboardAvoiding}
-        >
-          <View>
-            <Logo style={styles.logo} />
-            <Header
-              title={userType === USER_TYPES.FIGHTER ? t('SignIn.SignInAsFighter') : t('SignIn.SignInAsFollower')}
-              isBackArrow
-              isBottomLine={false}
-            />
-            {isError && (
-            <View style={styles.error}>
-              <ErrorIcon />
-              <Text style={styles.errorText}>{t('SignIn.InvalidEmailOrAndPassword')}</Text>
-            </View>
-            )}
-            <View style={[styles.inputWrapper, isError && { marginTop: 25 }]}>
+        <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
+          <View style={styles.keyboardAvoidingChildContainer}>
+            <View>
+              <Logo style={styles.logo} />
+
+              <View style={styles.titleContainer}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={navigation.goBack}
+                  style={styles.backButtonWrapper}
+                >
+                  <View style={styles.backButton}>
+                    <BackArrowIcon />
+                  </View>
+                </TouchableOpacity>
+                <Text style={styles.title}>
+                  {userType === USER_TYPES.FIGHTER ? t('SignIn.SignInAsFighter') : t('SignIn.SignInAsFollower')}
+                </Text>
+              </View>
+
+              <View style={styles.errorContainer}>
+                {!!apiError && (
+                <View style={styles.error}>
+                  <ErrorIcon />
+                  <Text style={styles.errorText}>{apiError}</Text>
+                </View>
+                )}
+              </View>
+
               <Input
                 label={t('SignIn.Email')}
                 value={emailValue}
                 onChange={(value) => { onChangeInputValue('email'); setEmailValue(value); }}
                 onBlur={onEmailBlur}
                 errors={inputErrors.email}
-                style={styles.input}
+                style={styles.emailInput}
               />
+
               <View>
                 <Input
                   label={t('SignIn.Password')}
@@ -165,34 +185,32 @@ function SignIn({ route }) {
                   onBlur={onPasswordBlur}
                   errors={inputErrors.password}
                 />
-                <TouchableOpacity
-                  onPress={() => {}}
-                >
+                <TouchableOpacity>
                   <Text style={styles.forgotPassword}>{t('SignIn.ForgotPassword?')}</Text>
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
-          <View>
-            <Button
-              title={t('SignIn.SignIn')}
-              disabled={!emailValue
-                || !passwordValue
-                || !!inputErrors.email.length
-                || !!inputErrors.password.length
-                || isError}
-              onPress={onPressSignIn}
-              style={styles.button}
-              isLoading={isLoading}
-            />
-            <View style={styles.signIn}>
-              <Text style={styles.text}>{t('SignIn.DontHaveAccount?')}</Text>
+
+            <View style={styles.signInButtonWrapper}>
               <Button
-                type="link"
-                title={t('SignIn.SignUp')}
-                onPress={onPressSignUp}
-                style={styles.textLinkWrapper}
+                title={t('SignIn.SignIn')}
+                disabled={!emailValue
+                  || !passwordValue
+                  || !!inputErrors.email.length
+                  || !!inputErrors.password.length}
+                onPress={onPressSignIn}
+                style={styles.button}
+                isLoading={isLoading}
               />
+              <View style={styles.signUpTextWrapper}>
+                <Text style={styles.signUpText}>{t('SignIn.DontHaveAccount?')}</Text>
+                <Button
+                  type="link"
+                  title={t('SignIn.SignUp')}
+                  onPress={onPressSignUp}
+                  style={styles.signUpTextLinkWrapper}
+                />
+              </View>
             </View>
           </View>
         </KeyboardAvoidingView>

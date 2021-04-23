@@ -24,7 +24,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
   },
   logo: {
-    marginBottom: 85,
+    marginBottom: 60,
     alignSelf: 'center',
   },
 });

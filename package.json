@@ -5,7 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "react-native start --reset-cache",
     "test": "jest",
     "lint": "eslint ."
   },
@@ -21,6 +21,7 @@
     "axios": "^0.21.1",
     "dayjs": "1.10.4",
     "i18next": "20.2.1",
+    "lodash": "4.17.21",
     "lodash.debounce": "4.0.8",
     "metro-config": "^0.65.2",
     "prop-types": "^15.7.2",
@@ -45,7 +46,7 @@
     "react-redux": "^7.2.3",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "socket.io-client": "^4.0.1"
+    "socket.io-client": "2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.13.14",

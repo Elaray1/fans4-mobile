@@ -20,11 +20,8 @@ function SelectUserType() {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-
   const onChooseUserType = useCallback(async (userType) => {
-    navigation.navigate('SignUp', {
-      userType,
-    });
+    navigation.navigate('SignUp', { userType });
   }, [navigation]);
 
   return (
