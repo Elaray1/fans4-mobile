@@ -21,4 +21,7 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     lineHeight: fonts.lineHeight.small,
   },
+  radioButtonIcon: {
+    marginRight: 12,
+  },
 });

@@ -14,8 +14,8 @@ import styles from './RadioButton.styles';
 function RadioButton({ isSelected, title, onPress }) {
   return (
     <TouchableOpacity style={[styles.container, isSelected && styles.selected]} onPress={onPress}>
-      {isSelected ? <RadioButtonSelectedIcon style={{ marginRight: 12 }} />
-        : <RadioButtonIcon style={{ marginRight: 12 }} />}
+      {isSelected ? <RadioButtonSelectedIcon style={styles.radioButtonIcon} />
+        : <RadioButtonIcon style={styles.radioButtonIcon} />}
       <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );

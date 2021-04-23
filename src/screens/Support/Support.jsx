@@ -53,7 +53,7 @@ function Support() {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <Header isBackArrow title={t('Support.support')} />
+      <Header leftItemType="backArrow" title={t('Support.support')} />
       <View style={styles.content}>
         <View>
           {items.map(
