@@ -27,4 +27,11 @@ export default StyleSheet.create({
     height: 1,
     marginBottom: 30,
   },
+  text: {
+    fontSize: fonts.size.small,
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+    lineHeight: fonts.lineHeight.small,
+    color: colors.primary,
+  },
 });

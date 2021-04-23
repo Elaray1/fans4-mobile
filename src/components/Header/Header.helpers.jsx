@@ -6,6 +6,8 @@ import { ITEM_TYPES } from 'components/Header/Header.constants';
 import Text from 'components/Text';
 import Icon from './components/Icon';
 
+import styles from './Header.styles';
+
 const WIDTH_ICON = 32;
 
 export const getHeaderItem = ({ type, props, text }) => {
@@ -23,7 +25,7 @@ export const getHeaderItem = ({ type, props, text }) => {
           activeOpacity={0.7}
           onPress={props.onPress}
         >
-          <Text style={props.style}>{text}</Text>
+          <Text style={[styles.text, props.style]}>{text}</Text>
         </TouchableOpacity>
       );
       break;
