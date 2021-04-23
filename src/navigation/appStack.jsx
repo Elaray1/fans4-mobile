@@ -3,16 +3,11 @@ import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import HomeIcon from 'assets/icons/tab-bar/home';
-
-import * as userActions from 'resources/user/user.actions';
-
 import AccountIcon from 'assets/icons/tab-bar/account.svg';
 import ExploreIcon from 'assets/icons/tab-bar/explore.svg';
 import FightsIcon from 'assets/icons/tab-bar/fights.svg';
 import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
 
-import AppLoader from 'screens/AppLoader/AppLoader';
 import EmailConfirmation from 'screens/EmailConfirmation';
 import Account from 'screens/Account';
 import Explore from 'screens/Explore';
