@@ -1,0 +1,73 @@
+import React, { useState, useCallback, useMemo } from 'react';
+import {
+  SafeAreaView, View, StatusBar, Linking,
+} from 'react-native';
+import { useTranslation } from 'react-i18next';
+
+import colors from 'themes/colors';
+
+import Header from 'components/Header';
+import Button from 'components/Button';
+import RadioButton from 'components/RadioButton';
+
+import styles from './ContactAdmin.styles';
+
+function ContactAdmin() {
+  const { t } = useTranslation();
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const items = useMemo(() => [
+    {
+      _id: '1',
+      title: t('ContactAdmin.updateMyPersonalInfo'),
+    },
+    {
+      _id: '2',
+      title: t('ContactAdmin.changeMyStatus'),
+    },
+    {
+      _id: '3',
+      title: t('ContactAdmin.updateMyStatus'),
+    },
+    {
+      _id: '4',
+      title: t('ContactAdmin.whyMyContentWasBlocked'),
+    },
+    {
+      _id: '5',
+      title: t('ContactAdmin.incomeIssues'),
+    },
+    {
+      _id: '6',
+      title: t('ContactAdmin.other'),
+    },
+  ], [t]);
+
+  const onButtonPress = useCallback(() => {
+    Linking.openURL(`mailto:admin@fans4.com?subject=${items[selectedItem - 1].name}`); // TODO: add user full name to subject
+  }, [items, selectedItem]);
+
+  return (
+    <SafeAreaView style={styles.screen}>
+      <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+      <Header isBackArrow title={t('ContactAdmin.contactAdmin')} />
+      <View style={styles.content}>
+        <View style={styles.selectList}>
+          {items.map(
+            (item, index) => (
+              <RadioButton
+                key={item._id}
+                isSelected={selectedItem === (index + 1)}
+                title={item.title}
+                onPress={() => { setSelectedItem(index + 1); }}
+              />
+            ),
+          )}
+        </View>
+        <Button title={t('ContactAdmin.sendEmail')} disabled={!selectedItem} onPress={onButtonPress} />
+      </View>
+    </SafeAreaView>
+  );
+}
+
+export default React.memo(ContactAdmin);

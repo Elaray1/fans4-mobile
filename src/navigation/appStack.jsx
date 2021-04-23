@@ -22,6 +22,8 @@ import VerificationFailed from 'screens/VerificationFailed';
 import OnBoarding1 from 'screens/OnBoarding1';
 import OnBoarding2 from 'screens/OnBoarding2';
 import OnBoarding3 from 'screens/OnBoarding3';
+import ContactAdmin from 'screens/ContactAdmin';
+import Support from 'screens/Support';
 
 import colors from 'themes/colors';
 import { commonStyles } from 'themes/commonStyles';
@@ -160,6 +162,8 @@ function AppScreens() {
       <AppStack.Screen name="OnBoarding1" component={OnBoarding1} />
       <AppStack.Screen name="OnBoarding2" component={OnBoarding2} />
       <AppStack.Screen name="OnBoarding3" component={OnBoarding3} />
+      <AppStack.Screen name="ContactAdmin" component={ContactAdmin} />
+      <AppStack.Screen name="Support" component={Support} />
     </AppStack.Navigator>
   );
 }
