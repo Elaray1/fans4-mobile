@@ -8,9 +8,9 @@ export default (state = null, action) => {
   switch (action.type) {
     case SET_USER_DATA:
       return {
-        ...state,
+        ...(state || {}),
         userData: {
-          ...state.userData,
+          ...(state?.userData || {}),
           ...action.user,
         },
       };

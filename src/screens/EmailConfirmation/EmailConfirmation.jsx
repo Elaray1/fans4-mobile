@@ -1,12 +1,18 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, StatusBar, ScrollView,
+  SafeAreaView,
+  View,
+  StatusBar,
+  ScrollView,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+
+import * as socketService from 'services/socket.service';
 
 import * as userActions from 'resources/user/user.actions';
+import * as userSelectors from 'resources/user/user.selectors';
 
 import colors from 'themes/colors';
 
@@ -16,37 +22,43 @@ import Checkmark from 'assets/icons/checkmark';
 import Text from 'components/Text';
 import Button from 'components/Button';
 
-import { USER_TYPES } from 'resources/user/user.constants';
-
 import styles from './EmailConfirmation.styles';
 
-function EmailConfirmation({ route }) {
+function EmailConfirmation() {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { email } = route.params;
+
+  const userEmail = useSelector(userSelectors.getUserEmail);
+  const userType = useSelector(userSelectors.getUserType);
 
   let timer = null;
 
-  const [isResendButton, setIsResendButton] = useState(false);
+  const [isResendButtonShown, setIsResendButtonShown] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    timer = setTimeout(() => setIsResendButton(true), 10000);
+    socketService.on('email:verified', async (updatedUser) => {
+      await dispatch(userActions.setUserData(updatedUser));
+      navigation.navigate('BiographicalData');
+    });
+  }, [dispatch, navigation]);
 
+  useEffect(() => {
+    timer = setTimeout(() => setIsResendButtonShown(true), 10000);
     return () => timer && clearTimeout(timer);
   }, [timer]);
 
   const onResendEmail = useCallback(async () => {
-    setIsResendButton(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    timer = setTimeout(() => setIsResendButton(true), 10000);
+    setIsResendButtonShown(false);
+    timer = setTimeout(() => setIsResendButtonShown(true), 10000);
 
-    await userActions.sendEmailConfirmation({ email });
-  }, [email]);
+    await userActions.sendEmailConfirmation({ email: userEmail });
+  }, [userEmail]);
 
-  const onBackToSignUp = useCallback(async () => {
+  const goToSignUp = useCallback(async () => {
     await dispatch(userActions.logout());
-  }, [dispatch]);
+    navigation.replace('AuthStack', { screen: 'SignUp', params: { userType } });
+  }, [dispatch, navigation, userType]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -61,7 +73,7 @@ function EmailConfirmation({ route }) {
             <Text style={styles.text}>
               {t('EmailConfirmation.WeHaveSentYouConfirmationEmailTo')}
               {' '}
-              {email}
+              {userEmail}
               .
             </Text>
             <Text style={[styles.text, { marginTop: 20 }]}>
@@ -71,7 +83,7 @@ function EmailConfirmation({ route }) {
           </View>
         </View>
         <View>
-          {isResendButton
+          {isResendButtonShown
             ? (
               <Button
                 title={t('EmailConfirmation.ResendConfirmationEmail')}
@@ -86,7 +98,7 @@ function EmailConfirmation({ route }) {
             )}
           <Button
             title={t('EmailConfirmation.BackToSignUpPage')}
-            onPress={onBackToSignUp}
+            onPress={goToSignUp}
             type="link"
             style={styles.linkButton}
           />
@@ -96,14 +108,4 @@ function EmailConfirmation({ route }) {
   );
 }
 
-EmailConfirmation.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({
-      email: PropTypes.string,
-      userType: PropTypes.oneOf(Object.values(USER_TYPES)),
-      isResendEmail: PropTypes.bool,
-    }),
-  }).isRequired,
-};
-
-export default EmailConfirmation;
+export default React.memo(EmailConfirmation);

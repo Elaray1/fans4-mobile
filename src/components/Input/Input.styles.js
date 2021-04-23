@@ -35,6 +35,7 @@ export default StyleSheet.create({
   labelFocused: {
   },
   error: {
+    borderWidth: 1,
     borderColor: colors.error,
   },
   errorMessage: {

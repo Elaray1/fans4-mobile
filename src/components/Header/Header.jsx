@@ -15,12 +15,17 @@ function Header({
   title,
   isBackArrow,
   isBottomLine,
+  backArrowCallback,
 }) {
   const navigation = useNavigation();
-
   const onBackNavigation = useCallback(() => {
+    if (backArrowCallback) {
+      backArrowCallback();
+      return;
+    }
+
     navigation.goBack();
-  }, [navigation]);
+  }, [navigation, backArrowCallback]);
 
   return (
     <View style={styles.headerWrapper}>
@@ -48,14 +53,16 @@ function Header({
 }
 
 Header.propTypes = {
+  isBottomLine: PropTypes.bool,
   title: PropTypes.string.isRequired,
   isBackArrow: PropTypes.bool,
-  isBottomLine: PropTypes.bool,
+  backArrowCallback: PropTypes.func,
 };
 
 Header.defaultProps = {
   isBackArrow: false,
   isBottomLine: true,
+  backArrowCallback: null,
 };
 
 export default React.memo(Header);

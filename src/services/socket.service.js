@@ -27,7 +27,10 @@ export const connect = async () => {
       accessToken: config.accessToken,
       deviceId: getMaskedDeviceId(),
     },
+    autoConnect: false,
   });
+
+  socket.connect();
 
   socket.on('connect', () => {
     console.log('WS connected');

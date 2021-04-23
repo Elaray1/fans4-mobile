@@ -1,8 +1,8 @@
 import React from 'react';
-import {
-  View,
-} from 'react-native';
+import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import PropTypes from 'prop-types';
+
 
 import SelectUserType from 'screens/SelectUserType';
 import SignUp from 'screens/SignUp';
@@ -19,7 +19,6 @@ function AuthScreens() {
     <View style={commonStyles.navigator}>
       <AuthStack.Navigator
         headerMode="none"
-        initialRouteName="SelectUserType"
         screenOptions={{
           backgroundColor: colors.main,
           cardStyle: {

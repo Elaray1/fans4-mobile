@@ -5,35 +5,40 @@ import axios from 'axios';
 import { STORAGE_KEYS } from 'helpers/constants';
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
 import { setItem, clear } from 'helpers/storage';
+import getInitialScreen from 'helpers/getInitialScreen';
+import * as rootNavigation from 'helpers/rootNavigation';
+
+import * as sockets from 'services/socket.service';
 
 import {
-  USER_SIGNED_IN,
   USER_LOGGED_OUT,
   USER_FILLED_REGISTRATION_FORM,
-  SET_USER_AUTHENTICATED,
   SET_USER_DATA,
-  USER_LOGGED_OUT,
 } from './user.constants';
 
 import * as api from './user.api';
 
 export const emailSignUp = ({
-  email, password, userType,
+  email, password, userType, navigation,
 }) => async (dispatch) => {
-  const deviceId = getMaskedDeviceId();
   const { user, accessToken } = await api.emailSignUp({
-    email, password, userType, deviceId,
+    email,
+    password,
+    userType,
   });
+
   config.accessToken = accessToken;
 
+  sockets.disconnect();
+  sockets.connect();
+  sockets.emit('subscribe', `user-${user._id}`);
+
   await Promise.all([
-    setItem(STORAGE_KEYS.USER_TYPE, userType),
-    setItem(STORAGE_KEYS.USER_EMAIL, email),
     setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
     dispatch({ type: SET_USER_DATA, user }),
   ]);
 
-  return user;
+  rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'EmailConfirmation' } }] });
 };
 
 export const sendEmailConfirmation = async ({
@@ -44,14 +49,9 @@ export const sendEmailConfirmation = async ({
   });
 };
 
-export const fetchAccessToken = async () => {
-  const deviceId = getMaskedDeviceId();
-  const { accessToken } = await api.fetchAccessToken({ deviceId });
-  return accessToken;
-};
-
 export const getUserData = () => async (dispatch) => {
   const user = await api.getUserData();
+
   await dispatch({ type: SET_USER_DATA, user });
   return user;
 };
@@ -61,23 +61,31 @@ export const setUserData = user => async (dispatch) => {
   return user;
 };
 
-export const removeVerificationDeviceId = async () => {
+export const emailSignIn = ({
+  email,
+  password,
+  userType,
+}) => async (dispatch) => {
   const deviceId = getMaskedDeviceId();
-  await api.removeVerificationDeviceId(deviceId);
-};
 
-export const emailSignIn = ({ email, password, userType }) => async (dispatch) => {
-  const deviceId = getMaskedDeviceId();
   const { user, accessToken } = await api.emailSignIn({
     email, password, userType, deviceId,
   });
+
   config.accessToken = accessToken;
+
+  sockets.disconnect();
+  sockets.connect();
+  sockets.emit('subscribe', `user-${user._id}`);
+
   await Promise.all([
-    setItem(STORAGE_KEYS.USER_TYPE, userType),
-    setItem(STORAGE_KEYS.USER_EMAIL, email),
     setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
     dispatch({ type: SET_USER_DATA, user }),
   ]);
+
+  const { stack, screen } = getInitialScreen(user);
+  rootNavigation.reset({ routes: [{ name: stack, params: { screen } }] });
+
   return user;
 };
 
@@ -125,9 +133,15 @@ export const fillRegistrationForm = ({
 };
 
 /* Fighters actions: end */
+
 export const logout = () => async (dispatch) => {
   // await api.logout(); // add logout endpoint
   config.accessToken = null;
   await clear();
+
+  sockets.disconnect();
+  sockets.connect();
+  sockets.emit('subscribe', `device-${getMaskedDeviceId()}`);
+
   dispatch({ type: USER_LOGGED_OUT });
 };

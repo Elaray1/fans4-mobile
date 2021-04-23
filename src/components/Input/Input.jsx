@@ -32,6 +32,7 @@ function Input({
   style,
   errorStyle,
   labelStyle,
+  autoCapitalize,
 }) {
   const [focused, setFocused] = useState(false);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -58,7 +59,6 @@ function Input({
           styles.label,
           labelStyle,
           focused && styles.labelFocused,
-          errorStyle,
           disabled && styles.disabled,
         ]}
       >
@@ -91,6 +91,7 @@ function Input({
           returnKeyType={returnKeyType}
           style={styles.input}
           maxLength={maxLength}
+          autoCapitalize={autoCapitalize}
         />
         {type === 'password' && (
         <TouchableOpacity
@@ -116,6 +117,7 @@ function Input({
 
 Input.propTypes = {
   type: PropTypes.string,
+  autoCapitalize: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
   onChange: PropTypes.func.isRequired,
@@ -135,6 +137,7 @@ Input.propTypes = {
 };
 
 Input.defaultProps = {
+  autoCapitalize: 'sentences',
   type: 'none',
   label: null,
   value: '',

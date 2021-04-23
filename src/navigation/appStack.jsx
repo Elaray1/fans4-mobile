@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Platform, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useDispatch, useSelector } from 'react-redux';
-
-import * as userSelectors from 'resources/user/user.selectors';
-
-import { reset } from 'helpers/rootNavigation';
+import PropTypes from 'prop-types';
 
 import HomeIcon from 'assets/icons/tab-bar/home';
 
@@ -25,27 +21,21 @@ import OnBoarding3 from 'screens/OnBoarding3';
 import colors from 'themes/colors';
 import { commonStyles } from 'themes/commonStyles';
 
-import { registerPushNotifications, unregisterPushNotifications, initAppSockets } from 'navigation/helpers/bootstrap';
-
-import { STORAGE_KEYS } from 'helpers/constants';
-import { getItem } from 'helpers/storage';
-
 import TabBarIcon from 'components/TabBarIcon';
 
 const AppStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const SCREEN_OPTIONS = {
+  cardStyle: {
+    backgroundColor: colors.main,
+  },
+};
+
 function HomeScreens() {
   return (
-    <HomeStack.Navigator
-      headerMode="none"
-      screenOptions={{
-        cardStyle: {
-          backgroundColor: colors.main,
-        },
-      }}
-    >
+    <HomeStack.Navigator headerMode="none" screenOptions={SCREEN_OPTIONS}>
       <HomeStack.Screen name="Home" component={Home} />
     </HomeStack.Navigator>
   );
@@ -78,59 +68,11 @@ function Tabs() {
 }
 
 function AppScreens() {
-  const dispatch = useDispatch();
-
-  const user = useSelector(userSelectors.getUserData);
-
-  useEffect(() => {
-    const init = async () => {
-      if (!user.appState.isEmailVerified) {
-        const [
-          USER_EMAIL,
-        ] = await Promise.all([
-          getItem(STORAGE_KEYS.USER_EMAIL),
-        ]);
-
-        reset({
-          index: 0,
-          routes: [
-            {
-              name: 'EmailConfirmation',
-              params: {
-                email: USER_EMAIL,
-              },
-            },
-          ],
-        });
-      } else {
-        // check user data and navigate to BiographicalData / Home
-      }
-    };
-
-    init();
-  }, [dispatch, user.appState.isEmailVerified]);
-
-  // Initialize sockets
-  useEffect(() => {
-    initAppSockets({ dispatch });
-  }, [dispatch]);
-
-  // Initialize Push Notifications
-  useEffect(() => {
-    registerPushNotifications();
-
-    return () => unregisterPushNotifications();
-  }, []);
-
   return (
     <View style={commonStyles.navigator}>
       <AppStack.Navigator
         headerMode="none"
-        screenOptions={{
-          cardStyle: {
-            backgroundColor: colors.main,
-          },
-        }}
+        screenOptions={SCREEN_OPTIONS}
       >
 
         {/* <TABS> */}

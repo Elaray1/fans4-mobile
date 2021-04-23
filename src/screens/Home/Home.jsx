@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, View, StatusBar } from 'react-native';
 
 import colors from 'themes/colors';
-
 import Text from 'components/Text';
+import { clear } from 'helpers/storage';
 
 import styles from './Home.styles';
 

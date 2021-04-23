@@ -4,6 +4,9 @@ import { commonStyles, variables } from 'themes/commonStyles';
 
 import fonts from 'themes/fonts';
 
+const ICON_SIZE = 32;
+const TITLE_CONTAINER_HEIGHT = 20;
+
 export default StyleSheet.create({
   screen: {
     ...commonStyles.screen,
@@ -15,50 +18,64 @@ export default StyleSheet.create({
     paddingTop: variables.paddingTopLogo,
     flex: 1,
   },
-  logo: {
-    marginBottom: 85,
-    alignSelf: 'center',
-  },
-  inputWrapper: {
-    marginTop: 50,
-  },
   keyboardAvoiding: {
     flex: 1,
-    position: 'relative',
+  },
+  keyboardAvoidingChildContainer: {
+    width: '100%',
+    height: '100%',
     justifyContent: 'space-between',
   },
-  signIn: {
-    marginTop: 15,
+  logo: {
+    marginBottom: 60,
+    alignSelf: 'center',
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: TITLE_CONTAINER_HEIGHT,
+  },
+  backButtonWrapper: {
+    backgroundColor: colors.gray,
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    borderRadius: 5,
+    // this rules center icon vertically without increasing container height
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    transform: [{ translateY: -((ICON_SIZE - TITLE_CONTAINER_HEIGHT) / 2) }],
+  },
+  backButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  signInButtonWrapper: {
+    width: '100%',
+  },
+  signUpTextWrapper: {
     alignSelf: 'center',
     flexDirection: 'row',
+    marginTop: 15,
+    marginBottom: 15,
   },
-  textLinkWrapper: {
+  signUpTextLinkWrapper: {
     marginLeft: 3,
   },
-  text: {
+  signUpText: {
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
     fontSize: fonts.size.small,
   },
-  textLink: {
-    textDecorationLine: 'underline',
-  },
-  input: {
-    marginBottom: 20,
+  emailInput: {
+    marginBottom: 23,
   },
   button: {
-    marginTop: 15,
-  },
-  forgotPassword: {
-    marginTop: 5,
-    textAlign: 'right',
-    fontFamily: fonts.family.bold,
-    fontWeight: fonts.weight.medium,
-    fontSize: fonts.size.caption,
-    lineHeight: fonts.lineHeight.caption,
+    marginTop: 10,
   },
   error: {
-    marginTop: 25,
     justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
@@ -71,5 +88,23 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     color: colors.errorText,
     fontSize: fonts.size.caption,
+  },
+  title: {
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+  },
+  errorContainer: {
+    marginTop: 10,
+    width: '100%',
+    height: 60,
+    justifyContent: 'center',
+  },
+  forgotPassword: {
+    marginTop: 5,
+    textAlign: 'right',
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.medium,
+    fontSize: fonts.size.caption,
+    lineHeight: fonts.lineHeight.caption,
   },
 });
