@@ -39,8 +39,9 @@ function SettingsModal({
   }, []);
 
   const onSupportPress = useCallback(() => {
-    console.log('onSupportPress');
-  }, []);
+    onClose();
+    navigation.navigate('Support');
+  }, [navigation, onClose]);
 
   const onInvitePress = useCallback(() => {
     console.log('onInvitePress');
