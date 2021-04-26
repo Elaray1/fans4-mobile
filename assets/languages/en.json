@@ -151,5 +151,19 @@
     "answer4": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
     "question5": "Question #5",
     "answer5": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat."
+  },
+  "SettingsModal": {
+    "settings": "Settings",
+    "accountInformation": "Account Information",
+    "updateYourEmailBiography": "Update your email, biography",
+    "security": "Security",
+    "changePassword": "Change password",
+    "finances": "Finances",
+    "manageBankAccount": "Manage bank account, view income details",
+    "support": "Support",
+    "contactAdminFAQ": "Contact Admin, FAQ",
+    "inviteFollower": "Invite a follower",
+    "scanQRCode": "Scan QR code, share a link",
+    "logOut": "Log out"
   }
 }

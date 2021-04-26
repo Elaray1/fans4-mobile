@@ -1,0 +1,179 @@
+import PropTypes from 'prop-types';
+import React, { useCallback } from 'react';
+import {
+  View, TouchableOpacity, Modal, Pressable,
+} from 'react-native';
+import { useTranslation } from 'react-i18next';
+
+import Text from 'components/Text';
+
+import CrossIcon from 'assets/icons/cross';
+import AccountIcon from 'assets/icons/account';
+import SecurityIcon from 'assets/icons/security';
+import FinancesIcon from 'assets/icons/finances';
+import SupportIcon from 'assets/icons/support';
+import InviteIcon from 'assets/icons/invite';
+
+import styles from './SettingsModal.styles';
+
+const WIDTH_ICON = 24;
+
+function SettingsModal({
+  onClose, visible,
+}) {
+  const { t } = useTranslation();
+
+  const onAccountInfoPress = useCallback(() => {
+    console.log('onAccountInfoPress');
+  }, []);
+
+  const onSecurityPress = useCallback(() => {
+    console.log('onSecurityPress');
+  }, []);
+
+  const onFinancesPress = useCallback(() => {
+    console.log('onFinancesPress');
+  }, []);
+
+  const onSupportPress = useCallback(() => {
+    console.log('onSupportPress');
+  }, []);
+
+  const onInvitePress = useCallback(() => {
+    console.log('onInvitePress');
+  }, []);
+
+  const onLogOutPress = useCallback(() => {
+    console.log('onLogOutPress');
+  }, []);
+
+  return (
+    <Modal
+      animationType="fade"
+      transparent
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <Pressable style={styles.background} onPress={onClose} />
+      <View style={styles.modal}>
+        <View style={styles.header}>
+          <View style={{ width: WIDTH_ICON }} />
+          <Text style={styles.title}>{t('SettingsModal.settings')}</Text>
+          <TouchableOpacity activeOpacity={0.7} onPress={onClose}>
+            <CrossIcon />
+          </TouchableOpacity>
+        </View>
+        <View>
+          <View>
+            <TouchableOpacity
+              style={styles.settingsOption}
+              onPress={onAccountInfoPress}
+              activeOpacity={0.7}
+            >
+              <AccountIcon style={styles.settingIcon} />
+              <View>
+                <Text style={styles.settingTitle}>
+                  {t('SettingsModal.accountInformation')}
+                </Text>
+                <Text style={styles.settingText}>
+                  {t('SettingsModal.updateYourEmailBiography')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.line} />
+          </View>
+
+          <View>
+            <TouchableOpacity
+              style={styles.settingsOption}
+              onPress={onSecurityPress}
+              activeOpacity={0.7}
+            >
+              <SecurityIcon style={styles.settingIcon} />
+              <View>
+                <Text style={styles.settingTitle}>
+                  {t('SettingsModal.security')}
+                </Text>
+                <Text style={styles.settingText}>
+                  {t('SettingsModal.changePassword')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.line} />
+          </View>
+
+          <View>
+            <TouchableOpacity
+              style={styles.settingsOption}
+              onPress={onFinancesPress}
+              activeOpacity={0.7}
+            >
+              <FinancesIcon style={styles.settingIcon} />
+              <View>
+                <Text style={styles.settingTitle}>
+                  {t('SettingsModal.finances')}
+                </Text>
+                <Text style={styles.settingText}>
+                  {t('SettingsModal.manageBankAccount')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.line} />
+          </View>
+
+          <View>
+            <TouchableOpacity
+              style={styles.settingsOption}
+              onPress={onSupportPress}
+              activeOpacity={0.7}
+            >
+              <SupportIcon style={styles.settingIcon} />
+              <View>
+                <Text style={styles.settingTitle}>
+                  {t('SettingsModal.support')}
+                </Text>
+                <Text style={styles.settingText}>
+                  {t('SettingsModal.contactAdminFAQ')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.line} />
+          </View>
+
+          <View>
+            <TouchableOpacity
+              style={styles.settingsOption}
+              onPress={onInvitePress}
+              activeOpacity={0.7}
+            >
+              <InviteIcon style={styles.settingIcon} />
+              <View>
+                <Text style={styles.settingTitle}>
+                  {t('SettingsModal.inviteFollower')}
+                </Text>
+                <Text style={styles.settingText}>
+                  {t('SettingsModal.scanQRCode')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.line} />
+          </View>
+
+          <TouchableOpacity style={styles.logOutButton} onPress={onLogOutPress}>
+            <Text style={styles.logOutText}>
+              {t('SettingsModal.logOut')}
+            </Text>
+          </TouchableOpacity>
+
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+SettingsModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+};
+
+export default React.memo(SettingsModal);

@@ -22,6 +22,6 @@ export default (user) => {
 
   return {
     stack: 'AppStack',
-    screen: 'Home',
+    screen: 'Account',
   };
 };
