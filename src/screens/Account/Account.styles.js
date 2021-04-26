@@ -9,6 +9,7 @@ export default StyleSheet.create({
   },
   content: {
     ...commonStyles.screenContent,
+    marginTop: 20,
   },
   profileBlock: {
     flexDirection: 'row',

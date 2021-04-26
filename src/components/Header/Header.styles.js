@@ -25,7 +25,6 @@ export default StyleSheet.create({
   line: {
     backgroundColor: colors.line,
     height: 1,
-    marginBottom: 30,
   },
   text: {
     fontSize: fonts.size.small,

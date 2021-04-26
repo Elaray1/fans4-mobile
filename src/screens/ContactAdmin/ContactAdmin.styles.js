@@ -7,6 +7,7 @@ export default StyleSheet.create({
   },
   content: {
     ...commonStyles.screenContent,
+    marginTop: 30,
     justifyContent: 'space-between',
     paddingBottom: 20,
   },

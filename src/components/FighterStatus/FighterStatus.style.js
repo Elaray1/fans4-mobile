@@ -15,7 +15,6 @@ export default StyleSheet.create({
     paddingVertical: 8,
   },
   statusText: {
-    alignItems: 'baseline',
     textAlign: 'center',
     fontSize: fonts.size.caption,
     lineHeight: fonts.lineHeight.caption,

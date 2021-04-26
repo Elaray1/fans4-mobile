@@ -10,6 +10,7 @@ export default StyleSheet.create({
   },
   content: {
     ...commonStyles.screenContent,
+    marginTop: 30,
   },
   scrollContent: {
     flexGrow: 1,
