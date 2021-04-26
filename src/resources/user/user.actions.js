@@ -14,7 +14,6 @@ import i18n from 'services/i18n.service';
 
 import {
   USER_LOGGED_OUT,
-  USER_FILLED_REGISTRATION_FORM,
   SET_USER_DATA,
 } from './user.constants';
 
@@ -146,7 +145,7 @@ export const fillRegistrationForm = ({
   response.status = response.status || 500;
 
   if (response.status >= 200 && response.status < 300) {
-    dispatch({ type: USER_FILLED_REGISTRATION_FORM, user: response.data });
+    dispatch({ type: SET_USER_DATA, user: response.data });
     return null;
   }
   if (response.status === 400) {
@@ -155,6 +154,12 @@ export const fillRegistrationForm = ({
 
   response.data.errors = response.data.errors || generalError;
   throwApiError(response);
+};
+
+export const updateUserInfo = ({ about }) => async (dispatch) => {
+  const user = await api.updateUserInfo({ about });
+
+  dispatch({ type: SET_USER_DATA, user });
 };
 
 /* Fighters actions: end */

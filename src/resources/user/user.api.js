@@ -36,6 +36,13 @@ export const setPushToken = ({ token, deviceId }) => apiClient
 //     fullName, nickname, birthdate, cityId, weight, height, reach,
 //   });
 
+export const updateUserInfo = ({
+  about,
+}) => apiClient
+  .put('users/', {
+    about,
+  });
+
 /* Fighters api: end */
 export const emailSignIn = ({
   email, password, userType, deviceId,

@@ -24,6 +24,8 @@ import OnBoarding2 from 'screens/OnBoarding2';
 import OnBoarding3 from 'screens/OnBoarding3';
 import ContactAdmin from 'screens/ContactAdmin';
 import Support from 'screens/Support';
+import ChangeBiography from 'screens/ChangeBiography';
+import AccountInformation from 'screens/AccountInformation';
 
 import * as socketService from 'services/socket.service';
 
@@ -192,6 +194,8 @@ function AppScreens() {
       <AppStack.Screen name="OnBoarding3" component={OnBoarding3} />
       <AppStack.Screen name="ContactAdmin" component={ContactAdmin} />
       <AppStack.Screen name="Support" component={Support} />
+      <AppStack.Screen name="ChangeBiography" component={ChangeBiography} />
+      <AppStack.Screen name="AccountInformation" component={AccountInformation} />
     </AppStack.Navigator>
   );
 }

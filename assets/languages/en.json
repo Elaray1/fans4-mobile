@@ -165,5 +165,15 @@
     "inviteFollower": "Invite a follower",
     "scanQRCode": "Scan QR code, share a link",
     "logOut": "Log out"
+  },
+  "ChangeBiography": {
+    "addBiography": "Add Biography",
+    "changeBiography": "Change Biography",
+    "save": "Save",
+    "biography": "Biography"
+  },
+  "AccountInformation": {
+    "accountInformation": "Account Information",
+    "biography": "Biography"
   }
 }
