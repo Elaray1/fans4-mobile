@@ -7,8 +7,11 @@ export default StyleSheet.create({
   },
   content: {
     ...commonStyles.screenContent,
-    justifyContent: 'space-between',
     marginTop: 0,
-    paddingBottom: 20,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    paddingBottom: 50,
   },
 });

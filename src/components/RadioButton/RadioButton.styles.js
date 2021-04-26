@@ -12,9 +12,11 @@ export default StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 40,
     paddingVertical: 18,
+    marginVertical: 5,
   },
   selected: {
     borderWidth: 1,
+    paddingVertical: 17,
     borderColor: colors.white,
   },
   text: {

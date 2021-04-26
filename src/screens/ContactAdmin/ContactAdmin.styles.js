@@ -9,7 +9,7 @@ export default StyleSheet.create({
     ...commonStyles.screenContent,
     marginTop: 30,
     justifyContent: 'space-between',
-    paddingBottom: 20,
+    paddingBottom: 50,
   },
   selectList: {
     height: '68%',

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import {
-  SafeAreaView, View, StatusBar,
+  SafeAreaView, View, StatusBar, ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -54,7 +54,7 @@ function Support() {
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <Header leftItemType="backArrow" title={t('Support.support')} />
-      <View style={styles.content}>
+      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View>
           {items.map(
             item => (
@@ -63,7 +63,7 @@ function Support() {
           )}
         </View>
         <Button title={t('Support.contactAdmin')} onPress={onButtonPress} />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

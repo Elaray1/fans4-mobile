@@ -7,8 +7,7 @@ export default StyleSheet.create({
   container: {
     borderColor: colors.line,
     borderBottomWidth: 1,
-    paddingBottom: 18,
-    marginBottom: 18,
+    paddingVertical: 18,
   },
   titleContainer: {
     flexDirection: 'row',
@@ -17,12 +16,19 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: fonts.size.small,
+    lineHeight: fonts.lineHeight.small,
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
   },
   text: {
     fontSize: fonts.size.caption,
+    lineHeight: fonts.lineHeight.small,
+    fontFamily: fonts.family.base,
+    fontWeight: fonts.weight.medium,
     color: colors.grayText,
-    marginTop: 12,
+  },
+  line: {
+    backgroundColor: colors.line,
+    height: 1,
   },
 });

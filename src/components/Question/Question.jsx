@@ -19,13 +19,16 @@ function Question({ title, text }) {
   }, [isOpen]);
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>{title}</Text>
-        {isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
-      </View>
-      {isOpen && <Text style={styles.text}>{text}</Text>}
-    </TouchableOpacity>
+    <>
+      <TouchableOpacity style={styles.container} onPress={onPress}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>{title}</Text>
+          {isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
+        </View>
+        {isOpen && <Text style={styles.text}>{text}</Text>}
+      </TouchableOpacity>
+      <View style={styles.line} />
+    </>
   );
 }
 
