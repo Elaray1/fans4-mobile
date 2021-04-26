@@ -175,5 +175,15 @@
   "AccountInformation": {
     "accountInformation": "Account Information",
     "biography": "Biography"
+  },
+  "FighterStatus": {
+    "active": "Active",
+    "injured": "Injured",
+    "recovery": "Post-fight Recovery"
+  },
+  "Account": {
+    "account": "Account",
+    "posts": "posts",
+    "followers": "followers"
   }
 }
