@@ -4,6 +4,7 @@ import {
   View, TouchableOpacity, Modal, Pressable,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 
 import Text from 'components/Text';
 
@@ -21,11 +22,13 @@ const WIDTH_ICON = 24;
 function SettingsModal({
   onClose, visible,
 }) {
+  const navigation = useNavigation();
   const { t } = useTranslation();
 
   const onAccountInfoPress = useCallback(() => {
-    console.log('onAccountInfoPress');
-  }, []);
+    onClose();
+    navigation.navigate('AccountInformation');
+  }, [navigation, onClose]);
 
   const onSecurityPress = useCallback(() => {
     console.log('onSecurityPress');

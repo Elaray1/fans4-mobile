@@ -16,12 +16,11 @@ export default StyleSheet.create({
     flexGrow: 1,
   },
   item: {
-    marginTop: 18,
+    paddingVertical: 18,
   },
   line: {
     backgroundColor: colors.line,
     height: 1,
-    marginTop: 11,
   },
   itemContent: {
     flexDirection: 'row',
