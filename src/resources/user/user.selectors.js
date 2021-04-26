@@ -8,6 +8,6 @@ export const getUserFullName = ({ user }) => user?.fullName;
 
 /* Fighters selectors: start */
 
-export const getUserBiographyAbout = ({ user }) => user?.role?.biography?.about;
+export const getUserBiographyAbout = ({ user }) => user?.role?.biography?.about || '';
 
 /* Fighters selectors: end */

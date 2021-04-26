@@ -19,7 +19,7 @@ function ChangeBiography() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const initialValue = useSelector(userSelectors.getUserBiographyAbout || '');
+  const initialValue = useSelector(userSelectors.getUserBiographyAbout);
 
   const [value, setValue] = useState(initialValue);
 

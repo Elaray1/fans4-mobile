@@ -36,8 +36,8 @@ function AccountInformation() {
               <Text style={styles.itemText}>{t('AccountInformation.biography')}</Text>
               <ArrowRightIcon />
             </View>
-            <View style={styles.line} />
           </TouchableOpacity>
+          <View style={styles.line} />
         </View>
       </ScrollView>
     </SafeAreaView>
