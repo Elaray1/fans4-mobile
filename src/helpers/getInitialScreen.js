@@ -1,3 +1,5 @@
+import { USER_TYPES, USER_STATUSES } from 'resources/user/user.constants';
+
 export default (user) => {
   if (!user) {
     return {
@@ -6,18 +8,36 @@ export default (user) => {
     };
   }
 
-  if (user.role.type === 'fighter' && user.status === 'pending') {
-    if (user.appState.isEmailVerified) {
+  if (user.role.type === USER_TYPES.FIGHTER) {
+    if (user.status === USER_STATUSES.PENDING) {
+      if (!user.appState.isEmailVerified) {
+        return {
+          stack: 'AppStack',
+          screen: 'EmailConfirmation',
+        };
+      }
+
+      const isProfileDataSubmited = !!user.role.biography;
+
+      if (isProfileDataSubmited) {
+        return {
+          stack: 'AppStack',
+          screen: 'VerificationPending',
+        };
+      }
+
       return {
         stack: 'AppStack',
         screen: 'BiographicalData',
       };
     }
 
-    return {
-      stack: 'AppStack',
-      screen: 'EmailConfirmation',
-    };
+    if (user.status === USER_STATUSES.DECLINED) {
+      return {
+        stack: 'AppStack',
+        screen: 'VerificationFailed',
+      };
+    }
   }
 
   return {

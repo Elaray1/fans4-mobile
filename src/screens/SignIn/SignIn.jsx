@@ -31,7 +31,6 @@ function SignIn({ route }) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { userType } = route.params;
-
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const [inputErrors, setInputErrors] = useState({

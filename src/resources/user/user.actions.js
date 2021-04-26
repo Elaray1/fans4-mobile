@@ -138,6 +138,7 @@ export const fillRegistrationForm = ({
       data: { errors: generalError },
       status: 500,
     });
+
     return null;
   }
 
