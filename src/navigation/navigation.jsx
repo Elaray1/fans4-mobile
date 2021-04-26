@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { InteractionManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
@@ -32,7 +33,7 @@ const NAVIGATOR_CONTAINER_THEME = {
 
 const Stack = createStackNavigator();
 
-const init = async (dispatch, setIsInitialized) => {
+const init = async (dispatch) => {
   let user;
   const accessToken = await getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
@@ -55,7 +56,9 @@ const init = async (dispatch, setIsInitialized) => {
 
   const { stack, screen } = getInitialScreen(user);
   rootNavigation.reset({ routes: [{ name: stack, params: { screen } }] });
-  setIsInitialized(true);
+
+  // this is needed to hide splash screen after screen appearing animation
+  InteractionManager.runAfterInteractions(() => SplashScreen.hide());
 };
 
 const connectPushNotifications = (userAuthenticated) => {
@@ -108,19 +111,8 @@ const disconnectPushNotifications = (userAuthenticated) => {
 
 function AppNavigation() {
   const dispatch = useDispatch();
-  const [isInitialized, setIsInitialized] = useState(false);
-
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
-
-  const onNavigatorReady = useCallback(() => {
-    init(dispatch, setIsInitialized);
-  }, [dispatch, setIsInitialized]);
-
-  useEffect(() => {
-    if (isInitialized) {
-      SplashScreen.hide();
-    }
-  }, [isInitialized]);
+  const onNavigatorReady = useCallback(() => init(dispatch), [dispatch]);
 
   useEffect(() => {
     connectPushNotifications(userAuthenticated);
@@ -129,8 +121,8 @@ function AppNavigation() {
 
   return (
     <NavigationContainer
-      ref={rootNavigation.navigationRef}
       theme={NAVIGATOR_CONTAINER_THEME}
+      ref={rootNavigation.navigationRef}
       onReady={onNavigatorReady}
     >
       <Stack.Navigator initialRouteName={userAuthenticated ? 'AppStack' : 'AuthStack'} headerMode="none">
