@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   SafeAreaView, View, ScrollView, StatusBar, Image,
 } from 'react-native';
@@ -12,6 +12,7 @@ import Header from 'components/Header';
 import Text from 'components/Text';
 import FighterStatus from 'components/FighterStatus';
 
+import * as postActions from 'resources/post/post.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import styles from './Account.styles';
@@ -24,7 +25,18 @@ function Account() {
   const hometown = useSelector(userSelectors.getHometown);
   const avatarUrl = useSelector(userSelectors.getAvatarUrl);
 
+  const [postsAmount, setPostsAmount] = useState(0);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+
+  useEffect(() => {
+    const init = async () => {
+      const amount = await postActions.getPostsAmount();
+      setPostsAmount(amount);
+    };
+
+    init();
+  }, []);
+
   const onBurgerPress = useCallback(() => {
     setIsSettingsVisible(true);
   }, []);
@@ -70,7 +82,7 @@ function Account() {
         <View style={[styles.profileBlock, { alignItems: 'center' }]}>
           <View style={[styles.profileData, { marginRight: 10 }]}>
             <Text style={styles.profileDataTitle}>{t('Account.posts')}</Text>
-            <Text style={styles.profileDataText}>10</Text>
+            <Text style={styles.profileDataText}>{postsAmount}</Text>
           </View>
           <View style={[styles.profileData, { marginLeft: 10 }]}>
             <Text style={styles.profileDataTitle}>{t('Account.followers')}</Text>
