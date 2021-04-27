@@ -50,4 +50,12 @@ export default StyleSheet.create({
     fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
   },
+  inputContainerMultiline: {
+    alignItems: 'flex-start',
+    paddingVertical: 18,
+  },
+  inputMultiline: {
+    paddingVertical: 0,
+    textAlignVertical: 'top',
+  },
 });

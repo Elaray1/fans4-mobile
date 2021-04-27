@@ -74,6 +74,7 @@ function Input({
           focused && styles.inputFocused,
           !!errors.length && styles.error,
           disabled && styles.disabled,
+          multiline && styles.inputContainerMultiline,
         ]}
       >
         <TextInput
@@ -92,11 +93,11 @@ function Input({
           secureTextEntry={type === 'password' && !isPasswordVisible}
           keyboardType={getKeyboardType(type)}
           returnKeyType={returnKeyType}
-          style={[styles.input, multiline && { textAlignVertical: 'top' }]}
+          style={[styles.input, multiline && styles.inputMultiline]}
           maxLength={maxLength}
           multiline={multiline}
-          numberOfLines={numberOfLines}
           autoCapitalize={autoCapitalize}
+          numberOfLines={numberOfLines}
         />
         {type === 'password' && (
         <TouchableOpacity
