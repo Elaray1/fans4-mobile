@@ -25,13 +25,13 @@ function Account() {
   const hometown = useSelector(userSelectors.getHometown);
   const avatarUrl = useSelector(userSelectors.getAvatarUrl);
 
-  const [postsAmount, setPostsAmount] = useState(0);
+  const [postsCount, setPostsCount] = useState(0);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
 
   useEffect(() => {
     const init = async () => {
-      const amount = await postActions.getPostsAmount();
-      setPostsAmount(amount);
+      const count = await postActions.getPostsCount();
+      setPostsCount(count);
     };
 
     init();
@@ -82,7 +82,7 @@ function Account() {
         <View style={[styles.profileBlock, { alignItems: 'center' }]}>
           <View style={[styles.profileData, { marginRight: 10 }]}>
             <Text style={styles.profileDataTitle}>{t('Account.posts')}</Text>
-            <Text style={styles.profileDataText}>{postsAmount}</Text>
+            <Text style={styles.profileDataText}>{postsCount}</Text>
           </View>
           <View style={[styles.profileData, { marginLeft: 10 }]}>
             <Text style={styles.profileDataTitle}>{t('Account.followers')}</Text>
