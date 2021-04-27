@@ -28,6 +28,7 @@ export const commonStyles = {
     }),
   },
   tab: {
+    backgroundColor: colors.main,
     ...(Platform.OS === 'android'
       ? {
         marginTop: 20,
