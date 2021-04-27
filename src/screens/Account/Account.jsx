@@ -30,10 +30,13 @@ function Account() {
   const hometown = useSelector(userSelectors.getHometown);
   const avatarUrl = useSelector(userSelectors.getAvatarUrl);
   const biography = useSelector(userSelectors.getUserBiographyAbout);
+  const age = useSelector(userSelectors.getUserAge);
+  const profileInfo = useSelector(userSelectors.getUserProfileInfo);
 
   const [postsCount, setPostsCount] = useState(0);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   const [isBiographyOpen, setIsBiographyOpen] = useState(!biography);
+  const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -59,6 +62,10 @@ function Account() {
   const onAddBiographyPress = useCallback(() => {
     navigation.navigate('ChangeBiography');
   }, [navigation]);
+
+  const onPersonalInfoPress = useCallback(() => {
+    setIsPersonalInfoOpen(!isPersonalInfoOpen);
+  }, [isPersonalInfoOpen]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -113,7 +120,7 @@ function Account() {
           onPress={onBiographyPress}
         >
           <View style={[styles.biographyData, !isBiographyOpen && styles.biographyClosedData]}>
-            <Text style={styles.blockTitle}>Biography</Text>
+            <Text style={styles.blockTitle}>{t('Account.biography')}</Text>
             {isBiographyOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
           </View>
 
@@ -127,10 +134,49 @@ function Account() {
               activeOpacity={0.7}
               onPress={onAddBiographyPress}
             >
-              <Text style={styles.addBiographyText}>Add biography</Text>
+              <Text style={styles.addBiographyText}>{t('Account.addBiography')}</Text>
             </TouchableOpacity>
             )
           }
+        </TouchableOpacity>
+
+        <View style={styles.line} />
+
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.biographyBlock}
+          onPress={onPersonalInfoPress}
+        >
+          <View style={[styles.biographyData, !isPersonalInfoOpen && styles.biographyClosedData]}>
+            <Text style={styles.blockTitle}>{t('Account.personalInfo')}</Text>
+            {isPersonalInfoOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
+          </View>
+
+          {isPersonalInfoOpen
+          && (
+          <View style={styles.personalInfoContainer}>
+            <View style={styles.personalInfoData}>
+              <Text style={styles.profileDataTitle}>{t('Account.age')}</Text>
+              <Text style={styles.personalInfoValue}>{age}</Text>
+            </View>
+
+            <View style={styles.personalInfoData}>
+              <Text style={styles.profileDataTitle}>{t('Account.weight')}</Text>
+              <Text style={styles.personalInfoValue}>{profileInfo?.weight}</Text>
+            </View>
+
+            <View style={styles.personalInfoData}>
+              <Text style={styles.profileDataTitle}>{t('Account.height')}</Text>
+              <Text style={styles.personalInfoValue}>{profileInfo?.height}</Text>
+            </View>
+
+            <View style={styles.personalInfoData}>
+              <Text style={styles.profileDataTitle}>{t('Account.reach')}</Text>
+              <Text style={styles.personalInfoValue}>{profileInfo?.reach}</Text>
+            </View>
+          </View>
+          )}
+
         </TouchableOpacity>
 
         <View style={styles.line} />
