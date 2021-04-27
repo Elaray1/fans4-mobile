@@ -20,13 +20,23 @@ function VerificationPending() {
 
   const goToSignIn = useCallback(async () => {
     navigation.reset({
+      index: 1,
       routes: [{
         name: 'AuthStack',
-        params: {
-          screen: 'SignIn',
-          params: {
-            userType,
-          },
+        state: {
+          routes: [{
+            name: 'SelectUserType',
+          }],
+        },
+      }, {
+        name: 'AuthStack',
+        state: {
+          routes: [{
+            name: 'SignIn',
+            params: {
+              userType,
+            },
+          }],
         },
       }],
     });
