@@ -14,6 +14,7 @@ export default StyleSheet.create({
   profileBlock: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 20,
   },
   photoImage: {
     height: 100,
@@ -47,12 +48,21 @@ export default StyleSheet.create({
     backgroundColor: colors.line,
     height: 1,
   },
+  lineIndent: {
+    marginBottom: 20,
+  },
   profileData: {
     paddingVertical: 8,
     borderRadius: 5,
     flex: 1,
     alignItems: 'center',
     backgroundColor: colors.gray,
+  },
+  profileLeftData: {
+    marginRight: 10,
+  },
+  profileRightData: {
+    marginLeft: 10,
   },
   profileDataTitle: {
     color: colors.textSecondary,
@@ -75,6 +85,9 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  biographyClosedData: {
+    paddingBottom: 18,
   },
   blockTitle: {
     fontSize: fonts.size.small,

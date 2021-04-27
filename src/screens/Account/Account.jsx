@@ -73,7 +73,7 @@ function Account() {
         onRightItemPress={onBurgerPress}
       />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
-        <View style={[styles.profileBlock, { marginBottom: 20 }]}>
+        <View style={styles.profileBlock}>
           <Image
             style={styles.photoImage}
             source={{ uri: avatarUrl }}
@@ -92,14 +92,14 @@ function Account() {
           </View>
         </View>
 
-        <View style={[styles.line, { marginBottom: 20 }]} />
+        <View style={[styles.line, styles.lineIndent]} />
 
-        <View style={[styles.profileBlock, { marginBottom: 20 }]}>
-          <View style={[styles.profileData, { marginRight: 10 }]}>
+        <View style={styles.profileBlock}>
+          <View style={[styles.profileData, styles.profileLeftData]}>
             <Text style={styles.profileDataTitle}>{t('Account.posts')}</Text>
             <Text style={styles.profileDataText}>{postsCount}</Text>
           </View>
-          <View style={[styles.profileData, { marginLeft: 10 }]}>
+          <View style={[styles.profileData, styles.profileRightData]}>
             <Text style={styles.profileDataTitle}>{t('Account.followers')}</Text>
             <Text style={styles.profileDataText}>57</Text>
           </View>
@@ -112,7 +112,7 @@ function Account() {
           style={styles.biographyBlock}
           onPress={onBiographyPress}
         >
-          <View style={[styles.biographyData, !isBiographyOpen && { paddingBottom: 18 }]}>
+          <View style={[styles.biographyData, !isBiographyOpen && styles.biographyClosedData]}>
             <Text style={styles.blockTitle}>Biography</Text>
             {isBiographyOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
           </View>
@@ -133,7 +133,7 @@ function Account() {
           }
         </TouchableOpacity>
 
-        <View style={[styles.line, { marginBottom: 18 }]} />
+        <View style={styles.line} />
 
       </ScrollView>
     </SafeAreaView>
