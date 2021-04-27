@@ -184,6 +184,13 @@
   "Account": {
     "account": "Account",
     "posts": "posts",
-    "followers": "followers"
+    "followers": "followers",
+    "biography": "Biography",
+    "addBiography": "Add biography",
+    "personalInfo": "Personal Info",
+    "age": "Age",
+    "weight": "Weight",
+    "height": "Height",
+    "reach": "Reach"
   }
 }

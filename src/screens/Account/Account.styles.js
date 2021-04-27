@@ -116,4 +116,26 @@ export default StyleSheet.create({
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
   },
+  personalInfoContainer: {
+    marginTop: 12,
+  },
+  personalInfoData: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 14,
+  },
+  personalInfoTitle: {
+    color: colors.textSecondary,
+    fontSize: fonts.size.caption,
+    lineHeight: fonts.lineHeight.caption,
+    fontFamily: fonts.family.base,
+    fontWeight: fonts.weight.medium,
+  },
+  personalInfoValue: {
+    fontSize: fonts.size.caption,
+    lineHeight: fonts.lineHeight.caption,
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+  },
 });
