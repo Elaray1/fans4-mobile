@@ -44,9 +44,14 @@ export const updateUserInfo = ({
   });
 
 /* Fighters api: end */
+
 export const emailSignIn = ({
   email, password, userType, deviceId,
 }) => apiClient
   .post('users/signin', {
     email, password, userType, deviceId,
   });
+
+export const completeOnboarding = () => {
+  return apiClient.put('users/onboarding');
+};
