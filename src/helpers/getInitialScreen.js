@@ -40,7 +40,7 @@ export default (user) => {
     }
   }
 
-  if (!user.isOnboardingCompleted) {
+  if (!user.appState.isOnboardingCompleted) {
     return {
       stack: 'AppStack',
       screen: 'OnBoarding1',
