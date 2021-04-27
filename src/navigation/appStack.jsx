@@ -26,6 +26,7 @@ import ContactAdmin from 'screens/ContactAdmin';
 import Support from 'screens/Support';
 import ChangeBiography from 'screens/ChangeBiography';
 import AccountInformation from 'screens/AccountInformation';
+import AccountBlocked from 'screens/AccountBlocked';
 
 import * as socketService from 'services/socket.service';
 
@@ -196,6 +197,7 @@ function AppScreens() {
       <AppStack.Screen name="Support" component={Support} />
       <AppStack.Screen name="ChangeBiography" component={ChangeBiography} />
       <AppStack.Screen name="AccountInformation" component={AccountInformation} />
+      <AppStack.Screen name="AccountBlocked" component={AccountBlocked} />
     </AppStack.Navigator>
   );
 }

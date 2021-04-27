@@ -38,6 +38,13 @@ export default (user) => {
         screen: 'VerificationFailed',
       };
     }
+
+    if (user.status === USER_STATUSES.BLOCKED) {
+      return {
+        stack: 'AppStack',
+        screen: 'AccountBlocked',
+      };
+    }
   }
 
   if (!user.appState.isOnboardingCompleted) {

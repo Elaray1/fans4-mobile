@@ -10,4 +10,5 @@ export const USER_STATUSES = {
   PENDING: 'pending',
   VERIFIED: 'verified',
   DECLINED: 'declined',
+  BLOCKED: 'blocked',
 };
