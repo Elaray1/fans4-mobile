@@ -57,4 +57,4 @@ function ChangeBiography() {
   );
 }
 
-export default ChangeBiography;
+export default React.memo(ChangeBiography);
