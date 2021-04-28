@@ -167,13 +167,19 @@ export const updateUserInfo = ({ about }) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   const deviceId = getMaskedDeviceId();
-  await api.logout({ deviceId });
+
   config.accessToken = null;
   await clear();
 
   sockets.disconnect();
   sockets.connect();
   sockets.emit('subscribe', `device-${getMaskedDeviceId()}`);
+
+  try {
+    await api.logout({ deviceId });
+  } catch (err) {
+    console.error(err);
+  }
 
   dispatch({ type: USER_LOGGED_OUT });
 };
