@@ -66,4 +66,4 @@ export const forgotPassword = ({ email, deviceId }) => apiClient
   .post('users/forgot-password', { email, deviceId });
 
 export const resetPassword = ({ password }) => apiClient
-  .put('users/password-setup', { password });
+  .put('users/password/reset', { password });

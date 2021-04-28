@@ -11,7 +11,14 @@ function ResetPasswordLink() {
   const navigation = useNavigation();
 
   const onLinkPress = useCallback(() => {
-    navigation.navigate('SelectUserType');
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'SelectUserType',
+        },
+      ],
+    });
   }, [navigation]);
 
   return (
