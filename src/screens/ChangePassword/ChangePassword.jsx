@@ -13,7 +13,7 @@ import Input from 'components/Input';
 import Text from 'components/Text';
 import Button from 'components/Button';
 
-import * as userActions from 'resources/user/user.actions';
+import * as userApi from 'resources/user/user.api';
 import { validatePassword } from 'helpers/validate';
 
 import styles from './ChangePassword.styles';
@@ -30,7 +30,7 @@ function ChangePassword() {
 
   const onButtonPress = useCallback(async () => {
     try {
-      await userActions.resetPassword(password);
+      await userApi.resetPassword({ password });
       clear(); // TODO replace with logout
       navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'PasswordUpdated' } }] });
     } catch (error) {
@@ -51,6 +51,7 @@ function ChangePassword() {
             <Input
               label={t('ChangePassword.inputLabel')}
               value={password}
+              type="password"
               onChange={setPassword}
             />
           </View>

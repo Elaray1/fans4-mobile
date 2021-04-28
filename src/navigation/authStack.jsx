@@ -11,7 +11,7 @@ import SignUp from 'screens/SignUp';
 import SignIn from 'screens/SignIn';
 import ForgotPassword from 'screens/ForgotPassword';
 import ResetPasswordLink from 'screens/ResetPasswordLink';
-import PasswordUpdated from 'screens/PasswordUpdated';
+import PasswordUpdate from 'screens/PasswordUpdate';
 
 import * as socketService from 'services/socket.service';
 import * as RootNavigation from 'helpers/rootNavigation';
@@ -63,7 +63,7 @@ function AuthScreens() {
       <AuthStack.Screen name="SignIn" component={SignIn} />
       <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} />
       <AuthStack.Screen name="ResetPasswordLink" component={ResetPasswordLink} />
-      <AuthStack.Screen name="PasswordUpdated" component={PasswordUpdated} />
+      <AuthStack.Screen name="PasswordUpdate" component={PasswordUpdate} />
     </AuthStack.Navigator>
   );
 }

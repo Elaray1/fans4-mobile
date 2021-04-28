@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import {
   SafeAreaView, View, ScrollView, StatusBar,
 } from 'react-native';
@@ -12,14 +13,20 @@ import Input from 'components/Input';
 import Text from 'components/Text';
 import Button from 'components/Button';
 
-import * as userActions from 'resources/user/user.actions';
+import * as userApi from 'resources/user/user.api';
+
 import { validateEmail } from 'helpers/validate';
+import { getMaskedDeviceId } from 'helpers/deviceInfo';
+
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import styles from './ForgotPassword.styles';
 
-function ForgotPassword() {
+function ForgotPassword({ route }) {
+  const deviceId = getMaskedDeviceId();
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { userType } = route.params;
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,13 +37,13 @@ function ForgotPassword() {
   const onButtonPress = useCallback(async () => {
     try {
       setIsLoading(true);
-      await userActions.forgotPassword(email);
+      await userApi.forgotPassword({ email, deviceId, userType });
       navigation.navigate('ResetPasswordLink');
     } catch (error) {
       console.error(error);
     }
     setIsLoading(false);
-  }, [email, navigation]);
+  }, [deviceId, email, navigation, userType]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -69,5 +76,13 @@ function ForgotPassword() {
     </SafeAreaView>
   );
 }
+
+ForgotPassword.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      userType: PropTypes.oneOf(Object.values(USER_TYPES)),
+    }),
+  }).isRequired,
+};
 
 export default ForgotPassword;

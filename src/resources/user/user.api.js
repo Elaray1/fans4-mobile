@@ -62,8 +62,8 @@ export const completeOnboarding = () => {
 export const logout = ({ deviceId }) => apiClient
   .post('users/logout', { deviceId });
 
-export const forgotPassword = ({ email, deviceId }) => apiClient
-  .post('users/forgot-password', { email, deviceId });
+export const forgotPassword = ({ email, deviceId, userType }) => apiClient
+  .post('users/forgot-password', { email, deviceId, userType });
 
 export const resetPassword = ({ password }) => apiClient
   .put('users/password/reset', { password });

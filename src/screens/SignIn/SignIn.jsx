@@ -134,8 +134,8 @@ function SignIn({ route }) {
   }, [navigation, userType]);
 
   const onPressForgotPassword = useCallback(() => {
-    navigation.navigate('ForgotPassword');
-  }, [navigation]);
+    navigation.navigate('ForgotPassword', { userType });
+  }, [navigation, userType]);
 
   return (
     <SafeAreaView style={styles.screen}>
