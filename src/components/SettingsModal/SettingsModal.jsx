@@ -38,8 +38,9 @@ function SettingsModal({
   }, [navigation, onClose]);
 
   const onSecurityPress = useCallback(() => {
-    console.log('onSecurityPress');
-  }, []);
+    onClose();
+    navigation.navigate('Security');
+  }, [navigation, onClose]);
 
   const onFinancesPress = useCallback(() => {
     console.log('onFinancesPress');

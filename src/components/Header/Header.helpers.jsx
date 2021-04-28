@@ -23,6 +23,7 @@ export const getHeaderItem = ({ type, props, text }) => {
       item = (
         <TouchableOpacity
           activeOpacity={0.7}
+          disabled={!props.onPress}
           onPress={props.onPress}
         >
           <Text style={[styles.text, props.style]}>{text}</Text>
