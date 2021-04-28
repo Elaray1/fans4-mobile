@@ -26,6 +26,16 @@ export const getUsers = ({ role, status }) => apiClient
 export const setPushToken = ({ token, deviceId }) => apiClient
   .put('users/push-token', { token, deviceId });
 
+export const emailSignIn = ({
+  email, password, userType, deviceId,
+}) => apiClient
+  .post('users/signin', {
+    email, password, userType, deviceId,
+  });
+
+export const updatePassword = ({ oldPassword, newPassword }) => apiClient
+  .put('users/password', { oldPassword, newPassword });
+
 
 /* Fighters api: start */
 
@@ -44,13 +54,6 @@ export const updateUserInfo = ({
   });
 
 /* Fighters api: end */
-
-export const emailSignIn = ({
-  email, password, userType, deviceId,
-}) => apiClient
-  .post('users/signin', {
-    email, password, userType, deviceId,
-  });
 
 export const completeOnboarding = () => {
   return apiClient.put('users/onboarding');

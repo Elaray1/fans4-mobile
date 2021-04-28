@@ -18,6 +18,6 @@ export default StyleSheet.create({
     height: 120,
   },
   disabledText: {
-    color: colors.disabledText,
+    opacity: 0.5,
   },
 });

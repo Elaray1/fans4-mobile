@@ -176,6 +176,20 @@
     "accountInformation": "Account Information",
     "biography": "Biography"
   },
+  "Security": {
+    "security": "Security",
+    "save": "Save",
+    "oldPassword": "Old password",
+    "newPassword": "New password",
+    "passwordShouldContainAtLeast6Characters": "Password should contain at least 6 characters",
+    "yourNewPasswordCannotBeTheSameAsYourOldPassword": "Your new password cannot be the same as your old password."
+  },
+  "PasswordUpdated": {
+    "security": "Security",
+    "passwordUpdated": "Password Updated",
+    "useYourNewPasswordToLogIn": "Use your new password to log in.",
+    "done": "Done"
+  },
   "FighterStatus": {
     "active": "Active",
     "injured": "Injured",
@@ -197,6 +211,7 @@
     "title": "Your Account is Blocked",
     "description": "Your account has been blocked. If you think that this may be an error, please contact Support.",
     "buttonText": "Contact Support",
-    "linkText": "Back to sign up page"
+    "linkText": "Back to sign up page",
+    "followers": "followers"
   }
 }

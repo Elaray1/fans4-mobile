@@ -6,15 +6,21 @@ import colors from 'themes/colors';
 
 import Text from 'components/Text';
 import Button from 'components/Button';
+import Header from 'components/Header';
 
 import styles from './IllustrationScreen.styles';
 
 function IllustrationScreen({
-  buttonText, linkText, title, description, illustration, onButtonPress, onLinkPress,
+  buttonText, linkText, title, description, illustration, onButtonPress, onLinkPress, headerText,
 }) {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+      {headerText && (
+      <Header
+        title={headerText}
+      />
+      )}
       <View style={styles.content}>
         <View style={styles.illustrationContainer}>
           {illustration}
@@ -39,6 +45,7 @@ function IllustrationScreen({
 IllustrationScreen.propTypes = {
   buttonText: PropTypes.string,
   linkText: PropTypes.string,
+  headerText: PropTypes.string,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   illustration: PropTypes.node.isRequired,
@@ -49,6 +56,7 @@ IllustrationScreen.propTypes = {
 IllustrationScreen.defaultProps = {
   buttonText: null,
   linkText: null,
+  headerText: null,
   onButtonPress: () => null,
   onLinkPress: () => null,
 };

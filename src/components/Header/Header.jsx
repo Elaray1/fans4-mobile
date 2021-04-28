@@ -17,12 +17,20 @@ function Header({
   onRightItemPress,
   leftItemText,
   rightItemText,
+  leftItemDisabled,
+  rightItemDisabled,
   leftItemStyle,
   rightItemStyle,
   isBottomLine,
 }) {
-  const leftItemProps = { onPress: onLeftItemPress, style: leftItemStyle };
-  const rightItemProps = { onPress: onRightItemPress, style: rightItemStyle };
+  const leftItemProps = {
+    onPress: leftItemDisabled ? null : onLeftItemPress,
+    style: leftItemStyle,
+  };
+  const rightItemProps = {
+    onPress: rightItemDisabled ? null : onRightItemPress,
+    style: rightItemStyle,
+  };
 
   const leftItem = getHeaderItem({
     type: leftItemType,
@@ -60,6 +68,8 @@ Header.propTypes = {
   onRightItemPress: PropTypes.func,
   leftItemText: PropTypes.string,
   rightItemText: PropTypes.string,
+  leftItemDisabled: PropTypes.bool,
+  rightItemDisabled: PropTypes.bool,
   leftItemStyle: PropTypes.shape(),
   rightItemStyle: PropTypes.shape(),
 };
@@ -72,6 +82,8 @@ Header.defaultProps = {
   onRightItemPress: null,
   leftItemText: '',
   rightItemText: '',
+  leftItemDisabled: false,
+  rightItemDisabled: false,
   leftItemStyle: {},
   rightItemStyle: {},
 };

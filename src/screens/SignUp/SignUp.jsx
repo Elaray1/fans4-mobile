@@ -112,7 +112,6 @@ function SignUp({ route }) {
           email,
           password: passwordValue,
           userType,
-          navigation,
         }));
       } catch (err) {
         console.error('Signup error:', err);
@@ -120,7 +119,7 @@ function SignUp({ route }) {
         setApiError(extractApiErrorMessage(err));
       }
     }
-  }, [emailValue, passwordValue, userType, inputErrors, t, dispatch, navigation]);
+  }, [emailValue, passwordValue, userType, inputErrors, t, dispatch]);
 
   const onChangeInputValue = useCallback((inputName) => {
     if (inputErrors[inputName].length) {

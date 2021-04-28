@@ -163,6 +163,12 @@ export const updateUserInfo = ({ about }) => async (dispatch) => {
   dispatch({ type: SET_USER_DATA, user });
 };
 
+export const updatePassword = async ({ oldPassword, newPassword }) => {
+  await api.updatePassword({ oldPassword, newPassword });
+
+  rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'PasswordUpdated' } }] });
+};
+
 /* Fighters actions: end */
 
 export const logout = () => async (dispatch) => {

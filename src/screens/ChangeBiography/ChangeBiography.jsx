@@ -22,13 +22,19 @@ function ChangeBiography() {
   const initialValue = useSelector(userSelectors.getUserBiographyAbout);
 
   const [value, setValue] = useState(initialValue);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const saveButtonProps = (!value || initialValue === value)
+
+  const isSaveButtonDisabled = isLoading || !value || initialValue === value;
+
+  const saveButtonProps = isSaveButtonDisabled
     ? { rightItemStyle: styles.disabledText }
     : {};
 
   const onPressSave = useCallback(async () => {
+    setIsLoading(true);
     await dispatch(userActions.updateUserInfo({ about: value }));
+    setIsLoading(false);
     navigation.goBack();
   }, [dispatch, value, navigation]);
 
@@ -40,6 +46,7 @@ function ChangeBiography() {
         rightItemType="text"
         rightItemText={t('ChangeBiography.save')}
         onRightItemPress={onPressSave}
+        rightItemDisabled={isSaveButtonDisabled}
         {...saveButtonProps}
       />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
