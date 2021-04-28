@@ -166,13 +166,20 @@ export const updateUserInfo = ({ about }) => async (dispatch) => {
 /* Fighters actions: end */
 
 export const logout = () => async (dispatch) => {
-  // await api.logout(); // add logout endpoint
+  const deviceId = getMaskedDeviceId();
+
   config.accessToken = null;
   await clear();
 
   sockets.disconnect();
   sockets.connect();
   sockets.emit('subscribe', `device-${getMaskedDeviceId()}`);
+
+  try {
+    await api.logout({ deviceId });
+  } catch (err) {
+    console.error(err);
+  }
 
   dispatch({ type: USER_LOGGED_OUT });
 };
