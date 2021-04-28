@@ -55,3 +55,6 @@ export const emailSignIn = ({
 export const completeOnboarding = () => {
   return apiClient.put('users/onboarding');
 };
+
+export const logout = ({ deviceId }) => apiClient
+  .post('users/logout', { deviceId });

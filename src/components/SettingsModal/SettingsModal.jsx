@@ -5,8 +5,12 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Text from 'components/Text';
+
+import * as userActions from 'resources/user/user.actions';
+import * as userSelectors from 'resources/user/user.selectors';
 
 import CrossIcon from 'assets/icons/cross';
 import AccountIcon from 'assets/icons/account';
@@ -23,7 +27,10 @@ function SettingsModal({
   onClose, visible,
 }) {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
+
+  const userType = useSelector(userSelectors.getUserType);
 
   const onAccountInfoPress = useCallback(() => {
     onClose();
@@ -47,9 +54,10 @@ function SettingsModal({
     console.log('onInvitePress');
   }, []);
 
-  const onLogOutPress = useCallback(() => {
-    console.log('onLogOutPress');
-  }, []);
+  const onLogOutPress = useCallback(async () => {
+    await dispatch(userActions.logout());
+    navigation.replace('AuthStack', { screen: 'SignIn', params: { userType } });
+  }, [dispatch, navigation, userType]);
 
   return (
     <Modal
