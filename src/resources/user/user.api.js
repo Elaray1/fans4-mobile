@@ -20,8 +20,17 @@ export const fetchAccessToken = ({ deviceId }) => apiClient
 export const getUserData = () => apiClient
   .get('users/current');
 
-export const getUsers = ({ role, status }) => apiClient
-  .get(`users?role=${role}&status=${status}`);
+export const getUsers = ({ page, perPage, myFollowers }) => apiClient
+  .get('users', {
+    page,
+    perPage,
+    ...(myFollowers && { myFollowers }),
+  });
+
+export const getUsersCount = ({ myFollowers }) => apiClient
+  .get('users/count', {
+    ...(myFollowers && { myFollowers }),
+  });
 
 export const setPushToken = ({ token, deviceId }) => apiClient
   .put('users/push-token', { token, deviceId });

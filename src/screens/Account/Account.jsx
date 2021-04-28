@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import {
-  SafeAreaView, View, ScrollView, StatusBar, Image, TouchableOpacity,
+  SafeAreaView, View, ScrollView, StatusBar, Image, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -13,7 +13,8 @@ import Header from 'components/Header';
 import Text from 'components/Text';
 import FighterStatus from 'components/FighterStatus';
 
-import * as postActions from 'resources/post/post.actions';
+import * as userApi from 'resources/user/user.api';
+import * as postApi from 'resources/post/post.api';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import ArrowUpIcon from 'assets/icons/arrow-up';
@@ -33,15 +34,20 @@ function Account() {
   const age = useSelector(userSelectors.getUserAge);
   const profileInfo = useSelector(userSelectors.getUserProfileInfo);
 
-  const [postsCount, setPostsCount] = useState(0);
+  const [postsCount, setPostsCount] = useState(null);
+  const [followersCount, setFollowersCount] = useState(null);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   const [isBiographyOpen, setIsBiographyOpen] = useState(!biography);
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
 
   useEffect(() => {
     const init = async () => {
-      const count = await postActions.getPostsCount();
-      setPostsCount(count);
+      const [{ count: fetchedPostsCount }, { count: fetchedFollowersCount }] = await Promise.all([
+        postApi.getPostsCount(),
+        userApi.getUsersCount({ myFollowers: true }),
+      ]);
+      setPostsCount(fetchedPostsCount);
+      setFollowersCount(fetchedFollowersCount);
     };
 
     init();
@@ -54,6 +60,10 @@ function Account() {
   const onSettingsClose = useCallback(() => {
     setIsSettingsVisible(false);
   }, []);
+
+  const onFollowersPress = useCallback(() => {
+    navigation.navigate('Followers');
+  }, [navigation]);
 
   const onBiographyPress = useCallback(() => {
     setIsBiographyOpen(!isBiographyOpen);
@@ -104,12 +114,26 @@ function Account() {
         <View style={styles.profileBlock}>
           <View style={[styles.profileData, styles.profileLeftData]}>
             <Text style={styles.profileDataTitle}>{t('Account.posts')}</Text>
-            <Text style={styles.profileDataText}>{postsCount}</Text>
+            <Text style={styles.profileDataText}>
+              {postsCount === null
+                ? <ActivityIndicator color={colors.white} />
+                : postsCount
+              }
+            </Text>
           </View>
-          <View style={[styles.profileData, styles.profileRightData]}>
+          <TouchableOpacity
+            style={[styles.profileData, styles.profileRightData]}
+            activeOpacity={0.7}
+            onPress={onFollowersPress}
+          >
             <Text style={styles.profileDataTitle}>{t('Account.followers')}</Text>
-            <Text style={styles.profileDataText}>57</Text>
-          </View>
+            <Text style={styles.profileDataText}>
+              {followersCount === null
+                ? <ActivityIndicator color={colors.white} />
+                : followersCount
+              }
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.line} />

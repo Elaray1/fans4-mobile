@@ -90,11 +90,6 @@ export const emailSignIn = ({
   return user;
 };
 
-export const getUsers = async ({ role, status }) => {
-  const users = await api.getUsers({ role, status });
-  return users;
-};
-
 export const setPushToken = async (token) => {
   const deviceId = getMaskedDeviceId();
   await api.setPushToken({ token, deviceId });
