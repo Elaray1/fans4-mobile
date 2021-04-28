@@ -21,7 +21,7 @@ function IllustrationScreen({
         title={headerText}
       />
       )}
-      <View style={styles.content}>
+      <View style={[styles.content, headerText && { paddingTop: 0 }]}>
         <View style={styles.illustrationContainer}>
           {illustration}
         </View>

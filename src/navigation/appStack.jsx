@@ -30,6 +30,8 @@ import AccountBlocked from 'screens/AccountBlocked';
 import Security from 'screens/Security';
 import PasswordUpdated from 'screens/PasswordUpdated';
 import ChangePassword from 'screens/ChangePassword';
+import ChangeEmail from 'screens/ChangeEmail';
+import ConfirmYourEmailAddress from 'screens/ConfirmYourEmailAddress';
 
 import * as socketService from 'services/socket.service';
 
@@ -204,6 +206,8 @@ function AppScreens() {
       <AppStack.Screen name="Security" component={Security} />
       <AppStack.Screen name="PasswordUpdated" component={PasswordUpdated} />
       <AppStack.Screen name="ChangePassword" component={ChangePassword} />
+      <AppStack.Screen name="ChangeEmail" component={ChangeEmail} />
+      <AppStack.Screen name="ConfirmYourEmailAddress" component={ConfirmYourEmailAddress} />
     </AppStack.Navigator>
   );
 }
