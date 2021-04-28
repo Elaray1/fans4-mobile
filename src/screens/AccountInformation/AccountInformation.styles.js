@@ -32,4 +32,27 @@ export default StyleSheet.create({
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
   },
+  email: {
+    fontSize: fonts.size.caption,
+    color: colors.textSecondary,
+    lineHeight: fonts.lineHeight.small,
+  },
+  arrowRight: {
+    marginLeft: 18,
+  },
+  emailPending: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+    backgroundColor: colors.buttonNotification,
+  },
+  emailPendingText: {
+    color: colors.primary,
+    fontSize: fonts.size.caption,
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+    lineHeight: fonts.lineHeight.caption,
+  },
 });

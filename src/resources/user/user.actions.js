@@ -163,12 +163,6 @@ export const updateUserInfo = ({ about }) => async (dispatch) => {
   dispatch({ type: SET_USER_DATA, user });
 };
 
-export const updatePassword = async ({ oldPassword, newPassword }) => {
-  await api.updatePassword({ oldPassword, newPassword });
-
-  rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'PasswordUpdated' } }] });
-};
-
 /* Fighters actions: end */
 
 export const logout = () => async (dispatch) => {
@@ -188,4 +182,18 @@ export const logout = () => async (dispatch) => {
   }
 
   dispatch({ type: USER_LOGGED_OUT });
+};
+
+export const updatePassword = async ({ oldPassword, newPassword }) => {
+  await api.updatePassword({ oldPassword, newPassword });
+
+  rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'PasswordUpdated' } }] });
+};
+
+export const updateEmail = ({ newEmail, password }) => async (dispatch) => {
+  const user = await api.updateEmail({ newEmail, password });
+
+  rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'ConfirmYourEmailAddress' } }] });
+
+  dispatch({ type: SET_USER_DATA, user });
 };

@@ -33,10 +33,6 @@ export const emailSignIn = ({
     email, password, userType, deviceId,
   });
 
-export const updatePassword = ({ oldPassword, newPassword }) => apiClient
-  .put('users/password', { oldPassword, newPassword });
-
-
 /* Fighters api: start */
 
 // export const fillRegistrationForm = ({
@@ -67,3 +63,9 @@ export const forgotPassword = ({ email, deviceId, userType }) => apiClient
 
 export const resetPassword = ({ password }) => apiClient
   .put('users/password/reset', { password });
+
+export const updatePassword = ({ oldPassword, newPassword }) => apiClient
+  .put('users/password', { oldPassword, newPassword });
+
+export const updateEmail = ({ newEmail, password }) => apiClient
+  .put('users/email', { newEmail, password });

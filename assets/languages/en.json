@@ -174,7 +174,8 @@
   },
   "AccountInformation": {
     "accountInformation": "Account Information",
-    "biography": "Biography"
+    "biography": "Biography",
+    "email": "Email"
   },
   "Security": {
     "security": "Security",
@@ -237,5 +238,21 @@
     "button": "Save password",
     "link": "Back to sign in page",
     "text": "Please enter new password"
+  },
+  "ChangeEmail": {
+    "changeEmail": "Change Email",
+    "save": "Save",
+    "passwordShouldContainAtLeast6Characters": "Password should contain at least 6 characters",
+    "emailIsInvalid": "Email is invalid",
+    "newEmail": "New Email",
+    "password": "Password",
+    "anErrorOccurred": "An error occurred"
+  },
+  "ConfirmYourEmailAddress": {
+    "changeEmail": "Change Email",
+    "confirmYourEmailAddress": "Confirm your Email Address",
+    "weHaveSentYouAConfirmationEmailTo": "We have sent you a confirmation email to",
+    "pleaseCheckYourInbox": "Please check your Inbox.",
+    "done": "Done"
   }
 }

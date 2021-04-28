@@ -7,6 +7,7 @@ export const getUserData = ({ user }) => user;
 export const getUserEmail = ({ user }) => user?.email;
 export const getUserType = ({ user }) => user?.role?.type;
 export const getUserFullName = ({ user }) => user?.fullName;
+export const getUserNewEmail = ({ user }) => user?.appState?.newEmail;
 
 /* Fighters selectors: start */
 
