@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { clear } from 'helpers/storage';
+import { useDispatch } from 'react-redux';
 
 import colors from 'themes/colors';
 
@@ -14,31 +14,33 @@ import Text from 'components/Text';
 import Button from 'components/Button';
 
 import * as userApi from 'resources/user/user.api';
+import * as userActions from 'resources/user/user.actions';
 import { validatePassword } from 'helpers/validate';
 
 import styles from './ChangePassword.styles';
 
 function ChangePassword() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [password, setPassword] = useState('');
 
-  const onBackToSignIn = useCallback(() => {
-    clear(); // TODO replace with logout
+  const onBackToSignIn = useCallback(async () => {
+    await dispatch(userActions.logout());
     navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'SelectUserType' } }] });
-  }, [navigation]);
+  }, [dispatch, navigation]);
 
   const onButtonPress = useCallback(async () => {
     try {
       await userApi.resetPassword({ password });
-      clear(); // TODO replace with logout
-      navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'PasswordUpdated' } }] });
+      await dispatch(userActions.logout());
+      navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'PasswordUpdate' } }] });
     } catch (error) {
       console.error(error);
     }
-  }, [password, navigation]);
+  }, [password, dispatch, navigation]);
 
-  useEffect(() => clear()); // TODO replace with logout
+  useEffect(() => dispatch(userActions.logout()));
 
   return (
     <SafeAreaView style={styles.screen}>
