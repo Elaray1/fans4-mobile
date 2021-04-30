@@ -16,7 +16,7 @@ import Button from 'components/Button';
 import DatePickerModal from 'components/DatePickerModal';
 import CitySelectModal from 'components/CitySelectModal';
 import Toggle from 'components/Toggle';
-import UploadPhotoButton from 'components/UploadPhotoButton';
+import UploadMediaButton from 'components/UploadMediaButton';
 
 import * as userActions from 'resources/user/user.actions';
 
@@ -157,15 +157,17 @@ function BiographicalData() {
           </View>
 
 
-          <UploadPhotoButton
+          <UploadMediaButton
             label={t('BiographicalData.profilePhoto')}
-            handleImageUpload={setPhoto}
+            handleMediaUpload={setPhoto}
+            mediaType="image"
+            cropping
           />
         </View>
 
         <Button
           title={t('BiographicalData.next')}
-          disabled={!fullName || !birthdate || !hometown?.cityNameWithState || !photo?.data}
+          disabled={!fullName || !birthdate || !hometown?.cityNameWithState || !photo?.path}
           onPress={onNext}
         />
       </ScrollView>

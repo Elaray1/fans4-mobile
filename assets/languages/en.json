@@ -110,7 +110,7 @@
   "DatePickerModal": {
     "done": "Done"
   },
-  "UploadPhotoButton": {
+  "uploadMediaButton": {
     "deleteMedia": "Delete Media",
     "uploadedMediaWillBeDeleted": "Uploaded media will be deleted.",
     "delete": "Delete",

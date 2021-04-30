@@ -9,6 +9,7 @@ const { width } = Dimensions.get('window');
 export default StyleSheet.create({
   buttonWrapper: {
     marginBottom: 20,
+    width: '100%',
   },
   button: {
     paddingHorizontal: 16,
@@ -46,7 +47,7 @@ export default StyleSheet.create({
     right: 10,
   },
   error: {
-
+    marginTop: 5,
   },
   errorText: {
     color: colors.error,
