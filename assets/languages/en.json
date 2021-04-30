@@ -254,5 +254,10 @@
     "weHaveSentYouAConfirmationEmailTo": "We have sent you a confirmation email to",
     "pleaseCheckYourInbox": "Please check your Inbox.",
     "done": "Done"
+  },
+  "NewPost": {
+    "title": "New Post",
+    "textInputLabel": "Post Text (max. 160 characters)",
+    "uploadMediaButtonLabel": "Post Media"
   }
 }

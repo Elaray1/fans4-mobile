@@ -8,9 +8,6 @@ import PlayIcon from 'assets/icons/play';
 import styles from './Video.styles';
 
 function Video({ uri, aspectRatio }) {
-  const source = useMemo(() => ({ uri }), [uri]);
-  const videoAspectRatio = useMemo(() => ({ aspectRatio }), [aspectRatio]);
-
   const [paused, setPaused] = useState(true);
   const play = useCallback(() => setPaused(false), []);
   const pause = useCallback(() => setPaused(true), []);
@@ -18,8 +15,8 @@ function Video({ uri, aspectRatio }) {
   return (
     <View style={styles.container}>
       <ReactNativeVideo
-        style={[styles.video, videoAspectRatio]}
-        source={source}
+        style={[styles.video, { aspectRatio }]}
+        source={{ uri }}
         ignoreSilentSwitch="ignore"
         volume={1}
         playInBackground

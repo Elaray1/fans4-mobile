@@ -42,11 +42,26 @@ export const emailSignIn = ({
     email, password, userType, deviceId,
   });
 
-export const updatePassword = ({ oldPassword, newPassword }) => apiClient
-  .put('users/password', { oldPassword, newPassword });
-
-export const fillRegistrationForm = (data, file) => {
-  return apiClient.postWithFile('users/registration-form', data, file);
+export const fillRegistrationForm = ({
+  fullName,
+  nickname,
+  gender,
+  birthdate,
+  cityId,
+  weight,
+  height,
+  reach,
+}, avatar) => {
+  return apiClient.postWithFile('users/registration-form', {
+    fullName,
+    nickname,
+    gender,
+    birthdate,
+    cityId,
+    weight,
+    height,
+    reach,
+  }, avatar);
 };
 
 export const updateUserInfo = ({

@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import config from 'resources/config';
 
 import { STORAGE_KEYS } from 'helpers/constants';
@@ -93,8 +91,28 @@ export const setPushToken = async (token) => {
   await api.setPushToken({ token, deviceId });
 };
 
-export const fillRegistrationForm = data => async (dispatch) => {
-  const { data: user } = await api.fillRegistrationForm(_.omit(data, ['avatar']), data.avatar);
+export const fillRegistrationForm = ({
+  fullName,
+  nickname,
+  gender,
+  birthdate,
+  cityId,
+  weight,
+  height,
+  reach,
+  avatar,
+}) => async (dispatch) => {
+  const user = await api.fillRegistrationForm({
+    fullName,
+    nickname,
+    gender,
+    birthdate,
+    cityId,
+    weight,
+    height,
+    reach,
+  }, avatar);
+
   dispatch({ type: SET_USER_DATA, user });
 };
 
@@ -121,6 +139,8 @@ export const logout = () => async (dispatch) => {
   } catch (err) {
     console.error(err);
   }
+
+  config.accessToken = null;
 
   dispatch({ type: USER_LOGGED_OUT });
 };
