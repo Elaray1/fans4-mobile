@@ -6,6 +6,7 @@
   "rules": {
     "consistent-return": "off",
     "no-console": "off",
+    "no-param-reassign": "off",
     "import/extensions": [
       2,
       {
