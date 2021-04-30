@@ -1,16 +1,14 @@
-import { Platform } from 'react-native';
+import _ from 'lodash';
+
 import config from 'resources/config';
-import axios from 'axios';
 
 import { STORAGE_KEYS } from 'helpers/constants';
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
 import { setItem, clear } from 'helpers/storage';
 import getInitialScreen from 'helpers/getInitialScreen';
 import * as rootNavigation from 'helpers/rootNavigation';
-import { throwApiError, generalError } from 'helpers/api/api.client';
 
 import * as sockets from 'services/socket.service';
-import i18n from 'services/i18n.service';
 
 import {
   USER_LOGGED_OUT,
@@ -95,75 +93,23 @@ export const setPushToken = async (token) => {
   await api.setPushToken({ token, deviceId });
 };
 
-/* Fighters actions: start */
-
-export const fillRegistrationForm = ({
-  fullName, nickname, gender, birthdate, cityId, weight, height, reach, photo,
-}) => async (dispatch) => {
-  const formData = new FormData();
-
-  formData.append('fullName', fullName);
-  formData.append('nickname', nickname);
-  formData.append('gender', gender);
-  formData.append('birthdate', birthdate);
-  formData.append('cityId', cityId);
-  formData.append('weight', weight);
-  formData.append('height', height);
-  formData.append('reach', reach);
-  formData.append('avatar', {
-    name: 'image',
-    type: photo?.mime,
-    uri: Platform.OS === 'android' ? photo?.path : photo?.path.replace('file://', ''),
-  });
-
-  const response = await axios.request({ // TODO: change to work with api.client
-    method: 'put',
-    url: `${config.apiUrl}/users/registration-form`,
-    headers: {
-      Authorization: `Bearer ${config.accessToken}`,
-      'X-Application-ID': config.applicationId,
-      'X-Language': i18n.language,
-      'Content-Type': 'multipart/form-data',
-    },
-    data: formData,
-  });
-
-  if (!response) {
-    throwApiError({
-      data: { errors: generalError },
-      status: 500,
-    });
-
-    return null;
-  }
-
-  response.data = response.data || {};
-  response.status = response.status || 500;
-
-  if (response.status >= 200 && response.status < 300) {
-    dispatch({ type: SET_USER_DATA, user: response.data });
-    return null;
-  }
-  if (response.status === 400) {
-    throwApiError(response);
-  }
-
-  response.data.errors = response.data.errors || generalError;
-  throwApiError(response);
+export const fillRegistrationForm = data => async (dispatch) => {
+  const { data: user } = await api.fillRegistrationForm(_.omit(data, ['avatar']), data.avatar);
+  dispatch({ type: SET_USER_DATA, user });
 };
 
 export const updateUserInfo = ({ about }) => async (dispatch) => {
   const user = await api.updateUserInfo({ about });
-
   dispatch({ type: SET_USER_DATA, user });
 };
 
-/* Fighters actions: end */
+export const updatePassword = async ({ oldPassword, newPassword }) => {
+  await api.updatePassword({ oldPassword, newPassword });
+  rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'PasswordUpdated' } }] });
+};
 
 export const logout = () => async (dispatch) => {
   const deviceId = getMaskedDeviceId();
-
-  config.accessToken = null;
   await clear();
 
   sockets.disconnect();

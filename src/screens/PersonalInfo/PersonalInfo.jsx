@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, ScrollView, StatusBar, TouchableOpacity,
+  SafeAreaView, View, ScrollView, StatusBar, TouchableOpacity, Platform,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -109,6 +109,7 @@ function PersonalInfo({ route }) {
 
   const onNextPress = useCallback(async () => {
     setIsLoading(true);
+
     try {
       await dispatch(userActions.fillRegistrationForm({
         fullName,
@@ -116,10 +117,14 @@ function PersonalInfo({ route }) {
         gender,
         birthdate,
         cityId,
-        photo,
         weight,
         height,
         reach,
+        avatar: {
+          name: 'image',
+          type: photo?.mime,
+          uri: Platform.OS === 'android' ? photo?.path : photo?.path.replace('file://', ''),
+        },
       }));
       navigation.navigate('TermsOfUse');
     } finally {

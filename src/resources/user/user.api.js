@@ -42,14 +42,12 @@ export const emailSignIn = ({
     email, password, userType, deviceId,
   });
 
-/* Fighters api: start */
+export const updatePassword = ({ oldPassword, newPassword }) => apiClient
+  .put('users/password', { oldPassword, newPassword });
 
-// export const fillRegistrationForm = ({
-//   fullName, nickname, birthdate, cityId, weight, height, reach,
-// }) => apiClient
-//   .put('users/registration-form', {
-//     fullName, nickname, birthdate, cityId, weight, height, reach,
-//   });
+export const fillRegistrationForm = (data, file) => {
+  return apiClient.postWithFile('users/registration-form', data, file);
+};
 
 export const updateUserInfo = ({
   about,
@@ -57,8 +55,6 @@ export const updateUserInfo = ({
   .put('users/', {
     about,
   });
-
-/* Fighters api: end */
 
 export const completeOnboarding = () => {
   return apiClient.put('users/onboarding');

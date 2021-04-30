@@ -19,21 +19,41 @@ export const throwApiError = ({ data = {}, status = 500 }) => {
   throw new ApiError(data, status);
 };
 
-const httpRequest = method => async (url, data) => {
+const httpRequest = method => async (url, data, file) => {
   let urlWithSlash = url;
 
   if (urlWithSlash[0] !== '/') {
     urlWithSlash = `/${urlWithSlash}`;
   }
+
   const options = {
+    method: method === 'postWithFile' ? 'post' : method,
     headers: {
       Authorization: `Bearer ${config.accessToken}`,
       'X-Application-ID': config.applicationId,
       'X-Language': i18n.language,
     },
-    method,
     url: `${config.apiUrl}${urlWithSlash}`,
   };
+
+  if (method === 'postWithFile') {
+    options.headers['Content-Type'] = 'multipart/form-data';
+
+    if (data) {
+      const formData = new FormData();
+
+      Object.keys(data).forEach((key) => {
+        formData.append(key, data[key]);
+      });
+
+      // It's important to append file field after all other fields because
+      // server parse request in appending order.
+      // Thereby server can quickly parse simple fields and then
+      // pass partially received file to third-party service(e.g. s3) as a stream
+      formData.append('file', file);
+      data = formData;
+    }
+  }
 
   if (data) {
     if (data.blob) {
@@ -62,23 +82,25 @@ const httpRequest = method => async (url, data) => {
   if (response.status >= 200 && response.status < 300) {
     return response.data;
   }
+
   if (response.status === 400) {
     throwApiError(response);
   }
 
   response.data.errors = response.data.errors || generalError;
   throwApiError(response);
-  return null;
 };
 
 export const getRequest = httpRequest('get');
 export const postRequest = httpRequest('post');
+export const postWithFileRequest = httpRequest('postWithFile');
 export const putRequest = httpRequest('put');
 export const deleteRequest = httpRequest('delete');
 
 const apiClient = {
   get: getRequest,
   post: postRequest,
+  postWithFile: postWithFileRequest,
   put: putRequest,
   delete: deleteRequest,
 };
