@@ -30,8 +30,8 @@ function ChangeEmail() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    socketService.on('new-email:verified', async (updatedUser) => {
-      await dispatch(userActions.setUserData(updatedUser));
+    socketService.on('new-email:verified', (updatedUser) => {
+      dispatch(userActions.setUserData(updatedUser));
     });
   }, [dispatch]);
 

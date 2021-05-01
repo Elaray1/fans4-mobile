@@ -53,12 +53,12 @@ export const sendEmailConfirmation = async ({
 export const getUserData = () => async (dispatch) => {
   const user = await api.getUserData();
 
-  await dispatch({ type: SET_USER_DATA, user });
+  dispatch({ type: SET_USER_DATA, user });
   return user;
 };
 
-export const setUserData = user => async (dispatch) => {
-  await dispatch({ type: SET_USER_DATA, user });
+export const setUserData = user => (dispatch) => {
+  dispatch({ type: SET_USER_DATA, user });
   return user;
 };
 
@@ -182,12 +182,6 @@ export const logout = () => async (dispatch) => {
   }
 
   dispatch({ type: USER_LOGGED_OUT });
-};
-
-export const updatePassword = async ({ oldPassword, newPassword }) => {
-  await api.updatePassword({ oldPassword, newPassword });
-
-  rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'PasswordUpdated' } }] });
 };
 
 export const updateEmail = ({ newEmail, password }) => async (dispatch) => {

@@ -55,4 +55,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
     lineHeight: fonts.lineHeight.caption,
   },
+  newEmail: {
+    marginRight: 12,
+  },
 });

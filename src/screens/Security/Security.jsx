@@ -9,7 +9,9 @@ import Input from 'components/Input';
 
 import extractApiErrorMessage from 'helpers/extractApiErrorMessage';
 
-import * as userActions from 'resources/user/user.actions';
+import * as rootNavigation from 'helpers/rootNavigation';
+
+import * as userApi from 'resources/user/user.api';
 
 import { validatePassword } from 'helpers/validate';
 
@@ -85,10 +87,8 @@ function Security() {
       setIsLoading(true);
 
       try {
-        await userActions.updatePassword({
-          oldPassword,
-          newPassword,
-        });
+        await userApi.updatePassword({ oldPassword, newPassword });
+        rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'PasswordUpdated' } }] });
       } catch (err) {
         setInputErrors({
           ...inputErrors,
