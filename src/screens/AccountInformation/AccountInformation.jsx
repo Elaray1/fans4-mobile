@@ -45,7 +45,7 @@ function AccountInformation() {
               <Text style={styles.itemText}>{t('AccountInformation.email')}</Text>
               <View style={styles.itemContent}>
                 <View style={styles.itemContent}>
-                  <Text style={[styles.email, userNewEmail && { marginRight: 12 }]}>
+                  <Text style={[styles.email, userNewEmail && styles.newEmail]}>
                     {userEmail}
                   </Text>
                   {userNewEmail && (

@@ -42,4 +42,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },
+  header: {
+    paddingTop: 0,
+  },
 });
