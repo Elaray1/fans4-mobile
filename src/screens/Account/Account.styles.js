@@ -9,6 +9,8 @@ export default StyleSheet.create({
   },
   content: {
     ...commonStyles.screenContent,
+  },
+  flatListHeader: {
     marginTop: 20,
   },
   profileBlock: {

@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import {
-  SafeAreaView, View, ScrollView, StatusBar, Image, TouchableOpacity, FlatList, ActivityIndicator,
+  SafeAreaView, View, StatusBar, Image, TouchableOpacity, FlatList, ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -105,10 +105,9 @@ function Account() {
 
   const renderItemSeparator = () => <View style={styles.space} />;
 
-  const fetchMorePosts = useCallback(async () => {
-    if (page !== INITIAL_PAGE) {
-      const newPosts = await postApi.getPosts({ page, perPage: PER_PAGE, my: true });
-      console.log(newPosts);
+  const fetchMorePosts = useCallback(async (neededPage) => {
+    if (neededPage !== INITIAL_PAGE && !isAllPostsLoaded) {
+      const newPosts = await postApi.getPosts({ page: neededPage, perPage: PER_PAGE, my: true });
       if (newPosts.length < PER_PAGE) {
         setIsAllPostsLoaded(true);
       } else {
@@ -117,11 +116,11 @@ function Account() {
       console.log(newPosts);
       setPosts([...posts, ...newPosts]);
     }
-  }, [posts, page]);
+  }, [posts, isAllPostsLoaded]);
 
   const handleLoadMore = useCallback(async () => {
     setPage(page + 1);
-    await fetchMorePosts();
+    await fetchMorePosts(page + 1);
   }, [fetchMorePosts, page]);
 
   const renderFooter = () => {
@@ -135,19 +134,12 @@ function Account() {
     );
   };
 
-  return (
-    <SafeAreaView style={styles.screen}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <SettingsModal
-        visible={isSettingsVisible}
-        onClose={onSettingsClose}
-      />
-      <Header
-        title={t('Account.account')}
-        rightItemType="menu"
-        onRightItemPress={onBurgerPress}
-      />
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+  console.log(posts.length);
+
+  const renderHeader = () => {
+    return (
+      <View style={styles.flatListHeader}>
+
         <View style={styles.profileBlock}>
           <Image
             style={styles.photoImage}
@@ -176,7 +168,7 @@ function Account() {
               {postsCount === null
                 ? <ActivityIndicator color={colors.white} />
                 : postsCount
-              }
+          }
             </Text>
           </View>
           <TouchableOpacity
@@ -189,7 +181,7 @@ function Account() {
               {followersCount === null
                 ? <ActivityIndicator color={colors.white} />
                 : followersCount
-              }
+          }
             </Text>
           </TouchableOpacity>
         </View>
@@ -207,19 +199,19 @@ function Account() {
           </View>
 
           {isBiographyOpen && Boolean(biography)
-          && <Text style={styles.biographyText}>{biography}</Text>}
+      && <Text style={styles.biographyText}>{biography}</Text>}
 
           {isBiographyOpen && !biography
-            && (
-            <TouchableOpacity
-              style={styles.addBiographyContainter}
-              activeOpacity={0.7}
-              onPress={onAddBiographyPress}
-            >
-              <Text style={styles.addBiographyText}>{t('Account.addBiography')}</Text>
-            </TouchableOpacity>
-            )
-          }
+        && (
+        <TouchableOpacity
+          style={styles.addBiographyContainter}
+          activeOpacity={0.7}
+          onPress={onAddBiographyPress}
+        >
+          <Text style={styles.addBiographyText}>{t('Account.addBiography')}</Text>
+        </TouchableOpacity>
+        )
+      }
         </TouchableOpacity>
 
         <View style={styles.line} />
@@ -235,49 +227,67 @@ function Account() {
           </View>
 
           {isPersonalInfoOpen
-          && (
-          <View style={styles.personalInfoContainer}>
-            <View style={styles.personalInfoData}>
-              <Text style={styles.profileDataTitle}>{t('Account.age')}</Text>
-              <Text style={styles.personalInfoValue}>{age}</Text>
-            </View>
+      && (
+      <View style={styles.personalInfoContainer}>
+        <View style={styles.personalInfoData}>
+          <Text style={styles.profileDataTitle}>{t('Account.age')}</Text>
+          <Text style={styles.personalInfoValue}>{age}</Text>
+        </View>
 
-            <View style={styles.personalInfoData}>
-              <Text style={styles.profileDataTitle}>{t('Account.weight')}</Text>
-              <Text style={styles.personalInfoValue}>{profileInfo?.weight}</Text>
-            </View>
+        <View style={styles.personalInfoData}>
+          <Text style={styles.profileDataTitle}>{t('Account.weight')}</Text>
+          <Text style={styles.personalInfoValue}>{profileInfo?.weight}</Text>
+        </View>
 
-            <View style={styles.personalInfoData}>
-              <Text style={styles.profileDataTitle}>{t('Account.height')}</Text>
-              <Text style={styles.personalInfoValue}>{profileInfo?.height}</Text>
-            </View>
+        <View style={styles.personalInfoData}>
+          <Text style={styles.profileDataTitle}>{t('Account.height')}</Text>
+          <Text style={styles.personalInfoValue}>{profileInfo?.height}</Text>
+        </View>
 
-            <View style={styles.personalInfoData}>
-              <Text style={styles.profileDataTitle}>{t('Account.reach')}</Text>
-              <Text style={styles.personalInfoValue}>{profileInfo?.reach}</Text>
-            </View>
-          </View>
-          )}
+        <View style={styles.personalInfoData}>
+          <Text style={styles.profileDataTitle}>{t('Account.reach')}</Text>
+          <Text style={styles.personalInfoValue}>{profileInfo?.reach}</Text>
+        </View>
+      </View>
+      )}
 
         </TouchableOpacity>
 
         <View style={styles.line} />
 
-        <View>
-          <Text style={[styles.blockTitle, styles.postsTitle]}>Posts</Text>
-          <FlatList
-            data={posts}
-            keyExtractor={keyExtractor}
-            renderItem={renderItem}
-            ItemSeparatorComponent={renderItemSeparator}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0}
-            initialNumToRender={10}
-            ListFooterComponent={renderFooter}
-          />
-        </View>
+        <Text style={[styles.blockTitle, styles.postsTitle]}>Posts</Text>
 
-      </ScrollView>
+      </View>
+
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.screen}>
+      <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+      <SettingsModal
+        visible={isSettingsVisible}
+        onClose={onSettingsClose}
+      />
+      <Header
+        title={t('Account.account')}
+        rightItemType="menu"
+        onRightItemPress={onBurgerPress}
+      />
+
+      <FlatList
+        style={styles.content}
+        data={posts}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        ItemSeparatorComponent={renderItemSeparator}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.1}
+        initialNumToRender={10}
+        ListHeaderComponent={renderHeader} // we can't use flatlist inside of scrollview
+        ListFooterComponent={renderFooter}
+      />
+
     </SafeAreaView>
   );
 }
