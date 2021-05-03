@@ -138,4 +138,13 @@ export default StyleSheet.create({
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
   },
+  postsTitle: {
+    paddingVertical: 18,
+  },
+  space: {
+    height: 10,
+  },
+  loader: {
+    paddingVertical: 10,
+  },
 });

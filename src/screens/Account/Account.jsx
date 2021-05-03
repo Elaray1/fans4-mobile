@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import {
-  SafeAreaView, View, ScrollView, StatusBar, Image, TouchableOpacity, ActivityIndicator,
+  SafeAreaView, View, ScrollView, StatusBar, Image, TouchableOpacity, FlatList, ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import SettingsModal from 'components/SettingsModal';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import FighterStatus from 'components/FighterStatus';
+import Post from 'components/Post';
 
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
@@ -21,6 +22,9 @@ import ArrowUpIcon from 'assets/icons/arrow-up';
 import ArrowDownIcon from 'assets/icons/arrow-down';
 
 import styles from './Account.styles';
+
+const INITIAL_PAGE = 1;
+const PER_PAGE = 10;
 
 function Account() {
   const { t } = useTranslation();
@@ -39,15 +43,25 @@ function Account() {
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   const [isBiographyOpen, setIsBiographyOpen] = useState(!biography);
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(INITIAL_PAGE);
+  const [isAllPostsLoaded, setIsAllPostsLoaded] = useState(false);
 
   useEffect(() => {
     const init = async () => {
-      const [{ count: fetchedPostsCount }, { count: fetchedFollowersCount }] = await Promise.all([
+      const [
+        { count: fetchedPostsCount },
+        { count: fetchedFollowersCount },
+        fetchedPosts,
+      ] = await Promise.all([
         postApi.getPostsCount(),
         userApi.getUsersCount({ myFollowers: true }),
+        postApi.getPosts({ page: INITIAL_PAGE, perPage: PER_PAGE, my: true }),
+
       ]);
       setPostsCount(fetchedPostsCount);
       setFollowersCount(fetchedFollowersCount);
+      setPosts(fetchedPosts);
     };
 
     init();
@@ -76,6 +90,50 @@ function Account() {
   const onPersonalInfoPress = useCallback(() => {
     setIsPersonalInfoOpen(!isPersonalInfoOpen);
   }, [isPersonalInfoOpen]);
+
+  const keyExtractor = useCallback(item => item._id, []);
+
+  const renderItem = ({ item }) => {
+    return (
+      <Post
+        description={item.content.text}
+        type={item.content.type}
+        status={item.status}
+      />
+    );
+  };
+
+  const renderItemSeparator = () => <View style={styles.space} />;
+
+  const fetchMorePosts = useCallback(async () => {
+    if (page !== INITIAL_PAGE) {
+      const newPosts = await postApi.getPosts({ page, perPage: PER_PAGE, my: true });
+      console.log(newPosts);
+      if (newPosts.length < PER_PAGE) {
+        setIsAllPostsLoaded(true);
+      } else {
+        setIsAllPostsLoaded(false);
+      }
+      console.log(newPosts);
+      setPosts([...posts, ...newPosts]);
+    }
+  }, [posts, page]);
+
+  const handleLoadMore = useCallback(async () => {
+    setPage(page + 1);
+    await fetchMorePosts();
+  }, [fetchMorePosts, page]);
+
+  const renderFooter = () => {
+    if (isAllPostsLoaded) {
+      return null;
+    }
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -204,6 +262,20 @@ function Account() {
         </TouchableOpacity>
 
         <View style={styles.line} />
+
+        <View>
+          <Text style={[styles.blockTitle, styles.postsTitle]}>Posts</Text>
+          <FlatList
+            data={posts}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            ItemSeparatorComponent={renderItemSeparator}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0}
+            initialNumToRender={10}
+            ListFooterComponent={renderFooter}
+          />
+        </View>
 
       </ScrollView>
     </SafeAreaView>
