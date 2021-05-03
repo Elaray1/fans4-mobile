@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import { SafeAreaView, ScrollView, StatusBar } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import _includes from 'lodash/includes';
 
 import colors from 'themes/colors';
 
@@ -36,14 +35,13 @@ function NewPost() {
   }, [navigation]);
 
   const submit = useCallback(async () => {
-    const params = { text };
-    if (uploadingMedia) {
-      const [fileType] = uploadingMedia.mime.split('/');
-      if (_includes(['video', 'image'], fileType)) {
-        params.width = uploadingMedia.width;
-        params.height = uploadingMedia.height;
-      }
-    }
+    const params = {
+      text,
+      ...(uploadingMedia && {
+        width: uploadingMedia.width,
+        height: uploadingMedia.height,
+      }),
+    };
 
     try {
       await postApi.createPost(params, uploadingMedia && {
