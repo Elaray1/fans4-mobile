@@ -272,7 +272,7 @@ function Account() {
 
         <View style={styles.line} />
 
-        <Text style={[styles.blockTitle, styles.postsTitle]}>Posts</Text>
+        <Text style={[styles.blockTitle, styles.postsTitle]}>{t('Account.Posts')}</Text>
 
       </View>
 

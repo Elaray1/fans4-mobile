@@ -208,7 +208,8 @@
     "age": "Age",
     "weight": "Weight",
     "height": "Height",
-    "reach": "Reach"
+    "reach": "Reach",
+    "Posts": "Posts"
   },
   "AccountBlocked": {
     "title": "Your Account is Blocked",
