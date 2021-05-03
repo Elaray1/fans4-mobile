@@ -11,7 +11,7 @@ import colors from 'themes/colors';
 import SettingsModal from 'components/SettingsModal';
 import Header from 'components/Header';
 import Text from 'components/Text';
-import FighterStatus from 'components/FighterStatus';
+import StatusBadge from 'components/StatusBadge';
 import Post from 'components/Post';
 
 import * as userApi from 'resources/user/user.api';
@@ -62,6 +62,7 @@ function Account() {
       setPostsCount(fetchedPostsCount);
       setFollowersCount(fetchedFollowersCount);
       setPosts(fetchedPosts);
+      setPage(INITIAL_PAGE + 1);
     };
 
     init();
@@ -99,15 +100,20 @@ function Account() {
         description={item.content.text}
         type={item.content.type}
         status={item.status}
+        checkedOn={item.checkedOn}
       />
     );
   };
 
   const renderItemSeparator = () => <View style={styles.space} />;
 
-  const fetchMorePosts = useCallback(async (neededPage) => {
-    if (neededPage !== INITIAL_PAGE && !isAllPostsLoaded) {
-      const newPosts = await postApi.getPosts({ page: neededPage, perPage: PER_PAGE, my: true });
+  const fetchMorePosts = useCallback(async () => {
+    if (page !== INITIAL_PAGE && !isAllPostsLoaded) {
+      const newPosts = await postApi.getPosts({
+        page,
+        perPage: PER_PAGE,
+        my: true,
+      });
       if (newPosts.length < PER_PAGE) {
         setIsAllPostsLoaded(true);
       } else {
@@ -115,11 +121,11 @@ function Account() {
       }
       setPosts([...posts, ...newPosts]);
     }
-  }, [posts, isAllPostsLoaded]);
+  }, [posts, page, isAllPostsLoaded]);
 
   const handleLoadMore = useCallback(async () => {
     setPage(page + 1);
-    await fetchMorePosts(page + 1);
+    await fetchMorePosts();
   }, [fetchMorePosts, page]);
 
   const renderFooter = () => {
@@ -152,7 +158,7 @@ function Account() {
             </Text>
             )}
             <Text style={styles.location}>{hometown}</Text>
-            <FighterStatus status="active" />
+            <StatusBadge status="active" />
           </View>
         </View>
 

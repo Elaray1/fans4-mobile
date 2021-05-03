@@ -5,7 +5,12 @@ import PropTypes from 'prop-types';
 import { CONTENT_TYPES, POST_STATUSES } from 'resources/post/post.constants';
 
 import Text from 'components/Text';
+import StatusBadge from 'components/StatusBadge';
 
+import LikeIcon from 'assets/icons/like';
+import CommentIcon from 'assets/icons/comment';
+
+import { formatCount, formatTime } from './Post.helpers';
 import styles from './Post.styles';
 
 function Post({
@@ -16,6 +21,7 @@ function Post({
   location,
   fullName,
   status,
+  checkedOn,
 }) {
   return (
     <View style={styles.post}>
@@ -44,16 +50,33 @@ function Post({
             source={{ uri: contentUrl }}
           />
         )}
-        <Text>{description}</Text>
+        <Text style={styles.description}>{description}</Text>
       </View>
 
-
       {status === POST_STATUSES.APPROVED && (
-        <View><Text>Approved</Text></View>
+        <View style={[styles.status, styles.approvedStatus]}>
+          <View style={styles.postActions}>
+            <View style={styles.postAction}>
+              <LikeIcon />
+              <Text style={styles.postActionText}>{formatCount(1730)}</Text>
+            </View>
+            <View style={[styles.postAction, styles.postActionRight]}>
+              <CommentIcon />
+              <Text style={styles.postActionText}>{formatCount(12)}</Text>
+            </View>
+          </View>
+
+          <Text style={styles.time}>{formatTime(checkedOn)}</Text>
+
+        </View>
       )}
-      {status === POST_STATUSES.PENDING && (
-      <View><Text>Pending</Text></View>
+
+      {(status === POST_STATUSES.PENDING || status === POST_STATUSES.DECLINED) && (
+      <View style={styles.status}>
+        <StatusBadge status={status} />
+      </View>
       )}
+
     </View>
   );
 }
@@ -66,6 +89,7 @@ Post.propTypes = {
   location: PropTypes.string,
   fullName: PropTypes.string,
   status: PropTypes.oneOf(Object.values(POST_STATUSES)).isRequired,
+  checkedOn: PropTypes.string,
 };
 
 Post.defaultProps = {
@@ -74,6 +98,7 @@ Post.defaultProps = {
   avatarUrl: null,
   location: null,
   fullName: null,
+  checkedOn: null,
 };
 
 export default React.memo(Post);

@@ -55,10 +55,10 @@ function Followers() {
 
   const renderItemSeparator = () => <View style={styles.line} />;
 
-  const fetchMoreFollowers = useCallback(async (neededPage) => {
-    if (neededPage !== INITIAL_PAGE && !isAllFollowersLoaded) {
+  const fetchMoreFollowers = useCallback(async () => {
+    if (page !== INITIAL_PAGE && !isAllFollowersLoaded) {
       const newFollowers = await userApi.getUsers({
-        page: neededPage,
+        page,
         perPage: PER_PAGE,
         myFollowers: true,
       });
@@ -69,7 +69,7 @@ function Followers() {
       }
       setFollowers([...followers, ...newFollowers]);
     }
-  }, [followers, isAllFollowersLoaded]);
+  }, [followers, page, isAllFollowersLoaded]);
 
   const handleLoadMore = useCallback(async () => {
     setPage(page + 1);
