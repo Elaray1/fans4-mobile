@@ -14,6 +14,9 @@ export default StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
+  statusPostContainer: {
+    paddingVertical: 6,
+  },
   statusText: {
     textAlign: 'center',
     fontSize: fonts.size.caption,
@@ -38,5 +41,11 @@ export default StyleSheet.create({
   },
   recoveryText: {
     color: colors.yellow,
+  },
+  pendingContainer: {
+    backgroundColor: colors.primary,
+  },
+  declinedContainer: {
+    backgroundColor: colors.error,
   },
 });

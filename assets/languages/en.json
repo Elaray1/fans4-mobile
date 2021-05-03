@@ -191,10 +191,12 @@
     "useYourNewPasswordToLogIn": "Use your new password to log in.",
     "done": "Done"
   },
-  "FighterStatus": {
+  "StatusBadge": {
     "active": "Active",
     "injured": "Injured",
-    "recovery": "Post-fight Recovery"
+    "recovery": "Post-fight Recovery",
+    "pending": "Pending",
+    "declined": "Declined"
   },
   "Account": {
     "account": "Account",
