@@ -29,8 +29,6 @@ function EmailConfirmation() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const user = useSelector(userSelectors.getUserData);
-  console.log(user);
   const userEmail = useSelector(userSelectors.getUserEmail);
   const userType = useSelector(userSelectors.getUserType);
 

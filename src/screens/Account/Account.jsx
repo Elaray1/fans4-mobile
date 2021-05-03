@@ -113,7 +113,6 @@ function Account() {
       } else {
         setIsAllPostsLoaded(false);
       }
-      console.log(newPosts);
       setPosts([...posts, ...newPosts]);
     }
   }, [posts, isAllPostsLoaded]);
@@ -133,8 +132,6 @@ function Account() {
       </View>
     );
   };
-
-  console.log(posts.length);
 
   const renderHeader = () => {
     return (
