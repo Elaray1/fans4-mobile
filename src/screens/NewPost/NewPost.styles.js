@@ -7,6 +7,7 @@ export default StyleSheet.create({
   },
   content: {
     ...commonStyles.screenContent,
+    marginTop: 30,
   },
   textInput: {
     height: 120,

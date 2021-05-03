@@ -12,6 +12,29 @@ export default StyleSheet.create({
     backgroundColor: colors.gray,
     borderRadius: 5,
   },
+  author: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  authorAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 100,
+  },
+  authorFullName: {
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+    fontSize: fonts.size.small,
+    lineHeight: fonts.lineHeight.small,
+    marginLeft: 10,
+  },
+  postImage: {
+    width: '100%',
+    resizeMode: 'contain',
+    borderRadius: 5,
+    marginBottom: 12,
+  },
   description: {
     color: colors.textSecondary,
     fontFamily: fonts.family.base,

@@ -1,5 +1,4 @@
-export const CONTENT_TYPES = {
-  TEXT: 'text',
+export const MEDIA_TYPES = {
   VIDEO: 'video',
   IMAGE: 'image',
 };

@@ -113,7 +113,7 @@ function UploadMediaButton({
   } else {
     contentView = (
       <View>
-        <Video uri={media.path} aspectRatio={media.width / media.height} />
+        <Video source={{ uri: media.path }} aspectRatio={media.width / media.height} />
         <TouchableOpacity
           style={styles.redBin}
           activeOpacity={0.7}

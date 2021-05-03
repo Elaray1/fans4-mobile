@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { SafeAreaView, ScrollView, StatusBar } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import _ from 'lodash';
+import _includes from 'lodash/includes';
 
 import colors from 'themes/colors';
 
@@ -37,10 +37,12 @@ function NewPost() {
 
   const submit = useCallback(async () => {
     const params = { text };
-
-    if (_.includes(uploadingMedia?.mime, 'video')) {
-      params.width = uploadingMedia.width;
-      params.height = uploadingMedia.height;
+    if (uploadingMedia) {
+      const [fileType] = uploadingMedia.mime.split('/');
+      if (_includes(['video', 'image'], fileType)) {
+        params.width = uploadingMedia.width;
+        params.height = uploadingMedia.height;
+      }
     }
 
     try {

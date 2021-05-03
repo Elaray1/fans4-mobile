@@ -30,6 +30,7 @@ function Account() {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
+  const userId = useSelector(userSelectors.getUserId);
   const fullName = useSelector(userSelectors.getUserFullName);
   const nickname = useSelector(userSelectors.getUserNickname);
   const hometown = useSelector(userSelectors.getHometown);
@@ -57,8 +58,14 @@ function Account() {
         postApi.getPostsCount(),
         userApi.getUsersCount({ myFollowers: true }),
         postApi.getPosts({ page: INITIAL_PAGE, perPage: PER_PAGE, my: true }),
-
       ]);
+
+      if (fetchedPosts.length < PER_PAGE) {
+        setIsAllPostsLoaded(true);
+      } else {
+        setIsAllPostsLoaded(false);
+      }
+
       setPostsCount(fetchedPostsCount);
       setFollowersCount(fetchedFollowersCount);
       setPosts(fetchedPosts);
@@ -95,12 +102,19 @@ function Account() {
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
+    const props = {
+      ...(userId !== item.author._id && {
+        author: item.author,
+      }),
+    };
     return (
       <Post
-        description={item.content.text}
-        type={item.content.type}
+        _id={item._id}
+        media={item.media}
+        text={item.text}
         status={item.status}
         checkedOn={item.checkedOn}
+        {...props}
       />
     );
   };

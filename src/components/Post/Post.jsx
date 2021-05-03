@@ -2,55 +2,68 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { CONTENT_TYPES, POST_STATUSES } from 'resources/post/post.constants';
+import { MEDIA_TYPES, POST_STATUSES } from 'resources/post/post.constants';
 
 import Text from 'components/Text';
 import StatusBadge from 'components/StatusBadge';
+import Video from 'components/Video';
 
 import LikeIcon from 'assets/icons/like';
 import CommentIcon from 'assets/icons/comment';
 
+import config from 'resources/config';
 import { formatCount, formatTime } from './Post.helpers';
 import styles from './Post.styles';
 
 function Post({
-  description,
-  type,
-  contentUrl,
-  avatarUrl,
-  location,
-  fullName,
+  _id,
+  text,
+  media,
+  author,
   status,
   checkedOn,
 }) {
   return (
     <View style={styles.post}>
 
-      {avatarUrl && fullName && location && (
-      <View>
+      {author && (
+      <View style={styles.author}>
         <Image
-          style={styles.avatar}
-          source={{ uri: avatarUrl }}
+          style={styles.authorAvatar}
+          source={{ uri: author.avatarUrl }}
         />
-        <View>
-          <Text>
-            {fullName}
-          </Text>
-          <Text>
-            {location}
-          </Text>
-        </View>
+        <Text style={styles.authorFullName}>
+          {author.fullName}
+        </Text>
       </View>
       )}
 
       <View>
-        {contentUrl && (
+        {media?.type === MEDIA_TYPES.IMAGE && (
           <Image
-            style={{ width: '100%' }}
-            source={{ uri: contentUrl }}
+            style={[styles.postImage, { aspectRatio: media.width / media.height }]}
+            source={{
+              uri: `${config.apiUrl}/posts/${_id}/media`,
+              headers: {
+                Authorization: `Bearer ${config.accessToken}`,
+                'X-Application-ID': config.applicationId,
+              },
+            }}
           />
         )}
-        <Text style={styles.description}>{description}</Text>
+        {media?.type === MEDIA_TYPES.VIDEO && (
+          <Video
+            source={{
+              uri: `${config.apiUrl}/posts/${_id}/media`,
+              headers: {
+                Authorization: `Bearer ${config.accessToken}`,
+                'X-Application-ID': config.applicationId,
+              },
+            }}
+            aspectRatio={media.width / media.height}
+          />
+        )}
+        {Boolean(text) && <Text style={styles.description}>{text}</Text>}
       </View>
 
       {status === POST_STATUSES.APPROVED && (
@@ -82,22 +95,26 @@ function Post({
 }
 
 Post.propTypes = {
-  description: PropTypes.string,
-  type: PropTypes.oneOf(Object.values(CONTENT_TYPES)).isRequired,
-  contentUrl: PropTypes.string,
-  avatarUrl: PropTypes.string,
-  location: PropTypes.string,
-  fullName: PropTypes.string,
+  _id: PropTypes.string.isRequired,
+  text: PropTypes.string,
+  media: PropTypes.shape({
+    type: PropTypes.oneOf(Object.values(MEDIA_TYPES)).isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+  }),
+  author: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    fullName: PropTypes.string.isRequired,
+    avatarUrl: PropTypes.string.isRequired,
+  }),
   status: PropTypes.oneOf(Object.values(POST_STATUSES)).isRequired,
   checkedOn: PropTypes.string,
 };
 
 Post.defaultProps = {
-  description: null,
-  contentUrl: null,
-  avatarUrl: null,
-  location: null,
-  fullName: null,
+  text: null,
+  media: null,
+  author: null,
   checkedOn: null,
 };
 
