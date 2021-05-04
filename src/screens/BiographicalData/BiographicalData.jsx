@@ -161,7 +161,7 @@ function BiographicalData() {
             label={t('BiographicalData.profilePhoto')}
             handleMediaUpload={setPhoto}
             mediaType="image"
-            cropping
+            croppingAvatar
           />
         </View>
 
