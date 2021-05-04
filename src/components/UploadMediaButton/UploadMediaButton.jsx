@@ -22,7 +22,7 @@ function UploadMediaButton({
   handleMediaUpload,
   label,
   mediaType,
-  cropping,
+  croppingAvatar,
 }) {
   const { t } = useTranslation();
 
@@ -30,7 +30,7 @@ function UploadMediaButton({
   const [media, setMedia] = useState(null);
 
   const onEditProfilePicture = useCallback(async () => {
-    const options = cropping ? {
+    const options = croppingAvatar ? {
       cropping: true,
       mediaType: MEDIA_TYPES.PHOTO,
       cropperCircleOverlay: true,
@@ -40,10 +40,25 @@ function UploadMediaButton({
       multiple: false,
     } : {
       mediaType,
+      multiple: false,
     };
 
     try {
-      const mediaData = await ImagePicker.openPicker(options);
+      let mediaData = await ImagePicker.openPicker(options);
+
+      if (mediaData.mime.includes('image') && !croppingAvatar) {
+        const { width, height, path } = mediaData;
+
+        if (width / height < 0.8) {
+          const croppedHeight = width * 5 / 4;
+          mediaData = await ImagePicker.openCropper({
+            path,
+            height: croppedHeight,
+            width,
+          });
+        }
+      }
+
       setMedia(mediaData);
       handleMediaUpload(mediaData);
 
@@ -55,7 +70,7 @@ function UploadMediaButton({
         setErrorText(t('uploadMediaButton.provideAccessToTheLibrary'));
       }
     }
-  }, [handleMediaUpload, t, mediaType, cropping]);
+  }, [handleMediaUpload, t, mediaType, croppingAvatar]);
 
   const onBinPress = useCallback(() => {
     Alert.alert(
@@ -98,7 +113,7 @@ function UploadMediaButton({
     contentView = (
       <View>
         <Image
-          style={styles.photoImage}
+          style={[styles.photoImage, { aspectRatio: media.width / media.height }]}
           source={{ uri: media.path }}
         />
         <TouchableOpacity
@@ -135,14 +150,14 @@ function UploadMediaButton({
 
 UploadMediaButton.defaultProps = {
   mediaType: MEDIA_TYPES.ANY,
-  cropping: false,
+  croppingAvatar: false,
 };
 
 UploadMediaButton.propTypes = {
   label: PropTypes.string.isRequired,
   handleMediaUpload: PropTypes.func.isRequired,
   mediaType: PropTypes.oneOf([...Object.values(MEDIA_TYPES)]),
-  cropping: PropTypes.bool,
+  croppingAvatar: PropTypes.bool,
 };
 
 export default React.memo(UploadMediaButton);

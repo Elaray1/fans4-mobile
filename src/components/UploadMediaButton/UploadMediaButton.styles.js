@@ -1,10 +1,7 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import colors from 'themes/colors';
-import { variables } from 'themes/commonStyles';
 import fonts from 'themes/fonts';
-
-const { width } = Dimensions.get('window');
 
 export default StyleSheet.create({
   buttonWrapper: {
@@ -38,8 +35,8 @@ export default StyleSheet.create({
   },
   photoImage: {
     borderRadius: 5,
-    width: width - variables.paddingHorizontal * 2,
-    height: width - variables.paddingHorizontal * 2,
+    width: '100%',
+    resizeMode: 'contain',
   },
   redBin: {
     position: 'absolute',
