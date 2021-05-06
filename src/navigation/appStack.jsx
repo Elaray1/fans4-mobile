@@ -42,6 +42,7 @@ import colors from 'themes/colors';
 import { commonStyles } from 'themes/commonStyles';
 
 import TabBarIcon from 'components/TabBarIcon';
+import { USER_STATUSES } from 'resources/user/user.constants';
 
 const AppStack = createStackNavigator();
 const ExploreStack = createStackNavigator();
@@ -155,28 +156,51 @@ function Tabs() {
 
 function AppScreens() {
   useEffect(() => {
-    socketService.on('verification:failed', () => {
-      RootNavigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'VerificationFailed',
-          },
-        ],
-      });
+    socketService.on('user:statusUpadted', (user) => {
+      if (user.status === USER_STATUSES.VERIFIED) {
+        if (user.statusHistory.length === 1) {
+          RootNavigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'VerificationSuccessful',
+              },
+            ],
+          });
+        } else {
+          RootNavigation.reset({
+            index: 0,
+            routes: [{
+              name: 'AppStack',
+              state: {
+                routes: [{ name: 'Account' }],
+              },
+            }],
+          });
+        }
+      }
+      if (user.status === USER_STATUSES.DECLINED) {
+        RootNavigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'VerificationFailed',
+            },
+          ],
+        });
+      }
+      if (user.status === USER_STATUSES.BLOCKED) {
+        RootNavigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'AccountBlocked',
+            },
+          ],
+        });
+      }
     });
-
-    socketService.on('verification:successful', () => {
-      RootNavigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'VerificationSuccessful',
-          },
-        ],
-      });
-    });
-  });
+  }, []);
 
   return (
     <AppStack.Navigator
