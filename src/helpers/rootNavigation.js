@@ -11,3 +11,15 @@ export function navigate(name, params) {
 export function reset(...args) {
   navigationRef.current?.dispatch({ ...CommonActions.reset(...args) });
 }
+
+export function resetToScreen(stack, screen) {
+  reset({
+    index: 0,
+    routes: [{
+      name: stack,
+      state: {
+        routes: [{ name: screen }],
+      },
+    }],
+  });
+}

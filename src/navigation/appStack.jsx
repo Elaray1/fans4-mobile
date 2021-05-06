@@ -157,48 +157,21 @@ function Tabs() {
 function AppScreens() {
   useEffect(() => {
     socketService.on('user:statusUpadted', (user) => {
+      let screen;
+
       if (user.status === USER_STATUSES.VERIFIED) {
         if (user.statusHistory.length === 1) {
-          RootNavigation.reset({
-            index: 0,
-            routes: [
-              {
-                name: 'VerificationSuccessful',
-              },
-            ],
-          });
+          screen = 'VerificationSuccessful';
         } else {
-          RootNavigation.reset({
-            index: 0,
-            routes: [{
-              name: 'AppStack',
-              state: {
-                routes: [{ name: 'Account' }],
-              },
-            }],
-          });
+          screen = 'Account';
         }
+      } else if (user.status === USER_STATUSES.DECLINED) {
+        screen = 'VerificationFailed';
+      } else if (user.status === USER_STATUSES.BLOCKED) {
+        screen = 'AccountBlocked';
       }
-      if (user.status === USER_STATUSES.DECLINED) {
-        RootNavigation.reset({
-          index: 0,
-          routes: [
-            {
-              name: 'VerificationFailed',
-            },
-          ],
-        });
-      }
-      if (user.status === USER_STATUSES.BLOCKED) {
-        RootNavigation.reset({
-          index: 0,
-          routes: [
-            {
-              name: 'AccountBlocked',
-            },
-          ],
-        });
-      }
+
+      RootNavigation.resetToScreen('AppStack', screen);
     });
   }, []);
 
