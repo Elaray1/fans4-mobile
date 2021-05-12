@@ -156,6 +156,7 @@ function ChangeEmail() {
             onChange={(value) => { setEmailValue(value); onChangeInputValue('email'); }}
             onBlur={onEmailBlur}
             errors={inputErrors.email}
+            autoCapitalize="none"
           />
         </View>
         <Input
