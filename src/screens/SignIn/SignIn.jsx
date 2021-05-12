@@ -177,6 +177,7 @@ function SignIn({ route }) {
                 onBlur={onEmailBlur}
                 errors={inputErrors.email}
                 style={styles.emailInput}
+                autoCapitalize="none"
               />
 
               <View>
