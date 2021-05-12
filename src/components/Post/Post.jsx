@@ -23,49 +23,66 @@ function Post({
   status,
   checkedOn,
 }) {
-  return (
-    <View style={styles.post}>
+  const authorView = author ? (
+    <View style={styles.author}>
+      <Image
+        style={styles.authorAvatar}
+        source={{ uri: author.avatarUrl }}
+      />
+      <Text style={styles.authorFullName}>
+        {author.fullName}
+      </Text>
+    </View>
+  ) : null;
 
-      {author && (
-      <View style={styles.author}>
-        <Image
-          style={styles.authorAvatar}
-          source={{ uri: author.avatarUrl }}
-        />
-        <Text style={styles.authorFullName}>
-          {author.fullName}
-        </Text>
-      </View>
-      )}
+  let contentContainerView = null;
+  if (media) {
+    const source = {
+      uri: `${config.apiUrl}/posts/${_id}/media`,
+      headers: {
+        Authorization: `Bearer ${config.accessToken}`,
+        'X-Application-ID': config.applicationId,
+      },
+    };
 
-      <View>
-        {media?.type === MEDIA_TYPES.IMAGE && (
+    let mediaView;
+    if (media.type === MEDIA_TYPES.IMAGE) {
+      mediaView = (
+        <View style={styles.mediaContainer}>
           <Image
             style={[styles.postImage, { aspectRatio: media.width / media.height }]}
-            source={{
-              uri: `${config.apiUrl}/posts/${_id}/media`,
-              headers: {
-                Authorization: `Bearer ${config.accessToken}`,
-                'X-Application-ID': config.applicationId,
-              },
-            }}
+            source={source}
           />
-        )}
-        {media?.type === MEDIA_TYPES.VIDEO && (
+        </View>
+
+      );
+    } else {
+      mediaView = (
+        <View style={styles.mediaContainer}>
           <Video
-            source={{
-              uri: `${config.apiUrl}/posts/${_id}/media`,
-              headers: {
-                Authorization: `Bearer ${config.accessToken}`,
-                'X-Application-ID': config.applicationId,
-              },
-            }}
+            source={source}
             aspectRatio={media.width / media.height}
           />
-        )}
-        {Boolean(text) && <Text style={styles.description}>{text}</Text>}
-      </View>
+        </View>
+      );
+    }
 
+    contentContainerView = (
+      <>
+        {mediaView}
+        {Boolean(text) && <Text style={styles.description}>{text}</Text>}
+      </>
+    );
+  } else {
+    contentContainerView = (
+      <Text style={styles.description}>{text}</Text>
+    );
+  }
+
+  return (
+    <View style={styles.post}>
+      {authorView}
+      {contentContainerView}
       {status === POST_STATUSES.APPROVED && (
         <View style={[styles.status, styles.approvedStatus]}>
           <View style={styles.postActions}>

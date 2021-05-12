@@ -33,7 +33,6 @@ export default StyleSheet.create({
     width: '100%',
     resizeMode: 'contain',
     borderRadius: 5,
-    marginBottom: 12,
   },
   description: {
     color: colors.textSecondary,
@@ -41,9 +40,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     fontSize: fonts.size.caption,
     lineHeight: fonts.lineHeight.small,
-  },
-  status: {
-    marginTop: 12,
+    marginBottom: 12,
   },
   approvedStatus: {
     flexDirection: 'row',
@@ -78,5 +75,8 @@ export default StyleSheet.create({
     fontSize: fonts.size.caption,
     lineHeight: fonts.lineHeight.caption,
     marginLeft: 6,
+  },
+  mediaContainer: {
+    marginBottom: 12,
   },
 });
