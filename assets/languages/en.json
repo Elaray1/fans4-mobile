@@ -121,6 +121,7 @@
   "PersonalInfo": {
     "PersonalInfo": "Personal Info",
     "weight": "Weight",
+    "weightClass": "Weight class",
     "height": "Height",
     "reach": "Reach",
     "submit": "Submit"
@@ -266,5 +267,22 @@
   "SearchFighters": {
     "fighters": "Fighters",
     "search": "Search"
+  },
+  "WeightClassSelectModal": {
+    "cancel": "Cancel",
+    "chooseWeightClass": "Choose Weight Class",
+    "save": "Save",
+    "Strawweight": "Strawweight",
+    "Flyweight": "Flyweight",
+    "Bantamweight": "Bantamweight",
+    "Featherweight": "Featherweight",
+    "Lightweight": "Lightweight",
+    "Welterweight": "Welterweight",
+    "Middleweight": "Middleweight",
+    "LightHeavyweight": "Light Heavyweight",
+    "Heavyweight": "Heavyweight",
+    "SuperHeavyweight": "Super Heavyweight",
+    "description": "Choose 1-3 preferred weight classes for fights",
+    "over": "over "
   }
 }
