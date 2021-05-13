@@ -8,21 +8,17 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 
 import * as userActions from 'resources/user/user.actions';
-
 import extractApiErrorMessage from 'helpers/extractApiErrorMessage';
-
 import colors from 'themes/colors';
-
 import Logo from 'assets/icons/logo';
 import ErrorIcon from 'assets/icons/error';
 import BackArrowIcon from 'assets/icons/back-arrow';
-
 import Text from 'components/Text';
 import Button from 'components/Button';
 import Input from 'components/Input';
-
 import { USER_TYPES } from 'resources/user/user.constants';
 import { validateEmail, validatePassword } from 'helpers/validate';
+import * as rootNavigation from 'helpers/rootNavigation';
 
 import styles from './SignIn.styles';
 
@@ -137,6 +133,7 @@ function SignIn({ route }) {
     navigation.navigate('ForgotPassword', { userType });
   }, [navigation, userType]);
 
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
@@ -226,7 +223,7 @@ function SignIn({ route }) {
 SignIn.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
-      userType: PropTypes.oneOf(Object.values(USER_TYPES)),
+      userType: PropTypes.oneOf(Object.values(USER_TYPES)).isRequired,
     }),
   }).isRequired,
 };

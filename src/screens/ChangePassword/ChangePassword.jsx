@@ -1,46 +1,40 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   SafeAreaView, View, ScrollView, StatusBar,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
 
 import colors from 'themes/colors';
-
 import Header from 'components/Header';
 import Input from 'components/Input';
 import Text from 'components/Text';
 import Button from 'components/Button';
-
 import * as userApi from 'resources/user/user.api';
-import * as userActions from 'resources/user/user.actions';
+import { USER_TYPES } from 'resources/user/user.constants';
 import { validatePassword } from 'helpers/validate';
+import * as rootNavigation from 'helpers/rootNavigation';
 
 import styles from './ChangePassword.styles';
 
-function ChangePassword() {
+function ChangePassword({ route }) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
   const [password, setPassword] = useState('');
+  const { resetPasswordToken, userType } = route.params;
 
   const onBackToSignIn = useCallback(async () => {
-    await dispatch(userActions.logout());
-    navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'SelectUserType' } }] });
-  }, [dispatch, navigation]);
+    rootNavigation.resetToScren('AuthStack', 'SelectUserType');
+  }, []);
 
   const onButtonPress = useCallback(async () => {
     try {
-      await userApi.resetPassword({ password });
-      await dispatch(userActions.logout());
-      navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'PasswordUpdate' } }] });
+      await userApi.resetPassword({ password, resetPasswordToken });
+      rootNavigation.resetToScreen('AuthStack', 'PasswordReseted', { userType });
     } catch (error) {
       console.error(error);
     }
-  }, [password, dispatch, navigation]);
+  }, [password, resetPasswordToken, userType]);
 
-  useEffect(() => dispatch(userActions.logout()));
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -75,4 +69,13 @@ function ChangePassword() {
   );
 }
 
-export default ChangePassword;
+ChangePassword.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      resetPasswordToken: PropTypes.string.isRequired,
+      userType: PropTypes.oneOf(Object.values(USER_TYPES)).isRequired,
+    }),
+  }).isRequired,
+};
+
+export default React.memo(ChangePassword);

@@ -27,6 +27,7 @@ function ForgotPassword({ route }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { userType } = route.params;
+
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -57,6 +58,7 @@ function ForgotPassword({ route }) {
               label={t('ForgotPassword.inputLabel')}
               value={email}
               onChange={setEmail}
+              autoCapitalize="none"
             />
           </View>
           <View style={styles.buttonContainer}>
