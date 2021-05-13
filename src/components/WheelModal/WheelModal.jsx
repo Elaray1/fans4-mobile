@@ -46,6 +46,9 @@ function WheelModal({
           pickerData={options}
           onValueChange={setInternalDate}
           itemSpace={30}
+          // this cause message about invalid prop
+          // butit's still required to change text color in IOS
+          itemStyle={styles.itemStyle}
         />
       </View>
     </Modal>
