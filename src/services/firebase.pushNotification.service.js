@@ -95,7 +95,7 @@ class PushNotification {
         }
       });
 
-    this.unsubcribe = messaging()
+    this.unsubscribe = messaging()
       .onMessage((remoteMessage) => {
         console.log('[FCM] A new FCM message arrived!', remoteMessage);
         if (remoteMessage) {
@@ -114,7 +114,9 @@ class PushNotification {
   }
 
   unregister = () => {
-    this.unsubcribe();
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 }
 
