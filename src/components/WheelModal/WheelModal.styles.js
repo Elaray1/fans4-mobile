@@ -39,4 +39,7 @@ export default StyleSheet.create({
     height: 1,
     marginBottom: 10,
   },
+  itemStyle: {
+    color: colors.white,
+  },
 });
