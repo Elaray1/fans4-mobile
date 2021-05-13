@@ -130,10 +130,6 @@ export const logout = () => async (dispatch) => {
   const deviceId = getMaskedDeviceId();
   await clear();
 
-  sockets.disconnect();
-  sockets.connect();
-  sockets.emit('subscribe', `device-${getMaskedDeviceId()}`);
-
   try {
     await api.logout({ deviceId });
   } catch (err) {
@@ -141,6 +137,9 @@ export const logout = () => async (dispatch) => {
   }
 
   config.accessToken = null;
+  sockets.disconnect();
+  sockets.connect();
+  sockets.emit('subscribe', `device-${getMaskedDeviceId()}`);
 
   dispatch({ type: USER_LOGGED_OUT });
 };

@@ -14,9 +14,6 @@ export const sendEmailConfirmation = ({
     email,
   });
 
-export const fetchAccessToken = ({ deviceId }) => apiClient
-  .get('users/fetch-access-token', { deviceId });
-
 export const getUserData = () => apiClient
   .get('users/current');
 
@@ -79,10 +76,10 @@ export const logout = ({ deviceId }) => apiClient
   .post('users/logout', { deviceId });
 
 export const forgotPassword = ({ email, deviceId, userType }) => apiClient
-  .post('users/forgot-password', { email, deviceId, userType });
+  .post('users/password-reset-email', { email, deviceId, userType });
 
-export const resetPassword = ({ password }) => apiClient
-  .put('users/password/reset', { password });
+export const resetPassword = ({ password, resetPasswordToken }) => apiClient
+  .put('users/password/reset', { password, resetPasswordToken });
 
 export const updatePassword = ({ oldPassword, newPassword }) => apiClient
   .put('users/password', { oldPassword, newPassword });

@@ -137,6 +137,7 @@ function Tabs() {
         component={NewPostScreens}
         options={{
           tabBarLabel: 'New post',
+          tabBarVisible: false,
           // eslint-disable-next-line react/prop-types
           tabBarIcon: ({ focused }) => <TabBarIcon icon={NewPostIcon} focused={focused} />,
         }}

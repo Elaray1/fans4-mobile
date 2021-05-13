@@ -230,7 +230,7 @@
     "description": "A link to reset your password has been sent to [Email Address]. Please check your Inbox.",
     "linkText": "Back to sign in page"
   },
-  "PasswordUpdate": {
+  "PasswordReseted": {
     "title": "Password Updated",
     "description": "Use your new password to log in.",
     "linkText": "Back to sign in page"
