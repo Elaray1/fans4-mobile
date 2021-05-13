@@ -100,6 +100,7 @@ export const fillRegistrationForm = ({
   weight,
   height,
   reach,
+  weightClasses,
   avatar,
 }) => async (dispatch) => {
   const user = await api.fillRegistrationForm({
@@ -111,6 +112,7 @@ export const fillRegistrationForm = ({
     weight,
     height,
     reach,
+    weightClasses,
   }, avatar);
 
   dispatch({ type: SET_USER_DATA, user });

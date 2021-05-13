@@ -15,6 +15,7 @@ import Text from 'components/Text';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import WheelModal from 'components/WheelModal';
+import WeightClassSelectModal from 'components/WeightClassSelectModal';
 
 import styles from './PersonalInfo.styles';
 
@@ -41,6 +42,9 @@ function PersonalInfo({ route }) {
 
   const [weight, setWeight] = useState(null);
   const [isWeightModalVisible, setIsWeightModalVisible] = useState(false);
+
+  const [weightClasses, setWeightClasses] = useState([]);
+  const [isWeightClassModalVisible, setIsWeighClassModalVisible] = useState(false);
 
   const [height, setHeight] = useState(null);
   const [isHeightModalVisible, setIsHeightModalVisible] = useState(false);
@@ -79,6 +83,19 @@ function PersonalInfo({ route }) {
 
   const onWeightPress = useCallback(() => {
     setIsWeightModalVisible(true);
+  }, []);
+
+  const onCloseWeightClassModal = useCallback(() => {
+    setIsWeighClassModalVisible(false);
+  }, []);
+
+  const onSubmitWeightClassModal = useCallback((wc) => {
+    setWeightClasses(wc);
+    setIsWeighClassModalVisible(false);
+  }, []);
+
+  const onWeightClassPress = useCallback(() => {
+    setIsWeighClassModalVisible(true);
   }, []);
 
   const onCloseHeightModal = useCallback(() => {
@@ -120,6 +137,7 @@ function PersonalInfo({ route }) {
         weight,
         height,
         reach,
+        weightClasses: weightClasses.map(item => item.name),
         avatar: {
           name: 'image',
           type: photo?.mime,
@@ -132,7 +150,7 @@ function PersonalInfo({ route }) {
     }
   }, [
     navigation, dispatch, birthdate, cityId, fullName,
-    gender, height, nickname, photo, reach, weight,
+    gender, height, nickname, photo, reach, weight, weightClasses,
   ]);
 
   return (
@@ -158,6 +176,12 @@ function PersonalInfo({ route }) {
         onClose={onCloseReachModal}
         onSubmit={onSubmitReachModal}
       />
+      <WeightClassSelectModal
+        visible={isWeightClassModalVisible}
+        onClose={onCloseWeightClassModal}
+        onSubmit={onSubmitWeightClassModal}
+        isFemale={gender === 'female'}
+      />
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <Header leftItemType="backArrow" title={t('PersonalInfo.PersonalInfo')} />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
@@ -170,6 +194,21 @@ function PersonalInfo({ route }) {
               activeOpacity={0.8}
             >
               <Text style={styles.input}>{weight || ''}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View>
+            <Text style={styles.inputLabel}>{t('PersonalInfo.weightClass')}</Text>
+            <TouchableOpacity
+              style={styles.inputContainer}
+              onPress={onWeightClassPress}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.input}>
+                {weightClasses.map((item, index) => {
+                  return index === (weightClasses.length - 1) ? item.name : `${item.name}, `;
+                })}
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -199,7 +238,7 @@ function PersonalInfo({ route }) {
         <Button
           title={t('PersonalInfo.submit')}
           isLoading={isLoading}
-          disabled={!weight || !height || !reach}
+          disabled={!weight || !height || !reach || !weightClasses.length}
           onPress={onNextPress}
         />
       </ScrollView>
