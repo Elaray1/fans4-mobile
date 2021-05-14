@@ -34,6 +34,7 @@ function Account() {
   const fullName = useSelector(userSelectors.getUserFullName);
   const nickname = useSelector(userSelectors.getUserNickname);
   const hometown = useSelector(userSelectors.getHometown);
+  const fightingStatus = useSelector(userSelectors.getFightingStatus);
   const avatarUrl = useSelector(userSelectors.getAvatarUrl);
   const biography = useSelector(userSelectors.getUserBiographyAbout);
   const age = useSelector(userSelectors.getUserAge);
@@ -172,7 +173,7 @@ function Account() {
             </Text>
             )}
             <Text style={styles.location}>{hometown}</Text>
-            <StatusBadge status="active" />
+            {fightingStatus && <StatusBadge status={fightingStatus} />}
           </View>
         </View>
 

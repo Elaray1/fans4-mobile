@@ -24,10 +24,10 @@ export default StyleSheet.create({
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
   },
-  activeContainer: {
+  readyForFightsContainer: {
     backgroundColor: hexToRgba(colors.green, 0.12),
   },
-  activeText: {
+  readyForFightsText: {
     color: colors.green,
   },
   injuredContainer: {
