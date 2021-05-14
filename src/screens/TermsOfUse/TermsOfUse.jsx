@@ -29,7 +29,10 @@ function TermsOfUse() {
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <Header leftItemType="backArrow" title={t('TermsOfUse.headerTitle')} />
       <View style={styles.content}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
           <Text style={styles.title}>{t('TermsOfUse.firstParagraphTitle')}</Text>
           <Text style={styles.text}>{t('TermsOfUse.firstParagraphText')}</Text>
           <Text style={styles.title}>{t('TermsOfUse.secondParagraphTitle')}</Text>
