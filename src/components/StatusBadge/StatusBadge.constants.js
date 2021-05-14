@@ -1,5 +1,5 @@
 export const FIGHTER_STATUSES = {
-  ACTIVE: 'active',
+  ACTIVE: 'readyForFights',
   INJURED: 'injured',
   RECOVERY: 'recovery',
 };
