@@ -1,10 +1,10 @@
 import { apiClient } from 'helpers/api';
 
 export const emailSignUp = ({
-  email, password, userType, deviceId,
+  email, password, userType,
 }) => apiClient
   .post('users/signup', {
-    email, password, userType, deviceId,
+    email, password, userType,
   });
 
 export const sendEmailConfirmation = ({
@@ -86,3 +86,6 @@ export const updatePassword = ({ oldPassword, newPassword }) => apiClient
 
 export const updateEmail = ({ newEmail, password }) => apiClient
   .put('users/email', { newEmail, password });
+
+export const getOtherFighters = ({ page, perPage, searchValue }) => apiClient
+  .get('users/other-fighters', { page, perPage, searchValue });

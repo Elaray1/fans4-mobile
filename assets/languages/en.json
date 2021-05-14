@@ -262,5 +262,9 @@
     "title": "New Post",
     "textInputLabel": "Post Text (max. 160 characters)",
     "uploadMediaButtonLabel": "Post Media"
+  },
+  "SearchFighters": {
+    "fighters": "Fighters",
+    "search": "Search"
   }
 }
