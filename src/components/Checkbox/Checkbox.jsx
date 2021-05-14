@@ -55,4 +55,4 @@ Checkbox.defaultProps = {
   labelStyle: {},
 };
 
-export default Checkbox;
+export default React.memo(Checkbox);
