@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {
+  useCallback,
   useState,
 } from 'react';
 import {
@@ -21,76 +22,102 @@ function CitySelectModal({
 }) {
   const { t } = useTranslation();
 
-  const allWeightClasses = [
+  const maleWeightClasses = [
     {
       _id: 1,
-      name: t('WeightClassSelectModal.Strawweight'),
-      weight: 115,
-      isChecked: false,
-    },
-    {
-      _id: 2,
       name: t('WeightClassSelectModal.Flyweight'),
       weight: 125,
       isChecked: false,
     },
     {
-      _id: 3,
+      _id: 2,
       name: t('WeightClassSelectModal.Bantamweight'),
       weight: 135,
       isChecked: false,
     },
     {
-      _id: 4,
+      _id: 3,
       name: t('WeightClassSelectModal.Featherweight'),
       weight: 145,
       isChecked: false,
     },
     {
-      _id: 5,
+      _id: 4,
       name: t('WeightClassSelectModal.Lightweight'),
       weight: 155,
       isChecked: false,
     },
     {
-      _id: 6,
+      _id: 5,
       name: t('WeightClassSelectModal.Welterweight'),
       weight: 170,
       isChecked: false,
     },
     {
-      _id: 7,
+      _id: 6,
       name: t('WeightClassSelectModal.Middleweight'),
       weight: 185,
       isChecked: false,
     },
     {
-      _id: 8,
+      _id: 7,
       name: t('WeightClassSelectModal.LightHeavyweight'),
       weight: 205,
       isChecked: false,
     },
     {
-      _id: 9,
+      _id: 8,
       name: t('WeightClassSelectModal.Heavyweight'),
       weight: 265,
       isChecked: false,
     },
     {
-      _id: 10,
+      _id: 9,
       name: t('WeightClassSelectModal.SuperHeavyweight'),
       weight: 265,
       isChecked: false,
     },
   ];
 
-  const maleWeightClasses = allWeightClasses.slice(1);
-  const femaleWeightClasses = allWeightClasses.slice(0, 4);
-
+  const femaleWeightClasses = [{
+    _id: 1,
+    name: t('WeightClassSelectModal.Strawweight'),
+    weight: 115,
+    isChecked: false,
+  },
+  {
+    _id: 2,
+    name: t('WeightClassSelectModal.Flyweight'),
+    weight: 125,
+    isChecked: false,
+  },
+  {
+    _id: 3,
+    name: t('WeightClassSelectModal.Bantamweight'),
+    weight: 135,
+    isChecked: false,
+  },
+  {
+    _id: 4,
+    name: t('WeightClassSelectModal.Featherweight'),
+    weight: 145,
+    isChecked: false,
+  },
+  ];
 
   const [weightClasses, setWeightClasses] = useState(
     isFemale ? femaleWeightClasses : maleWeightClasses,
   );
+
+  const onCheckBoxPress = useCallback((item) => {
+    if (weightClasses.filter(c => c.isChecked).length < 3 || item.isChecked) {
+      setWeightClasses(cs => cs.map(c => (
+        c._id === item._id ? { ...c, isChecked: !c.isChecked } : c
+      )));
+    }
+  }, [weightClasses]);
+
+  const label = useCallback(item => `${item.name} — ${item._id === 9 ? t('WeightClassSelectModal.over') : ''}${item.weight} lbs`, [t]);
 
   return (
     <Modal
@@ -126,15 +153,9 @@ function CitySelectModal({
           {weightClasses.map(item => (
             <View key={item._id} style={styles.checkBoxContainer}>
               <CheckBox
-                label={`${item.name} — ${item._id === 10 ? t('WeightClassSelectModal.over') : ''}${item.weight} lbs`}
+                label={label(item)}
                 value={item.isChecked}
-                onChangeValue={() => {
-                  if (weightClasses.filter(c => c.isChecked).length < 3 || item.isChecked) {
-                    setWeightClasses(cs => cs.map(c => (
-                      c._id === item._id ? { ...c, isChecked: !c.isChecked } : c
-                    )));
-                  }
-                }}
+                onChangeValue={() => onCheckBoxPress(item)}
               />
             </View>
           ))}
