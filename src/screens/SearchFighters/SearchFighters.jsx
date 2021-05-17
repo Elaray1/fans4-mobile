@@ -40,31 +40,36 @@ function SearchFighters() {
     }
 
     if (page === 1 || fighters.length < totalCount) {
-      const {
-        fighters: fetchedFighters,
-        totalCount: fetchedTotalCount,
-      } = await userApi.getOtherFighters({
-        page,
-        perPage: PER_PAGE_COUNT,
-        searchValue: search,
-      });
-      setPage(fetchingPage + 1);
-      setTotalCount(fetchedTotalCount);
-      setFighters([...currentFighters, ...fetchedFighters]);
+      try {
+        const {
+          fighters: fetchedFighters,
+          totalCount: fetchedTotalCount,
+        } = await userApi.getOtherFighters({
+          page,
+          perPage: PER_PAGE_COUNT,
+          searchValue: search,
+        });
+        setPage(fetchingPage + 1);
+        setTotalCount(fetchedTotalCount);
+        setFighters([...currentFighters, ...fetchedFighters]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
     }
-    setIsLoading(false);
   }, [fighters, page, totalCount]);
 
   const onSearchQueryChange = useRef(debounce(async (value) => {
     await fetchNewItems({ search: value, refresh: true });
   }, 500, { leading: false, trailing: true }));
 
-  // useEffect(() => {
-  //   const init = async () => {
-  //     await fetchNewItems();
-  //   };
-  //   init();
-  // }, [fetchNewItems]);
+  useEffect(() => {
+    const init = async () => {
+      await fetchNewItems();
+    };
+    init();
+  }, [fetchNewItems]);
 
   useEffect(() => {
     onSearchQueryChange.current(searchValue);
