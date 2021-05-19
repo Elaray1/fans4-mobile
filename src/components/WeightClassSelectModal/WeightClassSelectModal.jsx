@@ -26,55 +26,55 @@ function CitySelectModal({
     {
       _id: 1,
       name: t('WeightClassSelectModal.Flyweight'),
-      weight: 125,
+      label: t('WeightClassSelectModal.FlyweightWithWeight'),
       isChecked: false,
     },
     {
       _id: 2,
       name: t('WeightClassSelectModal.Bantamweight'),
-      weight: 135,
+      label: t('WeightClassSelectModal.BantamweightWithWeight'),
       isChecked: false,
     },
     {
       _id: 3,
       name: t('WeightClassSelectModal.Featherweight'),
-      weight: 145,
+      label: t('WeightClassSelectModal.FeatherweightWithWeight'),
       isChecked: false,
     },
     {
       _id: 4,
       name: t('WeightClassSelectModal.Lightweight'),
-      weight: 155,
+      label: t('WeightClassSelectModal.LightweightWithWeight'),
       isChecked: false,
     },
     {
       _id: 5,
       name: t('WeightClassSelectModal.Welterweight'),
-      weight: 170,
+      label: t('WeightClassSelectModal.WelterweightWithWeight'),
       isChecked: false,
     },
     {
       _id: 6,
       name: t('WeightClassSelectModal.Middleweight'),
-      weight: 185,
+      label: t('WeightClassSelectModal.MiddleweightWithWeight'),
       isChecked: false,
     },
     {
       _id: 7,
       name: t('WeightClassSelectModal.LightHeavyweight'),
-      weight: 205,
+      label: t('WeightClassSelectModal.LightHeavyweightWithWeight'),
       isChecked: false,
     },
     {
       _id: 8,
       name: t('WeightClassSelectModal.Heavyweight'),
-      weight: 265,
+      label: t('WeightClassSelectModal.HeavyweightWithWeight'),
       isChecked: false,
     },
     {
       _id: 9,
       name: t('WeightClassSelectModal.SuperHeavyweight'),
-      weight: 265,
+      label: t('WeightClassSelectModal.SuperHeavyweightWithWeight'),
       isChecked: false,
     },
   ];
@@ -82,25 +82,25 @@ function CitySelectModal({
   const femaleWeightClasses = [{
     _id: 1,
     name: t('WeightClassSelectModal.Strawweight'),
-    weight: 115,
+    label: t('WeightClassSelectModal.StrawweightWithWeight'),
     isChecked: false,
   },
   {
     _id: 2,
     name: t('WeightClassSelectModal.Flyweight'),
-    weight: 125,
+    label: t('WeightClassSelectModal.FlyweightWithWeight'),
     isChecked: false,
   },
   {
     _id: 3,
     name: t('WeightClassSelectModal.Bantamweight'),
-    weight: 135,
+    label: t('WeightClassSelectModal.BantamweightWithWeight'),
     isChecked: false,
   },
   {
     _id: 4,
     name: t('WeightClassSelectModal.Featherweight'),
-    weight: 145,
+    label: t('WeightClassSelectModal.FeatherweightWithWeight'),
     isChecked: false,
   },
   ];
@@ -117,7 +117,10 @@ function CitySelectModal({
     }
   }, [weightClasses]);
 
-  const label = useCallback(item => `${item.name} — ${item._id === 9 ? t('WeightClassSelectModal.over') : ''}${item.weight} lbs`, [t]);
+  const onSave = useCallback(() => onSubmit(weightClasses.filter(i => i.isChecked)),
+    [onSubmit, weightClasses]);
+
+  const isAnyWeightClassSelected = !weightClasses.some((i => i.isChecked));
 
   return (
     <Modal
@@ -135,13 +138,13 @@ function CitySelectModal({
           <Text style={styles.headerTitle}>{t('WeightClassSelectModal.chooseWeightClass')}</Text>
           <View style={styles.headerEmptyBlock} />
           <TouchableOpacity
-            onPress={() => onSubmit(weightClasses.filter(i => i.isChecked))}
+            onPress={onSave}
             activeOpacity={0.7}
-            disabled={!weightClasses.filter(i => i.isChecked).length}
+            disabled={isAnyWeightClassSelected}
           >
             <Text style={{
               ...styles.headerCancel,
-              ...(!weightClasses.filter(i => i.isChecked).length && styles.disabledButton),
+              ...(isAnyWeightClassSelected && styles.disabledButton),
             }}
             >
               {t('WeightClassSelectModal.save')}
@@ -153,7 +156,7 @@ function CitySelectModal({
           {weightClasses.map(item => (
             <View key={item._id} style={styles.checkBoxContainer}>
               <CheckBox
-                label={label(item)}
+                label={item.label}
                 value={item.isChecked}
                 onChangeValue={() => onCheckBoxPress(item)}
               />
