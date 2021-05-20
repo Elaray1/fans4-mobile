@@ -10,7 +10,6 @@ import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
 
 import EmailConfirmation from 'screens/EmailConfirmation';
 import Account from 'screens/Account';
-import Explore from 'screens/Explore';
 import Fights from 'screens/Fights';
 import NewPost from 'screens/NewPost';
 import BiographicalData from 'screens/BiographicalData';
@@ -34,6 +33,7 @@ import ChangeEmail from 'screens/ChangeEmail';
 import ConfirmYourEmailAddress from 'screens/ConfirmYourEmailAddress';
 import Fans from 'screens/Fans';
 import SearchFighters from 'screens/SearchFighters';
+import Fighter from 'screens/Fighter';
 
 import * as socketService from 'services/socket.service';
 
@@ -209,6 +209,7 @@ function AppScreens() {
       <AppStack.Screen name="ChangeEmail" component={ChangeEmail} />
       <AppStack.Screen name="ConfirmYourEmailAddress" component={ConfirmYourEmailAddress} />
       <AppStack.Screen name="Fans" component={Fans} />
+      <AppStack.Screen name="Fighter" component={Fighter} />
     </AppStack.Navigator>
   );
 }
