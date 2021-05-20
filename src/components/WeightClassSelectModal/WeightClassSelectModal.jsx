@@ -111,9 +111,11 @@ function CitySelectModal({
 
   const onCheckBoxPress = useCallback((item) => {
     if (weightClasses.filter(c => c.isChecked).length < 3 || item.isChecked) {
-      setWeightClasses(cs => cs.map(c => (
-        c._id === item._id ? { ...c, isChecked: !c.isChecked } : c
-      )));
+      setWeightClasses((cs) => {
+        return cs.map((c) => {
+          return c._id === item._id ? { ...c, isChecked: !c.isChecked } : c;
+        });
+      });
     }
   }, [weightClasses]);
 
@@ -142,10 +144,10 @@ function CitySelectModal({
             activeOpacity={0.7}
             disabled={isAnyWeightClassSelected}
           >
-            <Text style={{
-              ...styles.headerCancel,
-              ...(isAnyWeightClassSelected && styles.disabledButton),
-            }}
+            <Text style={[
+              styles.headerCancel,
+              isAnyWeightClassSelected && styles.disabledButton,
+            ]}
             >
               {t('WeightClassSelectModal.save')}
             </Text>
