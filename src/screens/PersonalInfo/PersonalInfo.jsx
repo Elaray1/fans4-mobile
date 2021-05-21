@@ -205,9 +205,7 @@ function PersonalInfo({ route }) {
               activeOpacity={0.8}
             >
               <Text style={styles.input}>
-                {weightClasses.map((item, index) => {
-                  return index === (weightClasses.length - 1) ? item.name : `${item.name}, `;
-                })}
+                {weightClasses.map(item => item.name).join(', ')}
               </Text>
             </TouchableOpacity>
           </View>
