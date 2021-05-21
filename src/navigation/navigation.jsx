@@ -4,6 +4,7 @@ import { InteractionManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
+import cookies from '@react-native-cookies/cookies';
 import 'react-native-gesture-handler';
 
 import { STORAGE_KEYS } from 'helpers/constants';
@@ -34,6 +35,16 @@ const NAVIGATOR_CONTAINER_THEME = {
 const Stack = createStackNavigator();
 
 const init = async (dispatch) => {
+  // This is needed because react-native use cookies by default
+  // but actually we don't use cookies
+  // so we clear cookies in order to prevent mixing authorization cookies
+  // with other authorization methods
+  try {
+    cookies.clearAll();
+  } catch (err) {
+    console.log('Clearing cookies error:', err);
+  }
+
   let user;
   const accessToken = await getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
