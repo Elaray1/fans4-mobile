@@ -32,7 +32,7 @@ import PasswordUpdated from 'screens/PasswordUpdated';
 import ChangePassword from 'screens/ChangePassword';
 import ChangeEmail from 'screens/ChangeEmail';
 import ConfirmYourEmailAddress from 'screens/ConfirmYourEmailAddress';
-import Followers from 'screens/Followers';
+import Fans from 'screens/Fans';
 import SearchFighters from 'screens/SearchFighters';
 
 import * as socketService from 'services/socket.service';
@@ -208,7 +208,7 @@ function AppScreens() {
       <AppStack.Screen name="ChangePassword" component={ChangePassword} />
       <AppStack.Screen name="ChangeEmail" component={ChangeEmail} />
       <AppStack.Screen name="ConfirmYourEmailAddress" component={ConfirmYourEmailAddress} />
-      <AppStack.Screen name="Followers" component={Followers} />
+      <AppStack.Screen name="Fans" component={Fans} />
     </AppStack.Navigator>
   );
 }

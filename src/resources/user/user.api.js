@@ -17,16 +17,16 @@ export const sendEmailConfirmation = ({
 export const getUserData = () => apiClient
   .get('users/current');
 
-export const getUsers = ({ page, perPage, myFollowers }) => apiClient
+export const getUsers = ({ page, perPage, myFans }) => apiClient
   .get('users', {
     page,
     perPage,
-    ...(myFollowers && { myFollowers }),
+    ...(myFans && { myFans }),
   });
 
-export const getUsersCount = ({ myFollowers }) => apiClient
+export const getUsersCount = ({ myFans }) => apiClient
   .get('users/count', {
-    ...(myFollowers && { myFollowers }),
+    ...(myFans && { myFans }),
   });
 
 export const setPushToken = ({ token, deviceId }) => apiClient

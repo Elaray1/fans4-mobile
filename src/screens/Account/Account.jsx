@@ -41,7 +41,7 @@ function Account() {
   const profileInfo = useSelector(userSelectors.getUserProfileInfo);
 
   const [postsCount, setPostsCount] = useState(null);
-  const [followersCount, setFollowersCount] = useState(null);
+  const [fansCount, setFansCount] = useState(null);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   const [isBiographyOpen, setIsBiographyOpen] = useState(!biography);
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
@@ -53,11 +53,11 @@ function Account() {
     const init = async () => {
       const [
         { count: fetchedPostsCount },
-        { count: fetchedFollowersCount },
+        { count: fetchedFansCount },
         fetchedPosts,
       ] = await Promise.all([
         postApi.getPostsCount(),
-        userApi.getUsersCount({ myFollowers: true }),
+        userApi.getUsersCount({ myFans: true }),
         postApi.getPosts({ page: INITIAL_PAGE, perPage: PER_PAGE, my: true }),
       ]);
 
@@ -68,7 +68,7 @@ function Account() {
       }
 
       setPostsCount(fetchedPostsCount);
-      setFollowersCount(fetchedFollowersCount);
+      setFansCount(fetchedFansCount);
       setPosts(fetchedPosts);
       setPage(INITIAL_PAGE + 1);
     };
@@ -84,8 +84,8 @@ function Account() {
     setIsSettingsVisible(false);
   }, []);
 
-  const onFollowersPress = useCallback(() => {
-    navigation.navigate('Followers');
+  const onFansPress = useCallback(() => {
+    navigation.navigate('Fans');
   }, [navigation]);
 
   const onBiographyPress = useCallback(() => {
@@ -192,13 +192,13 @@ function Account() {
           <TouchableOpacity
             style={[styles.profileData, styles.profileRightData]}
             activeOpacity={0.7}
-            onPress={onFollowersPress}
+            onPress={onFansPress}
           >
-            <Text style={styles.profileDataTitle}>{t('Account.followers')}</Text>
+            <Text style={styles.profileDataTitle}>{t('Account.fans')}</Text>
             <Text style={styles.profileDataText}>
-              {followersCount === null
+              {fansCount === null
                 ? <ActivityIndicator color={colors.white} />
-                : followersCount
+                : fansCount
           }
             </Text>
           </TouchableOpacity>

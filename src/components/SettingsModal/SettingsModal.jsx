@@ -168,7 +168,7 @@ function SettingsModal({
               <InviteIcon style={styles.settingIcon} />
               <View>
                 <Text style={styles.settingTitle}>
-                  {t('SettingsModal.inviteFollower')}
+                  {t('SettingsModal.inviteFan')}
                 </Text>
                 <Text style={styles.settingText}>
                   {t('SettingsModal.scanQRCode')}
