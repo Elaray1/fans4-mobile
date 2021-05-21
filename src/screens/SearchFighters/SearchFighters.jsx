@@ -32,7 +32,6 @@ function SearchFighters() {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchNewItems = useCallback(async ({ search = '', refresh } = {}) => {
-    setIsLoading(true);
     let fetchingPage = 1;
     let currentFighters = [];
 
@@ -42,6 +41,7 @@ function SearchFighters() {
     }
 
     if (page === 1 || fighters.length < totalCount) {
+      setIsLoading(true);
       try {
         const {
           fighters: fetchedFighters,
@@ -71,7 +71,7 @@ function SearchFighters() {
   }, [searchValue]);
 
   const onPressFighter = useCallback((fighterId) => {
-    navigation.navigate('Fighter', { id: fighterId });
+    navigation.navigate('Fighter', { _id: fighterId });
   }, [navigation]);
 
   const renderItem = ({ item }) => {

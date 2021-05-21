@@ -27,7 +27,7 @@ export default StyleSheet.create({
   line: {
     backgroundColor: colors.line,
     height: 1,
-    marginTop: 10,
+    marginVertical: 10,
   },
   fullName: {
     fontSize: fonts.size.small,

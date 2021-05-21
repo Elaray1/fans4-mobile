@@ -24,7 +24,7 @@ function Fighter({ route }) {
   const { t } = useTranslation();
 
   const {
-    id,
+    _id,
   } = route?.params;
 
   const [fighter, setFighter] = useState(null);
@@ -35,19 +35,23 @@ function Fighter({ route }) {
 
   useEffect(() => {
     const init = async () => {
-      const {
-        fighter: fetchedFighter,
-        postsCount: fetchedPostsCount,
-        followersCount: fetchedFollowersCount,
-      } = await userApi.getOtherFighter({ id });
+      try {
+        const {
+          fighter: fetchedFighter,
+          postsCount: fetchedPostsCount,
+          followersCount: fetchedFollowersCount,
+        } = await userApi.getOtherFighter({ _id });
 
-      setFighter(fetchedFighter);
-      setPostsCount(fetchedPostsCount);
-      setFollowersCount(fetchedFollowersCount);
+        setFighter(fetchedFighter);
+        setPostsCount(fetchedPostsCount);
+        setFollowersCount(fetchedFollowersCount);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     init();
-  }, [id]);
+  }, [_id]);
 
   const onBiographyPress = useCallback(() => {
     setIsBiographyOpen(!isBiographyOpen);
@@ -71,10 +75,10 @@ function Fighter({ route }) {
               <View style={styles.profileBlock}>
                 <Image
                   style={styles.photoImage}
-                  source={{ uri: fighter?.avatarUrl }}
+                  source={{ uri: fighter.avatarUrl }}
                 />
                 <View>
-                  <Text style={styles.fullName}>{fighter?.fullName}</Text>
+                  <Text style={styles.fullName}>{fighter.fullName}</Text>
                   {fighter.role.biography.nickname && (
                   <Text style={styles.nickname}>
                     “
@@ -199,7 +203,7 @@ function Fighter({ route }) {
 Fighter.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      _id: PropTypes.string.isRequired,
     }),
   }).isRequired,
 };
