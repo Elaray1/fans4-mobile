@@ -14,30 +14,30 @@ import Text from 'components/Text';
 
 import colors from 'themes/colors';
 
-import styles from './Followers.styles';
+import styles from './Fans.styles';
 
 const INITIAL_PAGE = 1;
 const PER_PAGE = 25;
 
-function Followers() {
-  const [followers, setFollowers] = useState([]);
+function Fans() {
+  const [fans, setFans] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
-  const [isAllFollowersLoaded, setIsAllFollowersLoaded] = useState(false);
+  const [isAllFansLoaded, setIsAllFansLoaded] = useState(false);
 
   useEffect(() => {
     const initialLoad = async () => {
-      const fetchedFollowers = await userApi.getUsers({
-        myFollowers: true,
+      const fetchedFans = await userApi.getUsers({
+        myFans: true,
         page: INITIAL_PAGE,
         perPage: PER_PAGE,
       });
 
-      if (fetchedFollowers.length < PER_PAGE) {
-        setIsAllFollowersLoaded(true);
+      if (fetchedFans.length < PER_PAGE) {
+        setIsAllFansLoaded(true);
       } else {
-        setIsAllFollowersLoaded(false);
+        setIsAllFansLoaded(false);
       }
-      setFollowers(fetchedFollowers);
+      setFans(fetchedFans);
       setPage(INITIAL_PAGE + 1);
     };
     initialLoad();
@@ -55,29 +55,29 @@ function Followers() {
 
   const renderItemSeparator = () => <View style={styles.line} />;
 
-  const fetchMoreFollowers = useCallback(async () => {
-    if (page !== INITIAL_PAGE && !isAllFollowersLoaded) {
-      const newFollowers = await userApi.getUsers({
+  const fetchMoreFans = useCallback(async () => {
+    if (page !== INITIAL_PAGE && !isAllFansLoaded) {
+      const newFans = await userApi.getUsers({
         page,
         perPage: PER_PAGE,
-        myFollowers: true,
+        myFans: true,
       });
-      if (newFollowers.length < PER_PAGE) {
-        setIsAllFollowersLoaded(true);
+      if (newFans.length < PER_PAGE) {
+        setIsAllFansLoaded(true);
       } else {
-        setIsAllFollowersLoaded(false);
+        setIsAllFansLoaded(false);
       }
-      setFollowers([...followers, ...newFollowers]);
+      setFans([...fans, ...newFans]);
     }
-  }, [followers, page, isAllFollowersLoaded]);
+  }, [fans, page, isAllFansLoaded]);
 
   const handleLoadMore = useCallback(async () => {
     setPage(page + 1);
-    await fetchMoreFollowers(page + 1);
-  }, [fetchMoreFollowers, page]);
+    await fetchMoreFans(page + 1);
+  }, [fetchMoreFans, page]);
 
   const renderFooter = () => {
-    if (isAllFollowersLoaded) {
+    if (isAllFansLoaded) {
       return null;
     }
     return (
@@ -91,11 +91,11 @@ function Followers() {
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <Header
-        title="Followers"
+        title="Fans"
         leftItemType="backArrow"
       />
       <FlatList
-        data={followers}
+        data={fans}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         ItemSeparatorComponent={renderItemSeparator}
@@ -108,4 +108,4 @@ function Followers() {
   );
 }
 
-export default React.memo(Followers);
+export default React.memo(Fans);

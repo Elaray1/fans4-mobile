@@ -3,7 +3,7 @@ export const SET_USER_DATA = 'SET_USER_DATA';
 
 export const USER_TYPES = {
   FIGHTER: 'fighter',
-  FOLLOWER: 'follower',
+  FAN: 'fan',
 };
 
 export const USER_STATUSES = {

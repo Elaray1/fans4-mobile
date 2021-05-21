@@ -10,11 +10,11 @@
   "SelectRole": {
     "selectYourRole": "Select your role",
     "ImFighter": "I’m a Fighter",
-    "ImFollower": "I’m a Follower"
+    "ImFan": "I’m a Fan"
   },
   "SignUp": {
     "SignUpAsFighter": "Sign up as a Fighter",
-    "SignUpAsFollower": "Sign up as a Follower",
+    "SignUpAsFan": "Sign up as a Fan",
     "Email": "Email",
     "Password": "Password",
     "SignUp": "Sign up",
@@ -33,7 +33,7 @@
   },
   "SignIn": {
     "SignInAsFighter": "Sign in as a Fighter",
-    "SignInAsFollower": "Sign in as a Follower",
+    "SignInAsFan": "Sign in as a Fan",
     "Email": "Email",
     "Password": "Password",
     "ForgotPassword?": "Forgot password?",
@@ -163,7 +163,7 @@
     "manageBankAccount": "Manage bank account, view income details",
     "support": "Support",
     "contactAdminFAQ": "Contact Admin, FAQ",
-    "inviteFollower": "Invite a follower",
+    "inviteFan": "Invite a fan",
     "scanQRCode": "Scan QR code, share a link",
     "logOut": "Log out"
   },
@@ -202,7 +202,7 @@
   "Account": {
     "account": "Account",
     "posts": "posts",
-    "followers": "followers",
+    "fans": "fans",
     "biography": "Biography",
     "addBiography": "Add biography",
     "personalInfo": "Personal Info",
@@ -216,8 +216,7 @@
     "title": "Your Account is Blocked",
     "description": "Your account has been blocked. If you think that this may be an error, please contact Support.",
     "buttonText": "Contact Support",
-    "linkText": "Back to sign up page",
-    "followers": "followers"
+    "linkText": "Back to sign up page"
   },
   "ForgotPassword": {
     "title": "Forgot password",

@@ -38,8 +38,8 @@ function SelectUserType() {
             style={styles.fighterButton}
           />
           <Button
-            title={t('SelectRole.ImFollower')}
-            onPress={() => onChooseUserType(USER_TYPES.FOLLOWER)}
+            title={t('SelectRole.ImFan')}
+            onPress={() => onChooseUserType(USER_TYPES.FAN)}
           />
         </View>
       </ScrollView>

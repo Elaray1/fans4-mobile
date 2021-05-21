@@ -154,7 +154,7 @@ function SignIn({ route }) {
                   </View>
                 </TouchableOpacity>
                 <Text style={styles.title}>
-                  {userType === USER_TYPES.FIGHTER ? t('SignIn.SignInAsFighter') : t('SignIn.SignInAsFollower')}
+                  {userType === USER_TYPES.FIGHTER ? t('SignIn.SignInAsFighter') : t('SignIn.SignInAsFan')}
                 </Text>
               </View>
 
