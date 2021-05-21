@@ -22,7 +22,7 @@ function Video({ source, aspectRatio }) {
         playInBackground
         playWhenInactive
         paused={paused}
-        resizeMode="contain"
+        resizeMode="cover"
       />
 
       <TouchableWithoutFeedback onPress={paused ? null : pause}>

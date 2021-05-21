@@ -61,7 +61,6 @@ function Post({
         <View style={styles.mediaContainer}>
           <Video
             source={source}
-            aspectRatio={media.width / media.height}
           />
         </View>
       );
