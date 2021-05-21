@@ -158,7 +158,7 @@ function Tabs() {
 
 function AppScreens() {
   useEffect(() => {
-    socketService.on('user:statusUpadted', (user) => {
+    socketService.on('user:statusUpdated', (user) => {
       let screen;
 
       if (user.status === USER_STATUSES.VERIFIED) {
