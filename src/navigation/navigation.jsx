@@ -4,6 +4,7 @@ import { InteractionManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
+import { ToastProvider } from 'react-native-fast-toast';
 import cookies from '@react-native-cookies/cookies';
 import 'react-native-gesture-handler';
 
@@ -16,7 +17,6 @@ import * as rootNavigation from 'helpers/rootNavigation';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
 import config from 'resources/config';
-
 import * as sockets from 'services/socket.service';
 import firebasePushNotificationService from 'services/firebase.pushNotification.service';
 import localPushNotificationService from 'services/local.pushNotification.service';
@@ -131,16 +131,19 @@ function AppNavigation() {
   }, [userAuthenticated]);
 
   return (
-    <NavigationContainer
-      theme={NAVIGATOR_CONTAINER_THEME}
-      ref={rootNavigation.navigationRef}
-      onReady={onNavigatorReady}
-    >
-      <Stack.Navigator initialRouteName={userAuthenticated ? 'AppStack' : 'AuthStack'} headerMode="none">
-        <Stack.Screen name="AppStack" component={AppScreens} />
-        <Stack.Screen name="AuthStack" component={AuthScreens} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ToastProvider placement="top" offset={30}>
+      <NavigationContainer
+        theme={NAVIGATOR_CONTAINER_THEME}
+        ref={rootNavigation.navigationRef}
+        onReady={onNavigatorReady}
+      >
+        <Stack.Navigator initialRouteName={userAuthenticated ? 'AppStack' : 'AuthStack'} headerMode="none">
+          <Stack.Screen name="AppStack" component={AppScreens} />
+          <Stack.Screen name="AuthStack" component={AuthScreens} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ToastProvider>
+
   );
 }
 

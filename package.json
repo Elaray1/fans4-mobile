@@ -33,6 +33,7 @@
     "react-native-config": "1.4.2",
     "react-native-date-picker": "3.2.10",
     "react-native-device-info": "8.0.8",
+    "react-native-fast-toast": "2.3.0",
     "react-native-gesture-handler": "1.10.3",
     "react-native-image-crop-picker": "git@github.com:fans-4/react-native-image-crop-picker.git#51f089f9992c44cb0dd860b31057a54de52916a3",
     "react-native-localize": "2.0.2",
