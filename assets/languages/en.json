@@ -171,7 +171,7 @@
     "addBiography": "Add Biography",
     "changeBiography": "Change Biography",
     "save": "Save",
-    "biography": "Biography"
+    "biography": "Biography (max. 300 characters)"
   },
   "AccountInformation": {
     "accountInformation": "Account Information",
@@ -292,5 +292,18 @@
     "HeavyweightWithWeight": "Heavyweight — 265 lbs",
     "SuperHeavyweightWithWeight": "Super Heavyweight — over 265 lbs",
     "description": "Choose 1-3 preferred weight classes for fights"
+  },
+  "Fighter": {
+    "fightersProfile": "Fighter’s Profile",
+    "posts": "posts",
+    "followers": "followers",
+    "biography": "Biography",
+    "personalInfo": "Personal Info",
+    "age": "Age",
+    "weight": "Weight",
+    "height": "Height",
+    "reach": "Reach",
+    "fighterHasntAddedBiographyYet": "Fighter hasn’t added biography yet.",
+    "applyForAFight": "Apply for a Fight"
   }
 }

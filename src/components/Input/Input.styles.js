@@ -32,8 +32,6 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     lineHeight: fonts.lineHeight.caption,
   },
-  labelFocused: {
-  },
   error: {
     borderWidth: 1,
     borderColor: colors.error,

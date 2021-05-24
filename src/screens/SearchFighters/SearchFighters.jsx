@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
+import { useNavigation } from '@react-navigation/native';
 
 import Header from 'components/Header';
 import SearchInput from 'components/SearchInput';
@@ -22,6 +23,7 @@ const PER_PAGE_COUNT = 20;
 
 function SearchFighters() {
   const { t } = useTranslation();
+  const navigation = useNavigation();
 
   const [fighters, setFighters] = useState([]);
   const [page, setPage] = useState(1);
@@ -30,7 +32,6 @@ function SearchFighters() {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchNewItems = useCallback(async ({ search = '', refresh } = {}) => {
-    setIsLoading(true);
     let fetchingPage = 1;
     let currentFighters = [];
 
@@ -40,6 +41,7 @@ function SearchFighters() {
     }
 
     if (page === 1 || fighters.length < totalCount) {
+      setIsLoading(true);
       try {
         const {
           fighters: fetchedFighters,
@@ -65,15 +67,12 @@ function SearchFighters() {
   }, 500, { leading: false, trailing: true }));
 
   useEffect(() => {
-    const init = async () => {
-      await fetchNewItems();
-    };
-    init();
-  }, [fetchNewItems]);
-
-  useEffect(() => {
     onSearchQueryChange.current(searchValue);
   }, [searchValue]);
+
+  const onPressFighter = useCallback((fighterId) => {
+    navigation.navigate('Fighter', { _id: fighterId });
+  }, [navigation]);
 
   const renderItem = ({ item }) => {
     const { nickname } = item.role.biography;
@@ -81,7 +80,7 @@ function SearchFighters() {
 
     return (
       <TouchableOpacity
-        onPress={() => null}
+        onPress={() => onPressFighter(item._id)}
       >
         <View style={styles.fighter}>
           <Image
