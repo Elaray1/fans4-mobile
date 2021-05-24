@@ -100,7 +100,10 @@ function Post({
         </View>
       )}
 
-      {(status === POST_STATUSES.PENDING || status === POST_STATUSES.DECLINED) && (
+      {(status === POST_STATUSES.PENDING
+      || status === POST_STATUSES.DECLINED
+      || status === POST_STATUSES.REMOVED
+      ) && (
       <View style={styles.status}>
         <StatusBadge status={status} />
       </View>
