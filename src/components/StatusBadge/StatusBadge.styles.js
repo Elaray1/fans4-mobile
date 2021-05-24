@@ -48,4 +48,7 @@ export default StyleSheet.create({
   declinedContainer: {
     backgroundColor: colors.error,
   },
+  removedContainer: {
+    backgroundColor: colors.error,
+  },
 });

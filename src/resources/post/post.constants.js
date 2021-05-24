@@ -7,4 +7,5 @@ export const POST_STATUSES = {
   APPROVED: 'approved',
   PENDING: 'pending',
   DECLINED: 'declined',
+  REMOVED: 'removed',
 };

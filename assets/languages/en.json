@@ -197,7 +197,8 @@
     "injured": "Injured",
     "recovery": "Post-fight Recovery",
     "pending": "Pending",
-    "declined": "Declined"
+    "declined": "Declined",
+    "removed": "Removed"
   },
   "Account": {
     "account": "Account",
