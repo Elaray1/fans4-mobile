@@ -46,7 +46,7 @@ function SearchFighters() {
         const {
           fighters: fetchedFighters,
           totalCount: fetchedTotalCount,
-        } = await userApi.getOtherFighters({
+        } = await userApi.getFighters({
           page,
           perPage: PER_PAGE_COUNT,
           searchValue: search,

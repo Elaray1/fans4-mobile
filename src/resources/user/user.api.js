@@ -89,8 +89,8 @@ export const updatePassword = ({ oldPassword, newPassword }) => apiClient
 export const updateEmail = ({ newEmail, password }) => apiClient
   .put('users/email', { newEmail, password });
 
-export const getOtherFighters = ({ page, perPage, searchValue }) => apiClient
-  .get('users/other-fighters', { page, perPage, searchValue });
+export const getFighters = ({ page, perPage, searchValue }) => apiClient
+  .get('users/fighters', { page, perPage, searchValue });
 
 export const getOtherFighter = ({ _id }) => apiClient
   .get(`users/${_id}`);
