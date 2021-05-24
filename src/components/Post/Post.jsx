@@ -61,6 +61,8 @@ function Post({
         <View style={styles.mediaContainer}>
           <Video
             source={source}
+            width={media.width}
+            height={media.height}
           />
         </View>
       );
