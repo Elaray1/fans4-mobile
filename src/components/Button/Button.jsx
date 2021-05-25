@@ -21,6 +21,7 @@ function Button({
   style,
   titleStyle,
   isLoading,
+  disableWithoutFade,
 }) {
   const isDisabled = disabled || isLoading;
 
@@ -28,7 +29,7 @@ function Button({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.7}
-      disabled={isDisabled}
+      disabled={isDisabled || disableWithoutFade}
       style={[
         type !== TYPES.LINK && styles.button,
         type === TYPES.PRIMARY && styles.primaryButton,
@@ -63,6 +64,7 @@ Button.propTypes = {
   style: PropTypes.shape(),
   titleStyle: Text.propTypes.style,
   disabled: PropTypes.bool,
+  disableWithoutFade: PropTypes.bool,
   isLoading: PropTypes.bool,
   type: PropTypes.oneOf(Object.values(TYPES)),
 };
@@ -70,6 +72,7 @@ Button.propTypes = {
 Button.defaultProps = {
   onPress: () => null,
   disabled: false,
+  disableWithoutFade: false,
   isLoading: false,
   style: {},
   titleStyle: {},

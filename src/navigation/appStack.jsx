@@ -34,6 +34,7 @@ import ConfirmYourEmailAddress from 'screens/ConfirmYourEmailAddress';
 import Fans from 'screens/Fans';
 import SearchFighters from 'screens/SearchFighters';
 import Fighter from 'screens/Fighter';
+import InviteAFan from 'screens/InviteAFan';
 
 import * as socketService from 'services/socket.service';
 
@@ -210,6 +211,7 @@ function AppScreens() {
       <AppStack.Screen name="ConfirmYourEmailAddress" component={ConfirmYourEmailAddress} />
       <AppStack.Screen name="Fans" component={Fans} />
       <AppStack.Screen name="Fighter" component={Fighter} />
+      <AppStack.Screen name="InviteAFan" component={InviteAFan} />
     </AppStack.Navigator>
   );
 }

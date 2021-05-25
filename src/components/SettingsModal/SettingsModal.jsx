@@ -52,8 +52,9 @@ function SettingsModal({
   }, [navigation, onClose]);
 
   const onInvitePress = useCallback(() => {
-    console.log('onInvitePress');
-  }, []);
+    onClose();
+    navigation.navigate('InviteAFan');
+  }, [navigation, onClose]);
 
   const onLogOutPress = useCallback(async () => {
     await dispatch(userActions.logout());

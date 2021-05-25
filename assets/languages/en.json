@@ -306,5 +306,11 @@
     "reach": "Reach",
     "fighterHasntAddedBiographyYet": "Fighter hasn’t added biography yet.",
     "applyForAFight": "Apply for a Fight"
+  },
+  "InviteAFan": {
+    "inviteAFan": "Invite a Fan",
+    "shareALink": "Share a link",
+    "askYourFan": "Ask your fan to scan this QR code or share a link.",
+    "invitation": "invitation"
   }
 }
