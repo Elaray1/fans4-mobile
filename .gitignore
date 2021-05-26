@@ -29,6 +29,7 @@ ios/Pods
 #
 build/
 android/app/release/
+android/app/releaseStaging/
 .idea
 .gradle
 local.properties
@@ -45,6 +46,7 @@ yarn-error.log
 buck-out/
 \.buckd/
 *.keystore
+!fans4.keystore
 !debug.keystore
 
 # fastlane
