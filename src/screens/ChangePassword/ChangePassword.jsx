@@ -23,7 +23,7 @@ function ChangePassword({ route }) {
   const { resetPasswordToken, userType } = route.params;
 
   const onBackToSignIn = useCallback(async () => {
-    rootNavigation.resetToScren('AuthStack', 'SelectUserType');
+    rootNavigation.resetToScreen('AuthStack', 'SelectUserType');
   }, []);
 
   const onButtonPress = useCallback(async () => {
