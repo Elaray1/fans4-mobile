@@ -29,7 +29,7 @@ function Fighter({ route }) {
 
   const [fighter, setFighter] = useState(null);
   const [postsCount, setPostsCount] = useState(null);
-  const [followersCount, setFollowersCount] = useState(null);
+  const [fansCount, setFansCount] = useState(null);
   const [isBiographyOpen, setIsBiographyOpen] = useState(false);
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
 
@@ -39,12 +39,12 @@ function Fighter({ route }) {
         const {
           fighter: fetchedFighter,
           postsCount: fetchedPostsCount,
-          followersCount: fetchedFollowersCount,
+          fansCount: fetchedFansCount,
         } = await userApi.getOtherFighter({ _id });
 
         setFighter(fetchedFighter);
         setPostsCount(fetchedPostsCount);
-        setFollowersCount(fetchedFollowersCount);
+        setFansCount(fetchedFansCount);
       } catch (error) {
         console.error(error);
       }
@@ -113,11 +113,11 @@ function Fighter({ route }) {
                   <View
                     style={[styles.profileData, styles.profileRightData]}
                   >
-                    <Text style={styles.profileDataTitle}>{t('Fighter.followers')}</Text>
+                    <Text style={styles.profileDataTitle}>{t('Fighter.fans')}</Text>
                     <Text style={styles.profileDataText}>
-                      {followersCount === null
+                      {fansCount === null
                         ? <ActivityIndicator color={colors.white} />
-                        : followersCount
+                        : fansCount
                   }
                     </Text>
                   </View>
