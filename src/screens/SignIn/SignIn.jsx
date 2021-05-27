@@ -1,24 +1,28 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity,
+  SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity, Linking,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 
-import * as userActions from 'resources/user/user.actions';
-import extractApiErrorMessage from 'helpers/extractApiErrorMessage';
 import colors from 'themes/colors';
 import Logo from 'assets/icons/logo';
 import ErrorIcon from 'assets/icons/error';
 import BackArrowIcon from 'assets/icons/back-arrow';
+
 import Text from 'components/Text';
 import Button from 'components/Button';
 import Input from 'components/Input';
+
+import config from 'resources/config';
 import { USER_TYPES } from 'resources/user/user.constants';
+import * as userActions from 'resources/user/user.actions';
+
 import { validateEmail, validatePassword } from 'helpers/validate';
 import * as rootNavigation from 'helpers/rootNavigation';
+import extractApiErrorMessage from 'helpers/extractApiErrorMessage';
 
 import styles from './SignIn.styles';
 
@@ -126,7 +130,11 @@ function SignIn({ route }) {
   }, [inputErrors, apiError]);
 
   const onPressSignUp = useCallback(() => {
-    navigation.navigate('SignUp', { userType });
+    if (userType === USER_TYPES.FIGHTER) {
+      navigation.navigate('SignUp', { userType });
+    } else {
+      Linking.openURL(`${config.webUrl}/signup`);
+    }
   }, [navigation, userType]);
 
   const onPressForgotPassword = useCallback(() => {

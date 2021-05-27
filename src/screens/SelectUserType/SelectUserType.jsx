@@ -21,7 +21,7 @@ function SelectUserType() {
   const navigation = useNavigation();
 
   const onChooseUserType = useCallback(async (userType) => {
-    navigation.navigate('SignUp', { userType });
+    navigation.navigate(userType === USER_TYPES.FAN ? 'SignIn' : 'SignUp', { userType });
   }, [navigation]);
 
   return (
