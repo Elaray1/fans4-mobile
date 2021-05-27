@@ -211,7 +211,9 @@
     "weight": "Weight",
     "height": "Height",
     "reach": "Reach",
-    "Posts": "Posts"
+    "Posts": "Posts",
+    "OnceYouAddAPost": "Once you add a post you will see it here.",
+    "AddPost": "Add post"
   },
   "AccountBlocked": {
     "title": "Your Account is Blocked",
