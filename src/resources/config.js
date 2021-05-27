@@ -18,6 +18,7 @@ const getSocketUrl = () => {
 export default {
   apiUrl: getApiUrl(),
   webSocketUrl: getSocketUrl(),
+  webUrl: Config.WEB_URL,
   mode: Config.APP_ENV,
   applicationId: 'fans4',
 };

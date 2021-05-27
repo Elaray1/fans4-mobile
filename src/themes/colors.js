@@ -34,6 +34,8 @@ const colors = {
 
   errorBackground: 'rgba(243, 76, 76, 0.12)',
   errorText: '#F34C4C',
+
+  grayBlock: '#1A1A1F',
 };
 
 export default colors;
