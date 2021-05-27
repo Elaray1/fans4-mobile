@@ -47,6 +47,13 @@ export default (user) => {
     }
   }
 
+  if (user.role.type === USER_TYPES.FAN) {
+    return {
+      stack: 'AppStack',
+      screen: 'Feed',
+    };
+  }
+
   if (!user.appState.isOnboardingCompleted) {
     return {
       stack: 'AppStack',
