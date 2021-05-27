@@ -14,8 +14,10 @@ export const getUserNewEmail = ({ user }) => user?.appState?.newEmail;
 
 export const getUserNickname = ({ user }) => user?.role?.biography?.nickname;
 export const getFightingStatus = ({ user }) => user?.role?.fightingStatus;
-export const getHometown = ({ user }) => `${user?.role?.biography?.hometown?.cityName},
- ${user?.role?.biography?.hometown?.stateCode}`;
+export const getHometown = ({ user }) => {
+  const { cityName, stateCode } = user?.role?.biography?.hometown;
+  return `${cityName}, ${stateCode}`;
+};
 export const getAvatarUrl = ({ user }) => user?.avatarUrl;
 export const getUserAge = ({ user }) => dayjs().diff(user?.role?.biography?.birthdate, 'year');
 export const getUserProfileInfo = ({ user }) => user?.role?.profile;
