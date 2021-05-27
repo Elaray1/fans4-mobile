@@ -149,4 +149,20 @@ export default StyleSheet.create({
   loader: {
     paddingVertical: 10,
   },
+  noItemsContainer: {
+    alignItems: 'center',
+    paddingTop: 32,
+  },
+  noItemsText: {
+    color: colors.grayText,
+    fontWeight: fonts.weight.medium,
+    fontSize: fonts.size.small,
+  },
+  noItemsButtonText: {
+    marginTop: 10,
+    color: colors.primary,
+    fontSize: fonts.size.small,
+    fontWeight: fonts.weight.bold,
+    fontFamily: fonts.family.bold,
+  },
 });

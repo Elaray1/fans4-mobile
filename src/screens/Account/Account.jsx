@@ -17,6 +17,7 @@ import Post from 'components/Post';
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 import * as userSelectors from 'resources/user/user.selectors';
+import * as rootNavigation from 'helpers/rootNavigation';
 
 import ArrowUpIcon from 'assets/icons/arrow-up';
 import ArrowDownIcon from 'assets/icons/arrow-down';
@@ -99,6 +100,10 @@ function Account() {
   const onPersonalInfoPress = useCallback(() => {
     setIsPersonalInfoOpen(!isPersonalInfoOpen);
   }, [isPersonalInfoOpen]);
+
+  const onAddPostPress = useCallback(() => {
+    rootNavigation.resetToScreen('NewPost', 'NewPost');
+  }, []);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -280,6 +285,17 @@ function Account() {
     );
   };
 
+  const renderNoItems = () => {
+    return (
+      <View style={styles.noItemsContainer}>
+        <Text style={styles.noItemsText}>{t('Account.OnceYouAddAPost')}</Text>
+        <TouchableOpacity onPress={onAddPostPress}>
+          <Text style={styles.noItemsButtonText}>{t('Account.AddPost')}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
@@ -304,6 +320,7 @@ function Account() {
         initialNumToRender={10}
         ListHeaderComponent={renderHeader} // we can't use flatlist inside of scrollview
         ListFooterComponent={renderFooter}
+        ListEmptyComponent={renderNoItems}
       />
 
     </SafeAreaView>
