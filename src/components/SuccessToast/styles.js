@@ -5,6 +5,7 @@ import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   container: {
+    width: '100%',
     padding: 16,
     backgroundColor: colors.gray,
     borderColor: colors.primary,

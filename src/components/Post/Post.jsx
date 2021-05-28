@@ -22,6 +22,8 @@ function Post({
   author,
   status,
   checkedOn,
+  likesCount,
+  commentsCount,
 }) {
   const authorView = author ? (
     <View style={styles.author}>
@@ -89,11 +91,11 @@ function Post({
           <View style={styles.postActions}>
             <View style={styles.postAction}>
               <LikeIcon />
-              <Text style={styles.postActionText}>{formatCount(1730)}</Text>
+              <Text style={styles.postActionText}>{formatCount(likesCount)}</Text>
             </View>
             <View style={[styles.postAction, styles.postActionRight]}>
               <CommentIcon />
-              <Text style={styles.postActionText}>{formatCount(12)}</Text>
+              <Text style={styles.postActionText}>{formatCount(commentsCount)}</Text>
             </View>
           </View>
 
@@ -130,6 +132,8 @@ Post.propTypes = {
   }),
   status: PropTypes.oneOf(Object.values(POST_STATUSES)).isRequired,
   checkedOn: PropTypes.string,
+  likesCount: PropTypes.number,
+  commentsCount: PropTypes.number,
 };
 
 Post.defaultProps = {
@@ -137,6 +141,8 @@ Post.defaultProps = {
   media: null,
   author: null,
   checkedOn: null,
+  likesCount: 0,
+  commentsCount: 0,
 };
 
 export default React.memo(Post);

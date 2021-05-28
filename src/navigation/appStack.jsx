@@ -2,11 +2,15 @@ import React, { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSelector } from 'react-redux';
 
 import AccountIcon from 'assets/icons/tab-bar/account.svg';
 import ExploreIcon from 'assets/icons/tab-bar/explore.svg';
 import FightsIcon from 'assets/icons/tab-bar/fights.svg';
 import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
+import FeedIcon from 'assets/icons/tab-bar/feed.svg';
+import EventsIcon from 'assets/icons/tab-bar/events.svg';
+import VotingIcon from 'assets/icons/tab-bar/voting.svg';
 
 import EmailConfirmation from 'screens/EmailConfirmation';
 import Account from 'screens/Account';
@@ -35,6 +39,9 @@ import Fans from 'screens/Fans';
 import SearchFighters from 'screens/SearchFighters';
 import Fighter from 'screens/Fighter';
 import InviteAFan from 'screens/InviteAFan';
+import Feed from 'screens/Feed';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import * as socketService from 'services/socket.service';
 
@@ -44,13 +51,17 @@ import colors from 'themes/colors';
 import { commonStyles } from 'themes/commonStyles';
 
 import TabBarIcon from 'components/TabBarIcon';
-import { USER_STATUSES } from 'resources/user/user.constants';
+import { USER_STATUSES, USER_TYPES } from 'resources/user/user.constants';
 
 const AppStack = createStackNavigator();
 const ExploreStack = createStackNavigator();
 const FightsStack = createStackNavigator();
 const NewPostStack = createStackNavigator();
 const AccountStack = createStackNavigator();
+const FeedStack = createStackNavigator();
+const EventsStack = createStackNavigator();
+const VotingStack = createStackNavigator();
+
 const Tab = createBottomTabNavigator();
 
 const SCREEN_OPTIONS = {
@@ -103,28 +114,60 @@ function NewPostScreens() {
   );
 }
 
-function Tabs() {
+function FeedScreens() {
   return (
-    <Tab.Navigator
-      initialRouteName="Account"
-      tabBarOptions={{
-        keyboardHidesTabBar: Platform.OS === 'android',
-        activeTintColor: colors.tabBarActive,
-        inactiveTintColor: colors.tabBarInactive,
-        style: commonStyles.tabBar,
-        tabStyle: commonStyles.tab,
-        labelStyle: commonStyles.labelStyle,
-      }}
+    <FeedStack.Navigator
+      headerMode="none"
+      screenOptions={SCREEN_OPTIONS}
     >
-      <Tab.Screen
-        name="Explore"
-        component={ExploreScreens}
-        options={{
-          tabBarLabel: 'Explore',
-          // eslint-disable-next-line react/prop-types
-          tabBarIcon: ({ focused }) => <TabBarIcon icon={ExploreIcon} focused={focused} />,
-        }}
-      />
+      <FeedStack.Screen name="Feed" component={Feed} />
+    </FeedStack.Navigator>
+  );
+}
+
+function EventsScreens() {
+  return (
+    <EventsStack.Navigator
+      headerMode="none"
+      screenOptions={SCREEN_OPTIONS}
+    >
+      {/* TODO: change on correct screen */}
+      <EventsStack.Screen name="Feed" component={Feed} />
+    </EventsStack.Navigator>
+  );
+}
+
+function VotingScreens() {
+  return (
+    <VotingStack.Navigator
+      headerMode="none"
+      screenOptions={SCREEN_OPTIONS}
+    >
+      {/* TODO: change on correct screen */}
+      <VotingStack.Screen name="Feed" component={Feed} />
+    </VotingStack.Navigator>
+  );
+}
+
+function Tabs() {
+  const userType = useSelector(userSelectors.getUserType);
+
+  const navigatorProps = {
+    initialRouteName: userType === USER_TYPES.FIGHTER ? 'Account' : 'Feed',
+    tabBarOptions: {
+      keyboardHidesTabBar: Platform.OS === 'android',
+      activeTintColor: colors.tabBarActive,
+      inactiveTintColor: colors.tabBarInactive,
+      style: commonStyles.tabBar,
+      tabStyle: commonStyles.tab,
+      labelStyle: commonStyles.labelStyle,
+    },
+  };
+
+  const FighterNavigator = () => (
+    <Tab.Navigator
+      {...navigatorProps}
+    >
       <Tab.Screen
         name="Fights"
         component={FightsScreens}
@@ -132,6 +175,15 @@ function Tabs() {
           tabBarLabel: 'Fights',
           // eslint-disable-next-line react/prop-types
           tabBarIcon: ({ focused }) => <TabBarIcon icon={FightsIcon} focused={focused} />,
+        }}
+      />
+      <Tab.Screen
+        name="Events"
+        component={EventsScreens}
+        options={{
+          tabBarLabel: 'Events',
+          // eslint-disable-next-line react/prop-types
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={EventsIcon} focused={focused} />,
         }}
       />
       <Tab.Screen
@@ -145,6 +197,15 @@ function Tabs() {
         }}
       />
       <Tab.Screen
+        name="Explore"
+        component={ExploreScreens}
+        options={{
+          tabBarLabel: 'Explore',
+          // eslint-disable-next-line react/prop-types
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={ExploreIcon} focused={focused} />,
+        }}
+      />
+      <Tab.Screen
         name="Account"
         component={AccountScreens}
         options={{
@@ -154,6 +215,62 @@ function Tabs() {
         }}
       />
     </Tab.Navigator>
+  );
+
+  const FanNavigator = () => (
+    <Tab.Navigator
+      {...navigatorProps}
+    >
+      <Tab.Screen
+        name="Feed"
+        component={FeedScreens}
+        options={{
+          tabBarLabel: 'Feed',
+          // eslint-disable-next-line react/prop-types
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={FeedIcon} focused={focused} />,
+        }}
+      />
+      <Tab.Screen
+        name="Explore"
+        component={ExploreScreens}
+        options={{
+          tabBarLabel: 'Explore',
+          // eslint-disable-next-line react/prop-types
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={ExploreIcon} focused={focused} />,
+        }}
+      />
+      <Tab.Screen
+        name="Events"
+        component={EventsScreens}
+        options={{
+          tabBarLabel: 'Events',
+          // eslint-disable-next-line react/prop-types
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={EventsIcon} focused={focused} />,
+        }}
+      />
+      <Tab.Screen
+        name="Voting"
+        component={VotingScreens}
+        options={{
+          tabBarLabel: 'Voting',
+          // eslint-disable-next-line react/prop-types
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={VotingIcon} focused={focused} />,
+        }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={AccountScreens}
+        options={{
+          tabBarLabel: 'Account',
+          // eslint-disable-next-line react/prop-types
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={AccountIcon} focused={focused} />,
+        }}
+      />
+    </Tab.Navigator>
+  );
+
+  return (
+    userType === USER_TYPES.FIGHTER ? <FighterNavigator /> : <FanNavigator />
   );
 }
 

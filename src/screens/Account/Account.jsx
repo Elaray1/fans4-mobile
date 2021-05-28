@@ -55,7 +55,7 @@ function Account() {
       const [
         { count: fetchedPostsCount },
         { count: fetchedFansCount },
-        fetchedPosts,
+        { posts: fetchedPosts },
       ] = await Promise.all([
         postApi.getPostsCount(),
         userApi.getUsersCount({ myFans: true }),
@@ -120,6 +120,8 @@ function Account() {
         text={item.text}
         status={item.status}
         checkedOn={item.checkedOn}
+        likesCount={item.likedUserIds.length}
+        commentsCount={item.commentsCount}
         {...props}
       />
     );
@@ -129,7 +131,7 @@ function Account() {
 
   const fetchMorePosts = useCallback(async () => {
     if (page !== INITIAL_PAGE && !isAllPostsLoaded) {
-      const newPosts = await postApi.getPosts({
+      const { posts: newPosts } = await postApi.getPosts({
         page,
         perPage: PER_PAGE,
         my: true,

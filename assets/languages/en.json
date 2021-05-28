@@ -314,5 +314,13 @@
     "shareALink": "Share a link",
     "askYourFan": "Ask your fan to scan this QR code or share a link.",
     "invitation": "invitation"
+  },
+  "Feed": {
+    "feed": "Feed",
+    "noSubscriptionsYet": "No subscriptions, yet",
+    "onceYouSubscribeToAFighterYouWillSeeAllOfThatFightersContentHere": "Once you subscribe to a fighter you will see all of that fighter's content here.",
+    "noPostsYet": "No posts, yet",
+    "onceFighterWillAddPostsYouWillSeeThemHere": "Once fighter will add posts, you will see them here.",
+    "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh."
   }
 }
