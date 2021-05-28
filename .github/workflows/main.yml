@@ -1,4 +1,4 @@
-name: Build Android
+name: Build Android and iOS staging build
 on: 
   push:
     branches:
@@ -34,14 +34,63 @@ jobs:
       - name: Distribute app via Firebase App Distribution
         env:
           firebaseToken: ${{ secrets.FIREBASE_TOKEN }}
-          firebaseGroups: ${{ secrets.FIREBASE_GROUPS }}
-          firebaseAppId: ${{ secrets.FIREBASE_APP_ID }}
+          firebaseGroups: ${{ secrets.FIREBASE_ANDROID_GROUPS }}
+          firebaseAppId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
           notes: ${{ github.event.head_commit.message }}
         run: |
           yarn global add firebase-tools
           export PATH="$(yarn global bin):$PATH"
           firebase \
             appdistribution:distribute android/app/build/outputs/apk/releaseStaging/app-releaseStaging.apk \
+            --app $firebaseAppId \
+            --release-notes "$notes" \
+            --groups "$firebaseGroups" \
+            --token "$firebaseToken"
+
+  build-ios:
+    name: Build iOS IPA
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+        
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://${{ secrets.PAT_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Install pod dependencies
+        run: |
+          cd ios && pod install
+
+      - name: Build app
+        run: |
+          xcodebuild -workspace fans4.xcworkspace -scheme fans4-staging archive -archivePath fans4-staging.xcarchive -allowProvisioningUpdates
+          xcodebuild -exportArchive -archivePath ./fans4-staging.xcarchive -exportPath . -exportOptionsPlist fans4/Info.plist
+          cd ..
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: fans4.ipa
+          path: ios/
+
+
+      - name: Distribute app via Firebase App Distribution
+        env:
+          firebaseToken: ${{ secrets.FIREBASE_TOKEN }}
+          firebaseGroups: ${{ secrets.FIREBASE_IOS_GROUPS }}
+          firebaseAppId: ${{ secrets.FIREBASE_IOS_APP_ID }}
+          notes: ${{ github.event.head_commit.message }}
+        run: |
+          yarn global add firebase-tools
+          export PATH="$(yarn global bin):$PATH"
+          firebase \
+            appdistribution:distribute ios/fans4.ipa \
             --app $firebaseAppId \
             --release-notes "$notes" \
             --groups "$firebaseGroups" \
