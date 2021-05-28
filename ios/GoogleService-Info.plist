@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>57971665876-a2loma82a49g8stvtu2162oighftb9cf.apps.googleusercontent.com</string>
+	<string>57971665876-393ec9q6g9s5rviu1l2veg0jhcfr4bfl.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.57971665876-a2loma82a49g8stvtu2162oighftb9cf</string>
+	<string>com.googleusercontent.apps.57971665876-393ec9q6g9s5rviu1l2veg0jhcfr4bfl</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBMOQ4goUmEkZAJ7ZUvPes5Fhm3Cgqq1uY</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.fans4</string>
+	<string>com.paralect.fans4</string>
 	<key>PROJECT_ID</key>
 	<string>fans4-33cbe</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:57971665876:ios:01864e6c0f8d4b36710441</string>
+	<string>1:57971665876:ios:b1725178edd8c14d710441</string>
 </dict>
 </plist>

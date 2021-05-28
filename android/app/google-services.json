@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:57971665876:android:81b4f3ac8c592326710441",
+        "mobilesdk_app_id": "1:57971665876:android:545b3c8cfa391909710441",
         "android_client_info": {
-          "package_name": "com.fans4"
+          "package_name": "com.paralect.fans4"
         }
       },
       "oauth_client": [
@@ -29,6 +29,13 @@
             {
               "client_id": "57971665876-q673pgsk16mnh50td4881adb0v71eh0f.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "57971665876-a2loma82a49g8stvtu2162oighftb9cf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fans4"
+              }
             }
           ]
         }

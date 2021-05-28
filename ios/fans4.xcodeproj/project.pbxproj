@@ -13,7 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		4E018D3E96C118CFDF997C87 /* libPods-fans4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91247A77CB5989263595F6A4 /* libPods-fans4.a */; };
 		63D5C2144E024511AD4A902F /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60E7A83B4D764378BF1387B8 /* NotoSans-Bold.ttf */; };
-		6DEA13B9261DAE5F000119B3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DEA13B8261DAE5F000119B3 /* GoogleService-Info.plist */; };
+		6D312257266155FF0058520E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D312256266155FF0058520E /* GoogleService-Info.plist */; };
 		7E6707E4FE3FC481F796F4AE /* libPods-fans4-fans4Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 854115D88383EDB01DFAEE8A /* libPods-fans4-fans4Tests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F61FA07EEF1D4872B0331DB7 /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A5741374B944335BFB9E535 /* NotoSans-Regular.ttf */; };
@@ -43,7 +43,7 @@
 		3BF4A783CDD3F8AFC18A8797 /* Pods-fans4-fans4Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4-fans4Tests.release.xcconfig"; path = "Target Support Files/Pods-fans4-fans4Tests/Pods-fans4-fans4Tests.release.xcconfig"; sourceTree = "<group>"; };
 		4F4054BFF500972123FEEF15 /* Pods-fans4.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4.debug.xcconfig"; path = "Target Support Files/Pods-fans4/Pods-fans4.debug.xcconfig"; sourceTree = "<group>"; };
 		60E7A83B4D764378BF1387B8 /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSans-Bold.ttf"; path = "../assets/fonts/NotoSans-Bold.ttf"; sourceTree = "<group>"; };
-		6DEA13B8261DAE5F000119B3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6D312256266155FF0058520E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DEA1402261DBC43000119B3 /* fans4.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = fans4.entitlements; path = fans4/fans4.entitlements; sourceTree = "<group>"; };
 		77FFDCFA00E96E62BA95EDC7 /* Pods-fans4.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4.release.xcconfig"; path = "Target Support Files/Pods-fans4/Pods-fans4.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = fans4/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -93,9 +93,9 @@
 		13B07FAE1A68108700A75B9A /* fans4 */ = {
 			isa = PBXGroup;
 			children = (
+				6D312256266155FF0058520E /* GoogleService-Info.plist */,
 				6DEA1402261DBC43000119B3 /* fans4.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				6DEA13B8261DAE5F000119B3 /* GoogleService-Info.plist */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -264,7 +264,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				6DEA13B9261DAE5F000119B3 /* GoogleService-Info.plist in Resources */,
+				6D312257266155FF0058520E /* GoogleService-Info.plist in Resources */,
 				63D5C2144E024511AD4A902F /* NotoSans-Bold.ttf in Resources */,
 				F61FA07EEF1D4872B0331DB7 /* NotoSans-Regular.ttf in Resources */,
 			);

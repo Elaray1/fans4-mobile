@@ -140,7 +140,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.fans4"
+        applicationId "com.paralect.fans4"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
