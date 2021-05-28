@@ -31,4 +31,18 @@ jobs:
           name: app-releaseStaging.apk
           path: android/app/build/outputs/apk/releaseStaging/
 
+      - name: Distribute app via Firebase App Distribution
+        env:
+          firebaseToken: ${{ secrets.FIREBASE_TOKEN }}
+          firebaseGroups: ${{ secrets.FIREBASE_GROUPS }}
+          firebaseAppId: ${{ secrets.FIREBASE_APP_ID }}
+          notes: ${{ github.event.head_commit.message }}
+        run: |
+          npm i -g firebase-tools
+          firebase \
+            appdistribution:distribute android/app/build/outputs/apk/releaseStaging/app-releaseStaging.apk \
+            --app $firebaseAppId \
+            --release-notes "$notes" \
+            --groups "$firebaseGroups" \
+            --token "$firebaseToken"
 
