@@ -38,8 +38,8 @@ jobs:
           firebaseAppId: ${{ secrets.FIREBASE_APP_ID }}
           notes: ${{ github.event.head_commit.message }}
         run: |
-          npm i -g firebase-tools
-          echo "export PATH=$PATH:$(npm get prefix)/bin" >> ~/.bashrc
+          yarn global add firebase-tools
+          export PATH="$(yarn global bin):$PATH"
           firebase \
             appdistribution:distribute android/app/build/outputs/apk/releaseStaging/app-releaseStaging.apk \
             --app $firebaseAppId \
