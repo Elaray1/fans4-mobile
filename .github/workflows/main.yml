@@ -69,6 +69,8 @@ jobs:
 
       - name: Build app
         run: |
+          ls
+          cd ios
           xcodebuild -workspace fans4.xcworkspace -scheme fans4-staging archive -archivePath fans4-staging.xcarchive -allowProvisioningUpdates
           xcodebuild -exportArchive -archivePath ./fans4-staging.xcarchive -exportPath . -exportOptionsPlist fans4/Info.plist
           cd ..
