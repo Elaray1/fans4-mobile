@@ -2,7 +2,7 @@ name: Build Android and iOS staging build
 on: 
   push:
     branches:
-      - ios
+      - staging
 
 jobs:
   # build-android:
