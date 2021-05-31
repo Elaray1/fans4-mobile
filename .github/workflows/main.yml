@@ -60,7 +60,8 @@ jobs:
         run: >
           git config --global url."https://${{ secrets.PAT_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       
-      - uses: actions/cache@v2
+      - name: Cache npm modules
+        uses: actions/cache@v2
         id: cache-npm
         with:
           path: node_modules
@@ -89,8 +90,7 @@ jobs:
 
 
       - name: Setup provisioning profile
-        run: sudo ./.github/secrets/decrypt_secrets.sh
-        shell: bash
+        run: sh ./.github/secrets/decrypt_secrets.sh
         env:
           IOS_PROFILE_KEY: ${{ secrets.GPG_PASS }}
           IOS_CERT_PASS: ${{ secrets.CERTIFICATE_PASS }}
