@@ -2,50 +2,50 @@ name: Build Android and iOS staging build
 on: 
   push:
     branches:
-      - main
+      - ios
 
 jobs:
-  build-android:
-    name: Build Android APK
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
+  # build-android:
+  #   name: Build Android APK
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         persist-credentials: false
         
-      - name: Reconfigure git to use HTTP authentication
-        run: >
-          git config --global url."https://${{ secrets.PAT_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+  #     - name: Reconfigure git to use HTTP authentication
+  #       run: >
+  #         git config --global url."https://${{ secrets.PAT_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
 
-      - name: Install npm dependencies
-        run: npm ci
+  #     - name: Install npm dependencies
+  #       run: npm ci
 
-      - name: Build Android Release
-        run: |
-          cd android && ./gradlew assembleReleaseStaging -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
+  #     - name: Build Android Release
+  #       run: |
+  #         cd android && ./gradlew assembleReleaseStaging -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-releaseStaging.apk
-          path: android/app/build/outputs/apk/releaseStaging/
+  #     - name: Upload Artifact
+  #       uses: actions/upload-artifact@v1
+  #       with:
+  #         name: app-releaseStaging.apk
+  #         path: android/app/build/outputs/apk/releaseStaging/
 
-      - name: Distribute app via Firebase App Distribution
-        env:
-          firebaseToken: ${{ secrets.FIREBASE_TOKEN }}
-          firebaseGroups: ${{ secrets.FIREBASE_ANDROID_GROUPS }}
-          firebaseAppId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
-          notes: ${{ github.event.head_commit.message }}
-        run: |
-          yarn global add firebase-tools
-          export PATH="$(yarn global bin):$PATH"
-          firebase \
-            appdistribution:distribute android/app/build/outputs/apk/releaseStaging/app-releaseStaging.apk \
-            --app $firebaseAppId \
-            --release-notes "$notes" \
-            --groups "$firebaseGroups" \
-            --token "$firebaseToken"
+  #     - name: Distribute app via Firebase App Distribution
+  #       env:
+  #         firebaseToken: ${{ secrets.FIREBASE_TOKEN }}
+  #         firebaseGroups: ${{ secrets.FIREBASE_ANDROID_GROUPS }}
+  #         firebaseAppId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+  #         notes: ${{ github.event.head_commit.message }}
+  #       run: |
+  #         yarn global add firebase-tools
+  #         export PATH="$(yarn global bin):$PATH"
+  #         firebase \
+  #           appdistribution:distribute android/app/build/outputs/apk/releaseStaging/app-releaseStaging.apk \
+  #           --app $firebaseAppId \
+  #           --release-notes "$notes" \
+  #           --groups "$firebaseGroups" \
+  #           --token "$firebaseToken"
 
   build-ios:
     name: Build iOS IPA
@@ -67,13 +67,21 @@ jobs:
         run: |
           cd ios && pod install
 
+      - name: Install gpg
+        run: brew install gnupg
+
+
+      - name: Setup provisioning profile
+        run: ./.github/secrets/decrypt_secrets.sh
+        env:
+          IOS_PROFILE_KEY: ${{ secrets.GPG_PASS }}
+          IOS_CERT_PASS: ${{ secrets.CERTIFICATE_PASS }}
+
       - name: Build app
         run: |
-          ls
           cd ios
-          xcodebuild -workspace fans4.xcworkspace -scheme fans4-staging archive -archivePath fans4-staging.xcarchive -allowProvisioningUpdates
+          xcodebuild -workspace fans4.xcworkspace -scheme fans4-staging archive -archivePath fans4-staging.xcarchive -allowProvisioningUpdates PROVISIONING_PROFILE="40818aae-aee5-4efd-93ff-8783558108ed"
           xcodebuild -exportArchive -archivePath ./fans4-staging.xcarchive -exportPath . -exportOptionsPlist fans4/Info.plist
-          cd ..
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
