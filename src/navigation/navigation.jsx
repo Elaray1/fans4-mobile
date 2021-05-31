@@ -8,7 +8,7 @@ import { ToastProvider } from 'react-native-fast-toast';
 import cookies from '@react-native-cookies/cookies';
 import 'react-native-gesture-handler';
 
-import { STORAGE_KEYS } from 'helpers/constants';
+import { STORAGE_KEYS, PUSH_NOTIFICATION_TYPES } from 'helpers/constants';
 import { getItem } from 'helpers/storage';
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
 import getInitialScreen from 'helpers/getInitialScreen';
@@ -102,6 +102,14 @@ const connectPushNotifications = (userAuthenticated) => {
 
   const onOpenNotification = async (message) => {
     console.log('[App] onOpenNotification: ', message);
+    switch (message.data.type) {
+      case PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED: {
+        rootNavigation.navigate('Account');
+        break;
+      }
+      default:
+        break;
+    }
   };
 
   (async () => {
