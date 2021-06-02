@@ -12,6 +12,9 @@ export default StyleSheet.create({
     ...commonStyles.screenContent,
     marginTop: 30,
   },
+  scrollView: {
+    marginBottom: 10,
+  },
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'space-between',
