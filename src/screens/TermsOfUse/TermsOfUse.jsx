@@ -31,6 +31,7 @@ function TermsOfUse() {
       <View style={styles.content}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
+          style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
           <Text style={styles.title}>{t('TermsOfUse.firstParagraphTitle')}</Text>
