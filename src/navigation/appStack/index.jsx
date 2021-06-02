@@ -1,0 +1,117 @@
+import React, { useEffect } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { useSelector } from 'react-redux';
+
+import EmailConfirmation from 'screens/EmailConfirmation';
+import BiographicalData from 'screens/BiographicalData';
+import PersonalInfo from 'screens/PersonalInfo';
+import TermsOfUse from 'screens/TermsOfUse';
+import VerificationPending from 'screens/VerificationPending';
+import VerificationSuccessful from 'screens/VerificationSuccessful';
+import VerificationFailed from 'screens/VerificationFailed';
+import OnBoarding1 from 'screens/OnBoarding1';
+import OnBoarding2 from 'screens/OnBoarding2';
+import OnBoarding3 from 'screens/OnBoarding3';
+import ContactAdmin from 'screens/ContactAdmin';
+import Support from 'screens/Support';
+import ChangeBiography from 'screens/ChangeBiography';
+import AccountInformation from 'screens/AccountInformation';
+import AccountBlocked from 'screens/AccountBlocked';
+import Security from 'screens/Security';
+import PasswordUpdated from 'screens/PasswordUpdated';
+import ChangePassword from 'screens/ChangePassword';
+import ChangeEmail from 'screens/ChangeEmail';
+import ConfirmYourEmailAddress from 'screens/ConfirmYourEmailAddress';
+import Fans from 'screens/Fans';
+import Fighter from 'screens/Fighter';
+import InviteAFan from 'screens/InviteAFan';
+
+import * as userSelectors from 'resources/user/user.selectors';
+
+import * as socketService from 'services/socket.service';
+
+import * as RootNavigation from 'helpers/rootNavigation';
+
+import colors from 'themes/colors';
+
+import { USER_STATUSES, USER_TYPES } from 'resources/user/user.constants';
+
+import FighterNavigator from 'navigation/appStack/components/fighter';
+import FanNavigator from 'navigation/appStack/components/fan';
+
+const AppStack = createStackNavigator();
+
+const SCREEN_OPTIONS = {
+  cardStyle: {
+    backgroundColor: colors.main,
+  },
+};
+
+function Tabs() {
+  const userType = useSelector(userSelectors.getUserType);
+
+  return (
+    userType === USER_TYPES.FIGHTER ? <FighterNavigator /> : <FanNavigator />
+  );
+}
+
+function AppScreens() {
+  useEffect(() => {
+    socketService.on('user:statusUpdated', (user) => {
+      let screen;
+
+      if (user.status === USER_STATUSES.VERIFIED) {
+        if (user.statusHistory.length === 1) {
+          screen = 'VerificationSuccessful';
+        } else {
+          screen = 'Account';
+        }
+      } else if (user.status === USER_STATUSES.DECLINED) {
+        screen = 'VerificationFailed';
+      } else if (user.status === USER_STATUSES.BLOCKED) {
+        screen = 'AccountBlocked';
+      }
+
+      RootNavigation.resetToScreen('AppStack', screen);
+    });
+  }, []);
+
+  return (
+    <AppStack.Navigator
+      headerMode="none"
+      screenOptions={SCREEN_OPTIONS}
+    >
+
+      {/* <TABS> */}
+      <AppStack.Screen name="Tabs" component={Tabs} />
+      {/* <TABS /> */}
+
+      { /* Screens without tabs */}
+      <AppStack.Screen name="EmailConfirmation" component={EmailConfirmation} />
+      <AppStack.Screen name="BiographicalData" component={BiographicalData} />
+      <AppStack.Screen name="PersonalInfo" component={PersonalInfo} />
+      <AppStack.Screen name="TermsOfUse" component={TermsOfUse} />
+      <AppStack.Screen name="VerificationPending" component={VerificationPending} />
+      <AppStack.Screen name="VerificationSuccessful" component={VerificationSuccessful} />
+      <AppStack.Screen name="VerificationFailed" component={VerificationFailed} />
+      <AppStack.Screen name="OnBoarding1" component={OnBoarding1} />
+      <AppStack.Screen name="OnBoarding2" component={OnBoarding2} />
+      <AppStack.Screen name="OnBoarding3" component={OnBoarding3} />
+      <AppStack.Screen name="ContactAdmin" component={ContactAdmin} />
+      <AppStack.Screen name="Support" component={Support} />
+      <AppStack.Screen name="ChangeBiography" component={ChangeBiography} />
+      <AppStack.Screen name="AccountInformation" component={AccountInformation} />
+      <AppStack.Screen name="AccountBlocked" component={AccountBlocked} />
+      <AppStack.Screen name="Security" component={Security} />
+      <AppStack.Screen name="PasswordUpdated" component={PasswordUpdated} />
+      <AppStack.Screen name="ChangePassword" component={ChangePassword} />
+      <AppStack.Screen name="ChangeEmail" component={ChangeEmail} />
+      <AppStack.Screen name="ConfirmYourEmailAddress" component={ConfirmYourEmailAddress} />
+      <AppStack.Screen name="Fans" component={Fans} />
+      <AppStack.Screen name="Fighter" component={Fighter} />
+      <AppStack.Screen name="InviteAFan" component={InviteAFan} />
+    </AppStack.Navigator>
+  );
+}
+
+export default AppScreens;
