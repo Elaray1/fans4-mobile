@@ -1,17 +1,8 @@
 import React, { useEffect } from 'react';
-import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import AccountIcon from 'assets/icons/tab-bar/account.svg';
-import ExploreIcon from 'assets/icons/tab-bar/explore.svg';
-import FightsIcon from 'assets/icons/tab-bar/fights.svg';
-import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
+import { useSelector } from 'react-redux';
 
 import EmailConfirmation from 'screens/EmailConfirmation';
-import Account from 'screens/Account';
-import Fights from 'screens/Fights';
-import NewPost from 'screens/NewPost';
 import BiographicalData from 'screens/BiographicalData';
 import PersonalInfo from 'screens/PersonalInfo';
 import TermsOfUse from 'screens/TermsOfUse';
@@ -32,26 +23,23 @@ import ChangePassword from 'screens/ChangePassword';
 import ChangeEmail from 'screens/ChangeEmail';
 import ConfirmYourEmailAddress from 'screens/ConfirmYourEmailAddress';
 import Fans from 'screens/Fans';
-import SearchFighters from 'screens/SearchFighters';
 import Fighter from 'screens/Fighter';
 import InviteAFan from 'screens/InviteAFan';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import * as socketService from 'services/socket.service';
 
 import * as RootNavigation from 'helpers/rootNavigation';
 
 import colors from 'themes/colors';
-import { commonStyles } from 'themes/commonStyles';
 
-import TabBarIcon from 'components/TabBarIcon';
-import { USER_STATUSES } from 'resources/user/user.constants';
+import { USER_STATUSES, USER_TYPES } from 'resources/user/user.constants';
+
+import FighterNavigator from 'navigation/appStack/components/fighter';
+import FanNavigator from 'navigation/appStack/components/fan';
 
 const AppStack = createStackNavigator();
-const ExploreStack = createStackNavigator();
-const FightsStack = createStackNavigator();
-const NewPostStack = createStackNavigator();
-const AccountStack = createStackNavigator();
-const Tab = createBottomTabNavigator();
 
 const SCREEN_OPTIONS = {
   cardStyle: {
@@ -59,101 +47,11 @@ const SCREEN_OPTIONS = {
   },
 };
 
-function AccountScreens() {
-  return (
-    <AccountStack.Navigator
-      headerMode="none"
-      screenOptions={SCREEN_OPTIONS}
-    >
-      <AccountStack.Screen name="Account" component={Account} />
-    </AccountStack.Navigator>
-  );
-}
-
-function ExploreScreens() {
-  return (
-    <ExploreStack.Navigator
-      headerMode="none"
-      screenOptions={SCREEN_OPTIONS}
-    >
-      <ExploreStack.Screen name="SearchFighters" component={SearchFighters} />
-    </ExploreStack.Navigator>
-  );
-}
-
-function FightsScreens() {
-  return (
-    <FightsStack.Navigator
-      headerMode="none"
-      screenOptions={SCREEN_OPTIONS}
-    >
-      <FightsStack.Screen name="Fights" component={Fights} />
-    </FightsStack.Navigator>
-  );
-}
-
-function NewPostScreens() {
-  return (
-    <NewPostStack.Navigator
-      headerMode="none"
-      screenOptions={SCREEN_OPTIONS}
-    >
-      <NewPostStack.Screen name="NewPost" component={NewPost} />
-    </NewPostStack.Navigator>
-  );
-}
-
 function Tabs() {
+  const userType = useSelector(userSelectors.getUserType);
+
   return (
-    <Tab.Navigator
-      initialRouteName="Account"
-      tabBarOptions={{
-        keyboardHidesTabBar: Platform.OS === 'android',
-        activeTintColor: colors.tabBarActive,
-        inactiveTintColor: colors.tabBarInactive,
-        style: commonStyles.tabBar,
-        tabStyle: commonStyles.tab,
-        labelStyle: commonStyles.labelStyle,
-      }}
-    >
-      <Tab.Screen
-        name="Explore"
-        component={ExploreScreens}
-        options={{
-          tabBarLabel: 'Explore',
-          // eslint-disable-next-line react/prop-types
-          tabBarIcon: ({ focused }) => <TabBarIcon icon={ExploreIcon} focused={focused} />,
-        }}
-      />
-      <Tab.Screen
-        name="Fights"
-        component={FightsScreens}
-        options={{
-          tabBarLabel: 'Fights',
-          // eslint-disable-next-line react/prop-types
-          tabBarIcon: ({ focused }) => <TabBarIcon icon={FightsIcon} focused={focused} />,
-        }}
-      />
-      <Tab.Screen
-        name="NewPost"
-        component={NewPostScreens}
-        options={{
-          tabBarLabel: 'New post',
-          tabBarVisible: false,
-          // eslint-disable-next-line react/prop-types
-          tabBarIcon: ({ focused }) => <TabBarIcon icon={NewPostIcon} focused={focused} />,
-        }}
-      />
-      <Tab.Screen
-        name="Account"
-        component={AccountScreens}
-        options={{
-          tabBarLabel: 'Account',
-          // eslint-disable-next-line react/prop-types
-          tabBarIcon: ({ focused }) => <TabBarIcon icon={AccountIcon} focused={focused} />,
-        }}
-      />
-    </Tab.Navigator>
+    userType === USER_TYPES.FIGHTER ? <FighterNavigator /> : <FanNavigator />
   );
 }
 
