@@ -10,7 +10,7 @@ import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
 import EventsIcon from 'assets/icons/tab-bar/events.svg';
 
 import Fights from 'screens/Fights';
-import Feed from 'screens/Feed';
+import Events from 'screens/Events';
 import Account from 'screens/Account';
 import NewPost from 'screens/NewPost';
 import SearchFighters from 'screens/SearchFighters';
@@ -51,8 +51,7 @@ function EventsScreens() {
       headerMode="none"
       screenOptions={SCREEN_OPTIONS}
     >
-      {/* TODO: change on correct screen */}
-      <EventsStack.Screen name="Feed" component={Feed} />
+      <EventsStack.Screen name="Events" component={Events} />
     </EventsStack.Navigator>
   );
 }

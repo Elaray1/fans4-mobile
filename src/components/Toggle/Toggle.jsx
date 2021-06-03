@@ -7,45 +7,49 @@ import Text from 'components/Text';
 import styles from './Toggle.styles';
 
 function Toggle({
-  leftOption,
-  rightOption,
-  selectedOptionId,
+  items,
+  selectedItemId,
   onSelect,
 }) {
-  const onOptionPress = useCallback(id => () => onSelect(id), [onSelect]);
+  const onItemPress = useCallback((item) => {
+    if (item.onSelect) {
+      item.onSelect();
+    }
+    onSelect(item.id);
+  }, [onSelect]);
 
   return (
     <View style={styles.wrapper}>
-      <TouchableOpacity
-        style={[styles.option, selectedOptionId === leftOption.id && styles.selectedOption]}
-        activeOpacity={1}
-        onPress={onOptionPress(leftOption.id)}
-      >
-        <Text style={styles.optionText}>{leftOption.value}</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.option, selectedOptionId === rightOption.id && styles.selectedOption]}
-        activeOpacity={1}
-        onPress={onOptionPress(rightOption.id)}
-      >
-        <Text style={styles.optionText}>{rightOption.value}</Text>
-      </TouchableOpacity>
+      {items.map(item => (
+        <TouchableOpacity
+          key={item.id}
+          style={[
+            styles.option,
+            { width: `${100 / items.length}%` },
+            item.id === selectedItemId && styles.selectedOption,
+          ]}
+          activeOpacity={1}
+          onPress={() => onItemPress(item)}
+        >
+          <Text style={styles.optionText}>{item.value}</Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 }
 
 Toggle.propTypes = {
-  leftOption: PropTypes.shape({
+  items: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
-  }).isRequired,
-  rightOption: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-  }).isRequired,
-  selectedOptionId: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired,
+    onSelect: PropTypes.func,
+  })).isRequired,
+  selectedItemId: PropTypes.string.isRequired,
+  onSelect: PropTypes.func,
+};
+
+Toggle.defaultProps = {
+  onSelect: () => null,
 };
 
 
