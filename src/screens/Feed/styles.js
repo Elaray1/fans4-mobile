@@ -26,6 +26,7 @@ export default StyleSheet.create({
   },
   titleText: {
     marginBottom: 20,
+    fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
   },
   text: {

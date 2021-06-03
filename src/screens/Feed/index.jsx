@@ -47,7 +47,7 @@ function Feed() {
       currentPosts = posts;
     }
 
-    if (page === 1 || posts.length < totalCount) {
+    if (page === 1 || currentPosts.length < totalCount) {
       setIsLoading(true);
       try {
         const {
@@ -86,7 +86,7 @@ function Feed() {
 
   const renderItem = ({ item }) => {
     return (
-      <View style={styles.post}>
+      <View style={styles.post} key={item._id}>
         <Post
           _id={item._id}
           media={item.media}
