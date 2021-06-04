@@ -57,7 +57,7 @@ function EventFights({ route }) {
           perPage: PER_PAGE_COUNT,
           eventId,
         });
-        setPage(page + 1);
+        setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setFights([...currentFights, ...fetchedFights]);
       } catch (error) {
@@ -149,21 +149,6 @@ function EventFights({ route }) {
     }
     return <Loader />;
   };
-
-  const Fights = () => (fights.length ? (
-    <FlatList
-      data={fights}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      onEndReachedThreshold={0.3}
-      onEndReached={fetchNewItems}
-      showsVerticalScrollIndicator={false}
-      ListFooterComponent={renderFooter}
-      onRefresh={onRefresh}
-      refreshing={isRefreshing}
-    />
-  ) : null);
-
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -171,7 +156,19 @@ function EventFights({ route }) {
         leftItemType="backArrow"
       />
       <View style={styles.content}>
-        {isLoading ? <Loader /> : <Fights />}
+        {isLoading ? <Loader /> : (Boolean(fights.length) && (
+        <FlatList
+          data={fights}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          onEndReachedThreshold={0.3}
+          onEndReached={fetchNewItems}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={renderFooter}
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
+        />
+        ))}
       </View>
     </SafeAreaView>
   );

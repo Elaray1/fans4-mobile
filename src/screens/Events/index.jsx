@@ -78,6 +78,8 @@ function Events() {
     if (!refresh) {
       fetchingPage = page;
       currentEvents = events;
+    } else {
+      setIsRefreshing(true);
     }
 
     if (page === 1 || currentEvents.length < totalCount) {
@@ -91,13 +93,14 @@ function Events() {
           perPage: PER_PAGE_COUNT,
           eventTypes: eventTypes || selectedToggleItem.eventTypes,
         });
-        setPage(page + 1);
+        setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setEvents([...currentEvents, ...fetchedEvents]);
       } catch (error) {
         showFailure(t('Events.couldntLoadTheEventsPullToRefresh'));
       }
       setIsLoading(false);
+      setIsRefreshing(false);
     }
   }, [events, page, totalCount, showFailure, t, selectedToggleItem.eventTypes]);
 
@@ -173,20 +176,6 @@ function Events() {
     return <Loader />;
   };
 
-  const EventsList = () => (events.length ? (
-    <FlatList
-      data={events}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      onEndReachedThreshold={0.3}
-      onEndReached={fetchNewItems}
-      showsVerticalScrollIndicator={false}
-      ListFooterComponent={renderFooter}
-      onRefresh={onRefresh}
-      refreshing={isRefreshing}
-    />
-  ) : selectedToggleItem.emptyView);
-
   const onToggleSelect = useCallback(async (item) => {
     setSelectedToggleItem(item);
     await fetchNewItems({ refresh: true, eventTypes: item.eventTypes });
@@ -199,7 +188,20 @@ function Events() {
       />
       <View style={styles.content}>
         <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
-        {isLoading ? <Loader /> : <EventsList />}
+        {isRefreshing && <Loader />}
+        {!isRefreshing && (events.length ? (
+          <FlatList
+            data={events}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            onEndReachedThreshold={0.3}
+            onEndReached={fetchNewItems}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={renderFooter}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
+          />
+        ) : selectedToggleItem.emptyView)}
       </View>
     </SafeAreaView>
   );

@@ -57,7 +57,7 @@ function Feed() {
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
         });
-        setPage(page + 1);
+        setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setPosts([...currentPosts, ...fetchedPosts]);
       } catch (error) {
@@ -126,20 +126,11 @@ function Feed() {
     </View>
   );
 
-  const Posts = () => (posts.length ? (
-    <FlatList
-      data={posts}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      onEndReachedThreshold={0.3}
-      onEndReached={fetchNewItems}
-      style={styles.fightersList}
-      showsVerticalScrollIndicator={false}
-      ListFooterComponent={renderFooter}
-      onRefresh={onRefresh}
-      refreshing={isRefreshing}
-    />
-  ) : <NoPosts />);
+  const EmptyView = () => {
+    return (
+      !isLoading ? <NoPosts /> : <Loader />
+    );
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -147,7 +138,22 @@ function Feed() {
         title={t('Feed.feed')}
       />
       <View style={styles.content}>
-        {fightersList?.length ? <Posts /> : <NoSubscriptions />}
+        {isRefreshing && <Loader />}
+        {!isRefreshing && fightersList?.length && (posts.length ? (
+          <FlatList
+            data={posts}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            onEndReachedThreshold={0.3}
+            onEndReached={fetchNewItems}
+            style={styles.fightersList}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={renderFooter}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
+          />
+        ) : <EmptyView />)}
+        {!fightersList?.length && <NoSubscriptions />}
       </View>
     </SafeAreaView>
   );
