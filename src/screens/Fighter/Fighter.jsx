@@ -86,7 +86,9 @@ function Fighter({ route }) {
                     ”
                   </Text>
                   )}
-                  <Text style={styles.location}>{`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}</Text>
+                  <Text style={styles.location}>
+                    {`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
+                  </Text>
                   {fighter.role.fightingStatus
                 && <StatusBadge status={fighter.role.fightingStatus} />
                 }

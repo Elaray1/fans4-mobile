@@ -1,5 +1,8 @@
 import React from 'react';
-import { SafeAreaView, View, StatusBar } from 'react-native';
+import Header from 'components/Header';
+import {
+  SafeAreaView, View, StatusBar, ScrollView,
+} from 'react-native';
 
 import colors from 'themes/colors';
 import Text from 'components/Text';
@@ -10,9 +13,10 @@ function Fights() {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <View style={styles.content}>
+      <Header title="Fights" />
+      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <Text>Fights</Text>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
