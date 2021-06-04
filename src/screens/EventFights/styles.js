@@ -60,9 +60,6 @@ export default StyleSheet.create({
     alignSelf: 'flex-end',
     marginHorizontal: 4,
   },
-  fighter: {
-    alignItems: 'center',
-  },
   line: {
     width: '100%',
     height: 1,
@@ -79,7 +76,7 @@ export default StyleSheet.create({
   },
   winner: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 4,
     left: 23,
     paddingHorizontal: 9,
     paddingVertical: 1,
@@ -93,5 +90,8 @@ export default StyleSheet.create({
   winnerImage: {
     borderWidth: 2,
     borderColor: colors.primary,
+  },
+  firstFighter: {
+    alignItems: 'flex-end',
   },
 });

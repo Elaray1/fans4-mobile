@@ -112,7 +112,7 @@ function Events() {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      await fetchNewItems();
+      await fetchNewItems({ refresh: true });
     };
 
     fetchEvents();

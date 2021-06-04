@@ -1,12 +1,15 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, Image,
+  SafeAreaView, View, FlatList, ActivityIndicator, Image, TouchableOpacity,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 import * as fightApi from 'resources/fight/fight.api';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
@@ -24,6 +27,9 @@ const PER_PAGE_COUNT = 10;
 function EventFights({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
+  const navigation = useNavigation();
+
+  const userId = useSelector(userSelectors.getUserId);
 
   const {
     title,
@@ -67,6 +73,14 @@ function EventFights({ route }) {
     }
   }, [fights, page, totalCount, showFailure, t, eventId]);
 
+  const onFighterPress = useCallback((fighterId) => {
+    if (userId === fighterId) {
+      navigation.navigate('Account');
+    } else {
+      navigation.navigate('Fighter', { _id: fighterId });
+    }
+  }, [navigation, userId]);
+
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
     await fetchNewItems({ refresh: true });
@@ -85,9 +99,13 @@ function EventFights({ route }) {
   const keyExtractor = useCallback(item => item._id, []);
 
   /* eslint-disable react/prop-types */
-  const Fighter = ({ fighter, isWinner }) => {
+  const Fighter = ({ fighter, isWinner, style }) => {
     return (
-      <View style={styles.fighter}>
+      <TouchableOpacity
+        style={[styles.fighter, style]}
+        onPress={() => onFighterPress(fighter._id)}
+        activeOpacity={0.7}
+      >
         <View style={styles.imageContainer}>
           <Image
             style={[styles.photoImage, isWinner && styles.winnerImage]}
@@ -100,9 +118,9 @@ function EventFights({ route }) {
           )}
         </View>
         <Text style={styles.captionText}>
-          {toFixLength({ text: fighter.fullName, length: 15 })}
+          {toFixLength({ text: fighter.fullName, length: 30 })}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -115,11 +133,18 @@ function EventFights({ route }) {
       <View style={styles.fight} key={item._id}>
         <View style={styles.fightersInfo}>
           <View style={styles.fighters}>
-            <Fighter fighter={firstFighter} isWinner={firstFighter._id === item.results?.winnerId} />
+            <Fighter
+              fighter={firstFighter}
+              isWinner={firstFighter._id === item.results?.winnerId}
+              style={styles.firstFighter}
+            />
             <Text style={[styles.captionText, styles.vs]}>
               {t('EventFights.vs')}
             </Text>
-            <Fighter fighter={secondFighter} isWinner={secondFighter._id === item.results?.winnerId} />
+            <Fighter
+              fighter={secondFighter}
+              isWinner={secondFighter._id === item.results?.winnerId}
+            />
           </View>
           <View style={styles.line} />
           {isWinner
