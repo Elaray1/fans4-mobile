@@ -1,24 +1,20 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, Image, TouchableOpacity,
+  SafeAreaView, View, FlatList, ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
 
 import * as fightApi from 'resources/fight/fight.api';
 
-import * as userSelectors from 'resources/user/user.selectors';
-
 import Header from 'components/Header';
-import Text from 'components/Text';
+import Fight from 'components/Fight';
 
 import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
 
-import { toFixLength } from 'helpers/modifyText';
+import { EVENT_FIGHT_STATUSES, FIGHT_STATUSES } from 'resources/fight/fight.constants';
 
 import styles from './styles';
 
@@ -27,9 +23,6 @@ const PER_PAGE_COUNT = 10;
 function EventFights({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
-  const navigation = useNavigation();
-
-  const userId = useSelector(userSelectors.getUserId);
 
   const {
     title,
@@ -52,7 +45,7 @@ function EventFights({ route }) {
       currentFights = fights;
     }
 
-    if (page === 1 || currentFights.length < totalCount) {
+    if (fetchingPage === 1 || currentFights.length < totalCount) {
       setIsLoading(true);
       try {
         const {
@@ -73,14 +66,6 @@ function EventFights({ route }) {
     }
   }, [fights, page, totalCount, showFailure, t, eventId]);
 
-  const onFighterPress = useCallback((fighterId) => {
-    if (userId === fighterId) {
-      navigation.navigate('Account');
-    } else {
-      navigation.navigate('Fighter', { _id: fighterId });
-    }
-  }, [navigation, userId]);
-
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
     await fetchNewItems({ refresh: true });
@@ -98,71 +83,12 @@ function EventFights({ route }) {
 
   const keyExtractor = useCallback(item => item._id, []);
 
-  /* eslint-disable react/prop-types */
-  const Fighter = ({ fighter, isWinner, style }) => {
-    return (
-      <TouchableOpacity
-        style={[styles.fighter, style]}
-        onPress={() => onFighterPress(fighter._id)}
-        activeOpacity={0.7}
-      >
-        <View style={styles.imageContainer}>
-          <Image
-            style={[styles.photoImage, isWinner && styles.winnerImage]}
-            source={{ uri: fighter.avatarUrl }}
-          />
-          {isWinner && (
-          <View style={styles.winner}>
-            <Text style={styles.winnerText}>{t('EventFights.winner')}</Text>
-          </View>
-          )}
-        </View>
-        <Text style={styles.captionText}>
-          {toFixLength({ text: fighter.fullName, length: 30 })}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-
   const renderItem = ({ item }) => {
-    const [firstFighter, secondFighter] = item.fighters;
-    const location = `${item.event.location.cityName}, ${item.event.location.stateCode}`;
-    const isWinner = Boolean(item.results?.winnerId);
-
     return (
-      <View style={styles.fight} key={item._id}>
-        <View style={styles.fightersInfo}>
-          <View style={styles.fighters}>
-            <Fighter
-              fighter={firstFighter}
-              isWinner={firstFighter._id === item.results?.winnerId}
-              style={styles.firstFighter}
-            />
-            <Text style={[styles.captionText, styles.vs]}>
-              {t('EventFights.vs')}
-            </Text>
-            <Fighter
-              fighter={secondFighter}
-              isWinner={secondFighter._id === item.results?.winnerId}
-            />
-          </View>
-          <View style={styles.line} />
-          {isWinner
-            ? (
-              <View>
-                <Text style={styles.text}>
-                  {`Round ${item.results.roundNumber}, ${moment.duration().asMinutes()}, ${item.results.winMethod}`}
-                </Text>
-              </View>
-            )
-            : (
-              <View style={styles.location}>
-                <Text style={styles.text}>{location}</Text>
-                <Text style={styles.text}>{location}</Text>
-              </View>
-            )}
-        </View>
-      </View>
+      <Fight
+        fight={item}
+        status={item.status === FIGHT_STATUSES.PAST ? EVENT_FIGHT_STATUSES.PAST : EVENT_FIGHT_STATUSES.UPCOMING}
+      />
     );
   };
 

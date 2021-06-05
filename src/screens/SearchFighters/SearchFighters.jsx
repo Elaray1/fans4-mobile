@@ -40,7 +40,7 @@ function SearchFighters() {
       currentFighters = fighters;
     }
 
-    if (page === 1 || fighters.length < totalCount) {
+    if (fetchingPage === 1 || fighters.length < totalCount) {
       setIsLoading(true);
       try {
         const {

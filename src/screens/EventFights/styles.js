@@ -11,13 +11,6 @@ export default StyleSheet.create({
     ...commonStyles.screenContent,
     marginTop: 30,
   },
-  fight: {
-    borderRadius: 5,
-    marginBottom: 10,
-    backgroundColor: colors.gray,
-    paddingVertical: 16,
-    paddingHorizontal: 11.5,
-  },
   noSubscriptions: {
     flex: 1,
     alignItems: 'center',
@@ -39,37 +32,8 @@ export default StyleSheet.create({
     color: colors.textSecondary,
     fontWeight: fonts.weight.medium,
   },
-  photoImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 5,
-    marginBottom: 8,
-  },
-  fightersInfo: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  fighters: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   captionText: {
     fontSize: fonts.size.caption,
-  },
-  vs: {
-    alignSelf: 'flex-end',
-    marginHorizontal: 4,
-  },
-  line: {
-    width: '100%',
-    height: 1,
-    marginVertical: 12,
-    backgroundColor: colors.line,
-  },
-  location: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   imageContainer: {
     position: 'relative',
@@ -90,8 +54,5 @@ export default StyleSheet.create({
   winnerImage: {
     borderWidth: 2,
     borderColor: colors.primary,
-  },
-  firstFighter: {
-    alignItems: 'flex-end',
   },
 });

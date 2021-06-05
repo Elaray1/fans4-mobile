@@ -42,7 +42,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 4,
-    backgroundColor: colors.buttonNotification,
+    backgroundColor: colors.primary012,
     borderRadius: 5,
   },
   checkmarkBox: {

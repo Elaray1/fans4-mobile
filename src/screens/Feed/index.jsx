@@ -47,7 +47,7 @@ function Feed() {
       currentPosts = posts;
     }
 
-    if (page === 1 || currentPosts.length < totalCount) {
+    if (fetchingPage === 1 || currentPosts.length < totalCount) {
       setIsLoading(true);
       try {
         const {

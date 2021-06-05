@@ -18,6 +18,7 @@ import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
 
+import { toLocalDateAndTime } from 'helpers/toLocalTime';
 import { EVENT_STATUSES } from 'resources/event/event.constants';
 
 import styles from './styles';
@@ -36,19 +37,12 @@ function Events() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const UpcomingEmptyView = () => (
+  // eslint-disable-next-line react/prop-types
+  const EmptyView = ({ title, text }) => (
     <View style={styles.emptyView}>
       <View style={styles.illustration} />
-      <Text style={styles.titleText}>{t('Events.noEventsYet')}</Text>
-      <Text style={styles.text}>{t('Events.onceEventsAreScheduledYouWillSeeThemHere')}</Text>
-    </View>
-  );
-
-  const PastEmptyView = () => (
-    <View style={styles.emptyView}>
-      <View style={styles.illustration} />
-      <Text style={styles.titleText}>{t('Events.noEventsYet')}</Text>
-      <Text style={styles.text}>{t('Events.onceYouParticipateInAnEventItWillBeShownOnThisPage')}</Text>
+      <Text style={styles.titleText}>{title}</Text>
+      <Text style={styles.text}>{text}</Text>
     </View>
   );
 
@@ -58,13 +52,19 @@ function Events() {
         id: '1',
         value: t('Events.upcoming'),
         eventTypes: [EVENT_STATUSES.UPCOMING, EVENT_STATUSES.CANCELED],
-        emptyView: <UpcomingEmptyView />,
+        emptyView: {
+          title: t('Events.noEventsYet'),
+          text: t('Events.onceEventsAreScheduledYouWillSeeThemHere'),
+        },
       },
       {
         id: '2',
         value: t('Events.past'),
         eventTypes: [EVENT_STATUSES.PAST],
-        emptyView: <PastEmptyView />,
+        emptyView: {
+          title: t('Events.noEventsYet'),
+          text: t('Events.onceYouParticipateInAnEventItWillBeShownOnThisPage'),
+        },
       },
     ];
   }, [t]);
@@ -82,7 +82,7 @@ function Events() {
       setIsRefreshing(true);
     }
 
-    if (page === 1 || currentEvents.length < totalCount) {
+    if (fetchingPage === 1 || currentEvents.length < totalCount) {
       setIsLoading(true);
       try {
         const {
@@ -126,11 +126,6 @@ function Events() {
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
-    const eventDate = moment(item.date).tz(item.location.timezone);
-
-    const currentYear = moment().tz(item.location.timezone).year();
-    const eventYear = eventDate.year();
-
     return (
       <TouchableOpacity
         onPress={() => onEventPress(item)}
@@ -152,13 +147,7 @@ function Events() {
         </View>
         <View>
           <Text style={styles.titleText}>{item.name}</Text>
-          <Text style={styles.text}>
-            {eventDate.format(`ddd, MMM DD${currentYear !== eventYear ? ', YYYY' : ''}`)}
-            {' '}
-            /
-            {' '}
-            {eventDate.format('h:mm a z')}
-          </Text>
+          <Text style={styles.text}>{toLocalDateAndTime(item)}</Text>
           <Text style={styles.text}>
             {`${item.location.cityName}, ${item.location.stateCode}`}
           </Text>
@@ -201,7 +190,7 @@ function Events() {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-        ) : selectedToggleItem.emptyView)}
+        ) : <EmptyView title={selectedToggleItem.emptyView.title} text={selectedToggleItem.emptyView.text} />)}
       </View>
     </SafeAreaView>
   );

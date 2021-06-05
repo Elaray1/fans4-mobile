@@ -30,7 +30,7 @@ const colors = {
   disabledBackground: '#F8F9FA', // need to change
 
   clearSearch: '#DADADA',
-  buttonNotification: 'rgba(106, 125, 221, 0.12)',
+  primary012: 'rgba(106, 125, 221, 0.12)',
 
   errorBackground: 'rgba(243, 76, 76, 0.12)',
   errorText: '#F34C4C',
