@@ -2,7 +2,7 @@ import React, {
   useState, useCallback, useEffect, useMemo,
 } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -167,7 +167,15 @@ function Fights() {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-        ) : <EmptyView title={selectedToggleItem.emptyView.title} text={selectedToggleItem.emptyView.text} />)}
+        ) : (
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+            keyboardShouldPersistTaps="handled"
+          >
+            <EmptyView title={selectedToggleItem.emptyView.title} text={selectedToggleItem.emptyView.text} />
+          </ScrollView>
+        ))}
       </View>
     </SafeAreaView>
   );

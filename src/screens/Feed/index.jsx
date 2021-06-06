@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -152,7 +152,15 @@ function Feed() {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-        ) : <EmptyView />)}
+        ) : (
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+            keyboardShouldPersistTaps="handled"
+          >
+            <EmptyView />
+          </ScrollView>
+        ))}
         {!fightersList?.length && <NoSubscriptions />}
       </View>
     </SafeAreaView>
