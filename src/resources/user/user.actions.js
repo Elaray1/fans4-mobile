@@ -130,7 +130,6 @@ export const updatePassword = async ({ oldPassword, newPassword }) => {
 
 export const logout = () => async (dispatch) => {
   const deviceId = getMaskedDeviceId();
-  await clear();
 
   try {
     await api.logout({ deviceId });
@@ -138,10 +137,11 @@ export const logout = () => async (dispatch) => {
     console.error(err);
   }
 
+  await clear();
   config.accessToken = null;
   sockets.disconnect();
   sockets.connect();
-  sockets.emit('subscribe', `device-${getMaskedDeviceId()}`);
+  sockets.emit('subscribe', `device-${deviceId}`);
 
   dispatch({ type: USER_LOGGED_OUT });
 };

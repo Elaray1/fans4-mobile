@@ -11,7 +11,7 @@ export const toLocalDate = (item) => {
 
 export const toLocalTime = (item) => {
   const eventDate = moment(item.date).tz(item.location.timezone);
-  return `${toLocalDate(item)} / ${eventDate.format('h:mm a z')}`;
+  return `${eventDate.format('h:mm a z')}`;
 };
 
 export const toLocalDateAndTime = (item) => {

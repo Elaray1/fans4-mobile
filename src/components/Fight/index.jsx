@@ -117,7 +117,7 @@ function Fight({
 
 Fight.propTypes = {
   fight: PropTypes.shape().isRequired,
-  status: PropTypes.oneOf(...Object.values(FIGHT_VIEW_TYPE)),
+  status: PropTypes.oneOf(Object.values(FIGHT_VIEW_TYPE)),
 };
 
 Fight.defaultProps = {
