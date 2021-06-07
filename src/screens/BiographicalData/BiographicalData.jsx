@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   SafeAreaView, View, ScrollView, StatusBar, TouchableOpacity,
 } from 'react-native';
@@ -28,9 +28,14 @@ const GENDERS = {
 };
 
 function BiographicalData() {
-  const navigation = useNavigation();
   const { t } = useTranslation();
+  const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const genders = useMemo(() => [
+    { id: GENDERS.male, value: t('BiographicalData.male') },
+    { id: GENDERS.female, value: t('BiographicalData.female') },
+  ], [t]);
 
   const [fullName, setFullName] = useState('');
   const [nickname, setNickname] = useState('');
@@ -149,9 +154,8 @@ function BiographicalData() {
           <View>
             <Text style={styles.inputLabel}>{t('BiographicalData.genderByBirth')}</Text>
             <Toggle
-              leftOption={{ id: GENDERS.male, value: t('BiographicalData.male') }}
-              rightOption={{ id: GENDERS.female, value: t('BiographicalData.female') }}
-              selectedOptionId={gender}
+              items={genders}
+              selectedItemId={gender}
               onSelect={setGender}
             />
           </View>
