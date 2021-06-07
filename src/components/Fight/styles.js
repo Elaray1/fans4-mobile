@@ -52,7 +52,7 @@ export default StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 5,
-    backgroundColor: colors.primary012,
+    backgroundColor: colors.buttonNotification,
   },
   votesText: {
     fontSize: fonts.size.caption,

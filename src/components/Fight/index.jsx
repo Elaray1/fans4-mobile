@@ -4,18 +4,20 @@ import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
 import Text from 'components/Text';
 import Fighter from 'components/Fight/Fighter';
 
-import timeFormat from 'helpers/timeFormat';
 import { toLocalDateAndTime, toLocalDate } from 'helpers/toLocalTime';
 
 import { EVENT_FIGHT_STATUSES, FIGHT_STATUSES } from 'resources/fight/fight.constants';
 
 import styles from './styles';
+
+const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
 
 const getLocation = location => `${location.cityName}, ${location.stateCode}`;
 
@@ -50,7 +52,7 @@ function Fight({
         <Text style={styles.text}>
           {t('Fight.round')}
           {' '}
-          {`${fight.results.roundNumber}, ${timeFormat(fight.results.duration)}, ${fight.results.winMethod}`}
+          {`${fight.results.roundNumber}, ${formatDuration(fight.results.duration)}, ${fight.results.winMethod}`}
         </Text>
       </View>
     ),
@@ -81,7 +83,7 @@ function Fight({
         <Text style={styles.text}>
           {t('Fight.round')}
           {' '}
-          {`${fight.results.roundNumber}, ${timeFormat(fight.results.duration)}, ${fight.results.winMethod}`}
+          {`${fight.results.roundNumber}, ${formatDuration(fight.results.duration)}, ${fight.results.winMethod}`}
         </Text>
       </View>
     ),

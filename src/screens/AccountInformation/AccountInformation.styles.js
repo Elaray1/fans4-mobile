@@ -46,7 +46,7 @@ export default StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 5,
-    backgroundColor: colors.primary012,
+    backgroundColor: colors.buttonNotification,
   },
   emailPendingText: {
     color: colors.primary,
