@@ -13,7 +13,7 @@ import Fighter from 'components/Fight/Fighter';
 
 import { toLocalDateAndTime, toLocalDate } from 'helpers/toLocalTime';
 
-import { EVENT_FIGHT_STATUSES, FIGHT_STATUSES } from 'resources/fight/fight.constants';
+import { FIGHT_VIEW_TYPE } from 'components/Fight/constants';
 
 import styles from './styles';
 
@@ -41,13 +41,13 @@ function Fight({
   const [firstFighter, secondFighter] = fight.fighters;
 
   const FIGHT_INFO = {
-    [EVENT_FIGHT_STATUSES.UPCOMING]: () => (
+    [FIGHT_VIEW_TYPE.EVENT_UPCOMING]: () => (
       <View style={styles.location}>
         <Text style={styles.text}>{getLocation(firstFighter.hometown)}</Text>
         <Text style={styles.text}>{getLocation(secondFighter.hometown)}</Text>
       </View>
     ),
-    [EVENT_FIGHT_STATUSES.PAST]: () => (
+    [FIGHT_VIEW_TYPE.EVENT_PAST]: () => (
       <View>
         <Text style={styles.text}>
           {t('Fight.round')}
@@ -56,7 +56,7 @@ function Fight({
         </Text>
       </View>
     ),
-    [FIGHT_STATUSES.IN_VOTING]: () => (
+    [FIGHT_VIEW_TYPE.IN_VOTING]: () => (
       <View style={styles.location}>
         <Text style={styles.text}>{getLocation(firstFighter.hometown)}</Text>
         <View style={styles.votes}>
@@ -65,7 +65,7 @@ function Fight({
         <Text style={styles.text}>{getLocation(secondFighter.hometown)}</Text>
       </View>
     ),
-    [FIGHT_STATUSES.UPCOMING]: () => (
+    [FIGHT_VIEW_TYPE.UPCOMING]: () => (
       <View>
         <Text style={styles.text}>
           {`${fight.event.name} / ${getLocation(fight.event.location)}`}
@@ -75,7 +75,7 @@ function Fight({
         </Text>
       </View>
     ),
-    [FIGHT_STATUSES.PAST]: () => (
+    [FIGHT_VIEW_TYPE.PAST]: () => (
       <View>
         <Text style={styles.text}>
           {`${fight.event.name} / ${toLocalDate(fight.event)}`}
@@ -117,7 +117,7 @@ function Fight({
 
 Fight.propTypes = {
   fight: PropTypes.shape().isRequired,
-  status: PropTypes.oneOf([...Object.values(EVENT_FIGHT_STATUSES), ...Object.values(FIGHT_STATUSES)]),
+  status: PropTypes.oneOf(...Object.values(FIGHT_VIEW_TYPE)),
 };
 
 Fight.defaultProps = {

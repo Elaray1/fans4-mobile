@@ -14,7 +14,9 @@ import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
 
-import { EVENT_FIGHT_STATUSES, FIGHT_STATUSES } from 'resources/fight/fight.constants';
+import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
+import { FIGHT_VIEW_TYPE } from 'components/Fight/constants';
+
 
 import styles from './styles';
 
@@ -87,7 +89,7 @@ function EventFights({ route }) {
     return (
       <Fight
         fight={item}
-        status={item.status === FIGHT_STATUSES.PAST ? EVENT_FIGHT_STATUSES.PAST : EVENT_FIGHT_STATUSES.UPCOMING}
+        status={item.status === FIGHT_STATUSES.PAST ? FIGHT_VIEW_TYPE.EVENT_PAST : FIGHT_VIEW_TYPE.EVENT_UPCOMING}
       />
     );
   };

@@ -6,8 +6,3 @@ export const FIGHT_STATUSES = {
   PAST: 'past',
   DECLINED: 'declined',
 };
-
-export const EVENT_FIGHT_STATUSES = {
-  UPCOMING: 'event_upcoming',
-  PAST: 'event_past',
-};
