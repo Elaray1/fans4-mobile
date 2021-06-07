@@ -37,7 +37,7 @@ function Security() {
     } else {
       setInputErrors({
         ...inputErrors,
-        [field]: [t('Security.passwordShouldContainAtLeast6Characters')],
+        [field]: [t('Security.PasswordMustContainAtLeast6Characters')],
       });
       return;
     }
@@ -78,7 +78,7 @@ function Security() {
         isErrors = true;
         setInputErrors({
           ...inputErrors,
-          [field]: [t('Security.passwordShouldContainAtLeast6Characters')],
+          [field]: [t('Security.PasswordMustContainAtLeast6Characters')],
         });
       }
     });
@@ -124,7 +124,7 @@ function Security() {
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View style={styles.oldPassword}>
           <Input
-            label={t('Security.oldPassword')}
+            label={t('Security.currentPassword')}
             value={oldPassword}
             onChange={(value) => { setOldPassword(value); onChangeInputValue('oldPassword'); }}
             type="password"

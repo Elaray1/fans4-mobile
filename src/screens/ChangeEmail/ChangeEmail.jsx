@@ -58,7 +58,7 @@ function ChangeEmail() {
     } else {
       setInputErrors({
         ...inputErrors,
-        password: [t('ChangeEmail.passwordShouldContainAtLeast6Characters')],
+        password: [t('ChangeEmail.PasswordMustContainAtLeast6Characters')],
       });
     }
   }, [inputErrors, t, passwordValue]);
@@ -92,7 +92,7 @@ function ChangeEmail() {
       isErrors = true;
       setInputErrors({
         ...inputErrors,
-        password: [t('ChangeEmail.passwordShouldContainAtLeast6Characters')],
+        password: [t('ChangeEmail.PasswordMustContainAtLeast6Characters')],
       });
     } else if (inputErrors.password.length) {
       setInputErrors({

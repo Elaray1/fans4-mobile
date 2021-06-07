@@ -21,7 +21,7 @@
     "AlreadyHaveAccount": "Already have an account?",
     "SignIn": "Sign in",
     "EmailIsInvalid": "Email is invalid",
-    "PasswordShouldContainAtLeast6Characters": "Password should contain at least 6 characters"
+    "PasswordMustContainAtLeast6Characters": "Password must contain at least 6 characters"
   },
   "EmailConfirmation": {
     "ConfirmYourEmailAddress": "Confirm your email address",
@@ -41,8 +41,8 @@
     "DontHaveAccount?": "Don’t have an account?",
     "SignUp": "Sign up",
     "EmailIsInvalid": "Email is invalid",
-    "PasswordShouldContainAtLeast6Characters": "Password should contain at least 6 characters",
-    "InvalidEmailOrAndPassword": "Invalid email or/and password"
+    "PasswordMustContainAtLeast6Characters": "Password must contain at least 6 characters",
+    "InvalidEmailAndOrPassword": "Invalid email and/or password"
   },
   "CitySelectModal": {
     "noSearchResults": "No search results",
@@ -181,9 +181,9 @@
   "Security": {
     "security": "Security",
     "save": "Save",
-    "oldPassword": "Old password",
+    "currentPassword": "Current password",
     "newPassword": "New password",
-    "passwordShouldContainAtLeast6Characters": "Password should contain at least 6 characters",
+    "PasswordMustContainAtLeast6Characters": "Password must contain at least 6 characters",
     "yourNewPasswordCannotBeTheSameAsYourOldPassword": "Your new password cannot be the same as your old password."
   },
   "PasswordUpdated": {
@@ -248,7 +248,7 @@
   "ChangeEmail": {
     "changeEmail": "Change Email",
     "save": "Save",
-    "passwordShouldContainAtLeast6Characters": "Password should contain at least 6 characters",
+    "PasswordMustContainAtLeast6Characters": "Password must contain at least 6 characters",
     "emailIsInvalid": "Email is invalid",
     "newEmail": "New Email",
     "password": "Password",

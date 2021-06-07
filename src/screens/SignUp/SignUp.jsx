@@ -70,7 +70,7 @@ function SignUp({ route }) {
     } else {
       setInputErrors({
         ...inputErrors,
-        password: [t('SignUp.PasswordShouldContainAtLeast6Characters')],
+        password: [t('SignUp.PasswordMustContainAtLeast6Characters')],
       });
     }
   }, [passwordValue, inputErrors, t]);
@@ -94,7 +94,7 @@ function SignUp({ route }) {
       isErrors = true;
       setInputErrors({
         ...inputErrors,
-        password: [t('SignUp.PasswordShouldContainAtLeast6Characters')],
+        password: [t('SignUp.PasswordMustContainAtLeast6Characters')],
       });
     } else if (inputErrors.password.length) {
       setInputErrors({

@@ -21,7 +21,6 @@ import { USER_TYPES } from 'resources/user/user.constants';
 import * as userActions from 'resources/user/user.actions';
 
 import { validateEmail, validatePassword } from 'helpers/validate';
-import * as rootNavigation from 'helpers/rootNavigation';
 import extractApiErrorMessage from 'helpers/extractApiErrorMessage';
 
 import styles from './SignIn.styles';
@@ -64,7 +63,7 @@ function SignIn({ route }) {
     } else {
       setInputErrors({
         ...inputErrors,
-        password: [t('SignIn.PasswordShouldContainAtLeast6Characters')],
+        password: [t('SignIn.PasswordMustContainAtLeast6Characters')],
       });
     }
   }, [passwordValue, inputErrors, t]);
@@ -89,7 +88,7 @@ function SignIn({ route }) {
       isErrors = true;
       setInputErrors({
         ...inputErrors,
-        password: [t('SignIn.PasswordShouldContainAtLeast6Characters')],
+        password: [t('SignIn.PasswordMustContainAtLeast6Characters')],
       });
     } else if (inputErrors.password.length) {
       setInputErrors({
