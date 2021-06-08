@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, StatusBar, Image, TouchableOpacity, ScrollView, ActivityIndicator,
+  SafeAreaView, View, StatusBar, TouchableOpacity, ScrollView, ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
@@ -10,8 +10,8 @@ import colors from 'themes/colors';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
-import StatusBadge from 'components/StatusBadge';
 import Button from 'components/Button';
+import Profile from 'components/FighterAccount/Profile';
 
 import * as userApi from 'resources/user/user.api';
 
@@ -72,28 +72,13 @@ function Fighter({ route }) {
           />
           <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
             <View style={styles.flatListHeader}>
-              <View style={styles.profileBlock}>
-                <Image
-                  style={styles.photoImage}
-                  source={{ uri: fighter.avatarUrl }}
-                />
-                <View>
-                  <Text style={styles.fullName}>{fighter.fullName}</Text>
-                  {fighter.role.biography.nickname && (
-                  <Text style={styles.nickname}>
-                    “
-                    {fighter.role.biography.nickname}
-                    ”
-                  </Text>
-                  )}
-                  <Text style={styles.location}>
-                    {`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
-                  </Text>
-                  {fighter.role.fightingStatus
-                && <StatusBadge status={fighter.role.fightingStatus} />
-                }
-                </View>
-              </View>
+              <Profile
+                avatarUrl={fighter.avatarUrl}
+                fullName={fighter.fullName}
+                nickname={fighter.role.biography.nickname}
+                location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
+                fightingStatus={fighter.role.fightingStatus}
+              />
 
               <View style={[styles.line, styles.lineIndent]} />
 

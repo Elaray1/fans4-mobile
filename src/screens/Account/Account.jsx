@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import {
-  SafeAreaView, View, StatusBar, Image, TouchableOpacity, FlatList, ActivityIndicator,
+  SafeAreaView, View, StatusBar, TouchableOpacity, FlatList, ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -11,8 +11,8 @@ import colors from 'themes/colors';
 import SettingsModal from 'components/SettingsModal';
 import Header from 'components/Header';
 import Text from 'components/Text';
-import StatusBadge from 'components/StatusBadge';
 import Post from 'components/Post';
+import Profile from 'components/FighterAccount/Profile';
 
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
@@ -165,24 +165,13 @@ function Account() {
     return (
       <View style={styles.flatListHeader}>
 
-        <View style={styles.profileBlock}>
-          <Image
-            style={styles.photoImage}
-            source={{ uri: avatarUrl }}
-          />
-          <View>
-            <Text style={styles.fullName}>{fullName}</Text>
-            {nickname && (
-            <Text style={styles.nickname}>
-              “
-              {nickname}
-              ”
-            </Text>
-            )}
-            <Text style={styles.location}>{hometown}</Text>
-            {fightingStatus && <StatusBadge status={fightingStatus} />}
-          </View>
-        </View>
+        <Profile
+          avatarUrl={avatarUrl}
+          fullName={fullName}
+          nickname={nickname}
+          location={hometown}
+          fightingStatus={fightingStatus}
+        />
 
         <View style={[styles.line, styles.lineIndent]} />
 

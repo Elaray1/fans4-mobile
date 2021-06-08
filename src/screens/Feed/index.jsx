@@ -139,7 +139,7 @@ function Feed() {
       />
       <View style={styles.content}>
         {isRefreshing && <Loader />}
-        {!isRefreshing && fightersList?.length && (posts.length ? (
+        {!isRefreshing && Boolean(fightersList?.length) && (posts.length ? (
           <FlatList
             data={posts}
             renderItem={renderItem}
