@@ -25,6 +25,7 @@ import ConfirmYourEmailAddress from 'screens/ConfirmYourEmailAddress';
 import Fans from 'screens/Fans';
 import Fighter from 'screens/Fighter';
 import InviteAFan from 'screens/InviteAFan';
+import EventFights from 'screens/EventFights';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -110,6 +111,7 @@ function AppScreens() {
       <AppStack.Screen name="Fans" component={Fans} />
       <AppStack.Screen name="Fighter" component={Fighter} />
       <AppStack.Screen name="InviteAFan" component={InviteAFan} />
+      <AppStack.Screen name="EventFights" component={EventFights} />
     </AppStack.Navigator>
   );
 }

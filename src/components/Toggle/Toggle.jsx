@@ -15,7 +15,7 @@ function Toggle({
     if (item.onSelect) {
       item.onSelect();
     }
-    onSelect(item.id);
+    onSelect(item);
   }, [onSelect]);
 
   return (

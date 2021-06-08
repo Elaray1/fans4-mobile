@@ -322,5 +322,35 @@
     "noPostsYet": "No posts, yet",
     "onceFighterWillAddPostsYouWillSeeThemHere": "Once fighter will add posts, you will see them here.",
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh."
+  },
+  "Events": {
+    "events": "Events",
+    "couldntLoadTheEventsPullToRefresh": "Couldn’t load the events. Pull to refresh.",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "canceled": "Canceled",
+    "noEventsYet": "No events, yet",
+    "onceEventsAreScheduledYouWillSeeThemHere": "Once events are scheduled, you will see them here.",
+    "onceYouParticipateInAnEventItWillBeShownOnThisPage": "Once you participate in an event, it will be shown  on this page."
+  },
+  "EventFights": {
+    "couldntLoadTheFightsPullToRefresh": "Couldn’t load the fights. Pull to refresh."
+  },
+  "Fights": {
+    "fights": "Fights",
+    "noFightsYyet": "No fights, yet",
+    "onceFightsAreAddedToTheVotingYouWillSeeThemHere": "Once fights are added to the voting, you will see them here.",
+    "onceFightsAreScheduledYouWillSeeThemHere": "Once fights are scheduled, you will see them here.",
+    "onceYouParticipateInFightsYouWillSeeThemHere": "Once you participate in fights, you will see them here.",
+    "voting": "Voting",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh."
+  },
+  "Fight": {
+    "vs": "vs",
+    "round": "Round",
+    "winner": "Winner",
+    "votes": "votes"
   }
 }

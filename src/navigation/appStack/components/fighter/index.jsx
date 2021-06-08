@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import AccountIcon from 'assets/icons/tab-bar/account.svg';
-import ExploreIcon from 'assets/icons/tab-bar/explore.svg';
+import FightersIcon from 'assets/icons/tab-bar/fighters.svg';
 import FightsIcon from 'assets/icons/tab-bar/fights.svg';
 import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
 import EventsIcon from 'assets/icons/tab-bar/events.svg';
@@ -23,7 +23,7 @@ import TabBarIcon from 'components/TabBarIcon';
 const Tab = createBottomTabNavigator();
 
 const FightsStack = createStackNavigator();
-const ExploreStack = createStackNavigator();
+const FightersStack = createStackNavigator();
 const NewPostStack = createStackNavigator();
 const AccountStack = createStackNavigator();
 const EventsStack = createStackNavigator();
@@ -78,14 +78,14 @@ function AccountScreens() {
   );
 }
 
-function ExploreScreens() {
+function FightersScreens() {
   return (
-    <ExploreStack.Navigator
+    <FightersStack.Navigator
       headerMode="none"
       screenOptions={SCREEN_OPTIONS}
     >
-      <ExploreStack.Screen name="SearchFighters" component={SearchFighters} />
-    </ExploreStack.Navigator>
+      <FightersStack.Screen name="SearchFighters" component={SearchFighters} />
+    </FightersStack.Navigator>
   );
 }
 
@@ -132,12 +132,12 @@ function FighterNavigator() {
         }}
       />
       <Tab.Screen
-        name="Explore"
-        component={ExploreScreens}
+        name="Fighters"
+        component={FightersScreens}
         options={{
-          tabBarLabel: 'Explore',
+          tabBarLabel: 'Fighters',
           // eslint-disable-next-line react/prop-types
-          tabBarIcon: ({ focused }) => <TabBarIcon icon={ExploreIcon} focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon icon={FightersIcon} focused={focused} />,
         }}
       />
       <Tab.Screen

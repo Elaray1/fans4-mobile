@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -47,7 +47,7 @@ function Feed() {
       currentPosts = posts;
     }
 
-    if (page === 1 || posts.length < totalCount) {
+    if (fetchingPage === 1 || currentPosts.length < totalCount) {
       setIsLoading(true);
       try {
         const {
@@ -57,7 +57,7 @@ function Feed() {
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
         });
-        setPage(page + 1);
+        setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setPosts([...currentPosts, ...fetchedPosts]);
       } catch (error) {
@@ -80,13 +80,13 @@ function Feed() {
 
     fetchPosts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fightersList?.length]);
+  }, []);
 
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
     return (
-      <View style={styles.post}>
+      <View style={styles.post} key={item._id}>
         <Post
           _id={item._id}
           media={item.media}
@@ -126,20 +126,11 @@ function Feed() {
     </View>
   );
 
-  const Posts = () => (posts.length ? (
-    <FlatList
-      data={posts}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      onEndReachedThreshold={0.3}
-      onEndReached={fetchNewItems}
-      style={styles.fightersList}
-      showsVerticalScrollIndicator={false}
-      ListFooterComponent={renderFooter}
-      onRefresh={onRefresh}
-      refreshing={isRefreshing}
-    />
-  ) : <NoPosts />);
+  const EmptyView = () => {
+    return (
+      !isLoading ? <NoPosts /> : <Loader />
+    );
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -147,7 +138,30 @@ function Feed() {
         title={t('Feed.feed')}
       />
       <View style={styles.content}>
-        {fightersList?.length ? <Posts /> : <NoSubscriptions />}
+        {isRefreshing && <Loader />}
+        {!isRefreshing && fightersList?.length && (posts.length ? (
+          <FlatList
+            data={posts}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            onEndReachedThreshold={0.3}
+            onEndReached={fetchNewItems}
+            style={styles.fightersList}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={renderFooter}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
+          />
+        ) : (
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+            keyboardShouldPersistTaps="handled"
+          >
+            <EmptyView />
+          </ScrollView>
+        ))}
+        {!fightersList?.length && <NoSubscriptions />}
       </View>
     </SafeAreaView>
   );

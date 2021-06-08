@@ -94,6 +94,10 @@ function BiographicalData() {
     navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'SelectUserType' } }] });
   }, [dispatch, navigation]);
 
+  const onToggleSelect = useCallback((item) => {
+    setGender(item.id);
+  }, []);
+
   return (
     <SafeAreaView style={styles.screen}>
       <DatePickerModal
@@ -156,7 +160,7 @@ function BiographicalData() {
             <Toggle
               items={genders}
               selectedItemId={gender}
-              onSelect={setGender}
+              onSelect={onToggleSelect}
             />
           </View>
 

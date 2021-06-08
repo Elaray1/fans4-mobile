@@ -40,14 +40,14 @@ function SearchFighters() {
       currentFighters = fighters;
     }
 
-    if (page === 1 || fighters.length < totalCount) {
+    if (fetchingPage === 1 || fighters.length < totalCount) {
       setIsLoading(true);
       try {
         const {
           fighters: fetchedFighters,
           totalCount: fetchedTotalCount,
         } = await userApi.getFighters({
-          page,
+          page: fetchingPage,
           perPage: PER_PAGE_COUNT,
           searchValue: search,
         });
