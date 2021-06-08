@@ -48,6 +48,13 @@ export default (user) => {
   }
 
   if (user.role.type === USER_TYPES.FAN) {
+    if (user.status === USER_STATUSES.BLOCKED) {
+      return {
+        stack: 'AppStack',
+        screen: 'AccountBlocked',
+      };
+    }
+
     return {
       stack: 'AppStack',
       screen: 'Feed',

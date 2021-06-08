@@ -1,20 +1,20 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
+import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
-
-import { clear } from 'helpers/storage';
 
 import PlaceholderIllustration from 'assets/illustrations/placeholder';
 
 function AccountBlocked() {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const userName = useSelector(userSelectors.getUserFullName);
 
@@ -22,10 +22,10 @@ function AccountBlocked() {
     Linking.openURL(`mailto:admin@fans4.com?subject=Blocked account. ${userName}`);
   }, [userName]);
 
-  const onLinkPress = useCallback(() => {
-    clear(); // TODO replace with logout
+  const onLinkPress = useCallback(async () => {
+    await dispatch(userActions.logout());
     navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'SelectUserType' } }] });
-  }, [navigation]);
+  }, [navigation, dispatch]);
 
   return (
     <IllustrationScreen
