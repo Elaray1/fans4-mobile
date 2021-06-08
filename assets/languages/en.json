@@ -202,8 +202,8 @@
   },
   "Account": {
     "account": "Account",
-    "posts": "posts",
-    "fans": "fans",
+    "posts": "Posts",
+    "fans": "Fans",
     "biography": "Biography",
     "addBiography": "Add biography",
     "personalInfo": "Personal Info",

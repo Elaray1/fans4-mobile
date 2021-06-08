@@ -13,10 +13,6 @@ export default StyleSheet.create({
   flatListHeader: {
     marginTop: 20,
   },
-  postsAndFans: {
-    flexDirection: 'row',
-    marginTop: 20,
-  },
   postsAndFansBlock: {
     alignItems: 'center',
     marginBottom: 20,
@@ -27,33 +23,6 @@ export default StyleSheet.create({
   },
   lineIndent: {
     marginBottom: 20,
-  },
-  profileData: {
-    paddingVertical: 8,
-    borderRadius: 5,
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: colors.gray,
-  },
-  profileLeftData: {
-    marginRight: 10,
-  },
-  profileRightData: {
-    marginLeft: 10,
-  },
-  profileDataTitle: {
-    color: colors.textSecondary,
-    fontSize: fonts.size.caption,
-    lineHeight: fonts.lineHeight.caption,
-    fontFamily: fonts.family.base,
-    fontWeight: fonts.weight.medium,
-    marginBottom: 5,
-  },
-  profileDataText: {
-    fontSize: fonts.size.small,
-    lineHeight: fonts.lineHeight.small,
-    fontFamily: fonts.family.bold,
-    fontWeight: fonts.weight.bold,
   },
   biographyBlock: {
     paddingTop: 18,

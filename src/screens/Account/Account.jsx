@@ -13,6 +13,7 @@ import Header from 'components/Header';
 import Text from 'components/Text';
 import Post from 'components/Post';
 import Profile from 'components/FighterAccount/Profile';
+import Statistic from 'components/FighterAccount/Statistic';
 
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
@@ -173,32 +174,13 @@ function Account() {
           fightingStatus={fightingStatus}
         />
 
-        <View style={[styles.line, styles.lineIndent]} />
+        <View style={styles.line} />
 
-        <View style={styles.profileBlock}>
-          <View style={[styles.profileData, styles.profileLeftData]}>
-            <Text style={styles.profileDataTitle}>{t('Account.posts')}</Text>
-            <Text style={styles.profileDataText}>
-              {postsCount === null
-                ? <ActivityIndicator color={colors.white} />
-                : postsCount
-          }
-            </Text>
-          </View>
-          <TouchableOpacity
-            style={[styles.profileData, styles.profileRightData]}
-            activeOpacity={0.7}
-            onPress={onFansPress}
-          >
-            <Text style={styles.profileDataTitle}>{t('Account.fans')}</Text>
-            <Text style={styles.profileDataText}>
-              {fansCount === null
-                ? <ActivityIndicator color={colors.white} />
-                : fansCount
-          }
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <Statistic
+          postsCount={postsCount}
+          fansCount={fansCount}
+          onFansPress={onFansPress}
+        />
 
         <View style={styles.line} />
 

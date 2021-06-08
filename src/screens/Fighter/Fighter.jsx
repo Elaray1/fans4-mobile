@@ -12,6 +12,7 @@ import Header from 'components/Header';
 import Text from 'components/Text';
 import Button from 'components/Button';
 import Profile from 'components/FighterAccount/Profile';
+import Statistic from 'components/FighterAccount/Statistic';
 
 import * as userApi from 'resources/user/user.api';
 
@@ -87,28 +88,10 @@ function Fighter({ route }) {
                   title={t('Fighter.applyForAFight')}
                   style={styles.applyButton}
                 />
-                <View style={styles.postsAndFans}>
-                  <View style={[styles.profileData, styles.profileLeftData]}>
-                    <Text style={styles.profileDataTitle}>{t('Fighter.posts')}</Text>
-                    <Text style={styles.profileDataText}>
-                      {postsCount === null
-                        ? <ActivityIndicator color={colors.white} />
-                        : postsCount
-                  }
-                    </Text>
-                  </View>
-                  <View
-                    style={[styles.profileData, styles.profileRightData]}
-                  >
-                    <Text style={styles.profileDataTitle}>{t('Fighter.fans')}</Text>
-                    <Text style={styles.profileDataText}>
-                      {fansCount === null
-                        ? <ActivityIndicator color={colors.white} />
-                        : fansCount
-                  }
-                    </Text>
-                  </View>
-                </View>
+                <Statistic
+                  postsCount={postsCount}
+                  fansCount={fansCount}
+                />
               </View>
 
               <View style={styles.line} />
