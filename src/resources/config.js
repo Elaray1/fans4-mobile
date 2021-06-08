@@ -15,10 +15,17 @@ const getSocketUrl = () => {
   return Platform.OS === 'android' ? Config.ANDROID_WEB_SOCKET_URL : Config.IOS_WEB_SOCKET_URL;
 };
 
+const getWebUrl = () => {
+  if (Config.APP_ENV !== 'DEV') {
+    return Config.WEB_URL;
+  }
+  return Platform.OS === 'android' ? Config.ANDROID_WEB_URL : Config.IOS_WEB_URL;
+};
+
 export default {
   apiUrl: getApiUrl(),
   webSocketUrl: getSocketUrl(),
-  webUrl: Config.WEB_URL,
+  webUrl: getWebUrl(),
   mode: Config.APP_ENV,
   applicationId: 'fans4',
 };
