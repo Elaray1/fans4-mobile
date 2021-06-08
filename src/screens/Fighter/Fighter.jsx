@@ -13,6 +13,7 @@ import Text from 'components/Text';
 import Button from 'components/Button';
 import Profile from 'components/FighterAccount/Profile';
 import Statistic from 'components/FighterAccount/Statistic';
+import Biography from 'components/FighterAccount/Biography';
 
 import * as userApi from 'resources/user/user.api';
 
@@ -31,7 +32,6 @@ function Fighter({ route }) {
   const [fighter, setFighter] = useState(null);
   const [postsCount, setPostsCount] = useState(null);
   const [fansCount, setFansCount] = useState(null);
-  const [isBiographyOpen, setIsBiographyOpen] = useState(false);
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
 
   useEffect(() => {
@@ -53,10 +53,6 @@ function Fighter({ route }) {
 
     init();
   }, [_id]);
-
-  const onBiographyPress = useCallback(() => {
-    setIsBiographyOpen(!isBiographyOpen);
-  }, [isBiographyOpen]);
 
   const onPersonalInfoPress = useCallback(() => {
     setIsPersonalInfoOpen(!isPersonalInfoOpen);
@@ -96,29 +92,10 @@ function Fighter({ route }) {
 
               <View style={styles.line} />
 
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.biographyBlock}
-                onPress={onBiographyPress}
-              >
-                <View style={[
-                  styles.biographyData,
-                  !isBiographyOpen && styles.biographyClosedData,
-                ]}
-                >
-                  <Text style={styles.blockTitle}>{t('Fighter.biography')}</Text>
-                  {isBiographyOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
-                </View>
+              <Biography
+                biography={fighter.role.biography.about}
+              />
 
-                {isBiographyOpen && Boolean(fighter.role.biography.about)
-            && <Text style={styles.biographyText}>{fighter.role.biography.about}</Text>}
-
-                {isBiographyOpen && !fighter.role.biography.about
-              && (
-                <Text style={styles.biographyText}>{t('Fighter.fighterHasntAddedBiographyYet')}</Text>
-              )
-            }
-              </TouchableOpacity>
 
               <View style={styles.line} />
 

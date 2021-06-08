@@ -24,31 +24,6 @@ export default StyleSheet.create({
   lineIndent: {
     marginBottom: 20,
   },
-  biographyBlock: {
-    paddingTop: 18,
-  },
-  biographyData: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  biographyClosedData: {
-    paddingBottom: 18,
-  },
-  blockTitle: {
-    fontSize: fonts.size.small,
-    lineHeight: fonts.lineHeight.small,
-    fontFamily: fonts.family.bold,
-    fontWeight: fonts.weight.bold,
-  },
-  biographyText: {
-    paddingVertical: 12,
-    color: colors.textSecondary,
-    fontSize: fonts.size.caption,
-    lineHeight: fonts.lineHeight.small,
-    fontFamily: fonts.family.base,
-    fontWeight: fonts.weight.medium,
-  },
   personalInfoContainer: {
     marginTop: 12,
   },

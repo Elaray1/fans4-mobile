@@ -14,6 +14,7 @@ import Text from 'components/Text';
 import Post from 'components/Post';
 import Profile from 'components/FighterAccount/Profile';
 import Statistic from 'components/FighterAccount/Statistic';
+import Biography from 'components/FighterAccount/Biography';
 
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
@@ -45,7 +46,6 @@ function Account() {
   const [postsCount, setPostsCount] = useState(null);
   const [fansCount, setFansCount] = useState(null);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
-  const [isBiographyOpen, setIsBiographyOpen] = useState(!biography);
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
@@ -89,10 +89,6 @@ function Account() {
   const onFansPress = useCallback(() => {
     navigation.navigate('Fans');
   }, [navigation]);
-
-  const onBiographyPress = useCallback(() => {
-    setIsBiographyOpen(!isBiographyOpen);
-  }, [isBiographyOpen]);
 
   const onAddBiographyPress = useCallback(() => {
     navigation.navigate('ChangeBiography');
@@ -184,31 +180,10 @@ function Account() {
 
         <View style={styles.line} />
 
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.biographyBlock}
-          onPress={onBiographyPress}
-        >
-          <View style={[styles.biographyData, !isBiographyOpen && styles.biographyClosedData]}>
-            <Text style={styles.blockTitle}>{t('Account.biography')}</Text>
-            {isBiographyOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
-          </View>
-
-          {isBiographyOpen && Boolean(biography)
-      && <Text style={styles.biographyText}>{biography}</Text>}
-
-          {isBiographyOpen && !biography
-        && (
-        <TouchableOpacity
-          style={styles.addBiographyContainter}
-          activeOpacity={0.7}
-          onPress={onAddBiographyPress}
-        >
-          <Text style={styles.addBiographyText}>{t('Account.addBiography')}</Text>
-        </TouchableOpacity>
-        )
-      }
-        </TouchableOpacity>
+        <Biography
+          biography={biography}
+          onAddBiographyPress={onAddBiographyPress}
+        />
 
         <View style={styles.line} />
 
