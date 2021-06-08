@@ -80,7 +80,7 @@ function Feed() {
 
     fetchPosts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fightersList?.length]);
+  }, []);
 
   const keyExtractor = useCallback(item => item._id, []);
 

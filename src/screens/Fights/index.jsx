@@ -34,15 +34,6 @@ function Fights() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // eslint-disable-next-line react/prop-types
-  const EmptyView = ({ title, text }) => (
-    <View style={styles.emptyView}>
-      <View style={styles.illustration} />
-      <Text style={styles.titleText}>{title}</Text>
-      <Text style={styles.text}>{text}</Text>
-    </View>
-  );
-
   const toggleItems = useMemo(() => {
     return [
       {
@@ -76,6 +67,14 @@ function Fights() {
   }, [t]);
 
   const [selectedToggleItem, setSelectedToggleItem] = useState(toggleItems[0]);
+
+  const EmptyView = () => (
+    <View style={styles.emptyView}>
+      <View style={styles.illustration} />
+      <Text style={styles.titleText}>{selectedToggleItem.emptyView.title}</Text>
+      <Text style={styles.text}>{selectedToggleItem.emptyView.text}</Text>
+    </View>
+  );
 
   const fetchNewItems = useCallback(async ({ refresh, fightTypes } = {}) => {
     let fetchingPage = 1;
@@ -173,7 +172,7 @@ function Fights() {
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
             keyboardShouldPersistTaps="handled"
           >
-            <EmptyView title={selectedToggleItem.emptyView.title} text={selectedToggleItem.emptyView.text} />
+            <EmptyView />
           </ScrollView>
         ))}
       </View>
