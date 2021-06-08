@@ -62,7 +62,7 @@ function Account() {
         postApi.getPosts({ page: INITIAL_PAGE, perPage: PER_PAGE, my: true }),
       ]);
 
-      if (fetchedPosts.length < PER_PAGE) {
+      if (fetchedPosts?.length < PER_PAGE) {
         setIsAllPostsLoaded(true);
       } else {
         setIsAllPostsLoaded(false);

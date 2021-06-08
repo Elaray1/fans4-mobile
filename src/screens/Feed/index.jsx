@@ -35,7 +35,7 @@ function Feed() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
-    if (!fightersList.length) {
+    if (!fightersList?.length) {
       return;
     }
 
@@ -65,7 +65,7 @@ function Feed() {
       }
       setIsLoading(false);
     }
-  }, [posts, page, totalCount, fightersList.length, showFailure, t]);
+  }, [posts, page, totalCount, fightersList?.length, showFailure, t]);
 
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -80,7 +80,7 @@ function Feed() {
 
     fetchPosts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fightersList.length]);
+  }, [fightersList?.length]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -147,7 +147,7 @@ function Feed() {
         title={t('Feed.feed')}
       />
       <View style={styles.content}>
-        {fightersList.length ? <Posts /> : <NoSubscriptions />}
+        {fightersList?.length ? <Posts /> : <NoSubscriptions />}
       </View>
     </SafeAreaView>
   );
