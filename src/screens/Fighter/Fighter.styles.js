@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { commonStyles } from 'themes/commonStyles';
 import colors from 'themes/colors';
-import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   screen: {
@@ -23,28 +22,6 @@ export default StyleSheet.create({
   },
   lineIndent: {
     marginBottom: 20,
-  },
-  personalInfoContainer: {
-    marginTop: 12,
-  },
-  personalInfoData: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 14,
-  },
-  personalInfoTitle: {
-    color: colors.textSecondary,
-    fontSize: fonts.size.caption,
-    lineHeight: fonts.lineHeight.caption,
-    fontFamily: fonts.family.base,
-    fontWeight: fonts.weight.medium,
-  },
-  personalInfoValue: {
-    fontSize: fonts.size.caption,
-    lineHeight: fonts.lineHeight.caption,
-    fontFamily: fonts.family.bold,
-    fontWeight: fonts.weight.bold,
   },
   space: {
     height: 10,
