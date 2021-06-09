@@ -354,5 +354,23 @@
     "round": "Round",
     "winner": "Winner",
     "votes": "votes"
+  },
+  "Comments": {
+    "comments": "Comments",
+    "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh.",
+    "noCommentsYet": "No comments, yet",
+    "beTheFirstFanToCommentOnThisPost": "Be the first fan to comment on this post.",
+    "addComment": "Add comment",
+    "max160Characters": "max. 160 characters",
+    "post": "Post",
+    "onceAFanCommentsOnThisPostYouWillSeeItHere": "Once a fan comments on this post, you will see it here."
+  },
+  "Comment": {
+    "you": "you",
+    "deleteComment": "Delete Comment",
+    "commentDeleted": "Comment deleted."
+  },
+  "Toast": {
+    "somethingWentWrongPleaseTryAgain": "Something went wrong. Please try again."
   }
 }

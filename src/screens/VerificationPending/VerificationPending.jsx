@@ -41,11 +41,7 @@ function VerificationPending() {
       }],
     });
 
-    try {
-      await dispatch(userActions.logout());
-    } catch (err) {
-      console.error('Logout error:', err);
-    }
+    await dispatch(userActions.logout());
   }, [navigation, dispatch, userType]);
 
   return (

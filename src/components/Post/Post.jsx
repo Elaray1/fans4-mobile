@@ -1,6 +1,7 @@
-import React from 'react';
-import { View, Image } from 'react-native';
+import React, { useCallback } from 'react';
+import { View, Image, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
 
 import { MEDIA_TYPES, POST_STATUSES } from 'resources/post/post.constants';
 
@@ -26,6 +27,8 @@ function Post({
   likesCount,
   commentsCount,
 }) {
+  const navigation = useNavigation();
+
   const authorView = author ? (
     <View style={styles.author}>
       <Image
@@ -89,6 +92,10 @@ function Post({
     );
   }
 
+  const onCommentsPress = useCallback(() => {
+    navigation.navigate('Comments', { postId: _id });
+  }, [navigation, _id]);
+
   return (
     <View style={styles.post}>
       {authorView}
@@ -100,10 +107,14 @@ function Post({
               <LikeIcon />
               <Text style={styles.postActionText}>{formatCount(likesCount)}</Text>
             </View>
-            <View style={[styles.postAction, styles.postActionRight]}>
+            <TouchableOpacity
+              onPress={onCommentsPress}
+              activeOpacity={0.7}
+              style={[styles.postAction, styles.postActionRight]}
+            >
               <CommentIcon />
               <Text style={styles.postActionText}>{formatCount(commentsCount)}</Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <Text style={styles.time}>{formatTime(checkedOn)}</Text>

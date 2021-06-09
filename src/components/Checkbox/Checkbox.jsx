@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  TouchableOpacity, ViewPropTypes, Text,
+  TouchableOpacity, ViewPropTypes,
 } from 'react-native';
+
+import Text from 'components/Text';
 
 import CheckMark from 'assets/icons/check-mark.svg';
 
