@@ -17,14 +17,10 @@ import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 
 import * as userApi from 'resources/user/user.api';
 
-import styles from './Fighter.styles';
+import styles from './styles';
 
-function Fighter({ route }) {
+function Fighter({ fighterId }) {
   const { t } = useTranslation();
-
-  const {
-    _id,
-  } = route?.params;
 
   const [fighter, setFighter] = useState(null);
   const [postsCount, setPostsCount] = useState(null);
@@ -37,7 +33,7 @@ function Fighter({ route }) {
           fighter: fetchedFighter,
           postsCount: fetchedPostsCount,
           fansCount: fetchedFansCount,
-        } = await userApi.getOtherFighter({ _id });
+        } = await userApi.getOtherFighter({ _id: fighterId });
 
         setFighter(fetchedFighter);
         setPostsCount(fetchedPostsCount);
@@ -48,7 +44,7 @@ function Fighter({ route }) {
     };
 
     init();
-  }, [_id]);
+  }, [fighterId]);
 
   return (
     <>
@@ -108,11 +104,7 @@ function Fighter({ route }) {
 }
 
 Fighter.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
+  fighterId: PropTypes.string.isRequired,
 };
 
 export default React.memo(Fighter);

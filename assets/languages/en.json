@@ -307,7 +307,9 @@
     "height": "Height",
     "reach": "Reach",
     "fighterHasntAddedBiographyYet": "Fighter hasn’t added biography yet.",
-    "applyForAFight": "Apply for a Fight"
+    "applyForAFight": "Apply for a Fight",
+    "proposeAFight": "Propose a Fight",
+    "subscribed": "Subscribed"
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",

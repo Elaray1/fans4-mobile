@@ -6,9 +6,9 @@ export const getPostsCount = () => apiClient
 export const createPost = (data, file) => apiClient
   .postWithFile('posts', data, file);
 
-export const getPosts = ({ page, perPage, my }) => apiClient
+export const getPosts = ({ page, perPage, authorId }) => apiClient
   .get('posts', {
     page,
     perPage,
-    ...(my && { my }),
+    ...(authorId && { authorId }),
   });

@@ -57,7 +57,11 @@ function Account() {
       ] = await Promise.all([
         postApi.getPostsCount(),
         userApi.getUsersCount({ myFans: true }),
-        postApi.getPosts({ page: INITIAL_PAGE, perPage: PER_PAGE, my: true }),
+        postApi.getPosts({
+          page: INITIAL_PAGE,
+          perPage: PER_PAGE,
+          authorId: userId,
+        }),
       ]);
 
       if (fetchedPosts?.length < PER_PAGE) {
@@ -73,7 +77,7 @@ function Account() {
     };
 
     init();
-  }, []);
+  }, [userId]);
 
   const onBurgerPress = useCallback(() => {
     setIsSettingsVisible(true);
@@ -124,7 +128,7 @@ function Account() {
       const { posts: newPosts } = await postApi.getPosts({
         page,
         perPage: PER_PAGE,
-        my: true,
+        authorId: userId,
       });
       if (newPosts.length < PER_PAGE) {
         setIsAllPostsLoaded(true);
@@ -133,7 +137,7 @@ function Account() {
       }
       setPosts([...posts, ...newPosts]);
     }
-  }, [posts, page, isAllPostsLoaded]);
+  }, [page, isAllPostsLoaded, userId, posts]);
 
   const handleLoadMore = useCallback(async () => {
     setPage(page + 1);
