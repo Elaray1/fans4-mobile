@@ -368,9 +368,27 @@
   "Comment": {
     "you": "you",
     "deleteComment": "Delete Comment",
-    "commentDeleted": "Comment deleted."
+    "commentDeleted": "Comment deleted.",
+    "reportThisComment": "Report this Comment"
   },
   "Toast": {
     "somethingWentWrongPleaseTryAgain": "Something went wrong. Please try again."
+  },
+  "ReportComment": {
+    "reportComment": "Report Comment",
+    "whyDoYouWantToReportThisComment": "Why do you want to report this comment?",
+    "unwantedCommercialContent": "Unwanted commercial content",
+    "inappropriateContent": "Inappropriate content",
+    "hateSpeechOrSymbols": "Hate speech or symbols",
+    "falseInformation": "False information",
+    "other": "Other",
+    "report": "Report",
+    "writeHereTheReasonMax160Characters": "Write here the reason (max. 160 characters)"
+  },
+  "ThanksForReporting": {
+    "reportComment": "Report Comment",
+    "thanksForReporting": "Thanks for Reporting!",
+    "thanksYourFeedbackHelpsUsMakeFans4AGoodPlaceForEveryoneWeWillReviewThisComment": "Thanks, your feedback helps us make Fans4 a good place for everyone. We will review this comment.",
+    "done": "Done"
   }
 }

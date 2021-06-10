@@ -45,7 +45,7 @@ export default StyleSheet.create({
     right: 20,
     zIndex: 1,
     elevation: 1,
-    minWidth: 163,
+    minWidth: 183,
     paddingVertical: 16,
     paddingLeft: 20,
     backgroundColor: colors.gray,

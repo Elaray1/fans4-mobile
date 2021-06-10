@@ -5,6 +5,8 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -25,6 +27,7 @@ function Comment({
 }) {
   const { showFailure, showSuccess } = useToast();
   const { t } = useTranslation();
+  const navigation = useNavigation();
 
   const userId = useSelector(userSelectors.getUserId);
   const isAuthor = data.author._id === userId;
@@ -55,6 +58,11 @@ function Comment({
       showFailure();
     }
   }, [data._id, onDelete, showFailure, showSuccess, t]);
+
+  const onReportComment = useCallback(async () => {
+    setIsActionsOpened(false);
+    navigation.navigate('ReportComment', { commentId: data._id, postId: data.post._id });
+  }, [navigation, data._id, data.post._id]);
 
   return (
     <View
@@ -90,10 +98,18 @@ function Comment({
                     actionsPositionY && { top: actionsPositionY + 30 },
                   ]}
                 >
-                  {isAuthor && (
-                  <Text style={styles.actionsText} onPress={onDeleteComment}>
-                    {t('Comment.deleteComment')}
-                  </Text>
+                  {isAuthor ? (
+                    <TouchableOpacity activeOpacity={0.7} onPress={onDeleteComment}>
+                      <Text style={styles.actionsText}>
+                        {t('Comment.deleteComment')}
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity activeOpacity={0.7} onPress={onReportComment}>
+                      <Text style={styles.actionsText}>
+                        {t('Comment.reportThisComment')}
+                      </Text>
+                    </TouchableOpacity>
                   )}
                 </View>
               </TouchableOpacity>
@@ -119,6 +135,9 @@ Comment.propTypes = {
       fullName: PropTypes.string.isRequired,
     }),
     createdOn: PropTypes.string.isRequired,
+    post: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+    }),
   }).isRequired,
   onDelete: PropTypes.func,
 };
