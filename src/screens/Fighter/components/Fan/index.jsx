@@ -34,7 +34,7 @@ function Fighter({ fighterId }) {
 
   const fightersList = useSelector(userSelectors.getSubscribedFighters);
 
-  const isSubscribed = useMemo(() => Boolean(fightersList.find(_id => _id === fighterId)),
+  const isSubscribed = useMemo(() => Boolean(fightersList.find(({ _id }) => _id === fighterId)),
     [fighterId, fightersList]);
 
   const [fighter, setFighter] = useState(null);
