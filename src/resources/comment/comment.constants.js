@@ -5,3 +5,9 @@ export const REPORT_REASONS = {
   FALSE_INFORMATION: 'false_information',
   OTHER: 'other',
 };
+
+export const COMMENTS_FILTERS = {
+  MY: 'my',
+  OTHERS: 'others',
+  ALL: 'all',
+};
