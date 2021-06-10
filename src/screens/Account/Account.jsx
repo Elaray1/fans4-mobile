@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import {
-  SafeAreaView, View, StatusBar, Image, TouchableOpacity, FlatList, ActivityIndicator,
+  SafeAreaView, View, StatusBar, TouchableOpacity, FlatList, ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -11,16 +11,16 @@ import colors from 'themes/colors';
 import SettingsModal from 'components/SettingsModal';
 import Header from 'components/Header';
 import Text from 'components/Text';
-import StatusBadge from 'components/StatusBadge';
 import Post from 'components/Post';
+import Profile from 'components/FighterAccount/Profile';
+import Statistic from 'components/FighterAccount/Statistic';
+import Biography from 'components/FighterAccount/Biography';
+import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as rootNavigation from 'helpers/rootNavigation';
-
-import ArrowUpIcon from 'assets/icons/arrow-up';
-import ArrowDownIcon from 'assets/icons/arrow-down';
 
 import styles from './Account.styles';
 
@@ -44,8 +44,6 @@ function Account() {
   const [postsCount, setPostsCount] = useState(null);
   const [fansCount, setFansCount] = useState(null);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
-  const [isBiographyOpen, setIsBiographyOpen] = useState(!biography);
-  const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
   const [isAllPostsLoaded, setIsAllPostsLoaded] = useState(false);
@@ -59,7 +57,11 @@ function Account() {
       ] = await Promise.all([
         postApi.getPostsCount(),
         userApi.getUsersCount({ myFans: true }),
-        postApi.getPosts({ page: INITIAL_PAGE, perPage: PER_PAGE, my: true }),
+        postApi.getPosts({
+          page: INITIAL_PAGE,
+          perPage: PER_PAGE,
+          authorId: userId,
+        }),
       ]);
 
       if (fetchedPosts?.length < PER_PAGE) {
@@ -75,7 +77,7 @@ function Account() {
     };
 
     init();
-  }, []);
+  }, [userId]);
 
   const onBurgerPress = useCallback(() => {
     setIsSettingsVisible(true);
@@ -89,17 +91,9 @@ function Account() {
     navigation.navigate('Fans');
   }, [navigation]);
 
-  const onBiographyPress = useCallback(() => {
-    setIsBiographyOpen(!isBiographyOpen);
-  }, [isBiographyOpen]);
-
   const onAddBiographyPress = useCallback(() => {
     navigation.navigate('ChangeBiography');
   }, [navigation]);
-
-  const onPersonalInfoPress = useCallback(() => {
-    setIsPersonalInfoOpen(!isPersonalInfoOpen);
-  }, [isPersonalInfoOpen]);
 
   const onAddPostPress = useCallback(() => {
     rootNavigation.resetToScreen('NewPost', 'NewPost');
@@ -134,7 +128,7 @@ function Account() {
       const { posts: newPosts } = await postApi.getPosts({
         page,
         perPage: PER_PAGE,
-        my: true,
+        authorId: userId,
       });
       if (newPosts.length < PER_PAGE) {
         setIsAllPostsLoaded(true);
@@ -143,7 +137,7 @@ function Account() {
       }
       setPosts([...posts, ...newPosts]);
     }
-  }, [posts, page, isAllPostsLoaded]);
+  }, [page, isAllPostsLoaded, userId, posts]);
 
   const handleLoadMore = useCallback(async () => {
     setPage(page + 1);
@@ -165,118 +159,37 @@ function Account() {
     return (
       <View style={styles.flatListHeader}>
 
-        <View style={styles.profileBlock}>
-          <Image
-            style={styles.photoImage}
-            source={{ uri: avatarUrl }}
-          />
-          <View>
-            <Text style={styles.fullName}>{fullName}</Text>
-            {nickname && (
-            <Text style={styles.nickname}>
-              “
-              {nickname}
-              ”
-            </Text>
-            )}
-            <Text style={styles.location}>{hometown}</Text>
-            {fightingStatus && <StatusBadge status={fightingStatus} />}
-          </View>
-        </View>
-
-        <View style={[styles.line, styles.lineIndent]} />
-
-        <View style={styles.profileBlock}>
-          <View style={[styles.profileData, styles.profileLeftData]}>
-            <Text style={styles.profileDataTitle}>{t('Account.posts')}</Text>
-            <Text style={styles.profileDataText}>
-              {postsCount === null
-                ? <ActivityIndicator color={colors.white} />
-                : postsCount
-          }
-            </Text>
-          </View>
-          <TouchableOpacity
-            style={[styles.profileData, styles.profileRightData]}
-            activeOpacity={0.7}
-            onPress={onFansPress}
-          >
-            <Text style={styles.profileDataTitle}>{t('Account.fans')}</Text>
-            <Text style={styles.profileDataText}>
-              {fansCount === null
-                ? <ActivityIndicator color={colors.white} />
-                : fansCount
-          }
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <Profile
+          avatarUrl={avatarUrl}
+          fullName={fullName}
+          nickname={nickname}
+          location={hometown}
+          fightingStatus={fightingStatus}
+        />
 
         <View style={styles.line} />
 
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.biographyBlock}
-          onPress={onBiographyPress}
-        >
-          <View style={[styles.biographyData, !isBiographyOpen && styles.biographyClosedData]}>
-            <Text style={styles.blockTitle}>{t('Account.biography')}</Text>
-            {isBiographyOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
-          </View>
-
-          {isBiographyOpen && Boolean(biography)
-      && <Text style={styles.biographyText}>{biography}</Text>}
-
-          {isBiographyOpen && !biography
-        && (
-        <TouchableOpacity
-          style={styles.addBiographyContainter}
-          activeOpacity={0.7}
-          onPress={onAddBiographyPress}
-        >
-          <Text style={styles.addBiographyText}>{t('Account.addBiography')}</Text>
-        </TouchableOpacity>
-        )
-      }
-        </TouchableOpacity>
+        <Statistic
+          postsCount={postsCount}
+          fansCount={fansCount}
+          onFansPress={onFansPress}
+        />
 
         <View style={styles.line} />
 
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.biographyBlock}
-          onPress={onPersonalInfoPress}
-        >
-          <View style={[styles.biographyData, !isPersonalInfoOpen && styles.biographyClosedData]}>
-            <Text style={styles.blockTitle}>{t('Account.personalInfo')}</Text>
-            {isPersonalInfoOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
-          </View>
+        <Biography
+          biography={biography}
+          onAddBiographyPress={onAddBiographyPress}
+        />
 
-          {isPersonalInfoOpen
-      && (
-      <View style={styles.personalInfoContainer}>
-        <View style={styles.personalInfoData}>
-          <Text style={styles.profileDataTitle}>{t('Account.age')}</Text>
-          <Text style={styles.personalInfoValue}>{age}</Text>
-        </View>
+        <View style={styles.line} />
 
-        <View style={styles.personalInfoData}>
-          <Text style={styles.profileDataTitle}>{t('Account.weight')}</Text>
-          <Text style={styles.personalInfoValue}>{profileInfo?.weight}</Text>
-        </View>
-
-        <View style={styles.personalInfoData}>
-          <Text style={styles.profileDataTitle}>{t('Account.height')}</Text>
-          <Text style={styles.personalInfoValue}>{profileInfo?.height}</Text>
-        </View>
-
-        <View style={styles.personalInfoData}>
-          <Text style={styles.profileDataTitle}>{t('Account.reach')}</Text>
-          <Text style={styles.personalInfoValue}>{profileInfo?.reach}</Text>
-        </View>
-      </View>
-      )}
-
-        </TouchableOpacity>
+        <PersonalInfo
+          age={age}
+          weight={profileInfo?.weight}
+          height={profileInfo?.height}
+          reach={profileInfo?.reach}
+        />
 
         <View style={styles.line} />
 

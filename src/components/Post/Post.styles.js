@@ -42,6 +42,14 @@ export default StyleSheet.create({
     lineHeight: fonts.lineHeight.small,
     marginBottom: 12,
   },
+  blockedPost: {
+    height: 163,
+    backgroundColor: hexToRgba(colors.grayText, 0.2),
+    borderRadius: 5,
+    marginBottom: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   approvedStatus: {
     flexDirection: 'row',
     justifyContent: 'space-between',

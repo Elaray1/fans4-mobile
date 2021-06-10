@@ -32,6 +32,16 @@ export default StyleSheet.create({
   disabledPrimaryButtonTitle: {
     opacity: 0.4,
   },
+  doneButton: {
+    backgroundColor: hexToRgba(colors.primary, 0.12),
+  },
+  doneButtonTitle: {
+    color: colors.primary,
+    fontSize: fonts.size.caption,
+    fontFamily: fonts.family.base,
+    fontWeight: fonts.weight.medium,
+    lineHeight: fonts.lineHeight.small,
+  },
   secondaryButton: {
     borderColor: colors.primary,
     backgroundColor: colors.white,

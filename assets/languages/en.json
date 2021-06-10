@@ -202,8 +202,8 @@
   },
   "Account": {
     "account": "Account",
-    "posts": "posts",
-    "fans": "fans",
+    "posts": "Posts",
+    "fans": "Fans",
     "biography": "Biography",
     "addBiography": "Add biography",
     "personalInfo": "Personal Info",
@@ -307,7 +307,9 @@
     "height": "Height",
     "reach": "Reach",
     "fighterHasntAddedBiographyYet": "Fighter hasn’t added biography yet.",
-    "applyForAFight": "Apply for a Fight"
+    "applyForAFight": "Apply for a Fight",
+    "proposeAFight": "Propose a Fight",
+    "subscribed": "Subscribed"
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",

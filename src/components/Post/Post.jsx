@@ -10,6 +10,7 @@ import Video from 'components/Video';
 
 import LikeIcon from 'assets/icons/like';
 import CommentIcon from 'assets/icons/comment';
+import LockIcon from 'assets/icons/lock';
 
 import config from 'resources/config';
 import { formatCount, formatTime } from './Post.helpers';
@@ -76,9 +77,15 @@ function Post({
         {Boolean(text) && <Text style={styles.description}>{text}</Text>}
       </>
     );
-  } else {
+  } else if (text) {
     contentContainerView = (
       <Text style={styles.description}>{text}</Text>
+    );
+  } else {
+    contentContainerView = (
+      <View style={styles.blockedPost}>
+        <LockIcon />
+      </View>
     );
   }
 
