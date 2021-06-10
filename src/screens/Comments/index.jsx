@@ -20,7 +20,6 @@ import useToast from 'hooks/useToast';
 import colors from 'themes/colors';
 
 import { USER_TYPES } from 'resources/user/user.constants';
-import { sortComments } from 'screens/Comments/helpers';
 
 
 import styles from './styles';
@@ -32,7 +31,6 @@ function Comments({ route }) {
   const { showFailure } = useToast();
 
   const userType = useSelector(userSelectors.getUserType);
-  const userId = useSelector(userSelectors.getUserId);
 
   const {
     postId,
@@ -61,27 +59,47 @@ function Comments({ route }) {
     if (fetchingPage === 1 || currentComments.length < totalCount) {
       setIsLoading(true);
       try {
-        const {
-          comments: fetchedComments,
-          totalCount: fetchedTotalCount,
-        } = await commentApi.getPostComments({
-          page: fetchingPage,
-          perPage: PER_PAGE_COUNT,
-          postId,
-        });
+        if (refresh) {
+          const [
+            {
+              comments: fetchedMyComments,
+            },
+            {
+              comments: fetchedOtherComments,
+              totalCount: fetchedTotalCount,
+            },
+          ] = await Promise.all([
+            commentApi.getMyPostComments({
+              postId,
+            }),
+            commentApi.getOtherPostComments({
+              page: fetchingPage,
+              perPage: PER_PAGE_COUNT,
+              postId,
+            }),
+          ]);
+          setTotalCount(fetchedTotalCount);
+          setComments([...fetchedMyComments, ...fetchedOtherComments]);
+        } else {
+          const {
+            comments: fetchedComments,
+            totalCount: fetchedTotalCount,
+          } = await commentApi.getOtherPostComments({
+            page: fetchingPage,
+            perPage: PER_PAGE_COUNT,
+            postId,
+          });
+          setTotalCount(fetchedTotalCount);
+          setComments([...currentComments, ...fetchedComments]);
+        }
         setPage(fetchingPage + 1);
-        setTotalCount(fetchedTotalCount);
-        setComments(sortComments({
-          comments: [...currentComments, ...fetchedComments],
-          userId,
-        }));
       } catch (error) {
         showFailure(t('Comments.couldntRefreshTheFeedPullToRefresh'));
       }
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [comments, page, totalCount, showFailure, t, postId, userId]);
+  }, [comments, page, totalCount, showFailure, t, postId]);
 
   const onRefresh = useCallback(async () => {
     await fetchNewItems({ refresh: true });

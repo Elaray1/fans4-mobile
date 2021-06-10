@@ -1,12 +1,21 @@
 import { apiClient } from 'helpers/api';
 
-export const getPostComments = ({
+export const getOtherPostComments = ({
   page, perPage, postId,
 }) => apiClient
   .get('comments', {
     page,
     perPage,
     postId,
+    isMyComments: false,
+  });
+
+export const getMyPostComments = ({
+  postId,
+}) => apiClient
+  .get('comments', {
+    postId,
+    isMyComments: true,
   });
 
 export const createComment = ({ text, postId }) => apiClient
