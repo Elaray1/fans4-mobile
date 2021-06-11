@@ -29,6 +29,6 @@ export const getUserBiographyAbout = ({ user }) => user?.role?.biography?.about 
 
 /* Fans selectors: start */
 
-export const getSubscribedFighters = ({ user }) => user?.role?.subscription?.fighterIds || [];
+export const getSubscribedFighters = ({ user }) => user?.role?.subscription?.fighters;
 
 /* Fighters selectors: end */
