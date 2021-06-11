@@ -94,7 +94,7 @@ function Feed() {
           status={item.status}
           checkedOn={item.checkedOn}
           author={item.author}
-          likesCount={item.likedUserIds.length}
+          likedUserIds={item.likedUserIds}
           commentsCount={item.commentsCount}
         />
       </View>
