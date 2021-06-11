@@ -19,6 +19,7 @@ import { REPORT_REASONS } from 'resources/comment/comment.constants';
 
 import styles from './styles';
 
+const REPORT_MAX_LENGTH = 160;
 function ReportComment({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
@@ -99,7 +100,7 @@ function ReportComment({ route }) {
                 label={t('ReportComment.writeHereTheReasonMax160Characters')}
                 value={reasonValue}
                 onChange={setReasonValue}
-                maxLength={160}
+                maxLength={REPORT_MAX_LENGTH}
                 style={styles.input}
                 multiline
               />

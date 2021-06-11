@@ -6,8 +6,8 @@ export const REPORT_REASONS = {
   OTHER: 'other',
 };
 
-export const COMMENTS_FILTERS = {
-  MY: 'my',
+export const CREATED_BY = {
+  ME: 'me',
   OTHERS: 'others',
   ALL: 'all',
 };

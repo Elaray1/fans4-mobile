@@ -1,24 +1,13 @@
 import { apiClient } from 'helpers/api';
 
-import { COMMENTS_FILTERS } from 'resources/comment/comment.constants';
-
-export const getOtherPostComments = ({
-  page, perPage, postId,
+export const getPostComments = ({
+  page, perPage, postId, createdBy,
 }) => apiClient
   .get('comments', {
     page,
     perPage,
     postId,
-    filter: COMMENTS_FILTERS.OTHERS,
-  });
-
-export const getMyPostComments = ({
-  postId,
-}) => apiClient
-  .get('comments', {
-    postId,
-    isMyComments: true,
-    filter: COMMENTS_FILTERS.MY,
+    createdBy,
   });
 
 export const createComment = ({ text, postId }) => apiClient

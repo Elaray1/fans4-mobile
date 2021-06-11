@@ -20,6 +20,7 @@ import useToast from 'hooks/useToast';
 import colors from 'themes/colors';
 
 import { USER_TYPES } from 'resources/user/user.constants';
+import { CREATED_BY } from 'resources/comment/comment.constants';
 
 
 import styles from './styles';
@@ -69,13 +70,15 @@ function Comments({ route }) {
               totalCount: fetchedTotalCount,
             },
           ] = await Promise.all([
-            commentApi.getMyPostComments({
+            commentApi.getPostComments({
               postId,
+              createdBy: CREATED_BY.ME,
             }),
-            commentApi.getOtherPostComments({
+            commentApi.getPostComments({
               page: fetchingPage,
               perPage: PER_PAGE_COUNT,
               postId,
+              createdBy: CREATED_BY.OTHERS,
             }),
           ]);
           setTotalCount(fetchedTotalCount);
@@ -84,10 +87,11 @@ function Comments({ route }) {
           const {
             comments: fetchedComments,
             totalCount: fetchedTotalCount,
-          } = await commentApi.getOtherPostComments({
+          } = await commentApi.getPostComments({
             page: fetchingPage,
             perPage: PER_PAGE_COUNT,
             postId,
+            createdBy: CREATED_BY.OTHERS,
           });
           setTotalCount(fetchedTotalCount);
           setComments([...currentComments, ...fetchedComments]);
