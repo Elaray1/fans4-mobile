@@ -43,7 +43,11 @@ const httpRequest = method => async (url, data, file) => {
       const formData = new FormData();
 
       Object.keys(data).forEach((key) => {
-        formData.append(key, typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key]);
+        if (Array.isArray(data[key])) {
+          data[key] = `[${data[key].toString()}]`;
+        }
+
+        formData.append(key, data[key]);
       });
 
       // It's important to append file field after all other fields because
