@@ -39,10 +39,11 @@ export const emailSignUp = ({
 };
 
 export const sendEmailConfirmation = async ({
-  email,
+  email, userType,
 }) => {
   await api.sendEmailConfirmation({
     email,
+    userType,
   });
 };
 

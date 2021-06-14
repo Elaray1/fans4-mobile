@@ -8,10 +8,11 @@ export const emailSignUp = ({
   });
 
 export const sendEmailConfirmation = ({
-  email,
+  email, userType,
 }) => apiClient
   .post('users/send-email-confirmation', {
     email,
+    userType,
   });
 
 export const getUserData = () => apiClient

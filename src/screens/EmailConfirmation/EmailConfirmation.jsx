@@ -52,8 +52,11 @@ function EmailConfirmation() {
     setIsResendButtonShown(false);
     timer = setTimeout(() => setIsResendButtonShown(true), 10000);
 
-    await userActions.sendEmailConfirmation({ email: userEmail });
-  }, [userEmail]);
+    await userActions.sendEmailConfirmation({
+      email: userEmail,
+      userType,
+    });
+  }, [userEmail, userType]);
 
   const goToSignUp = useCallback(async () => {
     await dispatch(userActions.logout());
