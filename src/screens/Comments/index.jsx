@@ -26,6 +26,7 @@ import { CREATED_BY } from 'resources/comment/comment.constants';
 import styles from './styles';
 
 const PER_PAGE_COUNT = 25;
+const COMMENT_MAX_LEGHT = 160;
 
 function Comments({ route }) {
   const { t } = useTranslation();
@@ -203,7 +204,7 @@ function Comments({ route }) {
           <Input
             value={commentValue}
             onChange={setCommentValue}
-            maxLength={160}
+            maxLength={COMMENT_MAX_LEGHT}
             multiline
             style={styles.input}
             buttonTitle={t('Comments.post')}
