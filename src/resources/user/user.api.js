@@ -37,7 +37,7 @@ export const emailSignIn = ({
   email, password, userType, deviceId,
 }) => apiClient
   .post('users/signin', {
-    email, password, userType, deviceId,
+    email, password, userType, deviceId, isFromMobile: true,
   });
 
 export const fillRegistrationForm = ({
