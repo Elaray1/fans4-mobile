@@ -20,7 +20,7 @@ import useToast from 'hooks/useToast';
 import colors from 'themes/colors';
 
 import { USER_TYPES } from 'resources/user/user.constants';
-import { CREATED_BY } from 'resources/comment/comment.constants';
+import { CREATED_BY, SORT_OPTIONS } from 'resources/comment/comment.constants';
 
 
 import styles from './styles';
@@ -74,12 +74,14 @@ function Comments({ route }) {
             commentApi.getPostComments({
               postId,
               createdBy: CREATED_BY.ME,
+              sortOption: SORT_OPTIONS.CREATED_ON_DESC,
             }),
             commentApi.getPostComments({
               page: fetchingPage,
               perPage: PER_PAGE_COUNT,
               postId,
               createdBy: CREATED_BY.OTHERS,
+              sortOption: SORT_OPTIONS.CREATED_ON_ASC,
             }),
           ]);
           setTotalCount(fetchedTotalCount);
@@ -93,6 +95,7 @@ function Comments({ route }) {
             perPage: PER_PAGE_COUNT,
             postId,
             createdBy: CREATED_BY.OTHERS,
+            sortOption: SORT_OPTIONS.CREATED_ON_ASC,
           });
           setTotalCount(fetchedTotalCount);
           setComments([...currentComments, ...fetchedComments]);

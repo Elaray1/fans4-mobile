@@ -1,13 +1,14 @@
 import { apiClient } from 'helpers/api';
 
 export const getPostComments = ({
-  page, perPage, postId, createdBy,
+  page, perPage, postId, createdBy, sortOption,
 }) => apiClient
   .get('comments', {
     page,
     perPage,
     postId,
     createdBy,
+    sortOption,
   });
 
 export const createComment = ({ text, postId }) => apiClient
