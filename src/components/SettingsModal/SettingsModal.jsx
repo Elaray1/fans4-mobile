@@ -57,14 +57,29 @@ function SettingsModal({
   }, [navigation, onClose]);
 
   const onLogOutPress = useCallback(async () => {
-    await dispatch(userActions.logout());
     navigation.reset({
       index: 1,
-      routes: [
-        { name: 'AuthStack', params: { screen: 'SelectUserType' } },
-        { name: 'AuthStack', params: { screen: 'SignIn', params: { userType } } },
-      ],
+      routes: [{
+        name: 'AuthStack',
+        state: {
+          routes: [{
+            name: 'SelectUserType',
+          }],
+        },
+      }, {
+        name: 'AuthStack',
+        state: {
+          routes: [{
+            name: 'SignIn',
+            params: {
+              userType,
+            },
+          }],
+        },
+      }],
     });
+
+    await dispatch(userActions.logout());
   }, [dispatch, navigation, userType]);
 
   return (

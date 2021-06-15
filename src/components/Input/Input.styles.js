@@ -50,10 +50,24 @@ export default StyleSheet.create({
   },
   inputContainerMultiline: {
     alignItems: 'flex-start',
-    paddingVertical: 18,
+    paddingTop: 15,
+    paddingBottom: 10,
   },
   inputMultiline: {
     paddingVertical: 0,
     textAlignVertical: 'top',
+  },
+  buttonTitle: {
+    color: colors.primary,
+    textDecorationLine: 'none',
+  },
+  button: {
+    marginLeft: 20,
+  },
+  multilineButtonStyles: {
+    alignSelf: 'flex-end',
+  },
+  disabledTitleStyle: {
+    opacity: 0.5,
   },
 });

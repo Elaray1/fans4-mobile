@@ -1,5 +1,6 @@
 import React from 'react';
 import { useToast } from 'react-native-fast-toast';
+import { useTranslation } from 'react-i18next';
 
 import SuccessToast from 'components/SuccessToast';
 import FailureToast from 'components/FailureToast';
@@ -16,6 +17,7 @@ const defaultOptions = {
 };
 
 export default () => {
+  const { t } = useTranslation();
   const toast = useToast();
 
   return {
@@ -23,7 +25,7 @@ export default () => {
       toast.show(<SuccessToast text={text} />, defaultOptions);
     },
     showFailure: (text) => {
-      toast.show(<FailureToast text={text} />, defaultOptions);
+      toast.show(<FailureToast text={text || t('Toast.somethingWentWrongPleaseTryAgain')} />, defaultOptions);
     },
   };
 };

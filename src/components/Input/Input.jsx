@@ -6,6 +6,7 @@ import {
 import getKeyboardType from 'helpers/getKeyboardType';
 
 import Text from 'components/Text';
+import Button from 'components/Button';
 
 import colors from 'themes/colors';
 
@@ -13,6 +14,8 @@ import OpenedEyeIcon from 'assets/icons/opened-eye';
 import ClosedEyeIcon from 'assets/icons/closed-eye';
 
 import styles from './Input.styles';
+
+const DEFAULT_INPUT_CONTENT_SIZE_HEIGHT = 27.7;
 
 function Input({
   type,
@@ -35,9 +38,12 @@ function Input({
   multiline,
   numberOfLines,
   autoCapitalize,
+  buttonTitle,
+  onButtonPress,
 }) {
   const [focused, setFocused] = useState(false);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
+  const [inputContentSizeHeight, setInputContentSizeHeight] = useState(DEFAULT_INPUT_CONTENT_SIZE_HEIGHT);
 
   const handleFocus = useCallback(() => {
     setFocused(true);
@@ -52,6 +58,10 @@ function Input({
   const onChangePasswordVisibility = useCallback(() => {
     setPasswordVisible(!isPasswordVisible);
   }, [isPasswordVisible]);
+
+  const onContentSizeChange = useCallback((event) => {
+    setInputContentSizeHeight(event.nativeEvent.contentSize.height);
+  }, []);
 
   return (
     <View style={style}>
@@ -73,7 +83,7 @@ function Input({
           style,
           focused && styles.inputFocused,
           !!errors.length && styles.error,
-          disabled && styles.disabled,
+          disabled && !buttonTitle && styles.disabled,
           multiline && styles.inputContainerMultiline,
         ]}
       >
@@ -98,6 +108,7 @@ function Input({
           multiline={multiline}
           autoCapitalize={autoCapitalize}
           numberOfLines={numberOfLines}
+          onContentSizeChange={onContentSizeChange}
         />
         {type === 'password' && (
         <TouchableOpacity
@@ -109,6 +120,20 @@ function Input({
           {!disabled && !isPasswordVisible && <ClosedEyeIcon />}
           {!disabled && isPasswordVisible && <OpenedEyeIcon />}
         </TouchableOpacity>
+        )}
+        {Boolean(buttonTitle) && (
+        <Button
+          type="link"
+          title={buttonTitle}
+          onPress={onButtonPress}
+          disabled={!value || disabled}
+          titleStyle={styles.buttonTitle}
+          style={[
+            styles.button,
+            Boolean(inputContentSizeHeight > DEFAULT_INPUT_CONTENT_SIZE_HEIGHT) && styles.multilineButtonStyles,
+          ]}
+          disabledTitleStyle={styles.disabledTitleStyle}
+        />
         )}
       </View>
       {!!errors.length
@@ -142,6 +167,8 @@ Input.propTypes = {
   maxLength: PropTypes.number,
   multiline: PropTypes.bool,
   numberOfLines: PropTypes.number,
+  buttonTitle: PropTypes.string,
+  onButtonPress: PropTypes.func,
 };
 
 Input.defaultProps = {
@@ -152,8 +179,8 @@ Input.defaultProps = {
   placeholder: '',
   disabled: false,
   errors: [],
-  onFocus: () => {},
-  onBlur: () => {},
+  onFocus: () => null,
+  onBlur: () => null,
   returnKeyType: 'done',
   getRef: { current: null },
   blurOnSubmit: true,
@@ -164,6 +191,8 @@ Input.defaultProps = {
   errorStyle: {},
   multiline: false,
   numberOfLines: 1,
+  buttonTitle: '',
+  onButtonPress: () => null,
 };
 
 export default Input;

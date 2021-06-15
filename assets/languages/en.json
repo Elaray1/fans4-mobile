@@ -354,5 +354,41 @@
     "round": "Round",
     "winner": "Winner",
     "votes": "votes"
+  },
+  "Comments": {
+    "comments": "Comments",
+    "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh.",
+    "noCommentsYet": "No comments, yet",
+    "beTheFirstFanToCommentOnThisPost": "Be the first fan to comment on this post.",
+    "addComment": "Add comment",
+    "max160Characters": "max. 160 characters",
+    "post": "Post",
+    "onceAFanCommentsOnThisPostYouWillSeeItHere": "Once a fan comments on this post, you will see it here."
+  },
+  "Comment": {
+    "you": "you",
+    "deleteComment": "Delete Comment",
+    "commentDeleted": "Comment deleted.",
+    "reportThisComment": "Report this Comment"
+  },
+  "Toast": {
+    "somethingWentWrongPleaseTryAgain": "Something went wrong. Please try again."
+  },
+  "ReportComment": {
+    "reportComment": "Report Comment",
+    "whyDoYouWantToReportThisComment": "Why do you want to report this comment?",
+    "unwantedCommercialContent": "Unwanted commercial content",
+    "inappropriateContent": "Inappropriate content",
+    "hateSpeechOrSymbols": "Hate speech or symbols",
+    "falseInformation": "False information",
+    "other": "Other",
+    "report": "Report",
+    "writeHereTheReasonMax160Characters": "Write here the reason (max. 160 characters)"
+  },
+  "ThanksForReporting": {
+    "reportComment": "Report Comment",
+    "thanksForReporting": "Thanks for Reporting!",
+    "thanksYourFeedbackHelpsUsMakeFans4AGoodPlaceForEveryoneWeWillReviewThisComment": "Thanks, your feedback helps us make Fans4 a good place for everyone. We will review this comment.",
+    "done": "Done"
   }
 }

@@ -1,8 +1,12 @@
-import React from 'react';
-import { View, Image } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, Image, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
-import { MEDIA_TYPES, POST_STATUSES } from 'resources/post/post.constants';
+import * as userSelectors from 'resources/user/user.selectors';
+
+import * as postApi from 'resources/post/post.api';
 
 import Text from 'components/Text';
 import StatusBadge from 'components/StatusBadge';
@@ -13,7 +17,12 @@ import CommentIcon from 'assets/icons/comment';
 import LockIcon from 'assets/icons/lock';
 
 import config from 'resources/config';
+
+import useToast from 'hooks/useToast';
+import colors from 'themes/colors';
+import { MEDIA_TYPES, POST_STATUSES } from 'resources/post/post.constants';
 import { formatCount, formatTime } from './Post.helpers';
+
 import styles from './Post.styles';
 
 function Post({
@@ -23,9 +32,17 @@ function Post({
   author,
   status,
   checkedOn,
-  likesCount,
+  likedUserIds,
   commentsCount,
 }) {
+  const navigation = useNavigation();
+  const { showFailure } = useToast();
+
+  const userId = useSelector(userSelectors.getUserId);
+
+  const [likesCount, setLikesCount] = useState(likedUserIds.length);
+  const [isLiked, setIsLiked] = useState(likedUserIds.some(id => id === userId));
+
   const authorView = author ? (
     <View style={styles.author}>
       <Image
@@ -89,6 +106,25 @@ function Post({
     );
   }
 
+  const onCommentsPress = useCallback(() => {
+    navigation.navigate('Comments', { postId: _id });
+  }, [navigation, _id]);
+
+  const onLikePress = useCallback(async () => {
+    try {
+      let updatedPost;
+      if (isLiked) {
+        updatedPost = await postApi.removeLikeFromPost(_id);
+      } else {
+        updatedPost = await postApi.likePost(_id);
+      }
+      setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
+      setIsLiked(updatedPost.likedUserIds.some(id => id === userId));
+    } catch (error) {
+      showFailure();
+    }
+  }, [_id, showFailure, userId, isLiked, likesCount]);
+
   return (
     <View style={styles.post}>
       {authorView}
@@ -96,14 +132,22 @@ function Post({
       {status === POST_STATUSES.APPROVED && (
         <View style={[styles.status, styles.approvedStatus]}>
           <View style={styles.postActions}>
-            <View style={styles.postAction}>
-              <LikeIcon />
+            <TouchableOpacity
+              onPress={onLikePress}
+              activeOpacity={0.7}
+              style={[styles.postAction]}
+            >
+              {isLiked ? <LikeIcon fill={colors.white} /> : <LikeIcon />}
               <Text style={styles.postActionText}>{formatCount(likesCount)}</Text>
-            </View>
-            <View style={[styles.postAction, styles.postActionRight]}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onCommentsPress}
+              activeOpacity={0.7}
+              style={[styles.postAction, styles.postActionRight]}
+            >
               <CommentIcon />
               <Text style={styles.postActionText}>{formatCount(commentsCount)}</Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <Text style={styles.time}>{formatTime(checkedOn)}</Text>
@@ -139,7 +183,7 @@ Post.propTypes = {
   }),
   status: PropTypes.oneOf(Object.values(POST_STATUSES)).isRequired,
   checkedOn: PropTypes.string,
-  likesCount: PropTypes.number,
+  likedUserIds: PropTypes.arrayOf(PropTypes.string),
   commentsCount: PropTypes.number,
 };
 
@@ -148,7 +192,7 @@ Post.defaultProps = {
   media: null,
   author: null,
   checkedOn: null,
-  likesCount: 0,
+  likedUserIds: [],
   commentsCount: 0,
 };
 

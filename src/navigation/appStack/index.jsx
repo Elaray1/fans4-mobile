@@ -26,6 +26,9 @@ import Fans from 'screens/Fans';
 import Fighter from 'screens/Fighter';
 import InviteAFan from 'screens/InviteAFan';
 import EventFights from 'screens/EventFights';
+import Comments from 'screens/Comments';
+import ReportComment from 'screens/ReportComment';
+import ThanksForReporting from 'screens/ThanksForReporting';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -112,6 +115,9 @@ function AppScreens() {
       <AppStack.Screen name="Fighter" component={Fighter} />
       <AppStack.Screen name="InviteAFan" component={InviteAFan} />
       <AppStack.Screen name="EventFights" component={EventFights} />
+      <AppStack.Screen name="Comments" component={Comments} />
+      <AppStack.Screen name="ReportComment" component={ReportComment} />
+      <AppStack.Screen name="ThanksForReporting" component={ThanksForReporting} />
     </AppStack.Navigator>
   );
 }

@@ -92,7 +92,7 @@ function Fighter({ fighterId }) {
         text={item.text}
         status={item.status}
         checkedOn={item.checkedOn}
-        likesCount={item.likedUserIds.length}
+        likedUserIds={item.likedUserIds}
         commentsCount={item.commentsCount}
       />
     );

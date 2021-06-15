@@ -22,6 +22,7 @@ function Button({
   disabled,
   style,
   titleStyle,
+  disabledTitleStyle,
   isLoading,
   disableWithoutFade,
 }) {
@@ -58,6 +59,7 @@ function Button({
               type === TYPES.LINK && styles.link,
               isDisabled && type === TYPES.PRIMARY && styles.disabledPrimaryButtonTitle,
               isDisabled && type === TYPES.SECONDARY && styles.disabledSecondaryButtonTitle,
+              isDisabled && disabledTitleStyle,
               titleStyle,
             ]}
           >
@@ -72,8 +74,9 @@ function Button({
 Button.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.shape()]).isRequired,
   onPress: PropTypes.func,
-  style: PropTypes.shape(),
+  style: PropTypes.oneOfType([PropTypes.array, PropTypes.shape()]),
   titleStyle: Text.propTypes.style,
+  disabledTitleStyle: Text.propTypes.style,
   disabled: PropTypes.bool,
   disableWithoutFade: PropTypes.bool,
   isLoading: PropTypes.bool,
@@ -87,6 +90,7 @@ Button.defaultProps = {
   isLoading: false,
   style: {},
   titleStyle: {},
+  disabledTitleStyle: {},
   type: TYPES.PRIMARY,
 };
 

@@ -12,3 +12,9 @@ export const getPosts = ({ page, perPage, authorId }) => apiClient
     perPage,
     ...(authorId && { authorId }),
   });
+
+export const likePost = _id => apiClient
+  .post(`posts/${_id}/likes`);
+
+export const removeLikeFromPost = _id => apiClient
+  .delete(`posts/${_id}/likes`);
