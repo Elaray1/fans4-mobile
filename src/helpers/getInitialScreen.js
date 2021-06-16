@@ -9,7 +9,7 @@ export default (user) => {
   }
 
   if (user.role.type === USER_TYPES.FIGHTER) {
-    if (user.status === USER_STATUSES.PENDING) {
+    if (user.status === USER_STATUSES.IN_REGISTRATION_PROCESS) {
       if (!user.appState.isEmailVerified) {
         return {
           stack: 'AppStack',
@@ -17,6 +17,13 @@ export default (user) => {
         };
       }
 
+      return {
+        stack: 'AppStack',
+        screen: 'BiographicalData',
+      };
+    }
+
+    if (user.status === USER_STATUSES.PENDING) {
       const isProfileDataSubmited = !!user.role.biography;
 
       if (isProfileDataSubmited) {
@@ -25,11 +32,6 @@ export default (user) => {
           screen: 'VerificationPending',
         };
       }
-
-      return {
-        stack: 'AppStack',
-        screen: 'BiographicalData',
-      };
     }
 
     if (user.status === USER_STATUSES.DECLINED) {

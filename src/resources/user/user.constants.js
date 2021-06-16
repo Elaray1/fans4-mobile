@@ -11,4 +11,5 @@ export const USER_STATUSES = {
   VERIFIED: 'verified',
   DECLINED: 'declined',
   BLOCKED: 'blocked',
+  IN_REGISTRATION_PROCESS: 'in_registration_process',
 };
