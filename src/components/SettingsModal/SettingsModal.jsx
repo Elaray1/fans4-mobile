@@ -46,8 +46,9 @@ function SettingsModal({
   }, [navigation, onClose]);
 
   const onFinancesPress = useCallback(() => {
-    console.log('onFinancesPress');
-  }, []);
+    onClose();
+    navigation.navigate('Finances');
+  }, [navigation, onClose]);
 
   const onSupportPress = useCallback(() => {
     onClose();

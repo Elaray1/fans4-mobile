@@ -463,5 +463,10 @@
     "genders": "Genders",
     "other": "Other",
     "preferNotToSay": "Prefer not to say"
+  },
+  "Finances": {
+    "finances": "Finances",
+    "addBankAccount": "Add Bank Account",
+    "incomeWillBePaidToThisBankAccountMonthlyYouCanTrackAllFinanceInformationInThisSection": "Income will be paid to this bank account monthly. You can track all finance information in this section."
   }
 }
