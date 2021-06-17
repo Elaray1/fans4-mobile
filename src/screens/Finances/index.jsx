@@ -1,8 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
-  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator,
+  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, Linking,
 } from 'react-native';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import * as accountApi from 'resources/account/account.api';
 
@@ -17,9 +22,14 @@ import colors from 'themes/colors';
 
 import styles from './styles';
 
-function Finances() {
+function Finances({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
+  const navigation = useNavigation();
+
+  const isUserAuthenticated = useSelector(userSelectors.getAuthenticated);
+
+  const stripeAccountId = route?.params?.stripeAccountId;
 
   const [account, setAccount] = useState(null);
 
@@ -38,16 +48,42 @@ function Finances() {
 
   const createUserAccount = useCallback(async () => {
     try {
-      const { account: fetchedAccount } = await accountApi.createUserAccount();
+      const {
+        accountLink: fetchedAccountLink,
+      } = await accountApi.createUserAccount();
+      console.log(fetchedAccountLink);
+      // Linking.openURL();
     } catch (error) {
       showFailure();
     }
   }, [showFailure]);
 
+  const onGoBack = useCallback(() => {
+    navigation.reset({
+      index: 0,
+      routes: [{
+        name: 'AppStack',
+        state: {
+          routes: [{
+            name: 'Account',
+          }],
+        },
+      }],
+    });
+  }, [navigation]);
+
   useEffect(() => {
-    getUserBankAccount();
+    if (isUserAuthenticated) {
+      getUserBankAccount();
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isUserAuthenticated]);
+
+  useEffect(() => {
+    if (stripeAccountId) {
+      console.log(1);
+    }
+  }, [stripeAccountId]);
 
   const NoBackAccountEmptyView = () => (
     <View style={styles.emptyView}>
@@ -76,7 +112,11 @@ function Finances() {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <Header leftItemType="backArrow" title={t('Finances.finances')} />
+      <Header
+        title={t('Finances.finances')}
+        leftItemType="backArrow"
+        onLeftItemPress={onGoBack}
+      />
       <View style={styles.content}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -96,5 +136,13 @@ function Finances() {
     </SafeAreaView>
   );
 }
+
+Finances.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      stripeAccountId: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
+};
 
 export default React.memo(Finances);
