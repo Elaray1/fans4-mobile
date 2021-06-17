@@ -46,7 +46,7 @@ function AccountInformation() {
               <View style={styles.itemContent}>
                 <View style={styles.itemContent}>
                   <Text style={[styles.email, userNewEmail && styles.newEmail]}>
-                    {userEmail}
+                    {userNewEmail ?? userEmail}
                   </Text>
                   {userNewEmail && (
                   <View style={styles.emailPending}>
