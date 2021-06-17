@@ -11,6 +11,7 @@ import Text from 'components/Text';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import CrossIcon from 'assets/icons/cross';
 import AccountIcon from 'assets/icons/account';
@@ -29,6 +30,8 @@ function SettingsModal({
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
+  const isFan = useSelector(userSelectors.getUserType) === USER_TYPES.FAN;
 
   const userType = useSelector(userSelectors.getUserType);
 
@@ -137,6 +140,7 @@ function SettingsModal({
             <View style={styles.line} />
           </View>
 
+          {!isFan && (
           <View>
             <TouchableOpacity
               style={styles.settingsOption}
@@ -155,6 +159,7 @@ function SettingsModal({
             </TouchableOpacity>
             <View style={styles.line} />
           </View>
+          )}
 
           <View>
             <TouchableOpacity
@@ -175,6 +180,7 @@ function SettingsModal({
             <View style={styles.line} />
           </View>
 
+          {!isFan && (
           <View>
             <TouchableOpacity
               style={styles.settingsOption}
@@ -193,6 +199,7 @@ function SettingsModal({
             </TouchableOpacity>
             <View style={styles.line} />
           </View>
+          )}
 
           <TouchableOpacity style={styles.logOutButton} onPress={onLogOutPress}>
             <Text style={styles.logOutText}>
