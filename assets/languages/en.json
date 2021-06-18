@@ -390,5 +390,11 @@
     "thanksForReporting": "Thanks for Reporting!",
     "thanksYourFeedbackHelpsUsMakeFans4AGoodPlaceForEveryoneWeWillReviewThisComment": "Thanks, your feedback helps us make Fans4 a good place for everyone. We will review this comment.",
     "done": "Done"
+  },
+  "AccountFan": {
+    "username": "username",
+    "YourSubscriptions": "Your subscriptions",
+    "YouCantSubscribe": "You can't subscribe for a Fighters in the app. We know it’s a hassle. After you subscribed, you can enjoy the content in the app.",
+    "PleaseGoToFans4": "Please go to Fans4 official website to learn more.",
   }
 }
