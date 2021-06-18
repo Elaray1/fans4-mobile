@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import {
   SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, Linking,
 } from 'react-native';
@@ -22,14 +21,12 @@ import colors from 'themes/colors';
 
 import styles from './styles';
 
-function Finances({ route }) {
+function Finances() {
   const { t } = useTranslation();
   const { showFailure } = useToast();
   const navigation = useNavigation();
 
   const isUserAuthenticated = useSelector(userSelectors.getAuthenticated);
-
-  const stripeAccountId = route?.params?.stripeAccountId;
 
   const [account, setAccount] = useState(null);
 
@@ -51,8 +48,7 @@ function Finances({ route }) {
       const {
         accountLink: fetchedAccountLink,
       } = await accountApi.createUserAccount();
-      console.log(fetchedAccountLink);
-      // Linking.openURL();
+      Linking.openURL(fetchedAccountLink);
     } catch (error) {
       showFailure();
     }
@@ -78,12 +74,6 @@ function Finances({ route }) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUserAuthenticated]);
-
-  useEffect(() => {
-    if (stripeAccountId) {
-      console.log(1);
-    }
-  }, [stripeAccountId]);
 
   const NoBackAccountEmptyView = () => (
     <View style={styles.emptyView}>
@@ -136,13 +126,5 @@ function Finances({ route }) {
     </SafeAreaView>
   );
 }
-
-Finances.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({
-      stripeAccountId: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
-};
 
 export default React.memo(Finances);
