@@ -42,6 +42,7 @@ import { USER_STATUSES, USER_TYPES } from 'resources/user/user.constants';
 
 import FighterNavigator from 'navigation/appStack/components/fighter';
 import FanNavigator from 'navigation/appStack/components/fan';
+import _ from 'lodash';
 
 const AppStack = createStackNavigator();
 
@@ -65,7 +66,10 @@ function AppScreens() {
       let screen;
 
       if (user.status === USER_STATUSES.VERIFIED) {
-        if (user.statusHistory.length === 1) {
+        const isFirstVerification = (user.statusHistory || [])
+          .filter((h => h.status === USER_STATUSES.VERIFIED)).length === 1;
+
+        if (isFirstVerification) {
           screen = 'VerificationSuccessful';
         } else {
           screen = 'Account';

@@ -13,3 +13,8 @@ export const USER_STATUSES = {
   BLOCKED: 'blocked',
   IN_REGISTRATION_PROCESS: 'in_registration_process',
 };
+
+export const FIGHTER_GENDERS = {
+  FEMALE: 'female',
+  MALE: 'male',
+};

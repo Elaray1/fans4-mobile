@@ -19,13 +19,9 @@ import Toggle from 'components/Toggle';
 import UploadMediaButton from 'components/UploadMediaButton';
 
 import * as userActions from 'resources/user/user.actions';
+import { FIGHTER_GENDERS } from 'resources/user/user.constants';
 
 import styles from './BiographicalData.styles';
-
-const GENDERS = {
-  male: 'male',
-  female: 'female',
-};
 
 function BiographicalData() {
   const { t } = useTranslation();
@@ -33,8 +29,8 @@ function BiographicalData() {
   const dispatch = useDispatch();
 
   const genders = useMemo(() => [
-    { id: GENDERS.male, value: t('BiographicalData.male') },
-    { id: GENDERS.female, value: t('BiographicalData.female') },
+    { id: FIGHTER_GENDERS.MALE, value: t('BiographicalData.male') },
+    { id: FIGHTER_GENDERS.FEMALE, value: t('BiographicalData.female') },
   ], [t]);
 
   const [fullName, setFullName] = useState('');
@@ -44,7 +40,7 @@ function BiographicalData() {
 
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [isCitySelectVisible, setIsCitySelectVisible] = useState(false);
-  const [gender, setGender] = useState(GENDERS.male);
+  const [gender, setGender] = useState(FIGHTER_GENDERS.MALE);
   const [photo, setPhoto] = useState(null);
 
   const onBirthDatePress = useCallback(() => {
