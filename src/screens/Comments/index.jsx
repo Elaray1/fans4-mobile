@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, KeyboardAvoidingView,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -173,6 +173,7 @@ function Comments({ route }) {
   };
   return (
     <SafeAreaView style={styles.screen}>
+<<<<<<< HEAD
       <Header
         title={t('Comments.comments')}
         leftItemType="backArrow"
@@ -216,10 +217,58 @@ function Comments({ route }) {
             onButtonPress={onCreateComment}
             disabled={isButtonDisabled}
             autoFocus
+=======
+      <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
+        <View style={styles.keyboardAvoidingChildContainer}>
+          <Header
+            title={t('Comments.comments')}
+            leftItemType="backArrow"
+>>>>>>> Update leave comment screen
           />
+          <View style={styles.content}>
+            {isRefreshing && <Loader />}
+            {!isRefreshing && (comments.length ? (
+              <FlatList
+                data={comments}
+                renderItem={renderItem}
+                keyExtractor={keyExtractor}
+                onEndReachedThreshold={0.3}
+                onEndReached={fetchNewItems}
+                showsVerticalScrollIndicator={false}
+                ListFooterComponent={renderFooter}
+                onRefresh={onRefresh}
+                refreshing={isRefreshing}
+              />
+            ) : (
+              <ScrollView
+                contentContainerStyle={{ flexGrow: 1 }}
+                refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+                keyboardShouldPersistTaps="handled"
+              >
+                <EmptyView />
+              </ScrollView>
+            ))}
+            {userType === USER_TYPES.FAN && !isRefreshing && (
+            <View style={styles.commentContainer}>
+              <View style={styles.line} />
+              <Text style={styles.secondaryText}>
+                {`${t('Comments.addComment')} ${commentValue.length ? `(${t('Comments.max160Characters')})` : ''}`}
+              </Text>
+              <Input
+                value={commentValue}
+                onChange={setCommentValue}
+                maxLength={COMMENT_MAX_LEGHT}
+                multiline
+                style={styles.input}
+                buttonTitle={t('Comments.post')}
+                onButtonPress={onCreateComment}
+                disabled={isButtonDisabled}
+              />
+            </View>
+            )}
+          </View>
         </View>
-        )}
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

@@ -51,4 +51,12 @@ export default StyleSheet.create({
   input: {
     height: null,
   },
+  keyboardAvoiding: {
+    flex: 1,
+  },
+  keyboardAvoidingChildContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'space-between',
+  },
 });

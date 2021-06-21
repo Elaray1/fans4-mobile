@@ -1,6 +1,7 @@
 import React, {
   useCallback, useEffect, useState, useMemo,
 } from 'react';
+import PropTypes from 'prop-types';
 import {
   SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, Linking, Platform,
 } from 'react-native';
@@ -26,12 +27,14 @@ import colors from 'themes/colors';
 
 import styles from './styles';
 
-function Finances() {
+function Finances({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
   const navigation = useNavigation();
 
   const isUserAuthenticated = useSelector(userSelectors.getAuthenticated);
+
+  const stripeAccountId = route?.params?.stripeAccountId;
 
   const [account, setAccount] = useState(null);
 
@@ -101,7 +104,7 @@ function Finances() {
       getUserBankAccount();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUserAuthenticated]);
+  }, [isUserAuthenticated, stripeAccountId]);
 
   const emptyViewText = useMemo(() => {
     return account
@@ -192,5 +195,13 @@ function Finances() {
     </SafeAreaView>
   );
 }
+
+Finances.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      stripeAccountId: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
+};
 
 export default React.memo(Finances);

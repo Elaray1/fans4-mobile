@@ -140,7 +140,7 @@ const linking = {
     screens: {
       AppStack: {
         screens: {
-          Finances: 'finances',
+          Finances: 'finances/:stripeAccountId',
         },
       },
     },
