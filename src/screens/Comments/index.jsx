@@ -1,4 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {
+  useState, useCallback, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import {
   SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl,
@@ -213,6 +215,7 @@ function Comments({ route }) {
             buttonTitle={t('Comments.post')}
             onButtonPress={onCreateComment}
             disabled={isButtonDisabled}
+            autoFocus
           />
         </View>
         )}
