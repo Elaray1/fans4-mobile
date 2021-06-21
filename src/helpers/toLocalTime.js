@@ -1,17 +1,17 @@
 import moment from 'moment-timezone';
 
 export const toLocalDate = (item) => {
-  const eventDate = moment(item.date).tz(item.location.timezone);
+  const eventDate = moment(item.date);
 
-  const currentYear = moment().tz(item.location.timezone).year();
+  const currentYear = moment().year();
   const eventYear = eventDate.year();
 
   return `${eventDate.format(`ddd, MMM DD${currentYear !== eventYear ? ', YYYY' : ''}`)}`;
 };
 
 export const toLocalTime = (item) => {
-  const eventDate = moment(item.date).tz(item.location.timezone);
-  return `${eventDate.format('h:mm a z')}`;
+  const eventDate = moment(item.date);
+  return `${eventDate.format('h:mm a')}`;
 };
 
 export const toLocalDateAndTime = (item) => {
