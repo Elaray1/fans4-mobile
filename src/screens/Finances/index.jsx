@@ -1,16 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useState, useMemo,
+} from 'react';
 import {
-  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, Linking,
+  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, Linking, Platform,
 } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as accountApi from 'resources/account/account.api';
 
-import PlusIcon from 'assets/icons/plus.svg';
+import PlusIcon from 'assets/icons/plus';
+import TrashIcon from 'assets/icons/trash';
 
 import Text from 'components/Text';
 import Header from 'components/Header';
@@ -31,6 +36,7 @@ function Finances() {
   const [account, setAccount] = useState(null);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [webViewUrl, setWebViewUrl] = useState(null);
 
   const getUserBankAccount = useCallback(async () => {
     setIsRefreshing(true);
@@ -48,7 +54,21 @@ function Finances() {
       const {
         accountLink: fetchedAccountLink,
       } = await accountApi.createUserAccount();
-      Linking.openURL(fetchedAccountLink);
+      if (Platform.OS === 'ios') {
+        setWebViewUrl(fetchedAccountLink);
+      } else {
+        // TODO: handle when app is already opened on finances screen and refresh data
+        Linking.openURL(fetchedAccountLink);
+      }
+    } catch (error) {
+      showFailure();
+    }
+  }, [showFailure]);
+
+  const deleteBankAccount = useCallback(async () => {
+    try {
+      await accountApi.deleteBankAccount();
+      setAccount(null);
     } catch (error) {
       showFailure();
     }
@@ -68,6 +88,14 @@ function Finances() {
     });
   }, [navigation]);
 
+  const onWebViewStateChange = useCallback(async (webViewState) => {
+    if (!webViewState.url.includes('connect.stripe.com')) {
+      await axios({ method: 'get', url: webViewState.url });
+      setWebViewUrl(null);
+      getUserBankAccount();
+    }
+  }, [getUserBankAccount]);
+
   useEffect(() => {
     if (isUserAuthenticated) {
       getUserBankAccount();
@@ -75,18 +103,45 @@ function Finances() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUserAuthenticated]);
 
-  const NoBackAccountEmptyView = () => (
+  const emptyViewText = useMemo(() => {
+    return account
+      ? {
+        title: t('Finances.noIncomeYet'),
+        text: t('Finances.onceYouEarnIncomeYouWillSeeItHere'),
+      }
+      : {
+        title: t('Finances.finances'),
+        text: t('Finances.incomeWillBePaidToThisBankAccountMonthlyYouCanTrackAllFinanceInformationInThisSection'),
+      };
+  }, [account, t]);
+
+  const EmptyView = () => (
     <View style={styles.emptyView}>
       <View style={styles.emptyViewImage} />
-      <Text style={styles.title}>{t('Finances.finances')}</Text>
+      <Text style={styles.title}>{emptyViewText.title}</Text>
       <Text style={styles.secondaryText}>
-        {t('Finances.incomeWillBePaidToThisBankAccountMonthlyYouCanTrackAllFinanceInformationInThisSection')}
+        {emptyViewText.text}
       </Text>
     </View>
   );
 
-  const BankAccount = () => (account
-    ? null
+  const BankAccount = () => (account?.typeMetadata?.bankAccount
+    ? (
+      <View style={styles.bankAccount}>
+        <View>
+          <Text style={styles.title}>{t('Finances.bankAccount')}</Text>
+          <Text style={styles.bankAccountNumber}>
+            {`${account.typeMetadata.bankAccount.routingNumber} ${account.typeMetadata.bankAccount.last4}`}
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={deleteBankAccount}
+          activeOpacity={0.7}
+        >
+          <TrashIcon />
+        </TouchableOpacity>
+      </View>
+    )
     : (
       <TouchableOpacity
         onPress={createUserAccount}
@@ -102,27 +157,38 @@ function Finances() {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <Header
-        title={t('Finances.finances')}
-        leftItemType="backArrow"
-        onLeftItemPress={onGoBack}
+      {webViewUrl && (
+      <WebView
+        source={{ uri: webViewUrl }}
+        onNavigationStateChange={onWebViewStateChange}
+        startInLoadingState
       />
-      <View style={styles.content}>
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-        >
-          {isRefreshing
-            ? <Loader />
-            : (
-              <>
-                <BankAccount />
-                <NoBackAccountEmptyView />
-              </>
-            )}
-        </ScrollView>
-      </View>
+      )}
+      {!webViewUrl && (
+        <>
+          <Header
+            title={t('Finances.finances')}
+            leftItemType="backArrow"
+            onLeftItemPress={onGoBack}
+          />
+          <View style={styles.content}>
+            <ScrollView
+              contentContainerStyle={styles.scrollContent}
+              style={styles.scrollView}
+              showsVerticalScrollIndicator={false}
+            >
+              {isRefreshing
+                ? <Loader />
+                : (
+                  <>
+                    <BankAccount />
+                    <EmptyView />
+                  </>
+                )}
+            </ScrollView>
+          </View>
+        </>
+      )}
     </SafeAreaView>
   );
 }

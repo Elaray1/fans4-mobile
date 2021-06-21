@@ -49,4 +49,19 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     color: colors.textSecondary,
   },
+  bankAccount: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderRadius: 5,
+    backgroundColor: colors.gray,
+    paddingLeft: 12,
+    paddingVertical: 14,
+    paddingRight: 15,
+  },
+  bankAccountNumber: {
+    marginTop: 6,
+    fontSize: fonts.size.caption,
+    color: colors.textSecondary,
+  },
 });

@@ -5,3 +5,6 @@ export const getUserAccount = () => apiClient
 
 export const createUserAccount = () => apiClient
   .post('accounts');
+
+export const deleteBankAccount = () => apiClient
+  .delete('accounts/bank-account');

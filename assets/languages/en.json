@@ -467,6 +467,9 @@
   "Finances": {
     "finances": "Finances",
     "addBankAccount": "Add Bank Account",
-    "incomeWillBePaidToThisBankAccountMonthlyYouCanTrackAllFinanceInformationInThisSection": "Income will be paid to this bank account monthly. You can track all finance information in this section."
+    "incomeWillBePaidToThisBankAccountMonthlyYouCanTrackAllFinanceInformationInThisSection": "Income will be paid to this bank account monthly. You can track all finance information in this section.",
+    "bankAccount": "Bank Account",
+    "noIncomeYet": "No income, yet",
+    "onceYouEarnIncomeYouWillSeeItHere": "Once you earn income, you will see it here."
   }
 }
