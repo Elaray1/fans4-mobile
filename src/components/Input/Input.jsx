@@ -40,6 +40,7 @@ function Input({
   autoCapitalize,
   buttonTitle,
   onButtonPress,
+  autoFocus,
 }) {
   const [focused, setFocused] = useState(false);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -109,6 +110,7 @@ function Input({
           autoCapitalize={autoCapitalize}
           numberOfLines={numberOfLines}
           onContentSizeChange={onContentSizeChange}
+          autoFocus={autoFocus}
         />
         {type === 'password' && (
         <TouchableOpacity
@@ -169,6 +171,7 @@ Input.propTypes = {
   numberOfLines: PropTypes.number,
   buttonTitle: PropTypes.string,
   onButtonPress: PropTypes.func,
+  autoFocus: PropTypes.bool,
 };
 
 Input.defaultProps = {
@@ -193,6 +196,7 @@ Input.defaultProps = {
   numberOfLines: 1,
   buttonTitle: '',
   onButtonPress: () => null,
+  autoFocus: false,
 };
 
 export default Input;
