@@ -330,7 +330,19 @@
     "fighterHasntAddedBiographyYet": "Fighter hasn’t added biography yet.",
     "applyForAFight": "Apply for a Fight",
     "proposeAFight": "Propose a Fight",
-    "subscribed": "Subscribed"
+    "subscribed": "Subscribed",
+    "youCannotApplyForAFight_0": "You can not apply for a fight with ",
+    "youCannotApplyForAFight_1": " because you are in different weight classes.",
+    "yourFightIsInAdminReview": "Your fight is in admin review.",
+    "yourFightIsAlreadyInVoting": "Your fight is already in voting.",
+    "yourFightIsAlreadyInUpcomingEvent": "Your fight is already in upcoming event.",
+    "youApplied": "You applied. Pending",
+    "youAppliedForAFight": "You applied for a fight.",
+    "unableToApplyForAFight": "Unable to apply for a fight. Please try again.",
+    "youInjured_0": "You can not apply for a fight with ",
+    "youInjured_1": " while you are injured.",
+    "fighterInjured_0": "You can not apply for a fight with ",
+    "fighterInjured_1": " because this fighter is injured"
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",
