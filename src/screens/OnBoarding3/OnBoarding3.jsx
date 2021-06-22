@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,7 +9,10 @@ import PlaceholderIllustration from 'assets/illustrations/placeholder';
 
 import * as userApi from 'resources/user/user.api';
 
-function OnBoarding3() {
+function OnBoarding3({ route }) {
+  const {
+    userType,
+  } = route?.params;
   const { t } = useTranslation();
   const navigation = useNavigation();
 
@@ -24,13 +28,21 @@ function OnBoarding3() {
 
   return (
     <IllustrationScreen
-      buttonText={t('OnBoarding3.buttonText')}
-      description={t('OnBoarding3.description')}
-      title={t('OnBoarding3.title')}
+      buttonText={t(`OnBoarding3.${userType}.buttonText`)}
+      description={t(`OnBoarding3.${userType}.description`)}
+      title={t(`OnBoarding3.${userType}.title`)}
       illustration={<PlaceholderIllustration />}
       onButtonPress={onNext}
     />
   );
 }
+
+OnBoarding3.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      userType: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
+};
 
 export default React.memo(OnBoarding3);

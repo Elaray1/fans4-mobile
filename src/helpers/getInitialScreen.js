@@ -57,6 +57,15 @@ export default (user) => {
       };
     }
 
+    if (user.status === USER_STATUSES.VERIFIED) {
+      if (!user.appState.isOnboardingCompleted) {
+        return {
+          stack: 'AppStack',
+          screen: 'OnBoarding1',
+        };
+      }
+    }
+
     return {
       stack: 'AppStack',
       screen: 'Feed',
