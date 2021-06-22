@@ -20,6 +20,7 @@ import TrashIcon from 'assets/icons/trash';
 
 import Text from 'components/Text';
 import Header from 'components/Header';
+import Modal from 'components/Modal';
 
 import useToast from 'hooks/useToast';
 
@@ -37,9 +38,10 @@ function Finances({ route }) {
   const stripeAccountId = route?.params?.stripeAccountId;
 
   const [account, setAccount] = useState(null);
+  const [webViewUrl, setWebViewUrl] = useState(null);
+  const [isConfirmationModal, setIsConfirmationModal] = useState(false);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [webViewUrl, setWebViewUrl] = useState(null);
 
   const getUserBankAccount = useCallback(async () => {
     setIsRefreshing(true);
@@ -60,7 +62,6 @@ function Finances({ route }) {
       if (Platform.OS === 'ios') {
         setWebViewUrl(fetchedAccountLink);
       } else {
-        // TODO: handle when app is already opened on finances screen and refresh data
         Linking.openURL(fetchedAccountLink);
       }
     } catch (error) {
@@ -68,14 +69,13 @@ function Finances({ route }) {
     }
   }, [showFailure]);
 
-  const deleteBankAccount = useCallback(async () => {
-    try {
-      await accountApi.deleteBankAccount();
-      setAccount(null);
-    } catch (error) {
-      showFailure();
-    }
-  }, [showFailure]);
+  const deleteBankAccount = useCallback(() => {
+    setIsConfirmationModal(true);
+  }, []);
+
+  const onCloseConfirmationModal = useCallback(() => {
+    setIsConfirmationModal(false);
+  }, []);
 
   const onGoBack = useCallback(() => {
     navigation.reset({
@@ -90,6 +90,18 @@ function Finances({ route }) {
       }],
     });
   }, [navigation]);
+
+  const onDeleteBankAccountConfirmation = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await accountApi.deleteBankAccount();
+      setAccount(null);
+    } catch (error) {
+      showFailure();
+    }
+    onCloseConfirmationModal(false);
+    setIsRefreshing(false);
+  }, [showFailure, onCloseConfirmationModal]);
 
   const onWebViewStateChange = useCallback(async (webViewState) => {
     if (!webViewState.url.includes('connect.stripe.com')) {
@@ -159,40 +171,52 @@ function Finances({ route }) {
   const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
 
   return (
-    <SafeAreaView style={styles.screen}>
-      {webViewUrl && (
-      <WebView
-        source={{ uri: webViewUrl }}
-        onNavigationStateChange={onWebViewStateChange}
-        startInLoadingState
+    <>
+      {!isRefreshing && isConfirmationModal && (
+      <Modal
+        title={t('Finances.deleteBankAccount')}
+        text={t('Finances.bankAccountWillBeDeletedButWeWillStoreTheData')}
+        closeButtonText={t('Finances.cancel')}
+        submitButtonText={t('Finances.delete')}
+        onClose={onCloseConfirmationModal}
+        onSubmit={onDeleteBankAccountConfirmation}
       />
       )}
-      {!webViewUrl && (
-        <>
-          <Header
-            title={t('Finances.finances')}
-            leftItemType="backArrow"
-            onLeftItemPress={onGoBack}
+      <SafeAreaView style={styles.screen}>
+        {webViewUrl && (
+          <WebView
+            source={{ uri: webViewUrl }}
+            onNavigationStateChange={onWebViewStateChange}
+            startInLoadingState
           />
-          <View style={styles.content}>
-            <ScrollView
-              contentContainerStyle={styles.scrollContent}
-              style={styles.scrollView}
-              showsVerticalScrollIndicator={false}
-            >
-              {isRefreshing
-                ? <Loader />
-                : (
-                  <>
-                    <BankAccount />
-                    <EmptyView />
-                  </>
-                )}
-            </ScrollView>
-          </View>
-        </>
-      )}
-    </SafeAreaView>
+        )}
+        {!webViewUrl && (
+          <>
+            <Header
+              title={t('Finances.finances')}
+              leftItemType="backArrow"
+              onLeftItemPress={onGoBack}
+            />
+            <View style={styles.content}>
+              <ScrollView
+                contentContainerStyle={styles.scrollContent}
+                style={styles.scrollView}
+                showsVerticalScrollIndicator={false}
+              >
+                {isRefreshing
+                  ? <Loader />
+                  : (
+                    <>
+                      <BankAccount />
+                      <EmptyView />
+                    </>
+                  )}
+              </ScrollView>
+            </View>
+          </>
+        )}
+      </SafeAreaView>
+    </>
   );
 }
 

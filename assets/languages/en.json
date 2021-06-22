@@ -470,6 +470,10 @@
     "incomeWillBePaidToThisBankAccountMonthlyYouCanTrackAllFinanceInformationInThisSection": "Income will be paid to this bank account monthly. You can track all finance information in this section.",
     "bankAccount": "Bank Account",
     "noIncomeYet": "No income, yet",
-    "onceYouEarnIncomeYouWillSeeItHere": "Once you earn income, you will see it here."
+    "onceYouEarnIncomeYouWillSeeItHere": "Once you earn income, you will see it here.",
+    "deleteBankAccount": "Delete Bank Account",
+    "bankAccountWillBeDeletedButWeWillStoreTheData": "Bank account will be deleted, but we will store the data.",
+    "cancel": "Cancel",
+    "delete": "Delete"
   }
 }
