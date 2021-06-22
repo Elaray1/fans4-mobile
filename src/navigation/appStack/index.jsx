@@ -42,7 +42,6 @@ import { USER_STATUSES, USER_TYPES } from 'resources/user/user.constants';
 
 import FighterNavigator from 'navigation/appStack/components/fighter';
 import FanNavigator from 'navigation/appStack/components/fan';
-import _ from 'lodash';
 
 const AppStack = createStackNavigator();
 

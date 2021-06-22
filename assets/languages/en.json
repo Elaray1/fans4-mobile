@@ -76,19 +76,40 @@
     "linkText": "Back to sign up page"
   },
   "OnBoarding1": {
-    "title": "Onboarding 1",
-    "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
-    "buttonText": "Next"
+    "fan": {
+      "title": "Onboarding 1",
+      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "buttonText": "Next"
+    },
+    "fighter": {
+      "title": "Onboarding 1",
+      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "buttonText": "Next"
+    }
   },
   "OnBoarding2": {
-    "title": "Onboarding 2",
-    "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
-    "buttonText": "Next"
+    "fan": {
+      "title": "Onboarding 2",
+      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "buttonText": "Next"
+    },
+    "fighter": {
+      "title": "Onboarding 2",
+      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "buttonText": "Next"
+    }
   },
   "OnBoarding3": {
-    "title": "Onboarding 3",
-    "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
-    "buttonText": "Let’s Start"
+    "fan": {
+      "title": "Onboarding 3",
+      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "buttonText": "Let’s Start"
+    },
+    "fighter": {
+      "title": "Onboarding 3",
+      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "buttonText": "Let’s Start"
+    }
   },
   "helpers": {
     "api": {
@@ -395,6 +416,6 @@
     "username": "username",
     "YourSubscriptions": "Your subscriptions",
     "YouCantSubscribe": "You can't subscribe for a Fighters in the app. We know it’s a hassle. After you subscribed, you can enjoy the content in the app.",
-    "PleaseGoToFans4": "Please go to Fans4 official website to learn more.",
+    "PleaseGoToFans4": "Please go to Fans4 official website to learn more."
   }
 }
