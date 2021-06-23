@@ -6,7 +6,7 @@ import {
 
 import Text from 'components/Text';
 
-import useAnimatedModal from 'helpers/useAnimatedModal';
+import useAnimatedModal from 'hooks/useAnimatedModal';
 
 import colors from 'themes/colors';
 
