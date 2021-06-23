@@ -43,7 +43,7 @@ function Finances({ route }) {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const getUserBankAccount = useCallback(async () => {
+  const getUserWithdrawalMethod = useCallback(async () => {
     setIsRefreshing(true);
     try {
       const { account: fetchedAccount } = await accountApi.getUserAccount();
@@ -69,7 +69,7 @@ function Finances({ route }) {
     }
   }, [showFailure]);
 
-  const deleteBankAccount = useCallback(() => {
+  const deleteWithdrawalMethod = useCallback(() => {
     setIsConfirmationModal(true);
   }, []);
 
@@ -91,10 +91,10 @@ function Finances({ route }) {
     });
   }, [navigation]);
 
-  const onDeleteBankAccountConfirmation = useCallback(async () => {
+  const onDeleteWithdrawalMethodConfirmation = useCallback(async () => {
     setIsRefreshing(true);
     try {
-      await accountApi.deleteBankAccount();
+      await accountApi.deleteUserAccount();
       setAccount(null);
     } catch (error) {
       showFailure();
@@ -107,13 +107,13 @@ function Finances({ route }) {
     if (!webViewState.url.includes('connect.stripe.com')) {
       await axios({ method: 'get', url: webViewState.url });
       setWebViewUrl(null);
-      getUserBankAccount();
+      getUserWithdrawalMethod();
     }
-  }, [getUserBankAccount]);
+  }, [getUserWithdrawalMethod]);
 
   useEffect(() => {
     if (isUserAuthenticated) {
-      getUserBankAccount();
+      getUserWithdrawalMethod();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUserAuthenticated, stripeAccountId]);
@@ -126,7 +126,7 @@ function Finances({ route }) {
       }
       : {
         title: t('Finances.finances'),
-        text: t('Finances.incomeWillBePaidToThisBankAccountMonthlyYouCanTrackAllFinanceInformationInThisSection'),
+        text: t('Finances.incomeWillBePaidByThisMethodMonthlyYouCanTrackAllFinanceInformationInThisSection'),
       };
   }, [account, t]);
 
@@ -140,17 +140,38 @@ function Finances({ route }) {
     </View>
   );
 
-  const BankAccount = () => (account?.typeMetadata?.bankAccount
+  const withdrawalMethod = useMemo(() => {
+    const bankAccount = account?.typeMetadata?.bankAccount;
+    const card = account?.typeMetadata?.card;
+
+    if (bankAccount) {
+      return {
+        title: t('Finances.bankAccount'),
+        text: `••••••••• ${account.typeMetadata.bankAccount.last4}`,
+      };
+    }
+
+    if (card) {
+      return {
+        title: t('Finances.card'),
+        text: `•••• •••• •••• ${account.typeMetadata.card.last4}`,
+      };
+    }
+
+    return null;
+  }, [account?.typeMetadata?.bankAccount, account?.typeMetadata?.card, t]);
+
+  const WithdrawalMethod = () => (withdrawalMethod
     ? (
-      <View style={styles.bankAccount}>
+      <View style={styles.withdrawalMethod}>
         <View>
-          <Text style={styles.title}>{t('Finances.bankAccount')}</Text>
-          <Text style={styles.bankAccountNumber}>
-            {`${account.typeMetadata.bankAccount.routingNumber} ${account.typeMetadata.bankAccount.last4}`}
+          <Text style={styles.title}>{withdrawalMethod.title}</Text>
+          <Text style={styles.withdrawalMethodNumber}>
+            {withdrawalMethod.text}
           </Text>
         </View>
         <TouchableOpacity
-          onPress={deleteBankAccount}
+          onPress={deleteWithdrawalMethod}
           activeOpacity={0.7}
         >
           <TrashIcon />
@@ -161,10 +182,10 @@ function Finances({ route }) {
       <TouchableOpacity
         onPress={createUserAccount}
         activeOpacity={0.7}
-        style={styles.addBankAccount}
+        style={styles.addWithdrawalMethod}
       >
         <PlusIcon style={styles.plus} />
-        <Text style={styles.title}>{t('Finances.addBankAccount')}</Text>
+        <Text style={styles.title}>{t('Finances.addWithdrawalMethod')}</Text>
       </TouchableOpacity>
     ));
 
@@ -174,12 +195,12 @@ function Finances({ route }) {
     <>
       {!isRefreshing && isConfirmationModal && (
       <Modal
-        title={t('Finances.deleteBankAccount')}
-        text={t('Finances.bankAccountWillBeDeletedButWeWillStoreTheData')}
+        title={t('Finances.deleteWithdrawalMethod')}
+        text={t('Finances.withdrawalMethodWillBeDeletedButWeWillStoreTheData')}
         closeButtonText={t('Finances.cancel')}
         submitButtonText={t('Finances.delete')}
         onClose={onCloseConfirmationModal}
-        onSubmit={onDeleteBankAccountConfirmation}
+        onSubmit={onDeleteWithdrawalMethodConfirmation}
       />
       )}
       <SafeAreaView style={styles.screen}>
@@ -207,7 +228,7 @@ function Finances({ route }) {
                   ? <Loader />
                   : (
                     <>
-                      <BankAccount />
+                      <WithdrawalMethod />
                       <EmptyView />
                     </>
                   )}

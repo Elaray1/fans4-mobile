@@ -18,7 +18,7 @@ export default StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
   },
-  addBankAccount: {
+  addWithdrawalMethod: {
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -49,7 +49,7 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     color: colors.textSecondary,
   },
-  bankAccount: {
+  withdrawalMethod: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -59,7 +59,7 @@ export default StyleSheet.create({
     paddingVertical: 14,
     paddingRight: 15,
   },
-  bankAccountNumber: {
+  withdrawalMethodNumber: {
     marginTop: 6,
     fontSize: fonts.size.caption,
     color: colors.textSecondary,

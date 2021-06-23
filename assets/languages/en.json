@@ -466,13 +466,14 @@
   },
   "Finances": {
     "finances": "Finances",
-    "addBankAccount": "Add Bank Account",
-    "incomeWillBePaidToThisBankAccountMonthlyYouCanTrackAllFinanceInformationInThisSection": "Income will be paid to this bank account monthly. You can track all finance information in this section.",
+    "addWithdrawalMethod": "Add Withdrawal Method",
+    "incomeWillBePaidByThisMethodMonthlyYouCanTrackAllFinanceInformationInThisSection": "Income will be paid by this method monthly. You can track all finance information in this section.",
     "bankAccount": "Bank Account",
+    "card": "Card",
     "noIncomeYet": "No income, yet",
     "onceYouEarnIncomeYouWillSeeItHere": "Once you earn income, you will see it here.",
-    "deleteBankAccount": "Delete Bank Account",
-    "bankAccountWillBeDeletedButWeWillStoreTheData": "Bank account will be deleted, but we will store the data.",
+    "deleteWithdrawalMethod": "Delete Withdrawal Method",
+    "withdrawalMethodWillBeDeletedButWeWillStoreTheData": "Withdrawal method will be deleted, but we will store the data.",
     "cancel": "Cancel",
     "delete": "Delete"
   }
