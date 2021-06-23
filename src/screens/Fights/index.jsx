@@ -39,7 +39,7 @@ function Fights() {
       {
         id: '1',
         value: t('Fights.voting'),
-        fightTypes: [FIGHT_STATUSES.IN_VOTING],
+        statuses: [FIGHT_STATUSES.IN_VOTING],
         emptyView: {
           title: t('Fights.noFightsYyet'),
           text: t('Fights.onceFightsAreAddedToTheVotingYouWillSeeThemHere'),
@@ -48,7 +48,7 @@ function Fights() {
       {
         id: '2',
         value: t('Fights.upcoming'),
-        fightTypes: [FIGHT_STATUSES.UPCOMING],
+        statuses: [FIGHT_STATUSES.UPCOMING],
         emptyView: {
           title: t('Fights.noFightsYyet'),
           text: t('Fights.onceFightsAreScheduledYouWillSeeThemHere'),
@@ -57,7 +57,7 @@ function Fights() {
       {
         id: '3',
         value: t('Fights.past'),
-        fightTypes: [FIGHT_STATUSES.PAST],
+        statuses: [FIGHT_STATUSES.PAST],
         emptyView: {
           title: t('Fights.noFightsYyet'),
           text: t('Fights.onceYouParticipateInFightsYouWillSeeThemHere'),
@@ -76,7 +76,7 @@ function Fights() {
     </View>
   );
 
-  const fetchNewItems = useCallback(async ({ refresh, fightTypes } = {}) => {
+  const fetchNewItems = useCallback(async ({ refresh, statuses } = {}) => {
     let fetchingPage = 1;
     let currentFights = [];
 
@@ -96,7 +96,7 @@ function Fights() {
         } = await fightApi.getFights({
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
-          fightTypes: fightTypes || selectedToggleItem.fightTypes,
+          statuses: statuses || selectedToggleItem.statuses,
         });
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
@@ -107,7 +107,7 @@ function Fights() {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [fights, page, totalCount, showFailure, t, selectedToggleItem.fightTypes]);
+  }, [fights, page, totalCount, showFailure, t, selectedToggleItem.statuses]);
 
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -143,7 +143,7 @@ function Fights() {
 
   const onToggleSelect = useCallback(async (item) => {
     setSelectedToggleItem(item);
-    await fetchNewItems({ refresh: true, fightTypes: item.fightTypes });
+    await fetchNewItems({ refresh: true, statuses: item.statuses });
   }, [fetchNewItems]);
 
   return (

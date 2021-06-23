@@ -18,3 +18,22 @@ export const FIGHTER_GENDERS = {
   FEMALE: 'female',
   MALE: 'male',
 };
+
+export const FIGHTING_STATUSES = {
+  READY_FOR_FIGHTS: 'readyForFights',
+  INJURED: 'injured',
+  RECOVERY: 'recovery',
+};
+
+export const FIGHTER_WEIGHT_CATEGORIES = {
+  STRAWWEIGHT: 'Strawweight',
+  FLYWEIGHT: 'Flyweight',
+  BANTAMWEIGHT: 'Bantamweight',
+  FEATHERWEIGHT: 'Featherweight',
+  LIGHTWEIGHT: 'Lightweight',
+  WELTERWEIGHT: 'Welterweight',
+  MIDDLEWEIGHT: 'Middleweight',
+  LIGHT_HEAVYWEIGHT: 'Light Heavyweight',
+  HEAVYWEIGHT: 'Heavyweight',
+  SUPER_HEAVYWEIGHT: 'Super heavyweight',
+};

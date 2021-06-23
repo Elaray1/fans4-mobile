@@ -14,7 +14,6 @@ import { TYPES } from './Button.constants';
 
 import styles from './Button.styles';
 
-
 function Button({
   type,
   title,

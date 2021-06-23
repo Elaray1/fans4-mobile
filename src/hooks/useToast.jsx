@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import SuccessToast from 'components/SuccessToast';
 import FailureToast from 'components/FailureToast';
 
-
 const defaultOptions = {
   placement: 'top',
   duration: 5 * 1000,

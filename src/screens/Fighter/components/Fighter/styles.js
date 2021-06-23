@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { commonStyles } from 'themes/commonStyles';
 import colors from 'themes/colors';
+import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   screen: {
@@ -29,11 +30,30 @@ export default StyleSheet.create({
   loader: {
     paddingVertical: 10,
   },
-  applyButton: {
-    height: 40,
-  },
   loaderWrapper: {
     flex: 1,
     justifyContent: 'center',
+  },
+  createdFightContainer: {
+    backgroundColor: colors.buttonNotification,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  createdFightText: {
+    lineHeight: 20,
+    color: colors.primary,
+    fontWeight: fonts.weight.medium,
+    fontSize: fonts.size.caption,
+  },
+  cannotApplyForAFightText: {
+    color: colors.grayText,
+    fontWeight: fonts.weight.medium,
+    fontSize: fonts.size.caption,
+  },
+  createdFightTextWrapper: {
+    flexDirection: 'row',
   },
 });

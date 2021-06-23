@@ -24,6 +24,8 @@ export const getAvatarUrl = ({ user }) => user?.avatarUrl;
 export const getUserAge = ({ user }) => dayjs().diff(user?.role?.biography?.birthdate, 'year');
 export const getUserProfileInfo = ({ user }) => user?.role?.profile;
 export const getUserBiographyAbout = ({ user }) => user?.role?.biography?.about || '';
+export const getWeightClasses = ({ user }) => user?.role?.profile?.weightClasses;
+
 
 /* Fighters selectors: end */
 
