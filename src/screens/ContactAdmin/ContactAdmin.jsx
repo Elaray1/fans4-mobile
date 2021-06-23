@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import {
   SafeAreaView, View, StatusBar, Linking,
+  ScrollView,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -11,6 +12,7 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 import RadioButton from 'components/RadioButton';
 
+import { USER_TYPES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import styles from './ContactAdmin.styles';
@@ -19,8 +21,9 @@ function ContactAdmin() {
   const { t } = useTranslation();
   const [selectedItem, setSelectedItem] = useState(null);
   const userName = useSelector(userSelectors.getUserFullName);
+  const userType = useSelector(userSelectors.getUserType);
 
-  const items = useMemo(() => [
+  const items = useMemo(() => (userType === USER_TYPES.FIGHTER ? [
     {
       _id: '1',
       title: t('ContactAdmin.updateMyPersonalInfo'),
@@ -45,7 +48,20 @@ function ContactAdmin() {
       _id: '6',
       title: t('ContactAdmin.other'),
     },
-  ], [t]);
+  ] : [
+    {
+      _id: '1',
+      title: t('ContactAdmin.updateMyPersonalInfo'),
+    },
+    {
+      _id: '2',
+      title: t('ContactAdmin.whyMyContentWasBlocked'),
+    },
+    {
+      _id: '3',
+      title: t('ContactAdmin.other'),
+    },
+  ]), [t, userType]);
 
   const onButtonPress = useCallback(() => {
     Linking.openURL(`mailto:admin@fans4.com?subject=${items[selectedItem - 1].title} ${userName}`);
@@ -55,7 +71,7 @@ function ContactAdmin() {
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <Header leftItemType="backArrow" title={t('ContactAdmin.contactAdmin')} />
-      <View style={styles.content}>
+      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View style={styles.selectList}>
           {items.map(
             (item, index) => (
@@ -69,7 +85,8 @@ function ContactAdmin() {
           )}
         </View>
         <Button title={t('ContactAdmin.sendEmail')} disabled={!selectedItem} onPress={onButtonPress} />
-      </View>
+      </ScrollView>
+
     </SafeAreaView>
   );
 }
