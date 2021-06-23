@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   View, TouchableOpacity, Modal, Pressable,
 } from 'react-native';
@@ -31,9 +31,9 @@ function SettingsModal({
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const isFan = useSelector(userSelectors.getUserType) === USER_TYPES.FAN;
-
   const userType = useSelector(userSelectors.getUserType);
+
+  const isFan = useMemo(() => userType === USER_TYPES.FAN, [userType]);
 
   const onAccountInfoPress = useCallback(() => {
     onClose();
@@ -114,7 +114,7 @@ function SettingsModal({
                   {t('SettingsModal.accountInformation')}
                 </Text>
                 <Text style={styles.settingText}>
-                  {t('SettingsModal.updateYourEmailBiography')}
+                  {isFan ? t('SettingsModal.updateYourNameEmailEtc') : t('SettingsModal.updateYourEmailBiography')}
                 </Text>
               </View>
             </TouchableOpacity>

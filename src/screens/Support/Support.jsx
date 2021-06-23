@@ -4,6 +4,9 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import colors from 'themes/colors';
 
@@ -17,33 +20,28 @@ function Support() {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const items = [
-    {
-      _id: '1',
-      title: t('Support.question1'),
-      text: t('Support.answer1'),
-    },
-    {
-      _id: '2',
-      title: t('Support.question2'),
-      text: t('Support.answer2'),
-    },
-    {
-      _id: '3',
-      title: t('Support.question3'),
-      text: t('Support.answer3'),
-    },
-    {
-      _id: '4',
-      title: t('Support.question4'),
-      text: t('Support.answer4'),
-    },
-    {
-      _id: '5',
-      title: t('Support.question5'),
-      text: t('Support.answer5'),
-    },
-  ];
+  const userType = useSelector(userSelectors.getUserType);
+
+  const questionsAnswers = t(`Support.${userType}`, { returnObjects: true });
+  const optionsLength = Object.keys(questionsAnswers).length / 2;
+
+  const options = (new Array(optionsLength).fill(0)).reduce((acc, cur, index) => {
+    const question = questionsAnswers[`question${index + 1}`];
+    const answer = questionsAnswers[`answer${index + 1}`];
+
+    acc = acc.concat({
+      question,
+      answer,
+    });
+
+    return acc;
+  }, []);
+
+  const items = options.map((option, index) => ({
+    _id: index + 1,
+    title: option.question,
+    text: option.answer,
+  }));
 
 
   const onButtonPress = useCallback(() => {

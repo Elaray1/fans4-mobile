@@ -8,11 +8,10 @@ export default StyleSheet.create({
   content: {
     ...commonStyles.screenContent,
     marginTop: 30,
+  },
+  scrollContent: {
+    flexGrow: 1,
     justifyContent: 'space-between',
     paddingBottom: 50,
-  },
-  selectList: {
-    height: '68%',
-    justifyContent: 'space-between',
   },
 });
