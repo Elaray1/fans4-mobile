@@ -13,6 +13,7 @@ const Statistic = ({
   postsCount,
   fansCount,
   onFansPress,
+  recordCount,
 }) => {
   const { t } = useTranslation();
 
@@ -30,7 +31,7 @@ const Statistic = ({
 
   return (
     <View style={styles.profileBlock}>
-      <View style={[styles.profileData, styles.profileLeftData]}>
+      <View style={styles.profileData}>
         <Text style={styles.profileDataTitle}>{t('Account.posts')}</Text>
         <Text style={styles.profileDataText}>
           {postsCount === null
@@ -41,18 +42,23 @@ const Statistic = ({
       </View>
       {onFansPress ? (
         <TouchableOpacity
-          style={[styles.profileData, styles.profileRightData]}
+          style={[styles.profileData, styles.profileCenterData]}
           activeOpacity={0.7}
           onPress={onFansPress}
         >
           {fansBlock}
         </TouchableOpacity>
       ) : (
-        <View style={[styles.profileData, styles.profileRightData]}>
+        <View style={[styles.profileData, styles.profileCenterData]}>
           {fansBlock}
         </View>
       )}
-
+      <View style={styles.profileData}>
+        <Text style={styles.profileDataTitle}>{t('Account.record')}</Text>
+        <Text style={styles.profileDataText}>
+          {`${recordCount?.wins ?? 0}-${recordCount?.losses ?? 0}-${recordCount?.draws ?? 0}`}
+        </Text>
+      </View>
     </View>
   );
 };
@@ -61,12 +67,14 @@ Statistic.propTypes = {
   postsCount: PropTypes.number,
   fansCount: PropTypes.number,
   onFansPress: PropTypes.func,
+  recordCount: PropTypes.objectOf(PropTypes.number),
 };
 
 Statistic.defaultProps = {
   postsCount: null,
   fansCount: null,
   onFansPress: null,
+  recordCount: null,
 };
 
 export default React.memo(Statistic);

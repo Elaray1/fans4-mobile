@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, StatusBar, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  SafeAreaView, View, StatusBar, ScrollView, ActivityIndicator,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -103,6 +105,7 @@ function Fighter({ fighterId }) {
             <Statistic
               postsCount={postsCount}
               fansCount={fansCount}
+              recordCount={fighter.role.profile.record}
             />
           </View>
 

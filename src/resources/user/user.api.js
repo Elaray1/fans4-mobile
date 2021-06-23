@@ -49,6 +49,9 @@ export const fillRegistrationForm = ({
   weight,
   height,
   reach,
+  wins,
+  losses,
+  draws,
   weightClasses,
 }, avatar) => {
   return apiClient.postWithFile('users/registration-form', {
@@ -60,6 +63,9 @@ export const fillRegistrationForm = ({
     weight,
     height,
     reach,
+    wins,
+    losses,
+    draws,
     weightClasses,
   }, avatar);
 };

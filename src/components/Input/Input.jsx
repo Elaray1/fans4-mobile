@@ -81,7 +81,6 @@ function Input({
       <View
         style={[
           styles.inputContainer,
-          style,
           focused && styles.inputFocused,
           !!errors.length && styles.error,
           disabled && !buttonTitle && styles.disabled,

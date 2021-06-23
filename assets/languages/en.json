@@ -145,7 +145,10 @@
     "weightClass": "Weight class",
     "height": "Height",
     "reach": "Reach",
-    "submit": "Submit"
+    "submit": "Submit",
+    "wins": "Wins",
+    "losses": "Losses",
+    "draws": "Draws"
   },
   "WheelModal": {
     "done": "Done"
@@ -236,6 +239,7 @@
     "account": "Account",
     "posts": "Posts",
     "fans": "Fans",
+    "record": "Record",
     "biography": "Biography",
     "addBiography": "Add biography",
     "personalInfo": "Personal Info",

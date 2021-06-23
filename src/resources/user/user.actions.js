@@ -101,6 +101,9 @@ export const fillRegistrationForm = ({
   weight,
   height,
   reach,
+  wins,
+  losses,
+  draws,
   weightClasses,
   avatar,
 }) => async (dispatch) => {
@@ -113,6 +116,9 @@ export const fillRegistrationForm = ({
     weight,
     height,
     reach,
+    wins,
+    losses,
+    draws,
     weightClasses,
   }, avatar);
 

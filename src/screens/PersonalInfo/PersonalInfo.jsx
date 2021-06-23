@@ -12,6 +12,7 @@ import * as userActions from 'resources/user/user.actions';
 import colors from 'themes/colors';
 
 import Text from 'components/Text';
+import Input from 'components/Input';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import WheelModal from 'components/WheelModal';
@@ -39,6 +40,10 @@ function PersonalInfo({ route }) {
   } = route?.params;
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [wins, setWins] = useState(null);
+  const [losses, setLosses] = useState(null);
+  const [draws, setDraws] = useState(null);
 
   const [weight, setWeight] = useState(null);
   const [isWeightModalVisible, setIsWeightModalVisible] = useState(false);
@@ -137,6 +142,9 @@ function PersonalInfo({ route }) {
         weight,
         height,
         reach,
+        wins,
+        losses,
+        draws,
         weightClasses: weightClasses.map(item => item.name),
         avatar: {
           name: 'image',
@@ -148,10 +156,11 @@ function PersonalInfo({ route }) {
     } finally {
       setIsLoading(false);
     }
-  }, [
-    navigation, dispatch, birthdate, cityId, fullName,
-    gender, height, nickname, photo, reach, weight, weightClasses,
-  ]);
+  }, [dispatch, fullName, nickname,
+    gender, birthdate, cityId,
+    weight, height, reach, wins,
+    losses, draws, weightClasses,
+    photo?.mime, photo?.path, navigation]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -186,6 +195,35 @@ function PersonalInfo({ route }) {
       <Header leftItemType="backArrow" title={t('PersonalInfo.PersonalInfo')} />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View>
+          <View style={styles.record}>
+            <Input
+              value={wins ?? ''}
+              type="number"
+              onChange={(text) => {
+                setWins(text.replace(/[^0-9]/g, ''));
+              }}
+              label={t('PersonalInfo.wins')}
+              style={styles.recordInput}
+            />
+            <Input
+              value={losses ?? ''}
+              type="number"
+              onChange={(text) => {
+                setLosses(text.replace(/[^0-9]/g, ''));
+              }}
+              label={t('PersonalInfo.losses')}
+              style={styles.recordInput}
+            />
+            <Input
+              value={draws ?? ''}
+              type="number"
+              onChange={(text) => {
+                setDraws(text.replace(/[^0-9]/g, ''));
+              }}
+              label={t('PersonalInfo.draws')}
+              style={styles.recordInput}
+            />
+          </View>
           <View>
             <Text style={styles.inputLabel}>{t('PersonalInfo.weight')}</Text>
             <TouchableOpacity
@@ -236,7 +274,8 @@ function PersonalInfo({ route }) {
         <Button
           title={t('PersonalInfo.submit')}
           isLoading={isLoading}
-          disabled={!weight || !height || !reach || !weightClasses.length}
+          disabled={!weight || !height || !reach || !weightClasses.length || !wins || !losses
+          || !draws}
           onPress={onNextPress}
         />
       </ScrollView>
