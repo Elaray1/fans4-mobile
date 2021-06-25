@@ -133,11 +133,25 @@ const Voting = () => {
     await fetchNewItems({ refresh: true });
   }, [selectedToggleItem.createdByMe]);
 
+  const onVote = useCallback((fightId, userId) => {
+    setFights((fs) => {
+      return fs.map((fight) => {
+        if (fight._id !== fightId) return fight;
+
+        const votedUserIds = fight.votedUserIds.includes(userId)
+          ? fight.votedUserIds.filter(id => id !== userId)
+          : [...fight.votedUserIds, userId];
+
+        return { ...fight, votedUserIds };
+      });
+    });
+  }, []);
+
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
     return (
-      <Fight fight={item} />
+      <Fight fight={item} onVote={onVote} />
     );
   };
 

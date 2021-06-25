@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { View, TouchableOpacity, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -10,12 +10,15 @@ import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import { USER_TYPES } from 'resources/user/user.constants';
+import * as fightApi from 'resources/fight/fight.api';
 
 import Text from 'components/Text';
 import Fighter from 'components/Fight/Fighter';
 import Button from 'components/Button';
 
 import { toLocalDateAndTime, toLocalDate } from 'helpers/toLocalTime';
+
+import useToast from 'hooks/useToast';
 
 import { FIGHT_VIEW_TYPE } from 'components/Fight/constants';
 
@@ -28,12 +31,15 @@ const getLocation = location => `${location.cityName}, ${location.stateCode}`;
 function Fight({
   fight,
   status,
+  onVote,
 }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { showFailure } = useToast();
 
   const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
+  const userSubscriptions = useSelector(userSelectors.getSubscribedFighters);
 
   const onFighterPress = useCallback((fighterId) => {
     if (userId === fighterId) {
@@ -51,6 +57,25 @@ function Fight({
     const winMethodFormatted = _.startCase(fight.results.winMethod);
     fightResultText = `${fight.results.roundNumber}, ${durationFormatted}, ${winMethodFormatted}`;
   }
+
+  const onPressVote = useCallback(async (fightId, fighters) => {
+    if (userSubscriptions.includes(fighters[0]._id || fighters[1]._id)) {
+      try {
+        await fightApi.vote({ fightId });
+        onVote(fightId, userId);
+      } catch {
+        showFailure();
+      }
+    } else {
+      Alert.alert(
+        t('Fight.subscription'),
+        t('Fight.youHaveToBeSubscribed'),
+        [
+          { text: t('Fight.ok') },
+        ],
+      );
+    }
+  }, [onVote, showFailure, t, userId, userSubscriptions]);
 
   const FIGHT_INFO = {
     [FIGHT_VIEW_TYPE.EVENT_UPCOMING]: () => (
@@ -80,16 +105,25 @@ function Fight({
           </View>
         ) : (
           <View style={styles.location}>
-            {!fight.votedUserIds.includes(userId)
+            {fight.votedUserIds.includes(userId)
               ? (
-                <View style={styles.fanVoted}>
+                <TouchableOpacity
+                  style={styles.fanVoted}
+                  onPress={() => onPressVote(fight._id, fight.fighters)}
+                >
                   <Text style={styles.fanVotedText}>
-                    {t('Fight.you')} {!fight.suggestions.fans?.some(f => f._id === userId)
+                    {t('Fight.you')} {fight.suggestions.fans?.some(f => f._id === userId)
                     && t('Fight.createdAnd')}{t('Fight.voted')} ({fight.votedUserIds.length})
                   </Text>
-                </View>
+                </TouchableOpacity>
               )
-              : <Button title={t('Fight.vote')} onPress={() => {}} style={styles.button} />}
+              : (
+                <Button
+                  title={t('Fight.vote')}
+                  onPress={() => onPressVote(fight._id, fight.fighters)}
+                  style={styles.button}
+                />
+              )}
           </View>
         )}
       </>
@@ -147,10 +181,12 @@ function Fight({
 Fight.propTypes = {
   fight: PropTypes.shape().isRequired,
   status: PropTypes.oneOf(Object.values(FIGHT_VIEW_TYPE)),
+  onVote: PropTypes.func,
 };
 
 Fight.defaultProps = {
   status: null,
+  onVote: null,
 };
 
 export default React.memo(Fight);

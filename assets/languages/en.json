@@ -416,7 +416,10 @@
     "you": "You",
     "createdAnd": "created and ",
     "vote": "Vote",
-    "voted": "voted"
+    "voted": "voted",
+    "ok": "OK",
+    "subscription": "Subscription",
+    "youHaveToBeSubscribed": "You have to be subscribed to these fighters to vote. Please go to Fans4 official website to learn more."
   },
   "Comments": {
     "comments": "Comments",
