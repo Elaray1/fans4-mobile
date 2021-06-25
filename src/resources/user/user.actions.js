@@ -125,8 +125,12 @@ export const fillRegistrationForm = ({
   dispatch({ type: SET_USER_DATA, user });
 };
 
-export const updateUserInfo = ({ about }) => async (dispatch) => {
-  const user = await api.updateUserInfo({ about });
+export const updateUserInfo = ({
+  about, birthdate, fullName, userName, gender,
+}) => async (dispatch) => {
+  const user = await api.updateUserInfo({
+    about, birthdate, fullName, userName, gender,
+  });
   dispatch({ type: SET_USER_DATA, user });
 };
 

@@ -71,10 +71,14 @@ export const fillRegistrationForm = ({
 };
 
 export const updateUserInfo = ({
-  about,
+  about, birthdate, fullName, userName, gender,
 }) => apiClient
   .put('users/', {
-    about,
+    ...(about && { about }),
+    ...(birthdate && { birthdate }),
+    ...(fullName && { fullName }),
+    ...(userName && { userName }),
+    ...(gender && { gender }),
   });
 
 export const completeOnboarding = () => {
