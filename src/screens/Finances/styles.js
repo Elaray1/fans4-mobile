@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
 import { commonStyles } from 'themes/commonStyles';
 
+import hexToRgba from 'helpers/hexToRgba';
+
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
@@ -63,5 +65,54 @@ export default StyleSheet.create({
     marginTop: 6,
     fontSize: fonts.size.caption,
     color: colors.textSecondary,
+  },
+  incomeText: {
+    marginTop: 10,
+    textAlign: 'left',
+  },
+  incomeContainer: {
+    marginTop: 40,
+  },
+  incomeTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  perPeriod: {
+    marginTop: 5,
+    fontSize: fonts.size.caption,
+  },
+  incomeList: {
+    marginTop: 32,
+  },
+  incomeItem: {
+    marginBottom: 21,
+  },
+  incomeInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  line: {
+    width: '100%',
+    height: 1,
+    marginTop: 20,
+    backgroundColor: colors.line,
+  },
+  period: {
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.medium,
+    fontSize: fonts.size.small,
+  },
+  totalAmountContainer: {
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: hexToRgba(colors.green, 0.07),
+  },
+  totalAmount: {
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+    fontSize: fonts.size.small,
+    color: colors.green,
   },
 });

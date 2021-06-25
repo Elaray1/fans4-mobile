@@ -15,6 +15,8 @@ import * as userSelectors from 'resources/user/user.selectors';
 
 import * as accountApi from 'resources/account/account.api';
 
+import * as payoutApi from 'resources/payout/payout.api';
+
 import PlusIcon from 'assets/icons/plus';
 import TrashIcon from 'assets/icons/trash';
 
@@ -36,25 +38,20 @@ function Finances({ route }) {
   const isUserAuthenticated = useSelector(userSelectors.getAuthenticated);
 
   const stripeAccountId = route?.params?.stripeAccountId;
-  const fetchedError = route?.params?.error;
 
   const [account, setAccount] = useState(null);
+  const [income, setIncome] = useState(null);
   const [webViewUrl, setWebViewUrl] = useState(null);
   const [isConfirmationModal, setIsConfirmationModal] = useState(false);
-  const [error, setError] = useState(fetchedError);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-
-  if (error !== fetchedError) {
-    setError(fetchedError);
-  }
 
   const getUserWithdrawalMethod = useCallback(async () => {
     setIsRefreshing(true);
     try {
       const { account: fetchedAccount } = await accountApi.getUserAccount();
       setAccount(fetchedAccount);
-    } catch (err) {
+    } catch (error) {
       showFailure();
     }
     setIsRefreshing(false);
@@ -70,7 +67,7 @@ function Finances({ route }) {
       } else {
         Linking.openURL(fetchedAccountLink);
       }
-    } catch (err) {
+    } catch (error) {
       showFailure();
     }
   }, [showFailure]);
@@ -102,12 +99,23 @@ function Finances({ route }) {
     try {
       await accountApi.deleteUserAccount();
       setAccount(null);
-    } catch (err) {
+    } catch (error) {
       showFailure();
     }
     onCloseConfirmationModal(false);
     setIsRefreshing(false);
   }, [showFailure, onCloseConfirmationModal]);
+
+  const getUserIncome = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      const fetchedIncome = await payoutApi.getUserIncome();
+      setIncome(fetchedIncome);
+    } catch (error) {
+      showFailure();
+    }
+    setIsRefreshing(false);
+  }, [showFailure]);
 
   const onWebViewStateChange = useCallback(async (webViewState) => {
     if (!webViewState.url.includes('connect.stripe.com')) {
@@ -125,11 +133,9 @@ function Finances({ route }) {
   }, [isUserAuthenticated, stripeAccountId]);
 
   useEffect(() => {
-    if (error) {
-      showFailure(error);
-    }
+    getUserIncome();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+  }, []);
 
   const emptyViewText = useMemo(() => {
     return account
@@ -192,15 +198,44 @@ function Finances({ route }) {
       </View>
     )
     : (
-      <TouchableOpacity
-        onPress={createUserAccount}
-        activeOpacity={0.7}
-        style={styles.addWithdrawalMethod}
-      >
-        <PlusIcon style={styles.plus} />
-        <Text style={styles.title}>{t('Finances.addWithdrawalMethod')}</Text>
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity
+          onPress={createUserAccount}
+          activeOpacity={0.7}
+          style={styles.addWithdrawalMethod}
+        >
+          <PlusIcon style={styles.plus} />
+          <Text style={styles.title}>{t('Finances.addWithdrawalMethod')}</Text>
+        </TouchableOpacity>
+        {income?.length && (
+        <Text style={[styles.secondaryText, styles.incomeText]}>
+          {t('Finances.incomeWillBePaidToByThisMethodMonthly')}
+        </Text>
+        )}
+      </View>
     ));
+
+  const Income = () => (
+    <View style={styles.incomeContainer}>
+      <View style={styles.incomeTitleContainer}>
+        <Text style={styles.title}>{t('Finances.income')} </Text>
+        <Text style={[styles.secondaryText, styles.perPeriod]}>{t('Finances.perPeriod')}</Text>
+      </View>
+      <View style={styles.incomeList}>
+        {income.map(item => (
+          <View style={styles.incomeItem}>
+            <View style={styles.incomeInfo}>
+              <Text style={styles.period}>{item.period}</Text>
+              <View style={styles.totalAmountContainer}>
+                <Text style={styles.totalAmount}>{`$${item.totalAmount}`}</Text>
+              </View>
+            </View>
+            <View style={styles.line} />
+          </View>
+        ))}
+      </View>
+    </View>
+  );
 
   const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
 
@@ -242,7 +277,7 @@ function Finances({ route }) {
                   : (
                     <>
                       <WithdrawalMethod />
-                      <EmptyView />
+                      {income?.length ? <Income /> : <EmptyView />}
                     </>
                   )}
               </ScrollView>
@@ -258,7 +293,6 @@ Finances.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       stripeAccountId: PropTypes.string.isRequired,
-      error: PropTypes.string,
     }),
   }).isRequired,
 };

@@ -475,6 +475,9 @@
     "deleteWithdrawalMethod": "Delete Withdrawal Method",
     "withdrawalMethodWillBeDeletedButWeWillStoreTheData": "Withdrawal method will be deleted, but we will store the data.",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "income": "Income",
+    "perPeriod": "per period",
+    "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method monthly."
   }
 }
