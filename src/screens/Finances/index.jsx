@@ -36,19 +36,25 @@ function Finances({ route }) {
   const isUserAuthenticated = useSelector(userSelectors.getAuthenticated);
 
   const stripeAccountId = route?.params?.stripeAccountId;
+  const fetchedError = route?.params?.error;
 
   const [account, setAccount] = useState(null);
   const [webViewUrl, setWebViewUrl] = useState(null);
   const [isConfirmationModal, setIsConfirmationModal] = useState(false);
+  const [error, setError] = useState(fetchedError);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  if (error !== fetchedError) {
+    setError(fetchedError);
+  }
 
   const getUserWithdrawalMethod = useCallback(async () => {
     setIsRefreshing(true);
     try {
       const { account: fetchedAccount } = await accountApi.getUserAccount();
       setAccount(fetchedAccount);
-    } catch (error) {
+    } catch (err) {
       showFailure();
     }
     setIsRefreshing(false);
@@ -64,7 +70,7 @@ function Finances({ route }) {
       } else {
         Linking.openURL(fetchedAccountLink);
       }
-    } catch (error) {
+    } catch (err) {
       showFailure();
     }
   }, [showFailure]);
@@ -96,7 +102,7 @@ function Finances({ route }) {
     try {
       await accountApi.deleteUserAccount();
       setAccount(null);
-    } catch (error) {
+    } catch (err) {
       showFailure();
     }
     onCloseConfirmationModal(false);
@@ -117,6 +123,13 @@ function Finances({ route }) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUserAuthenticated, stripeAccountId]);
+
+  useEffect(() => {
+    if (error) {
+      showFailure(error);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   const emptyViewText = useMemo(() => {
     return account
@@ -245,6 +258,7 @@ Finances.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       stripeAccountId: PropTypes.string.isRequired,
+      error: PropTypes.string,
     }),
   }).isRequired,
 };
