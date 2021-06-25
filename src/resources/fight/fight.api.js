@@ -1,7 +1,7 @@
 import { apiClient } from 'helpers/api';
 
 export const getFights = ({
-  page, perPage, eventId, statuses, betweenFighterIds,
+  page, perPage, eventId, statuses, betweenFighterIds, createdByMe,
 }) => apiClient
   .get('fights', {
     page,
@@ -9,6 +9,7 @@ export const getFights = ({
     ...(eventId && { eventId }),
     ...(statuses && { statuses }),
     ...(betweenFighterIds && { betweenFighterIds }),
+    ...(createdByMe && { createdByMe }),
   });
 
 export const create = ({ fighterIds }) => apiClient.post('fights', { fighterIds });

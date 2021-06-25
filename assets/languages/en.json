@@ -412,7 +412,11 @@
     "vs": "vs",
     "round": "Round",
     "winner": "Winner",
-    "votes": "votes"
+    "votes": "votes",
+    "you": "You",
+    "createdAnd": "created and ",
+    "vote": "Vote",
+    "voted": "voted"
   },
   "Comments": {
     "comments": "Comments",
@@ -477,5 +481,15 @@
     "income": "Income",
     "perPeriod": "per period",
     "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method monthly."
+  },
+  "Voting": {
+    "voting": "Voting",
+    "propose": "Propose",
+    "all": "All",
+    "yourProposals": "Your proposals",
+    "noFights": "No fights, yet",
+    "youCreatedAndVoted": "You created and voted",
+    "vote": "Vote",
+    "youVoted": "You voted"
   }
 }

@@ -59,4 +59,19 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     color: colors.primary,
   },
+  fanVoted: {
+    backgroundColor: colors.buttonNotification,
+    borderRadius: 5,
+    height: 40,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fanVotedText: {
+    color: colors.primary,
+    fontSize: fonts.size.caption,
+  },
+  button: {
+    height: 40,
+  },
 });

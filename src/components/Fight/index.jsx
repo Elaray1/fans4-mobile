@@ -9,9 +9,11 @@ import 'moment-duration-format';
 import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import Text from 'components/Text';
 import Fighter from 'components/Fight/Fighter';
+import Button from 'components/Button';
 
 import { toLocalDateAndTime, toLocalDate } from 'helpers/toLocalTime';
 
@@ -31,6 +33,7 @@ function Fight({
   const navigation = useNavigation();
 
   const userId = useSelector(userSelectors.getUserId);
+  const userType = useSelector(userSelectors.getUserType);
 
   const onFighterPress = useCallback((fighterId) => {
     if (userId === fighterId) {
@@ -66,13 +69,30 @@ function Fight({
       </View>
     ),
     [FIGHT_VIEW_TYPE.IN_VOTING]: () => (
-      <View style={styles.location}>
-        <Text style={styles.text}>{getLocation(firstFighter.hometown)}</Text>
-        <View style={styles.votes}>
-          <Text style={styles.votesText}>{`${fight.votedUserIds.length} ${t('Fight.votes')}`}</Text>
-        </View>
-        <Text style={styles.text}>{getLocation(secondFighter.hometown)}</Text>
-      </View>
+      <>
+        { userType === USER_TYPES.FIGHTER ? (
+          <View style={styles.location}>
+            <Text style={styles.text}>{getLocation(firstFighter.hometown)}</Text>
+            <View style={styles.votes}>
+              <Text style={styles.votesText}>{`${fight.votedUserIds.length} ${t('Fight.votes')}`}</Text>
+            </View>
+            <Text style={styles.text}>{getLocation(secondFighter.hometown)}</Text>
+          </View>
+        ) : (
+          <View style={styles.location}>
+            {!fight.votedUserIds.includes(userId)
+              ? (
+                <View style={styles.fanVoted}>
+                  <Text style={styles.fanVotedText}>
+                    {t('Fight.you')} {!fight.suggestions.fans?.some(f => f._id === userId)
+                    && t('Fight.createdAnd')}{t('Fight.voted')} ({fight.votedUserIds.length})
+                  </Text>
+                </View>
+              )
+              : <Button title={t('Fight.vote')} onPress={() => {}} style={styles.button} />}
+          </View>
+        )}
+      </>
     ),
     [FIGHT_VIEW_TYPE.UPCOMING]: () => (
       <View>

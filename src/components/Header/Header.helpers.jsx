@@ -3,6 +3,8 @@ import { View, TouchableOpacity } from 'react-native';
 
 import { ITEM_TYPES } from 'components/Header/Header.constants';
 
+import PlusIcon from 'assets/icons/big-plus';
+
 import Text from 'components/Text';
 import Icon from './components/Icon';
 
@@ -27,6 +29,19 @@ export const getHeaderItem = ({ type, props, text }) => {
           onPress={props.onPress}
         >
           <Text style={[styles.text, props.style]}>{text}</Text>
+        </TouchableOpacity>
+      );
+      break;
+    case ITEM_TYPES.PLUS_AND_TEXT:
+      item = (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          disabled={!props.onPress}
+          onPress={props.onPress}
+          style={styles.plusButton}
+        >
+          <PlusIcon />
+          <Text style={[styles.plusText, props.style]}>{text}</Text>
         </TouchableOpacity>
       );
       break;
