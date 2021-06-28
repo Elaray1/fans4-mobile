@@ -162,6 +162,18 @@ function PersonalInfo({ route }) {
     losses, draws, weightClasses,
     photo?.mime, photo?.path, navigation]);
 
+  const onChangeWins = useCallback((text) => {
+    setWins(text.replace(/[^0-9]/g, ''));
+  }, []);
+
+  const onChangeLosses = useCallback((text) => {
+    setLosses(text.replace(/[^0-9]/g, ''));
+  }, []);
+
+  const onChangeDraws = useCallback((text) => {
+    setDraws(text.replace(/[^0-9]/g, ''));
+  }, []);
+
   return (
     <SafeAreaView style={styles.screen}>
       <WheelModal
@@ -199,27 +211,21 @@ function PersonalInfo({ route }) {
             <Input
               value={wins ?? ''}
               type="number"
-              onChange={(text) => {
-                setWins(text.replace(/[^0-9]/g, ''));
-              }}
+              onChange={onChangeWins}
               label={t('PersonalInfo.wins')}
               style={styles.recordInput}
             />
             <Input
               value={losses ?? ''}
               type="number"
-              onChange={(text) => {
-                setLosses(text.replace(/[^0-9]/g, ''));
-              }}
+              onChange={onChangeLosses}
               label={t('PersonalInfo.losses')}
               style={styles.recordInput}
             />
             <Input
               value={draws ?? ''}
               type="number"
-              onChange={(text) => {
-                setDraws(text.replace(/[^0-9]/g, ''));
-              }}
+              onChange={onChangeDraws}
               label={t('PersonalInfo.draws')}
               style={styles.recordInput}
             />
