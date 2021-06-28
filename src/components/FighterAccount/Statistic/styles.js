@@ -6,8 +6,8 @@ export default StyleSheet.create({
   profileBlock: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 20,
+    marginVertical: 20,
+    justifyContent: 'space-between',
   },
   profileData: {
     paddingVertical: 8,
@@ -16,11 +16,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.gray,
   },
-  profileLeftData: {
-    marginRight: 10,
-  },
-  profileRightData: {
-    marginLeft: 10,
+  profileCenterData: {
+    marginHorizontal: 10,
   },
   profileDataTitle: {
     color: colors.textSecondary,

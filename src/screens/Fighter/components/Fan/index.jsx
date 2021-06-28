@@ -129,6 +129,7 @@ function Fighter({ fighterId }) {
           <Statistic
             postsCount={postsCount}
             fansCount={fansCount}
+            recordCount={fighter.role.profile.record}
           />
         </View>
 
