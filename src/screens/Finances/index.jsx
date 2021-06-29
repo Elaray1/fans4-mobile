@@ -39,20 +39,26 @@ function Finances({ route }) {
   const isUserAuthenticated = useSelector(userSelectors.getAuthenticated);
 
   const stripeAccountId = route?.params?.stripeAccountId;
+  const fetchedError = route?.params?.error;
 
   const [account, setAccount] = useState(null);
   const [income, setIncome] = useState(null);
   const [webViewUrl, setWebViewUrl] = useState(null);
   const [isConfirmationModal, setIsConfirmationModal] = useState(false);
+  const [error, setError] = useState(fetchedError);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  if (error !== fetchedError) {
+    setError(fetchedError);
+  }
 
   const getUserWithdrawalMethod = useCallback(async () => {
     setIsRefreshing(true);
     try {
       const { account: fetchedAccount } = await accountApi.getUserAccount();
       setAccount(fetchedAccount);
-    } catch (error) {
+    } catch (err) {
       showFailure();
     }
     setIsRefreshing(false);
@@ -68,7 +74,7 @@ function Finances({ route }) {
       } else {
         Linking.openURL(fetchedAccountLink);
       }
-    } catch (error) {
+    } catch (err) {
       showFailure();
     }
   }, [showFailure]);
@@ -100,7 +106,7 @@ function Finances({ route }) {
     try {
       await accountApi.deleteUserAccount();
       setAccount(null);
-    } catch (error) {
+    } catch (err) {
       showFailure();
     }
     onCloseConfirmationModal(false);
@@ -115,12 +121,13 @@ function Finances({ route }) {
         const period = moment(payout.typeMetadata.from).format('MMMM YYYY');
 
         return {
+          _id: payout._id,
           period,
           totalAmount: payout.amount.toFixed(2),
         };
       });
       setIncome(fetchedIncome);
-    } catch (error) {
+    } catch (err) {
       showFailure();
     }
     setIsRefreshing(false);
@@ -128,11 +135,14 @@ function Finances({ route }) {
 
   const onWebViewStateChange = useCallback(async (webViewState) => {
     if (!webViewState.url.includes('connect.stripe.com')) {
-      await axios({ method: 'get', url: webViewState.url });
+      const response = await axios({ method: 'get', url: `${webViewState.url}&noRedirect=true` });
+      if (response.data?.error) {
+        showFailure(response.data.error);
+      }
       setWebViewUrl(null);
       getUserWithdrawalMethod();
     }
-  }, [getUserWithdrawalMethod]);
+  }, [getUserWithdrawalMethod, showFailure]);
 
   useEffect(() => {
     if (isUserAuthenticated) {
@@ -140,6 +150,13 @@ function Finances({ route }) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUserAuthenticated, stripeAccountId]);
+
+  useEffect(() => {
+    if (error) {
+      showFailure(error);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   useEffect(() => {
     getUserIncome();
@@ -170,7 +187,6 @@ function Finances({ route }) {
 
   const withdrawalMethod = useMemo(() => {
     const bankAccount = account?.typeMetadata?.bankAccount;
-    const card = account?.typeMetadata?.card;
 
     if (bankAccount) {
       return {
@@ -179,15 +195,8 @@ function Finances({ route }) {
       };
     }
 
-    if (card) {
-      return {
-        title: t('Finances.card'),
-        text: `•••• •••• •••• ${account.typeMetadata.card.last4}`,
-      };
-    }
-
     return null;
-  }, [account?.typeMetadata?.bankAccount, account?.typeMetadata?.card, t]);
+  }, [account?.typeMetadata?.bankAccount, t]);
 
   const WithdrawalMethod = () => (withdrawalMethod
     ? (
@@ -214,7 +223,7 @@ function Finances({ route }) {
           style={styles.addWithdrawalMethod}
         >
           <PlusIcon style={styles.plus} />
-          <Text style={styles.title}>{t('Finances.addWithdrawalMethod')}</Text>
+          <Text style={styles.title}>{t('Finances.addBankAccount')}</Text>
         </TouchableOpacity>
         {income?.length && (
         <Text style={[styles.secondaryText, styles.incomeText]}>
@@ -232,7 +241,7 @@ function Finances({ route }) {
       </View>
       <View style={styles.incomeList}>
         {income.map(item => (
-          <View style={styles.incomeItem}>
+          <View style={styles.incomeItem} key={item._id}>
             <View style={styles.incomeInfo}>
               <Text style={styles.period}>{item.period}</Text>
               <View style={styles.totalAmountContainer}>
@@ -252,8 +261,8 @@ function Finances({ route }) {
     <>
       {!isRefreshing && isConfirmationModal && (
       <Modal
-        title={t('Finances.deleteWithdrawalMethod')}
-        text={t('Finances.withdrawalMethodWillBeDeletedButWeWillStoreTheData')}
+        title={t('Finances.delete')}
+        text={t('Finances.bankAccountWillBeDeletedButWeWillStoreTheData')}
         closeButtonText={t('Finances.cancel')}
         submitButtonText={t('Finances.delete')}
         onClose={onCloseConfirmationModal}
@@ -301,7 +310,8 @@ function Finances({ route }) {
 Finances.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
-      stripeAccountId: PropTypes.string.isRequired,
+      stripeAccountId: PropTypes.string,
+      error: PropTypes.string,
     }),
   }).isRequired,
 };
