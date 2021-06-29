@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
+import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -109,7 +110,15 @@ function Finances({ route }) {
   const getUserIncome = useCallback(async () => {
     setIsRefreshing(true);
     try {
-      const fetchedIncome = await payoutApi.getUserIncome();
+      const payouts = await payoutApi.getUserPayouts();
+      const fetchedIncome = payouts.map((payout) => {
+        const period = moment(payout.typeMetadata.from).format('MMMM YYYY');
+
+        return {
+          period,
+          totalAmount: payout.amount.toFixed(2),
+        };
+      });
       setIncome(fetchedIncome);
     } catch (error) {
       showFailure();
