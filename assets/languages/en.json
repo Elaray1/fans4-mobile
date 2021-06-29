@@ -216,7 +216,7 @@
     "birthDate": "Birth Date",
     "couldntUpdateBirthdate": "Couldn’t update birth date."
   },
-  "ChangeNameUsernameGender": {
+  "ChangeFanInfo": {
     "nameUsernameGender": "Name, Username, Gender",
     "save": "Save",
     "fullName": "Full Name (not shown on public profile)",

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   SafeAreaView, ScrollView, View, TouchableOpacity,
 } from 'react-native';
@@ -17,7 +17,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 import { FAN_GENDERS } from 'resources/user/user.constants';
 import styles from './styles';
 
-function ChangeNameUsernameGender() {
+function ChangeFanInfo() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -29,13 +29,13 @@ function ChangeNameUsernameGender() {
   const [usernameValue, setUsername] = useState(userUserName);
   const [genderValue, setGender] = useState(userGender);
 
-  const genderToTag = {
+  const genderToTag = useMemo(() => ({
     [FAN_GENDERS.MALE]: t('genderPicker.male'),
     [FAN_GENDERS.FEMALE]: t('genderPicker.female'),
     [FAN_GENDERS.NONBINARY]: t('genderPicker.nonbinary'),
     [FAN_GENDERS.OTHER]: t('genderPicker.other'),
     [FAN_GENDERS.PREFER_NOT_TO_SAY]: t('genderPicker.preferNotToSay'),
-  };
+  }), [t]);
 
   const [isGenderModalVisible, setIsGenderModalVisible] = useState(false);
 
@@ -121,12 +121,12 @@ function ChangeNameUsernameGender() {
         } else if (userName) {
           setInputErrors({
             ...inputErrors,
-            username: [userName || t('ChangeNameUsernameGender.anErrorOccurred')],
+            username: [userName],
           });
         } else {
           setInputErrors({
             ...inputErrors,
-            gender: [gender || t('ChangeNameUsernameGender.anErrorOccurred')],
+            gender: [gender || t('ChangeFanInfo.anErrorOccurred')],
           });
         }
         setIsLoading(false);
@@ -141,20 +141,16 @@ function ChangeNameUsernameGender() {
   || !!inputErrors.fullName.length
   || !!inputErrors.username.length;
 
-  const saveButtonProps = isSaveButtonDisabled
-    ? { rightItemStyle: styles.disabledText }
-    : {};
-
   return (
     <SafeAreaView style={styles.screen}>
       <Header
-        title={t('ChangeNameUsernameGender.nameUsernameGender')}
+        title={t('ChangeFanInfo.nameUsernameGender')}
         leftItemType="backArrow"
         rightItemType="text"
-        rightItemText={t('ChangeNameUsernameGender.save')}
+        rightItemText={t('ChangeFanInfo.save')}
         onRightItemPress={onPressSave}
         rightItemDisabled={isSaveButtonDisabled}
-        {...saveButtonProps}
+        rightItemStyle={isSaveButtonDisabled ? styles.disabledText : undefined}
       />
       <GenderModal
         visible={isGenderModalVisible}
@@ -165,7 +161,7 @@ function ChangeNameUsernameGender() {
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View style={styles.emailInput}>
           <Input
-            label={t('ChangeNameUsernameGender.fullName')}
+            label={t('ChangeFanInfo.fullName')}
             value={fullNameValue}
             onChange={onFullNameChange}
             errors={inputErrors.fullName}
@@ -173,7 +169,7 @@ function ChangeNameUsernameGender() {
         </View>
         <View style={styles.emailInput}>
           <Input
-            label={t('ChangeNameUsernameGender.username')}
+            label={t('ChangeFanInfo.username')}
             value={usernameValue}
             onChange={onUsernameChange}
             maxLength={25}
@@ -195,4 +191,4 @@ function ChangeNameUsernameGender() {
   );
 }
 
-export default React.memo(ChangeNameUsernameGender);
+export default React.memo(ChangeFanInfo);

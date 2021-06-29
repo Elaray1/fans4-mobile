@@ -39,8 +39,8 @@ function AccountInformation() {
     navigation.navigate('ChangeBiography');
   }, [navigation]);
 
-  const onChangeNameUsernameGender = useCallback(() => {
-    navigation.navigate('ChangeNameUsernameGender');
+  const onChangeFanInfo = useCallback(() => {
+    navigation.navigate('ChangeFanInfo');
   }, [navigation]);
 
   const onChangeEmail = useCallback(() => {
@@ -130,7 +130,7 @@ function AccountInformation() {
             <View>
               <TouchableOpacity
                 style={styles.item}
-                onPress={onChangeNameUsernameGender}
+                onPress={onChangeFanInfo}
               >
                 <View style={styles.itemContent}>
                   <Text style={styles.itemText}>{t('AccountInformation.nameUsernameGender')}</Text>
