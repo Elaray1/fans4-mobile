@@ -19,6 +19,14 @@ export const FIGHTER_GENDERS = {
   MALE: 'male',
 };
 
+export const FAN_GENDERS = {
+  FEMALE: 'female',
+  MALE: 'male',
+  NONBINARY: 'nonbinary',
+  OTHER: 'other',
+  PREFER_NOT_TO_SAY: 'prefer_not_to_say',
+};
+
 export const FIGHTING_STATUSES = {
   READY_FOR_FIGHTS: 'readyForFights',
   INJURED: 'injured',

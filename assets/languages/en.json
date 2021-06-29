@@ -211,7 +211,18 @@
   "AccountInformation": {
     "accountInformation": "Account Information",
     "biography": "Biography",
-    "email": "Email"
+    "email": "Email",
+    "nameUsernameGender": "Name, Username, Gender",
+    "birthDate": "Birth Date",
+    "couldntUpdateBirthdate": "Couldn’t update birth date."
+  },
+  "ChangeFanInfo": {
+    "nameUsernameGender": "Name, Username, Gender",
+    "save": "Save",
+    "fullName": "Full Name (not shown on public profile)",
+    "username": "Username (will be displayed on your profile)",
+    "gender": "Gender",
+    "anErrorOccurred": "An error occurred"
   },
   "Security": {
     "security": "Security",
@@ -444,5 +455,13 @@
     "YourSubscriptions": "Your subscriptions",
     "YouCantSubscribe": "You can't subscribe for a Fighters in the app. We know it’s a hassle. After you subscribed, you can enjoy the content in the app.",
     "PleaseGoToFans4": "Please go to Fans4 official website to learn more."
+  },
+  "genderPicker": {
+    "male": "Male",
+    "female": "Female",
+    "nonbinary": "Nonbinary",
+    "genders": "Genders",
+    "other": "Other",
+    "preferNotToSay": "Prefer not to say"
   }
 }

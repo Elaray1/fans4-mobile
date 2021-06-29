@@ -15,6 +15,7 @@ import OnBoarding3 from 'screens/OnBoarding3';
 import ContactAdmin from 'screens/ContactAdmin';
 import Support from 'screens/Support';
 import ChangeBiography from 'screens/ChangeBiography';
+import ChangeFanInfo from 'screens/ChangeFanInfo';
 import AccountInformation from 'screens/AccountInformation';
 import AccountBlocked from 'screens/AccountBlocked';
 import Security from 'screens/Security';
@@ -107,6 +108,7 @@ function AppScreens() {
       <AppStack.Screen name="ContactAdmin" component={ContactAdmin} />
       <AppStack.Screen name="Support" component={Support} />
       <AppStack.Screen name="ChangeBiography" component={ChangeBiography} />
+      <AppStack.Screen name="ChangeFanInfo" component={ChangeFanInfo} />
       <AppStack.Screen name="AccountInformation" component={AccountInformation} />
       <AppStack.Screen name="AccountBlocked" component={AccountBlocked} />
       <AppStack.Screen name="Security" component={Security} />

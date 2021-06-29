@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useState, useCallback } from 'react';
 import {
-  View, TouchableOpacity, Modal, Pressable,
+  View, TouchableOpacity, Modal, Pressable, ActivityIndicator,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ import colors from 'themes/colors';
 import styles from './DatePickerModal.styles';
 
 function DatePickerModal({
-  date, onClose, onSubmit, visible,
+  date, onClose, onSubmit, visible, isLoading,
 }) {
   const { t } = useTranslation();
   const [internalDate, setInternalDate] = useState(date);
@@ -35,8 +35,12 @@ function DatePickerModal({
           style={styles.doneButton}
           onPress={onDonePress}
           activeOpacity={0.8}
+          disabled={isLoading}
         >
-          <Text style={styles.doneText}>{t('DatePickerModal.done')}</Text>
+          {!isLoading
+            ? <Text style={styles.doneText}>{t('DatePickerModal.done')}</Text>
+            : <ActivityIndicator color={colors.primary} />
+          }
         </TouchableOpacity>
         <View style={styles.line} />
         <DatePicker
@@ -60,10 +64,12 @@ DatePickerModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
 };
 
 DatePickerModal.defaultProps = {
   date: new Date('1990-01-01'),
+  isLoading: false,
 };
 
 export default React.memo(DatePickerModal);

@@ -40,6 +40,9 @@ export default StyleSheet.create({
   arrowRight: {
     marginLeft: 18,
   },
+  arrowSpace: {
+    width: 26,
+  },
   emailPending: {
     alignItems: 'center',
     justifyContent: 'center',
