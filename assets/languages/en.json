@@ -244,7 +244,8 @@
     "recovery": "Post-fight Recovery",
     "pending": "Pending",
     "declined": "Declined",
-    "removed": "Removed"
+    "removed": "Removed",
+    "blocked": "Blocked"
   },
   "Account": {
     "account": "Account",
@@ -419,7 +420,11 @@
     "voted": "voted",
     "ok": "OK",
     "subscription": "Subscription",
-    "youHaveToBeSubscribed": "You have to be subscribed to these fighters to vote. Please go to Fans4 official website to learn more."
+    "youHaveToBeSubscribed": "You have to be subscribed to these fighters to vote. Please go to Fans4 official website to learn more.",
+    "upcoming": "In upcoming event",
+    "votingClosed": "Voting closed. In admin review",
+    "pending": "In admin review",
+    "declined": "Declined"
   },
   "Comments": {
     "comments": "Comments",
@@ -493,6 +498,25 @@
     "noFights": "No fights, yet",
     "youCreatedAndVoted": "You created and voted",
     "vote": "Vote",
-    "youVoted": "You voted"
-  }
+    "youVoted": "You voted",
+    "ok": "OK",
+    "subscription": "Subscription",
+    "youHaveToBeSubscribed": "To propose a fight you have to be subscribed to fighter. Please go to Fans4 official website to learn more.",
+    "created": "Fight was sent to admin for review",
+    "voted": "Fight already created, we saved your vote",
+    "pending": "Fight already is in admin review",
+    "votingClosed": "Fight already is in admin review",
+    "approved": "Fight is in admin review, please wait and see whether it will be included in any event",
+    "upcoming": "Fight already is in upcoming event"
+  },
+  "ProposeAFight": {
+    "ProposeAFight": "Propose A Fight",
+    "next": "Next",
+    "create": "Create",
+    "chooseOpponent": "Choose opponent for this fight",
+    "noFighters": "No fighters who fits your request.",
+    "showFullList": "Show full list",
+    "chooseFighter": "Choose your fighter to create a fight",
+    "search": "Search by name or nickname"
+  },
 }

@@ -51,4 +51,12 @@ export default StyleSheet.create({
   removedContainer: {
     backgroundColor: colors.error,
   },
+  blockedContainer: {
+    backgroundColor: hexToRgba(colors.error, 0.1),
+    height: 20,
+    paddingVertical: 2,
+  },
+  blockedText: {
+    color: colors.error,
+  },
 });

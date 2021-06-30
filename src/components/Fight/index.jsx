@@ -128,15 +128,37 @@ function Fight({
         )}
       </>
     ),
-    [FIGHT_VIEW_TYPE.UPCOMING]: () => (
-      <View>
-        <Text style={styles.text}>
-          {`${fight.event.name} / ${getLocation(fight.event.location)}`}
-        </Text>
-        <Text style={styles.text}>
-          {toLocalDateAndTime(fight.event)}
+    [FIGHT_VIEW_TYPE.VOTING_CLOSED]: () => (
+      <View
+        style={styles.fanVoted}
+      >
+        <Text style={styles.fanVotedText}>
+          {t('Fight.votingClosed')} ({fight.votedUserIds.length})
         </Text>
       </View>
+
+    ),
+    [FIGHT_VIEW_TYPE.UPCOMING]: () => (
+      <>
+        {userType === USER_TYPES.FIGHTER ? (
+          <View>
+            <Text style={styles.text}>
+              {`${fight.event.name} / ${getLocation(fight.event.location)}`}
+            </Text>
+            <Text style={styles.text}>
+              {toLocalDateAndTime(fight.event)}
+            </Text>
+          </View>
+        ) : (
+          <View
+            style={styles.upcoming}
+          >
+            <Text style={styles.upcomingText}>
+              {t('Fight.upcoming')}
+            </Text>
+          </View>
+        )}
+      </>
     ),
     [FIGHT_VIEW_TYPE.PAST]: () => (
       <View>
@@ -147,6 +169,24 @@ function Fight({
           {t('Fight.round')}
           {' '}
           {fightResultText}
+        </Text>
+      </View>
+    ),
+    [FIGHT_VIEW_TYPE.DECLINED]: () => (
+      <View
+        style={styles.declined}
+      >
+        <Text style={styles.declinedText}>
+          {t('Fight.declined')}
+        </Text>
+      </View>
+    ),
+    [FIGHT_VIEW_TYPE.PENDING]: () => (
+      <View
+        style={styles.pending}
+      >
+        <Text style={styles.pendingText}>
+          {t('Fight.pending')}
         </Text>
       </View>
     ),

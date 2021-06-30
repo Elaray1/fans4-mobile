@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useToast } from 'react-native-fast-toast';
 import { useTranslation } from 'react-i18next';
 
@@ -19,12 +19,16 @@ export default () => {
   const { t } = useTranslation();
   const toast = useToast();
 
+  const showSuccess = useCallback((text) => {
+    toast.show(<SuccessToast text={text} />, defaultOptions);
+  }, [toast]);
+
+  const showFailure = useCallback((text = t('Toast.somethingWentWrongPleaseTryAgain')) => {
+    toast.show(<FailureToast text={text} />, defaultOptions);
+  }, [t, toast]);
+
   return {
-    showSuccess: (text) => {
-      toast.show(<SuccessToast text={text} />, defaultOptions);
-    },
-    showFailure: (text) => {
-      toast.show(<FailureToast text={text || t('Toast.somethingWentWrongPleaseTryAgain')} />, defaultOptions);
-    },
+    showSuccess,
+    showFailure,
   };
 };

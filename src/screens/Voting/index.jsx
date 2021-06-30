@@ -1,10 +1,15 @@
 import React, {
   useMemo, useState, useCallback, useEffect,
 } from 'react';
+import PropTypes from 'prop-types';
 import {
-  View, SafeAreaView, FlatList, ScrollView, RefreshControl, ActivityIndicator, TouchableOpacity,
+  View, SafeAreaView, FlatList, ScrollView, RefreshControl, ActivityIndicator, TouchableOpacity, Alert,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import * as fightApi from 'resources/fight/fight.api';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
@@ -27,9 +32,11 @@ import styles from './styles';
 
 const PER_PAGE_COUNT = 20;
 
-const Voting = () => {
+const Voting = ({ route }) => {
   const { t } = useTranslation();
-  const { showFailure } = useToast();
+  const navigation = useNavigation();
+  const { showFailure, showSuccess } = useToast();
+  const userSubscriptions = useSelector(userSelectors.getSubscribedFighters);
 
   const [fights, setFights] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -55,11 +62,25 @@ const Voting = () => {
 
   const [selectedToggleItem, setSelectedToggleItem] = useState(toggleItems[0]);
 
+  const navigateToPropose = useCallback(() => {
+    if (userSubscriptions.length) {
+      navigation.navigate('ProposeAFight');
+    } else {
+      Alert.alert(
+        t('Voting.subscription'),
+        t('Voting.youHaveToBeSubscribed'),
+        [
+          { text: t('Voting.ok') },
+        ],
+      );
+    }
+  }, [navigation, t, userSubscriptions?.length]);
+
   const EmptyView = () => (
     <View style={styles.emptyView}>
       <View style={styles.illustration} />
       <Text style={styles.titleText}>{ t('Voting.noFights')}</Text>
-      <TouchableOpacity style={styles.plusButton}>
+      <TouchableOpacity style={styles.plusButton} onPress={navigateToPropose}>
         <PlusIcon />
         <Text styles={styles.plusText}>{ t('Voting.propose')}</Text>
       </TouchableOpacity>
@@ -96,7 +117,7 @@ const Voting = () => {
         } = await fightApi.getFights({
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
-          statuses: [FIGHT_STATUSES.IN_VOTING],
+          statuses: selectedToggleItem.id === '1' ? [FIGHT_STATUSES.IN_VOTING] : null,
           createdByMe: selectedToggleItem.createdByMe,
         });
         setPage(fetchingPage + 1);
@@ -108,7 +129,11 @@ const Voting = () => {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [totalCount, page, fights, selectedToggleItem.createdByMe, showFailure, t]);
+  }, [totalCount, page, fights, selectedToggleItem.id, selectedToggleItem.createdByMe, showFailure, t]);
+
+  const onToggleSelect = useCallback(async (item) => {
+    setSelectedToggleItem(item);
+  }, []);
 
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -125,9 +150,35 @@ const Voting = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onToggleSelect = useCallback(async (item) => {
-    setSelectedToggleItem(item);
-  }, []);
+  useEffect(() => {
+    if (!route.params) {
+      return;
+    }
+
+    const { status, fight } = route.params;
+
+    if (status === 'created') {
+      showSuccess(t('Voting.created'));
+      onToggleSelect(toggleItems[1]);
+      setFights(fs => [fight, ...fs]);
+    }
+
+    if (status === 'voted') {
+      showSuccess(t('Voting.voted'));
+      onToggleSelect(toggleItems[1]);
+    }
+
+    if (status === 'processing') {
+      const message = {
+        [FIGHT_STATUSES.PENDING]: t('Voting.pending'),
+        [FIGHT_STATUSES.VOTING_CLOSED]: t('Voting.votingClosed'),
+        [FIGHT_STATUSES.APPROVED]: t('Voting.approved'),
+        [FIGHT_STATUSES.UPCOMING]: t('Voting.upcoming'),
+      };
+
+      showSuccess(message[fight.status]);
+    }
+  }, [onToggleSelect, route.params, showSuccess, t, toggleItems]);
 
   useDidUpdate(async () => {
     await fetchNewItems({ refresh: true });
@@ -147,7 +198,7 @@ const Voting = () => {
     });
   }, []);
 
-  const keyExtractor = useCallback(item => item._id, []);
+  const keyExtractor = useCallback(item => item?._id, []);
 
   const renderItem = ({ item }) => {
     return (
@@ -157,7 +208,12 @@ const Voting = () => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <Header title={t('Voting.voting')} rightItemType={ITEM_TYPES.PLUS_AND_TEXT} rightItemText={t('Voting.propose')} />
+      <Header
+        title={t('Voting.voting')}
+        rightItemType={ITEM_TYPES.PLUS_AND_TEXT}
+        rightItemText={t('Voting.propose')}
+        onRightItemPress={navigateToPropose}
+      />
       <View style={styles.content}>
         <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
         {isRefreshing && <Loader />}
@@ -185,6 +241,15 @@ const Voting = () => {
       </View>
     </SafeAreaView>
   );
+};
+
+Voting.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      status: PropTypes.string,
+      fight: PropTypes.shape(),
+    }),
+  }).isRequired,
 };
 
 export default React.memo(Voting);

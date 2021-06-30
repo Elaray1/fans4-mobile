@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+import hexToRgba from 'helpers/hexToRgba';
 
 export default StyleSheet.create({
   fight: {
@@ -73,5 +74,41 @@ export default StyleSheet.create({
   },
   button: {
     height: 40,
+  },
+  upcoming: {
+    backgroundColor: hexToRgba(colors.green, 0.12),
+    borderRadius: 5,
+    height: 40,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  upcomingText: {
+    color: colors.green,
+    fontSize: fonts.size.caption,
+  },
+  declined: {
+    backgroundColor: hexToRgba(colors.error, 0.12),
+    borderRadius: 5,
+    height: 40,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  declinedText: {
+    color: colors.error,
+    fontSize: fonts.size.caption,
+  },
+  pending: {
+    backgroundColor: colors.fightingStatusBadge,
+    borderRadius: 5,
+    height: 40,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pendingText: {
+    color: colors.fightingStatusText,
+    fontSize: fonts.size.caption,
   },
 });
