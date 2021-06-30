@@ -65,8 +65,12 @@ const init = async (dispatch) => {
     sockets.emit('subscribe', `device-${getMaskedDeviceId()}`);
   }
 
-  const { stack, screen } = getInitialScreen(user);
-  rootNavigation.reset({ routes: [{ name: stack, params: { screen } }] });
+
+  if (rootNavigation.isInitialRoute()) {
+    const { stack, screen } = getInitialScreen(user);
+    rootNavigation.reset({ routes: [{ name: stack, params: { screen } }] });
+  }
+
 
   // this is needed to hide splash screen after screen appearing animation
   InteractionManager.runAfterInteractions(() => SplashScreen.hide());
@@ -128,6 +132,21 @@ const disconnectPushNotifications = (userAuthenticated) => {
   localPushNotificationService.unregister();
 };
 
+const linking = {
+  prefixes: [
+    'fans4://',
+  ],
+  config: {
+    screens: {
+      AppStack: {
+        screens: {
+          Finances: 'finances/:stripeAccountId',
+        },
+      },
+    },
+  },
+};
+
 function AppNavigation() {
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
@@ -144,6 +163,7 @@ function AppNavigation() {
         theme={NAVIGATOR_CONTAINER_THEME}
         ref={rootNavigation.navigationRef}
         onReady={onNavigatorReady}
+        linking={linking}
       >
         <Stack.Navigator initialRouteName={userAuthenticated ? 'AppStack' : 'AuthStack'} headerMode="none">
           <Stack.Screen name="AppStack" component={AppScreens} />

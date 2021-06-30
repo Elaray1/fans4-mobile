@@ -12,6 +12,10 @@ export function reset(...args) {
   navigationRef.current?.dispatch({ ...CommonActions.reset(...args) });
 }
 
+export function isInitialRoute() {
+  return navigationRef.current?.getCurrentRoute().name === 'SelectUserType';
+}
+
 export function resetToScreen(stack, screen, params) {
   reset({
     index: 0,

@@ -463,5 +463,19 @@
     "genders": "Genders",
     "other": "Other",
     "preferNotToSay": "Prefer not to say"
+  },
+  "Finances": {
+    "finances": "Finances",
+    "addBankAccount": "Add Bank Account",
+    "incomeWillBePaidByThisMethodMonthlyYouCanTrackAllFinanceInformationInThisSection": "Income will be paid by this method monthly. You can track all finance information in this section.",
+    "bankAccount": "Bank Account",
+    "noIncomeYet": "No income, yet",
+    "onceYouEarnIncomeYouWillSeeItHere": "Once you earn income, you will see it here.",
+    "bankAccountWillBeDeletedButWeWillStoreTheData": "Bank account will be deleted, but we will store the data.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "income": "Income",
+    "perPeriod": "per period",
+    "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method monthly."
   }
 }
