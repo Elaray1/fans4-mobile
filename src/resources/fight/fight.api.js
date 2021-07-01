@@ -14,4 +14,6 @@ export const getFights = ({
 
 export const create = ({ fighterIds }) => apiClient.post('fights', { fighterIds });
 
-export const vote = ({ fightId }) => apiClient.put('fights/vote', { fightId });
+export const vote = ({ fightId }) => apiClient.post('fights/voting', { fightId });
+
+export const unvote = ({ fightId }) => apiClient.delete('fights/voting', { fightId });

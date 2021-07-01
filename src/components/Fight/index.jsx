@@ -61,7 +61,11 @@ function Fight({
   const onPressVote = useCallback(async (fightId, fighters) => {
     if (userSubscriptions.includes(fighters[0]._id || fighters[1]._id)) {
       try {
-        await fightApi.vote({ fightId });
+        if (!fight.votedUserIds.includes(userId)) {
+          await fightApi.vote({ fightId });
+        } else {
+          await fightApi.unvote({ fightId });
+        }
         onVote(fightId, userId);
       } catch {
         showFailure();
@@ -75,7 +79,7 @@ function Fight({
         ],
       );
     }
-  }, [onVote, showFailure, t, userId, userSubscriptions]);
+  }, [fight.votedUserIds, onVote, showFailure, t, userId, userSubscriptions]);
 
   const FIGHT_INFO = {
     [FIGHT_VIEW_TYPE.EVENT_UPCOMING]: () => (

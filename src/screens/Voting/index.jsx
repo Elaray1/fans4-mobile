@@ -185,9 +185,11 @@ const Voting = ({ route }) => {
   }, [selectedToggleItem.createdByMe]);
 
   const onVote = useCallback((fightId, userId) => {
-    setFights((fs) => {
+    const newFights = (fs) => {
       return fs.map((fight) => {
-        if (fight._id !== fightId) return fight;
+        if (fight._id !== fightId) {
+          return fight;
+        }
 
         const votedUserIds = fight.votedUserIds.includes(userId)
           ? fight.votedUserIds.filter(id => id !== userId)
@@ -195,7 +197,8 @@ const Voting = ({ route }) => {
 
         return { ...fight, votedUserIds };
       });
-    });
+    };
+    setFights(newFights);
   }, []);
 
   const keyExtractor = useCallback(item => item?._id, []);
