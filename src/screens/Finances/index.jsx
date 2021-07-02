@@ -56,7 +56,7 @@ function Finances({ route }) {
   const getUserWithdrawalMethod = useCallback(async () => {
     setIsRefreshing(true);
     try {
-      const { account: fetchedAccount } = await accountApi.getUserAccount();
+      const { account: fetchedAccount } = await accountApi.getStripePayoutAccount();
       setAccount(fetchedAccount);
     } catch (err) {
       showFailure();
@@ -64,11 +64,11 @@ function Finances({ route }) {
     setIsRefreshing(false);
   }, [showFailure]);
 
-  const createUserAccount = useCallback(async () => {
+  const createStripePayoutAccount = useCallback(async () => {
     try {
       const {
         accountLink: fetchedAccountLink,
-      } = await accountApi.createUserAccount();
+      } = await accountApi.createStripePayoutAccount();
       if (Platform.OS === 'ios') {
         setWebViewUrl(fetchedAccountLink);
       } else {
@@ -104,7 +104,7 @@ function Finances({ route }) {
   const onDeleteWithdrawalMethodConfirmation = useCallback(async () => {
     setIsRefreshing(true);
     try {
-      await accountApi.deleteUserAccount();
+      await accountApi.deleteStripePayoutAccount();
       setAccount(null);
     } catch (err) {
       showFailure();
@@ -218,7 +218,7 @@ function Finances({ route }) {
     : (
       <View>
         <TouchableOpacity
-          onPress={createUserAccount}
+          onPress={createStripePayoutAccount}
           activeOpacity={0.7}
           style={styles.addWithdrawalMethod}
         >

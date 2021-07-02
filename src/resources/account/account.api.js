@@ -1,10 +1,10 @@
 import { apiClient } from 'helpers/api';
 
-export const getUserAccount = () => apiClient
-  .get('accounts');
+export const getStripePayoutAccount = () => apiClient
+  .get('accounts/stripe/payout');
 
-export const createUserAccount = () => apiClient
-  .post('accounts');
+export const createStripePayoutAccount = () => apiClient
+  .post('accounts/stripe/payout');
 
-export const deleteUserAccount = () => apiClient
-  .delete('accounts');
+export const deleteStripePayoutAccount = () => apiClient
+  .delete('accounts/stripe/payout');
