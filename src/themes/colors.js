@@ -7,6 +7,7 @@ const colors = {
   yellow: '#FF9800',
 
   primary: '#6A7DDD',
+  disabledPrimary: '#3D4776',
   error: '#F34C4C',
 
   baseFont: '#FFFFFF',
@@ -36,6 +37,9 @@ const colors = {
   errorText: '#F34C4C',
 
   grayBlock: '#1A1A1F',
+
+  fightingStatusBadge: '#313236',
+  fightingStatusText: '#919192',
 };
 
 export default colors;

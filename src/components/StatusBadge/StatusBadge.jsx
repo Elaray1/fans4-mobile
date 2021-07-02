@@ -6,8 +6,10 @@ import { useTranslation } from 'react-i18next';
 import Text from 'components/Text';
 
 import { POST_STATUSES } from 'resources/post/post.constants';
+import { USER_STATUSES } from 'resources/user/user.constants';
 
 import { FIGHTER_STATUSES } from './StatusBadge.constants';
+
 import styles from './StatusBadge.styles';
 
 function StatusBadge({ status }) {
@@ -30,6 +32,7 @@ StatusBadge.propTypes = {
   status: PropTypes.oneOf([
     ...Object.values(FIGHTER_STATUSES),
     ...Object.values(POST_STATUSES),
+    ...Object.values(USER_STATUSES),
   ]).isRequired,
 };
 

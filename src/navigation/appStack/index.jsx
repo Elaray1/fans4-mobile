@@ -31,6 +31,7 @@ import Comments from 'screens/Comments';
 import ReportComment from 'screens/ReportComment';
 import ThanksForReporting from 'screens/ThanksForReporting';
 import Finances from 'screens/Finances';
+import ProposeAFight from 'screens/ProposeAFight';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -125,6 +126,7 @@ function AppScreens() {
       <AppStack.Screen name="ReportComment" component={ReportComment} />
       <AppStack.Screen name="ThanksForReporting" component={ThanksForReporting} />
       <AppStack.Screen name="Finances" component={Finances} />
+      <AppStack.Screen name="ProposeAFight" component={ProposeAFight} />
     </AppStack.Navigator>
   );
 }

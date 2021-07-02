@@ -105,3 +105,12 @@ export const getFighters = ({ page, perPage, searchValue }) => apiClient
 
 export const getOtherFighter = ({ _id }) => apiClient
   .get(`users/${_id}`);
+
+export const getFightersForFight = ({ opponentId, search }) => apiClient
+  .get('users/fighters-for-fight', {
+    opponentId,
+    ...(search && { search }),
+  });
+
+export const suggestFight = ({ firstFighterId, secondFighterId }) => apiClient
+  .post('fights/suggest', { firstFighterId, secondFighterId });

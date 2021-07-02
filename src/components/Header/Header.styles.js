@@ -33,4 +33,16 @@ export default StyleSheet.create({
     lineHeight: fonts.lineHeight.small,
     color: colors.primary,
   },
+  plusText: {
+    marginLeft: 3,
+  },
+  plusButton: {
+    paddingVertical: 4,
+    paddingLeft: 6,
+    paddingRight: 10,
+    flexDirection: 'row',
+    backgroundColor: colors.gray,
+    borderRadius: 5,
+    marginLeft: -80,
+  },
 });

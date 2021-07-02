@@ -10,6 +10,7 @@ import EventsIcon from 'assets/icons/tab-bar/events.svg';
 import VotingIcon from 'assets/icons/tab-bar/voting.svg';
 
 import Feed from 'screens/Feed';
+import Voting from 'screens/Voting';
 import Account from 'screens/Account';
 import SearchFighters from 'screens/SearchFighters';
 
@@ -83,8 +84,7 @@ function VotingScreens() {
       headerMode="none"
       screenOptions={SCREEN_OPTIONS}
     >
-      {/* TODO: change on correct screen */}
-      <VotingStack.Screen name="Feed" component={Feed} />
+      <VotingStack.Screen name="Voting" component={Voting} />
     </VotingStack.Navigator>
   );
 }
