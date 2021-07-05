@@ -1,5 +1,6 @@
 export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
 export const SET_USER_DATA = 'SET_USER_DATA';
+export const SET_USER_SUBSCRIPTIONS = 'SET_USER_SUBSCRIPTIONS';
 
 export const USER_TYPES = {
   FIGHTER: 'fighter',

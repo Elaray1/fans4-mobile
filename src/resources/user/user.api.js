@@ -18,11 +18,14 @@ export const sendEmailConfirmation = ({
 export const getUserData = () => apiClient
   .get('users/current');
 
-export const getUsers = ({ page, perPage, myFans }) => apiClient
+export const getUsers = ({
+  page, perPage, myFans, mySubscriptions,
+}) => apiClient
   .get('users', {
     page,
     perPage,
     ...(myFans && { myFans }),
+    ...(mySubscriptions && { mySubscriptions }),
   });
 
 export const getUsersCount = ({ myFans }) => apiClient

@@ -366,10 +366,12 @@
     "youApplied": "You applied. Pending",
     "youAppliedForAFight": "You applied for a fight.",
     "unableToApplyForAFight": "Unable to apply for a fight. Please try again.",
-    "youInjured_0": "You can not apply for a fight with ",
-    "youInjured_1": " while you are injured.",
-    "fighterInjured_0": "You can not apply for a fight with ",
-    "fighterInjured_1": " because this fighter is injured"
+    "youInjured_0": "You can not apply for a fight with",
+    "youInjured_1": "while you are injured.",
+    "fighterInjured_0": "You can not apply for a fight with",
+    "fighterInjured_1": "because this fighter is injured.",
+    "fighterBlocked_0": "You can not apply for a fight with",
+    "fighterBlocked_1": "because this fighter is blocked."
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",

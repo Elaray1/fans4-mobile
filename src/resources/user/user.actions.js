@@ -11,6 +11,7 @@ import * as sockets from 'services/socket.service';
 import {
   USER_LOGGED_OUT,
   SET_USER_DATA,
+  SET_USER_SUBSCRIPTIONS,
 } from './user.constants';
 
 import * as api from './user.api';
@@ -163,4 +164,10 @@ export const updateEmail = ({ newEmail, password }) => async (dispatch) => {
   rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'ConfirmYourEmailAddress' } }] });
 
   dispatch({ type: SET_USER_DATA, user });
+};
+
+export const getSubscriptions = () => async (dispatch) => {
+  const fighters = await api.getUsers({ mySubscriptions: true });
+
+  dispatch({ type: SET_USER_SUBSCRIPTIONS, fighters });
 };
