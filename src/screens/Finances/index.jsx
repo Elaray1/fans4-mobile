@@ -142,7 +142,8 @@ function Finances({ route }) {
       setWebViewUrl(null);
       getUserWithdrawalMethod();
     }
-  }, [getUserWithdrawalMethod, showFailure]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getUserWithdrawalMethod]);
 
   useEffect(() => {
     if (isUserAuthenticated) {
