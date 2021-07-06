@@ -9,6 +9,11 @@ jobs:
     name: Build Android APK
     runs-on: ubuntu-20.04
     steps:
+      - name: Clear artifacts
+        uses: kolpav/purge-artifacts-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          expire-in: 1minutes
       - name: Checkout
         uses: actions/checkout@v2
         with:
