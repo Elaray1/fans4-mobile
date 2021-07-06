@@ -13,6 +13,7 @@ import Feed from 'screens/Feed';
 import Voting from 'screens/Voting';
 import Account from 'screens/Account';
 import SearchFighters from 'screens/SearchFighters';
+import Events from 'screens/Events';
 
 import colors from 'themes/colors';
 import { commonStyles } from 'themes/commonStyles';
@@ -50,8 +51,7 @@ function EventsScreens() {
       headerMode="none"
       screenOptions={SCREEN_OPTIONS}
     >
-      {/* TODO: change on correct screen */}
-      <EventsStack.Screen name="Feed" component={Feed} />
+      <EventsStack.Screen name="Events" component={Events} />
     </EventsStack.Navigator>
   );
 }

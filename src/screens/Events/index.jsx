@@ -16,6 +16,8 @@ import Toggle from 'components/Toggle';
 
 import useToast from 'hooks/useToast';
 
+import LiveIcon from 'assets/icons/live.svg';
+
 import colors from 'themes/colors';
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
@@ -91,6 +93,7 @@ function Events() {
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
           eventTypes: eventTypes || selectedToggleItem.eventTypes,
+          unfinished: selectedToggleItem.id === '1',
         });
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
@@ -101,7 +104,7 @@ function Events() {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [events, page, totalCount, showFailure, t, selectedToggleItem.eventTypes]);
+  }, [totalCount, page, events, selectedToggleItem.eventTypes, selectedToggleItem.id, showFailure, t]);
 
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -119,7 +122,7 @@ function Events() {
   }, []);
 
   const onEventPress = useCallback((event) => {
-    navigation.navigate('EventFights', { eventId: event._id, title: event.name });
+    navigation.navigate('EventFights', { event });
   }, [navigation]);
 
   const keyExtractor = useCallback(item => item._id, []);
@@ -143,6 +146,19 @@ function Events() {
             <Text style={styles.imageText}>{t('Events.canceled')}</Text>
           </View>
           )}
+          <View style={styles.live}>
+            <LiveIcon />
+            <Text>Live</Text>
+          </View>
+          <View style={styles.line}>
+            <View style={[styles.progress, {
+              width: `${(item.fights.filter(
+                fight => fight.results !== undefined,
+              )
+                .length) / item.fights.length * 100}%`,
+            }]}
+            />
+          </View>
         </View>
         <View>
           <Text style={styles.titleText}>{item.name}</Text>

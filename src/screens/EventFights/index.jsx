@@ -1,22 +1,28 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator,
+  SafeAreaView, View, FlatList, ActivityIndicator, Image,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment-timezone';
 
 import * as fightApi from 'resources/fight/fight.api';
 
 import Header from 'components/Header';
 import Fight from 'components/Fight';
+import Text from 'components/Text';
 
 import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
 
+import { toLocalDateAndTime } from 'helpers/toLocalTime';
+import { EVENT_STATUSES } from 'resources/event/event.constants';
+
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 import { FIGHT_VIEW_TYPE } from 'components/Fight/constants';
 
+import LiveIcon from 'assets/icons/live.svg';
 
 import styles from './styles';
 
@@ -27,8 +33,7 @@ function EventFights({ route }) {
   const { showFailure } = useToast();
 
   const {
-    title,
-    eventId,
+    event,
   } = route?.params;
 
   const [fights, setFights] = useState([]);
@@ -56,7 +61,7 @@ function EventFights({ route }) {
         } = await fightApi.getFights({
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
-          eventId,
+          eventId: event._id,
         });
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
@@ -66,7 +71,7 @@ function EventFights({ route }) {
       }
       setIsLoading(false);
     }
-  }, [fights, page, totalCount, showFailure, t, eventId]);
+  }, [totalCount, page, fights, event._id, showFailure, t]);
 
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -105,10 +110,47 @@ function EventFights({ route }) {
   return (
     <SafeAreaView style={styles.screen}>
       <Header
-        title={title}
+        title={event.name}
         leftItemType="backArrow"
       />
       <View style={styles.content}>
+        <View
+          style={styles.event}
+        >
+          <View style={styles.eventImageContainer}>
+            <Image
+              style={styles.photoImage}
+              source={{ uri: event.imageUrl }}
+            />
+            {event.status === EVENT_STATUSES.CANCELED
+          && moment().isBefore(event.date)
+          && (
+          <View style={styles.imageStatus}>
+            <Text style={styles.imageText}>{t('Events.canceled')}</Text>
+          </View>
+          )}
+            <View style={styles.live}>
+              <LiveIcon />
+              <Text>Live</Text>
+            </View>
+            <View style={styles.line}>
+              <View style={[styles.progress, {
+                width: `${(event.fights.filter(
+                  fight => fight.results !== undefined,
+                )
+                  .length) / event.fights.length * 100}%`,
+              }]}
+              />
+            </View>
+          </View>
+          <View>
+            <Text style={styles.titleEvent}>{event.name}</Text>
+            <Text style={styles.text}>{toLocalDateAndTime(event)}</Text>
+            <Text style={styles.text}>
+              {`${event.location.cityName}, ${event.location.stateCode}`}
+            </Text>
+          </View>
+        </View>
         {isLoading ? <Loader /> : (Boolean(fights.length) && (
         <FlatList
           data={fights}
@@ -130,8 +172,7 @@ function EventFights({ route }) {
 EventFights.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      eventId: PropTypes.string.isRequired,
+      event: PropTypes.shape().isRequired,
     }),
   }).isRequired,
 };
