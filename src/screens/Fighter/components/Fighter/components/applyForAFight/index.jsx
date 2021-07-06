@@ -11,7 +11,7 @@ import Button from 'components/Button';
 
 import SuccessToastIcon from 'assets/icons/successToast.svg';
 
-import { FIGHTING_STATUSES, FIGHTER_WEIGHT_CATEGORIES } from 'resources/user/user.constants';
+import { FIGHTING_STATUSES, FIGHTER_WEIGHT_CATEGORIES, USER_STATUSES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 import * as fightApi from 'resources/fight/fight.api';
@@ -56,6 +56,14 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
     FIGHT_STATUSES.APPROVED,
   ], fight.status);
 
+  if (fighter.status === USER_STATUSES.BLOCKED) {
+    return (
+      <Text style={styles.cannotApplyForAFightText}>
+        {`${t('Fighter.fighterBlocked_0')} ${fighter.fullName} ${t('Fighter.fighterBlocked_1')}`}
+      </Text>
+    );
+  }
+
   if (!fight && isSharedWeightClasses && areBothFightersReadyForFight) {
     return (
       <Button
@@ -71,7 +79,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   if (userFightingStatus !== FIGHTING_STATUSES.READY_FOR_FIGHTS) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${t('Fighter.youInjured_0')}${fighter.fullName}${t('Fighter.youInjured_1')}`}
+        {`${t('Fighter.youInjured_0')} ${fighter.fullName} ${t('Fighter.youInjured_1')}`}
       </Text>
     );
   }
@@ -79,7 +87,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   if (fighter.role.fightingStatus !== FIGHTING_STATUSES.READY_FOR_FIGHTS) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${t('Fighter.fighterInjured_0')}${fighter.fullName}${t('Fighter.fighterInjured_1')}`}
+        {`${t('Fighter.fighterInjured_0')} ${fighter.fullName} ${t('Fighter.fighterInjured_1')}`}
       </Text>
     );
   }
@@ -90,7 +98,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
 
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${warningTitleStart}${fighter.fullName}${wargningTitleEnd}`}
+        {`${warningTitleStart} ${fighter.fullName} ${wargningTitleEnd}`}
       </Text>
     );
   }

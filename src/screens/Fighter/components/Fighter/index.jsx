@@ -18,7 +18,9 @@ import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 import * as userApi from 'resources/user/user.api';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as fightApi from 'resources/fight/fight.api';
+
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
+import { USER_STATUSES } from 'resources/user/user.constants';
 
 import ApplyForAFight from './components/applyForAFight';
 import styles from './styles';
@@ -95,7 +97,9 @@ function Fighter({ fighterId }) {
             fullName={fighter.fullName}
             nickname={fighter.role.biography.nickname}
             location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
-            fightingStatus={fighter.role.fightingStatus}
+            fightingStatus={fighter.status === USER_STATUSES.BLOCKED
+              ? USER_STATUSES.BLOCKED
+              : fighter.role.fightingStatus}
           />
 
           <View style={[styles.line, styles.lineIndent]} />

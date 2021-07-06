@@ -19,7 +19,12 @@ function StatusBadge({ status }) {
 
   return (
     <View style={styles.statusWrapper}>
-      <View style={[styles.statusContainer, styles[`${status}Container`], isPost && styles.statusPostContainer]}>
+      <View style={[
+        styles.statusContainer,
+        styles[`${status}Container`],
+        isPost && styles.statusPostContainer,
+      ]}
+      >
         <Text style={[styles.statusText, styles[`${status}Text`]]}>
           {t(`StatusBadge.${status}`)}
         </Text>
