@@ -33,6 +33,7 @@ function Fighter({ fighterId }) {
   const { t } = useTranslation();
 
   const fightersList = useSelector(userSelectors.getSubscribedFighters);
+  const userSubscriptions = useSelector(userSelectors.getSubscribedFighters);
 
   const isSubscribed = useMemo(() => Boolean(fightersList.find(({ _id }) => _id === fighterId)),
     [fighterId, fightersList]);
@@ -152,6 +153,8 @@ function Fighter({ fighterId }) {
         <View style={styles.line} />
 
         <Text style={[styles.blockTitle, styles.postsTitle]}>{t('Account.Posts')}</Text>
+        {!userSubscriptions.includes(fighterId) 
+        && <Text style={styles.grayText}>{t('Account.subscribeToFighter')}</Text>}
       </View>
     );
   };

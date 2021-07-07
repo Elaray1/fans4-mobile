@@ -261,7 +261,8 @@
     "reach": "Reach",
     "Posts": "Posts",
     "OnceYouAddAPost": "Once you add a post you will see it here.",
-    "AddPost": "Add post"
+    "AddPost": "Add post",
+    "subscribeToFighter": "Subscribe to this fighter for full access to Posts."
   },
   "AccountBlocked": {
     "title": "Your Account is Blocked",
