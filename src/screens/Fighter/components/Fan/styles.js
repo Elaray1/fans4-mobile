@@ -50,4 +50,11 @@ export default StyleSheet.create({
   postsTitle: {
     paddingVertical: 18,
   },
+  grayText: {
+    fontSize: fonts.size.small,
+    fontFamily: fonts.family.medium,
+    fontWeight: fonts.weight.medium,
+    color: colors.grayText,
+    marginBottom: 16,
+  },
 });
