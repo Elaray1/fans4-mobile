@@ -135,8 +135,8 @@ const ProposeAFight = () => {
           <Text style={styles.title}>
             {step === 0 ? t('ProposeAFight.chooseFighter') : t('ProposeAFight.chooseOpponent')}
           </Text>
-          {step === 1
-          && (
+
+          {step === 1 && (
             <View style={styles.search}>
               <SearchInput
                 value={search}
@@ -145,6 +145,7 @@ const ProposeAFight = () => {
               />
             </View>
           )}
+
           {fighters.map(fighter => (
             <Fighter
               key={fighter._id}
@@ -154,9 +155,10 @@ const ProposeAFight = () => {
               firstFighterWeightClasses={step === 0 ? null : firstFighter?.role?.profile?.weightClasses}
             />
           ))}
+
           {isLoading && <Loader />}
-          {!fighters.length && !isLoading
-          && (
+
+          {!fighters.length && !isLoading && (
           <View style={styles.emptyView}>
             <Text>{t('ProposeAFight.noFighters')}</Text>
             <TouchableOpacity style={styles.showFullListButton} onPress={onReload}>

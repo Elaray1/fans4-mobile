@@ -4,6 +4,10 @@ import { View, Image } from 'react-native';
 
 import StatusBadge from 'components/StatusBadge';
 import Text from 'components/Text';
+import GrayscaledImage from 'components/GrayscaledImage';
+
+
+import { USER_STATUSES } from 'resources/user/user.constants';
 
 import styles from './styles';
 
@@ -13,10 +17,13 @@ const Profile = ({
   nickname,
   location,
   fightingStatus,
+  status,
 }) => {
+  const ImageComponent = status === USER_STATUSES.BLOCKED ? GrayscaledImage : Image;
+
   return (
     <View style={styles.profileBlock}>
-      <Image
+      <ImageComponent
         style={styles.photoImage}
         source={{ uri: avatarUrl }}
       />
@@ -30,7 +37,8 @@ const Profile = ({
         </Text>
         )}
         <Text style={styles.location}>{location}</Text>
-        {fightingStatus && <StatusBadge status={fightingStatus} />}
+
+        <StatusBadge status={status === USER_STATUSES.BLOCKED ? status : fightingStatus} />
       </View>
     </View>
   );
@@ -42,6 +50,7 @@ Profile.propTypes = {
   nickname: PropTypes.string,
   location: PropTypes.string.isRequired,
   fightingStatus: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
 };
 
 Profile.defaultProps = {

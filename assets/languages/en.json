@@ -372,7 +372,8 @@
     "fighterInjured_0": "You can not apply for a fight with",
     "fighterInjured_1": "because this fighter is injured.",
     "fighterBlocked_0": "You can not apply for a fight with",
-    "fighterBlocked_1": "because this fighter is blocked."
+    "fighterBlocked_1": "because this fighter is blocked.",
+    "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter."
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",
@@ -521,5 +522,5 @@
     "showFullList": "Show full list",
     "chooseFighter": "Choose your fighter to create a fight",
     "search": "Search by name or nickname"
-  },
+  }
 }

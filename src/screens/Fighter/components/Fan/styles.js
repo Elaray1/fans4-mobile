@@ -57,4 +57,9 @@ export default StyleSheet.create({
     color: colors.grayText,
     marginBottom: 16,
   },
+  blockedSupportedFighterText: {
+    color: colors.grayText,
+    fontWeight: fonts.weight.medium,
+    fontSize: fonts.size.caption,
+  },
 });

@@ -65,7 +65,10 @@ const FanAccount = () => {
         ? <Loader />
         : isFightersFetched && (
         <View style={styles.subscriptions}>
-          <Text style={styles.title}>{t('AccountFan.YourSubscriptions')}</Text>
+          <Text style={styles.title}>
+            {t('AccountFan.YourSubscriptions')}
+          </Text>
+
           {fighters.map((item, i) => {
             const { nickname } = item.role.biography;
             const { cityName, stateCode } = item.role.biography.hometown;

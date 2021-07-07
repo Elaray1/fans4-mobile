@@ -119,7 +119,6 @@ function Fighter({ fighterId }) {
             biography={fighter.role.biography.about}
           />
 
-
           <View style={styles.line} />
 
           <PersonalInfo

@@ -133,17 +133,18 @@ function SearchFighters() {
           onChangeText={setSearchValue}
           placeholder={t('SearchFighters.search')}
         />
+
         {!!fighters.length && (
-        <FlatList
-          data={fighters}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          onEndReachedThreshold={0.3}
-          onEndReached={fetchNewItems}
-          style={styles.fightersList}
-          showsVerticalScrollIndicator={false}
-          ListFooterComponent={renderFooter}
-        />
+          <FlatList
+            data={fighters}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            onEndReachedThreshold={0.3}
+            onEndReached={fetchNewItems}
+            style={styles.fightersList}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={renderFooter}
+          />
         )}
       </View>
     </SafeAreaView>

@@ -21,15 +21,13 @@ const Fighter = ({
 }) => {
   let reason = null;
 
-  if (firstFighterWeightClasses 
+  if (firstFighterWeightClasses
     && _.intersection(firstFighterWeightClasses, fighter.role.profile.weightClasses).length === 0) {
     reason = 'weightClasses';
   }
 
-  if (
-    fighter.role.fightingStatus === FIGHTING_STATUSES.INJURED
-    || fighter.role.fightingStatus === FIGHTING_STATUSES.RECOVERY
-  ) {
+  if (fighter.role.fightingStatus === FIGHTING_STATUSES.INJURED
+    || fighter.role.fightingStatus === FIGHTING_STATUSES.RECOVERY) {
     reason = 'fightingStatus';
   }
 
@@ -49,43 +47,50 @@ const Fighter = ({
         style={[styles.image, isDisabled && styles.tintGray]}
         source={{ uri: fighter.avatarUrl }}
       />
+
       { isDisabled && (
-      <Image
-        style={[styles.image, isDisabled && styles.grayImage]}
-        source={{ uri: fighter.avatarUrl }}
-      />
+        <Image
+          style={[styles.image, isDisabled && styles.grayImage]}
+          source={{ uri: fighter.avatarUrl }}
+        />
       )}
+
       <View style={[styles.textContainer, isDisabled && styles.disabledTextContainer]}>
         <Text style={[styles.name, isDisabled && styles.opacity]}>
           {fighter.fullName}
         </Text>
+
         {fighter?.role?.biography?.nickname && (
-        <Text style={[styles.nickname, isDisabled && styles.opacity]}>
-          {`"${fighter?.role?.biography?.nickname}"`}
-        </Text>
+          <Text style={[styles.nickname, isDisabled && styles.opacity]}>
+            {`"${fighter?.role?.biography?.nickname}"`}
+          </Text>
         )}
+
         <Text style={[styles.location, isDisabled && styles.opacity]}>
           {fighter?.role?.biography?.hometown?.cityName}, {fighter?.role?.biography?.hometown?.stateCode}
         </Text>
+
         {reason === 'status' && (
           <StatusBadge status={fighter.status} />
         )}
+
         {reason === 'fightingStatus' && (
           <View style={styles.fightingStatus}>
             <Text style={styles.fightingStatusText}>{fighter.role.fightingStatus}</Text>
           </View>
         )}
+
         {reason === 'weightClasses' && (
           <Text style={[styles.nickname, isDisabled && styles.opacity]}>Weight categories do not match</Text>
         )}
       </View>
-      {!isDisabled
-      && (
+
+      {!isDisabled && (
         <>
           {isSelected
             ? <RadioButtonSelectedIcon style={styles.radioButtonIcon} />
             : <RadioButtonIcon style={styles.radioButtonIcon} />
-      }
+          }
         </>
       )}
     </TouchableOpacity>

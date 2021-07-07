@@ -21,6 +21,7 @@ import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 import Post from 'components/Post';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import { USER_STATUSES } from 'resources/user/user.constants';
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 
@@ -107,6 +108,7 @@ function Fighter({ fighterId }) {
           fullName={fighter.fullName}
           nickname={fighter.role.biography.nickname}
           location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
+          status={fighter.status}
           fightingStatus={fighter.role.fightingStatus}
         />
 
@@ -120,10 +122,17 @@ function Fighter({ fighterId }) {
                 type="done"
                 title={t('Fighter.subscribed')}
               />
-              <Button
-                title={t('Fighter.proposeAFight')}
-                style={styles.applyButton}
-              />
+
+              {fighter.status === USER_STATUSES.BLOCKED ? (
+                <Text style={styles.blockedSupportedFighterText}>
+                  {t('Fighter.subscribeToAnotherWhenBlocked')}
+                </Text>
+              ) : (
+                <Button
+                  title={t('Fighter.proposeAFight')}
+                  style={styles.applyButton}
+                />
+              )}
             </>
           )}
 
@@ -139,7 +148,6 @@ function Fighter({ fighterId }) {
         <Biography
           biography={fighter.role.biography.about}
         />
-
 
         <View style={styles.line} />
 
