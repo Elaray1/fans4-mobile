@@ -161,7 +161,7 @@ function Fighter({ fighterId }) {
         <View style={styles.line} />
 
         <Text style={[styles.blockTitle, styles.postsTitle]}>{t('Account.Posts')}</Text>
-        {!userSubscriptions.includes(fighterId) 
+        {!userSubscriptions.map(f => f._id).includes(fighterId)
         && <Text style={styles.grayText}>{t('Account.subscribeToFighter')}</Text>}
       </View>
     );
