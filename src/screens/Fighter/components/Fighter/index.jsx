@@ -93,6 +93,7 @@ function Fighter({ fighterId }) {
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View style={styles.flatListHeader}>
           <Profile
+            status={fighter.status}
             avatarUrl={fighter.avatarUrl}
             fullName={fighter.fullName}
             nickname={fighter.role.biography.nickname}

@@ -165,9 +165,3 @@ export const updateEmail = ({ newEmail, password }) => async (dispatch) => {
 
   dispatch({ type: SET_USER_DATA, user });
 };
-
-export const getSubscriptions = () => async (dispatch) => {
-  const fighters = await api.getUsers({ mySubscriptions: true });
-
-  dispatch({ type: SET_USER_SUBSCRIPTIONS, fighters });
-};

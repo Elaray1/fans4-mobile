@@ -76,7 +76,7 @@ export const fillRegistrationForm = ({
 export const updateUserInfo = ({
   about, birthdate, fullName, userName, gender,
 }) => apiClient
-  .put('users/', {
+  .put('users', {
     ...(about && { about }),
     ...(birthdate && { birthdate }),
     ...(fullName && { fullName }),

@@ -14,18 +14,13 @@ function Fighter({ route }) {
     _id,
   } = route?.params;
 
-
   const userType = useSelector(userSelectors.getUserType);
 
-  return (
-    userType === USER_TYPES.FIGHTER
-      ? (
-        <FighterForFighter fighterId={_id} />
-      )
-      : (
-        <FighterForFan fighterId={_id} />
-      )
-  );
+  if (userType === USER_TYPES.FIGHTER) {
+    return <FighterForFighter fighterId={_id} />;
+  }
+
+  return <FighterForFan fighterId={_id} />;
 }
 
 Fighter.propTypes = {
