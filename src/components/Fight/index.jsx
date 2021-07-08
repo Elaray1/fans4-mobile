@@ -59,7 +59,7 @@ function Fight({
   }
 
   const onPressVote = useCallback(async (fightId, fighters) => {
-    if (userSubscriptions.includes(fighters[0]._id || fighters[1]._id)) {
+    if (userSubscriptions.map(i => i._id).includes(fighters[0]._id || fighters[1]._id)) {
       try {
         if (!fight.votedUserIds.includes(userId)) {
           await fightApi.vote({ fightId });
