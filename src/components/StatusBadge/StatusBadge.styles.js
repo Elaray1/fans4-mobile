@@ -31,10 +31,10 @@ export default StyleSheet.create({
     color: colors.green,
   },
   injuredContainer: {
-    backgroundColor: hexToRgba(colors.error, 0.12),
+    backgroundColor: colors.greyBadge,
   },
   injuredText: {
-    color: colors.errorText,
+    color: colors.greyBadgeText,
   },
   recoveryContainer: {
     backgroundColor: hexToRgba(colors.yellow, 0.12),

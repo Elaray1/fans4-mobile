@@ -38,6 +38,9 @@ const colors = {
 
   grayBlock: '#1A1A1F',
 
+  greyBadge: 'rgba(173, 173, 173, 0.16)',
+  greyBadgeText: '#adadad',
+
   fightingStatusBadge: '#313236',
   fightingStatusText: '#919192',
 };
