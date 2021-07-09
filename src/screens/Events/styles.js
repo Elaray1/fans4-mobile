@@ -95,4 +95,7 @@ export default StyleSheet.create({
     paddingLeft: 6,
     borderRadius: 5,
   },
+  scrollView: {
+    flexGrow: 1,
+  },
 });

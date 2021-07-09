@@ -82,23 +82,33 @@ function Fight({
       </View>
     ),
     [FIGHT_VIEW_TYPE.EVENT_PAST]: () => (
-      <View style={styles.pastContainer}>
-        <View style={styles.dateContainer}>
-          <Text style={styles.text}>
-            {fight.event.name} / {toLocalDate(fight.event)}
-          </Text>
-        </View>
-        <View style={styles.resultContainer}>
-          <View style={styles.textContainer}>
-            <Text style={styles.resultsText}>{FIGHT_RESULT_LABELS[fight.results.winMethodCategory]}</Text>
-            <Text style={styles.text}>{t('Fight.round')} {fight.results.roundNumber}</Text>
+      <>
+        {fight.results ? (
+          <View style={styles.pastContainer}>
+            <View style={styles.dateContainer}>
+              <Text style={styles.text}>
+                {fight.event.name} / {toLocalDate(fight.event)}
+              </Text>
+            </View>
+            <View style={styles.resultContainer}>
+              <View style={styles.textContainer}>
+                <Text style={styles.resultsText}>{FIGHT_RESULT_LABELS[fight.results.winMethodCategory]}</Text>
+                <Text style={styles.text}>{t('Fight.round')} {fight.results.roundNumber}</Text>
+              </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>{_.startCase(fight.results.winMethod)}</Text>
+                <Text style={styles.text}>{formatDuration(fight.results.duration)}</Text>
+              </View>
+            </View>
           </View>
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>{_.startCase(fight.results.winMethod)}</Text>
-            <Text style={styles.text}>{formatDuration(fight.results.duration)}</Text>
+        ) : (
+          <View style={styles.location}>
+            <Text style={styles.text}>{getLocation(firstFighter.hometown)}</Text>
+            <Text style={styles.text}>{getLocation(secondFighter.hometown)}</Text>
           </View>
-        </View>
-      </View>
+        )
+    }
+      </>
     ),
     [FIGHT_VIEW_TYPE.IN_VOTING]: () => (
       <>

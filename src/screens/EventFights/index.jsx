@@ -107,6 +107,12 @@ function EventFights({ route }) {
     }
     return <Loader />;
   };
+  const progress = `${(event.fights.filter(
+    fight => fight.results !== undefined,
+  )
+    .length) / event.fights.length * 100}%`;
+  const isLive = event.status === EVENT_STATUSES.PAST
+  && event.fights.some(fight => !fight.results);
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -129,19 +135,20 @@ function EventFights({ route }) {
             <Text style={styles.imageText}>{t('Events.canceled')}</Text>
           </View>
           )}
+            {isLive && (
             <View style={styles.live}>
               <LiveIcon />
               <Text>Live</Text>
             </View>
+            )}
+            {isLive && (
             <View style={styles.line}>
               <View style={[styles.progress, {
-                width: `${(event.fights.filter(
-                  fight => fight.results !== undefined,
-                )
-                  .length) / event.fights.length * 100}%`,
+                width: progress,
               }]}
               />
             </View>
+            )}
           </View>
           <View>
             <Text style={styles.titleEvent}>{event.name}</Text>
