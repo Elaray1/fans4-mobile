@@ -1,12 +1,12 @@
 import { apiClient } from 'helpers/api';
 
 export const getEvents = ({
-  isFan, page, perPage, statuses, unfinished, isOnlyNotFinshedIfCanceled,
+  isFan, page, perPage, statuses, withoutResults, notPastByDate,
 }) => apiClient
   .get(isFan ? 'events' : 'events/current-fighter', {
     page,
     perPage,
     ...(statuses && { statuses }),
-    ...(unfinished && { unfinished }),
-    ...(isOnlyNotFinshedIfCanceled && { isOnlyNotFinshedIfCanceled }),
+    ...(withoutResults && { withoutResults }),
+    ...(notPastByDate && { notPastByDate }),
   });

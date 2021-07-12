@@ -103,8 +103,8 @@ function Events() {
           statuses: selectedTab.name === TABS.UPCOMING
             ? [EVENT_STATUSES.UPCOMING, EVENT_STATUSES.CANCELED, EVENT_STATUSES.PAST]
             : [EVENT_STATUSES.PAST],
-          unfinished: selectedTab.name === TABS.UPCOMING,
-          isOnlyNotFinshedIfCanceled: selectedTab.name === TABS.UPCOMING,
+          withoutResults: selectedTab.name === TABS.UPCOMING,
+          notPastByDate: selectedTab.name === TABS.UPCOMING,
         });
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
