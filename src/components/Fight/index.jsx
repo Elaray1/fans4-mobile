@@ -20,7 +20,7 @@ import { toLocalDateAndTime, toLocalDate } from 'helpers/toLocalTime';
 
 import useToast from 'hooks/useToast';
 
-import { FIGHT_VIEW_TYPE } from 'components/Fight/constants';
+import { FIGHT_VIEW_TYPE, FIGHT_RESULT_LABELS } from 'components/Fight/constants';
 
 import styles from './styles';
 
@@ -50,13 +50,6 @@ function Fight({
   }, [navigation, userId]);
 
   const [firstFighter, secondFighter] = fight.fighters;
-
-  let fightResultText;
-  if (fight.results) {
-    const durationFormatted = formatDuration(fight.results.duration);
-    const winMethodFormatted = _.startCase(fight.results.winMethod);
-    fightResultText = `${fight.results.roundNumber}, ${durationFormatted}, ${winMethodFormatted}`;
-  }
 
   const onPressVote = useCallback(async (fightId, fighters) => {
     if (userSubscriptions.map(i => i._id).includes(fighters[0]._id || fighters[1]._id)) {
@@ -89,13 +82,33 @@ function Fight({
       </View>
     ),
     [FIGHT_VIEW_TYPE.EVENT_PAST]: () => (
-      <View>
-        <Text style={styles.text}>
-          {t('Fight.round')}
-          {' '}
-          {fightResultText}
-        </Text>
-      </View>
+      <>
+        {fight.results ? (
+          <View style={styles.pastContainer}>
+            <View style={styles.dateContainer}>
+              <Text style={styles.text}>
+                {fight.event.name} / {toLocalDate(fight.event)}
+              </Text>
+            </View>
+            <View style={styles.resultContainer}>
+              <View style={styles.textContainer}>
+                <Text style={styles.resultsText}>{FIGHT_RESULT_LABELS[fight.results.winMethodCategory]}</Text>
+                <Text style={styles.text}>{t('Fight.round')} {fight.results.roundNumber}</Text>
+              </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>{_.startCase(fight.results.winMethod)}</Text>
+                <Text style={styles.text}>{formatDuration(fight.results.duration)}</Text>
+              </View>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.location}>
+            <Text style={styles.text}>{getLocation(firstFighter.hometown)}</Text>
+            <Text style={styles.text}>{getLocation(secondFighter.hometown)}</Text>
+          </View>
+        )
+    }
+      </>
     ),
     [FIGHT_VIEW_TYPE.IN_VOTING]: () => (
       <>
@@ -163,18 +176,6 @@ function Fight({
           </View>
         )}
       </>
-    ),
-    [FIGHT_VIEW_TYPE.PAST]: () => (
-      <View>
-        <Text style={styles.text}>
-          {`${fight.event.name} / ${toLocalDate(fight.event)}`}
-        </Text>
-        <Text style={styles.text}>
-          {t('Fight.round')}
-          {' '}
-          {fightResultText}
-        </Text>
-      </View>
     ),
     [FIGHT_VIEW_TYPE.DECLINED]: () => (
       <View

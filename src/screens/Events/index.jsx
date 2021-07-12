@@ -6,9 +6,13 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import moment from 'moment-timezone';
 
 import * as eventApi from 'resources/event/event.api';
+import * as userSelectors from 'resources/user/user.selectors';
+import { EVENT_STATUSES } from 'resources/event/event.constants';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
@@ -16,12 +20,15 @@ import Toggle from 'components/Toggle';
 
 import useToast from 'hooks/useToast';
 
+import LiveIcon from 'assets/icons/live.svg';
+
 import colors from 'themes/colors';
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
-import { EVENT_STATUSES } from 'resources/event/event.constants';
 
 import styles from './styles';
+
+const TABS = { UPCOMING: 'upcoming', PAST: 'past' };
 
 const PER_PAGE_COUNT = 20;
 
@@ -37,12 +44,14 @@ function Events() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const toggleItems = useMemo(() => {
+  const userType = useSelector(userSelectors.getUserType);
+
+  const tabs = useMemo(() => {
     return [
       {
         id: '1',
+        name: TABS.UPCOMING,
         value: t('Events.upcoming'),
-        eventTypes: [EVENT_STATUSES.UPCOMING, EVENT_STATUSES.CANCELED],
         emptyView: {
           title: t('Events.noEventsYet'),
           text: t('Events.onceEventsAreScheduledYouWillSeeThemHere'),
@@ -50,8 +59,8 @@ function Events() {
       },
       {
         id: '2',
+        name: TABS.PAST,
         value: t('Events.past'),
-        eventTypes: [EVENT_STATUSES.PAST],
         emptyView: {
           title: t('Events.noEventsYet'),
           text: t('Events.onceYouParticipateInAnEventItWillBeShownOnThisPage'),
@@ -60,13 +69,13 @@ function Events() {
     ];
   }, [t]);
 
-  const [selectedToggleItem, setSelectedToggleItem] = useState(toggleItems[0]);
+  const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
       <View style={styles.illustration} />
-      <Text style={styles.titleText}>{selectedToggleItem.emptyView.title}</Text>
-      <Text style={styles.text}>{selectedToggleItem.emptyView.text}</Text>
+      <Text style={styles.titleText}>{selectedTab.emptyView.title}</Text>
+      <Text style={styles.text}>{selectedTab.emptyView.text}</Text>
     </View>
   );
 
@@ -88,9 +97,14 @@ function Events() {
           events: fetchedEvents,
           totalCount: fetchedTotalCount,
         } = await eventApi.getEvents({
+          isFan: userType === USER_TYPES.FAN,
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
-          eventTypes: eventTypes || selectedToggleItem.eventTypes,
+          statuses: selectedTab.name === TABS.UPCOMING
+            ? [EVENT_STATUSES.UPCOMING, EVENT_STATUSES.CANCELED, EVENT_STATUSES.PAST]
+            : [EVENT_STATUSES.PAST],
+          withoutResults: selectedTab.name === TABS.UPCOMING,
+          notPastByDate: selectedTab.name === TABS.UPCOMING,
         });
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
@@ -101,7 +115,7 @@ function Events() {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [events, page, totalCount, showFailure, t, selectedToggleItem.eventTypes]);
+  }, [totalCount, page, events, userType, selectedTab.name, showFailure, t]);
 
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -116,15 +130,21 @@ function Events() {
 
     fetchEvents();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [selectedTab.id]);
 
   const onEventPress = useCallback((event) => {
-    navigation.navigate('EventFights', { eventId: event._id, title: event.name });
+    navigation.navigate('EventFights', { event });
   }, [navigation]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
+    const progress = `${(item.fights.filter(
+      fight => fight.results !== undefined,
+    )
+      .length) / item.fights.length * 100}%`;
+    const isLive = item.status === EVENT_STATUSES.PAST
+    && item.fights.some(fight => !fight.results);
     return (
       <TouchableOpacity
         onPress={() => onEventPress(item)}
@@ -141,6 +161,21 @@ function Events() {
           && (
           <View style={styles.imageStatus}>
             <Text style={styles.imageText}>{t('Events.canceled')}</Text>
+          </View>
+          )}
+          {isLive && (
+          <View style={styles.live}>
+            <LiveIcon />
+            <Text>Live</Text>
+          </View>
+          )}
+          {isLive
+          && (
+          <View style={styles.line}>
+            <View style={[styles.progress, {
+              width: progress,
+            }]}
+            />
           </View>
           )}
         </View>
@@ -165,9 +200,9 @@ function Events() {
   };
 
   const onToggleSelect = useCallback(async (item) => {
-    setSelectedToggleItem(item);
-    await fetchNewItems({ refresh: true, eventTypes: item.eventTypes });
-  }, [fetchNewItems]);
+    setSelectedTab(item);
+    // await fetchNewItems({ refresh: true, eventTypes: item.eventTypes });
+  }, []);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -175,7 +210,7 @@ function Events() {
         title={t('Events.events')}
       />
       <View style={styles.content}>
-        <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
+        <Toggle items={tabs} onSelect={onToggleSelect} selectedItemId={selectedTab.id} />
         {isRefreshing && <Loader />}
         {!isRefreshing && (events.length ? (
           <FlatList
@@ -191,7 +226,7 @@ function Events() {
           />
         ) : (
           <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={styles.scrollView}
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
             keyboardShouldPersistTaps="handled"
           >

@@ -1,8 +1,12 @@
 import { apiClient } from 'helpers/api';
 
-export const getEvents = ({ page, perPage, eventTypes }) => apiClient
-  .get('events', {
+export const getEvents = ({
+  isFan, page, perPage, statuses, withoutResults, notPastByDate,
+}) => apiClient
+  .get(isFan ? 'events' : 'events/current-fighter', {
     page,
     perPage,
-    ...(eventTypes && { eventTypes }),
+    ...(statuses && { statuses }),
+    ...(withoutResults && { withoutResults }),
+    ...(notPastByDate && { notPastByDate }),
   });
