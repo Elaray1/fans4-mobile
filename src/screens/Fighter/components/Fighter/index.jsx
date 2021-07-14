@@ -48,7 +48,7 @@ function Fighter({ fighterId }) {
             fights: [fetchedFight],
           },
         ] = await Promise.all([
-          userApi.getOtherFighter({
+          userApi.getFighter({
             _id: fighterId,
           }),
           fightApi.getFights({
@@ -107,6 +107,7 @@ function Fighter({ fighterId }) {
 
           <View style={styles.postsAndFansBlock}>
             <ApplyForAFight fight={fight} fighter={fighter} />
+
             <Statistic
               postsCount={postsCount}
               fansCount={fansCount}

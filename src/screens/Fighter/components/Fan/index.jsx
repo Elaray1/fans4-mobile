@@ -1,13 +1,10 @@
-import React, {
-  useState, useEffect, useMemo, useCallback,
-} from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {
-  SafeAreaView, View, StatusBar, ActivityIndicator, FlatList,
-} from 'react-native';
+import { SafeAreaView, View, StatusBar, ActivityIndicator, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
+import moment from 'moment';
 
 import colors from 'themes/colors';
 
@@ -33,11 +30,14 @@ const PER_PAGE = 10;
 function Fighter({ fighterId }) {
   const { t } = useTranslation();
 
-  const fightersList = useSelector(userSelectors.getSubscribedFighters);
   const userSubscriptions = useSelector(userSelectors.getSubscribedFighters);
 
-  const isSubscribed = useMemo(() => Boolean(fightersList.find(({ _id }) => _id === fighterId)),
-    [fighterId, fightersList]);
+  const isSubscribed = useMemo(() => !!userSubscriptions.find((f) => {
+    const isBeforeRenewalDate = moment(f.renewalDate).isAfter(new Date());
+    const isBeforeGracePeriodEndDate = moment(f.gracePeriodEndDate).isAfter(new Date());
+
+    return f._id === fighterId && (isBeforeRenewalDate || isBeforeGracePeriodEndDate);
+  }), [fighterId, userSubscriptions]);
 
   const [fighter, setFighter] = useState(null);
   const [postsCount, setPostsCount] = useState(null);
@@ -57,11 +57,11 @@ function Fighter({ fighterId }) {
           posts: fetchedPosts,
         },
         ] = await Promise.all([
-          userApi.getOtherFighter({ _id: fighterId }),
-          postApi.getPosts({
+          userApi.getFighter({ _id: fighterId }),
+          postApi.getFighterPosts({
             page: INITIAL_PAGE,
             perPage: PER_PAGE,
-            authorId: fighterId,
+            _id: fighterId,
           }),
         ]);
 

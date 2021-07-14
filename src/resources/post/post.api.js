@@ -6,12 +6,27 @@ export const getPostsCount = () => apiClient
 export const createPost = (data, file) => apiClient
   .postWithFile('posts', data, file);
 
-export const getPosts = ({ page, perPage, authorId }) => apiClient
-  .get('posts', {
+export const getMyFeedPosts = ({ page, perPage }) => apiClient
+  .get('posts/feed', {
     page,
     perPage,
-    ...(authorId && { authorId }),
   });
+
+export const getFighterPosts = ({ _id, page, perPage }) => {
+  return apiClient
+    .get(`posts/fighter/${_id}`, {
+      page,
+      perPage,
+    });
+};
+
+export const getMyPosts = ({ page, perPage }) => {
+  return apiClient
+    .get('posts/my', {
+      page,
+      perPage,
+    });
+};
 
 export const likePost = _id => apiClient
   .post(`posts/${_id}/likes`);
