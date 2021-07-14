@@ -522,7 +522,7 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = LPL8LR83TR;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = fans4/Info.plist;
@@ -554,7 +554,7 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = LPL8LR83TR;
 				INFOPLIST_FILE = fans4/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
