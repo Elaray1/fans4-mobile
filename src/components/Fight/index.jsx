@@ -52,13 +52,23 @@ function Fight({
   const [firstFighter, secondFighter] = fight.fighters;
 
   const onPressVote = useCallback(async (fightId, fighters) => {
-    if (userSubscriptions.map(i => i._id).includes(fighters[0]._id || fighters[1]._id)) {
+    const supportedFighterIds = userSubscriptions
+      .filter((f) => {
+        const isBeforeRenewalDate = moment(f.renewalDate).isAfter(new Date());
+        const isBeforeGracePeriodEndDate = moment(f.gracePeriodEndDate).isAfter(new Date());
+
+        return f._id && (isBeforeRenewalDate || isBeforeGracePeriodEndDate);
+      })
+      .map(f => f._id);
+
+    if (supportedFighterIds.includes(fighters[0]._id) || supportedFighterIds.includes(fighters[1]._id)) {
       try {
         if (!fight.votedUserIds.includes(userId)) {
           await fightApi.vote({ fightId });
         } else {
           await fightApi.unvote({ fightId });
         }
+
         onVote(fightId, userId);
       } catch {
         showFailure();

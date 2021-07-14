@@ -48,18 +48,18 @@ function FighterAccount() {
   useEffect(() => {
     const init = async () => {
       const [
-        { count: fetchedPostsCount },
-        { count: fetchedFansCount },
-        { posts: fetchedPosts },
+        { totalCount: fetchedFansCount },
+        { posts: fetchedPosts, totalCount: fetchedPostsCount },
       ] = await Promise.all([
-        postApi.getPostsCount(),
-        userApi.getUsersCount({ myFans: true }),
-        postApi.getPosts({
+        userApi.getMyFans({ page: 1, perPage: 1 }),
+        postApi.getMyPosts({
           page: INITIAL_PAGE,
           perPage: PER_PAGE,
-          authorId: userId,
         }),
       ]);
+
+      console.log('fetchedFansCount', fetchedFansCount);
+      console.log('fetchedPostsCount', fetchedPostsCount);
 
       if (fetchedPosts?.length < PER_PAGE) {
         setIsAllPostsLoaded(true);
@@ -119,6 +119,7 @@ function FighterAccount() {
         perPage: PER_PAGE,
         authorId: userId,
       });
+
       if (newPosts.length < PER_PAGE) {
         setIsAllPostsLoaded(true);
       } else {

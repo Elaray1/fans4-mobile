@@ -26,8 +26,7 @@ function Fans() {
 
   useEffect(() => {
     const initialLoad = async () => {
-      const fetchedFans = await userApi.getUsers({
-        myFans: true,
+      const { fans: fetchedFans } = await userApi.getMyFans({
         page: INITIAL_PAGE,
         perPage: PER_PAGE,
       });
@@ -37,6 +36,7 @@ function Fans() {
       } else {
         setIsAllFansLoaded(false);
       }
+
       setFans(fetchedFans);
       setPage(INITIAL_PAGE + 1);
     };

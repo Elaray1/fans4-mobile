@@ -49,20 +49,24 @@ function Feed() {
 
     if (fetchingPage === 1 || currentPosts.length < totalCount) {
       setIsLoading(true);
+
       try {
         const {
           posts: fetchedPosts,
           totalCount: fetchedTotalCount,
-        } = await postApi.getPosts({
+        } = await postApi.getMyFeedPosts({
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
         });
+
+
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setPosts([...currentPosts, ...fetchedPosts]);
       } catch (error) {
         showFailure(t('Feed.couldntRefreshTheFeedPullToRefresh'));
       }
+
       setIsLoading(false);
     }
   }, [posts, page, totalCount, fightersList?.length, showFailure, t]);

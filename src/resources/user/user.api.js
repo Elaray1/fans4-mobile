@@ -18,20 +18,10 @@ export const sendEmailConfirmation = ({
 export const getUserData = () => apiClient
   .get('users/current');
 
-export const getUsers = ({
-  page, perPage, myFans, mySubscriptions,
-}) => apiClient
-  .get('users', {
-    page,
-    perPage,
-    ...(myFans && { myFans }),
-    ...(mySubscriptions && { mySubscriptions }),
-  });
-
-export const getUsersCount = ({ myFans }) => apiClient
-  .get('users/count', {
-    ...(myFans && { myFans }),
-  });
+export const getMyFans = ({ page, perPage }) => apiClient.get('users/my-fans', {
+  page,
+  perPage,
+});
 
 export const setPushToken = ({ token, deviceId }) => apiClient
   .put('users/push-token', { token, deviceId });
@@ -106,8 +96,8 @@ export const updateEmail = ({ newEmail, password }) => apiClient
 export const getFighters = ({ page, perPage, searchValue }) => apiClient
   .get('users/fighters', { page, perPage, searchValue });
 
-export const getOtherFighter = ({ _id }) => apiClient
-  .get(`users/${_id}`);
+export const getFighter = ({ _id }) => apiClient
+  .get(`users/fighter/${_id}`);
 
 export const getFightersForFight = ({ opponentId, search }) => apiClient
   .get('users/fighters-for-fight', {
