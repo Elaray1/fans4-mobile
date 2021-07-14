@@ -226,10 +226,13 @@ function Finances({ route }) {
           <PlusIcon style={styles.plus} />
           <Text style={styles.title}>{t('Finances.addBankAccount')}</Text>
         </TouchableOpacity>
-        {income?.length && (
-        <Text style={[styles.secondaryText, styles.incomeText]}>
-          {t('Finances.incomeWillBePaidToByThisMethodMonthly')}
-        </Text>
+
+        {/*  Do not replace "!!: because it will cause a bug: */}
+        {/*  Text strings must be rendered within <Text> component */}
+        {!!income && !!income.length && (
+          <Text style={[styles.secondaryText, styles.incomeText]}>
+            {t('Finances.incomeWillBePaidToByThisMethodMonthly')}
+          </Text>
         )}
       </View>
     ));
@@ -261,15 +264,16 @@ function Finances({ route }) {
   return (
     <>
       {!isRefreshing && isConfirmationModal && (
-      <Modal
-        title={t('Finances.delete')}
-        text={t('Finances.bankAccountWillBeDeletedButWeWillStoreTheData')}
-        closeButtonText={t('Finances.cancel')}
-        submitButtonText={t('Finances.delete')}
-        onClose={onCloseConfirmationModal}
-        onSubmit={onDeleteWithdrawalMethodConfirmation}
-      />
+        <Modal
+          title={t('Finances.delete')}
+          text={t('Finances.bankAccountWillBeDeletedButWeWillStoreTheData')}
+          closeButtonText={t('Finances.cancel')}
+          submitButtonText={t('Finances.delete')}
+          onClose={onCloseConfirmationModal}
+          onSubmit={onDeleteWithdrawalMethodConfirmation}
+        />
       )}
+
       <SafeAreaView style={styles.screen}>
         {webViewUrl && (
           <WebView
@@ -278,6 +282,7 @@ function Finances({ route }) {
             startInLoadingState
           />
         )}
+
         {!webViewUrl && (
           <>
             <Header
@@ -291,14 +296,12 @@ function Finances({ route }) {
                 style={styles.scrollView}
                 showsVerticalScrollIndicator={false}
               >
-                {isRefreshing
-                  ? <Loader />
-                  : (
-                    <>
-                      <WithdrawalMethod />
-                      {income?.length ? <Income /> : <EmptyView />}
-                    </>
-                  )}
+                {isRefreshing ? <Loader /> : (
+                  <>
+                    <WithdrawalMethod />
+                    {income?.length ? <Income /> : <EmptyView />}
+                  </>
+                )}
               </ScrollView>
             </View>
           </>
