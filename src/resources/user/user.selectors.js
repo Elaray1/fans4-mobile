@@ -33,7 +33,7 @@ export const getUserGender = ({ user }) => user?.role?.biography?.gender;
 
 /* Fans selectors: start */
 
-export const getSubscribedFighters = ({ user }) => user?.role?.subscription?.fighters;
+export const getSupportedFighters = ({ user }) => user?.role?.subscription?.fighters;
 export const getUserName = ({ user }) => user?.role?.biography?.userName;
 
 /* Fighters selectors: end */

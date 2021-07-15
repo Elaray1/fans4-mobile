@@ -39,7 +39,7 @@ function Fight({
 
   const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
-  const userSubscriptions = useSelector(userSelectors.getSubscribedFighters);
+  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
 
   const onFighterPress = useCallback((fighterId) => {
     if (userId === fighterId) {

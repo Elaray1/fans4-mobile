@@ -80,4 +80,9 @@ export default StyleSheet.create({
   bottomText: {
     marginTop: 20,
   },
+  expirationDate: {
+    color: colors.grayText,
+    fontSize: fonts.size.caption,
+    lineHeight: fonts.lineHeight.caption,
+  },
 });

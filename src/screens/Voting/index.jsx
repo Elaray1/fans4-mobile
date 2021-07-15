@@ -36,7 +36,7 @@ const Voting = ({ route }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { showFailure, showSuccess } = useToast();
-  const userSubscriptions = useSelector(userSelectors.getSubscribedFighters);
+  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
 
   const [fights, setFights] = useState([]);
   const [totalCount, setTotalCount] = useState(0);

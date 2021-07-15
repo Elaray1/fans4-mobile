@@ -57,11 +57,11 @@ function Fans() {
 
   const fetchMoreFans = useCallback(async () => {
     if (page !== INITIAL_PAGE && !isAllFansLoaded) {
-      const newFans = await userApi.getUsers({
+      const { fans: newFans } = await userApi.getMyFans({
         page,
         perPage: PER_PAGE,
-        myFans: true,
       });
+
       if (newFans.length < PER_PAGE) {
         setIsAllFansLoaded(true);
       } else {

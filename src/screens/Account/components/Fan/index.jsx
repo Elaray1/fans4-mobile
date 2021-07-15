@@ -3,8 +3,11 @@ import { View, Image, ScrollView, ActivityIndicator, TouchableOpacity } from 're
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import * as userActions from 'resources/user/user.actions';
+
 import * as userApi from 'resources/user/user.api';
 import { USER_STATUSES } from 'resources/user/user.constants';
 
@@ -33,6 +36,7 @@ const FanAccount = () => {
   const fullName = useSelector(userSelectors.getUserFullName);
   const email = useSelector(userSelectors.getUserEmail);
   const userName = useSelector(userSelectors.getUserName);
+  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
 
   const goToFighterAccount = useCallback((_id) => {
     navigation.navigate('Fighter', { _id });
@@ -49,9 +53,10 @@ const FanAccount = () => {
       setIsLoading(true);
 
       try {
-        const fetchedFighters = await userApi.getUsers({ mySubscriptions: true });
+        const { fighters: fetchedFighters } = await userApi.getMyFighters();
         setFighters(fetchedFighters);
       } catch (err) {
+        console.error(err);
         showFailure();
       }
 
@@ -78,7 +83,20 @@ const FanAccount = () => {
     });
   }, [fighters]);
 
+  useEffect(() => {
+    socketService.on('fan:subscriptionsUpdated', ({ user }) => {
+      dispatch(userActions.setUserData(user));
+    });
+  }, [dispatch]);
+
+  const shownFighters = fighters.filter((f) => {
+    const fighterSubscription = userSubscriptions.find(s => s._id === f._id);
+    return fighterSubscription
+      && (fighterSubscription.autorenewal || moment(fighterSubscription.renewalDate).isAfter(new Date()));
+  });
+
   const supportedFighterView = (item, i) => {
+    const subscription = userSubscriptions.find(s => s._id === item._id);
     const { nickname } = item.role.biography;
     const { cityName, stateCode } = item.role.biography.hometown;
 
@@ -117,6 +135,12 @@ const FanAccount = () => {
             {' '}
             {toFixLength({ text: stateCode, length: 30 })}
           </Text>
+
+          {!subscription.autorenewal && (
+            <Text style={styles.expirationDate}>
+              {t('AccountFan.subscriptionExpiresOn')}{' '}{moment(subscription.renewalDate).format('MMM, D, YYYY')}
+            </Text>
+          )}
         </View>
       </TouchableOpacity>
     );
@@ -138,7 +162,7 @@ const FanAccount = () => {
             {t('AccountFan.YourSubscriptions')}
           </Text>
 
-          {fighters.map(supportedFighterView)}
+          {shownFighters.map(supportedFighterView)}
         </View>
       )}
 
