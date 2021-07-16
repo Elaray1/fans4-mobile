@@ -27,6 +27,8 @@ import Modal from 'components/Modal';
 
 import useToast from 'hooks/useToast';
 
+import IncomeIllustration from 'assets/illustrations/income.svg';
+
 import colors from 'themes/colors';
 
 import styles from './styles';
@@ -178,7 +180,7 @@ function Finances({ route }) {
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
-      <View style={styles.emptyViewImage} />
+      <IncomeIllustration style={styles.emptyViewImage} />
       <Text style={styles.title}>{emptyViewText.title}</Text>
       <Text style={styles.secondaryText}>
         {emptyViewText.text}

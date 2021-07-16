@@ -10,7 +10,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 
 import * as rootNavigation from 'helpers/rootNavigation';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import FailedIllustration from 'assets/illustrations/verification-pending.svg';
 
 function VerificationFailed() {
   const { t } = useTranslation();
@@ -35,7 +35,7 @@ function VerificationFailed() {
       description={t('VerificationFailed.description')}
       title={t('VerificationFailed.title')}
       onButtonPress={onButtonPress}
-      illustration={<PlaceholderIllustration />}
+      illustration={<FailedIllustration />}
     />
   );
 }

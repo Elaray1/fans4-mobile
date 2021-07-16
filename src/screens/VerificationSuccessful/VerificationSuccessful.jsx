@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import SuccessfulIllustration from 'assets/illustrations/verification-successful.svg';
 
 function VerificationSuccessful() {
   const navigation = useNavigation();
@@ -19,7 +19,7 @@ function VerificationSuccessful() {
       buttonText={t('VerificationSuccessful.buttonText')}
       description={t('VerificationSuccessful.description')}
       title={t('VerificationSuccessful.title')}
-      illustration={<PlaceholderIllustration />}
+      illustration={<SuccessfulIllustration />}
       onButtonPress={onNext}
     />
   );

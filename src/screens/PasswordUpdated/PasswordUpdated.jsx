@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import UpdatedIllustration from 'assets/illustrations/verification-successful';
 
 function PasswordUpdated() {
   const navigation = useNavigation();
@@ -28,7 +28,7 @@ function PasswordUpdated() {
       buttonText={t('PasswordUpdated.done')}
       description={t('PasswordUpdated.useYourNewPasswordToLogIn')}
       title={t('PasswordUpdated.passwordUpdated')}
-      illustration={<PlaceholderIllustration />}
+      illustration={<UpdatedIllustration />}
       onButtonPress={onNext}
     />
   );

@@ -6,11 +6,14 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import * as userApi from 'resources/user/user.api';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
+
+import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 
 import colors from 'themes/colors';
 
@@ -20,6 +23,7 @@ const INITIAL_PAGE = 1;
 const PER_PAGE = 25;
 
 function Fans() {
+  const { t } = useTranslation();
   const [fans, setFans] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
   const [isAllFansLoaded, setIsAllFansLoaded] = useState(false);
@@ -87,23 +91,36 @@ function Fans() {
     );
   };
 
+  const EmptyView = () => (
+    <View style={styles.emptyView}>
+      <NoFightsIllustration style={styles.illustration} />
+      <Text style={styles.titleText}>{t('Fans.noFans')}</Text>
+      <Text style={styles.text}>{t('Fans.youWillSeeThemHere')}</Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <Header
-        title="Fans"
+        title={t('Fans.fans')}
         leftItemType="backArrow"
       />
-      <FlatList
-        data={fans}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        ItemSeparatorComponent={renderItemSeparator}
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.3}
-        initialNumToRender={25}
-        ListFooterComponent={renderFooter}
-      />
+      {fans.length
+        ? (
+          <FlatList
+            data={fans}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            ItemSeparatorComponent={renderItemSeparator}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.3}
+            initialNumToRender={25}
+            ListFooterComponent={renderFooter}
+          />
+        )
+        : <EmptyView />
+      }
     </SafeAreaView>
   );
 }

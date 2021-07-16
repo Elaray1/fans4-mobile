@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import PendingIllustration from 'assets/illustrations/verification-pending.svg';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
@@ -49,7 +49,7 @@ function VerificationPending() {
       linkText={t('VerificationPending.linkText')}
       description={t('VerificationPending.description')}
       title={t('VerificationPending.title')}
-      illustration={<PlaceholderIllustration />}
+      illustration={<PendingIllustration />}
       onLinkPress={goToSignIn}
     />
   );

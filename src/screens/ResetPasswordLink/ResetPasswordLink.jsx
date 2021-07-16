@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import EmailIllustration from 'assets/illustrations/email';
 
 function ResetPasswordLink() {
   const { t } = useTranslation();
@@ -27,7 +27,7 @@ function ResetPasswordLink() {
       onLinkPress={onLinkPress}
       description={t('ResetPassword.description')}
       title={t('ResetPassword.title')}
-      illustration={<PlaceholderIllustration />}
+      illustration={<EmailIllustration />}
     />
   );
 }

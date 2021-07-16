@@ -26,8 +26,7 @@ export default StyleSheet.create({
   illustration: {
     width: 250,
     height: 250,
-    backgroundColor: colors.gray,
-    marginBottom: 50,
+    marginVertical: 50,
   },
   titleText: {
     textAlign: 'center',
