@@ -25,7 +25,7 @@ function Feed() {
   const { t } = useTranslation();
   const { showFailure } = useToast();
 
-  const fightersList = useSelector(userSelectors.getSubscribedFighters);
+  const fightersList = useSelector(userSelectors.getSupportedFighters);
 
   const [posts, setPosts] = useState([]);
   const [totalCount, setTotalCount] = useState(0);

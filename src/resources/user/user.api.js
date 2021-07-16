@@ -23,6 +23,11 @@ export const getMyFans = ({ page, perPage }) => apiClient.get('users/my-fans', {
   perPage,
 });
 
+export const getMyFighters = ({ page, perPage } = {}) => apiClient.get('users/my-fighters', {
+  page,
+  perPage,
+});
+
 export const setPushToken = ({ token, deviceId }) => apiClient
   .put('users/push-token', { token, deviceId });
 

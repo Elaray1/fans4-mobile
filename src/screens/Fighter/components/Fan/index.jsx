@@ -30,7 +30,7 @@ const PER_PAGE = 10;
 function Fighter({ fighterId }) {
   const { t } = useTranslation();
 
-  const userSubscriptions = useSelector(userSelectors.getSubscribedFighters);
+  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
 
   const isSubscribed = useMemo(() => !!userSubscriptions.find((f) => {
     const isBeforeRenewalDate = moment(f.renewalDate).isAfter(new Date());
