@@ -1,15 +1,16 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  SafeAreaView, View, FlatList, ActivityIndicator, Image,
-} from 'react-native';
+import { SafeAreaView, View, FlatList, ActivityIndicator, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
 
 import * as fightApi from 'resources/fight/fight.api';
+import { EVENT_STATUSES } from 'resources/event/event.constants';
+import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 
 import Header from 'components/Header';
-import Fight from 'components/Fight';
+import FightItem from 'components/FightItem';
+import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
 import Text from 'components/Text';
 
 import useToast from 'hooks/useToast';
@@ -17,10 +18,6 @@ import useToast from 'hooks/useToast';
 import colors from 'themes/colors';
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
-import { EVENT_STATUSES } from 'resources/event/event.constants';
-
-import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
-import { FIGHT_VIEW_TYPE } from 'components/Fight/constants';
 
 import LiveIcon from 'assets/icons/live.svg';
 
@@ -32,9 +29,7 @@ function EventFights({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
 
-  const {
-    event,
-  } = route?.params;
+  const { event } = route?.params;
 
   const [fights, setFights] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -92,9 +87,9 @@ function EventFights({ route }) {
 
   const renderItem = ({ item }) => {
     return (
-      <Fight
+      <FightItem
         fight={item}
-        status={item.status === FIGHT_STATUSES.PAST ? FIGHT_VIEW_TYPE.EVENT_PAST : FIGHT_VIEW_TYPE.EVENT_UPCOMING}
+        viewType={item.status === FIGHT_STATUSES.PAST ? FIGHT_VIEW_TYPE.EVENT_PAST : FIGHT_VIEW_TYPE.EVENT_UPCOMING}
       />
     );
   };

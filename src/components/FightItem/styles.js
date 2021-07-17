@@ -110,24 +110,4 @@ export default StyleSheet.create({
   pendingText: {
     color: colors.fightingStatusText,
   },
-  dateContainer: {
-    paddingBottom: 12,
-    width: '100%',
-    borderBottomWidth: 1,
-    borderColor: colors.line,
-  },
-  resultContainer: {
-    paddingTop: 12,
-    width: '100%',
-  },
-  pastContainer: {
-    width: '100%',
-  },
-  textContainer: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-  resultsText: {
-    fontSize: fonts.size.caption,
-  },
 });

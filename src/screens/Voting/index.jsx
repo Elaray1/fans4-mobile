@@ -18,7 +18,7 @@ import { ITEM_TYPES } from 'components/Header/Header.constants';
 
 import Header from 'components/Header';
 import Toggle from 'components/Toggle';
-import Fight from 'components/Fight';
+import FightItem from 'components/FightItem';
 import Text from 'components/Text';
 
 import PlusIcon from 'assets/icons/big-plus';
@@ -206,7 +206,7 @@ const Voting = ({ route }) => {
 
   const renderItem = ({ item }) => {
     return (
-      <Fight fight={item} onVote={onVote} />
+      <FightItem fight={item} onVote={onVote} />
     );
   };
 

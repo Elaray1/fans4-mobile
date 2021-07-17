@@ -4,7 +4,6 @@ import { View, TouchableOpacity, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import _ from 'lodash';
 import 'moment-duration-format';
 import moment from 'moment';
 
@@ -13,24 +12,22 @@ import { USER_TYPES } from 'resources/user/user.constants';
 import * as fightApi from 'resources/fight/fight.api';
 
 import Text from 'components/Text';
-import Fighter from 'components/Fight/Fighter';
 import Button from 'components/Button';
 
-import { toLocalDateAndTime, toLocalDate } from 'helpers/toLocalTime';
+import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
 import useToast from 'hooks/useToast';
 
-import { FIGHT_VIEW_TYPE, FIGHT_RESULT_LABELS } from 'components/Fight/constants';
+import { FIGHT_VIEW_TYPE } from './constants';
+import Fighter from './components/Fighter';
+import PastFightInfo from './components/PastFightInfo';
 
 import styles from './styles';
+import getLocation from './getLocation';
 
-const formatDuration = seconds => moment.duration(seconds, 'seconds').format('mm:ss');
-
-const getLocation = location => `${location.cityName}, ${location.stateCode}`;
-
-function Fight({
+function FightItem({
   fight,
-  status,
+  viewType,
   onVote,
 }) {
   const { t } = useTranslation();
@@ -91,35 +88,8 @@ function Fight({
         <Text style={styles.text}>{getLocation(secondFighter.hometown)}</Text>
       </View>
     ),
-    [FIGHT_VIEW_TYPE.EVENT_PAST]: () => (
-      <>
-        {fight.results ? (
-          <View style={styles.pastContainer}>
-            <View style={styles.dateContainer}>
-              <Text style={styles.text}>
-                {fight.event.name} / {toLocalDate(fight.event)}
-              </Text>
-            </View>
-            <View style={styles.resultContainer}>
-              <View style={styles.textContainer}>
-                <Text style={styles.resultsText}>{FIGHT_RESULT_LABELS[fight.results.winMethodCategory]}</Text>
-                <Text style={styles.text}>{t('Fight.round')} {fight.results.roundNumber}</Text>
-              </View>
-              <View style={styles.textContainer}>
-                <Text style={styles.text}>{_.startCase(fight.results.winMethod)}</Text>
-                <Text style={styles.text}>{formatDuration(fight.results.duration)}</Text>
-              </View>
-            </View>
-          </View>
-        ) : (
-          <View style={styles.location}>
-            <Text style={styles.text}>{getLocation(firstFighter.hometown)}</Text>
-            <Text style={styles.text}>{getLocation(secondFighter.hometown)}</Text>
-          </View>
-        )
-    }
-      </>
-    ),
+    [FIGHT_VIEW_TYPE.EVENT_PAST]: () => <PastFightInfo fight={fight} />,
+    [FIGHT_VIEW_TYPE.PAST]: () => <PastFightInfo fight={fight} />,
     [FIGHT_VIEW_TYPE.IN_VOTING]: () => (
       <>
         { userType === USER_TYPES.FIGHTER ? (
@@ -163,7 +133,6 @@ function Fight({
           {t('Fight.votingClosed')} ({fight.votedUserIds.length})
         </Text>
       </View>
-
     ),
     [FIGHT_VIEW_TYPE.UPCOMING]: () => (
       <>
@@ -207,6 +176,7 @@ function Fight({
     ),
   };
 
+
   return (
     <View style={styles.fight} key={fight._id}>
       <View style={styles.fightersInfo}>
@@ -227,21 +197,21 @@ function Fight({
           />
         </View>
         <View style={styles.line} />
-        {FIGHT_INFO[status || fight.status]()}
+        {FIGHT_INFO[viewType || fight.status]()}
       </View>
     </View>
   );
 }
 
-Fight.propTypes = {
+FightItem.propTypes = {
   fight: PropTypes.shape().isRequired,
-  status: PropTypes.oneOf(Object.values(FIGHT_VIEW_TYPE)),
+  viewType: PropTypes.oneOf(Object.values(FIGHT_VIEW_TYPE)),
   onVote: PropTypes.func,
 };
 
-Fight.defaultProps = {
-  status: null,
+FightItem.defaultProps = {
+  viewType: null,
   onVote: null,
 };
 
-export default React.memo(Fight);
+export default React.memo(FightItem);

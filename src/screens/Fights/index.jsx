@@ -11,7 +11,7 @@ import * as fightApi from 'resources/fight/fight.api';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import Toggle from 'components/Toggle';
-import Fight from 'components/Fight';
+import FightItem from 'components/FightItem';
 
 import useToast from 'hooks/useToast';
 
@@ -91,6 +91,7 @@ function Fights() {
 
     if (fetchingPage === 1 || currentFights.length < totalCount) {
       setIsLoading(true);
+
       try {
         const {
           fights: fetchedFights,
@@ -100,6 +101,7 @@ function Fights() {
           perPage: PER_PAGE_COUNT,
           statuses: statuses || selectedToggleItem.statuses,
         });
+
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setFights([...currentFights, ...fetchedFights]);
@@ -130,7 +132,7 @@ function Fights() {
 
   const renderItem = ({ item }) => {
     return (
-      <Fight fight={item} />
+      <FightItem fight={item} />
     );
   };
 
@@ -155,7 +157,9 @@ function Fights() {
       />
       <View style={styles.content}>
         <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
+
         {isRefreshing && <Loader />}
+
         {!isRefreshing && (fights.length ? (
           <FlatList
             data={fights}
