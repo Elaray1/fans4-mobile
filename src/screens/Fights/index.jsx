@@ -17,6 +17,8 @@ import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
 
+import NoFightsIllustration from 'assets/illustrations/no-events.svg';
+
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 
 import styles from './styles';
@@ -70,7 +72,7 @@ function Fights() {
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
-      <View style={styles.illustration} />
+      <NoFightsIllustration style={styles.illustration} />
       <Text style={styles.titleText}>{selectedToggleItem.emptyView.title}</Text>
       <Text style={styles.text}>{selectedToggleItem.emptyView.text}</Text>
     </View>

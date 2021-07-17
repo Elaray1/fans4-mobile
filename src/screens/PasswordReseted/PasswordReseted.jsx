@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import IllustrationScreen from 'components/IllustrationScreen';
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import UpdatedIllustration from 'assets/illustrations/verification-successful';
 import * as rootNavigation from 'helpers/rootNavigation';
 import { USER_TYPES } from 'resources/user/user.constants';
 
@@ -44,7 +44,7 @@ function PasswordReseted({ route }) {
       onLinkPress={onLinkPress}
       description={t('PasswordReseted.description')}
       title={t('PasswordReseted.title')}
-      illustration={<PlaceholderIllustration />}
+      illustration={<UpdatedIllustration />}
     />
   );
 }

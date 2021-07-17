@@ -40,10 +40,9 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   emptyViewImage: {
-    width: 126,
-    height: 126,
+    width: 200,
+    height: 200,
     marginBottom: 50,
-    backgroundColor: colors.gray,
   },
   secondaryText: {
     marginTop: 20,

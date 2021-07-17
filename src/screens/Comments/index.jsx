@@ -24,6 +24,7 @@ import colors from 'themes/colors';
 import { USER_TYPES } from 'resources/user/user.constants';
 import { CREATED_BY, SORT_OPTIONS } from 'resources/comment/comment.constants';
 
+import NoCommentsIllustration from 'assets/illustrations/no-events.svg';
 
 import styles from './styles';
 
@@ -145,7 +146,7 @@ function Comments({ route }) {
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
-      <View style={styles.illustration} />
+      <NoCommentsIllustration style={styles.illustration} />
       <Text style={styles.titleText}>{t('Comments.noCommentsYet')}</Text>
       <Text style={styles.text}>
         {userType === USER_TYPES.FAN

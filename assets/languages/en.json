@@ -523,5 +523,10 @@
     "showFullList": "Show full list",
     "chooseFighter": "Choose your fighter to create a fight",
     "search": "Search by name or nickname"
+  },
+  "Fans": {
+    "fans": "Fans",
+    "noFans": "No fans, yet",
+    "youWillSeeThemHere": "As you attract fans, you will see them here."
   }
 }

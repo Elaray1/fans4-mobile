@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import UpdatedIllustration from 'assets/illustrations/verification-successful';
 
 function ThanksForReporting({ route }) {
   const navigation = useNavigation();
@@ -27,7 +27,7 @@ function ThanksForReporting({ route }) {
         t('ThanksForReporting.thanksYourFeedbackHelpsUsMakeFans4AGoodPlaceForEveryoneWeWillReviewThisComment')
       }
       buttonText={t('ThanksForReporting.done')}
-      illustration={<PlaceholderIllustration />}
+      illustration={<UpdatedIllustration />}
       onButtonPress={onNext}
     />
   );

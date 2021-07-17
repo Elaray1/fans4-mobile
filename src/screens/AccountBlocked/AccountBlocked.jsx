@@ -9,7 +9,7 @@ import IllustrationScreen from 'components/IllustrationScreen';
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import BlockedIllustration from 'assets/illustrations/account-blocked.svg';
 
 function AccountBlocked() {
   const { t } = useTranslation();
@@ -35,7 +35,7 @@ function AccountBlocked() {
       title={t('AccountBlocked.title')}
       onButtonPress={onButtonPress}
       onLinkPress={onLinkPress}
-      illustration={<PlaceholderIllustration />}
+      illustration={<BlockedIllustration />}
     />
   );
 }

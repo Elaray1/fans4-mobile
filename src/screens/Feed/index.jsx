@@ -17,6 +17,8 @@ import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
 
+import NoPostsIllustration from 'assets/illustrations/no-events.svg';
+
 import styles from './styles';
 
 const PER_PAGE_COUNT = 10;
@@ -116,7 +118,7 @@ function Feed() {
 
   const NoSubscriptions = () => (
     <View style={styles.noSubscriptions}>
-      <View style={styles.illustration} />
+      <NoPostsIllustration style={styles.illustration} />
       <Text style={styles.titleText}>{t('Feed.noSubscriptionsYet')}</Text>
       <Text style={styles.text}>{t('Feed.onceYouSubscribeToAFighterYouWillSeeAllOfThatFightersContentHere')}</Text>
     </View>
@@ -124,7 +126,7 @@ function Feed() {
 
   const NoPosts = () => (
     <View style={styles.noSubscriptions}>
-      <View style={styles.illustration} />
+      <NoPostsIllustration style={styles.illustration} />
       <Text style={styles.titleText}>{t('Feed.noPostsYet')}</Text>
       <Text style={styles.text}>{t('Feed.onceFighterWillAddPostsYouWillSeeThemHere')}</Text>
     </View>

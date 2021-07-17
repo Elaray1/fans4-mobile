@@ -22,6 +22,7 @@ import Fight from 'components/Fight';
 import Text from 'components/Text';
 
 import PlusIcon from 'assets/icons/big-plus';
+import NoPostsIllustration from 'assets/illustrations/no-events';
 
 import useToast from 'hooks/useToast';
 import useDidUpdate from 'hooks/useDidUpdate';
@@ -78,7 +79,7 @@ const Voting = ({ route }) => {
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
-      <View style={styles.illustration} />
+      <NoPostsIllustration style={styles.illustration} />
       <Text style={styles.titleText}>{ t('Voting.noFights')}</Text>
       <TouchableOpacity style={styles.plusButton} onPress={navigateToPropose}>
         <PlusIcon />

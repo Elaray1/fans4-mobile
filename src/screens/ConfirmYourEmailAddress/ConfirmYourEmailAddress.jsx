@@ -7,7 +7,7 @@ import IllustrationScreen from 'components/IllustrationScreen';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import EmailIllustration from 'assets/illustrations/email';
 
 function ConfirmYourEmailAddress() {
   const navigation = useNavigation();
@@ -34,7 +34,7 @@ function ConfirmYourEmailAddress() {
       title={t('ConfirmYourEmailAddress.confirmYourEmailAddress')}
       description={description}
       buttonText={t('ConfirmYourEmailAddress.done')}
-      illustration={<PlaceholderIllustration />}
+      illustration={<EmailIllustration />}
       onButtonPress={onNext}
     />
   );

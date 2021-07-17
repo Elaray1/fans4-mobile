@@ -21,6 +21,7 @@ import Toggle from 'components/Toggle';
 import useToast from 'hooks/useToast';
 
 import LiveIcon from 'assets/icons/live.svg';
+import NoEventsIllustration from 'assets/illustrations/no-events.svg';
 
 import colors from 'themes/colors';
 
@@ -73,7 +74,7 @@ function Events() {
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
-      <View style={styles.illustration} />
+      <NoEventsIllustration style={styles.illustration} />
       <Text style={styles.titleText}>{selectedTab.emptyView.title}</Text>
       <Text style={styles.text}>{selectedTab.emptyView.text}</Text>
     </View>
