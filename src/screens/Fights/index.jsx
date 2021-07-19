@@ -44,7 +44,7 @@ function Fights() {
         statuses: [FIGHT_STATUSES.IN_VOTING],
         emptyView: {
           title: t('Fights.noFightsYyet'),
-          text: t('Fights.onceFightsAreAddedToTheVotingYouWillSeeThemHere'),
+          text: t('Fights.checkBackToVote'),
         },
       },
       {

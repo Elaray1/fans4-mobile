@@ -167,6 +167,8 @@ function Fighter({ fighterId }) {
     );
   };
 
+  const renderNoPosts = () => <Text style={styles.grayText}>{t('Fighter.checkBack')}</Text>;
+
   const renderItemSeparator = () => <View style={styles.space} />;
 
   const fetchMorePosts = useCallback(async () => {
@@ -215,7 +217,7 @@ function Fighter({ fighterId }) {
             style={styles.content}
             data={posts}
             keyExtractor={keyExtractor}
-            renderItem={renderItem}
+            renderItem={(posts || !isSubscribed) ? renderItem : renderNoPosts}
             ItemSeparatorComponent={renderItemSeparator}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.1}

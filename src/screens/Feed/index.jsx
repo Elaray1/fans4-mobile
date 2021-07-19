@@ -120,7 +120,7 @@ function Feed() {
     <View style={styles.noSubscriptions}>
       <NoPostsIllustration style={styles.illustration} />
       <Text style={styles.titleText}>{t('Feed.noSubscriptionsYet')}</Text>
-      <Text style={styles.text}>{t('Feed.onceYouSubscribeToAFighterYouWillSeeAllOfThatFightersContentHere')}</Text>
+      <Text style={styles.text}>{t('Feed.beSureToSubscribe')}</Text>
     </View>
   );
 
