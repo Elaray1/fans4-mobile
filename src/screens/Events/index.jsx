@@ -55,7 +55,7 @@ function Events() {
         value: t('Events.upcoming'),
         emptyView: {
           title: t('Events.noEventsYet'),
-          text: t('Events.onceEventsAreScheduledYouWillSeeThemHere'),
+          text: userType === USER_TYPES.FAN ? t('Events.checkBackFan') : t('Events.checkBack'),
         },
       },
       {
@@ -64,11 +64,13 @@ function Events() {
         value: t('Events.past'),
         emptyView: {
           title: t('Events.noEventsYet'),
-          text: t('Events.onceYouParticipateInAnEventItWillBeShownOnThisPage'),
+          text: userType === USER_TYPES.FAN
+            ? t('Events.checkBackFan')
+            : t('Events.onceYouParticipateInAnEventItWillBeShownOnThisPage'),
         },
       },
     ];
-  }, [t]);
+  }, [t, userType]);
 
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 

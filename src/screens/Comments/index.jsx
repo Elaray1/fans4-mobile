@@ -151,7 +151,7 @@ function Comments({ route }) {
       <Text style={styles.text}>
         {userType === USER_TYPES.FAN
           ? t('Comments.beTheFirstFanToCommentOnThisPost')
-          : t('Comments.onceAFanCommentsOnThisPostYouWillSeeItHere')}
+          : t('Comments.nothingYet')}
       </Text>
     </View>
   );

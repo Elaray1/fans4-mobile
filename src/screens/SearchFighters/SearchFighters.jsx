@@ -15,6 +15,9 @@ import Text from 'components/Text';
 import * as userApi from 'resources/user/user.api';
 
 import { toFixLength } from 'helpers/modifyText';
+
+import NoFightsIllustration from 'assets/illustrations/no-events.svg';
+
 import colors from 'themes/colors';
 
 import styles from './SearchFighters.styles';
@@ -122,6 +125,14 @@ function SearchFighters() {
     );
   };
 
+  const EmptyView = () => (
+    <View style={styles.emptyView}>
+      <NoFightsIllustration style={styles.illustration} />
+      <Text style={styles.titleText}>{t('SearchFighters.noFighters')}</Text>
+      <Text style={styles.text}>{t('SearchFighters.youWillSeeThemHere')}</Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -134,7 +145,7 @@ function SearchFighters() {
           placeholder={t('SearchFighters.search')}
         />
 
-        {!!fighters.length && (
+        {!!fighters.length ? (
           <FlatList
             data={fighters}
             renderItem={renderItem}
@@ -145,7 +156,7 @@ function SearchFighters() {
             showsVerticalScrollIndicator={false}
             ListFooterComponent={renderFooter}
           />
-        )}
+        ) : <EmptyView /> }
       </View>
     </SafeAreaView>
   );

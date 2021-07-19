@@ -170,11 +170,11 @@ function Finances({ route }) {
     return account
       ? {
         title: t('Finances.noIncomeYet'),
-        text: t('Finances.onceYouEarnIncomeYouWillSeeItHere'),
+        text: t('Finances.checkBack'),
       }
       : {
         title: t('Finances.finances'),
-        text: t('Finances.incomeWillBePaidByThisMethodMonthlyYouCanTrackAllFinanceInformationInThisSection'),
+        text: t('Finances.incomeWillBePaid'),
       };
   }, [account, t]);
 

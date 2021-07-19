@@ -24,7 +24,7 @@ function ThanksForReporting({ route }) {
       headerText={t('ThanksForReporting.reportComment')}
       title={t('ThanksForReporting.thanksForReporting')}
       description={
-        t('ThanksForReporting.thanksYourFeedbackHelpsUsMakeFans4AGoodPlaceForEveryoneWeWillReviewThisComment')
+        t('ThanksForReporting.thanksYourFeedback')
       }
       buttonText={t('ThanksForReporting.done')}
       illustration={<UpdatedIllustration />}

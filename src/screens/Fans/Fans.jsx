@@ -95,7 +95,7 @@ function Fans() {
     <View style={styles.emptyView}>
       <NoFightsIllustration style={styles.illustration} />
       <Text style={styles.titleText}>{t('Fans.noFans')}</Text>
-      <Text style={styles.text}>{t('Fans.youWillSeeThemHere')}</Text>
+      <Text style={styles.text}>{t('Fans.nothingYet')}</Text>
     </View>
   );
 

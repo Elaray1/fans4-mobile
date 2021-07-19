@@ -317,7 +317,9 @@
   },
   "SearchFighters": {
     "fighters": "Fighters",
-    "search": "Search"
+    "search": "Search",
+    "noFighters": "No fighters, yet",
+    "youWillSeeThemHere": "Check back for the full list of fighters."
   },
   "WeightClassSelectModal": {
     "cancel": "Cancel",
@@ -373,7 +375,8 @@
     "fighterInjured_1": "because this fighter is injured.",
     "fighterBlocked_0": "You can not apply for a fight with",
     "fighterBlocked_1": "because this fighter is blocked.",
-    "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter."
+    "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter.",
+    "checkBack": "Check back to view your fighter's first exclusive post!"
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",
@@ -384,7 +387,7 @@
   "Feed": {
     "feed": "Feed",
     "noSubscriptionsYet": "No subscriptions, yet",
-    "onceYouSubscribeToAFighterYouWillSeeAllOfThatFightersContentHere": "Once you subscribe to a fighter you will see all of that fighter's content here.",
+    "beSureToSubscribe": "Be sure to subscribe to receive full access to your fighter, pairing and voting for the next live event!",
     "noPostsYet": "No posts, yet",
     "onceFighterWillAddPostsYouWillSeeThemHere": "Once fighter will add posts, you will see them here.",
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh."
@@ -396,7 +399,8 @@
     "past": "Past",
     "canceled": "Canceled",
     "noEventsYet": "No events, yet",
-    "onceEventsAreScheduledYouWillSeeThemHere": "Once events are scheduled, you will see them here.",
+    "checkBack": "Check back to view the first event.",
+    "checkBackFan": "Check back to view the first live event!",
     "onceYouParticipateInAnEventItWillBeShownOnThisPage": "Once you participate in an event, it will be shown  on this page."
   },
   "EventFights": {
@@ -405,7 +409,7 @@
   "Fights": {
     "fights": "Fights",
     "noFightsYyet": "No fights, yet",
-    "onceFightsAreAddedToTheVotingYouWillSeeThemHere": "Once fights are added to the voting, you will see them here.",
+    "checkBackToVote": "Check back to vote for your favorite fighter!",
     "onceFightsAreScheduledYouWillSeeThemHere": "Once fights are scheduled, you will see them here.",
     "onceYouParticipateInFightsYouWillSeeThemHere": "Once you participate in fights, you will see them here.",
     "voting": "Voting",
@@ -438,7 +442,7 @@
     "addComment": "Add comment",
     "max160Characters": "max. 160 characters",
     "post": "Post",
-    "onceAFanCommentsOnThisPostYouWillSeeItHere": "Once a fan comments on this post, you will see it here."
+    "nothingYet": "Nothing yet! Check back to view your fans' first post."
   },
   "Comment": {
     "you": "you",
@@ -463,7 +467,7 @@
   "ThanksForReporting": {
     "reportComment": "Report Comment",
     "thanksForReporting": "Thanks for Reporting!",
-    "thanksYourFeedbackHelpsUsMakeFans4AGoodPlaceForEveryoneWeWillReviewThisComment": "Thanks, your feedback helps us make Fans4 a good place for everyone. We will review this comment.",
+    "thanksYourFeedback": "Thank you for your feedback and ensuring Fans4 is a safer community. Your comment was submitted for review.",
     "done": "Done"
   },
   "AccountFan": {
@@ -484,10 +488,10 @@
   "Finances": {
     "finances": "Finances",
     "addBankAccount": "Add Bank Account",
-    "incomeWillBePaidByThisMethodMonthlyYouCanTrackAllFinanceInformationInThisSection": "Income will be paid by this method monthly. You can track all finance information in this section.",
+    "incomeWillBePaid": "Income will be paid by this method on a monthly basis. You can track all financial information in this section.",
     "bankAccount": "Bank Account",
     "noIncomeYet": "No income, yet",
-    "onceYouEarnIncomeYouWillSeeItHere": "Once you earn income, you will see it here.",
+    "checkBack": "Check back to view how much you've earned!",
     "bankAccountWillBeDeletedButWeWillStoreTheData": "Bank account will be deleted, but we will store the data.",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -527,6 +531,6 @@
   "Fans": {
     "fans": "Fans",
     "noFans": "No fans, yet",
-    "youWillSeeThemHere": "As you attract fans, you will see them here."
+    "nothingYet": "Nothing yet! Check back to connect with your fans."
   }
 }
