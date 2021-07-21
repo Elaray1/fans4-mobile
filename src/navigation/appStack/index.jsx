@@ -32,6 +32,9 @@ import ReportComment from 'screens/ReportComment';
 import ThanksForReporting from 'screens/ThanksForReporting';
 import Finances from 'screens/Finances';
 import ProposeAFight from 'screens/ProposeAFight';
+import LegalInformation from 'screens/LegalInformation';
+import SettingsTermsOfUse from 'screens/SettingsTermsOfUse';
+import SettingsPrivacyPolicy from 'screens/SettingsPrivacyPolicy';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -127,6 +130,9 @@ function AppScreens() {
       <AppStack.Screen name="ThanksForReporting" component={ThanksForReporting} />
       <AppStack.Screen name="Finances" component={Finances} />
       <AppStack.Screen name="ProposeAFight" component={ProposeAFight} />
+      <AppStack.Screen name="LegalInformation" component={LegalInformation} />
+      <AppStack.Screen name="SettingsPrivacyPolicy" component={SettingsPrivacyPolicy} />
+      <AppStack.Screen name="SettingsTermsOfUse" component={SettingsTermsOfUse} />
     </AppStack.Navigator>
   );
 }
