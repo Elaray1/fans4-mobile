@@ -19,6 +19,7 @@ import SecurityIcon from 'assets/icons/security';
 import FinancesIcon from 'assets/icons/finances';
 import SupportIcon from 'assets/icons/support';
 import InviteIcon from 'assets/icons/invite';
+import LegalIcon from 'assets/icons/legal-information';
 
 import styles from './SettingsModal.styles';
 
@@ -58,6 +59,11 @@ function SettingsModal({
   const onInvitePress = useCallback(() => {
     onClose();
     navigation.navigate('InviteAFan');
+  }, [navigation, onClose]);
+
+  const onLegalInformationPress = useCallback(() => {
+    onClose();
+    navigation.navigate('LegalInformation');
   }, [navigation, onClose]);
 
   const onLogOutPress = useCallback(async () => {
@@ -201,6 +207,25 @@ function SettingsModal({
             <View style={styles.line} />
           </View>
           )}
+
+          <View>
+            <TouchableOpacity
+              style={styles.settingsOption}
+              onPress={onLegalInformationPress}
+              activeOpacity={0.7}
+            >
+              <LegalIcon style={styles.settingIcon} />
+              <View>
+                <Text style={styles.settingTitle}>
+                  {t('SettingsModal.legalInformation')}
+                </Text>
+                <Text style={styles.settingText}>
+                  {t('SettingsModal.terms')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.line} />
+          </View>
 
           <TouchableOpacity style={styles.logOutButton} onPress={onLogOutPress}>
             <Text style={styles.logOutText}>
