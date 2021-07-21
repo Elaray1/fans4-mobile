@@ -40,7 +40,6 @@ jobs:
       - name: Distribute app via Firebase App Distribution
         env:
           firebaseToken: ${{ secrets.FIREBASE_TOKEN }}
-          firebaseGroups: ${{ secrets.FIREBASE_ANDROID_GROUPS }}
           firebaseAppId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
           notes: ${{ github.event.head_commit.message }}
         run: |
@@ -50,7 +49,7 @@ jobs:
             appdistribution:distribute android/app/build/outputs/apk/releaseStaging/app-releaseStaging.apk \
             --app $firebaseAppId \
             --release-notes "$notes" \
-            --groups "$firebaseGroups" \
+            --groups default \
             --token "$firebaseToken"
 
   # build-ios:
