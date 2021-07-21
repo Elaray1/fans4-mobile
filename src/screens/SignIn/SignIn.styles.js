@@ -88,6 +88,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     color: colors.errorText,
     fontSize: fonts.size.caption,
+    width: '89%',
   },
   title: {
     fontFamily: fonts.family.bold,

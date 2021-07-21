@@ -3,6 +3,7 @@ import {
   SafeAreaView, ScrollView, View, TouchableOpacity,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import _get from 'lodash/get';
 
@@ -18,6 +19,7 @@ import { FAN_GENDERS } from 'resources/user/user.constants';
 import styles from './styles';
 
 function ChangeFanInfo() {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -111,6 +113,7 @@ function ChangeFanInfo() {
           userName: usernameValue,
           gender: genderValue,
         }));
+        navigation.navigate('AccountInformation');
       } catch (error) {
         const { fullName, userName, gender } = _get(error, 'data.errors', {});
         if (fullName) {
@@ -132,7 +135,7 @@ function ChangeFanInfo() {
         setIsLoading(false);
       }
     }
-  }, [inputErrors, dispatch, fullNameValue, usernameValue, genderValue, t]);
+  }, [inputErrors, dispatch, fullNameValue, usernameValue, genderValue, navigation, t]);
 
   const isSaveButtonDisabled = isLoading
   || !fullNameValue
@@ -177,7 +180,7 @@ function ChangeFanInfo() {
           />
         </View>
         <View>
-          <Text style={styles.inputLabel}>{t('BiographicalData.hometown')}</Text>
+          <Text style={styles.inputLabel}>{t('ChangeFanInfo.gender')}</Text>
           <TouchableOpacity
             style={styles.inputContainer}
             onPress={onGenderPress}
