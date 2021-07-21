@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>57971665876-393ec9q6g9s5rviu1l2veg0jhcfr4bfl.apps.googleusercontent.com</string>
+	<string>1085158108692-c2vfqs5o7j33c8eiohv8ljvcgbrqof0n.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.57971665876-393ec9q6g9s5rviu1l2veg0jhcfr4bfl</string>
+	<string>com.googleusercontent.apps.1085158108692-c2vfqs5o7j33c8eiohv8ljvcgbrqof0n</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBMOQ4goUmEkZAJ7ZUvPes5Fhm3Cgqq1uY</string>
+	<string>AIzaSyCfdznSACMt6iVgjyi6qYY2bi16h1npCuo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>57971665876</string>
+	<string>1085158108692</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.paralect.fans4</string>
 	<key>PROJECT_ID</key>
-	<string>fans4-33cbe</string>
+	<string>fans4-staging</string>
 	<key>STORAGE_BUCKET</key>
-	<string>fans4-33cbe.appspot.com</string>
+	<string>fans4-staging.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:57971665876:ios:b1725178edd8c14d710441</string>
+	<string>1:1085158108692:ios:35a3b52d995f720fe6c101</string>
 </dict>
 </plist>

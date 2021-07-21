@@ -18,9 +18,6 @@ import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
 import config from 'resources/config';
 import * as sockets from 'services/socket.service';
-import firebasePushNotificationService from 'services/firebase.pushNotification.service';
-import localPushNotificationService from 'services/local.pushNotification.service';
-
 import colors from 'themes/colors';
 
 import AppScreens from './appStack';
@@ -71,65 +68,8 @@ const init = async (dispatch) => {
     rootNavigation.reset({ routes: [{ name: stack, params: { screen } }] });
   }
 
-
   // this is needed to hide splash screen after screen appearing animation
   InteractionManager.runAfterInteractions(() => SplashScreen.hide());
-};
-
-const connectPushNotifications = (userAuthenticated) => {
-  if (!userAuthenticated) {
-    return;
-  }
-
-  const onRegister = async (pushNotificationToken) => {
-    await userActions.setPushToken(pushNotificationToken);
-  };
-
-  const onNotification = (message) => {
-    console.log('[App] onNotification: ', message);
-
-    const options = {
-      soundName: 'default',
-      playSound: true,
-    };
-
-    if (message.notification) {
-      localPushNotificationService.showNotification(
-        Number(Math.random().toString().substr(2, 9)),
-        message.notification.title,
-        message.notification.body,
-        message.data,
-        options,
-      );
-    }
-  };
-
-  const onOpenNotification = async (message) => {
-    console.log('[App] onOpenNotification: ', message);
-    switch (message.data.type) {
-      case PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED: {
-        rootNavigation.navigate('Account');
-        break;
-      }
-      default:
-        break;
-    }
-  };
-
-  (async () => {
-    await firebasePushNotificationService.registerAppWithFCM();
-    await firebasePushNotificationService.register(onRegister, onNotification, onOpenNotification);
-    localPushNotificationService.configure(onOpenNotification);
-  })();
-};
-
-const disconnectPushNotifications = (userAuthenticated) => {
-  if (!userAuthenticated) {
-    return;
-  }
-
-  firebasePushNotificationService.unregister();
-  localPushNotificationService.unregister();
 };
 
 const linking = {
@@ -151,11 +91,6 @@ function AppNavigation() {
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
   const onNavigatorReady = useCallback(() => init(dispatch), [dispatch]);
-
-  useEffect(() => {
-    connectPushNotifications(userAuthenticated);
-    return () => disconnectPushNotifications(userAuthenticated);
-  }, [userAuthenticated]);
 
   return (
     <ToastProvider placement="top" offset={30}>

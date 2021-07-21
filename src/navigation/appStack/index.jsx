@@ -37,23 +37,51 @@ import SettingsTermsOfUse from 'screens/SettingsTermsOfUse';
 import SettingsPrivacyPolicy from 'screens/SettingsPrivacyPolicy';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import { USER_STATUSES, USER_TYPES } from 'resources/user/user.constants';
 
+import pushNotificationService from 'services/pushNotification.service';
 import * as socketService from 'services/socket.service';
 
-import * as RootNavigation from 'helpers/rootNavigation';
-
-import colors from 'themes/colors';
-
-import { USER_STATUSES, USER_TYPES } from 'resources/user/user.constants';
+import * as rootNavigation from 'helpers/rootNavigation';
+import { PUSH_NOTIFICATION_TYPES } from 'helpers/constants';
 
 import FighterNavigator from 'navigation/appStack/components/fighter';
 import FanNavigator from 'navigation/appStack/components/fan';
+
+import colors from 'themes/colors';
 
 const AppStack = createStackNavigator();
 
 const SCREEN_OPTIONS = {
   cardStyle: {
     backgroundColor: colors.main,
+  },
+};
+
+const handleUserStatusUpdated = (user) => {
+  let screen;
+
+  if (user.status === USER_STATUSES.VERIFIED) {
+    const isFirstVerification = (user.statusHistory || [])
+      .filter((h => h.status === USER_STATUSES.VERIFIED)).length === 1;
+
+    if (isFirstVerification) {
+      screen = 'VerificationSuccessful';
+    } else {
+      screen = 'Account';
+    }
+  } else if (user.status === USER_STATUSES.DECLINED) {
+    screen = 'VerificationFailed';
+  } else if (user.status === USER_STATUSES.BLOCKED) {
+    screen = 'AccountBlocked';
+  }
+
+  rootNavigation.resetToScreen('AppStack', screen);
+};
+
+const pushNotificationHandlersByType = {
+  [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
+    rootNavigation.navigate('Account');
   },
 };
 
@@ -67,26 +95,9 @@ function Tabs() {
 
 function AppScreens() {
   useEffect(() => {
-    socketService.on('user:statusUpdated', (user) => {
-      let screen;
+    socketService.on('user:statusUpdated', handleUserStatusUpdated);
 
-      if (user.status === USER_STATUSES.VERIFIED) {
-        const isFirstVerification = (user.statusHistory || [])
-          .filter((h => h.status === USER_STATUSES.VERIFIED)).length === 1;
-
-        if (isFirstVerification) {
-          screen = 'VerificationSuccessful';
-        } else {
-          screen = 'Account';
-        }
-      } else if (user.status === USER_STATUSES.DECLINED) {
-        screen = 'VerificationFailed';
-      } else if (user.status === USER_STATUSES.BLOCKED) {
-        screen = 'AccountBlocked';
-      }
-
-      RootNavigation.resetToScreen('AppStack', screen);
-    });
+    pushNotificationService.startNoticationHandling(pushNotificationHandlersByType);
   }, []);
 
   return (

@@ -4,6 +4,7 @@
     "plugin:react-hooks/recommended"
   ],
   "rules": {
+    "class-methods-use-this": "off",
     "object-curly-newline": "off",
     "react/jsx-one-expression-per-line": "off",
     "max-len": ["error", {

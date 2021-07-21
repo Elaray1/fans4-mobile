@@ -1,4 +1,4 @@
-package com.paralect.fans4;
+package com.fans4;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;

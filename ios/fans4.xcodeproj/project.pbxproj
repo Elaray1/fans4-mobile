@@ -13,7 +13,6 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		4E018D3E96C118CFDF997C87 /* libPods-fans4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91247A77CB5989263595F6A4 /* libPods-fans4.a */; };
 		63D5C2144E024511AD4A902F /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60E7A83B4D764378BF1387B8 /* NotoSans-Bold.ttf */; };
-		6D312257266155FF0058520E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D312256266155FF0058520E /* GoogleService-Info.plist */; };
 		7E6707E4FE3FC481F796F4AE /* libPods-fans4-fans4Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 854115D88383EDB01DFAEE8A /* libPods-fans4-fans4Tests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F61FA07EEF1D4872B0331DB7 /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A5741374B944335BFB9E535 /* NotoSans-Regular.ttf */; };
@@ -33,6 +32,9 @@
 		00E356EE1AD99517003FC87E /* fans4Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fans4Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* fans4Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = fans4Tests.m; sourceTree = "<group>"; };
+		0956E5D026A87AE300C98201 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0956E5D226A87AE300C98201 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0956E5D426A87AE300C98201 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* fans4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fans4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = fans4/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = fans4/AppDelegate.m; sourceTree = "<group>"; };
@@ -40,15 +42,16 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = fans4/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = fans4/main.m; sourceTree = "<group>"; };
 		1A5741374B944335BFB9E535 /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSans-Regular.ttf"; path = "../assets/fonts/NotoSans-Regular.ttf"; sourceTree = "<group>"; };
+		25C750D729DE2443225C8336 /* Pods-fans4.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4.staging.xcconfig"; path = "Target Support Files/Pods-fans4/Pods-fans4.staging.xcconfig"; sourceTree = "<group>"; };
 		3BF4A783CDD3F8AFC18A8797 /* Pods-fans4-fans4Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4-fans4Tests.release.xcconfig"; path = "Target Support Files/Pods-fans4-fans4Tests/Pods-fans4-fans4Tests.release.xcconfig"; sourceTree = "<group>"; };
 		4F4054BFF500972123FEEF15 /* Pods-fans4.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4.debug.xcconfig"; path = "Target Support Files/Pods-fans4/Pods-fans4.debug.xcconfig"; sourceTree = "<group>"; };
 		60E7A83B4D764378BF1387B8 /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSans-Bold.ttf"; path = "../assets/fonts/NotoSans-Bold.ttf"; sourceTree = "<group>"; };
-		6D312256266155FF0058520E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DEA1402261DBC43000119B3 /* fans4.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = fans4.entitlements; path = fans4/fans4.entitlements; sourceTree = "<group>"; };
 		77FFDCFA00E96E62BA95EDC7 /* Pods-fans4.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4.release.xcconfig"; path = "Target Support Files/Pods-fans4/Pods-fans4.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = fans4/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		854115D88383EDB01DFAEE8A /* libPods-fans4-fans4Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fans4-fans4Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91247A77CB5989263595F6A4 /* libPods-fans4.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fans4.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C938DE5D9946D802E700EEB2 /* Pods-fans4-fans4Tests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4-fans4Tests.staging.xcconfig"; path = "Target Support Files/Pods-fans4-fans4Tests/Pods-fans4-fans4Tests.staging.xcconfig"; sourceTree = "<group>"; };
 		E72F620CC8673E25F2F759AB /* Pods-fans4-fans4Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4-fans4Tests.debug.xcconfig"; path = "Target Support Files/Pods-fans4-fans4Tests/Pods-fans4-fans4Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -90,10 +93,45 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		0956E5CE26A87AE300C98201 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				0956E5CF26A87AE300C98201 /* staging */,
+				0956E5D126A87AE300C98201 /* development */,
+				0956E5D326A87AE300C98201 /* production */,
+			);
+			name = Firebase;
+			path = fans4/Firebase;
+			sourceTree = "<group>";
+		};
+		0956E5CF26A87AE300C98201 /* staging */ = {
+			isa = PBXGroup;
+			children = (
+				0956E5D026A87AE300C98201 /* GoogleService-Info.plist */,
+			);
+			path = staging;
+			sourceTree = "<group>";
+		};
+		0956E5D126A87AE300C98201 /* development */ = {
+			isa = PBXGroup;
+			children = (
+				0956E5D226A87AE300C98201 /* GoogleService-Info.plist */,
+			);
+			path = development;
+			sourceTree = "<group>";
+		};
+		0956E5D326A87AE300C98201 /* production */ = {
+			isa = PBXGroup;
+			children = (
+				0956E5D426A87AE300C98201 /* GoogleService-Info.plist */,
+			);
+			path = production;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* fans4 */ = {
 			isa = PBXGroup;
 			children = (
-				6D312256266155FF0058520E /* GoogleService-Info.plist */,
+				0956E5CE26A87AE300C98201 /* Firebase */,
 				6DEA1402261DBC43000119B3 /* fans4.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -122,6 +160,8 @@
 				77FFDCFA00E96E62BA95EDC7 /* Pods-fans4.release.xcconfig */,
 				E72F620CC8673E25F2F759AB /* Pods-fans4-fans4Tests.debug.xcconfig */,
 				3BF4A783CDD3F8AFC18A8797 /* Pods-fans4-fans4Tests.release.xcconfig */,
+				25C750D729DE2443225C8336 /* Pods-fans4.staging.xcconfig */,
+				C938DE5D9946D802E700EEB2 /* Pods-fans4-fans4Tests.staging.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -204,6 +244,7 @@
 				14CEDF10D18438A97962246B /* [CP] Embed Pods Frameworks */,
 				FAA966B94CC31D527E6FF173 /* [CP] Copy Pods Resources */,
 				8E66C9E781682D1C0656CB3A /* [CP-User] [RNFB] Core Configuration */,
+				0956E5CA26A84BD700C98201 /* Setup Firebase Environment GoogleService-Info.plist */,
 			);
 			buildRules = (
 			);
@@ -264,7 +305,6 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				6D312257266155FF0058520E /* GoogleService-Info.plist in Resources */,
 				63D5C2144E024511AD4A902F /* NotoSans-Bold.ttf in Resources */,
 				F61FA07EEF1D4872B0331DB7 /* NotoSans-Regular.ttf in Resources */,
 			);
@@ -286,6 +326,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+		};
+		0956E5CA26A84BD700C98201 /* Setup Firebase Environment GoogleService-Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Firebase Environment GoogleService-Info.plist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Name of the resource we're selectively copying\nGOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist\n\n# Get references to dev and prod versions of the GoogleService-Info.plist\n# NOTE: These should only live on the file system and should NOT be part of the target (since we'll be adding them to the target manually)\nGOOGLESERVICE_INFO_DEV=${PROJECT_DIR}/${TARGET_NAME}/Firebase/development/${GOOGLESERVICE_INFO_PLIST}\nGOOGLESERVICE_INFO_STAGING=${PROJECT_DIR}/${TARGET_NAME}/Firebase/staging/${GOOGLESERVICE_INFO_PLIST}\nGOOGLESERVICE_INFO_PROD=${PROJECT_DIR}/${TARGET_NAME}/Firebase/production/${GOOGLESERVICE_INFO_PLIST}\n\n# Make sure the dev version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_DEV}\"\nif [ ! -f $GOOGLESERVICE_INFO_DEV ]\nthen\n    echo \"No Development GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Make sure the prod version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_STAGING}\"\nif [ ! -f $GOOGLESERVICE_INFO_STAGING ]\nthen\n    echo \"No Staging GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Make sure the prod version of GoogleService-Info.plist exists\necho \"Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_PROD}\"\nif [ ! -f $GOOGLESERVICE_INFO_PROD ]\nthen\n    echo \"No Production GoogleService-Info.plist found. Please ensure it's in the proper directory.\"\n    exit 1\nfi\n\n# Get a reference to the destination location for the GoogleService-Info.plist\nPLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\necho \"Will copy ${GOOGLESERVICE_INFO_PLIST} to final destination: ${PLIST_DESTINATION}\"\n\n# Copy over the prod GoogleService-Info.plist for Release builds\nif [ \"${CONFIGURATION}\" == \"Release\" ]\nthen\n    echo \"Using ${GOOGLESERVICE_INFO_PROD}\"\n    cp \"${GOOGLESERVICE_INFO_PROD}\" \"${PLIST_DESTINATION}\"\nelif [\"${CONFIGURATION}\" == \"Staging\"]\nthen\n    echo \"Using ${GOOGLESERVICE_INFO_STAGING}\"\n    cp \"${GOOGLESERVICE_INFO_DEV}\" \"${PLIST_DESTINATION}\"  \nelse\n    echo \"Using ${GOOGLESERVICE_INFO_DEV}\"\n    cp \"${GOOGLESERVICE_INFO_DEV}\" \"${PLIST_DESTINATION}\"\nfi\n";
 		};
 		14CEDF10D18438A97962246B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -513,6 +572,119 @@
 			};
 			name = Release;
 		};
+		0956E5CB26A84D0E00C98201 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Staging;
+		};
+		0956E5CC26A84D0E00C98201 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 25C750D729DE2443225C8336 /* Pods-fans4.staging.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 13;
+				DEVELOPMENT_TEAM = LPL8LR83TR;
+				INFOPLIST_FILE = fans4/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.paralect.fans4;
+				PRODUCT_NAME = fans4;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=*]" = "";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Staging;
+		};
+		0956E5CD26A84D0E00C98201 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C938DE5D9946D802E700EEB2 /* Pods-fans4-fans4Tests.staging.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = fans4Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/fans4.app/fans4";
+			};
+			name = Staging;
+		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4F4054BFF500972123FEEF15 /* Pods-fans4.debug.xcconfig */;
@@ -530,7 +702,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -561,7 +733,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -609,7 +781,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -674,7 +846,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -707,6 +879,7 @@
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
 				00E356F71AD99517003FC87E /* Release */,
+				0956E5CD26A84D0E00C98201 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -716,6 +889,7 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+				0956E5CC26A84D0E00C98201 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -725,6 +899,7 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+				0956E5CB26A84D0E00C98201 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "959399980032",
+    "project_id": "fans4-b6b08",
+    "storage_bucket": "fans4-b6b08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959399980032:android:570fa24fa9c65b2fdb3ce5",
+        "android_client_info": {
+          "package_name": "com.fans4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959399980032-3jilsk0gpr6ud7o1ac8s0b3qoub2bch9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVmshC6-haxlS_Bn2RnIMzcBktr52YdCc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959399980032-3jilsk0gpr6ud7o1ac8s0b3qoub2bch9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "959399980032-dcn94ko6e7d51hsp246lmg06mlil0p01.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.test.test"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

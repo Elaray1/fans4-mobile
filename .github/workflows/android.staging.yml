@@ -1,0 +1,54 @@
+name: Build Android staging build
+on: 
+  push:
+    branches:
+      - staging
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Clear artifacts
+        uses: kolpav/purge-artifacts-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          expire-in: 1minutes
+          
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+        
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://${{ secrets.PAT_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build Android Release
+        run: |
+          cd android && ./gradlew assembleReleaseStaging -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: app-releaseStaging.apk
+          path: android/app/build/outputs/apk/releaseStaging/
+
+      - name: Distribute app via Firebase App Distribution
+        env:
+          firebaseToken: ${{ secrets.FIREBASE_TOKEN }}
+          firebaseGroups: default
+          firebaseAppId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          notes: ${{ github.event.head_commit.message }}
+        run: |
+          yarn global add firebase-tools
+          export PATH="$(yarn global bin):$PATH"
+          firebase \
+            appdistribution:distribute android/app/build/outputs/apk/releaseStaging/app-releaseStaging.apk \
+            --app $firebaseAppId \
+            --release-notes "$notes" \
+            --groups "$firebaseGroups" \
+            --token "$firebaseToken"

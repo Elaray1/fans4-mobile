@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1085158108692",
+    "project_id": "fans4-staging",
+    "storage_bucket": "fans4-staging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085158108692:android:fbd0932986f2779be6c101",
+        "android_client_info": {
+          "package_name": "com.fans4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1085158108692-oj41uglrpenugpjg1m165u1t1vomjqfb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnTADpXwa-cJqY9AWWztjv2Bjn2u0Kfhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1085158108692-oj41uglrpenugpjg1m165u1t1vomjqfb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

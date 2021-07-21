@@ -11,7 +11,6 @@ import * as sockets from 'services/socket.service';
 import {
   USER_LOGGED_OUT,
   SET_USER_DATA,
-  SET_USER_SUBSCRIPTIONS,
 } from './user.constants';
 
 import * as api from './user.api';

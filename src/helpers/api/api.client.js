@@ -71,6 +71,7 @@ const httpRequest = method => async (url, data, file) => {
     }
   }
 
+  console.log('options', options);
   const response = await axios(options);
   if (!response) {
     throwApiError({
