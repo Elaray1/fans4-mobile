@@ -25,6 +25,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   const userId = useSelector(userSelectors.getUserId);
   const userWeightClasses = useSelector(userSelectors.getWeightClasses);
   const userFightingStatus = useSelector(userSelectors.getFightingStatus);
+  const userGender = useSelector(userSelectors.getUserGender);
 
   const [loading, setLoading] = useState(false);
   const [fight, setFight] = useState(initFight);
@@ -55,6 +56,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
     FIGHT_STATUSES.VOTING_CLOSED,
     FIGHT_STATUSES.APPROVED,
   ], fight.status);
+  const isSameGender = fighter.role.biography.gender === userGender;
 
   if (fighter.status === USER_STATUSES.BLOCKED) {
     return (
@@ -64,7 +66,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
     );
   }
 
-  if (!fight && isSharedWeightClasses && areBothFightersReadyForFight) {
+  if (!fight && isSharedWeightClasses && areBothFightersReadyForFight && isSameGender) {
     return (
       <Button
         isLoading={loading}
@@ -99,6 +101,14 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
     return (
       <Text style={styles.cannotApplyForAFightText}>
         {`${warningTitleStart} ${fighter.fullName} ${wargningTitleEnd}`}
+      </Text>
+    );
+  }
+
+  if (!isSameGender) {
+    return (
+      <Text style={styles.cannotApplyForAFightText}>
+        {`${t('Fighter.youCannotApplyForAFight_0')} ${fighter.fullName} ${t('Fighter.youCannotApplyForAFight_2')}`}
       </Text>
     );
   }
