@@ -34,6 +34,7 @@ function Post({
   checkedOn,
   likedUserIds,
   commentsCount,
+  disabled,
 }) {
   const navigation = useNavigation();
   const { showFailure } = useToast();
@@ -42,6 +43,7 @@ function Post({
 
   const [likesCount, setLikesCount] = useState(likedUserIds.length);
   const [isLiked, setIsLiked] = useState(likedUserIds.some(id => id === userId));
+  const iconsColor = disabled ? colors.whiteDisabled : colors.white;
 
   const authorView = author ? (
     <View style={styles.author}>
@@ -136,17 +138,24 @@ function Post({
               onPress={onLikePress}
               activeOpacity={0.7}
               style={[styles.postAction]}
+              disabled={disabled}
             >
-              {isLiked ? <LikeIcon fill={colors.white} /> : <LikeIcon />}
-              <Text style={styles.postActionText}>{formatCount(likesCount)}</Text>
+              {isLiked ? (
+                <LikeIcon
+                  stroke={iconsColor}
+                  fill={iconsColor}
+                />
+              ) : <LikeIcon stroke={iconsColor} />}
+              <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(likesCount)}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={onCommentsPress}
               activeOpacity={0.7}
               style={[styles.postAction, styles.postActionRight]}
+              disabled={disabled}
             >
-              <CommentIcon />
-              <Text style={styles.postActionText}>{formatCount(commentsCount)}</Text>
+              <CommentIcon stroke={iconsColor} />
+              <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(commentsCount)}</Text>
             </TouchableOpacity>
           </View>
 
@@ -185,6 +194,7 @@ Post.propTypes = {
   checkedOn: PropTypes.string,
   likedUserIds: PropTypes.arrayOf(PropTypes.string),
   commentsCount: PropTypes.number,
+  disabled: PropTypes.bool,
 };
 
 Post.defaultProps = {
@@ -194,6 +204,7 @@ Post.defaultProps = {
   checkedOn: null,
   likedUserIds: [],
   commentsCount: 0,
+  disabled: false,
 };
 
 export default React.memo(Post);

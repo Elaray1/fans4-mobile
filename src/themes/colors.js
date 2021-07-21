@@ -33,6 +33,8 @@ const colors = {
   clearSearch: '#DADADA',
   buttonNotification: 'rgba(106, 125, 221, 0.12)',
 
+  whiteDisabled: 'rgba(255, 255, 255, 0.6)',
+
   whiteBackground: 'rgba(255, 255, 255, 0.3)',
 
   errorBackground: 'rgba(243, 76, 76, 0.12)',
