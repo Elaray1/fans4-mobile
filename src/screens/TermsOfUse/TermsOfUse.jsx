@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 import colors from 'themes/colors';
 
@@ -11,18 +12,25 @@ import Text from 'components/Text';
 import Header from 'components/Header';
 import Button from 'components/Button';
 
+import { USER_TYPES } from 'resources/user/user.constants';
+import * as userSelectors from 'resources/user/user.selectors';
+
 import styles from './TermsOfUse.styles';
 
 function TermsOfUse() {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
+  const userType = useSelector(userSelectors.getUserType);
+
+  const isFan = userType === USER_TYPES.FAN;
+
   const onAccept = useCallback(() => {
     navigation.reset({
       index: 0,
-      routes: [{ name: 'VerificationPending' }],
+      routes: [{ name: isFan ? 'OnBoarding1' : 'VerificationPending' }],
     });
-  }, [navigation]);
+  }, [isFan, navigation]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -34,10 +42,10 @@ function TermsOfUse() {
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.title}>{t('TermsOfUse.firstParagraphTitle')}</Text>
-          <Text style={styles.text}>{t('TermsOfUse.firstParagraphText')}</Text>
-          <Text style={styles.title}>{t('TermsOfUse.secondParagraphTitle')}</Text>
-          <Text style={styles.text}>{t('TermsOfUse.secondParagraphText')}</Text>
+          <Text style={styles.title}>{t(`TermsOfUse.${userType}.firstParagraphTitle`)}</Text>
+          <Text style={styles.text}>{t(`TermsOfUse.${userType}.firstParagraphText`)}</Text>
+          <Text style={styles.title}>{t(`TermsOfUse.${userType}.secondParagraphTitle`)}</Text>
+          <Text style={styles.text}>{t(`TermsOfUse.${userType}.secondParagraphText`)}</Text>
         </ScrollView>
         <Button
           title={t('TermsOfUse.buttonText')}

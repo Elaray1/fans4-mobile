@@ -10,7 +10,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 
 import * as rootNavigation from 'helpers/rootNavigation';
 
-import FailedIllustration from 'assets/illustrations/verification-pending.svg';
+import FailedIllustration from 'assets/illustrations/account-blocked.svg';
 
 function VerificationFailed() {
   const { t } = useTranslation();
