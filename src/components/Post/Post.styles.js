@@ -87,4 +87,7 @@ export default StyleSheet.create({
   mediaContainer: {
     marginBottom: 12,
   },
+  disabled: {
+    color: colors.whiteDisabled,
+  },
 });
