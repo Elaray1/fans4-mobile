@@ -101,7 +101,6 @@ function SignIn({ route }) {
       try {
         setIsLoading(true);
 
-
         await dispatch(userActions.emailSignIn({
           email: emailValue,
           password: passwordValue,

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -16,6 +16,8 @@ import * as userSelectors from 'resources/user/user.selectors';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 import * as fightApi from 'resources/fight/fight.api';
 
+import analyticsService from 'services/analytics.service';
+
 import styles from './styles';
 
 const ApplyForAFight = ({ fighter, fight: initFight }) => {
@@ -26,6 +28,16 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   const userWeightClasses = useSelector(userSelectors.getWeightClasses);
   const userFightingStatus = useSelector(userSelectors.getFightingStatus);
   const userGender = useSelector(userSelectors.getUserGender);
+
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_APPLYING_FOR_A_FIGHT_STARTED,
+      data: {
+        userId,
+      },
+    });
+  }, [userId]);
+
 
   const [loading, setLoading] = useState(false);
   const [fight, setFight] = useState(initFight);

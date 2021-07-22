@@ -2,12 +2,18 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
 import PlaceholderIllustration from 'assets/illustrations/placeholder';
 
 import * as userApi from 'resources/user/user.api';
+import { USER_TYPES } from 'resources/user/user.constants';
+import * as userSelectors from 'resources/user/user.selectors';
+
+import analyticsService from 'services/analytics.service';
 
 function OnBoarding3({ route }) {
   const {
@@ -16,15 +22,33 @@ function OnBoarding3({ route }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
+  const userId = useSelector(userSelectors.getUserId);
+
   const onNext = useCallback(async () => {
     navigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'Account' } }] });
 
     try {
       await userApi.completeOnboarding();
+
+      if (userType === USER_TYPES.FIGHTER) {
+        analyticsService.logEvent({
+          name: analyticsService.events.FIGHTER_ONBOARDING_COMPLETED,
+          data: {
+            userId,
+          },
+        });
+      } else {
+        analyticsService.logEvent({
+          name: analyticsService.events.FAN_ONBOARDING_COMPLETED,
+          data: {
+            userId,
+          },
+        });
+      }
     } catch (err) {
       console.error(err);
     }
-  }, [navigation]);
+  }, [navigation, userId, userType]);
 
   return (
     <IllustrationScreen

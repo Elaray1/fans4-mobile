@@ -1,20 +1,21 @@
-import React, {
-  useState, useCallback, useEffect, useRef,
-} from 'react';
-import {
-  SafeAreaView, View, FlatList, TouchableOpacity, Image, ActivityIndicator,
-} from 'react-native';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { SafeAreaView, View, FlatList, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 import Header from 'components/Header';
 import SearchInput from 'components/SearchInput';
 import Text from 'components/Text';
 
 import * as userApi from 'resources/user/user.api';
+import { USER_TYPES } from 'resources/user/user.constants';
+import * as userSelectors from 'resources/user/user.selectors';
 
 import { toFixLength } from 'helpers/modifyText';
+
+import analyticsService from 'services/analytics.service';
 
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 
@@ -33,6 +34,27 @@ function SearchFighters() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const userId = useSelector(userSelectors.getUserId);
+  const userType = useSelector(userSelectors.getUserType);
+
+  useEffect(() => {
+    if (userType === USER_TYPES.FIGHTER) {
+      analyticsService.logEvent({
+        name: analyticsService.events.FIGHTER_OPENED_FIGHTERS_SCREEN,
+        data: {
+          userId,
+        },
+      });
+    } else {
+      analyticsService.logEvent({
+        name: analyticsService.events.FAN_OPENED_FIGHTERS_SCREEN,
+        data: {
+          userId,
+        },
+      });
+    }
+  }, [userType, userId]);
 
   const fetchNewItems = useCallback(async ({ search = '', refresh } = {}) => {
     let fetchingPage = 1;

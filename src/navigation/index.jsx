@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { InteractionManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,11 +8,13 @@ import { ToastProvider } from 'react-native-fast-toast';
 import cookies from '@react-native-cookies/cookies';
 import 'react-native-gesture-handler';
 
-import { STORAGE_KEYS, PUSH_NOTIFICATION_TYPES } from 'helpers/constants';
-import { getItem } from 'helpers/storage';
+import { STORAGE_KEYS } from 'helpers/constants';
+import { getItem, setItem } from 'helpers/storage';
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
 import getInitialScreen from 'helpers/getInitialScreen';
 import * as rootNavigation from 'helpers/rootNavigation';
+
+import analyticsService from 'services/analytics.service';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
@@ -32,6 +34,14 @@ const NAVIGATOR_CONTAINER_THEME = {
 const Stack = createStackNavigator();
 
 const init = async (dispatch) => {
+  const wasOpenedBefore = await getItem(STORAGE_KEYS.WAS_OPENED_BEFORE);
+  if (!wasOpenedBefore) {
+    analyticsService.logEvent({ name: analyticsService.events.FIRST_LAUNCH });
+    await setItem(STORAGE_KEYS.WAS_OPENED_BEFORE, JSON.stringify(true)); // without JSON.stringify() it doesn't work
+  } else {
+    analyticsService.logEvent({ name: analyticsService.events.LAUNCH });
+  }
+
   // This is needed because react-native use cookies by default
   // but actually we don't use cookies
   // so we clear cookies in order to prevent mixing authorization cookies
@@ -90,7 +100,33 @@ const linking = {
 function AppNavigation() {
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
-  const onNavigatorReady = useCallback(() => init(dispatch), [dispatch]);
+
+  const routeNameRef = useRef();
+
+  const onNavigatorReady = useCallback(async () => {
+    routeNameRef.current = rootNavigation.navigationRef.current.getCurrentRoute().name;
+    await init(dispatch);
+  }, [dispatch]);
+
+  const userId = useSelector(userSelectors.getUserId);
+  const userType = useSelector(userSelectors.getUserType);
+
+  const trackScreensOpening = useCallback(() => {
+    const previousRouteName = routeNameRef.current;
+    const currentRouteName = rootNavigation.navigationRef.current.getCurrentRoute().name;
+
+    if (previousRouteName !== currentRouteName) {
+      analyticsService.logEvent({
+        name: analyticsService.events.SCREEN_OPENED,
+        data: {
+          userId,
+          userType,
+        },
+      });
+    }
+
+    routeNameRef.current = currentRouteName;
+  }, [userId, userType]);
 
   return (
     <ToastProvider placement="top" offset={30}>
@@ -99,6 +135,7 @@ function AppNavigation() {
         ref={rootNavigation.navigationRef}
         onReady={onNavigatorReady}
         linking={linking}
+        onStateChange={trackScreensOpening}
       >
         <Stack.Navigator initialRouteName={userAuthenticated ? 'AppStack' : 'AuthStack'} headerMode="none">
           <Stack.Screen name="AppStack" component={AppScreens} />

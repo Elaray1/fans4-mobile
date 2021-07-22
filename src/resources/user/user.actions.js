@@ -7,10 +7,12 @@ import getInitialScreen from 'helpers/getInitialScreen';
 import * as rootNavigation from 'helpers/rootNavigation';
 
 import * as sockets from 'services/socket.service';
+import analyticsService from 'services/analytics.service';
 
 import {
   USER_LOGGED_OUT,
   SET_USER_DATA,
+  USER_TYPES,
 } from './user.constants';
 
 import * as api from './user.api';
@@ -34,6 +36,13 @@ export const emailSignUp = ({
     setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
     dispatch({ type: SET_USER_DATA, user }),
   ]);
+
+  analyticsService.logEvent({
+    name: analyticsService.events.FIGHTER_SIGNED_UP,
+    data: {
+      userId: user._id,
+    },
+  });
 
   rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'EmailConfirmation' } }] });
 };
@@ -64,6 +73,12 @@ export const emailSignIn = ({
   password,
   userType,
 }) => async (dispatch) => {
+  if (userType === USER_TYPES.FAN) {
+    analyticsService.logEvent({
+      name: analyticsService.events.SIGN_IN_AS_FAN_PRESSED,
+    });
+  }
+
   const deviceId = getMaskedDeviceId();
 
   const { user, accessToken } = await api.emailSignIn({

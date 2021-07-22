@@ -14,14 +14,23 @@ import Button from 'components/Button';
 
 import { USER_TYPES } from 'resources/user/user.constants';
 
+import analyticsService from 'services/analytics.service';
+
 import styles from './SelectUserType.styles';
 
 function SelectUserType() {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const onChooseUserType = useCallback(async (userType) => {
-    navigation.navigate(userType === USER_TYPES.FAN ? 'SignIn' : 'SignUp', { userType });
+  const onChooseUserType = useCallback((userType) => {
+    if (userType === USER_TYPES.FAN) {
+      navigation.navigate('SignIn', { userType });
+      analyticsService.logEvent({ name: analyticsService.events.IAM_FAN_PRESSED });
+      return;
+    }
+
+    navigation.navigate('SignUp', { userType });
+    analyticsService.logEvent({ name: analyticsService.events.IAM_FIGHTER_PRESSED });
   }, [navigation]);
 
   return (

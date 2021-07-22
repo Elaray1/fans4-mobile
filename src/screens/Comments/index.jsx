@@ -9,8 +9,9 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import * as userSelectors from 'resources/user/user.selectors';
-
 import * as commentApi from 'resources/comment/comment.api';
+
+import analyticsService from 'services/analytics.service';
 
 import Header from 'components/Header';
 import Comment from 'components/Comment';
@@ -36,10 +37,22 @@ function Comments({ route }) {
   const { showFailure } = useToast();
 
   const userType = useSelector(userSelectors.getUserType);
+  const userId = useSelector(userSelectors.getUserId);
 
   const {
     postId,
   } = route?.params;
+
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FAN_OPENED_POST_COMMENTS,
+      data: {
+        userId,
+        postId,
+      },
+    });
+  }, [userId, postId]);
+
 
   const [comments, setComments] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -123,13 +136,22 @@ function Comments({ route }) {
         text: commentValue,
         postId,
       });
+
       setCommentValue('');
       setComments([comment, ...comments]);
+
+      analyticsService.logEvent({
+        name: analyticsService.events.FAN_SENT_POST_COMMENT,
+        data: {
+          userId,
+          postId,
+        },
+      });
     } catch (error) {
       showFailure();
     }
     setIsButtonDisabled(false);
-  }, [showFailure, postId, commentValue, comments]);
+  }, [showFailure, postId, commentValue, comments, userId]);
 
   useEffect(() => {
     const fetchComments = async () => {

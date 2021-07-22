@@ -14,6 +14,8 @@ import * as userSelectors from 'resources/user/user.selectors';
 import * as fightApi from 'resources/fight/fight.api';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 
+import analyticsService from 'services/analytics.service';
+
 import { ITEM_TYPES } from 'components/Header/Header.constants';
 
 import Header from 'components/Header';
@@ -38,6 +40,7 @@ const Voting = ({ route }) => {
   const navigation = useNavigation();
   const { showFailure, showSuccess } = useToast();
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
+  const userId = useSelector(userSelectors.getUserId);
 
   const [fights, setFights] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -45,6 +48,15 @@ const Voting = ({ route }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FAN_OPENED_VOTING_PAGE,
+      data: {
+        userId,
+      },
+    });
+  }, [userId]);
 
   const toggleItems = useMemo(() => {
     return [

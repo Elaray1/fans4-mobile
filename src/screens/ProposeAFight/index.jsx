@@ -1,13 +1,13 @@
-import React, {
-  useCallback, useState, useEffect,
-} from 'react';
-import {
-  View, SafeAreaView, ScrollView, Image, TouchableOpacity, ActivityIndicator,
-} from 'react-native';
+import React, { useCallback, useState, useEffect } from 'react';
+import { View, SafeAreaView, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 import * as userApi from 'resources/user/user.api';
+import * as userSelectors from 'resources/user/user.selectors';
+
+import analyticsService from 'services/analytics.service';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
@@ -34,6 +34,17 @@ const ProposeAFight = () => {
   const setStepOne = useCallback(() => setStep(0), []);
   const setStepTwo = useCallback(() => setStep(1), []);
 
+  const userId = useSelector(userSelectors.getUserId);
+
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FAN_STARTED_PROPOSE_FIGHT,
+      data: {
+        userId,
+      },
+    });
+  }, [userId]);
+
   useEffect(() => {
     async function fetchFighters() {
       try {
@@ -43,6 +54,7 @@ const ProposeAFight = () => {
           opponentId: step === 1 ? firstFighter._id : null,
           search: step === 1 ? search : null,
         });
+
         setFighters(users);
       } catch (error) {
         console.error('Fetching fighters error:', error);
@@ -71,10 +83,17 @@ const ProposeAFight = () => {
           params: { status, fight },
         },
       });
+
+      analyticsService.logEvent({
+        name: analyticsService.events.FAN_PROPOSED_FIGHT,
+        data: {
+          userId,
+        },
+      });
     } catch (error) {
       console.error('Suggesting fight error:', error);
     }
-  }, [firstFighter?._id, secondFighter?._id, navigation]);
+  }, [firstFighter?._id, secondFighter?._id, navigation, userId]);
 
   const disabled = (step === 0 && !firstFighter) || (step === 1 && !secondFighter);
 

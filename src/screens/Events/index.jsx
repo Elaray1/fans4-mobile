@@ -27,6 +27,8 @@ import colors from 'themes/colors';
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
+import analyticsService from 'services/analytics.service';
+
 import styles from './styles';
 
 const TABS = { UPCOMING: 'upcoming', PAST: 'past' };
@@ -46,6 +48,25 @@ function Events() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const userType = useSelector(userSelectors.getUserType);
+  const userId = useSelector(userSelectors.getUserId);
+
+  useEffect(() => {
+    if (userType === USER_TYPES.FIGHTER) {
+      analyticsService.logEvent({
+        name: analyticsService.events.FIGHTER_OPENED_EVENTS_SCREEN,
+        data: {
+          userId,
+        },
+      });
+    } else {
+      analyticsService.logEvent({
+        name: analyticsService.events.FAN_OPENED_EVENTS_SCREEN,
+        data: {
+          userId,
+        },
+      });
+    }
+  }, [userType, userId]);
 
   const tabs = useMemo(() => {
     return [
