@@ -50,8 +50,7 @@ class PushNotificationService {
     this.notificationHandlers = notificationHandlers;
 
     if (Platform.OS === 'android') {
-      const isCreated = await createNotificationChannelAsync();
-      console.log('isCreated', isCreated);
+      await createNotificationChannelAsync();
     }
 
     if (Platform.OS === 'ios') {
