@@ -52,6 +52,7 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
     paddingTop: 15,
     paddingBottom: 10,
+    height: 120,
   },
   inputMultiline: {
     paddingVertical: 0,
