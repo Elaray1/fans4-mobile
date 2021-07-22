@@ -20,8 +20,11 @@ import * as postApi from 'resources/post/post.api';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import analyticsService from 'services/analytics.service';
+import * as socketService from 'services/socket.service';
 
 import * as rootNavigation from 'helpers/rootNavigation';
+
+import useToast from 'hooks/useToast';
 
 import styles from './styles';
 
@@ -31,6 +34,7 @@ const PER_PAGE = 10;
 function FighterAccount() {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { showFailure } = useToast();
 
   const userId = useSelector(userSelectors.getUserId);
   const fullName = useSelector(userSelectors.getUserFullName);
@@ -48,18 +52,46 @@ function FighterAccount() {
   const [page, setPage] = useState(INITIAL_PAGE);
   const [isAllPostsLoaded, setIsAllPostsLoaded] = useState(false);
 
+  const refreshPosts = useCallback(async () => {
+    console.log('refreshPosts');
+    const {
+      posts: fetchedPosts,
+      totalCount: fetchedPostsCount,
+    } = await postApi.getMyPosts({ page: INITIAL_PAGE, perPage: PER_PAGE });
+
+    setPostsCount(fetchedPostsCount);
+    setPosts(fetchedPosts);
+    setPage(INITIAL_PAGE + 1);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', refreshPosts);
+    return unsubscribe;
+  }, [navigation, refreshPosts]);
+
+  useEffect(() => {
+    socketService.on('post:status-updated', refreshPosts);
+  }, [refreshPosts]);
+
   useEffect(() => {
     const init = async () => {
-      const [
-        { totalCount: fetchedFansCount },
-        { posts: fetchedPosts, totalCount: fetchedPostsCount },
-      ] = await Promise.all([
-        userApi.getMyFans({ page: 1, perPage: 1 }),
-        postApi.getMyPosts({
-          page: INITIAL_PAGE,
-          perPage: PER_PAGE,
-        }),
-      ]);
+      let fetchedFansCount;
+      let fetchedPostsCount;
+      let fetchedPosts;
+
+      try {
+        const [{ totalCount: fansTotalCount }, { posts: initPosts, totalCount: postsTotalCount }] = await Promise.all([
+          userApi.getMyFans({ page: 1, perPage: 1 }),
+          postApi.getMyPosts({ page: INITIAL_PAGE, perPage: PER_PAGE }),
+        ]);
+
+        fetchedFansCount = fansTotalCount;
+        fetchedPostsCount = postsTotalCount;
+        fetchedPosts = initPosts;
+      } catch (err) {
+        showFailure();
+        return;
+      }
 
       if (fetchedPosts?.length < PER_PAGE) {
         setIsAllPostsLoaded(true);
@@ -74,7 +106,7 @@ function FighterAccount() {
     };
 
     init();
-  }, [userId]);
+  }, [userId, showFailure]);
 
   const onFansPress = useCallback(() => {
     navigation.navigate('Fans');

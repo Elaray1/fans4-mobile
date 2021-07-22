@@ -8,7 +8,7 @@
 // Also it's required to call PushNotification.configure() outside react lifecycle so:
 // Firstly we initiaize firebase and local push notifications then we import service to use it within React
 // For details check docs react-native-firebase and react-native-push-notification
-import { Platform, Alert } from 'react-native';
+import { Platform } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
@@ -50,7 +50,8 @@ class PushNotificationService {
     this.notificationHandlers = notificationHandlers;
 
     if (Platform.OS === 'android') {
-      await createNotificationChannelAsync();
+      const isCreated = await createNotificationChannelAsync();
+      console.log('isCreated', isCreated);
     }
 
     if (Platform.OS === 'ios') {
@@ -79,8 +80,8 @@ class PushNotificationService {
     messaging().onMessage((message) => {
       PushNotification.localNotification({
         channelId: NOTIFICATION_CHANNEL_ID,
-        message: message.notification.body,
-        title: message.notification.tile,
+        message: message.notification.body || '', // it doesn't work with undefined for some reason
+        title: message.notification.title,
         userInfo: message.data,
       });
     });
