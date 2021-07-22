@@ -55,6 +55,18 @@ function AccountInformation() {
     setIsDatePickerVisible(false);
   }, []);
 
+  const onBackArrowPress = useCallback(() => {
+    navigation.reset({
+      index: 0,
+      routes: [{
+        name: 'AppStack',
+        state: {
+          routes: [{ name: 'Account' }],
+        },
+      }],
+    });
+  }, [navigation]);
+
   const onSubmitDatePickerModal = useCallback(async (datePickerDate) => {
     setIsLoading(true);
     try {
@@ -82,6 +94,7 @@ function AccountInformation() {
       <Header
         title={t('AccountInformation.accountInformation')}
         leftItemType="backArrow"
+        onLeftItemPress={onBackArrowPress}
       />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         {userType === USER_TYPES.FIGHTER && (
