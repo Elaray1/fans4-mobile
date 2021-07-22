@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +7,8 @@ import IllustrationScreen from 'components/IllustrationScreen';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
+
+import analyticsService from 'services/analytics.service';
 
 import * as rootNavigation from 'helpers/rootNavigation';
 
@@ -17,6 +19,7 @@ function VerificationFailed() {
   const dispatch = useDispatch();
 
   const userName = useSelector(userSelectors.getUserFullName);
+  const userId = useSelector(userSelectors.getUserId);
 
   const onButtonPress = useCallback(() => {
     Linking.openURL(`mailto:admin@fans4.com?subject=Failed verification. ${userName}`);
@@ -26,6 +29,16 @@ function VerificationFailed() {
     dispatch(userActions.logout());
     rootNavigation.resetToScreen('AuthStack', 'SelectUserType');
   }, [dispatch]);
+
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_FAILED_VERIFICATION_OPENED,
+      data: {
+        userId,
+      },
+    });
+  }, [userId]);
+
 
   return (
     <IllustrationScreen

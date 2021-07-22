@@ -1,12 +1,13 @@
-import React, { useCallback } from 'react';
-import {
-  SafeAreaView, View, StatusBar, ScrollView,
-} from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import { SafeAreaView, View, StatusBar, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import { USER_TYPES } from 'resources/user/user.constants';
+
+import analyticsService from 'services/analytics.service';
 
 import colors from 'themes/colors';
 
@@ -20,7 +21,26 @@ function Support() {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
+  const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
+
+  useEffect(() => {
+    if (userType === USER_TYPES.FIGHTER) {
+      analyticsService.logEvent({
+        name: analyticsService.events.FIGHTER_OPENED_SUPPORT_SCREEN,
+        data: {
+          userId,
+        },
+      });
+    } else {
+      analyticsService.logEvent({
+        name: analyticsService.events.FAN_OPENED_SUPPORT_SCREEN,
+        data: {
+          userId,
+        },
+      });
+    }
+  }, [userType, userId]);
 
   const questionsAnswers = t(`Support.${userType}`, { returnObjects: true });
   const optionsLength = Object.keys(questionsAnswers).length / 2;
@@ -42,7 +62,6 @@ function Support() {
     title: option.question,
     text: option.answer,
   }));
-
 
   const onButtonPress = useCallback(() => {
     navigation.navigate('ContactAdmin');

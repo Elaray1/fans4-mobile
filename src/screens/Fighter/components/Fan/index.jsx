@@ -22,6 +22,8 @@ import { USER_STATUSES } from 'resources/user/user.constants';
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 
+import analyticsService from 'services/analytics.service';
+
 import styles from './styles';
 
 const INITIAL_PAGE = 1;
@@ -31,6 +33,7 @@ function Fighter({ fighterId }) {
   const { t } = useTranslation();
 
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
+  const userId = useSelector(userSelectors.getUserId);
 
   const isSubscribed = useMemo(() => !!userSubscriptions.find((f) => {
     const isBeforeRenewalDate = moment(f.renewalDate).isAfter(new Date());
@@ -45,6 +48,16 @@ function Fighter({ fighterId }) {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
   const [isAllPostsLoaded, setIsAllPostsLoaded] = useState(false);
+
+
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FAN_OPENED_FIGHTER_SCREEN,
+      data: {
+        userId,
+      },
+    });
+  }, [userId]);
 
   useEffect(() => {
     const init = async () => {

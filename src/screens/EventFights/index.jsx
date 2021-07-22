@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import { SafeAreaView, View, FlatList, ActivityIndicator, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
+import { useSelector } from 'react-redux';
 
 import * as fightApi from 'resources/fight/fight.api';
 import { EVENT_STATUSES } from 'resources/event/event.constants';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
+import { USER_TYPES } from 'resources/user/user.constants';
+import * as userSelectors from 'resources/user/user.selectors';
 
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
@@ -14,6 +17,8 @@ import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
 import Text from 'components/Text';
 
 import useToast from 'hooks/useToast';
+
+import analyticsService from 'services/analytics.service';
 
 import colors from 'themes/colors';
 
@@ -37,6 +42,21 @@ function EventFights({ route }) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const userType = useSelector(userSelectors.getUserType);
+  const userId = useSelector(userSelectors.getUserId);
+
+  useEffect(() => {
+    if (userType === USER_TYPES.FAN) {
+      analyticsService.logEvent({
+        name: analyticsService.events.FAN_OPENED_EVENT_SCREEN,
+        data: {
+          userId,
+          eventId: event._id,
+        },
+      });
+    }
+  }, [userType, userId, event._id]);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;

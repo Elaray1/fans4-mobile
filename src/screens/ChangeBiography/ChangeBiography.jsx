@@ -12,6 +12,8 @@ import Input from 'components/Input';
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 
+import analyticsService from 'services/analytics.service';
+
 import styles from './ChangeBiography.styles';
 
 function ChangeBiography() {
@@ -20,10 +22,10 @@ function ChangeBiography() {
   const dispatch = useDispatch();
 
   const initialValue = useSelector(userSelectors.getUserBiographyAbout);
+  const userId = useSelector(userSelectors.getUserId);
 
   const [value, setValue] = useState(initialValue);
   const [isLoading, setIsLoading] = useState(false);
-
 
   const isSaveButtonDisabled = isLoading || !value || initialValue === value;
 
@@ -35,8 +37,16 @@ function ChangeBiography() {
     setIsLoading(true);
     await dispatch(userActions.updateUserInfo({ about: value }));
     setIsLoading(false);
+
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_BIOGRAPHY_ADDED,
+      data: {
+        userId,
+      },
+    });
+
     navigation.goBack();
-  }, [dispatch, value, navigation]);
+  }, [dispatch, value, navigation, userId]);
 
   return (
     <SafeAreaView style={styles.screen}>

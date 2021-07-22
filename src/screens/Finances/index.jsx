@@ -13,10 +13,10 @@ import axios from 'axios';
 import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
-
 import * as accountApi from 'resources/account/account.api';
-
 import * as payoutApi from 'resources/payout/payout.api';
+
+import analyticsService from 'services/analytics.service';
 
 import PlusIcon from 'assets/icons/plus';
 import TrashIcon from 'assets/icons/trash';
@@ -50,6 +50,17 @@ function Finances({ route }) {
   const [error, setError] = useState(fetchedError);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const userId = useSelector(userSelectors.getUserId);
+
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_OPENED_FINANCES_SCREEN,
+      data: {
+        userId,
+      },
+    });
+  }, [userId]);
 
   if (error !== fetchedError) {
     setError(fetchedError);

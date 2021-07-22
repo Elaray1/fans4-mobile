@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, SafeAreaView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -12,6 +12,8 @@ import Share from 'components/Share';
 import * as userSelectors from 'resources/user/user.selectors';
 import config from 'resources/config';
 
+import analyticsService from 'services/analytics.service';
+
 import styles from './InviteAFan.styles';
 
 const InviteAFan = () => {
@@ -19,6 +21,15 @@ const InviteAFan = () => {
 
   const userId = useSelector(userSelectors.getUserId);
   const fullName = useSelector(userSelectors.getUserFullName);
+
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_OPENED_INVITE_FAN,
+      data: {
+        userId,
+      },
+    });
+  }, [userId]);
 
   const link = `${config.webUrl}/fighters/${userId}`;
 

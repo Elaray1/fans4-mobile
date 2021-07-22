@@ -18,6 +18,9 @@ import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 import * as userSelectors from 'resources/user/user.selectors';
+
+import analyticsService from 'services/analytics.service';
+
 import * as rootNavigation from 'helpers/rootNavigation';
 
 import styles from './styles';
@@ -58,9 +61,6 @@ function FighterAccount() {
         }),
       ]);
 
-      console.log('fetchedFansCount', fetchedFansCount);
-      console.log('fetchedPostsCount', fetchedPostsCount);
-
       if (fetchedPosts?.length < PER_PAGE) {
         setIsAllPostsLoaded(true);
       } else {
@@ -81,8 +81,15 @@ function FighterAccount() {
   }, [navigation]);
 
   const onAddBiographyPress = useCallback(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_ADD_BIOGRAPHY_STARTED,
+      data: {
+        userId,
+      },
+    });
+
     navigation.navigate('ChangeBiography');
-  }, [navigation]);
+  }, [navigation, userId]);
 
   const onAddPostPress = useCallback(() => {
     rootNavigation.resetToScreen('NewPost', 'NewPost');

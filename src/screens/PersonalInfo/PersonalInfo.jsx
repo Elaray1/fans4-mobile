@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import {
   SafeAreaView, View, ScrollView, StatusBar, TouchableOpacity, Platform,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import * as userActions from 'resources/user/user.actions';
+import * as userSelectors from 'resources/user/user.selectors';
+
+import analyticsService from 'services/analytics.service';
 
 import colors from 'themes/colors';
 
@@ -39,6 +42,8 @@ function PersonalInfo({ route }) {
     photo,
   } = route?.params;
 
+  const userId = useSelector(userSelectors.getUserId);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [wins, setWins] = useState(null);
@@ -56,6 +61,7 @@ function PersonalInfo({ route }) {
 
   const [reach, setReach] = useState(null);
   const [isReachModalVisible, setIsReachModalVisible] = useState(false);
+
 
   const heightOptions = useMemo(() => FOOTS.reduce((acc, foot) => {
     const footInches = INCHES.map(inch => footsToString(foot, inch));
@@ -152,6 +158,14 @@ function PersonalInfo({ route }) {
           uri: Platform.OS === 'android' ? photo?.path : photo?.path.replace('file://', ''),
         },
       }));
+
+      analyticsService.logEvent({
+        name: analyticsService.events.FIGHTER_FORM_SUBMITTED,
+        data: {
+          userId,
+        },
+      });
+
       navigation.navigate('TermsOfUse');
     } finally {
       setIsLoading(false);
@@ -160,7 +174,7 @@ function PersonalInfo({ route }) {
     gender, birthdate, cityId,
     weight, height, reach, wins,
     losses, draws, weightClasses,
-    photo?.mime, photo?.path, navigation]);
+    photo?.mime, photo?.path, navigation, userId]);
 
   const onChangeWins = useCallback((text) => {
     setWins(text.replace(/[^0-9]/g, ''));

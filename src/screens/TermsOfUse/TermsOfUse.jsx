@@ -15,6 +15,8 @@ import Button from 'components/Button';
 import { USER_TYPES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
 
+import analyticsService from 'services/analytics.service';
+
 import styles from './TermsOfUse.styles';
 
 function TermsOfUse() {
@@ -22,15 +24,26 @@ function TermsOfUse() {
   const { t } = useTranslation();
 
   const userType = useSelector(userSelectors.getUserType);
+  const userId = useSelector(userSelectors.getUserId);
+
 
   const isFan = userType === USER_TYPES.FAN;
 
   const onAccept = useCallback(() => {
+    if (!isFan) {
+      analyticsService.logEvent({
+        name: analyticsService.events.FIGHTER_TOS_ACCEPTED,
+        data: {
+          userId,
+        },
+      });
+    }
+
     navigation.reset({
       index: 0,
       routes: [{ name: isFan ? 'OnBoarding1' : 'VerificationPending' }],
     });
-  }, [isFan, navigation]);
+  }, [isFan, navigation, userId]);
 
   return (
     <SafeAreaView style={styles.screen}>

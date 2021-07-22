@@ -1,13 +1,21 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, View, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+
 
 import colors from 'themes/colors';
+
 import Header from 'components/Header';
 import Input from 'components/Input';
 import UploadMediaButton from 'components/UploadMediaButton';
+
 import * as postApi from 'resources/post/post.api';
+import * as userSelectors from 'resources/user/user.selectors';
+
 import * as rootNavigation from 'helpers/rootNavigation';
+
+import analyticsService from 'services/analytics.service';
 
 import styles from './NewPost.styles';
 
@@ -23,6 +31,17 @@ function NewPost() {
 
   const onChangeText = useCallback(newText => setText(newText), []);
   const handleMediaUpload = useCallback(media => setUploadingMedia(media), [setUploadingMedia]);
+
+  const userId = useSelector(userSelectors.getUserId);
+
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_NEW_POST_ADDING_STARTED,
+      data: {
+        userId,
+      },
+    });
+  }, [userId]);
 
   const goToAccount = useCallback(() => {
     setUploadingMedia(null);
@@ -49,12 +68,19 @@ function NewPost() {
 
       setLoading(false);
       goToAccount();
+
+      analyticsService.logEvent({
+        name: analyticsService.events.FIGHTER_ADDED_POST,
+        data: {
+          userId,
+        },
+      });
     } catch (error) {
       console.error('Submit post error:', error);
     } finally {
       setLoading(false);
     }
-  }, [text, uploadingMedia, goToAccount]);
+  }, [text, uploadingMedia, goToAccount, userId]);
 
   return (
     <SafeAreaView style={styles.screen}>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  SafeAreaView, View, StatusBar, ScrollView, ActivityIndicator,
-} from 'react-native';
+import { SafeAreaView, View, StatusBar, ScrollView, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -18,9 +16,10 @@ import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 import * as userApi from 'resources/user/user.api';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as fightApi from 'resources/fight/fight.api';
-
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 import { USER_STATUSES } from 'resources/user/user.constants';
+
+import analyticsService from 'services/analytics.service';
 
 import ApplyForAFight from './components/applyForAFight';
 import styles from './styles';
@@ -34,6 +33,15 @@ function Fighter({ fighterId }) {
   const [fight, setFight] = useState(null);
 
   const userId = useSelector(userSelectors.getUserId);
+
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_OPENED_OTHER_FIGHTER_SCREEN,
+      data: {
+        userId,
+      },
+    });
+  }, [userId]);
 
   useEffect(() => {
     const init = async () => {
