@@ -27,6 +27,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   resultsText: {
+    color: colors.white,
     fontSize: fonts.size.caption,
   },
   location: {

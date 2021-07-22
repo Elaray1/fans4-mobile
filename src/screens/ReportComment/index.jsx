@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import {
-  SafeAreaView, View, KeyboardAvoidingView,
+  SafeAreaView, View, KeyboardAvoidingView, ScrollView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -81,7 +81,7 @@ function ReportComment({ route }) {
       <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
         <View style={styles.keyboardAvoidingChildContainer}>
           <Header leftItemType="backArrow" title={t('ReportComment.reportComment')} />
-          <View style={styles.content}>
+          <ScrollView style={styles.content}>
             <View>
               <Text style={styles.text}>{t('ReportComment.whyDoYouWantToReportThisComment')}</Text>
               <View style={styles.selectList}>
@@ -113,7 +113,7 @@ function ReportComment({ route }) {
               onPress={onReport}
               isLoading={isLoading}
             />
-          </View>
+          </ScrollView>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

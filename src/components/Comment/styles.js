@@ -59,4 +59,8 @@ export default StyleSheet.create({
     backgroundColor: 'transparent',
     flex: 1,
   },
+  dotButton: {
+    padding: 4,
+    margin: -4,
+  },
 });

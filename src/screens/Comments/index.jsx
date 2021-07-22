@@ -214,6 +214,7 @@ function Comments({ route }) {
                 onChange={setCommentValue}
                 maxLength={COMMENT_MAX_LEGHT}
                 multiline
+                multilineSmall
                 style={styles.input}
                 buttonTitle={t('Comments.post')}
                 onButtonPress={onCreateComment}
