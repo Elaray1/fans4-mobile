@@ -79,7 +79,9 @@ function Comment({
           {isAuthor && <Text style={styles.youText}>{` (${t('Comment.you')})`}</Text>}
         </View>
         <View>
-          <EllipsisIcon onPress={onChooseCommentAction} />
+          <TouchableOpacity onPress={onChooseCommentAction} style={styles.dotButton}>
+            <EllipsisIcon />
+          </TouchableOpacity>
           {isActionsOpened && (
             <Modal
               transparent

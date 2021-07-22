@@ -36,6 +36,7 @@ function Input({
   errorStyle,
   labelStyle,
   multiline,
+  multilineSmall,
   numberOfLines,
   autoCapitalize,
   buttonTitle,
@@ -84,7 +85,7 @@ function Input({
           focused && styles.inputFocused,
           !!errors.length && styles.error,
           disabled && !buttonTitle && styles.disabled,
-          multiline && styles.inputContainerMultiline,
+          multiline && !multilineSmall && styles.inputContainerMultiline,
         ]}
       >
         <TextInput
@@ -171,6 +172,7 @@ Input.propTypes = {
   buttonTitle: PropTypes.string,
   onButtonPress: PropTypes.func,
   autoFocus: PropTypes.bool,
+  multilineSmall: PropTypes.bool,
 };
 
 Input.defaultProps = {
@@ -196,6 +198,7 @@ Input.defaultProps = {
   buttonTitle: '',
   onButtonPress: () => null,
   autoFocus: false,
+  multilineSmall: false,
 };
 
 export default Input;
