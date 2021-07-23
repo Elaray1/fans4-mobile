@@ -85,37 +85,37 @@
   },
   "OnBoarding1": {
     "fan": {
-      "title": "Onboarding 1",
-      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "title": "Follow your faves",
+      "description": "Get instant exclusive content curated by your favorite fighters.",
       "buttonText": "Next"
     },
     "fighter": {
-      "title": "Onboarding 1",
-      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "title": "Train hard",
+      "description": "Give fans access to unique highlights of your daily routine. Exclusive content made by you, enjoyed by fans.",
       "buttonText": "Next"
     }
   },
   "OnBoarding2": {
     "fan": {
-      "title": "Onboarding 2",
-      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "title": "Create a pairing",
+      "description": "Pair them with the perfect opponents for the next fight card.",
       "buttonText": "Next"
     },
     "fighter": {
-      "title": "Onboarding 2",
-      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "title": "Hook them in",
+      "description": "Connect directly with fans through pics, clips, vlogs and comments. Your brand, your terms.",
       "buttonText": "Next"
     }
   },
   "OnBoarding3": {
     "fan": {
-      "title": "Onboarding 3",
-      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "title": "Vote them in",
+      "description": "Get your faves in the next live event and watch it cage-side.",
       "buttonText": "Let’s Start"
     },
     "fighter": {
-      "title": "Onboarding 3",
-      "description": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
+      "title": "Hustle",
+      "description": "Build your influence like a champ by getting fans to subscribe to your channel. Gain fans, earn monthly.",
       "buttonText": "Let’s Start"
     }
   },
@@ -165,34 +165,35 @@
     "contactAdmin": "Contact Admin",
     "sendEmail": "Send Email",
     "updateMyPersonalInfo": "Update my personal info",
-    "changeMyStatus": "Change my status",
     "updateMyStatus": "Update my fighting status",
-    "whyMyContentWasBlocked": "Why my content was blocked?",
     "incomeIssues": "Income issues",
+    "fightsAndEvents": "Fights and events",
+    "reportAProblem": "Report a problem",
+    "fightProposal": "Fight proposal",
+    "events": "Events",
+    "subscription": "Subscription",
     "other": "Other"
   },
   "Support": {
     "support": "Support",
     "contactAdmin": "Contact Admin",
     "fighter": {
-      "question1": "Question #1",
-      "answer1": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
-      "question2": "Question #2",
-      "answer2": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
-      "question3": "Question #3",
-      "answer3": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
-      "question4": "Question #4",
-      "answer4": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
-      "question5": "Question #5",
-      "answer5": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat."
+      "question1": "I want to participate in an event. How do I do that?",
+      "answer1": "All fights go through a voting process exclusively for our fans. There are three ways to be included in the voting process:\n 1. Fans4 admins nominate you;\n 2. You apply for a fight with another fighter;\n 3. Your fans nominate you through the app.",
+      "question2": "Can I choose an opponent if I apply for a fight?",
+      "answer2": "Yes! A unique feature on Fans4 is that you can request a fight against another Fans4 fighter. To 'Apply for a Fight', select a fighter from the Fighters page and open their profile. Click on ‘Apply for a Fight'. Your request will be sent to a Fans4 admin. Note that you can only select a fighter in which:\n - your weight classes are the same;\n - you are in the same category;\n - your opponent is in 'Open for Fights' status.",
+      "question3": "How can I start earning money?",
+      "answer3": "Fans4 is the only platform to offer financial reward to our fighters. You will receive money for every fan that subscribes to your Fans4 page. Be sure to invite followers who will support you via your own personalied QR code found in the app (Profile > Settings > Invite a Fan > scan the QR code). Be an active user on our app, post quality content, apply for fights and participate in events so fans stay tuned to your content.",
+      "question4": "How will I receive payment?",
+      "answer4": "You will need to add your bank account details in order to receive payment. Go to Profile > Settings > Finances > Add bank account and follow the instructions. The more fans you have, the more you earn!"
     },
     "fan": {
-      "question1": "Question #1",
-      "answer1": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
-      "question2": "Question #2",
-      "answer2": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.",
-      "question3": "Question #3",
-      "answer3": "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat."
+      "question1": "How can I subscribe to fighter?",
+      "answer1": "To subscribe to a fighter, please visit the fans4.com official website. For now, you can't subscribe to a Fighter in the app. We know it’s a hassle. But after you subscribe, you can enjoy all the exclusive content in the app!",
+      "question2": "Why are some features not available to me?",
+      "answer2": "Some features are only available with subscription. For example, viewing fighter's content or proposing a fight with that fighter is only available once you are subscribed.",
+      "question3": "How can I propose a fight?",
+      "answer3": "You can propose a fight only with the fighters who you are subscribed to. To do this, go to Voting > Propose > Choose your Fighter > Next > Choose opponent > Submit. Once approved, you will be able to vote your fighter in for the next event. Be sure to track the proposal status on 'Your Proposals' tab on the Voting page."
     }
   },
   "SettingsModal": {
@@ -206,7 +207,7 @@
     "manageBankAccount": "Manage bank account, view income details",
     "support": "Support",
     "contactAdminFAQ": "Contact Admin, FAQ",
-    "inviteFan": "Invite a fan",
+    "inviteFan": "Invite a Fan",
     "scanQRCode": "Scan QR code, share a link",
     "legalInformation": "Legal Information",
     "terms": "Terms of Use and Privacy Policy",

@@ -7,13 +7,16 @@ import { useSelector } from 'react-redux';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import FighterIllustration from 'assets/illustrations/onboarding3-fighter';
+import FanIllustration from 'assets/illustrations/onboarding3-fan';
 
 import * as userApi from 'resources/user/user.api';
 import { USER_TYPES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import analyticsService from 'services/analytics.service';
+
+import styles from './styles';
 
 function OnBoarding3({ route }) {
   const {
@@ -23,6 +26,8 @@ function OnBoarding3({ route }) {
   const navigation = useNavigation();
 
   const userId = useSelector(userSelectors.getUserId);
+
+  const Illustration = userType === USER_TYPES.FAN ? FanIllustration : FighterIllustration;
 
   const onNext = useCallback(async () => {
     navigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'Account' } }] });
@@ -55,7 +60,7 @@ function OnBoarding3({ route }) {
       buttonText={t(`OnBoarding3.${userType}.buttonText`)}
       description={t(`OnBoarding3.${userType}.description`)}
       title={t(`OnBoarding3.${userType}.title`)}
-      illustration={<PlaceholderIllustration />}
+      illustration={<Illustration style={styles.illustration} />}
       onButtonPress={onNext}
     />
   );
