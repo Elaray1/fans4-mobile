@@ -53,7 +53,6 @@ function FighterAccount() {
   const [isAllPostsLoaded, setIsAllPostsLoaded] = useState(false);
 
   const refreshPosts = useCallback(async () => {
-    console.log('refreshPosts');
     const {
       posts: fetchedPosts,
       totalCount: fetchedPostsCount,
@@ -71,6 +70,7 @@ function FighterAccount() {
 
   useEffect(() => {
     socketService.on('post:status-updated', refreshPosts);
+    return () => socketService.removeListener('post:status-updated', refreshPosts);
   }, [refreshPosts]);
 
   useEffect(() => {
