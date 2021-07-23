@@ -30,19 +30,19 @@ function ContactAdmin() {
     },
     {
       _id: '2',
-      title: t('ContactAdmin.changeMyStatus'),
-    },
-    {
-      _id: '3',
       title: t('ContactAdmin.updateMyStatus'),
     },
     {
+      _id: '3',
+      title: t('ContactAdmin.incomeIssues'),
+    },
+    {
       _id: '4',
-      title: t('ContactAdmin.whyMyContentWasBlocked'),
+      title: t('ContactAdmin.fightsAndEvents'),
     },
     {
       _id: '5',
-      title: t('ContactAdmin.incomeIssues'),
+      title: t('ContactAdmin.reportAProblem'),
     },
     {
       _id: '6',
@@ -51,14 +51,22 @@ function ContactAdmin() {
   ] : [
     {
       _id: '1',
-      title: t('ContactAdmin.updateMyPersonalInfo'),
+      title: t('ContactAdmin.fightProposal'),
     },
     {
       _id: '2',
-      title: t('ContactAdmin.whyMyContentWasBlocked'),
+      title: t('ContactAdmin.events'),
     },
     {
       _id: '3',
+      title: t('ContactAdmin.subscription'),
+    },
+    {
+      _id: '4',
+      title: t('ContactAdmin.reportAProblem'),
+    },
+    {
+      _id: '5',
       title: t('ContactAdmin.other'),
     },
   ]), [t, userType]);

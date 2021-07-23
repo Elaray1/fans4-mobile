@@ -5,7 +5,12 @@ import { useNavigation } from '@react-navigation/native';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import FighterIllustration from 'assets/illustrations/onboarding2-fighter';
+import FanIllustration from 'assets/illustrations/onboarding2-fan';
+
+import { USER_TYPES } from 'resources/user/user.constants';
+
+import styles from './styles';
 
 function OnBoarding2({ route }) {
   const {
@@ -14,6 +19,8 @@ function OnBoarding2({ route }) {
 
   const navigation = useNavigation();
   const { t } = useTranslation();
+
+  const Illustration = userType === USER_TYPES.FAN ? FanIllustration : FighterIllustration;
 
   const onNext = useCallback(() => {
     navigation.navigate('OnBoarding3', { userType });
@@ -24,7 +31,7 @@ function OnBoarding2({ route }) {
       buttonText={t(`OnBoarding2.${userType}.buttonText`)}
       description={t(`OnBoarding2.${userType}.description`)}
       title={t(`OnBoarding2.${userType}.title`)}
-      illustration={<PlaceholderIllustration />}
+      illustration={<Illustration style={styles.illustration} />}
       onButtonPress={onNext}
     />
   );

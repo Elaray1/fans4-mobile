@@ -7,13 +7,20 @@ import * as userSelectors from 'resources/user/user.selectors';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
-import PlaceholderIllustration from 'assets/illustrations/placeholder';
+import FighterIllustration from 'assets/illustrations/onboarding1-fighter';
+import FanIllustration from 'assets/illustrations/onboarding1-fan';
+
+import { USER_TYPES } from 'resources/user/user.constants';
+
+import styles from './styles';
 
 function OnBoarding1() {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
   const userType = useSelector(userSelectors.getUserType);
+
+  const Illustration = userType === USER_TYPES.FAN ? FanIllustration : FighterIllustration;
 
   const onNext = useCallback(() => {
     navigation.navigate('OnBoarding2', { userType });
@@ -24,7 +31,7 @@ function OnBoarding1() {
       buttonText={t(`OnBoarding1.${userType}.buttonText`)}
       description={t(`OnBoarding1.${userType}.description`)}
       title={t(`OnBoarding1.${userType}.title`)}
-      illustration={<PlaceholderIllustration />}
+      illustration={<Illustration style={styles.illustration} />}
       onButtonPress={onNext}
     />
   );
