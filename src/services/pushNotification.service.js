@@ -46,7 +46,23 @@ class PushNotificationService {
     }
   }
 
-  async startNoticationHandling(notificationHandlers) {
+  stopNotificationHandling() {
+    this.notificationHandlers = null;
+
+    if (this.unsubscribeOnTokenRefresh) {
+      this.unsubscribeOnTokenRefresh();
+    }
+
+    if (this.unsubscribeOnMessage) {
+      this.unsubscribeOnMessage();
+    }
+
+    if (this.unsubscribeonNotificationOpenedApp) {
+      this.unsubscribeonNotificationOpenedApp();
+    }
+  }
+
+  async startNotificationHandling(notificationHandlers) {
     this.notificationHandlers = notificationHandlers;
 
     if (Platform.OS === 'android') {
@@ -65,7 +81,7 @@ class PushNotificationService {
 
     const token = await messaging().getToken();
     await this._updatePushNotificationToken(token);
-    messaging().onTokenRefresh(async (newToken) => {
+    this.unsubscribeOnTokenRefresh = messaging().onTokenRefresh(async (newToken) => {
       await this._updatePushNotificationToken(newToken);
     });
 
@@ -76,7 +92,7 @@ class PushNotificationService {
       }
     };
 
-    messaging().onMessage((message) => {
+    this.unsubscribeOnMessage = messaging().onMessage((message) => {
       PushNotification.localNotification({
         channelId: NOTIFICATION_CHANNEL_ID,
         message: message.notification.body || '', // it doesn't work with undefined for some reason
@@ -85,7 +101,7 @@ class PushNotificationService {
       });
     });
 
-    messaging().onNotificationOpenedApp((message) => {
+    this.unsubscribeonNotificationOpenedApp = messaging().onNotificationOpenedApp((message) => {
       handleNotification(message.data);
     });
 

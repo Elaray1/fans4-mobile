@@ -97,8 +97,12 @@ function Tabs() {
 function AppScreens() {
   useEffect(() => {
     socketService.on('user:status-updated', handleUserStatusUpdated);
+    pushNotificationService.startNotificationHandling(pushNotificationHandlersByType);
 
-    pushNotificationService.startNoticationHandling(pushNotificationHandlersByType);
+    return () => {
+      pushNotificationService.stopNotificationHandling();
+      socketService.removeListener('user:status-updated', handleUserStatusUpdated);
+    };
   }, []);
 
   return (
