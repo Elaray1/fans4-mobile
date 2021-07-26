@@ -41,13 +41,11 @@ function Finances({ route }) {
   const isUserAuthenticated = useSelector(userSelectors.getAuthenticated);
 
   const stripeAccountId = route?.params?.stripeAccountId;
-  const fetchedError = route?.params?.error;
 
   const [account, setAccount] = useState(null);
   const [income, setIncome] = useState(null);
   const [webViewUrl, setWebViewUrl] = useState(null);
   const [isConfirmationModal, setIsConfirmationModal] = useState(false);
-  const [error, setError] = useState(fetchedError);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -61,10 +59,6 @@ function Finances({ route }) {
       },
     });
   }, [userId]);
-
-  if (error !== fetchedError) {
-    setError(fetchedError);
-  }
 
   const getUserWithdrawalMethod = useCallback(async () => {
     setIsRefreshing(true);
@@ -88,6 +82,7 @@ function Finances({ route }) {
         Linking.openURL(fetchedAccountLink);
       }
     } catch (err) {
+      console.error('createStripePayoutAccount err', err);
       showFailure();
     }
   }, [showFailure]);
@@ -150,6 +145,7 @@ function Finances({ route }) {
     if (!webViewState.url.includes('connect.stripe.com')) {
       const response = await axios({ method: 'get', url: `${webViewState.url}&noRedirect=true` });
       if (response.data?.error) {
+        console.error('webViewState adding stripe error:', response.data.error);
         showFailure(response.data.error);
       }
       setWebViewUrl(null);
@@ -164,13 +160,6 @@ function Finances({ route }) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUserAuthenticated, stripeAccountId]);
-
-  useEffect(() => {
-    if (error) {
-      showFailure(error);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
 
   useEffect(() => {
     getUserIncome();
