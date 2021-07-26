@@ -61,6 +61,7 @@ function Modal({
         </View>
       );
     }
+
     if (submitButtonText) {
       return (
         <View style={styles.buttonsWrapper}>

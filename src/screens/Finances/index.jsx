@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, Linking, Platform,
+  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, Linking, Platform, Alert
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSelector } from 'react-redux';
@@ -278,7 +278,7 @@ function Finances({ route }) {
     <>
       {!isRefreshing && isConfirmationModal && (
         <Modal
-          title={t('Finances.delete')}
+          title={t('Finances.deleteWithdrawalMethod')}
           text={t('Finances.bankAccountWillBeDeletedButWeWillStoreTheData')}
           closeButtonText={t('Finances.cancel')}
           submitButtonText={t('Finances.delete')}

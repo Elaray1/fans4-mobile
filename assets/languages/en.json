@@ -506,6 +506,7 @@
     "checkBack": "Check back to view how much you've earned!",
     "bankAccountWillBeDeletedButWeWillStoreTheData": "Bank account will be deleted, but we will store the data.",
     "cancel": "Cancel",
+    "deleteWithdrawalMethod": "Delete Withdrawal Method",
     "delete": "Delete",
     "income": "Income",
     "perPeriod": "per period",

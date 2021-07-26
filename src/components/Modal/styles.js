@@ -24,13 +24,13 @@ export default StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    color: colors.defaultBlack,
+    color: colors.black,
     fontWeight: fonts.weight.bold,
     marginBottom: 9,
   },
   text: {
     textAlign: 'center',
-    color: colors.defaultBlack,
+    color: colors.black,
     fontSize: fonts.size.small,
     marginBottom: 16,
   },
