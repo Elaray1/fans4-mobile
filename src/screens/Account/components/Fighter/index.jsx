@@ -153,10 +153,9 @@ function FighterAccount() {
 
   const fetchMorePosts = useCallback(async () => {
     if (page !== INITIAL_PAGE && !isAllPostsLoaded) {
-      const { posts: newPosts } = await postApi.getPosts({
+      const { posts: newPosts } = await postApi.getMyPosts({
         page,
         perPage: PER_PAGE,
-        authorId: userId,
       });
 
       if (newPosts.length < PER_PAGE) {
@@ -166,7 +165,7 @@ function FighterAccount() {
       }
       setPosts([...posts, ...newPosts]);
     }
-  }, [page, isAllPostsLoaded, userId, posts]);
+  }, [page, isAllPostsLoaded, posts]);
 
   const handleLoadMore = useCallback(async () => {
     setPage(page + 1);
