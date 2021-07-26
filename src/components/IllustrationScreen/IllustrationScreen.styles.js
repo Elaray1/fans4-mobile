@@ -9,6 +9,7 @@ export default StyleSheet.create({
   },
   content: {
     ...commonStyles.screenContent,
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingTop: 100,
     paddingBottom: 20,

@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { Image, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -7,8 +8,8 @@ import { useSelector } from 'react-redux';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
-import FighterIllustration from 'assets/illustrations/onboarding3-fighter';
-import FanIllustration from 'assets/illustrations/onboarding3-fan';
+import FighterIllustration from 'assets/illustrations/onboarding3-fighter.png'; // eslint-disable-line import/extensions
+import FanIllustration from 'assets/illustrations/onboarding3-fan.png'; // eslint-disable-line import/extensions
 
 import * as userApi from 'resources/user/user.api';
 import { USER_TYPES } from 'resources/user/user.constants';
@@ -18,12 +19,17 @@ import analyticsService from 'services/analytics.service';
 
 import styles from './styles';
 
+const MAX_WIDTH_HEIGHT_PERCENT = 55;
+
 function OnBoarding3({ route }) {
   const {
     userType,
   } = route?.params;
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+
+  const height = screenHeight * MAX_WIDTH_HEIGHT_PERCENT / 100;
 
   const userId = useSelector(userSelectors.getUserId);
 
@@ -57,10 +63,12 @@ function OnBoarding3({ route }) {
 
   return (
     <IllustrationScreen
+      contentStyles={styles.content}
+      ilustrationContainerStyles={styles.ilustrationContainer}
       buttonText={t(`OnBoarding3.${userType}.buttonText`)}
       description={t(`OnBoarding3.${userType}.description`)}
       title={t(`OnBoarding3.${userType}.title`)}
-      illustration={<Illustration style={styles.illustration} />}
+      illustration={<Image source={Illustration} resizeMode="cover" style={{ width: screenWidth, height }} />}
       onButtonPress={onNext}
     />
   );

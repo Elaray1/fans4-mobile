@@ -24,6 +24,7 @@ import { MEDIA_TYPES, POST_STATUSES } from 'resources/post/post.constants';
 import { formatCount, formatTime } from './Post.helpers';
 
 import styles from './Post.styles';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 function Post({
   _id,
@@ -40,6 +41,7 @@ function Post({
   const { showFailure } = useToast();
 
   const userId = useSelector(userSelectors.getUserId);
+  const userType = useSelector(userSelectors.getUserType);
 
   const [likesCount, setLikesCount] = useState(likedUserIds.length);
   const [isLiked, setIsLiked] = useState(likedUserIds.some(id => id === userId));
@@ -113,6 +115,10 @@ function Post({
   }, [navigation, _id]);
 
   const onLikePress = useCallback(async () => {
+    if (userType === USER_TYPES.FIGHTER) {
+      return;
+    }
+
     try {
       let updatedPost;
       if (isLiked) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, StatusBar } from 'react-native';
+import { SafeAreaView, View, StatusBar, ViewPropTypes } from 'react-native';
 
 import colors from 'themes/colors';
 
@@ -12,19 +12,23 @@ import styles from './IllustrationScreen.styles';
 
 function IllustrationScreen({
   buttonText, linkText, title, description, illustration, onButtonPress, onLinkPress, headerText,
+  contentStyles, ilustrationContainerStyles,
 }) {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+
       {headerText && (
-      <Header
-        title={headerText}
-      />
+        <Header
+          title={headerText}
+        />
       )}
-      <View style={[styles.content, headerText && styles.header]}>
-        <View style={styles.illustrationContainer}>
+
+      <View style={[styles.content, headerText && styles.header, contentStyles]}>
+        <View style={[styles.illustrationContainer, ilustrationContainerStyles]}>
           {illustration}
         </View>
+
         <View style={styles.container}>
           <View style={styles.textContainer}>
             <Text style={styles.title}>{title}</Text>
@@ -32,6 +36,7 @@ function IllustrationScreen({
               {description}
             </Text>
           </View>
+
           <View style={styles.buttonContainer}>
             {buttonText && <Button title={buttonText} onPress={onButtonPress} />}
             {linkText && <Button title={linkText} type="link" onPress={onLinkPress} />}
@@ -51,6 +56,8 @@ IllustrationScreen.propTypes = {
   illustration: PropTypes.node.isRequired,
   onButtonPress: PropTypes.func,
   onLinkPress: PropTypes.func,
+  contentStyles: ViewPropTypes.style,
+  ilustrationContainerStyles: ViewPropTypes.style,
 };
 
 IllustrationScreen.defaultProps = {
@@ -59,6 +66,8 @@ IllustrationScreen.defaultProps = {
   headerText: null,
   onButtonPress: () => null,
   onLinkPress: () => null,
+  contentStyles: null,
+  ilustrationContainerStyles: null,
 };
 
 export default React.memo(IllustrationScreen);

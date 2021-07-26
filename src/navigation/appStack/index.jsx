@@ -59,6 +59,7 @@ const SCREEN_OPTIONS = {
 };
 
 const handleUserStatusUpdated = (user) => {
+  console.log('handleUserStatusUpdated');
   let screen;
 
   if (user.status === USER_STATUSES.VERIFIED) {
@@ -95,7 +96,7 @@ function Tabs() {
 
 function AppScreens() {
   useEffect(() => {
-    socketService.on('user:statusUpdated', handleUserStatusUpdated);
+    socketService.on('user:status-updated', handleUserStatusUpdated);
 
     pushNotificationService.startNoticationHandling(pushNotificationHandlersByType);
   }, []);
