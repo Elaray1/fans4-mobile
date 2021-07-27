@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import {
-  TextInput, View, Text as RNText, TouchableOpacity,
+  TextInput, View, Text as RNText, TouchableOpacity, Pressable
 } from 'react-native';
 import getKeyboardType from 'helpers/getKeyboardType';
 
@@ -31,7 +31,6 @@ function Input({
   value,
   errors,
   returnKeyType,
-  getRef,
   style,
   errorStyle,
   labelStyle,
@@ -46,6 +45,13 @@ function Input({
   const [focused, setFocused] = useState(false);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [inputContentSizeHeight, setInputContentSizeHeight] = useState(DEFAULT_INPUT_CONTENT_SIZE_HEIGHT);
+
+  const inputRef = useRef(null);
+  const focusIfMulitlone = useCallback(() => {
+    if (multiline && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [multiline]);
 
   const handleFocus = useCallback(() => {
     setFocused(true);
@@ -79,7 +85,8 @@ function Input({
         {label}
       </Text>
       )}
-      <View
+      <Pressable
+        onPress={focusIfMulitlone}
         style={[
           styles.inputContainer,
           focused && styles.inputFocused,
@@ -89,7 +96,7 @@ function Input({
         ]}
       >
         <TextInput
-          ref={getRef}
+          ref={multiline ? inputRef : undefined}
           value={value}
           placeholder={placeholder}
           placeholderTextColor={colors.disabledText}
@@ -137,7 +144,7 @@ function Input({
           disabledTitleStyle={styles.disabledTitleStyle}
         />
         )}
-      </View>
+      </Pressable>
       {!!errors.length
       && errors.map(error => (
         <Text key={error} style={[styles.errorMessage, errorStyle]}>
@@ -163,7 +170,6 @@ Input.propTypes = {
   style: PropTypes.shape(),
   labelStyle: RNText.propTypes.style,
   errorStyle: RNText.propTypes.style,
-  getRef: PropTypes.shape(),
   blurOnSubmit: PropTypes.bool,
   onSubmitEditing: PropTypes.func,
   maxLength: PropTypes.number,
@@ -186,7 +192,6 @@ Input.defaultProps = {
   onFocus: () => null,
   onBlur: () => null,
   returnKeyType: 'done',
-  getRef: { current: null },
   blurOnSubmit: true,
   onSubmitEditing: null,
   maxLength: null,

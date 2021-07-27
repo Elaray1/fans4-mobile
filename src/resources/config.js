@@ -1,8 +1,6 @@
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 
-console.log('config:', Config.APP_ENV);
-
 const getApiUrl = () => {
   if (Config.APP_ENV !== 'DEV') {
     return Config.API_URL;
