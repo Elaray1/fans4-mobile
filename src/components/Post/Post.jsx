@@ -21,10 +21,11 @@ import config from 'resources/config';
 import useToast from 'hooks/useToast';
 import colors from 'themes/colors';
 import { MEDIA_TYPES, POST_STATUSES } from 'resources/post/post.constants';
+import { USER_TYPES } from 'resources/user/user.constants';
+
 import { formatCount, formatTime } from './Post.helpers';
 
 import styles from './Post.styles';
-import { USER_TYPES } from 'resources/user/user.constants';
 
 function Post({
   _id,
@@ -46,6 +47,7 @@ function Post({
   const [likesCount, setLikesCount] = useState(likedUserIds.length);
   const [isLiked, setIsLiked] = useState(likedUserIds.some(id => id === userId));
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
+  const isFighter = userType === USER_TYPES.FIGHTER;
 
   const authorView = author ? (
     <View style={styles.author}>
@@ -131,7 +133,7 @@ function Post({
     } catch (error) {
       showFailure();
     }
-  }, [_id, showFailure, userId, isLiked, likesCount]);
+  }, [userType, isLiked, likesCount, _id, userId, showFailure]);
 
   return (
     <View style={styles.post}>
@@ -144,15 +146,18 @@ function Post({
               onPress={onLikePress}
               activeOpacity={0.7}
               style={[styles.postAction]}
-              disabled={disabled}
+              disabled={disabled || isFighter}
             >
               {isLiked ? (
                 <LikeIcon
                   stroke={iconsColor}
                   fill={iconsColor}
                 />
-              ) : <LikeIcon stroke={iconsColor} />}
-              <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(likesCount)}</Text>
+              ) : <LikeIcon stroke={isFighter ? colors.whiteDisabled : iconsColor} />}
+              <Text style={[styles.postActionText, (disabled || isFighter)
+                 && styles.disabled]}
+              >{formatCount(likesCount)}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={onCommentsPress}
