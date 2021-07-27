@@ -60,18 +60,6 @@ export default StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.primary,
   },
-  // titleText: {
-  //   textAlign: 'center',
-  //   marginBottom: 4,
-  //   fontFamily: fonts.family.bold,
-  //   fontWeight: fonts.weight.bold,
-  // },
-  // text: {
-  //   textAlign: 'center',
-  //   fontSize: fonts.size.caption,
-  //   color: colors.textSecondary,
-  //   fontWeight: fonts.weight.medium,
-  // },
   line: {
     width: '100%',
     height: 10,
@@ -117,5 +105,20 @@ export default StyleSheet.create({
     width: '100%',
     height: 128,
     marginBottom: 16,
+  },
+  imageStatus: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    backgroundColor: colors.error,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+  },
+  imageText: {
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
   },
 });
