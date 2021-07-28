@@ -33,7 +33,7 @@ function SearchFighters() {
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [searchValue, setSearchValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
@@ -63,10 +63,15 @@ function SearchFighters() {
     if (!refresh) {
       fetchingPage = page;
       currentFighters = fighters;
+    } else {
+      setFighters([]);
+      setTotalCount(0);
+      setPage(1);
     }
 
     if (fetchingPage === 1 || fighters.length < totalCount) {
       setIsLoading(true);
+
       try {
         const {
           fighters: fetchedFighters,
@@ -76,14 +81,15 @@ function SearchFighters() {
           perPage: PER_PAGE_COUNT,
           searchValue: search,
         });
+
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setFighters([...currentFighters, ...fetchedFighters]);
       } catch (error) {
         console.error(error);
-      } finally {
-        setIsLoading(false);
       }
+
+      setIsLoading(false);
     }
   }, [fighters, page, totalCount]);
 
@@ -140,6 +146,7 @@ function SearchFighters() {
     if (!isLoading) {
       return null;
     }
+
     return (
       <View style={styles.loader}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -167,7 +174,8 @@ function SearchFighters() {
           placeholder={t('SearchFighters.search')}
         />
 
-        {!!fighters.length ? (
+        {/* eslint-disable-next-line no-extra-boolean-cast */}
+        {isLoading || !!fighters.length ? (
           <FlatList
             data={fighters}
             renderItem={renderItem}
