@@ -511,7 +511,7 @@
     "deleteWithdrawalMethod": "Delete Withdrawal Method",
     "delete": "Delete",
     "income": "Income",
-    "perPeriod": "per period",
+    "perPeriod": "per month",
     "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method monthly."
   },
   "Voting": {
