@@ -13,9 +13,6 @@ if (__DEV__) {
   composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 }
 
-export default () => {
-  const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
-  return {
-    store,
-  };
-};
+const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+
+export default store;

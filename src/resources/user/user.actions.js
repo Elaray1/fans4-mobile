@@ -64,6 +64,7 @@ export const getUserData = () => async (dispatch) => {
 };
 
 export const setUserData = user => (dispatch) => {
+  console.log('setUserData', user);
   dispatch({ type: SET_USER_DATA, user });
   return user;
 };

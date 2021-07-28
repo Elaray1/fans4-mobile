@@ -385,6 +385,8 @@
     "unableToApplyForAFight": "Unable to apply for a fight. Please try again.",
     "youInjured_0": "You can not apply for a fight with",
     "youInjured_1": "while you are injured.",
+    "youRecovery_0": "You can not apply for a fight with",
+    "youRecovery_1": "because you are in post-fight recovery.",
     "fighterInjured_0": "You can not apply for a fight with",
     "fighterInjured_1": "because this fighter is injured.",
     "fighterBlocked_0": "You can not apply for a fight with",
