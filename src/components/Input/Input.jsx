@@ -74,17 +74,18 @@ function Input({
   return (
     <View style={style}>
       {label && (
-      <Text
-        style={[
-          styles.label,
-          labelStyle,
-          focused && styles.labelFocused,
-          disabled && styles.disabled,
-        ]}
-      >
-        {label}
-      </Text>
+        <Text
+          style={[
+            styles.label,
+            labelStyle,
+            focused && styles.labelFocused,
+            disabled && styles.disabled,
+          ]}
+        >
+          {label}
+        </Text>
       )}
+
       <Pressable
         onPress={focusIfMulitlone}
         style={[

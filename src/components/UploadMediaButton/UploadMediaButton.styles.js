@@ -5,7 +5,6 @@ import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   buttonWrapper: {
-    marginBottom: 20,
     width: '100%',
   },
   button: {

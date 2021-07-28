@@ -25,8 +25,7 @@ export default StyleSheet.create({
     borderColor: colors.primary,
   },
   label: {
-    color: colors.white,
-    opacity: 0.4,
+    color: colors.grayText,
     fontSize: fonts.size.caption,
     fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
