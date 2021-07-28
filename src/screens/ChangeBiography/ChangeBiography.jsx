@@ -11,8 +11,11 @@ import Input from 'components/Input';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
+import * as userApi from 'resources/user/user.api';
 
 import analyticsService from 'services/analytics.service';
+
+import useToast from 'hooks/useToast';
 
 import styles from './ChangeBiography.styles';
 
@@ -20,6 +23,7 @@ function ChangeBiography() {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { showFailure, showSuccess } = useToast();
 
   const initialValue = useSelector(userSelectors.getUserBiographyAbout);
   const userId = useSelector(userSelectors.getUserId);
@@ -35,7 +39,16 @@ function ChangeBiography() {
 
   const onPressSave = useCallback(async () => {
     setIsLoading(true);
-    await dispatch(userActions.updateUserInfo({ about: value }));
+
+    try {
+      const user = await userApi.updateUserInfo({ about: value });
+      showSuccess(t('ChangeBiography.updated'));
+      dispatch(userActions.setUserData(user));
+    } catch (err) {
+      console.error('Updating biography error:', err);
+      showFailure();
+    }
+
     setIsLoading(false);
 
     analyticsService.logEvent({
@@ -46,7 +59,7 @@ function ChangeBiography() {
     });
 
     navigation.goBack();
-  }, [dispatch, value, navigation, userId]);
+  }, [dispatch, value, navigation, userId, showSuccess, showFailure]);
 
   return (
     <SafeAreaView style={styles.screen}>

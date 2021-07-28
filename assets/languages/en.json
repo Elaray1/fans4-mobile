@@ -217,7 +217,8 @@
     "addBiography": "Add Biography",
     "changeBiography": "Change Biography",
     "save": "Save",
-    "biography": "Biography (max. 300 characters)"
+    "biography": "Biography (max. 300 characters)",
+    "updated": "Biography updated successfully."
   },
   "AccountInformation": {
     "accountInformation": "Account Information",
