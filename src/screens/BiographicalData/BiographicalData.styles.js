@@ -18,8 +18,7 @@ export default StyleSheet.create({
     paddingBottom: 50,
   },
   inputLabel: {
-    color: colors.white,
-    opacity: 0.4,
+    color: colors.grayText,
     fontSize: fonts.size.caption,
     fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
@@ -33,14 +32,19 @@ export default StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 16,
     marginTop: 6,
-    marginBottom: 20,
     backgroundColor: colors.gray,
   },
-  input: {
+  asInput: {
     flex: 1,
     color: colors.white,
     fontFamily: fonts.family.base,
     fontSize: fonts.size.small,
     fontWeight: fonts.weight.medium,
+  },
+  inputWrapper: {
+    marginTop: 20,
+  },
+  nextButton: {
+    marginTop: 36,
   },
 });

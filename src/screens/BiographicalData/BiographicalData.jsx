@@ -102,18 +102,22 @@ function BiographicalData() {
         onSubmit={onSubmitDatePickerModal}
         {...(birthdate && { date: birthdate })}
       />
+
       <CitySelectModal
         visible={isCitySelectVisible}
         onClose={onCloseCitySelectModal}
         onSubmit={onSubmitCitySelectModal}
         {...(hometown?.cityId && { cityId: hometown.cityId })}
       />
+
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+
       <Header
         title={t('BiographicalData.BiographicalData')}
         leftItemType="backArrow"
         onLeftItemPress={goToSelectType}
       />
+
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View>
           <Input
@@ -127,31 +131,32 @@ function BiographicalData() {
             maxLength={25}
             value={nickname}
             onChange={setNickname}
+            style={styles.inputWrapper}
           />
 
-          <View>
+          <View style={styles.inputWrapper}>
             <Text style={styles.inputLabel}>{t('BiographicalData.birthdate')}</Text>
             <TouchableOpacity
               style={styles.inputContainer}
               onPress={onBirthDatePress}
               activeOpacity={0.8}
             >
-              <Text style={styles.input}>{birthdate ? dayjs(birthdate).format('MM/DD/YYYY') : ''}</Text>
+              <Text style={styles.asInput}>{birthdate ? dayjs(birthdate).format('MM/DD/YYYY') : ''}</Text>
             </TouchableOpacity>
           </View>
 
-          <View>
+          <View style={styles.inputWrapper}>
             <Text style={styles.inputLabel}>{t('BiographicalData.hometown')}</Text>
             <TouchableOpacity
               style={styles.inputContainer}
               onPress={onHometownPress}
               activeOpacity={0.8}
             >
-              <Text style={styles.input}>{hometown?.cityNameWithState || ''}</Text>
+              <Text style={styles.asInput}>{hometown?.cityNameWithState || ''}</Text>
             </TouchableOpacity>
           </View>
 
-          <View>
+          <View style={styles.inputWrapper}>
             <Text style={styles.inputLabel}>{t('BiographicalData.genderByBirth')}</Text>
             <Toggle
               items={genders}
@@ -170,6 +175,7 @@ function BiographicalData() {
         </View>
 
         <Button
+          style={styles.nextButton}
           title={t('BiographicalData.next')}
           disabled={!fullName || !birthdate || !hometown?.cityNameWithState || !photo?.path}
           onPress={onNext}

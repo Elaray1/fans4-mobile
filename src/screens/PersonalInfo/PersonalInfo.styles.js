@@ -18,8 +18,7 @@ export default StyleSheet.create({
     paddingBottom: 50,
   },
   inputLabel: {
-    color: colors.white,
-    opacity: 0.4,
+    color: colors.grayText,
     fontSize: fonts.size.caption,
     fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
@@ -44,6 +43,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
   },
   record: {
+    marginBottom: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

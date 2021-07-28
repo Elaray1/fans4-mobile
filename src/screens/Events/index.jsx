@@ -116,26 +116,45 @@ function Events() {
 
     if (fetchingPage === 1 || currentEvents.length < totalCount) {
       setIsLoading(true);
+
+      let fetchedEvents;
+      let fetchedTotalCount;
+
       try {
-        const {
-          events: fetchedEvents,
-          totalCount: fetchedTotalCount,
-        } = await eventApi.getEvents({
-          isFan: userType === USER_TYPES.FAN,
-          page: fetchingPage,
-          perPage: PER_PAGE_COUNT,
-          statuses: selectedTab.name === TABS.UPCOMING
-            ? [EVENT_STATUSES.UPCOMING, EVENT_STATUSES.CANCELED, EVENT_STATUSES.PAST]
-            : [EVENT_STATUSES.PAST],
-          withoutResults: selectedTab.name === TABS.UPCOMING,
-          notPastByDate: selectedTab.name === TABS.UPCOMING,
-        });
+        if (userType === USER_TYPES.FAN) {
+          ({
+            events: fetchedEvents,
+            totalCount: fetchedTotalCount,
+          } = await eventApi.getEvents({
+            isFan: userType === USER_TYPES.FAN,
+            page: fetchingPage,
+            perPage: PER_PAGE_COUNT,
+            statuses: selectedTab.name === TABS.UPCOMING
+              ? [EVENT_STATUSES.UPCOMING, EVENT_STATUSES.CANCELED, EVENT_STATUSES.PAST]
+              : [EVENT_STATUSES.PAST],
+            withoutResults: selectedTab.name === TABS.UPCOMING,
+            notPastByDate: selectedTab.name === TABS.UPCOMING,
+          }));
+        } else {
+          ({
+            events: fetchedEvents,
+            totalCount: fetchedTotalCount,
+          } = await eventApi.getEventsForCurrentFighter({
+            page: fetchingPage,
+            perPage: PER_PAGE_COUNT,
+            withoutResults: selectedTab.name === TABS.UPCOMING,
+          }));
+        }
+
+        console.log('fetchedEvents', fetchedEvents);
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
-        setEvents([...currentEvents, ...fetchedEvents]);
+        setEvents([...currentEvents, ...(fetchedEvents || [])]);
       } catch (error) {
+        console.error('error', error);
         showFailure(t('Events.couldntLoadTheEventsPullToRefresh'));
       }
+
       setIsLoading(false);
       setIsRefreshing(false);
     }

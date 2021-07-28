@@ -37,6 +37,7 @@ import SettingsTermsOfUse from 'screens/SettingsTermsOfUse';
 import SettingsPrivacyPolicy from 'screens/SettingsPrivacyPolicy';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import * as userActions from 'resources/user/user.actions';
 import { USER_STATUSES, USER_TYPES } from 'resources/user/user.constants';
 
 import pushNotificationService from 'services/pushNotification.service';
@@ -49,6 +50,7 @@ import FighterNavigator from 'navigation/appStack/components/fighter';
 import FanNavigator from 'navigation/appStack/components/fan';
 
 import colors from 'themes/colors';
+import store from 'resources/store';
 
 const AppStack = createStackNavigator();
 
@@ -59,7 +61,6 @@ const SCREEN_OPTIONS = {
 };
 
 const handleUserStatusUpdated = (user) => {
-  console.log('handleUserStatusUpdated');
   let screen;
 
   if (user.status === USER_STATUSES.VERIFIED) {
@@ -80,6 +81,10 @@ const handleUserStatusUpdated = (user) => {
   rootNavigation.resetToScreen('AppStack', screen);
 };
 
+const handleFighterUpdated = (user) => {
+  store.dispatch(userActions.setUserData(user));
+};
+
 const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
     rootNavigation.navigate('Account');
@@ -97,11 +102,14 @@ function Tabs() {
 function AppScreens() {
   useEffect(() => {
     socketService.on('user:status-updated', handleUserStatusUpdated);
+    socketService.on('fighter:updated', handleFighterUpdated);
+
     pushNotificationService.startNotificationHandling(pushNotificationHandlersByType);
 
     return () => {
       pushNotificationService.stopNotificationHandling();
       socketService.removeListener('user:status-updated', handleUserStatusUpdated);
+      socketService.removeListener('fighter:updated', handleFighterUpdated);
     };
   }, []);
 

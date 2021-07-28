@@ -149,7 +149,7 @@
   },
   "PersonalInfo": {
     "PersonalInfo": "Personal Info",
-    "weight": "Weight",
+    "weight": "Preferred fighting weight",
     "weightClass": "Weight class",
     "height": "Height",
     "reach": "Reach",
@@ -217,7 +217,8 @@
     "addBiography": "Add Biography",
     "changeBiography": "Change Biography",
     "save": "Save",
-    "biography": "Biography (max. 300 characters)"
+    "biography": "Biography (max. 300 characters)",
+    "updated": "Biography updated successfully."
   },
   "AccountInformation": {
     "accountInformation": "Account Information",
@@ -290,7 +291,8 @@
   },
   "ResetPassword": {
     "title": "Reset Link has been Sent",
-    "description": "A link to reset your password has been sent to [Email Address]. Please check your Inbox.",
+    "description_0": "A link to reset your password has been sent to ",
+    "description_1": ". Please check your Inbox.",
     "linkText": "Back to sign in page"
   },
   "PasswordReseted": {
@@ -383,6 +385,8 @@
     "unableToApplyForAFight": "Unable to apply for a fight. Please try again.",
     "youInjured_0": "You can not apply for a fight with",
     "youInjured_1": "while you are injured.",
+    "youRecovery_0": "You can not apply for a fight with",
+    "youRecovery_1": "because you are in post-fight recovery.",
     "fighterInjured_0": "You can not apply for a fight with",
     "fighterInjured_1": "because this fighter is injured.",
     "fighterBlocked_0": "You can not apply for a fight with",
@@ -509,7 +513,7 @@
     "deleteWithdrawalMethod": "Delete Withdrawal Method",
     "delete": "Delete",
     "income": "Income",
-    "perPeriod": "per period",
+    "perPeriod": "per month",
     "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method monthly."
   },
   "Voting": {

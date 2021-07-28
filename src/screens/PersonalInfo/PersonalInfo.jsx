@@ -197,6 +197,7 @@ function PersonalInfo({ route }) {
         onClose={onCloseWeightModal}
         onSubmit={onSubmitWeightModal}
       />
+
       <WheelModal
         visible={isHeightModalVisible}
         options={heightOptions}
@@ -204,6 +205,7 @@ function PersonalInfo({ route }) {
         onClose={onCloseHeightModal}
         onSubmit={onSubmitHeightModal}
       />
+
       <WheelModal
         visible={isReachModalVisible}
         options={reachOptions}
@@ -211,14 +213,18 @@ function PersonalInfo({ route }) {
         onClose={onCloseReachModal}
         onSubmit={onSubmitReachModal}
       />
+
       <WeightClassSelectModal
         visible={isWeightClassModalVisible}
         onClose={onCloseWeightClassModal}
         onSubmit={onSubmitWeightClassModal}
         isFemale={gender === 'female'}
       />
+
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+
       <Header leftItemType="backArrow" title={t('PersonalInfo.PersonalInfo')} />
+
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View>
           <View style={styles.record}>
@@ -244,6 +250,7 @@ function PersonalInfo({ route }) {
               style={styles.recordInput}
             />
           </View>
+
           <View>
             <Text style={styles.inputLabel}>{t('PersonalInfo.weight')}</Text>
             <TouchableOpacity

@@ -116,6 +116,7 @@ function NewPost() {
             mediaType="any"
           />
         </ScrollView>
+
         {loading && (
           <>
             <View style={styles.loader}>
