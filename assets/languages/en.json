@@ -417,7 +417,9 @@
     "noEventsYet": "No events, yet",
     "checkBack": "Check back to view the first event.",
     "checkBackFan": "Check back to view the first live event!",
-    "onceYouParticipateInAnEventItWillBeShownOnThisPage": "Once you participate in an event, it will be shown  on this page."
+    "onceYouParticipateInAnEventItWillBeShownOnThisPage": "Once you participate in an event, it will be shown  on this page.",
+    "live": "Live",
+    "stayTuned": "Stay tuned for results."
   },
   "EventFights": {
     "couldntLoadTheFightsPullToRefresh": "Couldn’t load the fights. Pull to refresh."
@@ -499,7 +501,9 @@
     "nonbinary": "Nonbinary",
     "genders": "Genders",
     "other": "Other",
-    "preferNotToSay": "Prefer not to say"
+    "preferNotToSay": "Prefer not to say",
+    "cancel": "Cancel",
+    "selectGender": "Select Gender"
   },
   "Finances": {
     "finances": "Finances",

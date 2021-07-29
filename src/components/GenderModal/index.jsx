@@ -72,9 +72,9 @@ function GenderModal({
       <View style={styles.modal}>
         <View style={styles.header}>
           <TouchableOpacity onPress={onClose} activeOpacity={0.7}>
-            <Text style={styles.headerCancel}>{t('CitySelectModal.cancel')}</Text>
+            <Text style={styles.headerCancel}>{t('genderPicker.cancel')}</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('CitySelectModal.selectHometown')}</Text>
+          <Text style={styles.headerTitle}>{t('genderPicker.selectGender')}</Text>
           <View style={styles.headerEmptyBlock} />
         </View>
         <FlatList

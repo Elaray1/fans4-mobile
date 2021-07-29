@@ -46,7 +46,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
   },
   headerEmptyBlock: {
-    width: 50,
+    width: 40,
   },
   listItem: {
     flexDirection: 'row',

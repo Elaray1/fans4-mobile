@@ -121,4 +121,9 @@ export default StyleSheet.create({
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
   },
+  stayTuned: {
+    textAlign: 'center',
+    marginBottom: 20,
+    marginTop: 8,
+  },
 });

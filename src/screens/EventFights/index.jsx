@@ -153,7 +153,7 @@ function EventFights({ route }) {
             {isLive && (
             <View style={styles.live}>
               <LiveIcon />
-              <Text>Live</Text>
+              <Text>{t('Events.live')}</Text>
             </View>
             )}
             {isLive && (
@@ -173,6 +173,7 @@ function EventFights({ route }) {
             </Text>
           </View>
         </View>
+        {isLive && <Text style={styles.stayTuned}>{t('Events.stayTuned')}</Text>}
         {isLoading ? <Loader /> : (Boolean(fights.length) && (
         <FlatList
           data={fights}
