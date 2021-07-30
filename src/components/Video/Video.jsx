@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useMemo, useEffect } from 'react';
+import React, { useCallback, useRef, useState, useMemo } from 'react';
 import { TouchableOpacity, Pressable, View, Text, Modal } from 'react-native';
 import PropTypes from 'prop-types';
 import ReactNativeVideo from 'react-native-video';
@@ -73,7 +73,6 @@ function Video({ source, width, height }) {
   }, [setPlayedTime, duration]);
 
   const handleRenderedContainerLayout = useCallback((evt) => {
-    evt.persist();
     setRenderingWidth(evt.nativeEvent.layout.width);
   }, []);
 
@@ -106,15 +105,13 @@ function Video({ source, width, height }) {
   }, [isFullScreen]);
 
   const renderingHeight = width / height < MAX_VERTICAL_VIDEO_ASPECT_RATIO
-    ? width * (1 / MAX_VERTICAL_VIDEO_ASPECT_RATIO)
+    ? renderingWidth * (1 / MAX_VERTICAL_VIDEO_ASPECT_RATIO)
     : renderingWidth / (width / height);
 
   const videoStyle = useMemo(() => ({
     width: renderingWidth,
     height: renderingHeight,
-    aspectRatio: renderingWidth / renderingHeight,
   }), [renderingWidth, renderingHeight]);
-
 
   const Container = isFullScreen ? Modal : View;
 
