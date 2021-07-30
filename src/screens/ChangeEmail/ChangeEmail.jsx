@@ -27,7 +27,12 @@ function ChangeEmail() {
     email: [],
     password: [],
   });
+
   const [isLoading, setIsLoading] = useState(false);
+
+  const changeEmailValue = useCallback((value) => {
+    setEmailValue((value || '').trim().toLowerCase());
+  }, []);
 
   useEffect(() => {
     socketService.on('new-email:verified', (updatedUser) => {
@@ -153,7 +158,7 @@ function ChangeEmail() {
           <Input
             label={t('ChangeEmail.newEmail')}
             value={emailValue}
-            onChange={(value) => { setEmailValue(value); onChangeInputValue('email'); }}
+            onChange={(value) => { changeEmailValue(value); onChangeInputValue('email'); }}
             onBlur={onEmailBlur}
             errors={inputErrors.email}
             autoCapitalize="none"
