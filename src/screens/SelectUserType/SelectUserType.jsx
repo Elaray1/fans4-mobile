@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import {
-  SafeAreaView, View, StatusBar, ScrollView,
+  SafeAreaView, View, StatusBar, ScrollView, useWindowDimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,11 @@ import analyticsService from 'services/analytics.service';
 
 import styles from './SelectUserType.styles';
 
+const SMALL_SCREEN_HEIGHT = 640;
+const SMALL_SCREEN_PADDING_TOP_DECREASE = 40;
+
 function SelectUserType() {
+  const { height } = useWindowDimensions();
   const { t } = useTranslation();
   const navigation = useNavigation();
 
@@ -36,7 +40,15 @@ function SelectUserType() {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={[
+          styles.scrollContent,
+          SMALL_SCREEN_HEIGHT >= height && {
+            paddingTop: styles.scrollContent.paddingTop - SMALL_SCREEN_PADDING_TOP_DECREASE,
+          },
+        ]}
+      >
 
         <Logo style={styles.logo} />
         <Text style={styles.title}>{t('SelectRole.selectYourRole')}</Text>
