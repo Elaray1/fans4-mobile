@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { View, SafeAreaView, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -19,12 +20,14 @@ import Fighter from './components/fighter';
 
 import styles from './styles';
 
-const ProposeAFight = () => {
+const ProposeAFight = ({ route }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [fighters, setFighters] = useState([]);
   const [firstFighter, setFirstFighter] = useState(null);
   const [secondFighter, setSecondFighter] = useState(null);
+
+  const { preselectedFighterId } = route.params || {};
 
   const [search, setSearch] = useState('');
 
@@ -50,12 +53,19 @@ const ProposeAFight = () => {
       try {
         setIsLoading(true);
 
-        const { users } = await userApi.getFightersForFight({
+        const { fighters: fetchedFighters } = await userApi.getFightersForFight({
           opponentId: step === 1 ? firstFighter._id : null,
           search: step === 1 ? search : null,
         });
 
-        setFighters(users);
+        setFighters(fetchedFighters);
+
+        if (preselectedFighterId) {
+          const preselectedFighter = fetchedFighters.find(f => f._id === preselectedFighterId);
+          if (preselectedFighter) {
+            setFirstFighter(preselectedFighter);
+          }
+        }
       } catch (error) {
         console.error('Fetching fighters error:', error);
       } finally {
@@ -64,10 +74,8 @@ const ProposeAFight = () => {
     }
 
     fetchFighters();
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, step]);
-
 
   const suggestAFight = useCallback(async () => {
     try {
@@ -115,6 +123,7 @@ const ProposeAFight = () => {
         rightItemDisabled={disabled}
         rightItemStyle={disabled ? styles.disabled : null}
       />
+
       <View style={styles.content}>
         <View style={styles.fightersContainer}>
           <View style={styles.fightersBlock}>
@@ -133,7 +142,9 @@ const ProposeAFight = () => {
                 : <View style={styles.fighterPicturePlaceholder} />
               }
             </View>
+
             <Text style={styles.vs}>vs</Text>
+
             <View style={styles.rightBlock}>
               {secondFighter
                 ? (
@@ -150,6 +161,7 @@ const ProposeAFight = () => {
             </View>
           </View>
         </View>
+
         <ScrollView style={styles.fightersList}>
           <Text style={styles.title}>
             {step === 0 ? t('ProposeAFight.chooseFighter') : t('ProposeAFight.chooseOpponent')}
@@ -189,6 +201,18 @@ const ProposeAFight = () => {
       </View>
     </SafeAreaView>
   );
+};
+
+ProposeAFight.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      preselectedFighterId: PropTypes.string,
+    }),
+  }),
+};
+
+ProposeAFight.defaultProps = {
+  route: {},
 };
 
 export default React.memo(ProposeAFight);

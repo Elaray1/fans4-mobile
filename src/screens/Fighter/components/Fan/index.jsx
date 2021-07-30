@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, View, StatusBar, ActivityIndicator, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -30,6 +31,7 @@ const INITIAL_PAGE = 1;
 const PER_PAGE = 10;
 
 function Fighter({ fighterId }) {
+  const navigation = useNavigation();
   const { t } = useTranslation();
 
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
@@ -49,6 +51,9 @@ function Fighter({ fighterId }) {
   const [page, setPage] = useState(INITIAL_PAGE);
   const [isAllPostsLoaded, setIsAllPostsLoaded] = useState(false);
 
+  const goToProposeAFight = useCallback(() => {
+    navigation.navigate('ProposeAFight', { preselectedFighterId: fighter._id });
+  }, [navigation, fighter]);
 
   useEffect(() => {
     analyticsService.logEvent({
@@ -146,6 +151,7 @@ function Fighter({ fighterId }) {
                 <Button
                   title={t('Fighter.proposeAFight')}
                   style={styles.applyButton}
+                  onPress={goToProposeAFight}
                 />
               )}
             </>
@@ -188,10 +194,10 @@ function Fighter({ fighterId }) {
 
   const fetchMorePosts = useCallback(async () => {
     if (page !== INITIAL_PAGE && !isAllPostsLoaded) {
-      const { posts: newPosts } = await postApi.getPosts({
+      const { posts: newPosts } = await postApi.getFighterPosts({
         page,
         perPage: PER_PAGE,
-        authorId: fighterId,
+        _id: fighterId,
       });
       if (newPosts.length < PER_PAGE) {
         setIsAllPostsLoaded(true);
@@ -220,33 +226,33 @@ function Fighter({ fighterId }) {
   };
 
   return (
-    <>
+    <SafeAreaView style={styles.screen}>
+      <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+
+      <Header
+        title={t('Fighter.fightersProfile')}
+        leftItemType="backArrow"
+      />
+
       {fighter ? (
-        <SafeAreaView style={styles.screen}>
-          <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-          <Header
-            title={t('Fighter.fightersProfile')}
-            leftItemType="backArrow"
-          />
-          <FlatList
-            style={styles.content}
-            data={posts}
-            keyExtractor={keyExtractor}
-            renderItem={(posts || !isSubscribed) ? renderItem : renderNoPosts}
-            ItemSeparatorComponent={renderItemSeparator}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0.1}
-            initialNumToRender={10}
-            ListHeaderComponent={renderHeader} // we can't use flatlist inside of scrollview
-            ListFooterComponent={renderFooter}
-          />
-        </SafeAreaView>
+        <FlatList
+          style={styles.content}
+          data={posts}
+          keyExtractor={keyExtractor}
+          renderItem={(posts || !isSubscribed) ? renderItem : renderNoPosts}
+          ItemSeparatorComponent={renderItemSeparator}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.1}
+          initialNumToRender={10}
+          ListHeaderComponent={renderHeader} // we can't use flatlist inside of scrollview
+          ListFooterComponent={renderFooter}
+        />
       ) : (
         <View style={styles.loaderWrapper}>
           <ActivityIndicator color={colors.primary} size="large" />
         </View>
       )}
-    </>
+    </SafeAreaView>
   );
 }
 
