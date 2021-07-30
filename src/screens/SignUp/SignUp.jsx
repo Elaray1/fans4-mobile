@@ -7,6 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableOpacity,
+  useWindowDimensions,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -31,7 +32,11 @@ import extractApiErrorMessage from 'helpers/extractApiErrorMessage';
 
 import styles from './SignUp.styles';
 
+const SMALL_SCREEN_HEIGHT = 640;
+const SMALL_SCREEN_PADDING_TOP_DECREASE = 40;
+
 function SignUp({ route }) {
+  const { height } = useWindowDimensions();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -43,6 +48,10 @@ function SignUp({ route }) {
     email: [],
     password: [],
   });
+
+  const changeEmailValue = useCallback((value) => {
+    setEmailValue((value || '').trim().toLowerCase());
+  }, []);
 
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState('');
@@ -143,7 +152,15 @@ function SignUp({ route }) {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={[
+          styles.scrollContent,
+          SMALL_SCREEN_HEIGHT >= height && {
+            paddingTop: styles.scrollContent.paddingTop - SMALL_SCREEN_PADDING_TOP_DECREASE,
+          },
+        ]}
+      >
         <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
           <View style={styles.keyboardAvoidingChildContainer}>
             <View>
@@ -177,12 +194,11 @@ function SignUp({ route }) {
                 <Input
                   label={t('SignUp.Email')}
                   value={emailValue}
-                  onChange={(value) => { onChangeInputValue('email'); setEmailValue(value); }}
+                  onChange={(value) => { onChangeInputValue('email'); changeEmailValue(value); }}
                   onBlur={onEmailBlur}
                   errors={inputErrors.email}
                   type="emailAddress"
                   autoCapitalize="none"
-                  errorStyle={{ position: 'absolute', bottom: -17 }}
                 />
               </View>
 

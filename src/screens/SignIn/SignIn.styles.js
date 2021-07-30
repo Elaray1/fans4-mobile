@@ -30,6 +30,9 @@ export default StyleSheet.create({
     marginBottom: 60,
     alignSelf: 'center',
   },
+  logoForSmallScreen: {
+
+  },
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
