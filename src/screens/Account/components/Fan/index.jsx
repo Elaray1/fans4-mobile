@@ -67,7 +67,7 @@ const FanAccount = () => {
   }, [dispatch, showFailure]);
 
   useEffect(() => {
-    socketService.on('supportedFighter:statusUpdated', ({ _id, status }) => {
+    socketService.on('supportedFighter:status-updated', ({ _id, status }) => {
       const updatedFighters = fighters.map((f) => {
         if (f._id !== _id) {
           return f;
@@ -82,12 +82,6 @@ const FanAccount = () => {
       setFighters(updatedFighters);
     });
   }, [fighters]);
-
-  useEffect(() => {
-    socketService.on('fan:subscriptionsUpdated', ({ user }) => {
-      dispatch(userActions.setUserData(user));
-    });
-  }, [dispatch]);
 
   const shownFighters = fighters.filter((f) => {
     const fighterSubscription = userSubscriptions.find(s => s._id === f._id);

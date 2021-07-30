@@ -85,6 +85,10 @@ const handleFighterUpdated = (user) => {
   store.dispatch(userActions.setUserData(user));
 };
 
+const handleFanSubscriptionsUpdated = (user) => {
+  store.dispatch(userActions.setUserData(user));
+};
+
 const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
     rootNavigation.navigate('Account');
@@ -103,13 +107,16 @@ function AppScreens() {
   useEffect(() => {
     socketService.on('user:status-updated', handleUserStatusUpdated);
     socketService.on('fighter:updated', handleFighterUpdated);
+    socketService.on('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
 
     pushNotificationService.startNotificationHandling(pushNotificationHandlersByType);
 
     return () => {
       pushNotificationService.stopNotificationHandling();
+
       socketService.removeListener('user:status-updated', handleUserStatusUpdated);
       socketService.removeListener('fighter:updated', handleFighterUpdated);
+      socketService.removeListener('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
     };
   }, []);
 
