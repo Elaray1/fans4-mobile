@@ -36,6 +36,9 @@ export default StyleSheet.create({
     borderColor: colors.error,
   },
   errorMessage: {
+    position: 'absolute',
+    bottom: -17,
+    left: 0,
     fontSize: fonts.size.caption,
     color: colors.error,
   },

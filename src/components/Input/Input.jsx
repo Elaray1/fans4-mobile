@@ -120,38 +120,41 @@ function Input({
           onContentSizeChange={onContentSizeChange}
           autoFocus={autoFocus}
         />
+
         {type === 'password' && (
-        <TouchableOpacity
-          onPress={onChangePasswordVisibility}
-          style={styles.passwordIcon}
-          disabled={disabled}
-        >
-          {disabled && <ClosedEyeIcon stroke={colors.disabledText} />}
-          {!disabled && !isPasswordVisible && <ClosedEyeIcon />}
-          {!disabled && isPasswordVisible && <OpenedEyeIcon />}
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onChangePasswordVisibility}
+            style={styles.passwordIcon}
+            disabled={disabled}
+          >
+            {disabled && <ClosedEyeIcon stroke={colors.disabledText} />}
+            {!disabled && !isPasswordVisible && <ClosedEyeIcon />}
+            {!disabled && isPasswordVisible && <OpenedEyeIcon />}
+          </TouchableOpacity>
         )}
+
         {Boolean(buttonTitle) && (
-        <Button
-          type="link"
-          title={buttonTitle}
-          onPress={onButtonPress}
-          disabled={!value || disabled}
-          titleStyle={styles.buttonTitle}
-          style={[
-            styles.button,
-            Boolean(inputContentSizeHeight > DEFAULT_INPUT_CONTENT_SIZE_HEIGHT) && styles.multilineButtonStyles,
-          ]}
-          disabledTitleStyle={styles.disabledTitleStyle}
-        />
+          <Button
+            type="link"
+            title={buttonTitle}
+            onPress={onButtonPress}
+            disabled={!value || disabled}
+            titleStyle={styles.buttonTitle}
+            style={[
+              styles.button,
+              Boolean(inputContentSizeHeight > DEFAULT_INPUT_CONTENT_SIZE_HEIGHT) && styles.multilineButtonStyles,
+            ]}
+            disabledTitleStyle={styles.disabledTitleStyle}
+          />
         )}
       </Pressable>
+
       {!!errors.length
-      && errors.map(error => (
-        <Text key={error} style={[styles.errorMessage, errorStyle]}>
-          {error}
-        </Text>
-      ))}
+        && errors.map(error => (
+          <Text key={error} style={[styles.errorMessage, errorStyle]}>
+            {error}
+          </Text>
+        ))}
     </View>
   );
 }
