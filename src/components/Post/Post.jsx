@@ -3,6 +3,7 @@ import { View, Image, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -75,7 +76,7 @@ function Post({
     if (media.type === MEDIA_TYPES.IMAGE) {
       mediaView = (
         <View style={styles.mediaContainer}>
-          <Image
+          <FastImage
             style={[styles.postImage, { aspectRatio: media.width / media.height }]}
             source={source}
           />
