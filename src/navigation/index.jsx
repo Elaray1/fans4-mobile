@@ -103,6 +103,8 @@ const linking = {
 };
 
 const handleUserStatusUpdated = (user) => {
+  store.dispatch(userActions.setUserData(user));
+
   let screen;
 
   if (user.status === USER_STATUSES.VERIFIED) {
