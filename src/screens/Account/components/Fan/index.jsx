@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Image, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
-import * as userActions from 'resources/user/user.actions';
 
 import * as userApi from 'resources/user/user.api';
 import { USER_STATUSES } from 'resources/user/user.constants';
@@ -49,7 +49,7 @@ const FanAccount = () => {
   );
 
   useEffect(() => {
-    const init = async () => {
+    const updateUserSubscriptions = async () => {
       setIsLoading(true);
 
       try {
@@ -63,8 +63,8 @@ const FanAccount = () => {
       setIsLoading(false);
     };
 
-    init();
-  }, [dispatch, showFailure]);
+    updateUserSubscriptions();
+  }, [dispatch, showFailure, userSubscriptions]);
 
   useEffect(() => {
     socketService.on('supportedFighter:status-updated', ({ _id, status }) => {
@@ -107,7 +107,7 @@ const FanAccount = () => {
             source={{ uri: item.avatarUrl }}
           />
         ) : (
-          <Image
+          <FastImage
             style={styles.fighterImage}
             source={{ uri: item.avatarUrl }}
           />
