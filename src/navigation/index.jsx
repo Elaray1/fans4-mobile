@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { InteractionManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,18 +8,23 @@ import { ToastProvider } from 'react-native-fast-toast';
 import cookies from '@react-native-cookies/cookies';
 import 'react-native-gesture-handler';
 
-import { STORAGE_KEYS } from 'helpers/constants';
+import { STORAGE_KEYS, PUSH_NOTIFICATION_TYPES } from 'helpers/constants';
 import { getItem, setItem } from 'helpers/storage';
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
 import getInitialScreen from 'helpers/getInitialScreen';
 import * as rootNavigation from 'helpers/rootNavigation';
 
 import analyticsService from 'services/analytics.service';
+import * as socketsService from 'services/socket.service';
+import pushNotificationService from 'services/pushNotification.service';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
+import { USER_STATUSES } from 'resources/user/user.constants';
+
 import config from 'resources/config';
-import * as sockets from 'services/socket.service';
+import store from 'resources/store';
+
 import colors from 'themes/colors';
 
 import AppScreens from './appStack';
@@ -60,16 +65,16 @@ const init = async (dispatch) => {
 
     try {
       user = await dispatch(userActions.getUserData());
-      sockets.connect();
-      sockets.emit('subscribe', `user-${user._id}`);
+      socketsService.connect();
+      socketsService.emit('subscribe', `user-${user._id}`);
     } catch (err) {
       console.log('Fetching user on start error:', err.message);
     }
   }
 
   if (!user) {
-    sockets.connect();
-    sockets.emit('subscribe', `device-${getMaskedDeviceId()}`);
+    socketsService.connect();
+    socketsService.emit('subscribe', `device-${getMaskedDeviceId()}`);
   }
 
 
@@ -97,6 +102,41 @@ const linking = {
   },
 };
 
+const handleUserStatusUpdated = (user) => {
+  let screen;
+
+  if (user.status === USER_STATUSES.VERIFIED) {
+    const isFirstVerification = (user.statusHistory || [])
+      .filter((h => h.status === USER_STATUSES.VERIFIED)).length === 1;
+
+    if (isFirstVerification) {
+      screen = 'VerificationSuccessful';
+    } else {
+      screen = 'Account';
+    }
+  } else if (user.status === USER_STATUSES.DECLINED) {
+    screen = 'VerificationFailed';
+  } else if (user.status === USER_STATUSES.BLOCKED) {
+    screen = 'AccountBlocked';
+  }
+
+  rootNavigation.resetToScreen('AppStack', screen);
+};
+
+const handleFighterUpdated = (user) => {
+  store.dispatch(userActions.setUserData(user));
+};
+
+const handleFanSubscriptionsUpdated = (user) => {
+  store.dispatch(userActions.setUserData(user));
+};
+
+const pushNotificationHandlersByType = {
+  [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
+    rootNavigation.navigate('Account');
+  },
+};
+
 function AppNavigation() {
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
@@ -110,6 +150,25 @@ function AppNavigation() {
 
   const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
+
+  useEffect(() => {
+    const handle = async () => {
+      if (userAuthenticated) {
+        socketsService.on('user:status-updated', handleUserStatusUpdated);
+        socketsService.on('fighter:updated', handleFighterUpdated);
+        socketsService.on('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
+
+        pushNotificationService.startNotificationHandling(pushNotificationHandlersByType);
+      } else {
+        pushNotificationService.stopNotificationHandling();
+        socketsService.removeListener('user:status-updated', handleUserStatusUpdated);
+        socketsService.removeListener('fighter:updated', handleFighterUpdated);
+        socketsService.removeListener('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
+      }
+    };
+
+    handle();
+  }, [userAuthenticated]);
 
   const trackScreensOpening = useCallback(() => {
     const previousRouteName = routeNameRef.current;

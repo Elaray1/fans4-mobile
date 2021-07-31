@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 
@@ -37,61 +37,18 @@ import SettingsTermsOfUse from 'screens/SettingsTermsOfUse';
 import SettingsPrivacyPolicy from 'screens/SettingsPrivacyPolicy';
 
 import * as userSelectors from 'resources/user/user.selectors';
-import * as userActions from 'resources/user/user.actions';
-import { USER_STATUSES, USER_TYPES } from 'resources/user/user.constants';
-
-import pushNotificationService from 'services/pushNotification.service';
-import * as socketService from 'services/socket.service';
-
-import * as rootNavigation from 'helpers/rootNavigation';
-import { PUSH_NOTIFICATION_TYPES } from 'helpers/constants';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import FighterNavigator from 'navigation/appStack/components/fighter';
 import FanNavigator from 'navigation/appStack/components/fan';
 
 import colors from 'themes/colors';
-import store from 'resources/store';
 
 const AppStack = createStackNavigator();
 
 const SCREEN_OPTIONS = {
   cardStyle: {
     backgroundColor: colors.main,
-  },
-};
-
-const handleUserStatusUpdated = (user) => {
-  let screen;
-
-  if (user.status === USER_STATUSES.VERIFIED) {
-    const isFirstVerification = (user.statusHistory || [])
-      .filter((h => h.status === USER_STATUSES.VERIFIED)).length === 1;
-
-    if (isFirstVerification) {
-      screen = 'VerificationSuccessful';
-    } else {
-      screen = 'Account';
-    }
-  } else if (user.status === USER_STATUSES.DECLINED) {
-    screen = 'VerificationFailed';
-  } else if (user.status === USER_STATUSES.BLOCKED) {
-    screen = 'AccountBlocked';
-  }
-
-  rootNavigation.resetToScreen('AppStack', screen);
-};
-
-const handleFighterUpdated = (user) => {
-  store.dispatch(userActions.setUserData(user));
-};
-
-const handleFanSubscriptionsUpdated = (user) => {
-  store.dispatch(userActions.setUserData(user));
-};
-
-const pushNotificationHandlersByType = {
-  [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
-    rootNavigation.navigate('Account');
   },
 };
 
@@ -104,22 +61,6 @@ function Tabs() {
 }
 
 function AppScreens() {
-  useEffect(() => {
-    socketService.on('user:status-updated', handleUserStatusUpdated);
-    socketService.on('fighter:updated', handleFighterUpdated);
-    socketService.on('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
-
-    pushNotificationService.startNotificationHandling(pushNotificationHandlersByType);
-
-    return () => {
-      pushNotificationService.stopNotificationHandling();
-
-      socketService.removeListener('user:status-updated', handleUserStatusUpdated);
-      socketService.removeListener('fighter:updated', handleFighterUpdated);
-      socketService.removeListener('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
-    };
-  }, []);
-
   return (
     <AppStack.Navigator
       headerMode="none"

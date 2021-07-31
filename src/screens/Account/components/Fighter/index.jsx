@@ -70,7 +70,9 @@ function FighterAccount() {
 
   useEffect(() => {
     socketService.on('post:status-updated', refreshPosts);
-    return () => socketService.removeListener('post:status-updated', refreshPosts);
+    return () => {
+      socketService.removeListener('post:status-updated', refreshPosts);
+    };
   }, [refreshPosts]);
 
   useEffect(() => {
