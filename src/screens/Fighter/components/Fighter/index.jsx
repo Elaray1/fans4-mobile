@@ -94,10 +94,12 @@ function Fighter({ fighterId }) {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+
       <Header
         title={t('Fighter.fightersProfile')}
         leftItemType="backArrow"
       />
+
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View style={styles.flatListHeader}>
           <Profile

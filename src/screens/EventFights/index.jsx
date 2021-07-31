@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, View, FlatList, ActivityIndicator, Image } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
 import { useSelector } from 'react-redux';
@@ -139,7 +140,7 @@ function EventFights({ route }) {
           style={styles.event}
         >
           <View style={styles.eventImageContainer}>
-            <Image
+            <FastImage
               style={styles.photoImage}
               source={{ uri: event.imageUrl }}
             />

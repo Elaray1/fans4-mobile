@@ -8,7 +8,6 @@ import { USER_TYPES } from 'resources/user/user.constants';
 import FighterForFighter from './components/Fighter';
 import FighterForFan from './components/Fan';
 
-
 function Fighter({ route }) {
   const {
     _id,

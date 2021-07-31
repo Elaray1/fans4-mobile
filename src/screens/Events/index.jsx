@@ -2,8 +2,9 @@ import React, {
   useState, useCallback, useEffect, useMemo,
 } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, Image, TouchableOpacity, ScrollView, RefreshControl,
+  SafeAreaView, View, FlatList, ActivityIndicator, TouchableOpacity, ScrollView, RefreshControl,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
@@ -146,7 +147,6 @@ function Events() {
           }));
         }
 
-        console.log('fetchedEvents', fetchedEvents);
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setEvents([...currentEvents, ...(fetchedEvents || [])]);
@@ -195,31 +195,31 @@ function Events() {
         style={styles.event}
       >
         <View style={styles.imageContainer}>
-          <Image
+          <FastImage
             style={styles.photoImage}
             source={{ uri: item.imageUrl }}
           />
-          {item.status === EVENT_STATUSES.CANCELED
-          && moment().isBefore(item.date)
-          && (
+
+          {item.status === EVENT_STATUSES.CANCELED && moment().isBefore(item.date) && (
           <View style={styles.imageStatus}>
             <Text style={styles.imageText}>{t('Events.canceled')}</Text>
           </View>
           )}
+
           {isLive && (
-          <View style={styles.live}>
-            <LiveIcon />
-            <Text>Live</Text>
-          </View>
+            <View style={styles.live}>
+              <LiveIcon />
+              <Text>Live</Text>
+            </View>
           )}
-          {isLive
-          && (
-          <View style={styles.line}>
-            <View style={[styles.progress, {
-              width: progress,
-            }]}
-            />
-          </View>
+
+          {isLive && (
+            <View style={styles.line}>
+              <View style={[styles.progress, {
+                width: progress,
+              }]}
+              />
+            </View>
           )}
         </View>
         <View>

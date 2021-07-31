@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import _ from 'lodash';
 
 import RadioButtonIcon from 'assets/icons/radio-button';
@@ -43,13 +44,13 @@ const Fighter = ({
       onPress={() => setFighter(fighter)}
       disabled={isDisabled}
     >
-      <Image
+      <FastImage
         style={[styles.image, isDisabled && styles.tintGray]}
         source={{ uri: fighter.avatarUrl }}
       />
 
       { isDisabled && (
-        <Image
+        <FastImage
           style={[styles.image, isDisabled && styles.grayImage]}
           source={{ uri: fighter.avatarUrl }}
         />

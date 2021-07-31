@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 
 import Text from 'components/Text';
@@ -21,7 +22,7 @@ function Fighter({
       activeOpacity={0.7}
     >
       <View style={styles.imageContainer}>
-        <Image
+        <FastImage
           style={[styles.photoImage, isWinner && styles.winnerImage]}
           source={{ uri: fighter.avatarUrl }}
         />

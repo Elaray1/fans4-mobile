@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -52,7 +52,7 @@ function Post({
 
   const authorView = author ? (
     <View style={styles.author}>
-      <Image
+      <FastImage
         style={styles.authorAvatar}
         source={{ uri: author.avatarUrl }}
       />

@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { SafeAreaView, View, FlatList, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
 import { useNavigation } from '@react-navigation/native';
@@ -114,7 +115,7 @@ function SearchFighters() {
         onPress={() => onPressFighter(item._id)}
       >
         <View style={styles.fighter}>
-          <Image
+          <FastImage
             style={styles.fighterImage}
             source={{ uri: item.avatarUrl }}
           />

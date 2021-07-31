@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { View, SafeAreaView, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 import { useSelector } from 'react-redux';
 
 import * as userApi from 'resources/user/user.api';
@@ -132,7 +133,7 @@ const ProposeAFight = ({ route }) => {
                 ? (
 
                   <View>
-                    <Image
+                    <FastImage
                       style={styles.image}
                       source={{ uri: firstFighter.avatarUrl }}
                     />
@@ -149,7 +150,7 @@ const ProposeAFight = ({ route }) => {
               {secondFighter
                 ? (
                   <View>
-                    <Image
+                    <FastImage
                       style={styles.image}
                       source={{ uri: secondFighter.avatarUrl }}
                     />

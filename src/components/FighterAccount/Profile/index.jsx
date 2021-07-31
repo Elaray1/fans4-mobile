@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Image } from 'react-native';
+import { View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import StatusBadge from 'components/StatusBadge';
 import Text from 'components/Text';
@@ -19,7 +20,7 @@ const Profile = ({
   fightingStatus,
   status,
 }) => {
-  const ImageComponent = status === USER_STATUSES.BLOCKED ? GrayscaledImage : Image;
+  const ImageComponent = status === USER_STATUSES.BLOCKED ? GrayscaledImage : FastImage;
 
   return (
     <View style={styles.profileBlock}>
