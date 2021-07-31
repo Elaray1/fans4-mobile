@@ -4,15 +4,17 @@ import {
   View,
   StatusBar,
   ScrollView,
+  AppState,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 import * as socketService from 'services/socket.service';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
+import * as userApi from 'resources/user/user.api';
 
 import colors from 'themes/colors';
 
@@ -26,6 +28,7 @@ import styles from './EmailConfirmation.styles';
 
 function EmailConfirmation() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -42,6 +45,25 @@ function EmailConfirmation() {
       navigation.navigate('BiographicalData');
     });
   }, [dispatch, navigation]);
+
+  useEffect(() => {
+    const checkEmailVerificationOnFocus = async (appState) => {
+      if (isFocused && appState === 'active') {
+        const updatedUser = await userApi.getUserData();
+
+        if (updatedUser.appState.isEmailVerified) {
+          userActions.setUserData(updatedUser);
+          navigation.navigate('BiographicalData');
+        }
+      }
+    };
+
+    AppState.addEventListener('change', checkEmailVerificationOnFocus);
+
+    return () => {
+      AppState.removeEventListener('change', checkEmailVerificationOnFocus);
+    };
+  }, [isFocused, navigation]);
 
   useEffect(() => {
     timer = setTimeout(() => setIsResendButtonShown(true), 10000);
