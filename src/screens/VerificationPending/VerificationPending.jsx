@@ -1,7 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { AppState } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+
+import * as rootNavigation from 'helpers/rootNavigation';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
@@ -9,14 +12,39 @@ import PendingIllustration from 'assets/illustrations/verification-pending.svg';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
-
+import * as userApi from 'resources/user/user.api';
+import { USER_STATUSES } from 'resources/user/user.constants';
 
 function VerificationPending() {
   const { t } = useTranslation();
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const userType = useSelector(userSelectors.getUserType);
+
+  useEffect(() => {
+    const checkVerificationOnPending = async (appState) => {
+      if (isFocused && appState === 'active') {
+        const updatedUser = await userApi.getUserData();
+        userActions.setUserData(updatedUser);
+
+        if (updatedUser.status === USER_STATUSES.VERIFIED) {
+          rootNavigation.resetToScreen('AppStack', 'VerificationSuccessful');
+        } else if (updatedUser.status === USER_STATUSES.DECLINED) {
+          rootNavigation.resetToScreen('AppStack', 'VerificationFailed');
+        } else if (updatedUser.status === USER_STATUSES.BLOCKED) {
+          rootNavigation.resetToScreen('AppStack', 'AccountBlocked');
+        }
+      }
+    };
+
+    AppState.addEventListener('change', checkVerificationOnPending);
+
+    return () => {
+      AppState.removeEventListener('change', checkVerificationOnPending);
+    };
+  }, [isFocused, navigation]);
 
   const goToSignIn = useCallback(async () => {
     navigation.reset({
