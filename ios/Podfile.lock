@@ -6,7 +6,6 @@ PODS:
   - boost-for-react-native (1.63.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
-  - DVAssetLoaderDelegate (0.3.3)
   - FBLazyVector (0.64.0)
   - FBReactNativeSpec (0.64.0):
     - RCT-Folly (= 2020.01.13.00)
@@ -396,16 +395,14 @@ PODS:
     - React-Core
   - react-native-splash-screen (3.2.0):
     - React
+  - react-native-video (5.1.1):
+    - React-Core
+    - react-native-video/Video (= 5.1.1)
   - react-native-video-cache (2.0.5):
     - KTVHTTPCache (~> 2.0.0)
     - React
   - react-native-video/Video (5.1.1):
     - React-Core
-  - react-native-video/VideoCaching (5.1.1):
-    - DVAssetLoaderDelegate (~> 0.3.1)
-    - React-Core
-    - react-native-video/Video
-    - SPTPersistentCache (~> 1.1.0)
   - react-native-webview (11.6.4):
     - React-Core
   - React-perflogger (0.64.0)
@@ -553,7 +550,6 @@ PODS:
   - SDWebImageWebPCoder (0.6.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
-  - SPTPersistentCache (1.1.0)
   - TOCropViewController (2.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -603,8 +599,8 @@ DEPENDENCIES:
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
+  - react-native-video (from `../node_modules/react-native-video`)
   - react-native-video-cache (from `../node_modules/react-native-video-cache`)
-  - react-native-video/VideoCaching (from `../node_modules/react-native-video/react-native-video.podspec`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -641,7 +637,6 @@ SPEC REPOS:
     - Amplitude
     - boost-for-react-native
     - CocoaAsyncSocket
-    - DVAssetLoaderDelegate
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
@@ -668,7 +663,6 @@ SPEC REPOS:
     - PromisesObjC
     - SDWebImage
     - SDWebImageWebPCoder
-    - SPTPersistentCache
     - TOCropViewController
     - YogaKit
 
@@ -718,7 +712,7 @@ EXTERNAL SOURCES:
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
   react-native-video:
-    :path: "../node_modules/react-native-video/react-native-video.podspec"
+    :path: "../node_modules/react-native-video"
   react-native-video-cache:
     :path: "../node_modules/react-native-video-cache"
   react-native-webview:
@@ -788,7 +782,6 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
-  DVAssetLoaderDelegate: 0caec20e4e08b8560b691131539e9180024d4bce
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
   FBReactNativeSpec: 725b23b8ad24599ca22e3c4bdcc9dbffa1f19acc
   Firebase: 54cdc8bc9c9b3de54f43dab86e62f5a76b47034f
@@ -866,11 +859,10 @@ SPEC CHECKSUMS:
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
-  SPTPersistentCache: df36ea46762d7cf026502bbb86a8b79d0080dff4
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: f4d271a395f42be6bef4eb7a897d5bb933ae7d0c
+PODFILE CHECKSUM: 0d71942e8281bf8f000428d0021c9761878a7a27
 
 COCOAPODS: 1.10.1

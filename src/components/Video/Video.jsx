@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState, useMemo } from 'react';
 import { TouchableOpacity, Pressable, View, Text, Modal } from 'react-native';
 import PropTypes from 'prop-types';
 import ReactNativeVideo from 'react-native-video';
-import convertToProxyURL from 'react-native-video-cache';
+// import convertToProxyURL from 'react-native-video-cache';
 import moment from 'moment';
 
 import PlayIcon from 'assets/icons/play';
@@ -114,9 +114,9 @@ function Video({ source, width, height }) {
     height: renderingHeight,
   }), [renderingWidth, renderingHeight]);
 
-  const cachedSource = useMemo(() => {
-    return { ...source, uri: convertToProxyURL(source.uri) };
-  }, [source]);
+  // const cachedSource = useMemo(() => {
+  //   return { ...source, uri: convertToProxyURL(source.uri) };
+  // }, [source]);
 
   const Container = isFullScreen ? Modal : View;
 
@@ -131,7 +131,7 @@ function Video({ source, width, height }) {
           onLoad={handleOnLoadEvent}
           onEnd={handleVideoPlayingEnded}
           style={videoStyle}
-          source={cachedSource}
+          source={source}
           ignoreSilentSwitch="ignore"
           volume={1}
           playInBackground
