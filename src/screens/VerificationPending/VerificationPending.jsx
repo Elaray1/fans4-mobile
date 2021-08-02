@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -23,19 +23,46 @@ function VerificationPending() {
 
   const userType = useSelector(userSelectors.getUserType);
 
+  const checkVerificationIntervalTimerRef = useRef();
+
+  const checkVerification = useCallback(async () => {
+    let updatedUser;
+
+    try {
+      updatedUser = await userApi.getUserData();
+      userActions.setUserData(updatedUser);
+    } catch (err) {
+      console.error('updating user error:', err);
+    }
+
+    if (!updatedUser) {
+      return;
+    }
+
+    if (updatedUser.status === USER_STATUSES.VERIFIED) {
+      rootNavigation.resetToScreen('AppStack', 'VerificationSuccessful');
+    } else if (updatedUser.status === USER_STATUSES.DECLINED) {
+      rootNavigation.resetToScreen('AppStack', 'VerificationFailed');
+    } else if (updatedUser.status === USER_STATUSES.BLOCKED) {
+      rootNavigation.resetToScreen('AppStack', 'AccountBlocked');
+    } else {
+      return;
+    }
+
+    if (checkVerificationIntervalTimerRef.current) {
+      clearInterval(checkVerificationIntervalTimerRef.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkVerificationIntervalTimerRef.current = setInterval(checkVerification, 3000);
+    return () => checkVerificationIntervalTimerRef.current && clearInterval(checkVerificationIntervalTimerRef.current); // eslint-disable-line max-len
+  }, [checkVerification]);
+
   useEffect(() => {
     const checkVerificationOnPending = async (appState) => {
       if (isFocused && appState === 'active') {
-        const updatedUser = await userApi.getUserData();
-        userActions.setUserData(updatedUser);
-
-        if (updatedUser.status === USER_STATUSES.VERIFIED) {
-          rootNavigation.resetToScreen('AppStack', 'VerificationSuccessful');
-        } else if (updatedUser.status === USER_STATUSES.DECLINED) {
-          rootNavigation.resetToScreen('AppStack', 'VerificationFailed');
-        } else if (updatedUser.status === USER_STATUSES.BLOCKED) {
-          rootNavigation.resetToScreen('AppStack', 'AccountBlocked');
-        }
+        await checkVerification();
       }
     };
 
@@ -44,7 +71,7 @@ function VerificationPending() {
     return () => {
       AppState.removeEventListener('change', checkVerificationOnPending);
     };
-  }, [isFocused, navigation]);
+  }, [isFocused, navigation, checkVerification]);
 
   const goToSignIn = useCallback(async () => {
     navigation.reset({

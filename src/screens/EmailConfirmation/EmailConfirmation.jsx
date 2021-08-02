@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   SafeAreaView,
   View,
@@ -37,6 +37,8 @@ function EmailConfirmation() {
 
   const [isResendButtonShown, setIsResendButtonShown] = useState(false);
 
+  const checkEmailIntervalTimerRef = useRef();
+
   useEffect(() => {
     socketService.on('email:verified', async (updatedUser) => {
       await dispatch(userActions.setUserData(updatedUser));
@@ -56,12 +58,14 @@ function EmailConfirmation() {
     if (updatedUser && updatedUser.appState.isEmailVerified) {
       userActions.setUserData(updatedUser);
       navigation.navigate('BiographicalData');
+
+      clearInterval(checkEmailIntervalTimerRef.current);
     }
   }, [navigation]);
 
   useEffect(() => {
-    const timer = setInterval(checkIfConfirmed, 5000);
-    return () => timer && clearTimeout(timer);
+    checkEmailIntervalTimerRef.current = setInterval(checkIfConfirmed, 3000);
+    return () => checkEmailIntervalTimerRef.current && clearInterval(checkEmailIntervalTimerRef.current);
   }, [checkIfConfirmed]);
 
   useEffect(() => {
