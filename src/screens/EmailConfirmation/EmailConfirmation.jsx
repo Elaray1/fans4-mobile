@@ -35,8 +35,6 @@ function EmailConfirmation() {
   const userEmail = useSelector(userSelectors.getUserEmail);
   const userType = useSelector(userSelectors.getUserType);
 
-  let timer = null;
-
   const [isResendButtonShown, setIsResendButtonShown] = useState(false);
 
   useEffect(() => {
@@ -46,15 +44,30 @@ function EmailConfirmation() {
     });
   }, [dispatch, navigation]);
 
+  const checkIfConfirmed = useCallback(async () => {
+    let updatedUser;
+
+    try {
+      updatedUser = await userApi.getUserData();
+    } catch (err) {
+      console.error('updating user data error', err);
+    }
+
+    if (updatedUser && updatedUser.appState.isEmailVerified) {
+      userActions.setUserData(updatedUser);
+      navigation.navigate('BiographicalData');
+    }
+  }, [navigation]);
+
+  useEffect(() => {
+    const timer = setInterval(checkIfConfirmed, 5000);
+    return () => timer && clearTimeout(timer);
+  }, [checkIfConfirmed]);
+
   useEffect(() => {
     const checkEmailVerificationOnFocus = async (appState) => {
       if (isFocused && appState === 'active') {
-        const updatedUser = await userApi.getUserData();
-
-        if (updatedUser.appState.isEmailVerified) {
-          userActions.setUserData(updatedUser);
-          navigation.navigate('BiographicalData');
-        }
+        await checkIfConfirmed();
       }
     };
 
@@ -63,16 +76,16 @@ function EmailConfirmation() {
     return () => {
       AppState.removeEventListener('change', checkEmailVerificationOnFocus);
     };
-  }, [isFocused, navigation]);
+  }, [isFocused, navigation, checkIfConfirmed]);
 
   useEffect(() => {
-    timer = setTimeout(() => setIsResendButtonShown(true), 10000);
+    const timer = setTimeout(() => setIsResendButtonShown(true), 10000);
     return () => timer && clearTimeout(timer);
-  }, [timer]);
+  }, []);
 
   const onResendEmail = useCallback(async () => {
     setIsResendButtonShown(false);
-    timer = setTimeout(() => setIsResendButtonShown(true), 10000);
+    setTimeout(() => setIsResendButtonShown(true), 10000);
 
     await userActions.sendEmailConfirmation({
       email: userEmail,
