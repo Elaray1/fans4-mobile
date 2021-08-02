@@ -59,7 +59,7 @@ function ChangeBiography() {
     });
 
     navigation.goBack();
-  }, [dispatch, value, navigation, userId, showSuccess, showFailure]);
+  }, [dispatch, value, navigation, userId, showSuccess, showFailure, t]);
 
   return (
     <SafeAreaView style={styles.screen}>

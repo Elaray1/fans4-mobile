@@ -30,7 +30,7 @@ function VerificationPending() {
 
     try {
       updatedUser = await userApi.getUserData();
-      userActions.setUserData(updatedUser);
+      dispatch(userActions.setUserData(updatedUser));
     } catch (err) {
       console.error('updating user error:', err);
     }

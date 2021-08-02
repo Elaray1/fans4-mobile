@@ -56,12 +56,12 @@ function EmailConfirmation() {
     }
 
     if (updatedUser && updatedUser.appState.isEmailVerified) {
-      userActions.setUserData(updatedUser);
+      dispatch(userActions.setUserData(updatedUser));
       navigation.navigate('BiographicalData');
 
       clearInterval(checkEmailIntervalTimerRef.current);
     }
-  }, [navigation]);
+  }, [navigation, dispatch]);
 
   useEffect(() => {
     checkEmailIntervalTimerRef.current = setInterval(checkIfConfirmed, 3000);

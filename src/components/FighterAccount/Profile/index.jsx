@@ -30,13 +30,15 @@ const Profile = ({
       />
       <View>
         <Text style={styles.fullName}>{fullName}</Text>
+
         {nickname && (
-        <Text style={styles.nickname}>
-          “
-          {nickname}
-          ”
-        </Text>
+          <Text style={styles.nickname}>
+            “
+            {nickname}
+            ”
+          </Text>
         )}
+
         <Text style={styles.location}>{location}</Text>
 
         <StatusBadge status={status === USER_STATUSES.BLOCKED ? status : fightingStatus} />
