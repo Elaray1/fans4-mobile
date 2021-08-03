@@ -1,5 +1,5 @@
 # fans-4-mobile
 
-### Install dependencies on iOS
+### Install dependencies on iOS (--repo-update is required)
 1. npm ci
-2. cd ios && pod install
+2. cd ios && pod install **--repo-update**
