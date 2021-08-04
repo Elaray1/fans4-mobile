@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, Linking, Platform, Alert
+  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, Linking, Platform,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSelector } from 'react-redux';

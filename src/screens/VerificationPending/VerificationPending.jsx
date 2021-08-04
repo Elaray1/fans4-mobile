@@ -52,7 +52,7 @@ function VerificationPending() {
     if (checkVerificationIntervalTimerRef.current) {
       clearInterval(checkVerificationIntervalTimerRef.current);
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     checkVerificationIntervalTimerRef.current = setInterval(checkVerification, 3000);
