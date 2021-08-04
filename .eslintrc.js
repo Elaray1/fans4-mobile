@@ -36,10 +36,13 @@ module.exports = {
     // https://github.com/Intellicode/eslint-plugin-react-native
     "react-native/no-unused-styles": 2,
     "react-native/split-platform-components": 2,
-    "react-native/no-inline-styles": 2,
-    "react-native/no-color-literals": 2,
     "react-native/no-raw-text": 2,
     "react-native/no-single-element-style-arrays": 2,
+    // uncomment if needed
+    // https://github.com/Intellicode/eslint-plugin-react-native/blob/master/docs/rules/no-inline-styles.md
+    // "react-native/no-inline-styles": 2,
+    // https://github.com/Intellicode/eslint-plugin-react-native/blob/master/docs/rules/no-color-literals.md
+    // "react-native/no-color-literals": 2,
   },
   settings: {
     'import/resolver': {
