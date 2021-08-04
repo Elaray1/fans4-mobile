@@ -49,7 +49,7 @@ PODS:
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
-  - FirebaseCoreDiagnostics (8.4.0):
+  - FirebaseCoreDiagnostics (8.5.0):
     - GoogleDataTransport (~> 9.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
@@ -61,7 +61,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.4)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseInstallations (8.4.0):
+  - FirebaseInstallations (8.5.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/UserDefaults (~> 7.4)
@@ -167,10 +167,6 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.5.0):
     - GoogleUtilities/Logger
-  - KTVCocoaHTTPServer (1.0.0):
-    - CocoaAsyncSocket
-  - KTVHTTPCache (2.0.1):
-    - KTVCocoaHTTPServer
   - libevent (2.1.12)
   - libwebp (1.2.0):
     - libwebp/demux (= 1.2.0)
@@ -389,6 +385,8 @@ PODS:
     - React-Core
   - react-native-cookies (6.0.7):
     - React-Core
+  - react-native-create-thumbnail (1.4.1):
+    - React
   - react-native-date-picker (3.2.10):
     - React-Core
   - react-native-safe-area-context (3.2.0):
@@ -398,9 +396,6 @@ PODS:
   - react-native-video (5.1.1):
     - React-Core
     - react-native-video/Video (= 5.1.1)
-  - react-native-video-cache (2.0.5):
-    - KTVHTTPCache (~> 2.0.0)
-    - React
   - react-native-video/Video (5.1.1):
     - React-Core
   - react-native-webview (11.6.4):
@@ -596,11 +591,11 @@ DEPENDENCIES:
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
   - react-native-config (from `../node_modules/react-native-config`)
   - "react-native-cookies (from `../node_modules/@react-native-cookies/cookies`)"
+  - react-native-create-thumbnail (from `../node_modules/react-native-create-thumbnail`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-video (from `../node_modules/react-native-video`)
-  - react-native-video-cache (from `../node_modules/react-native-video-cache`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -654,8 +649,6 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
-    - KTVCocoaHTTPServer
-    - KTVHTTPCache
     - libevent
     - libwebp
     - nanopb
@@ -705,6 +698,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-config"
   react-native-cookies:
     :path: "../node_modules/@react-native-cookies/cookies"
+  react-native-create-thumbnail:
+    :path: "../node_modules/react-native-create-thumbnail"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
   react-native-safe-area-context:
@@ -713,8 +708,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-splash-screen"
   react-native-video:
     :path: "../node_modules/react-native-video"
-  react-native-video-cache:
-    :path: "../node_modules/react-native-video-cache"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-perflogger:
@@ -787,9 +780,9 @@ SPEC CHECKSUMS:
   Firebase: 54cdc8bc9c9b3de54f43dab86e62f5a76b47034f
   FirebaseAnalytics: 4751d6a49598a2b58da678cc07df696bcd809ab9
   FirebaseCore: 31f389c37ac1ea52454a53d3081f2d7019485a4a
-  FirebaseCoreDiagnostics: cad03be1904b975f845e632f2720c3337da27faf
+  FirebaseCoreDiagnostics: 7bf55d386f9fc690d971b70a582142321a390eb8
   FirebaseCrashlytics: c9eb562b2f6bd5ee5e880144fd5ef1bfe46c5dc5
-  FirebaseInstallations: 1585729afc787877763208c2088ed84221161f77
+  FirebaseInstallations: f2bc590b291d25fb40a9a05b8281c02a881b5117
   FirebaseMessaging: 78025c56654f05c7ebd6f7f87f9d4b12c5231207
   Flipper: 1bd2db48dcc31e4b167b9a33ec1df01c2ded4893
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
@@ -802,8 +795,6 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 6b6a08fd9c71f4dbc89e0e812acca81d797aa342
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
   GoogleUtilities: eea970f4a389963963bffe8d8fabe43540678b9c
-  KTVCocoaHTTPServer: df8d7b861e603ff8037e9b2138aca2563a6b768d
-  KTVHTTPCache: 588c3eb16f6bd1e6fde1e230dabfb7bd4e490a4d
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
@@ -823,11 +814,11 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 7c6c7ca84844f93b3dac9a87670bbad6541684ec
   react-native-config: c98128a72bc2c3a1ca72caec0b021f0fa944aa29
   react-native-cookies: 6004d512ffc6f2c498c5b70cda0bc040350c0585
+  react-native-create-thumbnail: d31c84dd69fb4d60aec0ff2f49bc0de41ede7b2c
   react-native-date-picker: 242eec7af56cea5fb2706d5db5d3837060b3884b
   react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-video: 1574074179ecaf6a9dd067116c8f31bf9fec15c8
-  react-native-video-cache: 0f8b1b2195f234eabd507cfebdd91c2e82695008
   react-native-webview: 4288b81c682bca4dcc9037afb3ee118af2655c03
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11

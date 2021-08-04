@@ -28,6 +28,7 @@ import styles from './styles';
 
 const INITIAL_PAGE = 1;
 const PER_PAGE = 10;
+const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
 function FighterAccount() {
   const { t } = useTranslation();
@@ -41,6 +42,7 @@ function FighterAccount() {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
   const [isAllPostsLoaded, setIsAllPostsLoaded] = useState(false);
+  const [viewablePosts, setViewablePosts] = useState({});
 
   const refreshPosts = useCallback(async () => {
     const {
@@ -117,12 +119,20 @@ function FighterAccount() {
 
   const keyExtractor = useCallback(item => item._id, []);
 
+  const updateViewableItems = useCallback(({ viewableItems }) => {
+    setViewablePosts(viewableItems.reduce((memo, item) => {
+      memo[item.key] = true;
+      return memo;
+    }, {}));
+  }, [setViewablePosts]);
+
   const renderItem = ({ item }) => {
     const props = {
       ...(userId !== item.author._id && {
         author: item.author,
       }),
     };
+
     return (
       <Post
         _id={item._id}
@@ -132,6 +142,7 @@ function FighterAccount() {
         checkedOn={item.checkedOn}
         likedUserIds={item.likedUserIds}
         commentsCount={item.commentsCount}
+        viewable={!!viewablePosts[item._id]}
         {...props}
       />
     );
@@ -201,6 +212,8 @@ function FighterAccount() {
       )}
       ListFooterComponent={renderFooter}
       ListEmptyComponent={renderNoItems}
+      onViewableItemsChanged={updateViewableItems}
+      viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
     />
   );
 }

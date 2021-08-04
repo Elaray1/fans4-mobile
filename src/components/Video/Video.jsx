@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState, useMemo } from 'react';
-import { TouchableOpacity, Pressable, View, Text, Modal } from 'react-native';
+import { TouchableOpacity, Pressable, View, Text, Modal, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import ReactNativeVideo from 'react-native-video';
-// import convertToProxyURL from 'react-native-video-cache';
+import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 
 import PlayIcon from 'assets/icons/play';
@@ -19,18 +19,18 @@ const CONTROLS_SHOWN_DURATION = 2 * 1000;
 
 const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
 
-function Video({ source, width, height }) {
+function Video({ source, width, height, posterSource, duration, viewable }) {
   const [paused, setPaused] = useState(true);
-  const [renderingWidth, setRenderingWidth] = useState(1);
+  const [renderingWidth, setRenderingWidth] = useState(0);
   const [playedTime, setPlayedTime] = useState(0);
   const playedTimeAsRef = useRef(0);
 
-  const [duration, setDuration] = useState(0);
   const [isControlsShown, setIsControlsShown] = useState(true);
   const videoRef = useRef(null);
   const controlsShowingTimeout = useRef(null);
   const isVideoInEndedState = useRef(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isPosterShown, setIsPosterShown] = useState(true);
 
   const hideControlsWithTimeout = useCallback(() => {
     clearTimeout(controlsShowingTimeout?.current);
@@ -41,18 +41,30 @@ function Video({ source, width, height }) {
 
   const play = useCallback(() => {
     if (isVideoInEndedState.current) {
+      setPlayedTime(0);
       isVideoInEndedState.current = false;
       videoRef.current.seek(0);
     }
 
+    if (isPosterShown) {
+      setIsPosterShown(false);
+    }
+
     setPaused(false);
+    setPaused(true);
+    setPaused(false);
+
     hideControlsWithTimeout();
-  }, [hideControlsWithTimeout]);
+  }, [hideControlsWithTimeout, isPosterShown]);
 
   const pause = useCallback(() => {
     setPaused(true);
     hideControlsWithTimeout();
   }, [hideControlsWithTimeout]);
+
+  const onFullscreenPlayerDidDismiss = useCallback(() => {
+    setPaused(true);
+  }, []);
 
   const showControls = useCallback(() => {
     setIsControlsShown(true);
@@ -82,7 +94,6 @@ function Video({ source, width, height }) {
   }, [playedTime]);
 
   const handleOnLoadEvent = useCallback(({ duration: videoDuration }) => {
-    setDuration(videoDuration);
     seekToMakeThumbnail(videoDuration);
   }, [seekToMakeThumbnail]);
 
@@ -92,6 +103,10 @@ function Video({ source, width, height }) {
   }, []);
 
   const toggleFullScreen = useCallback(() => {
+    if (setIsPosterShown) {
+      setIsPosterShown(false);
+    }
+
     if (isFullScreen) {
       setPaused(true);
       clearTimeout(controlsShowingTimeout?.current);
@@ -102,8 +117,16 @@ function Video({ source, width, height }) {
   }, [isFullScreen]);
 
   useDidUpdate(() => {
-    videoRef.current.seek(playedTimeAsRef.current);
+    setPlayedTime(playedTimeAsRef.current);
+
+    if (videoRef.current) {
+      videoRef.current.seek(playedTimeAsRef.current);
+    }
   }, [isFullScreen]);
+
+  const showFullScreen = useCallback(() => {
+    videoRef.current.presentFullscreenPlayer();
+  }, []);
 
   const renderingHeight = width / height < MAX_VERTICAL_VIDEO_ASPECT_RATIO
     ? renderingWidth * (1 / MAX_VERTICAL_VIDEO_ASPECT_RATIO)
@@ -114,9 +137,7 @@ function Video({ source, width, height }) {
     height: renderingHeight,
   }), [renderingWidth, renderingHeight]);
 
-  // const cachedSource = useMemo(() => {
-  //   return { ...source, uri: convertToProxyURL(source.uri) };
-  // }, [source]);
+  const posterStyle = useMemo(() => [videoStyle, viewable && styles.posterOverVideo], [viewable, videoStyle]);
 
   const Container = isFullScreen ? Modal : View;
 
@@ -126,21 +147,28 @@ function Video({ source, width, height }) {
         style={isFullScreen ? styles.fullScreenContainer : styles.container}
         onLayout={handleRenderedContainerLayout}
       >
-        <ReactNativeVideo
-          ref={videoRef}
-          onLoad={handleOnLoadEvent}
-          onEnd={handleVideoPlayingEnded}
-          style={videoStyle}
-          source={source}
-          ignoreSilentSwitch="ignore"
-          volume={1}
-          playInBackground
-          playWhenInactive
-          paused={paused}
-          resizeMode="cover"
-          progressUpdateInterval={300}
-          onProgress={updateTiming}
-        />
+        {(!posterSource || !isPosterShown || viewable) && (
+          <ReactNativeVideo
+            onFullscreenPlayerDidDismiss={onFullscreenPlayerDidDismiss}
+            onLoad={handleOnLoadEvent}
+            ref={videoRef}
+            onEnd={handleVideoPlayingEnded}
+            style={videoStyle}
+            source={source}
+            ignoreSilentSwitch="ignore"
+            volume={1}
+            playInBackground
+            playWhenInactive
+            paused={paused}
+            resizeMode="cover"
+            progressUpdateInterval={300}
+            onProgress={updateTiming}
+          />
+        )}
+
+        {posterSource && isPosterShown && (
+          <FastImage style={posterStyle} source={posterSource} />
+        )}
 
         {isControlsShown && (
           <>
@@ -166,7 +194,7 @@ function Video({ source, width, height }) {
             </View>
 
             <View style={styles.toggleFullScreenIconContainer}>
-              <TouchableOpacity onPress={toggleFullScreen}>
+              <TouchableOpacity onPress={Platform.OS === 'ios' ? showFullScreen : toggleFullScreen}>
                 {isFullScreen ? <CloseVideoFullScreenIcon /> : <OpenVideoFullScreenIcon />}
               </TouchableOpacity>
             </View>
@@ -176,17 +204,25 @@ function Video({ source, width, height }) {
         {!isControlsShown && <Pressable style={styles.toggleControlsShowingContainer} onPress={showControls} />}
       </View>
     </Container>
-
   );
 }
 
 Video.propTypes = {
+  posterSource: PropTypes.object,
   source: PropTypes.shape({
     uri: PropTypes.string.isRequired,
     headers: PropTypes.shape({}),
   }).isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
+  duration: PropTypes.number,
+  viewable: PropTypes.bool,
+};
+
+Video.defaultProps = {
+  posterSource: null,
+  duration: 0,
+  viewable: false,
 };
 
 export default React.memo(Video);

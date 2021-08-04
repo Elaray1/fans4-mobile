@@ -7,12 +7,15 @@ import fonts from 'themes/fonts';
 export default StyleSheet.create({
   container: {
     width: '100%',
+    minHeight: 100,
   },
   fullScreenContainer: {
+    position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.black,
     height: '100%',
+    width: '100%',
   },
   playControlContainer: {
     position: 'absolute',
@@ -59,5 +62,9 @@ export default StyleSheet.create({
     height: '100%',
     top: 0,
     left: 0,
+  },
+  posterOverVideo: {
+    position: 'absolute',
+    top: 0,
   },
 });
