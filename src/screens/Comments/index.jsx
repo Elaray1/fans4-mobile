@@ -194,6 +194,39 @@ function Comments({ route }) {
     }
     return <Loader />;
   };
+
+  const renderList = () => {
+    if (isRefreshing) {
+      return <Loader />;
+    }
+
+    if (!comments.length) {
+      return (
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+          keyboardShouldPersistTaps="handled"
+        >
+          <EmptyView />
+        </ScrollView>
+      )
+    }
+
+    return (
+      <FlatList
+        data={comments}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        onEndReachedThreshold={0.3}
+        onEndReached={fetchNewItems}
+        showsVerticalScrollIndicator={false}
+        ListFooterComponent={renderFooter}
+        onRefresh={onRefresh}
+        refreshing={isRefreshing}
+      />
+    )
+  }
+
   return (
     <SafeAreaView style={styles.screen}>
       <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
@@ -203,46 +236,27 @@ function Comments({ route }) {
             leftItemType="backArrow"
           />
           <View style={styles.content}>
-            {isRefreshing && <Loader />}
-            {!isRefreshing && (comments.length ? (
-              <FlatList
-                data={comments}
-                renderItem={renderItem}
-                keyExtractor={keyExtractor}
-                onEndReachedThreshold={0.3}
-                onEndReached={fetchNewItems}
-                showsVerticalScrollIndicator={false}
-                ListFooterComponent={renderFooter}
-                onRefresh={onRefresh}
-                refreshing={isRefreshing}
-              />
-            ) : (
-              <ScrollView
-                contentContainerStyle={{ flexGrow: 1 }}
-                refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
-                keyboardShouldPersistTaps="handled"
-              >
-                <EmptyView />
-              </ScrollView>
-            ))}
+            {renderList()}
+
             {userType === USER_TYPES.FAN && !isRefreshing && (
-            <View style={styles.commentContainer}>
-              <View style={styles.line} />
-              <Text style={styles.secondaryText}>
-                {`${t('Comments.addComment')} ${commentValue.length ? `(${t('Comments.max160Characters')})` : ''}`}
-              </Text>
-              <Input
-                value={commentValue}
-                onChange={setCommentValue}
-                maxLength={COMMENT_MAX_LEGHT}
-                multiline
-                multilineSmall
-                style={styles.input}
-                buttonTitle={t('Comments.post')}
-                onButtonPress={onCreateComment}
-                disabled={isButtonDisabled}
-              />
-            </View>
+              <View style={styles.commentContainer}>
+                <View style={styles.line} />
+                <Text style={styles.secondaryText}>
+                  {`${t('Comments.addComment')} ${commentValue.length ? `(${t('Comments.max160Characters')})` : ''}`}
+                </Text>
+                <Input
+                  value={commentValue}
+                  onChange={setCommentValue}
+                  maxLength={COMMENT_MAX_LEGHT}
+                  multiline
+                  multilineSmall
+                  autogrowHeight
+                  style={styles.input}
+                  buttonTitle={t('Comments.post')}
+                  onButtonPress={onCreateComment}
+                  disabled={isButtonDisabled}
+                />
+              </View>
             )}
           </View>
         </View>
