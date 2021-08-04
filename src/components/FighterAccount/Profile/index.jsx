@@ -53,11 +53,12 @@ Profile.propTypes = {
   nickname: PropTypes.string,
   location: PropTypes.string.isRequired,
   fightingStatus: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
+  status: PropTypes.string,
 };
 
 Profile.defaultProps = {
   nickname: null,
+  status: null,
 };
 
 export default React.memo(Profile);

@@ -10,10 +10,6 @@ import colors from 'themes/colors';
 
 import Text from 'components/Text';
 import Post from 'components/Post';
-import Profile from 'components/FighterAccount/Profile';
-import Statistic from 'components/FighterAccount/Statistic';
-import Biography from 'components/FighterAccount/Biography';
-import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
@@ -26,6 +22,8 @@ import * as rootNavigation from 'helpers/rootNavigation';
 
 import useToast from 'hooks/useToast';
 
+import FighterHeader from './FighterHeader';
+
 import styles from './styles';
 
 const INITIAL_PAGE = 1;
@@ -37,14 +35,6 @@ function FighterAccount() {
   const { showFailure } = useToast();
 
   const userId = useSelector(userSelectors.getUserId);
-  const fullName = useSelector(userSelectors.getUserFullName);
-  const nickname = useSelector(userSelectors.getUserNickname);
-  const hometown = useSelector(userSelectors.getHometown);
-  const fightingStatus = useSelector(userSelectors.getFightingStatus);
-  const avatarUrl = useSelector(userSelectors.getAvatarUrl);
-  const biography = useSelector(userSelectors.getUserBiographyAbout);
-  const age = useSelector(userSelectors.getUserAge);
-  const profileInfo = useSelector(userSelectors.getUserProfileInfo);
 
   const [postsCount, setPostsCount] = useState(null);
   const [fansCount, setFansCount] = useState(null);
@@ -109,10 +99,6 @@ function FighterAccount() {
 
     init();
   }, [userId, showFailure]);
-
-  const onFansPress = useCallback(() => {
-    navigation.navigate('Fans');
-  }, [navigation]);
 
   const onAddBiographyPress = useCallback(() => {
     analyticsService.logEvent({
@@ -185,52 +171,6 @@ function FighterAccount() {
     );
   };
 
-  const renderHeader = () => {
-    return (
-      <View style={styles.flatListHeader}>
-
-        <Profile
-          avatarUrl={avatarUrl}
-          fullName={fullName}
-          nickname={nickname}
-          location={hometown}
-          fightingStatus={fightingStatus}
-        />
-
-        <View style={styles.line} />
-
-        <Statistic
-          postsCount={postsCount}
-          fansCount={fansCount}
-          onFansPress={onFansPress}
-          recordCount={profileInfo?.record}
-        />
-
-        <View style={styles.line} />
-
-        <Biography
-          biography={biography}
-          onAddBiographyPress={onAddBiographyPress}
-        />
-
-        <View style={styles.line} />
-
-        <PersonalInfo
-          age={age}
-          weight={profileInfo?.weight}
-          height={profileInfo?.height}
-          reach={profileInfo?.reach}
-        />
-
-        <View style={styles.line} />
-
-        <Text style={[styles.blockTitle, styles.postsTitle]}>{t('Account.Posts')}</Text>
-
-      </View>
-
-    );
-  };
-
   const renderNoItems = () => {
     return (
       <View style={styles.noItemsContainer}>
@@ -252,7 +192,13 @@ function FighterAccount() {
       onEndReached={handleLoadMore}
       onEndReachedThreshold={0.1}
       initialNumToRender={10}
-      ListHeaderComponent={renderHeader} // we can't use flatlist inside of scrollview
+      ListHeaderComponent={(
+        <FighterHeader
+          postsCount={postsCount}
+          fansCount={fansCount}
+          onAddBiographyPress={onAddBiographyPress}
+        />
+      )}
       ListFooterComponent={renderFooter}
       ListEmptyComponent={renderNoItems}
     />

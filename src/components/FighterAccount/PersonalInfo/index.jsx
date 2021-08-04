@@ -35,27 +35,27 @@ const PersonalInfo = ({
       </View>
 
       {isPersonalInfoOpen && (
-      <View style={styles.personalInfoContainer}>
-        <View style={styles.personalInfoData}>
-          <Text style={styles.profileDataTitle}>{t('Account.age')}</Text>
-          <Text style={styles.personalInfoValue}>{age}</Text>
-        </View>
+        <View style={styles.personalInfoContainer}>
+          <View style={styles.personalInfoData}>
+            <Text style={styles.profileDataTitle}>{t('Account.age')}</Text>
+            <Text style={styles.personalInfoValue}>{age}</Text>
+          </View>
 
-        <View style={styles.personalInfoData}>
-          <Text style={styles.profileDataTitle}>{t('Account.weight')}</Text>
-          <Text style={styles.personalInfoValue}>{weight}</Text>
-        </View>
+          <View style={styles.personalInfoData}>
+            <Text style={styles.profileDataTitle}>{t('Account.weight')}</Text>
+            <Text style={styles.personalInfoValue}>{weight}</Text>
+          </View>
 
-        <View style={styles.personalInfoData}>
-          <Text style={styles.profileDataTitle}>{t('Account.height')}</Text>
-          <Text style={styles.personalInfoValue}>{height}</Text>
-        </View>
+          <View style={styles.personalInfoData}>
+            <Text style={styles.profileDataTitle}>{t('Account.height')}</Text>
+            <Text style={styles.personalInfoValue}>{height}</Text>
+          </View>
 
-        <View style={styles.personalInfoData}>
-          <Text style={styles.profileDataTitle}>{t('Account.reach')}</Text>
-          <Text style={styles.personalInfoValue}>{reach}</Text>
+          <View style={styles.personalInfoData}>
+            <Text style={styles.profileDataTitle}>{t('Account.reach')}</Text>
+            <Text style={styles.personalInfoValue}>{reach}</Text>
+          </View>
         </View>
-      </View>
       )}
 
     </TouchableOpacity>

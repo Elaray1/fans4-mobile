@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { View, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -15,11 +15,41 @@ const Biography = ({
   onAddBiographyPress,
 }) => {
   const { t } = useTranslation();
-  const [isBiographyOpen, setIsBiographyOpen] = useState(onAddBiographyPress ? !biography : false);
+  const [isOpen, setIsOpen] = useState(onAddBiographyPress ? !biography : false);
 
-  const onBiographyPress = useCallback(() => {
-    setIsBiographyOpen(!isBiographyOpen);
-  }, [isBiographyOpen]);
+  const onBiographyPress = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const renderBiography = () => {
+    if (biography) {
+      return (
+        <Text style={styles.biographyText}>
+          {biography}
+        </Text>
+      );
+    }
+
+    if (onAddBiographyPress) {
+      return (
+        <TouchableOpacity
+          style={styles.addBiographyContainter}
+          activeOpacity={0.7}
+          onPress={onAddBiographyPress}
+        >
+          <Text style={styles.addBiographyText}>
+            {t('Account.addBiography')}
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <Text style={styles.biographyText}>
+        {t('Fighter.fighterHasntAddedBiographyYet')}
+      </Text>
+    );
+  };
 
   return (
     <TouchableOpacity
@@ -28,28 +58,15 @@ const Biography = ({
       onPress={onBiographyPress}
     >
       <View
-        style={[styles.biographyData,
-          !isBiographyOpen && styles.biographyClosedData,
-        ]}
+        style={[styles.biographyData, !isOpen && styles.biographyClosedData]}
       >
-        <Text style={styles.blockTitle}>{t('Account.biography')}</Text>
-        {isBiographyOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
+        <Text style={styles.blockTitle}>
+          {t('Account.biography')}
+        </Text>
+        {isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </View>
 
-      {isBiographyOpen && Boolean(biography) && <Text style={styles.biographyText}>{biography}</Text>}
-
-      {isBiographyOpen && !biography && (onAddBiographyPress
-        ? (
-          <TouchableOpacity
-            style={styles.addBiographyContainter}
-            activeOpacity={0.7}
-            onPress={onAddBiographyPress}
-          >
-            <Text style={styles.addBiographyText}>{t('Account.addBiography')}</Text>
-          </TouchableOpacity>
-        )
-        : <Text style={styles.biographyText}>{t('Fighter.fighterHasntAddedBiographyYet')}</Text>)}
-
+      {isOpen && renderBiography()}
     </TouchableOpacity>
   );
 };
