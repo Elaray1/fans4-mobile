@@ -146,7 +146,7 @@ function Post({
             <TouchableOpacity
               onPress={onLikePress}
               activeOpacity={0.7}
-              style={[styles.postAction]}
+              style={styles.postAction}
               disabled={disabled || isFighter}
             >
               {isLiked ? (

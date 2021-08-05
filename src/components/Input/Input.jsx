@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useState, useRef } from 'react';
 import {
-  TextInput, View, Text as RNText, TouchableOpacity, Pressable
+  TextInput, View, Text as RNText, TouchableOpacity, Pressable,
 } from 'react-native';
 import getKeyboardType from 'helpers/getKeyboardType';
 

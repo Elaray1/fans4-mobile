@@ -26,7 +26,9 @@ function ConfirmYourEmailAddress() {
     });
   }, [navigation]);
 
-  const description = `${t('ConfirmYourEmailAddress.weHaveSentYouAConfirmationEmailTo')} ${userNewEmail}.\n\n${t('ConfirmYourEmailAddress.pleaseCheckYourInbox')}`;
+  const weHaveSentYou = t('ConfirmYourEmailAddress.weHaveSentYouAConfirmationEmailTo');
+  const plsCheckYourInbox = t('ConfirmYourEmailAddress.pleaseCheckYourInbox');
+  const description = `${weHaveSentYou} ${userNewEmail}.\n\n${plsCheckYourInbox}`;
 
   return (
     <IllustrationScreen
