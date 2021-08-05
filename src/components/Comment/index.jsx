@@ -101,13 +101,13 @@ function Comment({
                   ]}
                 >
                   {isAuthor ? (
-                    <TouchableOpacity activeOpacity={0.7} onPress={onDeleteComment}>
+                    <TouchableOpacity style={styles.clickableArea} activeOpacity={0.7} onPress={onDeleteComment}>
                       <Text style={styles.actionsText}>
                         {t('Comment.deleteComment')}
                       </Text>
                     </TouchableOpacity>
                   ) : (
-                    <TouchableOpacity activeOpacity={0.7} onPress={onReportComment}>
+                    <TouchableOpacity style={styles.clickableArea} activeOpacity={0.7} onPress={onReportComment}>
                       <Text style={styles.actionsText}>
                         {t('Comment.reportThisComment')}
                       </Text>

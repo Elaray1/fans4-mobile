@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, KeyboardAvoidingView,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -31,6 +31,9 @@ import styles from './styles';
 
 const PER_PAGE_COUNT = 25;
 const COMMENT_MAX_LEGHT = 160;
+
+const keyboardAvoidingViewBehavior = Platform.OS === 'ios' ? 'padding' : 'height';
+const keyboardVerticalOffset = Platform.OS === 'ios' ? 0 : 16;
 
 function Comments({ route }) {
   const { t } = useTranslation();
@@ -229,7 +232,11 @@ function Comments({ route }) {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
+      <KeyboardAvoidingView
+        behavior={keyboardAvoidingViewBehavior}
+        style={styles.keyboardAvoiding}
+        keyboardVerticalOffset={keyboardVerticalOffset}
+      >
         <View style={styles.keyboardAvoidingChildContainer}>
           <Header
             title={t('Comments.comments')}

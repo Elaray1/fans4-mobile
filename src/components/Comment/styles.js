@@ -46,10 +46,12 @@ export default StyleSheet.create({
     zIndex: 1,
     elevation: 1,
     minWidth: 183,
-    paddingVertical: 16,
-    paddingLeft: 20,
     backgroundColor: colors.gray,
     borderRadius: 5,
+  },
+  clickableArea: {
+    paddingVertical: 16,
+    paddingLeft: 20,
   },
   actionsText: {
     fontSize: fonts.size.small,
