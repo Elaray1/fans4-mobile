@@ -49,7 +49,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Fans4 requires access to your photo library to provide opportunity to upload photos and videos as post</string>
 	<key>UIAppFonts</key>
