@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import colors from 'themes/colors';
-import { commonStyles, variables } from 'themes/commonStyles';
+import { commonStyles } from 'themes/commonStyles';
+import { startScreensStyles } from 'themes/startScreenStyles';
 
 import fonts from 'themes/fonts';
 
@@ -15,7 +16,6 @@ export default StyleSheet.create({
     ...commonStyles.screenContent,
   },
   scrollContent: {
-    paddingTop: variables.paddingTopLogo,
     flex: 1,
   },
   keyboardAvoiding: {
@@ -27,11 +27,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   logo: {
-    marginBottom: 60,
-    alignSelf: 'center',
-  },
-  logoForSmallScreen: {
-
+    ...startScreensStyles.logo,
   },
   titleContainer: {
     flexDirection: 'row',

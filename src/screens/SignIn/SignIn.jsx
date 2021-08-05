@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity, Linking,
-  useWindowDimensions,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -26,11 +25,7 @@ import extractApiErrorMessage from 'helpers/extractApiErrorMessage';
 
 import styles from './SignIn.styles';
 
-const SMALL_SCREEN_HEIGHT = 640;
-const SMALL_SCREEN_PADDING_TOP_DECREASE = 40;
-
 function SignIn({ route }) {
-  const { height } = useWindowDimensions();
   const { t } = useTranslation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -155,12 +150,7 @@ function SignIn({ route }) {
 
       <ScrollView
         style={styles.content}
-        contentContainerStyle={[
-          styles.scrollContent,
-          SMALL_SCREEN_HEIGHT >= height && {
-            paddingTop: styles.scrollContent.paddingTop - SMALL_SCREEN_PADDING_TOP_DECREASE,
-          },
-        ]}
+        contentContainerStyle={styles.scrollContent}
       >
         <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
           <View style={styles.keyboardAvoidingChildContainer}>

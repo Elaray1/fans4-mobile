@@ -181,6 +181,7 @@ function Finances({ route }) {
   const EmptyView = () => (
     <View style={styles.emptyView}>
       <IncomeIllustration style={styles.emptyViewImage} />
+
       <Text style={styles.title}>{emptyViewText.title}</Text>
       <Text style={styles.secondaryText}>
         {emptyViewText.text}

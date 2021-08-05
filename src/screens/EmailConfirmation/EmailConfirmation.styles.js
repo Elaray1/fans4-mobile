@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import colors from 'themes/colors';
-import { commonStyles, variables } from 'themes/commonStyles';
+import { commonStyles } from 'themes/commonStyles';
 
 import fonts from 'themes/fonts';
 
@@ -12,7 +12,7 @@ export default StyleSheet.create({
     ...commonStyles.screenContent,
   },
   scrollContent: {
-    paddingTop: variables.paddingTopLogo,
+    paddingTop: 100,
     paddingBottom: 35,
     flex: 1,
     justifyContent: 'space-between',

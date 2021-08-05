@@ -4,7 +4,20 @@ import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 import { variables } from 'themes/commonStyles';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+
+const VERY_SMALL_SCREEN_HEIGHT = 568;
+
+const logOutButton = {
+  paddingTop: 30,
+  paddingBottom: 50,
+  alignItems: 'center',
+};
+
+if (height <= VERY_SMALL_SCREEN_HEIGHT) {
+  logOutButton.paddingTop = 20;
+  logOutButton.paddingBottom = 20;
+}
 
 export default StyleSheet.create({
   modal: {
@@ -59,11 +72,6 @@ export default StyleSheet.create({
     backgroundColor: colors.line,
     height: 1,
   },
-  logOutButton: {
-    paddingTop: 30,
-    paddingBottom: 50,
-    alignItems: 'center',
-  },
   logOutText: {
     color: colors.white,
     fontSize: fonts.size.small,
@@ -71,4 +79,5 @@ export default StyleSheet.create({
     fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
   },
+  logOutButton,
 });

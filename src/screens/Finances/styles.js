@@ -1,10 +1,30 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { commonStyles } from 'themes/commonStyles';
 
 import hexToRgba from 'helpers/hexToRgba';
 
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+
+const { height } = Dimensions.get('window');
+
+const VERY_SMALL_SCREEN_HEIGHT = 568;
+
+const emptyViewImage = {
+  width: 200,
+  height: 200,
+  marginBottom: 50,
+};
+
+const emptyView = {
+  marginTop: '35%',
+  alignItems: 'center',
+};
+
+if (height <= VERY_SMALL_SCREEN_HEIGHT) {
+  emptyViewImage.marginBottom = 0;
+  emptyView.marginTop = '25%';
+}
 
 export default StyleSheet.create({
   screen: {
@@ -34,15 +54,6 @@ export default StyleSheet.create({
   title: {
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
-  },
-  emptyView: {
-    marginTop: '35%',
-    alignItems: 'center',
-  },
-  emptyViewImage: {
-    width: 200,
-    height: 200,
-    marginBottom: 50,
   },
   secondaryText: {
     marginTop: 20,
@@ -114,4 +125,6 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     color: colors.green,
   },
+  emptyViewImage,
+  emptyView,
 });

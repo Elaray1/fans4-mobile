@@ -32,11 +32,7 @@ import extractApiErrorMessage from 'helpers/extractApiErrorMessage';
 
 import styles from './SignUp.styles';
 
-const SMALL_SCREEN_HEIGHT = 640;
-const SMALL_SCREEN_PADDING_TOP_DECREASE = 40;
-
 function SignUp({ route }) {
-  const { height } = useWindowDimensions();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -154,12 +150,7 @@ function SignUp({ route }) {
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <ScrollView
         style={styles.content}
-        contentContainerStyle={[
-          styles.scrollContent,
-          SMALL_SCREEN_HEIGHT >= height && {
-            paddingTop: styles.scrollContent.paddingTop - SMALL_SCREEN_PADDING_TOP_DECREASE,
-          },
-        ]}
+        contentContainerStyle={styles.scrollContent}
       >
         <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
           <View style={styles.keyboardAvoidingChildContainer}>

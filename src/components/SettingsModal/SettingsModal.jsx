@@ -188,24 +188,24 @@ function SettingsModal({
           </View>
 
           {!isFan && (
-          <View>
-            <TouchableOpacity
-              style={styles.settingsOption}
-              onPress={onInvitePress}
-              activeOpacity={0.7}
-            >
-              <InviteIcon style={styles.settingIcon} />
-              <View>
-                <Text style={styles.settingTitle}>
-                  {t('SettingsModal.inviteFan')}
-                </Text>
-                <Text style={styles.settingText}>
-                  {t('SettingsModal.scanQRCode')}
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={styles.line} />
-          </View>
+            <View>
+              <TouchableOpacity
+                style={styles.settingsOption}
+                onPress={onInvitePress}
+                activeOpacity={0.7}
+              >
+                <InviteIcon style={styles.settingIcon} />
+                <View>
+                  <Text style={styles.settingTitle}>
+                    {t('SettingsModal.inviteFan')}
+                  </Text>
+                  <Text style={styles.settingText}>
+                    {t('SettingsModal.scanQRCode')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.line} />
+            </View>
           )}
 
           <View>
