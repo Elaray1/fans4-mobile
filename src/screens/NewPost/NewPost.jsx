@@ -26,11 +26,18 @@ function NewPost() {
   const { t } = useTranslation();
   const [text, setText] = useState('');
   const [uploadingMedia, setUploadingMedia] = useState(null);
+  const [uploadingPoster, setUploadingPoster] = useState(null);
   const [loading, setLoading] = useState(null);
   const isSubmitDisabled = loading || (text === '' && !uploadingMedia);
 
   const onChangeText = useCallback(newText => setText(newText), []);
-  const handleMediaUpload = useCallback(media => setUploadingMedia(media), [setUploadingMedia]);
+  const handleMediaUpload = useCallback((media, poster) => {
+    setUploadingMedia(media);
+
+    if (setUploadingPoster) {
+      setUploadingPoster(poster);
+    }
+  }, [setUploadingMedia]);
 
   const userId = useSelector(userSelectors.getUserId);
 
@@ -60,6 +67,24 @@ function NewPost() {
     setLoading(true);
 
     try {
+      if (uploadingPoster) {
+        const {
+          postId,
+          storageUrl,
+        } = await postApi.createVideoPoster({}, uploadingPoster && {
+          name: 'file',
+          type: uploadingPoster.mime,
+          uri: uploadingPoster.path,
+        });
+
+        params.postId = postId;
+        params.posterStorageUrl = storageUrl;
+      }
+
+      if (uploadingMedia && uploadingMedia.mime.includes('video')) {
+        params.duration = uploadingMedia.duration;
+      }
+
       await postApi.createPost(params, uploadingMedia && {
         name: 'file',
         type: uploadingMedia.mime,
@@ -80,7 +105,7 @@ function NewPost() {
     } finally {
       setLoading(false);
     }
-  }, [text, uploadingMedia, goToAccount, userId]);
+  }, [text, uploadingMedia, goToAccount, userId, uploadingPoster]);
 
   return (
     <SafeAreaView style={styles.screen}>

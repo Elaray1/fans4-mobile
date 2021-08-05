@@ -6,6 +6,9 @@ export const getPostsCount = () => apiClient
 export const createPost = (data, file) => apiClient
   .postWithFile('posts', data, file);
 
+export const createVideoPoster = (data, file) => apiClient
+  .postWithFile('posts/video-poster', data, file);
+
 export const getMyFeedPosts = ({ page, perPage }) => apiClient
   .get('posts/feed', {
     page,

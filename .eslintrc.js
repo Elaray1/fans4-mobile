@@ -13,6 +13,7 @@ module.exports = {
   },
   plugins: ['react', 'react-native'],
   rules: {
+    'react/forbid-prop-types': 'off',
     semi: ['error', 'always'],
     'class-methods-use-this': 'off',
     'object-curly-newline': 'off',

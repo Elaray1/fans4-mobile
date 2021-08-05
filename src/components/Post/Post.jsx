@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -38,6 +38,7 @@ function Post({
   likedUserIds,
   commentsCount,
   disabled,
+  viewable,
 }) {
   const navigation = useNavigation();
   const { showFailure } = useToast();
@@ -50,6 +51,19 @@ function Post({
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
   const isFighter = userType === USER_TYPES.FIGHTER;
 
+  const posterSource = useMemo(() => {
+    if (media && media.type === MEDIA_TYPES.VIDEO && media.posterStorageUrl) {
+      return {
+        uri: `${config.apiUrl}/posts/${_id}/video-poster`,
+        headers: {
+          Authorization: `Bearer ${config.accessToken}`,
+          'X-Application-ID': config.applicationId,
+        },
+      };
+    }
+    return null;
+  }, [_id, media]);
+
   const authorView = author ? (
     <View style={styles.author}>
       <FastImage
@@ -61,6 +75,7 @@ function Post({
       </Text>
     </View>
   ) : null;
+
 
   let contentContainerView = null;
   if (media) {
@@ -81,15 +96,17 @@ function Post({
             source={source}
           />
         </View>
-
       );
     } else {
       mediaView = (
         <View style={styles.mediaContainer}>
           <Video
+            posterSource={posterSource}
             source={source}
             width={media.width}
             height={media.height}
+            duration={media.duration}
+            viewable={viewable}
           />
         </View>
       );
@@ -196,6 +213,8 @@ Post.propTypes = {
     type: PropTypes.oneOf(Object.values(MEDIA_TYPES)).isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
+    posterStorageUrl: PropTypes.string,
+    duration: PropTypes.number,
   }),
   author: PropTypes.shape({
     _id: PropTypes.string.isRequired,
@@ -207,6 +226,7 @@ Post.propTypes = {
   likedUserIds: PropTypes.arrayOf(PropTypes.string),
   commentsCount: PropTypes.number,
   disabled: PropTypes.bool,
+  viewable: PropTypes.bool,
 };
 
 Post.defaultProps = {
@@ -217,6 +237,7 @@ Post.defaultProps = {
   likedUserIds: [],
   commentsCount: 0,
   disabled: false,
+  viewable: PropTypes.bool,
 };
 
 export default React.memo(Post);

@@ -1,13 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  TouchableOpacity,
-  View,
-  Image,
-  Alert,
-} from 'react-native';
+import { TouchableOpacity, View, Image, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import ImagePicker from 'react-native-image-crop-picker';
+import { createThumbnail } from 'react-native-create-thumbnail';
 import Video from 'components/Video';
 import Text from 'components/Text';
 import _ from 'lodash';
@@ -28,6 +24,13 @@ function UploadMediaButton({
 
   const [errorText, setErrorText] = useState(null);
   const [media, setMedia] = useState(null);
+  const videoSource = useMemo(() => {
+    if (!media) {
+      return null;
+    }
+
+    return { uri: media.path };
+  }, [media]);
 
   const onEditProfilePicture = useCallback(async () => {
     const options = croppingAvatar ? {
@@ -40,17 +43,18 @@ function UploadMediaButton({
       multiple: false,
     } : {
       mediaType,
+      compressVideoPreset: 'HighestQuality',
       multiple: false,
     };
 
     try {
       let mediaData = await ImagePicker.openPicker(options);
-
       if (mediaData.mime.includes('image') && !croppingAvatar) {
         const { width, height, path } = mediaData;
 
         if (width / height < 0.8) {
           const croppedHeight = width * 5 / 4;
+
           mediaData = await ImagePicker.openCropper({
             path,
             height: croppedHeight,
@@ -59,8 +63,24 @@ function UploadMediaButton({
         }
       }
 
+      if (mediaData.mime.includes('video')) {
+        const res = await createThumbnail({
+          format: 'png',
+          url: mediaData.path,
+          timeStamp: mediaData.duration >= 1000 ? 1000 : Math.round(mediaData.duration / 2),
+        });
+
+        mediaData.duration /= 1000;
+
+        handleMediaUpload(mediaData, {
+          path: res.path,
+          mime: 'image/png',
+        });
+      } else {
+        handleMediaUpload(mediaData);
+      }
+
       setMedia(mediaData);
-      handleMediaUpload(mediaData);
 
       setErrorText(null);
     } catch (error) {
@@ -84,7 +104,9 @@ function UploadMediaButton({
         {
           text: t('uploadMediaButton.delete'),
           style: 'default',
-          onPress: () => setMedia(null),
+          onPress: () => {
+            setMedia(null);
+          },
         }],
     );
   }, [t]);
@@ -102,6 +124,7 @@ function UploadMediaButton({
           <Text style={styles.text}>{t('uploadMediaButton.upload')}</Text>
           <PaperclipIcon />
         </TouchableOpacity>
+
         {errorText && (
           <View style={styles.error}>
             <Text style={styles.errorText}>{errorText}</Text>
@@ -116,6 +139,7 @@ function UploadMediaButton({
           style={[styles.photoImage, { aspectRatio: media.width / media.height }]}
           source={{ uri: media.path }}
         />
+
         <TouchableOpacity
           style={styles.redBin}
           activeOpacity={0.7}
@@ -128,7 +152,7 @@ function UploadMediaButton({
   } else {
     contentView = (
       <View>
-        <Video source={{ uri: media.path }} width={media.width} height={media.height} />
+        <Video source={videoSource} width={media.width} height={media.height} duration={media.duration} />
         <TouchableOpacity
           style={styles.redBin}
           activeOpacity={0.7}

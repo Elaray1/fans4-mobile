@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
 import { ToastProvider } from 'react-native-fast-toast';
 import cookies from '@react-native-cookies/cookies';
+
 import 'react-native-gesture-handler';
 
 import { STORAGE_KEYS, PUSH_NOTIFICATION_TYPES } from 'helpers/constants';
@@ -204,7 +205,6 @@ function AppNavigation() {
         </Stack.Navigator>
       </NavigationContainer>
     </ToastProvider>
-
   );
 }
 
