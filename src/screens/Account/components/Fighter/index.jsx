@@ -203,7 +203,7 @@ function FighterAccount() {
           postsCount={postsCount}
           fansCount={fansCount}
           onFansPress={onFansPress}
-          recordCount={profileInfo.record}
+          recordCount={profileInfo?.record}
         />
 
         <View style={styles.line} />

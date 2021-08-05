@@ -3,8 +3,6 @@ import { StyleSheet } from 'react-native';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
-import { commonStyles } from 'themes/commonStyles';
-
 export default StyleSheet.create({
   container: {
     flexDirection: 'row',

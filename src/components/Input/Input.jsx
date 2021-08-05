@@ -15,8 +15,6 @@ import ClosedEyeIcon from 'assets/icons/closed-eye';
 
 import styles from './Input.styles';
 
-const DEFAULT_INPUT_CONTENT_SIZE_HEIGHT = 27.7;
-
 function Input({
   type,
   label,
@@ -41,10 +39,10 @@ function Input({
   buttonTitle,
   onButtonPress,
   autoFocus,
+  autogrowHeight,
 }) {
   const [focused, setFocused] = useState(false);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
-  const [inputContentSizeHeight, setInputContentSizeHeight] = useState(DEFAULT_INPUT_CONTENT_SIZE_HEIGHT);
 
   const inputRef = useRef(null);
   const focusIfMulitlone = useCallback(() => {
@@ -66,10 +64,6 @@ function Input({
   const onChangePasswordVisibility = useCallback(() => {
     setPasswordVisible(!isPasswordVisible);
   }, [isPasswordVisible]);
-
-  const onContentSizeChange = useCallback((event) => {
-    setInputContentSizeHeight(event.nativeEvent.contentSize.height);
-  }, []);
 
   return (
     <View style={style}>
@@ -94,6 +88,7 @@ function Input({
           !!errors.length && styles.error,
           disabled && !buttonTitle && styles.disabled,
           multiline && !multilineSmall && styles.inputContainerMultiline,
+          autogrowHeight && styles.autogrowHeight,
         ]}
       >
         <TextInput
@@ -117,7 +112,6 @@ function Input({
           multiline={multiline}
           autoCapitalize={autoCapitalize}
           numberOfLines={numberOfLines}
-          onContentSizeChange={onContentSizeChange}
           autoFocus={autoFocus}
         />
 
@@ -140,10 +134,7 @@ function Input({
             onPress={onButtonPress}
             disabled={!value || disabled}
             titleStyle={styles.buttonTitle}
-            style={[
-              styles.button,
-              Boolean(inputContentSizeHeight > DEFAULT_INPUT_CONTENT_SIZE_HEIGHT) && styles.multilineButtonStyles,
-            ]}
+            style={styles.button}
             disabledTitleStyle={styles.disabledTitleStyle}
           />
         )}
@@ -183,6 +174,7 @@ Input.propTypes = {
   onButtonPress: PropTypes.func,
   autoFocus: PropTypes.bool,
   multilineSmall: PropTypes.bool,
+  autogrowHeight: PropTypes.bool,
 };
 
 Input.defaultProps = {
@@ -208,6 +200,7 @@ Input.defaultProps = {
   onButtonPress: () => null,
   autoFocus: false,
   multilineSmall: false,
+  autogrowHeight: false,
 };
 
 export default Input;

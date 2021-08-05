@@ -15,6 +15,11 @@ export default StyleSheet.create({
     marginBottom: 5,
     backgroundColor: colors.gray,
   },
+  // Currently used only for screen Comments
+  autogrowHeight: {
+    height: 'auto',
+    paddingVertical: 10,
+  },
   disabled: {
     backgroundColor: colors.disabledBackground,
     color: colors.disabledText,
@@ -66,9 +71,6 @@ export default StyleSheet.create({
   },
   button: {
     marginLeft: 20,
-  },
-  multilineButtonStyles: {
-    alignSelf: 'flex-end',
   },
   disabledTitleStyle: {
     opacity: 0.5,

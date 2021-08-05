@@ -3,8 +3,9 @@ import { Platform } from 'react-native';
 const isIOS = Platform.OS === 'ios';
 
 const family = {
+  // for iOS it should be FontFamily that identical for those both fonts
   base: isIOS ? 'Noto Sans' : 'NotoSans-Regular',
-  bold: isIOS ? 'Noto Sans Bold' : 'NotoSans-Bold',
+  bold: isIOS ? 'Noto Sans' : 'NotoSans-Bold',
 };
 
 const size = {
