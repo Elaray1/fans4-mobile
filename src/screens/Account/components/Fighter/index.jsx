@@ -185,9 +185,9 @@ function FighterAccount() {
   const renderNoItems = () => {
     return (
       <View style={styles.noItemsContainer}>
-        <Text style={styles.noItemsText}>{t('Account.OnceYouAddAPost')}</Text>
+        <Text style={styles.noItemsText}>{t('Account.addYourFirstPost')}</Text>
         <TouchableOpacity onPress={onAddPostPress}>
-          <Text style={styles.noItemsButtonText}>{t('Account.AddPost')}</Text>
+          <Text style={styles.noItemsButtonText}>{t('Account.addPost')}</Text>
         </TouchableOpacity>
       </View>
     );
