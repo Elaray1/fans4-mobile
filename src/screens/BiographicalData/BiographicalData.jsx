@@ -19,7 +19,7 @@ import Toggle from 'components/Toggle';
 import UploadMediaButton from 'components/UploadMediaButton';
 
 import * as userActions from 'resources/user/user.actions';
-import { FIGHTER_GENDERS } from 'resources/user/user.constants';
+import { USER_TYPES, FIGHTER_GENDERS } from 'resources/user/user.constants';
 
 import styles from './BiographicalData.styles';
 
@@ -87,7 +87,25 @@ function BiographicalData() {
 
   const goToSelectType = useCallback(async () => {
     await dispatch(userActions.logout());
-    navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'SelectUserType' } }] });
+    navigation.reset({
+      index: 1, // to simulate situation like user went from 'SelectUserType' screen
+      routes: [{
+        name: 'AuthStack',
+        state: {
+          routes: [{
+            name: 'SelectUserType',
+          }],
+        },
+      }, {
+        name: 'AuthStack',
+        state: {
+          routes: [{
+            name: 'SignIn',
+            params: { userType: USER_TYPES.FIGHTER },
+          }],
+        },
+      }],
+    });
   }, [dispatch, navigation]);
 
   const onToggleSelect = useCallback((item) => {
