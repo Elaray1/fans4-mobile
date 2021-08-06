@@ -212,7 +212,7 @@ function Comments({ route }) {
         >
           <EmptyView />
         </ScrollView>
-      )
+      );
     }
 
     return (
@@ -227,8 +227,8 @@ function Comments({ route }) {
         onRefresh={onRefresh}
         refreshing={isRefreshing}
       />
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={styles.screen}>

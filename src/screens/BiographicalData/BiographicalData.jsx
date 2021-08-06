@@ -87,7 +87,25 @@ function BiographicalData() {
 
   const goToSelectType = useCallback(async () => {
     await dispatch(userActions.logout());
-    navigation.navigate('AuthStack', { screen: 'SignIn', params: { userType: USER_TYPES.FIGHTER } });
+    navigation.reset({
+      index: 1, // to simulate situation like user went from 'SelectUserType' screen
+      routes: [{
+        name: 'AuthStack',
+        state: {
+          routes: [{
+            name: 'SelectUserType',
+          }],
+        },
+      }, {
+        name: 'AuthStack',
+        state: {
+          routes: [{
+            name: 'SignIn',
+            params: { userType: USER_TYPES.FIGHTER },
+          }],
+        },
+      }],
+    });
   }, [dispatch, navigation]);
 
   const onToggleSelect = useCallback((item) => {
