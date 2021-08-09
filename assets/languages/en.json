@@ -69,7 +69,7 @@
   },
   "VerificationPending": {
     "title": "Verification Pending",
-    "description": "Thank you! We are processing the data you submitted. We will let you know as soon as it is complete.",
+    "description": "We are processing the information you submitted.",
     "linkText": "Back to sign in page"
   },
   "VerificationSuccessful": {
@@ -181,7 +181,7 @@
       "question1": "I want to participate in an event. How do I do that?",
       "answer1": "All fights go through a voting process exclusively for our fans. There are three ways to be included in the voting process:\n 1. Fans4 admins nominate you;\n 2. You apply for a fight with another fighter;\n 3. Your fans nominate you through the app.",
       "question2": "Can I choose an opponent if I apply for a fight?",
-      "answer2": "Yes! A unique feature on Fans4 is that you can request a fight against another Fans4 fighter. To 'Apply for a Fight', select a fighter from the Fighters page and open their profile. Click on ‘Apply for a Fight'. Your request will be sent to a Fans4 admin. Note that you can only select a fighter in which:\n - your weight classes are the same;\n - you are in the same category;\n - your opponent is in 'Open for Fights' status.",
+      "answer2": "Yes! A unique feature on Fans4 is that you can request a fight against another Fans4 fighter. To 'Apply for a Fight', select a fighter from the Fighters page and open their profile. Click on ‘Apply for a Fight'. Your request will be sent to a Fans4 admin. Note that you can only select a fighter in which:\n - your weight classes are the same;\n - you are in the same category;\n - your opponent is in 'Ready for Fights' status.",
       "question3": "How can I start earning money?",
       "answer3": "Fans4 is the only platform to offer financial reward to our fighters. You will receive money for every fan that subscribes to your Fans4 page. Be sure to invite followers who will support you via your own personalied QR code found in the app (Profile > Settings > Invite a Fan > scan the QR code). Be an active user on our app, post quality content, apply for fights and participate in events so fans stay tuned to your content.",
       "question4": "How will I receive payment?",
@@ -254,7 +254,7 @@
     "readyForFights": "Ready for Fights",
     "injured": "Injured",
     "recovery": "Post-fight Recovery",
-    "pending": "Pending",
+    "pending": "In admin review",
     "declined": "Declined",
     "removed": "Removed",
     "blocked": "Blocked"
@@ -272,8 +272,8 @@
     "height": "Height",
     "reach": "Reach",
     "Posts": "Posts",
-    "OnceYouAddAPost": "Once you add a post you will see it here.",
-    "AddPost": "Add post",
+    "addYourFirstPost": "Add your first post for your fans!",
+    "addPost": "Add post",
     "subscribeToFighter": "Subscribe to this fighter for full access to Posts."
   },
   "AccountBlocked": {
@@ -336,7 +336,7 @@
   },
   "WeightClassSelectModal": {
     "cancel": "Cancel",
-    "chooseWeightClass": "Choose Weight Class",
+    "chooseWeightClasses": "Choose Weight Class(es)",
     "save": "Save",
     "Strawweight": "Strawweight",
     "Flyweight": "Flyweight",
@@ -374,31 +374,31 @@
     "applyForAFight": "Apply for a Fight",
     "proposeAFight": "Propose a Fight",
     "subscribed": "Subscribed",
-    "youCannotApplyForAFight_0": "You can not apply for a fight with ",
-    "youCannotApplyForAFight_1": " because you are in different weight classes.",
-    "youCannotApplyForAFight_2": " because you are in different categories.",
+    "youCannotApplyForAFight_0": "You cannot apply for a fight with",
+    "youCannotApplyForAFight_1": "because you are in different weight classes.",
+    "youCannotApplyForAFight_2": "because you are in different categories.",
     "yourFightIsInAdminReview": "Your fight is in admin review.",
     "yourFightIsAlreadyInVoting": "Your fight is already in voting.",
     "yourFightIsAlreadyInUpcomingEvent": "Your fight is already in upcoming event.",
     "youApplied": "You applied. Pending",
     "youAppliedForAFight": "You applied for a fight.",
     "unableToApplyForAFight": "Unable to apply for a fight. Please try again.",
-    "youInjured_0": "You can not apply for a fight with",
+    "youInjured_0": "You cannot apply for a fight with",
     "youInjured_1": "while you are injured.",
-    "youRecovery_0": "You can not apply for a fight with",
+    "youRecovery_0": "You cannot apply for a fight with",
     "youRecovery_1": "because you are in post-fight recovery.",
-    "fighterInjured_0": "You can not apply for a fight with",
+    "fighterInjured_0": "You cannot apply for a fight with",
     "fighterInjured_1": "because this fighter is injured.",
-    "fighterBlocked_0": "You can not apply for a fight with",
+    "fighterBlocked_0": "You cannot apply for a fight with",
     "fighterBlocked_1": "because this fighter is blocked.",
     "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter.",
     "checkBack": "Check back to view your fighter's first exclusive post!"
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",
-    "shareALink": "Share a link",
-    "askYourFan": "Ask your fan to scan this QR code or share a link.",
-    "invitation": "invitation"
+    "shareTheLink": "Share the link",
+    "askYourFan": "Ask your fans to scan this QR code or share the link.",
+    "invitation": "Invitation"
   },
   "Feed": {
     "feed": "Feed",
@@ -417,7 +417,7 @@
     "noEventsYet": "No events, yet",
     "checkBack": "Check back to view the first event.",
     "checkBackFan": "Check back to view the first live event!",
-    "onceYouParticipateInAnEventItWillBeShownOnThisPage": "Once you participate in an event, it will be shown  on this page.",
+    "onceYouParticipateInAnEvent": "Once you participate in an event, you will see it here.",
     "live": "Live",
     "stayTuned": "Stay tuned for results."
   },
@@ -425,9 +425,9 @@
     "couldntLoadTheFightsPullToRefresh": "Couldn’t load the fights. Pull to refresh."
   },
   "Fights": {
-    "fights": "Fights",
+    "fights": "Your Fights",
     "noFightsYyet": "No fights, yet",
-    "checkBackToVote": "Check back to vote for your favorite fighter!",
+    "onceFightsAreAdded": "Once fights are added to the voting, you will see them here.",
     "onceFightsAreScheduledYouWillSeeThemHere": "Once fights are scheduled, you will see them here.",
     "onceYouParticipateInFightsYouWillSeeThemHere": "Once you participate in fights, you will see them here.",
     "voting": "Voting",

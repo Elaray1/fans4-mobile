@@ -137,7 +137,7 @@ function CitySelectModal({
           <TouchableOpacity onPress={onClose} activeOpacity={0.7}>
             <Text style={styles.headerCancel}>{t('WeightClassSelectModal.cancel')}</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('WeightClassSelectModal.chooseWeightClass')}</Text>
+          <Text style={styles.headerTitle}>{t('WeightClassSelectModal.chooseWeightClasses')}</Text>
           <View style={styles.headerEmptyBlock} />
           <TouchableOpacity
             onPress={onSave}

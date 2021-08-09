@@ -51,7 +51,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Fans4 requires access to your photo library to provide opportunity to upload photos and videos as post</string>
+	<string>Fans4 requires access to your photo library to provide opportunity to upload photos and videos as content</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>NotoSans-Bold.ttf</string>

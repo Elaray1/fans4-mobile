@@ -88,7 +88,7 @@ function Events() {
           title: t('Events.noEventsYet'),
           text: userType === USER_TYPES.FAN
             ? t('Events.checkBackFan')
-            : t('Events.onceYouParticipateInAnEventItWillBeShownOnThisPage'),
+            : t('Events.onceYouParticipateInAnEvent'),
         },
       },
     ];

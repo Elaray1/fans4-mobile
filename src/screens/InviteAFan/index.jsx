@@ -55,7 +55,7 @@ const InviteAFan = () => {
           <Text style={styles.name}>{fullName}</Text>
         </View>
         <Share message={link}>
-          <Button title={t('InviteAFan.shareALink')} disableWithoutFade />
+          <Button title={t('InviteAFan.shareTheLink')} disableWithoutFade />
         </Share>
       </View>
     </SafeAreaView>
