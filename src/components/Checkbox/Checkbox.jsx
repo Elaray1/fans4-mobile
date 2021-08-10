@@ -13,6 +13,7 @@ import styles from './Checkbox.styles';
 function Checkbox({
   value,
   onChangeValue,
+  disabled,
   label,
   style,
   labelStyle,
@@ -21,20 +22,21 @@ function Checkbox({
     <TouchableOpacity
       activeOpacity={1}
       onPress={onChangeValue}
+      disabled={disabled}
       style={[styles.checkboxWrapper, style]}
     >
       <TouchableOpacity
         style={[
           styles.checkbox,
           value && styles.activeCheckbox,
+          disabled && styles.disabled,
         ]}
         onPress={onChangeValue}
+        disabled={disabled}
       >
         {value && <CheckMark />}
       </TouchableOpacity>
-      <Text
-        style={[styles.label, labelStyle]}
-      >
+      <Text style={[styles.label, disabled && styles.disabled, labelStyle]}>
         {label}
       </Text>
     </TouchableOpacity>
@@ -44,6 +46,7 @@ function Checkbox({
 Checkbox.propTypes = {
   value: PropTypes.bool,
   onChangeValue: PropTypes.func,
+  disabled: PropTypes.bool,
   label: PropTypes.string,
   style: ViewPropTypes.style,
   labelStyle: Text.propTypes.style,
@@ -52,6 +55,7 @@ Checkbox.propTypes = {
 Checkbox.defaultProps = {
   value: false,
   onChangeValue: () => null,
+  disabled: false,
   label: '',
   style: {},
   labelStyle: {},

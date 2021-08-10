@@ -27,4 +27,8 @@ export default StyleSheet.create({
     backgroundColor: colors.primary,
     borderColor: colors.primary,
   },
+  disabled: {
+    color: colors.grayText,
+    borderColor: colors.grayText,
+  },
 });

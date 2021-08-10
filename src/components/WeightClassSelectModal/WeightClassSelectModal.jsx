@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
-import React, {
-  useCallback,
-  useState,
-} from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Modal,
@@ -16,6 +13,24 @@ import Text from 'components/Text';
 import CheckBox from 'components/Checkbox';
 
 import styles from './WeightClassSelectModal.styles';
+
+const MAX_CLASSES = 3;
+
+const getEnabledRange = (checkedNum, array) => {
+  const firstChecked = array.findIndex(wc => wc.isChecked);
+
+  if (checkedNum === MAX_CLASSES) {
+    return [firstChecked, firstChecked + MAX_CLASSES - 1];
+  }
+
+  const lastChecked = checkedNum === 1
+    ? firstChecked
+    : array.length - 1 - array.slice().reverse().findIndex(wc => wc.isChecked);
+
+  const firstEnabled = lastChecked - MAX_CLASSES + 1;
+  const lastEnabled = firstChecked + MAX_CLASSES - 1;
+  return [firstEnabled, lastEnabled];
+};
 
 function CitySelectModal({
   onClose, onSubmit, visible, isFemale,
@@ -79,30 +94,31 @@ function CitySelectModal({
     },
   ];
 
-  const femaleWeightClasses = [{
-    _id: 1,
-    name: t('WeightClassSelectModal.Strawweight'),
-    label: t('WeightClassSelectModal.StrawweightWithWeight'),
-    isChecked: false,
-  },
-  {
-    _id: 2,
-    name: t('WeightClassSelectModal.Flyweight'),
-    label: t('WeightClassSelectModal.FlyweightWithWeight'),
-    isChecked: false,
-  },
-  {
-    _id: 3,
-    name: t('WeightClassSelectModal.Bantamweight'),
-    label: t('WeightClassSelectModal.BantamweightWithWeight'),
-    isChecked: false,
-  },
-  {
-    _id: 4,
-    name: t('WeightClassSelectModal.Featherweight'),
-    label: t('WeightClassSelectModal.FeatherweightWithWeight'),
-    isChecked: false,
-  },
+  const femaleWeightClasses = [
+    {
+      _id: 1,
+      name: t('WeightClassSelectModal.Strawweight'),
+      label: t('WeightClassSelectModal.StrawweightWithWeight'),
+      isChecked: false,
+    },
+    {
+      _id: 2,
+      name: t('WeightClassSelectModal.Flyweight'),
+      label: t('WeightClassSelectModal.FlyweightWithWeight'),
+      isChecked: false,
+    },
+    {
+      _id: 3,
+      name: t('WeightClassSelectModal.Bantamweight'),
+      label: t('WeightClassSelectModal.BantamweightWithWeight'),
+      isChecked: false,
+    },
+    {
+      _id: 4,
+      name: t('WeightClassSelectModal.Featherweight'),
+      label: t('WeightClassSelectModal.FeatherweightWithWeight'),
+      isChecked: false,
+    },
   ];
 
   const [weightClasses, setWeightClasses] = useState(
@@ -110,17 +126,27 @@ function CitySelectModal({
   );
 
   const onCheckBoxPress = useCallback((item) => {
-    if (weightClasses.filter(c => c.isChecked).length < 3 || item.isChecked) {
-      setWeightClasses((cs) => {
-        return cs.map((c) => {
-          return c._id === item._id ? { ...c, isChecked: !c.isChecked } : c;
-        });
+    const updatedClasses = weightClasses.map(wc => ({
+      ...wc,
+      disabled: false,
+      isChecked: wc._id === item._id ? !wc.isChecked : wc.isChecked,
+    }));
+    const checkedNum = updatedClasses.filter(wc => wc.isChecked).length;
+
+    if (checkedNum > 0 && checkedNum <= MAX_CLASSES) {
+      const [firstEnabledIndex, lastEnabledIndex] = getEnabledRange(checkedNum, updatedClasses);
+      updatedClasses.forEach((wc, ix) => {
+        const isEnabled = ix >= firstEnabledIndex && ix <= lastEnabledIndex;
+        wc.disabled = !isEnabled;
       });
     }
+
+    setWeightClasses(updatedClasses);
   }, [weightClasses]);
 
-  const onSave = useCallback(() => onSubmit(weightClasses.filter(i => i.isChecked)),
-    [onSubmit, weightClasses]);
+  const onSave = useCallback(() => {
+    onSubmit(weightClasses.filter(i => i.isChecked));
+  }, [onSubmit, weightClasses]);
 
   const isAnyWeightClassSelected = !weightClasses.some((i => i.isChecked));
 
@@ -161,6 +187,7 @@ function CitySelectModal({
                 label={item.label}
                 value={item.isChecked}
                 onChangeValue={() => onCheckBoxPress(item)}
+                disabled={item.disabled}
               />
             </View>
           ))}
