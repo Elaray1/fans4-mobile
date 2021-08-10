@@ -12,6 +12,9 @@ import Button from 'components/Button';
 
 import { USER_TYPES } from 'resources/user/user.constants';
 
+import { STORAGE_KEYS } from 'helpers/constants';
+import { getItem } from 'helpers/storage';
+
 import analyticsService from 'services/analytics.service';
 
 import styles from './SelectUserType.styles';
@@ -19,6 +22,7 @@ import styles from './SelectUserType.styles';
 function SelectUserType() {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const wasOpenedBefore = getItem(STORAGE_KEYS.WAS_OPENED_BEFORE);
 
   const onChooseUserType = useCallback((userType) => {
     if (userType === USER_TYPES.FAN) {
@@ -27,9 +31,9 @@ function SelectUserType() {
       return;
     }
 
-    navigation.navigate('SignUp', { userType });
+    navigation.navigate(wasOpenedBefore ? 'SignIn' : 'SignUp', { userType });
     analyticsService.logEvent({ name: analyticsService.events.IAM_FIGHTER_PRESSED });
-  }, [navigation]);
+  }, [navigation, wasOpenedBefore]);
 
   return (
     <SafeAreaView style={styles.screen}>

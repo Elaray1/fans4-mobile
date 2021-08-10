@@ -101,11 +101,10 @@ function VerificationPending() {
 
   return (
     <IllustrationScreen
-      linkText={t('VerificationPending.linkText')}
       description={t('VerificationPending.description')}
       title={t('VerificationPending.title')}
       illustration={<PendingIllustration />}
-      onLinkPress={goToSignIn}
+      onBackButtonPress={goToSignIn}
     />
   );
 }
