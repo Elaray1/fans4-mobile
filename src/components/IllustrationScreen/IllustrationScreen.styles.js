@@ -46,4 +46,14 @@ export default StyleSheet.create({
   header: {
     paddingTop: 0,
   },
+  backArrow: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 32,
+    width: 32,
+    borderRadius: 5,
+    backgroundColor: colors.gray,
+    marginTop: 30,
+    marginLeft: 20,
+  },
 });

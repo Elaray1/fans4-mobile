@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, StatusBar, ViewPropTypes } from 'react-native';
+import { SafeAreaView, View, StatusBar, ViewPropTypes, TouchableOpacity } from 'react-native';
 
 import colors from 'themes/colors';
 
@@ -8,15 +8,22 @@ import Text from 'components/Text';
 import Button from 'components/Button';
 import Header from 'components/Header';
 
+import BackArrowIcon from 'assets/icons/back-arrow';
+
 import styles from './IllustrationScreen.styles';
 
 function IllustrationScreen({
   buttonText, linkText, title, description, illustration, onButtonPress, onLinkPress, headerText,
-  contentStyles, ilustrationContainerStyles,
+  contentStyles, ilustrationContainerStyles, onBackButtonPress,
 }) {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+      {onBackButtonPress && (
+      <TouchableOpacity style={styles.backArrow} onPress={onBackButtonPress}>
+        <BackArrowIcon />
+      </TouchableOpacity>
+      )}
 
       {headerText && (
         <Header
@@ -56,6 +63,7 @@ IllustrationScreen.propTypes = {
   illustration: PropTypes.node.isRequired,
   onButtonPress: PropTypes.func,
   onLinkPress: PropTypes.func,
+  onBackButtonPress: PropTypes.func,
   contentStyles: ViewPropTypes.style,
   ilustrationContainerStyles: ViewPropTypes.style,
 };
@@ -68,6 +76,7 @@ IllustrationScreen.defaultProps = {
   onLinkPress: () => null,
   contentStyles: null,
   ilustrationContainerStyles: null,
+  onBackButtonPress: null,
 };
 
 export default React.memo(IllustrationScreen);
