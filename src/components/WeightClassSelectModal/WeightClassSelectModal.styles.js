@@ -50,7 +50,6 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
   },
   description: {
-    color: colors.grayText,
     fontSize: fonts.size.small,
     lineHeight: fonts.lineHeight.small,
     fontFamily: fonts.family.base,
