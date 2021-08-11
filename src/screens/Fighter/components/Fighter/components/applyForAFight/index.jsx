@@ -106,10 +106,18 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
     );
   }
 
-  if (fighter.role.fightingStatus !== FIGHTING_STATUSES.READY_FOR_FIGHTS) {
+  if (fighter.role.fightingStatus === FIGHTING_STATUSES.INJURED) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
         {`${t('Fighter.fighterInjured_0')} ${fighter.fullName} ${t('Fighter.fighterInjured_1')}`}
+      </Text>
+    );
+  }
+
+  if (fighter.role.fightingStatus === FIGHTING_STATUSES.RECOVERY) {
+    return (
+      <Text style={styles.cannotApplyForAFightText}>
+        {`${t('Fighter.fighterRecovery_0')} ${fighter.fullName} ${t('Fighter.fighterRecovery_1')}`}
       </Text>
     );
   }

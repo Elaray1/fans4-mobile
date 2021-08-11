@@ -389,6 +389,8 @@
     "youRecovery_1": "because you are in post-fight recovery.",
     "fighterInjured_0": "You cannot apply for a fight with",
     "fighterInjured_1": "because this fighter is injured.",
+    "fighterRecovery_0": "You can not apply for a fight with",
+    "fighterRecovery_1": "because this fighter is in post-fight recovery.",
     "fighterBlocked_0": "You cannot apply for a fight with",
     "fighterBlocked_1": "because this fighter is blocked.",
     "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter.",
