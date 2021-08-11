@@ -21,7 +21,8 @@ import NoPostsIllustration from 'assets/illustrations/no-events.svg';
 
 import styles from './styles';
 
-const PER_PAGE_COUNT = 10;
+const PER_PAGE_COUNT = 20;
+const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
 function Feed() {
   const { t } = useTranslation();
@@ -35,6 +36,8 @@ function Feed() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const [viewablePosts, setViewablePosts] = useState({});
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     if (!fightersList?.length) {
@@ -60,7 +63,6 @@ function Feed() {
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
         });
-
 
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
@@ -90,6 +92,13 @@ function Feed() {
 
   const keyExtractor = useCallback(item => item._id, []);
 
+  const updateViewableItems = useCallback(({ viewableItems }) => {
+    setViewablePosts(viewableItems.reduce((memo, item) => {
+      memo[item.key] = true;
+      return memo;
+    }, {}));
+  }, [setViewablePosts]);
+
   const renderItem = ({ item }) => {
     return (
       <View style={styles.post} key={item._id}>
@@ -102,6 +111,7 @@ function Feed() {
           author={item.author}
           likedUserIds={item.likedUserIds}
           commentsCount={item.commentsCount}
+          viewable={!!viewablePosts[item._id]}
         />
       </View>
     );
@@ -145,6 +155,7 @@ function Feed() {
       />
       <View style={styles.content}>
         {isRefreshing && <Loader />}
+
         {!isRefreshing && Boolean(fightersList?.length) && (posts.length ? (
           <FlatList
             data={posts}
@@ -157,6 +168,8 @@ function Feed() {
             ListFooterComponent={renderFooter}
             onRefresh={onRefresh}
             refreshing={isRefreshing}
+            viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
+            onViewableItemsChanged={updateViewableItems}
           />
         ) : (
           <ScrollView
@@ -167,6 +180,7 @@ function Feed() {
             <EmptyView />
           </ScrollView>
         ))}
+
         {!fightersList?.length && <NoSubscriptions />}
       </View>
     </SafeAreaView>

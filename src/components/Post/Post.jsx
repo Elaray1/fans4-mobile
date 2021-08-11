@@ -237,7 +237,7 @@ Post.defaultProps = {
   likedUserIds: [],
   commentsCount: 0,
   disabled: false,
-  viewable: PropTypes.bool,
+  viewable: false,
 };
 
 export default React.memo(Post);

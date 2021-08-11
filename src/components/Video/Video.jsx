@@ -64,6 +64,7 @@ function Video({ source, width, height, posterSource, duration, viewable }) {
 
   const onFullscreenPlayerDidDismiss = useCallback(() => {
     setPaused(true);
+    setIsControlsShown(true);
   }, []);
 
   const showControls = useCallback(() => {

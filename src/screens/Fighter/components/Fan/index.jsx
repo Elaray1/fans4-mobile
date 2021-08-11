@@ -29,6 +29,7 @@ import styles from './styles';
 
 const INITIAL_PAGE = 1;
 const PER_PAGE = 10;
+const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
 function Fighter({ fighterId }) {
   const navigation = useNavigation();
@@ -50,6 +51,8 @@ function Fighter({ fighterId }) {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
   const [isAllPostsLoaded, setIsAllPostsLoaded] = useState(false);
+
+  const [viewablePosts, setViewablePosts] = useState({});
 
   const goToProposeAFight = useCallback(() => {
     navigation.navigate('ProposeAFight', { preselectedFighterId: fighter._id });
@@ -104,8 +107,16 @@ function Fighter({ fighterId }) {
 
   const keyExtractor = useCallback(item => item._id, []);
 
+  const updateViewableItems = useCallback(({ viewableItems }) => {
+    setViewablePosts(viewableItems.reduce((memo, item) => {
+      memo[item.key] = true;
+      return memo;
+    }, {}));
+  }, [setViewablePosts]);
+
   const renderItem = ({ item }) => {
     const isDisabled = !userSubscriptions.map(f => f._id).includes(item.author._id);
+
     return (
       <Post
         _id={item._id}
@@ -116,6 +127,7 @@ function Fighter({ fighterId }) {
         likedUserIds={item.likedUserIds}
         commentsCount={item.commentsCount}
         disabled={isDisabled}
+        viewable={!!viewablePosts[item._id]}
       />
     );
   };
@@ -246,6 +258,8 @@ function Fighter({ fighterId }) {
           initialNumToRender={10}
           ListHeaderComponent={renderHeader} // we can't use flatlist inside of scrollview
           ListFooterComponent={renderFooter}
+          viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
+          onViewableItemsChanged={updateViewableItems}
         />
       ) : (
         <View style={styles.loaderWrapper}>
