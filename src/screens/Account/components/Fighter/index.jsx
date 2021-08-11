@@ -175,6 +175,7 @@ function FighterAccount() {
     if (isAllPostsLoaded) {
       return null;
     }
+
     return (
       <View style={styles.loader}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -183,6 +184,10 @@ function FighterAccount() {
   };
 
   const renderNoItems = () => {
+    if (!isAllPostsLoaded) {
+      return null;
+    }
+
     return (
       <View style={styles.noItemsContainer}>
         <Text style={styles.noItemsText}>{t('Account.addYourFirstPost')}</Text>
