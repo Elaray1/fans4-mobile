@@ -83,14 +83,6 @@ function Fighter({ fighterId }) {
     init();
   }, [fighterId, userId]);
 
-  if (!fighter) {
-    return (
-      <View style={styles.loaderWrapper}>
-        <ActivityIndicator color={colors.primary} size="large" />
-      </View>
-    );
-  }
-
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
@@ -100,49 +92,55 @@ function Fighter({ fighterId }) {
         leftItemType="backArrow"
       />
 
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
-        <View style={styles.flatListHeader}>
-          <Profile
-            status={fighter.status}
-            avatarUrl={fighter.avatarUrl}
-            fullName={fighter.fullName}
-            nickname={fighter.role.biography.nickname}
-            location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
-            fightingStatus={fighter.status === USER_STATUSES.BLOCKED
-              ? USER_STATUSES.BLOCKED
-              : fighter.role.fightingStatus}
-          />
-
-          <View style={[styles.line, styles.lineIndent]} />
-
-          <View style={styles.postsAndFansBlock}>
-            <ApplyForAFight fight={fight} fighter={fighter} />
-
-            <Statistic
-              postsCount={postsCount}
-              fansCount={fansCount}
-              recordCount={fighter.role.profile.record}
+      {fighter ? (
+        <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+          <View style={styles.flatListHeader}>
+            <Profile
+              status={fighter.status}
+              avatarUrl={fighter.avatarUrl}
+              fullName={fighter.fullName}
+              nickname={fighter.role.biography.nickname}
+              location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
+              fightingStatus={fighter.status === USER_STATUSES.BLOCKED
+                ? USER_STATUSES.BLOCKED
+                : fighter.role.fightingStatus}
             />
+
+            <View style={[styles.line, styles.lineIndent]} />
+
+            <View style={styles.postsAndFansBlock}>
+              <ApplyForAFight fight={fight} fighter={fighter} />
+
+              <Statistic
+                postsCount={postsCount}
+                fansCount={fansCount}
+                recordCount={fighter.role.profile.record}
+              />
+            </View>
+
+            <View style={styles.line} />
+
+            <Biography
+              biography={fighter.role.biography.about}
+            />
+
+            <View style={styles.line} />
+
+            <PersonalInfo
+              age={dayjs().diff(fighter.role.biography.birthdate, 'year')}
+              weight={fighter.role.profile.weight}
+              height={fighter.role.profile.height}
+              reach={fighter.role.profile.reach}
+            />
+
+            <View style={styles.line} />
           </View>
-
-          <View style={styles.line} />
-
-          <Biography
-            biography={fighter.role.biography.about}
-          />
-
-          <View style={styles.line} />
-
-          <PersonalInfo
-            age={dayjs().diff(fighter.role.biography.birthdate, 'year')}
-            weight={fighter.role.profile.weight}
-            height={fighter.role.profile.height}
-            reach={fighter.role.profile.reach}
-          />
-
-          <View style={styles.line} />
+        </ScrollView>
+      ) : (
+        <View style={styles.loaderWrapper}>
+          <ActivityIndicator color={colors.primary} size="large" />
         </View>
-      </ScrollView>
+      )}
     </SafeAreaView>
   );
 }
