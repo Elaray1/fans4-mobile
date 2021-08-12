@@ -116,7 +116,6 @@ const pushNotificationService = new PushNotificationService(userApi);
 
 PushNotification.configure({
   onNotification(notification) {
-    console.log('onNotification', notification);
     if (pushNotificationService.notificationHandlers[notification.data.type]) {
       pushNotificationService.notificationHandlers[notification.data.type](notification.data);
     }

@@ -112,3 +112,6 @@ export const getFightersForFight = ({ opponentId, search }) => apiClient
 
 export const suggestFight = ({ firstFighterId, secondFighterId }) => apiClient
   .post('fights/suggest', { firstFighterId, secondFighterId });
+
+export const getPasswordResetToken = ({ deviceId }) => apiClient
+  .get('users/password-reset-token-checking', { deviceId });

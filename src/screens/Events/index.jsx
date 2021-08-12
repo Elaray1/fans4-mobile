@@ -182,12 +182,11 @@ function Events() {
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
-    const progress = `${(item.fights.filter(
-      fight => fight.results !== undefined,
-    )
-      .length) / item.fights.length * 100}%`;
+    const progress = `${(item.fights.filter(fight => fight.results !== undefined).length) / item.fights.length * 100}%`;
+
     const isLive = item.status === EVENT_STATUSES.PAST
-    && item.fights.some(fight => !fight.results);
+      && item.fights.some(fight => !fight.results);
+
     return (
       <TouchableOpacity
         onPress={() => onEventPress(item)}
@@ -252,9 +251,13 @@ function Events() {
       <Header
         title={t('Events.events')}
       />
+
       <View style={styles.content}>
         <Toggle items={tabs} onSelect={onToggleSelect} selectedItemId={selectedTab.id} />
+
         {isRefreshing && <Loader />}
+
+
         {!isRefreshing && (events.length ? (
           <FlatList
             data={events}
