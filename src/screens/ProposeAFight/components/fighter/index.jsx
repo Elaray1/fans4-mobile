@@ -45,16 +45,9 @@ const Fighter = ({
       disabled={isDisabled}
     >
       <FastImage
-        style={[styles.image, isDisabled && styles.tintGray]}
+        style={[styles.image, isDisabled && styles.grayImage]}
         source={{ uri: fighter.avatarUrl }}
       />
-
-      { isDisabled && (
-        <FastImage
-          style={[styles.image, isDisabled && styles.grayImage]}
-          source={{ uri: fighter.avatarUrl }}
-        />
-      )}
 
       <View style={[styles.textContainer, isDisabled && styles.disabledTextContainer]}>
         <Text style={[styles.name, isDisabled && styles.opacity]}>

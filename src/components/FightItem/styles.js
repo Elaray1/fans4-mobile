@@ -65,10 +65,12 @@ export default StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   fanVotedText: {
+    marginLeft: 8,
     color: colors.primary,
     fontSize: fonts.size.caption,
   },

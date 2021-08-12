@@ -42,12 +42,7 @@ export default StyleSheet.create({
     opacity: 0.5,
   },
   grayImage: {
-    position: 'absolute',
     opacity: 0.4,
-    left: 16,
-  },
-  tintGray: {
-    tintColor: 'gray',
   },
   selected: {
     borderColor: 'white',
