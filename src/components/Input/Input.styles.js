@@ -1,7 +1,9 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+
+const isIos = Platform.OS === 'ios';
 
 export default StyleSheet.create({
   inputContainer: {
@@ -18,7 +20,9 @@ export default StyleSheet.create({
   // Currently used only for screen Comments
   autogrowHeight: {
     height: 'auto',
-    paddingVertical: 10,
+    paddingTop: 6,
+    paddingBottom: 12,
+    alignItems: 'baseline',
   },
   disabled: {
     backgroundColor: colors.disabledBackground,
@@ -54,6 +58,7 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
+    lineHeight: 19,
   },
   inputContainerMultiline: {
     alignItems: 'flex-start',
@@ -63,14 +68,15 @@ export default StyleSheet.create({
   },
   inputMultiline: {
     paddingVertical: 0,
-    textAlignVertical: 'top',
+    textAlignVertical: isIos ? 'top' : 'bottom',
+  },
+  button: {
+    marginLeft: 20,
   },
   buttonTitle: {
     color: colors.primary,
     textDecorationLine: 'none',
-  },
-  button: {
-    marginLeft: 20,
+    lineHeight: 19,
   },
   disabledTitleStyle: {
     opacity: 0.5,
