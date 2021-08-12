@@ -5,4 +5,6 @@ export const STORAGE_KEYS = {
 
 export const PUSH_NOTIFICATION_TYPES = {
   POST_STATUS_CHANGED: 'post_status_changed',
+  FIGHTER_REGISTRATION_APPROVED: 'fighter_registration_approved',
+  FIGHTER_REGISTRATION_DECLINED: 'fighter_registration_declined',
 };

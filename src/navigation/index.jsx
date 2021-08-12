@@ -138,6 +138,12 @@ const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
     rootNavigation.navigate('Account');
   },
+  [PUSH_NOTIFICATION_TYPES.FIGHTER_REGISTRATION_APPROVED]: () => {
+    rootNavigation.navigate('VerificationSuccessful');
+  },
+  [PUSH_NOTIFICATION_TYPES.FIGHTER_REGISTRATION_DECLINED]: () => {
+    rootNavigation.navigate('VerificationFailed');
+  },
 };
 
 function AppNavigation() {
