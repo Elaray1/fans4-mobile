@@ -18,6 +18,8 @@ import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
 import useToast from 'hooks/useToast';
 
+import SuccessIcon from 'assets/icons/success.svg';
+
 import { FIGHT_VIEW_TYPE } from './constants';
 import Fighter from './components/Fighter';
 import PastFightInfo from './components/PastFightInfo';
@@ -108,6 +110,7 @@ function FightItem({
                   style={styles.fanVoted}
                   onPress={() => onPressVote(fight._id, fight.fighters)}
                 >
+                  <SuccessIcon />
                   <Text style={styles.fanVotedText}>
                     {t('Fight.you')} {fight.suggestions.fans?.some(f => f._id === userId)
                     && t('Fight.createdAnd')}{t('Fight.voted')} ({fight.votedUserIds.length})
@@ -166,6 +169,15 @@ function FightItem({
       </View>
     ),
     [FIGHT_VIEW_TYPE.PENDING]: () => (
+      <View
+        style={styles.pending}
+      >
+        <Text style={styles.pendingText}>
+          {t('Fight.pending')}
+        </Text>
+      </View>
+    ),
+    [FIGHT_VIEW_TYPE.APPROVED]: () => (
       <View
         style={styles.pending}
       >
