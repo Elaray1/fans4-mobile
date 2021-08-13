@@ -1,15 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, ScrollView, ActivityIndicator, TouchableOpacity, AppState } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
+
+import checkIfSubscriptionChanged from 'helpers/checkIfSubscriptionChanged';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as userApi from 'resources/user/user.api';
 import { USER_STATUSES } from 'resources/user/user.constants';
+import * as userActions from 'resources/user/user.actions';
 
 import * as socketService from 'services/socket.service';
 
@@ -26,11 +29,12 @@ import styles from './styles';
 
 const FanAccount = () => {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const { t } = useTranslation();
   const { showFailure } = useToast();
   const navigation = useNavigation();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [fighters, setFighters] = useState([]);
 
   const fullName = useSelector(userSelectors.getUserFullName);
@@ -42,11 +46,37 @@ const FanAccount = () => {
     navigation.navigate('Fighter', { _id });
   }, [navigation]);
 
-  const Loader = () => (
-    <View style={styles.loader}>
-      <ActivityIndicator size="large" color={colors.primary} />
-    </View>
-  );
+  const updateSubscriptionIfNeeded = useCallback(async () => {
+    try {
+      const fetchedUser = await userApi.getUserData();
+      const isChanged = checkIfSubscriptionChanged(userSubscriptions, fetchedUser.role.subscription.fighters);
+
+      if (isChanged) {
+        dispatch(userActions.setFanSubscriptions(fetchedUser?.role?.subscription?.fighters));
+      }
+    } catch (err) {
+      console.error('getting user data error:', err);
+    }
+  }, [dispatch, userSubscriptions]);
+
+  useEffect(() => {
+    const checkSubscriptionsOnFocus = (appState) => {
+      if (isFocused && appState === 'active') {
+        updateSubscriptionIfNeeded();
+      }
+    };
+
+    AppState.addEventListener('change', checkSubscriptionsOnFocus);
+
+    return () => {
+      AppState.removeEventListener('change', checkSubscriptionsOnFocus);
+    };
+  }, [isFocused, navigation, updateSubscriptionIfNeeded]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', updateSubscriptionIfNeeded);
+    return unsubscribe;
+  }, [navigation, updateSubscriptionIfNeeded]);
 
   useEffect(() => {
     const updateUserSubscriptions = async () => {
@@ -88,6 +118,12 @@ const FanAccount = () => {
     return fighterSubscription
       && (fighterSubscription.autorenewal || moment(fighterSubscription.renewalDate).isAfter(new Date()));
   });
+
+  const Loader = () => (
+    <View style={styles.loader}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
 
   const supportedFighterView = (item, i) => {
     const subscription = userSubscriptions.find(s => s._id === item._id);

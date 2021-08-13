@@ -133,6 +133,7 @@ const Voting = ({ route }) => {
           statuses: selectedToggleItem.id === '1' ? [FIGHT_STATUSES.IN_VOTING] : null,
           createdByMe: selectedToggleItem.createdByMe,
         });
+
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setFights([...currentFights, ...fetchedFights]);

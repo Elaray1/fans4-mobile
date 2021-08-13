@@ -1,12 +1,17 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, AppState,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+
 import { useTranslation } from 'react-i18next';
 
-import * as userSelectors from 'resources/user/user.selectors';
+import checkIfSubscriptionChanged from 'helpers/checkIfSubscriptionChanged';
 
+import * as userSelectors from 'resources/user/user.selectors';
+import * as userApi from 'resources/user/user.api';
+import * as userActions from 'resources/user/user.actions';
 import * as postApi from 'resources/post/post.api';
 
 import Header from 'components/Header';
@@ -14,6 +19,7 @@ import Post from 'components/Post';
 import Text from 'components/Text';
 
 import useToast from 'hooks/useToast';
+import useDidUpdate from 'hooks/useDidUpdate';
 
 import colors from 'themes/colors';
 
@@ -25,8 +31,11 @@ const PER_PAGE_COUNT = 20;
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
 function Feed() {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const { t } = useTranslation();
   const { showFailure } = useToast();
+  const isFocused = useIsFocused();
 
   const fightersList = useSelector(userSelectors.getSupportedFighters);
 
@@ -89,6 +98,44 @@ function Feed() {
     fetchPosts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const updateSubscriptionIfNeeded = useCallback(async () => {
+    try {
+      const fetchedUser = await userApi.getUserData();
+      const isChanged = checkIfSubscriptionChanged(fightersList, fetchedUser.role.subscription.fighters);
+      if (isChanged) {
+        dispatch(userActions.setFanSubscriptions(fetchedUser?.role?.subscription?.fighters));
+        onRefresh();
+      }
+    } catch (err) {
+      console.error('getting user data error:', err);
+    }
+  }, [dispatch, fightersList, onRefresh]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', updateSubscriptionIfNeeded);
+    return unsubscribe;
+  }, [navigation, updateSubscriptionIfNeeded]);
+
+  useEffect(() => {
+    const checkSubscriptionsOnFocus = (appState) => {
+      if (isFocused && appState === 'active') {
+        updateSubscriptionIfNeeded();
+      }
+    };
+
+    AppState.addEventListener('change', checkSubscriptionsOnFocus);
+
+    return () => {
+      AppState.removeEventListener('change', checkSubscriptionsOnFocus);
+    };
+  }, [isFocused, updateSubscriptionIfNeeded]);
+
+  useDidUpdate(() => {
+    if (!isFocused) {
+      onRefresh();
+    }
+  }, [fightersList]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -173,7 +220,7 @@ function Feed() {
           />
         ) : (
           <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={styles.emptyScroll}
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
             keyboardShouldPersistTaps="handled"
           >
@@ -181,7 +228,13 @@ function Feed() {
           </ScrollView>
         ))}
 
-        {!fightersList?.length && <NoSubscriptions />}
+        <ScrollView
+          contentContainerStyle={styles.emptyScroll}
+          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+          keyboardShouldPersistTaps="handled"
+        >
+          {!fightersList?.length && <NoSubscriptions />}
+        </ScrollView>
       </View>
     </SafeAreaView>
   );

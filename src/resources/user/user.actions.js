@@ -13,6 +13,7 @@ import {
   USER_LOGGED_OUT,
   SET_USER_DATA,
   USER_TYPES,
+  SET_USER_SUBSCRIPTIONS,
 } from './user.constants';
 
 import * as api from './user.api';
@@ -66,6 +67,10 @@ export const getUserData = () => async (dispatch) => {
 export const setUserData = user => (dispatch) => {
   dispatch({ type: SET_USER_DATA, user });
   return user;
+};
+
+export const setFanSubscriptions = (fighters = []) => (dispatch) => {
+  dispatch({ type: SET_USER_SUBSCRIPTIONS, fighters });
 };
 
 export const emailSignIn = ({

@@ -34,4 +34,7 @@ export default StyleSheet.create({
     color: colors.textSecondary,
     fontWeight: fonts.weight.medium,
   },
+  emptyScroll: {
+    flexGrow: 1,
+  },
 });

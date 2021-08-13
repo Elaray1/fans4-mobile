@@ -85,4 +85,11 @@ export default StyleSheet.create({
     fontSize: fonts.size.caption,
     lineHeight: fonts.lineHeight.caption,
   },
+  loader: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  textContainer: {
+    marginBottom: 20,
+  },
 });
