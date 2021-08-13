@@ -39,10 +39,11 @@ import SettingsPrivacyPolicy from 'screens/SettingsPrivacyPolicy';
 import * as userSelectors from 'resources/user/user.selectors';
 import { USER_TYPES } from 'resources/user/user.constants';
 
-import FighterNavigator from 'navigation/appStack/components/fighter';
-import FanNavigator from 'navigation/appStack/components/fan';
-
 import colors from 'themes/colors';
+
+import FighterTabNavigator from './FighterTabNavigator';
+import FanTabNavigator from './FanTabNavigator';
+
 
 const AppStack = createStackNavigator();
 
@@ -56,7 +57,7 @@ function Tabs() {
   const userType = useSelector(userSelectors.getUserType);
 
   return (
-    userType === USER_TYPES.FIGHTER ? <FighterNavigator /> : <FanNavigator />
+    userType === USER_TYPES.FIGHTER ? <FighterTabNavigator /> : <FanTabNavigator />
   );
 }
 
