@@ -94,13 +94,21 @@ function FightItem({
     [FIGHT_VIEW_TYPE.PAST]: () => <PastFightInfo fight={fight} />,
     [FIGHT_VIEW_TYPE.IN_VOTING]: () => (
       <>
-        { userType === USER_TYPES.FIGHTER ? (
+        {userType === USER_TYPES.FIGHTER ? (
           <View style={styles.location}>
-            <Text style={styles.text}>{getLocation(firstFighter.hometown)}</Text>
-            <View style={styles.votes}>
-              <Text style={styles.votesText}>{`${fight.votedUserIds.length} ${t('Fight.votes')}`}</Text>
+            <Text style={[styles.text, styles.locationText, styles.locationTextLeft]}>
+              {getLocation(firstFighter.hometown)}
+            </Text>
+
+            <View style={styles.votesContainer}>
+              <View style={styles.votes}>
+                <Text style={styles.votesText}>{`${fight.votedUserIds.length} ${t('Fight.votes')}`}</Text>
+              </View>
             </View>
-            <Text style={styles.text}>{getLocation(secondFighter.hometown)}</Text>
+
+            <Text style={[styles.text, styles.locationText, styles.locationTextRight]}>
+              {getLocation(secondFighter.hometown)}
+            </Text>
           </View>
         ) : (
           <View style={styles.location}>
@@ -129,9 +137,7 @@ function FightItem({
       </>
     ),
     [FIGHT_VIEW_TYPE.VOTING_CLOSED]: () => (
-      <View
-        style={styles.fanVoted}
-      >
+      <View style={styles.fanVoted}>
         <Text style={styles.fanVotedText}>
           {t('Fight.votingClosed')} ({fight.votedUserIds.length})
         </Text>
@@ -149,9 +155,7 @@ function FightItem({
             </Text>
           </View>
         ) : (
-          <View
-            style={styles.upcoming}
-          >
+          <View style={styles.upcoming}>
             <Text style={styles.upcomingText}>
               {t('Fight.upcoming')}
             </Text>
@@ -208,7 +212,9 @@ function FightItem({
             onPress={onFighterPress}
           />
         </View>
+
         <View style={styles.line} />
+
         {FIGHT_INFO[viewType || fight.status]()}
       </View>
     </View>

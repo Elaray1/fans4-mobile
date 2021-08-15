@@ -47,6 +47,18 @@ export default StyleSheet.create({
     color: colors.textSecondary,
     fontWeight: fonts.weight.medium,
   },
+  locationText: {
+    width: '33%',
+  },
+  locationTextLeft: {
+    textAlign: 'left',
+  },
+  locationTextRight: {
+    textAlign: 'right',
+  },
+  votesContainer: {
+    width: '33%',
+  },
   votes: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -54,6 +66,7 @@ export default StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 5,
     backgroundColor: colors.buttonNotification,
+    alignSelf: 'center',
   },
   votesText: {
     fontSize: fonts.size.caption,
