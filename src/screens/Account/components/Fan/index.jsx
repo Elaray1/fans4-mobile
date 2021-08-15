@@ -3,7 +3,7 @@ import { View, ScrollView, ActivityIndicator, TouchableOpacity, AppState } from 
 import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 
 import checkIfSubscriptionChanged from 'helpers/checkIfSubscriptionChanged';
@@ -29,7 +29,6 @@ import styles from './styles';
 
 const FanAccount = () => {
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
   const { t } = useTranslation();
   const { showFailure } = useToast();
   const navigation = useNavigation();
@@ -61,7 +60,7 @@ const FanAccount = () => {
 
   useEffect(() => {
     const checkSubscriptionsOnFocus = (appState) => {
-      if (isFocused && appState === 'active') {
+      if (appState === 'active') {
         updateSubscriptionIfNeeded();
       }
     };
@@ -71,7 +70,7 @@ const FanAccount = () => {
     return () => {
       AppState.removeEventListener('change', checkSubscriptionsOnFocus);
     };
-  }, [isFocused, navigation, updateSubscriptionIfNeeded]);
+  }, [navigation, updateSubscriptionIfNeeded]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', updateSubscriptionIfNeeded);
