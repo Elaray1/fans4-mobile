@@ -37,10 +37,12 @@ function Account() {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+
       <SettingsModal
         visible={isSettingsVisible}
         onClose={onSettingsClose}
       />
+
       <Header
         title={t('Account.account')}
         rightItemType="menu"

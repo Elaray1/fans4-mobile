@@ -22,6 +22,10 @@ export default StyleSheet.create({
   },
   postsTitle: {
     paddingVertical: 18,
+    fontSize: fonts.size.small,
+    lineHeight: fonts.lineHeight.small,
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
   },
   space: {
     height: 10,

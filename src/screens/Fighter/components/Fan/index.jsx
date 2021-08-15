@@ -132,73 +132,71 @@ function Fighter({ fighterId }) {
     );
   };
 
-  const renderHeader = () => {
-    return (
-      <View style={styles.flatListHeader}>
-        <Profile
-          avatarUrl={fighter.avatarUrl}
-          fullName={fighter.fullName}
-          nickname={fighter.role.biography.nickname}
-          location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
-          status={fighter.status}
-          fightingStatus={fighter.role.fightingStatus}
-        />
+  const ProfileHeader = (
+    <View style={styles.flatListHeader}>
+      <Profile
+        avatarUrl={fighter.avatarUrl}
+        fullName={fighter.fullName}
+        nickname={fighter.role.biography.nickname}
+        location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
+        status={fighter.status}
+        fightingStatus={fighter.role.fightingStatus}
+      />
 
-        <View style={styles.line} />
+      <View style={styles.line} />
 
-        <View style={styles.postsAndFansBlock}>
-          {isSubscribed && (
-            <>
+      <View style={styles.postsAndFansBlock}>
+        {isSubscribed && (
+          <>
+            <Button
+              style={styles.subscribedButton}
+              type="done"
+              title={t('Fighter.subscribed')}
+            />
+
+            {fighter.status === USER_STATUSES.BLOCKED ? (
+              <Text style={styles.blockedSupportedFighterText}>
+                {t('Fighter.subscribeToAnotherWhenBlocked')}
+              </Text>
+            ) : (
               <Button
-                style={styles.subscribedButton}
-                type="done"
-                title={t('Fighter.subscribed')}
+                title={t('Fighter.proposeAFight')}
+                style={styles.applyButton}
+                onPress={goToProposeAFight}
               />
+            )}
+          </>
+        )}
 
-              {fighter.status === USER_STATUSES.BLOCKED ? (
-                <Text style={styles.blockedSupportedFighterText}>
-                  {t('Fighter.subscribeToAnotherWhenBlocked')}
-                </Text>
-              ) : (
-                <Button
-                  title={t('Fighter.proposeAFight')}
-                  style={styles.applyButton}
-                  onPress={goToProposeAFight}
-                />
-              )}
-            </>
-          )}
-
-          <Statistic
-            postsCount={postsCount}
-            fansCount={fansCount}
-            recordCount={fighter.role.profile.record}
-          />
-        </View>
-
-        <View style={styles.line} />
-
-        <Biography
-          biography={fighter.role.biography.about}
+        <Statistic
+          postsCount={postsCount}
+          fansCount={fansCount}
+          recordCount={fighter.role.profile.record}
         />
-
-        <View style={styles.line} />
-
-        <PersonalInfo
-          age={dayjs().diff(fighter.role.biography.birthdate, 'year')}
-          weight={fighter.role.profile.weight}
-          height={fighter.role.profile.height}
-          reach={fighter.role.profile.reach}
-        />
-
-        <View style={styles.line} />
-
-        <Text style={[styles.blockTitle, styles.postsTitle]}>{t('Account.Posts')}</Text>
-        {!userSubscriptions.map(f => f._id).includes(fighterId)
-        && <Text style={styles.grayText}>{t('Account.subscribeToFighter')}</Text>}
       </View>
-    );
-  };
+
+      <View style={styles.line} />
+
+      <Biography
+        biography={fighter.role.biography.about}
+      />
+
+      <View style={styles.line} />
+
+      <PersonalInfo
+        age={dayjs().diff(fighter.role.biography.birthdate, 'year')}
+        weight={fighter.role.profile.weight}
+        height={fighter.role.profile.height}
+        reach={fighter.role.profile.reach}
+      />
+
+      <View style={styles.line} />
+
+      <Text style={[styles.blockTitle, styles.postsTitle]}>{t('Account.Posts')}</Text>
+      {!userSubscriptions.map(f => f._id).includes(fighterId)
+      && <Text style={styles.grayText}>{t('Account.subscribeToFighter')}</Text>}
+    </View>
+  );
 
   const renderNoPosts = () => <Text style={styles.grayText}>{t('Fighter.checkBack')}</Text>;
 
@@ -256,7 +254,9 @@ function Fighter({ fighterId }) {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           initialNumToRender={10}
-          ListHeaderComponent={renderHeader} // we can't use flatlist inside of scrollview
+          // Do not pass function here cause of bug with remounting:
+          // https://github.com/facebook/react-native/issues/13602#issuecomment-300608431
+          ListHeaderComponent={ProfileHeader}
           ListFooterComponent={renderFooter}
           viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
           onViewableItemsChanged={updateViewableItems}

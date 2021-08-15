@@ -231,9 +231,11 @@ const Voting = ({ route }) => {
         rightItemText={t('Voting.propose')}
         onRightItemPress={navigateToPropose}
       />
+
       <View style={styles.content}>
         <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
         {isRefreshing && <Loader />}
+
         {!isRefreshing && (fights.length ? (
           <FlatList
             data={fights}
