@@ -18,6 +18,9 @@ import Biography from 'components/FighterAccount/Biography';
 import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 import Post from 'components/Post';
 
+import useDidUpdate from 'hooks/useDidUpdate';
+
+
 import * as userSelectors from 'resources/user/user.selectors';
 import { USER_STATUSES } from 'resources/user/user.constants';
 import * as userApi from 'resources/user/user.api';
@@ -58,6 +61,46 @@ function Fighter({ fighterId }) {
     navigation.navigate('ProposeAFight', { preselectedFighterId: fighter._id });
   }, [navigation, fighter]);
 
+  const init = useCallback(async () => {
+    try {
+      const [{
+        fighter: fetchedFighter,
+        postsCount: fetchedPostsCount,
+        fansCount: fetchedFansCount,
+      }, {
+        posts: fetchedPosts,
+      },
+      ] = await Promise.all([
+        userApi.getFighter({ _id: fighterId }),
+        postApi.getFighterPosts({
+          page: INITIAL_PAGE,
+          perPage: PER_PAGE,
+          _id: fighterId,
+        }),
+      ]);
+
+      if (fetchedPosts?.length < PER_PAGE) {
+        setIsAllPostsLoaded(true);
+      } else {
+        setIsAllPostsLoaded(false);
+      }
+
+      setFighter(fetchedFighter);
+      setPostsCount(fetchedPostsCount);
+      setFansCount(fetchedFansCount);
+      setPosts(fetchedPosts);
+      setPage(INITIAL_PAGE + 1);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [fighterId]);
+
+  useDidUpdate(async () => {
+    if (isSubscribed) {
+      init();
+    }
+  }, [init, isSubscribed]);
+
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FAN_OPENED_FIGHTER_SCREEN,
@@ -68,42 +111,8 @@ function Fighter({ fighterId }) {
   }, [userId]);
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const [{
-          fighter: fetchedFighter,
-          postsCount: fetchedPostsCount,
-          fansCount: fetchedFansCount,
-        }, {
-          posts: fetchedPosts,
-        },
-        ] = await Promise.all([
-          userApi.getFighter({ _id: fighterId }),
-          postApi.getFighterPosts({
-            page: INITIAL_PAGE,
-            perPage: PER_PAGE,
-            _id: fighterId,
-          }),
-        ]);
-
-        if (fetchedPosts?.length < PER_PAGE) {
-          setIsAllPostsLoaded(true);
-        } else {
-          setIsAllPostsLoaded(false);
-        }
-
-        setFighter(fetchedFighter);
-        setPostsCount(fetchedPostsCount);
-        setFansCount(fetchedFansCount);
-        setPosts(fetchedPosts);
-        setPage(INITIAL_PAGE + 1);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     init();
-  }, [fighterId]);
+  }, [init, fighterId]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -132,7 +141,7 @@ function Fighter({ fighterId }) {
     );
   };
 
-  const ProfileHeader = (
+  const ProfileHeader = !fighter ? null : (
     <View style={styles.flatListHeader}>
       <Profile
         avatarUrl={fighter.avatarUrl}
