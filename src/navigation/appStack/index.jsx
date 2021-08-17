@@ -35,6 +35,7 @@ import ProposeAFight from 'screens/ProposeAFight';
 import LegalInformation from 'screens/LegalInformation';
 import SettingsTermsOfUse from 'screens/SettingsTermsOfUse';
 import SettingsPrivacyPolicy from 'screens/SettingsPrivacyPolicy';
+import BankAccountAdded from 'screens/BankAccountAdded';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import { USER_TYPES } from 'resources/user/user.constants';
@@ -106,6 +107,7 @@ function AppScreens() {
       <AppStack.Screen name="LegalInformation" component={LegalInformation} />
       <AppStack.Screen name="SettingsPrivacyPolicy" component={SettingsPrivacyPolicy} />
       <AppStack.Screen name="SettingsTermsOfUse" component={SettingsTermsOfUse} />
+      <AppStack.Screen name="BankAccountAdded" component={BankAccountAdded} />
     </AppStack.Navigator>
   );
 }

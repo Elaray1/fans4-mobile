@@ -7,6 +7,7 @@ import FastImage from 'react-native-fast-image';
 import { useSelector } from 'react-redux';
 
 import * as userApi from 'resources/user/user.api';
+import * as fightApi from 'resources/fight/fight.api';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import analyticsService from 'services/analytics.service';
@@ -80,7 +81,7 @@ const ProposeAFight = ({ route }) => {
 
   const suggestAFight = useCallback(async () => {
     try {
-      const { status, fight } = await userApi.suggestFight({
+      const { status, fight } = await fightApi.suggestFight({
         firstFighterId: firstFighter._id,
         secondFighterId: secondFighter._id,
       });

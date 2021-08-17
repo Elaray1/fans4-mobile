@@ -3,16 +3,20 @@ import {
   View, TouchableOpacity, FlatList, ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
 import colors from 'themes/colors';
 
 import Text from 'components/Text';
 import Post from 'components/Post';
+import Modal from 'components/Modal';
+
+import * as userActions from 'resources/user/user.actions';
 
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
+
 import * as userSelectors from 'resources/user/user.selectors';
 
 import analyticsService from 'services/analytics.service';
@@ -31,11 +35,13 @@ const PER_PAGE = 10;
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
 function FighterAccount() {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { showFailure } = useToast();
 
   const userId = useSelector(userSelectors.getUserId);
+  const isUpdateBankAccountModal = useSelector(userSelectors.getIsUpdateBankAccountModal);
 
   const [postsCount, setPostsCount] = useState(null);
   const [fansCount, setFansCount] = useState(null);
@@ -116,6 +122,23 @@ function FighterAccount() {
   const onAddPostPress = useCallback(() => {
     rootNavigation.resetToScreen('NewPost', 'NewPost');
   }, []);
+
+  const onUpdateBankAccountStatus = useCallback(async () => {
+    try {
+      await dispatch(userActions.updateIsBankAccountModal());
+    } catch (error) {
+      showFailure();
+    }
+  }, [dispatch, showFailure]);
+
+  const onCloseBankAccountModal = useCallback(async () => {
+    await onUpdateBankAccountStatus();
+  }, [onUpdateBankAccountStatus]);
+
+  const onUpdateBankAccount = useCallback(async () => {
+    await onUpdateBankAccountStatus();
+    navigation.navigate('Finances');
+  }, [onUpdateBankAccountStatus, navigation]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -199,27 +222,39 @@ function FighterAccount() {
   };
 
   return (
-    <FlatList
-      style={styles.content}
-      data={posts}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      ItemSeparatorComponent={renderItemSeparator}
-      onEndReached={handleLoadMore}
-      onEndReachedThreshold={0.1}
-      initialNumToRender={10}
-      ListHeaderComponent={(
-        <FighterHeader
-          postsCount={postsCount}
-          fansCount={fansCount}
-          onAddBiographyPress={onAddBiographyPress}
-        />
+    <>
+      {isUpdateBankAccountModal && (
+      <Modal
+        title={t('Account.updateBankAccount')}
+        text={t('Account.toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails')}
+        closeButtonText={t('Account.later')}
+        submitButtonText={t('Account.update')}
+        onClose={onCloseBankAccountModal}
+        onSubmit={onUpdateBankAccount}
+      />
       )}
-      ListFooterComponent={renderFooter}
-      ListEmptyComponent={renderNoItems}
-      onViewableItemsChanged={updateViewableItems}
-      viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
-    />
+      <FlatList
+        style={styles.content}
+        data={posts}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        ItemSeparatorComponent={renderItemSeparator}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.1}
+        initialNumToRender={10}
+        ListHeaderComponent={(
+          <FighterHeader
+            postsCount={postsCount}
+            fansCount={fansCount}
+            onAddBiographyPress={onAddBiographyPress}
+          />
+      )}
+        ListFooterComponent={renderFooter}
+        ListEmptyComponent={renderNoItems}
+        onViewableItemsChanged={updateViewableItems}
+        viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
+      />
+    </>
   );
 }
 

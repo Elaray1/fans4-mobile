@@ -144,6 +144,9 @@ const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.FIGHTER_REGISTRATION_DECLINED]: () => {
     rootNavigation.navigate('VerificationFailed');
   },
+  [PUSH_NOTIFICATION_TYPES.STRIPE_PAYOUT_ACCOUNT_STATUS_CHANGED]: () => {
+    rootNavigation.navigate('Finances');
+  },
 };
 
 function AppNavigation() {

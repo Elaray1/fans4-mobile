@@ -125,6 +125,33 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     color: colors.green,
   },
+  withdrawalMethodStatus: {
+    marginRight: 9,
+    marginTop: -1,
+  },
+  updateContainer: {
+    marginBottom: 20,
+    backgroundColor: colors.gray,
+    padding: 16,
+    borderRadius: 5,
+  },
+  updateButton: {
+    backgroundColor: colors.primary,
+    width: '100%',
+  },
+  updateTitle: {
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+  },
+  updateText: {
+    marginTop: 8,
+    marginBottom: 17,
+    color: colors.textSecondary,
+    fontSize: fonts.size.small,
+  },
+  bankAccountTitle: {
+    flexDirection: 'row',
+  },
   emptyViewImage,
   emptyView,
 });

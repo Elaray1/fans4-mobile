@@ -7,4 +7,5 @@ export const PUSH_NOTIFICATION_TYPES = {
   POST_STATUS_CHANGED: 'post_status_changed',
   FIGHTER_REGISTRATION_APPROVED: 'fighter_registration_approved',
   FIGHTER_REGISTRATION_DECLINED: 'fighter_registration_declined',
+  STRIPE_PAYOUT_ACCOUNT_STATUS_CHANGED: 'stripe_payout_account_status_changed',
 };
