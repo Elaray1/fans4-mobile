@@ -18,3 +18,6 @@ export const create = ({ fighterIds }) => apiClient.post('fights', { fighterIds 
 export const vote = ({ fightId }) => apiClient.post('fights/voting', { fightId });
 
 export const unvote = ({ fightId }) => apiClient.delete('fights/voting', { fightId });
+
+export const suggestFight = ({ firstFighterId, secondFighterId }) => apiClient
+  .post('fights/suggest', { firstFighterId, secondFighterId });

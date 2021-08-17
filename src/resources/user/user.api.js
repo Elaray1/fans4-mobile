@@ -110,6 +110,9 @@ export const getFightersForFight = ({ opponentId, search }) => apiClient
     ...(search && { search }),
   });
 
+export const updateIsBankAccountModal = () => apiClient
+  .put('users/bank-account-modal');
+
 export const suggestFight = ({ firstFighterId, secondFighterId }) => apiClient
   .post('fights/suggest', { firstFighterId, secondFighterId });
 

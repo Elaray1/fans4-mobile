@@ -8,6 +8,7 @@ const colors = {
 
   primary: '#6A7DDD',
   disabledPrimary: '#3D4776',
+  errorContainer: '#FF000029',
   error: '#F34C4C',
 
   baseFont: '#FFFFFF',

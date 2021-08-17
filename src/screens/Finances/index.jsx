@@ -1,15 +1,9 @@
-import React, {
-  useCallback, useEffect, useState, useMemo,
-} from 'react';
-import PropTypes from 'prop-types';
-import {
-  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, Linking, Platform,
-} from 'react-native';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import { SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, AppState } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
 import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
@@ -17,39 +11,101 @@ import * as accountApi from 'resources/account/account.api';
 import * as payoutApi from 'resources/payout/payout.api';
 
 import analyticsService from 'services/analytics.service';
+import * as socketsService from 'services/socket.service';
 
 import PlusIcon from 'assets/icons/plus';
-import TrashIcon from 'assets/icons/trash';
+import EditIcon from 'assets/icons/pencil';
 
 import Text from 'components/Text';
 import Header from 'components/Header';
 import Modal from 'components/Modal';
+import StripeAccountStatus from 'components/StripeAccountStatus';
+import Button from 'components/Button';
+import BankAccountModal from 'screens/Finances/components/BankAccountModal';
 
 import useToast from 'hooks/useToast';
 
 import IncomeIllustration from 'assets/illustrations/income.svg';
 
+import { ACCOUNT_STATUSES } from 'resources/account/account.constants';
+
 import colors from 'themes/colors';
 
 import styles from './styles';
 
-function Finances({ route }) {
+function Finances() {
   const { t } = useTranslation();
   const { showFailure } = useToast();
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
 
   const isUserAuthenticated = useSelector(userSelectors.getAuthenticated);
-
-  const stripeAccountId = route?.params?.stripeAccountId;
 
   const [account, setAccount] = useState(null);
   const [income, setIncome] = useState(null);
   const [webViewUrl, setWebViewUrl] = useState(null);
   const [isConfirmationModal, setIsConfirmationModal] = useState(false);
+  const [isBankAccountModal, setIsBankAccountModal] = useState(false);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const userId = useSelector(userSelectors.getUserId);
+
+  const updateBankAccount = useCallback(async () => {
+    setIsBankAccountModal(false);
+    const { accountLink } = await accountApi.createStripePayoutAccountUpdatingLink();
+    setWebViewUrl(accountLink);
+  }, []);
+
+  const getUserWithdrawalMethod = useCallback(async ({ isAddedScreen = false } = {}) => {
+    setIsRefreshing(true);
+
+    try {
+      const { account: fetchedAccount } = await accountApi.getStripePayoutAccount();
+      setAccount(fetchedAccount);
+      if (isAddedScreen) {
+        navigation.reset({
+          index: 0,
+          routes: [{
+            name: 'AppStack',
+            state: {
+              routes: [{
+                name: 'BankAccountAdded',
+              }],
+            },
+          }],
+        });
+      }
+    } catch (err) {
+      showFailure();
+    }
+
+    setIsRefreshing(false);
+  }, [showFailure, navigation]);
+
+  useEffect(() => {
+    console.log('USE EFFECT');
+    const updateAccount = (updatedAccount) => {
+      setAccount(updatedAccount);
+    };
+
+    socketsService.on('account:updated', updateAccount);
+    return () => socketsService.removeListener('account:updated', updateAccount);
+  }, []);
+
+  useEffect(() => {
+    const checkAccountOnFocus = async (appState) => {
+      if (isFocused && appState === 'active') {
+        getUserWithdrawalMethod();
+      }
+    };
+
+    AppState.addEventListener('change', checkAccountOnFocus);
+
+    return () => {
+      AppState.removeEventListener('change', checkAccountOnFocus);
+    };
+  }, [isFocused, navigation, getUserWithdrawalMethod]);
 
   useEffect(() => {
     analyticsService.logEvent({
@@ -60,27 +116,10 @@ function Finances({ route }) {
     });
   }, [userId]);
 
-  const getUserWithdrawalMethod = useCallback(async () => {
-    setIsRefreshing(true);
-    try {
-      const { account: fetchedAccount } = await accountApi.getStripePayoutAccount();
-      setAccount(fetchedAccount);
-    } catch (err) {
-      showFailure();
-    }
-    setIsRefreshing(false);
-  }, [showFailure]);
-
   const createStripePayoutAccount = useCallback(async () => {
     try {
-      const {
-        accountLink: fetchedAccountLink,
-      } = await accountApi.createStripePayoutAccount();
-      if (Platform.OS === 'ios') {
-        setWebViewUrl(fetchedAccountLink);
-      } else {
-        Linking.openURL(fetchedAccountLink);
-      }
+      const { accountLink: fetchedAccountLink } = await accountApi.createStripePayoutAccount();
+      setWebViewUrl(fetchedAccountLink);
     } catch (err) {
       console.error('createStripePayoutAccount err', err);
       showFailure();
@@ -88,6 +127,7 @@ function Finances({ route }) {
   }, [showFailure]);
 
   const deleteWithdrawalMethod = useCallback(() => {
+    setIsBankAccountModal(false);
     setIsConfirmationModal(true);
   }, []);
 
@@ -125,6 +165,7 @@ function Finances({ route }) {
     setIsRefreshing(true);
     try {
       const payouts = await payoutApi.getUserPayouts();
+
       const fetchedIncome = payouts.map((payout) => {
         const period = moment(payout.typeMetadata.from).format('MMMM YYYY');
 
@@ -134,37 +175,62 @@ function Finances({ route }) {
           totalAmount: payout.amount.toFixed(2),
         };
       });
+
       setIncome(fetchedIncome);
     } catch (err) {
       showFailure();
     }
+
     setIsRefreshing(false);
   }, [showFailure]);
 
   const onWebViewStateChange = useCallback(async (webViewState) => {
-    if (!webViewState.url.includes('connect.stripe.com')) {
-      const response = await axios({ method: 'get', url: `${webViewState.url}&noRedirect=true` });
-      if (response.data?.error) {
-        console.error('webViewState adding stripe error:', response.data.error);
-        showFailure(response.data.error);
+    // console.log('webViewState', webViewState);
+    // const isLoadingStarted = webViewState.loading;
+    // if (!isLoadingStarted) {
+    //   return;
+    // }
+
+    if (webViewState.url.includes('saving')) {
+      setWebViewUrl(null);
+
+      const parsedUrl = new URL(webViewState.url);
+      const token = parsedUrl.searchParams.get('token');
+      const stripeAccountId = parsedUrl.searchParams.get('stripeAccountId');
+
+      setIsRefreshing(true);
+
+      try {
+        await accountApi.saveStripePayoutAccount({ token, userId, stripeAccountId });
+      } catch (err) {
+        showFailure(err);
       }
+
+      setIsRefreshing(false);
+
+      setWebViewUrl(null);
+      getUserWithdrawalMethod({ isAddedScreen: true });
+    }
+
+    if (webViewState.url.includes('updating')) {
       setWebViewUrl(null);
       getUserWithdrawalMethod();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getUserWithdrawalMethod]);
+  }, [getUserWithdrawalMethod, showFailure, userId]);
+
+  const onChangeBankAccountModalVisibility = useCallback(() => {
+    setIsBankAccountModal(!isBankAccountModal);
+  }, [isBankAccountModal]);
 
   useEffect(() => {
     if (isUserAuthenticated) {
       getUserWithdrawalMethod();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUserAuthenticated, stripeAccountId]);
+  }, [isUserAuthenticated, getUserWithdrawalMethod]);
 
   useEffect(() => {
     getUserIncome();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getUserIncome]);
 
   const emptyViewText = useMemo(() => {
     return account
@@ -202,43 +268,65 @@ function Finances({ route }) {
     return null;
   }, [account?.typeMetadata?.bankAccount, t]);
 
-  const WithdrawalMethod = () => (withdrawalMethod
-    ? (
-      <View style={styles.withdrawalMethod}>
-        <View>
-          <Text style={styles.title}>{withdrawalMethod.title}</Text>
-          <Text style={styles.withdrawalMethodNumber}>
-            {withdrawalMethod.text}
-          </Text>
-        </View>
-        <TouchableOpacity
-          onPress={deleteWithdrawalMethod}
-          activeOpacity={0.7}
-        >
-          <TrashIcon />
-        </TouchableOpacity>
-      </View>
-    )
-    : (
-      <View>
-        <TouchableOpacity
-          onPress={createStripePayoutAccount}
-          activeOpacity={0.7}
-          style={styles.addWithdrawalMethod}
-        >
-          <PlusIcon style={styles.plus} />
-          <Text style={styles.title}>{t('Finances.addBankAccount')}</Text>
-        </TouchableOpacity>
+  const WithdrawalMethod = () => {
+    return (
+      withdrawalMethod
+        ? (
+          <View>
+            {account.status === ACCOUNT_STATUSES.RESTRICTED && (
+              <View style={styles.updateContainer}>
+                <Text style={styles.updateTitle}>
+                  {t('Finances.updateBankAccount')}
+                </Text>
+                <Text style={styles.updateText}>
+                  {t('Finances.toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails')}
+                </Text>
+                <Button
+                  title={t('Finances.update')}
+                  style={styles.updateButton}
+                  onPress={updateBankAccount}
+                />
+              </View>
+            )}
 
-        {/*  Do not replace "!!: because it will cause a bug: */}
-        {/*  Text strings must be rendered within <Text> component */}
-        {!!income && !!income.length && (
-          <Text style={[styles.secondaryText, styles.incomeText]}>
-            {t('Finances.incomeWillBePaidToByThisMethodMonthly')}
-          </Text>
-        )}
-      </View>
-    ));
+            <View style={styles.withdrawalMethod}>
+              <View>
+                <View style={styles.bankAccountTitle}>
+                  <Text style={[styles.title, styles.withdrawalMethodStatus]}>{withdrawalMethod.title}</Text>
+                  <StripeAccountStatus status={account.status} />
+                </View>
+                <Text style={styles.withdrawalMethodNumber}>
+                  {withdrawalMethod.text}
+                </Text>
+              </View>
+
+              <TouchableOpacity onPress={onChangeBankAccountModalVisibility} activeOpacity={0.7}>
+                <EditIcon />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+        ) : (
+          <View>
+            <TouchableOpacity
+              onPress={createStripePayoutAccount}
+              activeOpacity={0.7}
+              style={styles.addWithdrawalMethod}
+            >
+              <PlusIcon style={styles.plus} />
+              <Text style={styles.title}>{t('Finances.addBankAccount')}</Text>
+            </TouchableOpacity>
+
+            {/*  Do not replace "!!: because it will cause a bug: */}
+            {/*  Text strings must be rendered within <Text> component */}
+            {!!income && !!income.length && (
+            <Text style={[styles.secondaryText, styles.incomeText]}>
+              {t('Finances.incomeWillBePaidToByThisMethodMonthly')}
+            </Text>
+            )}
+          </View>
+        ));
+  };
 
   const Income = () => (
     <View style={styles.incomeContainer}>
@@ -246,6 +334,7 @@ function Finances({ route }) {
         <Text style={styles.title}>{t('Finances.income')} </Text>
         <Text style={[styles.secondaryText, styles.perPeriod]}>{t('Finances.perPeriod')}</Text>
       </View>
+
       <View style={styles.incomeList}>
         {income.map(item => (
           <View style={styles.incomeItem} key={item._id}>
@@ -255,6 +344,7 @@ function Finances({ route }) {
                 <Text style={styles.totalAmount}>{`$${item.totalAmount}`}</Text>
               </View>
             </View>
+
             <View style={styles.line} />
           </View>
         ))}
@@ -268,7 +358,7 @@ function Finances({ route }) {
     <>
       {!isRefreshing && isConfirmationModal && (
         <Modal
-          title={t('Finances.deleteWithdrawalMethod')}
+          title={t('Finances.deleteBankAccount')}
           text={t('Finances.bankAccountWillBeDeletedButWeWillStoreTheData')}
           closeButtonText={t('Finances.cancel')}
           submitButtonText={t('Finances.delete')}
@@ -277,11 +367,18 @@ function Finances({ route }) {
         />
       )}
 
+      <BankAccountModal
+        visible={isBankAccountModal}
+        onClose={onChangeBankAccountModalVisibility}
+        onUpdateBankAccount={updateBankAccount}
+        onDeleteBankAccount={deleteWithdrawalMethod}
+      />
+
       <SafeAreaView style={styles.screen}>
         {webViewUrl && (
           <WebView
             source={{ uri: webViewUrl }}
-            onNavigationStateChange={onWebViewStateChange}
+            onShouldStartLoadWithRequest={onWebViewStateChange}
             startInLoadingState
           />
         )}
@@ -293,6 +390,7 @@ function Finances({ route }) {
               leftItemType="backArrow"
               onLeftItemPress={onGoBack}
             />
+
             <View style={styles.content}>
               <ScrollView
                 contentContainerStyle={styles.scrollContent}
@@ -313,14 +411,5 @@ function Finances({ route }) {
     </>
   );
 }
-
-Finances.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({
-      stripeAccountId: PropTypes.string,
-      error: PropTypes.string,
-    }),
-  }).isRequired,
-};
 
 export default React.memo(Finances);

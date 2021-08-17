@@ -95,6 +95,7 @@
       "buttonText": "Next"
     }
   },
+
   "OnBoarding2": {
     "fan": {
       "title": "Create a pairing",
@@ -262,6 +263,11 @@
     "removed": "Removed",
     "blocked": "Blocked"
   },
+  "StripeAccountStatus": {
+    "active": "Active",
+    "pending": "Pending",
+    "restricted": "Restricted"
+  },
   "Account": {
     "account": "Account",
     "posts": "Posts",
@@ -277,7 +283,12 @@
     "Posts": "Posts",
     "addYourFirstPost": "Add your first post for your fans!",
     "addPost": "Add post",
-    "subscribeToFighter": "Subscribe to this fighter for full access to Posts."
+    "subscribeToFighter": "Subscribe to this fighter for full access to Posts.",
+    "OnceYouAddAPost": "Once you add a post you will see it here.",
+    "updateBankAccount": "Update Bank Account",
+    "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
+    "later": "Later",
+    "update": "Update"
   },
   "AccountBlocked": {
     "title": "Your Account is Blocked",
@@ -519,11 +530,18 @@
     "checkBack": "Check back to view how much you've earned!",
     "bankAccountWillBeDeletedButWeWillStoreTheData": "Bank account will be deleted, but we will store the data.",
     "cancel": "Cancel",
-    "deleteWithdrawalMethod": "Delete Withdrawal Method",
+    "deleteBankAccount": "Delete Bank Account",
     "delete": "Delete",
     "income": "Income",
     "perPeriod": "per month",
-    "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method monthly."
+    "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method monthly.",
+    "updateBankAccount": "Update Bank Account",
+    "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
+    "update": "Update"
+  },
+  "BankAccountModal": {
+    "updateBankAccount": "Update Bank Account",
+    "deleteBankAccount": "Delete Bank Account"
   },
   "Voting": {
     "voting": "Voting",
@@ -585,5 +603,11 @@
       "agreementToTerms": "AGREEMENT TO TERMS",
       "terms": "These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity (“you”) and [business entity name] (“we,” “us” or “our”), concerning your access to and use of the [website name.com] website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the “Site”). You agree that by accessing the Site, you have read, understood, and agree to be bound by all of these Terms and Conditions. If you do not agree with all of these Terms and Conditions, then you are expressly prohibited from using the Site and you must discontinue use immediately. Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to make changes or modifications to these Terms and Conditions at any time and for any reason."
     }
+  },
+  "BankAccountAdded": {
+    "title": "Bank Account Added",
+    "description": "Your account is under review. Once status changes to \"Active\", you will be able to receive funds into that account.",
+    "linkText": "Done",
+    "header": "Finances"
   }
 }
