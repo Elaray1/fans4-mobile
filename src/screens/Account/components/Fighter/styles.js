@@ -32,6 +32,7 @@ export default StyleSheet.create({
   noItemsContainer: {
     alignItems: 'center',
     paddingTop: 32,
+    marginBottom: 80,
   },
   noItemsText: {
     color: colors.grayText,
