@@ -1,13 +1,14 @@
 import { apiClient } from 'helpers/api';
 
 export const getFights = ({
-  page, perPage, eventId, statuses, betweenFighterIds, createdByMe,
+  page, perPage, eventId, statuses, betweenFighterIds, createdByMe, sortOption,
 }) => apiClient
   .get('fights', {
     page,
     perPage,
     ...(eventId && { eventId }),
     ...(statuses && { statuses }),
+    ...(sortOption && { sortOption }),
     ...(betweenFighterIds && { betweenFighterIds }),
     ...(createdByMe && { createdByMe }),
   });

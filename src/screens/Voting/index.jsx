@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as fightApi from 'resources/fight/fight.api';
-import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
+import { FIGHT_STATUSES, FIGHT_SORT_OPTIONS } from 'resources/fight/fight.constants';
 
 import analyticsService from 'services/analytics.service';
 
@@ -131,6 +131,7 @@ const Voting = ({ route }) => {
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
           statuses: selectedToggleItem.id === '1' ? [FIGHT_STATUSES.IN_VOTING] : null,
+          sortOption: selectedToggleItem.id === '2' ? FIGHT_SORT_OPTIONS.STATUS : null,
           createdByMe: selectedToggleItem.createdByMe,
         });
 

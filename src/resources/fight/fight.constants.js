@@ -7,3 +7,7 @@ export const FIGHT_STATUSES = {
   PAST: 'past',
   DECLINED: 'declined',
 };
+
+export const FIGHT_SORT_OPTIONS = {
+  STATUS: 'status',
+};
