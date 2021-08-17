@@ -19,7 +19,7 @@ export default StyleSheet.create({
     backgroundColor: colors.gray,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingTop: 10,
+    paddingVertical: 33,
   },
   settingsOption: {
     flexDirection: 'row',

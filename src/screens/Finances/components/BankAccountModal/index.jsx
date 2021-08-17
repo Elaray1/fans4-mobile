@@ -55,7 +55,6 @@ function BankAccountModal({
                 {t('BankAccountModal.deleteBankAccount')}
               </Text>
             </TouchableOpacity>
-            <View style={styles.line} />
           </View>
         </View>
       </View>
