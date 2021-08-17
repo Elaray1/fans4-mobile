@@ -102,7 +102,7 @@ class PushNotificationService {
     });
 
     this.unsubscribeonNotificationOpenedApp = messaging().onNotificationOpenedApp((message) => {
-      handleNotification(message.data);
+      handleNotification(message);
     });
 
     const initialNotification = await messaging().getInitialNotification();
@@ -116,7 +116,7 @@ const pushNotificationService = new PushNotificationService(userApi);
 
 PushNotification.configure({
   onNotification(notification) {
-    if (pushNotificationService.notificationHandlers[notification.data.type]) {
+    if (notification.foreground && pushNotificationService.notificationHandlers[notification.data.type]) {
       pushNotificationService.notificationHandlers[notification.data.type](notification.data);
     }
 
