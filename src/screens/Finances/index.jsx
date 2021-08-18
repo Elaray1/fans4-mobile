@@ -84,7 +84,6 @@ function Finances() {
   }, [showFailure, navigation]);
 
   useEffect(() => {
-    console.log('USE EFFECT');
     const updateAccount = (updatedAccount) => {
       setAccount(updatedAccount);
     };
@@ -185,12 +184,6 @@ function Finances() {
   }, [showFailure]);
 
   const onWebViewStateChange = useCallback(async (webViewState) => {
-    // console.log('webViewState', webViewState);
-    // const isLoadingStarted = webViewState.loading;
-    // if (!isLoadingStarted) {
-    //   return;
-    // }
-
     if (webViewState.url.includes('saving')) {
       setWebViewUrl(null);
 
@@ -354,6 +347,17 @@ function Finances() {
 
   const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
 
+  const BankModal = useMemo(() => {
+    return (
+      <BankAccountModal
+        visible={isBankAccountModal}
+        onClose={onChangeBankAccountModalVisibility}
+        onUpdateBankAccount={updateBankAccount}
+        onDeleteBankAccount={deleteWithdrawalMethod}
+      />
+    );
+  }, [deleteWithdrawalMethod, updateBankAccount, isBankAccountModal, onChangeBankAccountModalVisibility]);
+
   return (
     <>
       {!isRefreshing && isConfirmationModal && (
@@ -367,12 +371,7 @@ function Finances() {
         />
       )}
 
-      <BankAccountModal
-        visible={isBankAccountModal}
-        onClose={onChangeBankAccountModalVisibility}
-        onUpdateBankAccount={updateBankAccount}
-        onDeleteBankAccount={deleteWithdrawalMethod}
-      />
+      <BankModal />
 
       <SafeAreaView style={styles.screen}>
         {webViewUrl && (

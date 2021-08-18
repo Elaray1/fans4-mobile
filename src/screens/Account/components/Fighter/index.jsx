@@ -12,12 +12,12 @@ import Text from 'components/Text';
 import Post from 'components/Post';
 import Modal from 'components/Modal';
 
-import * as userActions from 'resources/user/user.actions';
-
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 
 import * as userSelectors from 'resources/user/user.selectors';
+
+import * as userActions from 'resources/user/user.actions';
 
 import analyticsService from 'services/analytics.service';
 import * as socketService from 'services/socket.service';
@@ -123,22 +123,24 @@ function FighterAccount() {
     rootNavigation.resetToScreen('NewPost', 'NewPost');
   }, []);
 
-  const onUpdateBankAccountStatus = useCallback(async () => {
+  const hideBankAccountWarning = useCallback(async () => {
     try {
-      await dispatch(userActions.updateIsBankAccountModal());
+      const user = await userApi.hideBankAccountWarning();
+
+      dispatch(userActions.setUserData(user));
     } catch (error) {
       showFailure();
     }
   }, [dispatch, showFailure]);
 
   const onCloseBankAccountModal = useCallback(async () => {
-    await onUpdateBankAccountStatus();
-  }, [onUpdateBankAccountStatus]);
+    await hideBankAccountWarning();
+  }, [hideBankAccountWarning]);
 
   const onUpdateBankAccount = useCallback(async () => {
-    await onUpdateBankAccountStatus();
+    await hideBankAccountWarning();
     navigation.navigate('Finances');
-  }, [onUpdateBankAccountStatus, navigation]);
+  }, [hideBankAccountWarning, navigation]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
