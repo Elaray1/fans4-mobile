@@ -3,6 +3,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
+import { ACCOUNT_STATUSES } from 'resources/account/account.constants';
+
 import Text from 'components/Text';
 
 import styles from './styles';
@@ -26,11 +28,7 @@ function StripeAccountStatus({ status }) {
 }
 
 StripeAccountStatus.propTypes = {
-  status: PropTypes.oneOf([
-    'active',
-    'pending',
-    'restricted',
-  ]).isRequired,
+  status: PropTypes.oneOf(Object.values(ACCOUNT_STATUSES)).isRequired,
 };
 
 export default React.memo(StripeAccountStatus);
