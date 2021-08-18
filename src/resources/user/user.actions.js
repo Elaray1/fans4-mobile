@@ -184,9 +184,3 @@ export const updateEmail = ({ newEmail, password }) => async (dispatch) => {
 
   dispatch({ type: SET_USER_DATA, user });
 };
-
-export const hideBankAccountWarning = () => async (dispatch) => {
-  const user = await api.hideBankAccountWarning();
-
-  dispatch({ type: SET_USER_DATA, user });
-};
