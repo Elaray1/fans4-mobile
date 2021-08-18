@@ -371,7 +371,7 @@ function Finances() {
         />
       )}
 
-      <BankModal />
+      {BankModal}
 
       <SafeAreaView style={styles.screen}>
         {webViewUrl && (
