@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View, TouchableOpacity, Modal, Pressable,
 } from 'react-native';
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Text from 'components/Text';
+import ConfirmationModal from 'components/Modal';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
@@ -33,6 +34,8 @@ function SettingsModal({
   const { t } = useTranslation();
 
   const userType = useSelector(userSelectors.getUserType);
+
+  const [isLogoutConfirmationModal, setIsLogoutConfirmationModal] = useState(false);
 
   const isFan = useMemo(() => userType === USER_TYPES.FAN, [userType]);
 
@@ -66,6 +69,14 @@ function SettingsModal({
     navigation.navigate('LegalInformation');
   }, [navigation, onClose]);
 
+  const onShowLogoutConfirmationModal = useCallback(() => {
+    setIsLogoutConfirmationModal(true);
+  }, []);
+
+  const onHideLogoutConfirmationModal = useCallback(() => {
+    setIsLogoutConfirmationModal(false);
+  }, []);
+
   const onLogOutPress = useCallback(async () => {
     navigation.reset({
       index: 1,
@@ -93,149 +104,161 @@ function SettingsModal({
   }, [dispatch, navigation, userType]);
 
   return (
-    <Modal
-      animationType="fade"
-      transparent
-      visible={visible}
-      onRequestClose={onClose}
-    >
-      <Pressable style={styles.background} onPress={onClose} />
-      <View style={styles.modal}>
-        <View style={styles.header}>
-          <View style={{ width: WIDTH_ICON }} />
-          <Text style={styles.title}>{t('SettingsModal.settings')}</Text>
-          <TouchableOpacity activeOpacity={0.7} onPress={onClose}>
-            <CrossIcon />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <View>
-            <TouchableOpacity
-              style={styles.settingsOption}
-              onPress={onAccountInfoPress}
-              activeOpacity={0.7}
-            >
-              <AccountIcon style={styles.settingIcon} />
-              <View>
-                <Text style={styles.settingTitle}>
-                  {t('SettingsModal.accountInformation')}
-                </Text>
-                <Text style={styles.settingText}>
-                  {isFan ? t('SettingsModal.updateYourNameEmailEtc') : t('SettingsModal.updateYourEmailBiography')}
-                </Text>
-              </View>
+    <>
+      {isLogoutConfirmationModal && (
+      <ConfirmationModal
+        title={t('SettingsModal.logOut')}
+        text={t('SettingsModal.doYouWantToLogOutOfTheAccount')}
+        closeButtonText={t('SettingsModal.cancel')}
+        submitButtonText={t('SettingsModal.yes')}
+        onClose={onHideLogoutConfirmationModal}
+        onSubmit={onLogOutPress}
+      />
+      )}
+      <Modal
+        animationType="fade"
+        transparent
+        visible={visible}
+        onRequestClose={onClose}
+      >
+        <Pressable style={styles.background} onPress={onClose} />
+        <View style={styles.modal}>
+          <View style={styles.header}>
+            <View style={{ width: WIDTH_ICON }} />
+            <Text style={styles.title}>{t('SettingsModal.settings')}</Text>
+            <TouchableOpacity activeOpacity={0.7} onPress={onClose}>
+              <CrossIcon />
             </TouchableOpacity>
-            <View style={styles.line} />
           </View>
-
           <View>
-            <TouchableOpacity
-              style={styles.settingsOption}
-              onPress={onSecurityPress}
-              activeOpacity={0.7}
-            >
-              <SecurityIcon style={styles.settingIcon} />
-              <View>
-                <Text style={styles.settingTitle}>
-                  {t('SettingsModal.security')}
-                </Text>
-                <Text style={styles.settingText}>
-                  {t('SettingsModal.changePassword')}
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={styles.line} />
-          </View>
-
-          {!isFan && (
-          <View>
-            <TouchableOpacity
-              style={styles.settingsOption}
-              onPress={onFinancesPress}
-              activeOpacity={0.7}
-            >
-              <FinancesIcon style={styles.settingIcon} />
-              <View>
-                <Text style={styles.settingTitle}>
-                  {t('SettingsModal.finances')}
-                </Text>
-                <Text style={styles.settingText}>
-                  {t('SettingsModal.manageBankAccount')}
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={styles.line} />
-          </View>
-          )}
-
-          <View>
-            <TouchableOpacity
-              style={styles.settingsOption}
-              onPress={onSupportPress}
-              activeOpacity={0.7}
-            >
-              <SupportIcon style={styles.settingIcon} />
-              <View>
-                <Text style={styles.settingTitle}>
-                  {t('SettingsModal.support')}
-                </Text>
-                <Text style={styles.settingText}>
-                  {t('SettingsModal.contactAdminFAQ')}
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={styles.line} />
-          </View>
-
-          {!isFan && (
             <View>
               <TouchableOpacity
                 style={styles.settingsOption}
-                onPress={onInvitePress}
+                onPress={onAccountInfoPress}
                 activeOpacity={0.7}
               >
-                <InviteIcon style={styles.settingIcon} />
+                <AccountIcon style={styles.settingIcon} />
                 <View>
                   <Text style={styles.settingTitle}>
-                    {t('SettingsModal.inviteFan')}
+                    {t('SettingsModal.accountInformation')}
                   </Text>
                   <Text style={styles.settingText}>
-                    {t('SettingsModal.scanQRCode')}
+                    {isFan ? t('SettingsModal.updateYourNameEmailEtc') : t('SettingsModal.updateYourEmailBiography')}
                   </Text>
                 </View>
               </TouchableOpacity>
               <View style={styles.line} />
             </View>
-          )}
 
-          <View>
-            <TouchableOpacity
-              style={styles.settingsOption}
-              onPress={onLegalInformationPress}
-              activeOpacity={0.7}
-            >
-              <LegalIcon style={styles.settingIcon} />
+            <View>
+              <TouchableOpacity
+                style={styles.settingsOption}
+                onPress={onSecurityPress}
+                activeOpacity={0.7}
+              >
+                <SecurityIcon style={styles.settingIcon} />
+                <View>
+                  <Text style={styles.settingTitle}>
+                    {t('SettingsModal.security')}
+                  </Text>
+                  <Text style={styles.settingText}>
+                    {t('SettingsModal.changePassword')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.line} />
+            </View>
+
+            {!isFan && (
+            <View>
+              <TouchableOpacity
+                style={styles.settingsOption}
+                onPress={onFinancesPress}
+                activeOpacity={0.7}
+              >
+                <FinancesIcon style={styles.settingIcon} />
+                <View>
+                  <Text style={styles.settingTitle}>
+                    {t('SettingsModal.finances')}
+                  </Text>
+                  <Text style={styles.settingText}>
+                    {t('SettingsModal.manageBankAccount')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.line} />
+            </View>
+            )}
+
+            <View>
+              <TouchableOpacity
+                style={styles.settingsOption}
+                onPress={onSupportPress}
+                activeOpacity={0.7}
+              >
+                <SupportIcon style={styles.settingIcon} />
+                <View>
+                  <Text style={styles.settingTitle}>
+                    {t('SettingsModal.support')}
+                  </Text>
+                  <Text style={styles.settingText}>
+                    {t('SettingsModal.contactAdminFAQ')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.line} />
+            </View>
+
+            {!isFan && (
               <View>
-                <Text style={styles.settingTitle}>
-                  {t('SettingsModal.legalInformation')}
-                </Text>
-                <Text style={styles.settingText}>
-                  {t('SettingsModal.terms')}
-                </Text>
+                <TouchableOpacity
+                  style={styles.settingsOption}
+                  onPress={onInvitePress}
+                  activeOpacity={0.7}
+                >
+                  <InviteIcon style={styles.settingIcon} />
+                  <View>
+                    <Text style={styles.settingTitle}>
+                      {t('SettingsModal.inviteFan')}
+                    </Text>
+                    <Text style={styles.settingText}>
+                      {t('SettingsModal.scanQRCode')}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <View style={styles.line} />
               </View>
+            )}
+
+            <View>
+              <TouchableOpacity
+                style={styles.settingsOption}
+                onPress={onLegalInformationPress}
+                activeOpacity={0.7}
+              >
+                <LegalIcon style={styles.settingIcon} />
+                <View>
+                  <Text style={styles.settingTitle}>
+                    {t('SettingsModal.legalInformation')}
+                  </Text>
+                  <Text style={styles.settingText}>
+                    {t('SettingsModal.terms')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.line} />
+            </View>
+
+            <TouchableOpacity style={styles.logOutButton} onPress={onShowLogoutConfirmationModal}>
+              <Text style={styles.logOutText}>
+                {t('SettingsModal.logOut')}
+              </Text>
             </TouchableOpacity>
-            <View style={styles.line} />
+
           </View>
-
-          <TouchableOpacity style={styles.logOutButton} onPress={onLogOutPress}>
-            <Text style={styles.logOutText}>
-              {t('SettingsModal.logOut')}
-            </Text>
-          </TouchableOpacity>
-
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </>
   );
 }
 
