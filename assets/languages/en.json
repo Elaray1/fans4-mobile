@@ -211,7 +211,10 @@
     "scanQRCode": "Scan QR code, share the link",
     "legalInformation": "Legal Information",
     "terms": "Terms of Use and Privacy Policy",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "doYouWantToLogOutOfTheAccount": "Do you want to log out of the account?",
+    "cancel": "Cancel",
+    "yes": "Yes"
   },
   "ChangeBiography": {
     "addBiography": "Add Biography",
