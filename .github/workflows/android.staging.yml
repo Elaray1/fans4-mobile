@@ -2,11 +2,11 @@ name: Build Android staging build
 on: 
   push:
     branches:
-      - staging
+      - staging-aab
 
 jobs:
   build-android:
-    name: Build Android APK
+    name: Build Android AAB
     runs-on: ubuntu-20.04
     steps:
       - name: Clear artifacts
@@ -29,13 +29,13 @@ jobs:
 
       - name: Build Android Release
         run: |
-          cd android && ./gradlew assembleReleaseStaging -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
+          cd android && ./gradlew bundleReleaseStaging -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: app-releaseStaging.apk
-          path: android/app/build/outputs/apk/releaseStaging/
+          name: app-releaseStaging.aab
+          path: android/app/build/outputs/bundle/releaseStaging/
 
       - name: Distribute app via Firebase App Distribution
         env:
@@ -47,7 +47,7 @@ jobs:
           yarn global add firebase-tools
           export PATH="$(yarn global bin):$PATH"
           firebase \
-            appdistribution:distribute android/app/build/outputs/apk/releaseStaging/app-releaseStaging.apk \
+            appdistribution:distribute android/app/build/outputs/bundle/releaseStaging/app-releaseStaging.aab \
             --app $firebaseAppId \
             --release-notes "$notes" \
             --groups "$firebaseGroups" \
