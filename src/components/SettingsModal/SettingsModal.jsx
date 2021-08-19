@@ -70,6 +70,7 @@ function SettingsModal({
   }, [navigation, onClose]);
 
   const onShowLogoutConfirmationModal = useCallback(() => {
+    console.log('onShowLogoutConfirmationModal');
     setIsLogoutConfirmationModal(true);
   }, []);
 
@@ -103,18 +104,10 @@ function SettingsModal({
     await dispatch(userActions.logout());
   }, [dispatch, navigation, userType]);
 
+  console.log('isLogoutConfirmationModal', isLogoutConfirmationModal);
+
   return (
     <>
-      {isLogoutConfirmationModal && (
-      <ConfirmationModal
-        title={t('SettingsModal.logOut')}
-        text={t('SettingsModal.doYouWantToLogOutOfTheAccount')}
-        closeButtonText={t('SettingsModal.cancel')}
-        submitButtonText={t('SettingsModal.yes')}
-        onClose={onHideLogoutConfirmationModal}
-        onSubmit={onLogOutPress}
-      />
-      )}
       <Modal
         animationType="fade"
         transparent
@@ -131,6 +124,7 @@ function SettingsModal({
             </TouchableOpacity>
           </View>
           <View>
+
             <View>
               <TouchableOpacity
                 style={styles.settingsOption}
@@ -257,6 +251,17 @@ function SettingsModal({
 
           </View>
         </View>
+
+        {isLogoutConfirmationModal && (
+          <ConfirmationModal
+            title={t('SettingsModal.logOut')}
+            text={t('SettingsModal.doYouWantToLogOutOfTheAccount')}
+            closeButtonText={t('SettingsModal.cancel')}
+            submitButtonText={t('SettingsModal.yes')}
+            onClose={onHideLogoutConfirmationModal}
+            onSubmit={onLogOutPress}
+          />
+        )}
       </Modal>
     </>
   );
