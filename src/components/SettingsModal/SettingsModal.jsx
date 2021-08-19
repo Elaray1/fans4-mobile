@@ -70,7 +70,6 @@ function SettingsModal({
   }, [navigation, onClose]);
 
   const onShowLogoutConfirmationModal = useCallback(() => {
-    console.log('onShowLogoutConfirmationModal');
     setIsLogoutConfirmationModal(true);
   }, []);
 
@@ -103,8 +102,6 @@ function SettingsModal({
 
     await dispatch(userActions.logout());
   }, [dispatch, navigation, userType]);
-
-  console.log('isLogoutConfirmationModal', isLogoutConfirmationModal);
 
   return (
     <>
