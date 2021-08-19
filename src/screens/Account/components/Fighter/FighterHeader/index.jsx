@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +32,13 @@ function FighterHeader({ postsCount, fansCount, onAddBiographyPress }) {
     navigation.navigate('Fans');
   }, [navigation]);
 
+  const record = useMemo(() => ({
+    ...profileInfo?.record,
+    wins: (profileInfo?.record.wins || 0) + (profileInfo?.appRecord.wins || 0),
+    losses: (profileInfo?.record.losses || 0) + (profileInfo?.appRecord.losses || 0),
+    draws: (profileInfo?.record.draws || 0) + (profileInfo?.appRecord.draws || 0),
+  }), [profileInfo?.record, profileInfo?.appRecord.wins, profileInfo?.appRecord.losses, profileInfo?.appRecord.draws]);
+
   return (
     <View style={styles.flatListHeader}>
 
@@ -49,7 +56,7 @@ function FighterHeader({ postsCount, fansCount, onAddBiographyPress }) {
         postsCount={postsCount}
         fansCount={fansCount}
         onFansPress={onFansPress}
-        recordCount={profileInfo?.record}
+        recordCount={record}
       />
 
       <View style={styles.line} />

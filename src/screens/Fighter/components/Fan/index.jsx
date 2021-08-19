@@ -141,6 +141,18 @@ function Fighter({ fighterId }) {
     );
   };
 
+  const record = useMemo(() => ({
+    ...fighter.role.profile.record,
+    wins: (fighter.role.profile.record.wins || 0) + (fighter.role.profile.appRecord.wins || 0),
+    losses: (fighter.role.profile.record.losses || 0) + (fighter.role.profile.appRecord.losses || 0),
+    draws: (fighter.role.profile.record.draws || 0) + (fighter.role.profile.appRecord.draws || 0),
+  }), [
+    fighter.role.profile.appRecord.draws,
+    fighter.role.profile.appRecord.losses,
+    fighter.role.profile.appRecord.wins,
+    fighter.role.profile.record,
+  ]);
+
   const ProfileHeader = !fighter ? null : (
     <View style={styles.flatListHeader}>
       <Profile
@@ -180,7 +192,7 @@ function Fighter({ fighterId }) {
         <Statistic
           postsCount={postsCount}
           fansCount={fansCount}
-          recordCount={fighter.role.profile.record}
+          recordCount={record}
         />
       </View>
 

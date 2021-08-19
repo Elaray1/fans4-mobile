@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, View, StatusBar, ScrollView, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -83,6 +83,18 @@ function Fighter({ fighterId }) {
     init();
   }, [fighterId, userId]);
 
+  const record = useMemo(() => ({
+    ...fighter.role.profile.record,
+    wins: (fighter.role.profile.record.wins || 0) + (fighter.role.profile.appRecord.wins || 0),
+    losses: (fighter.role.profile.record.losses || 0) + (fighter.role.profile.appRecord.losses || 0),
+    draws: (fighter.role.profile.record.draws || 0) + (fighter.role.profile.appRecord.draws || 0),
+  }), [
+    fighter.role.profile.appRecord.draws,
+    fighter.role.profile.appRecord.losses,
+    fighter.role.profile.appRecord.wins,
+    fighter.role.profile.record,
+  ]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
@@ -114,7 +126,7 @@ function Fighter({ fighterId }) {
               <Statistic
                 postsCount={postsCount}
                 fansCount={fansCount}
-                recordCount={fighter.role.profile.record}
+                recordCount={record}
               />
             </View>
 
