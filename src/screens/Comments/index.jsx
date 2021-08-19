@@ -46,6 +46,16 @@ function Comments({ route }) {
     postId,
   } = route?.params;
 
+  const [comments, setComments] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const [commentValue, setCommentValue] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(true);
+
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FAN_OPENED_POST_COMMENTS,
@@ -55,16 +65,6 @@ function Comments({ route }) {
       },
     });
   }, [userId, postId]);
-
-
-  const [comments, setComments] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [page, setPage] = useState(1);
-  const [commentValue, setCommentValue] = useState('');
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;
@@ -169,6 +169,14 @@ function Comments({ route }) {
     setComments(comments.filter(comment => comment._id !== deletedComment._id));
   }, [comments]);
 
+  const onInputFocus = useCallback(() => {
+    setIsInputFocused(true);
+  }, []);
+
+  const onInputBlur = useCallback(() => {
+    setIsInputFocused(false);
+  }, []);
+
   const EmptyView = () => (
     <View style={styles.emptyView}>
       <NoCommentsIllustration style={styles.illustration} />
@@ -254,6 +262,8 @@ function Comments({ route }) {
                 <Input
                   value={commentValue}
                   onChange={setCommentValue}
+                  onFocus={onInputFocus}
+                  onBlur={onInputBlur}
                   maxLength={COMMENT_MAX_LEGHT}
                   multiline
                   multilineSmall
@@ -262,6 +272,7 @@ function Comments({ route }) {
                   buttonTitle={t('Comments.post')}
                   onButtonPress={onCreateComment}
                   disabled={isButtonDisabled}
+                  autoFocus={isInputFocused}
                 />
               </View>
             )}
