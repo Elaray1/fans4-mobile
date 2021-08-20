@@ -358,9 +358,9 @@ function Finances() {
     );
   }, [deleteWithdrawalMethod, updateBankAccount, isBankAccountModal, onChangeBankAccountModalVisibility]);
 
-  const webViewStateChangeProps = Platform.OS === 'ios'
+  const webViewStateChangeProps = useMemo(() => (Platform.OS === 'ios'
     ? { onShouldStartLoadWithRequest: onWebViewStateChange }
-    : { onNavigationStateChange: onWebViewStateChange };
+    : { onNavigationStateChange: onWebViewStateChange }), [onWebViewStateChange]);
 
   return (
     <>
