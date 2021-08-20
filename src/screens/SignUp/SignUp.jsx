@@ -48,6 +48,12 @@ function SignUp({ route }) {
     setEmailValue((value || '').trim().toLowerCase());
   }, []);
 
+
+  const changePasswordValue = useCallback((value) => {
+    setPasswordValue((value || '').trim());
+  }, []);
+
+
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState('');
 
@@ -195,7 +201,7 @@ function SignUp({ route }) {
               <Input
                 label={t('SignUp.Password')}
                 value={passwordValue}
-                onChange={(value) => { onChangeInputValue('password'); setPasswordValue(value); }}
+                onChange={(value) => { onChangeInputValue('password'); changePasswordValue(value); }}
                 type="password"
                 autoCapitalize="none"
                 onBlur={onPasswordBlur}

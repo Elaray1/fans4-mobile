@@ -44,6 +44,10 @@ function SignIn({ route }) {
     setEmailValue((value || '').trim().toLowerCase());
   }, []);
 
+  const changePasswordValue = useCallback((value) => {
+    setPasswordValue((value || '').trim());
+  }, []);
+
   const onEmailBlur = useCallback(() => {
     if (validateEmail(emailValue)) {
       setInputErrors({
@@ -195,7 +199,7 @@ function SignIn({ route }) {
                 <Input
                   label={t('SignIn.Password')}
                   value={passwordValue}
-                  onChange={(value) => { onChangeInputValue('password'); setPasswordValue(value); }}
+                  onChange={(value) => { onChangeInputValue('password'); changePasswordValue(value); }}
                   type="password"
                   onBlur={onPasswordBlur}
                   errors={inputErrors.password}
@@ -217,6 +221,7 @@ function SignIn({ route }) {
                 style={styles.button}
                 isLoading={isLoading}
               />
+
               <View style={styles.signUpTextWrapper}>
                 <Text style={styles.signUpText}>{t('SignIn.DontHaveAccount?')}</Text>
                 <Button
