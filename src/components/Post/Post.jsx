@@ -39,6 +39,7 @@ function Post({
   commentsCount,
   disabled,
   viewable,
+  onUpdateCommentsCount,
 }) {
   const navigation = useNavigation();
   const { showFailure } = useToast();
@@ -131,7 +132,7 @@ function Post({
   }
 
   const onCommentsPress = useCallback(() => {
-    navigation.navigate('Comments', { postId: _id });
+    navigation.navigate('Comments', { postId: _id, onUpdateCommentsCount });
   }, [navigation, _id]);
 
   const onLikePress = useCallback(async () => {
@@ -227,6 +228,7 @@ Post.propTypes = {
   commentsCount: PropTypes.number,
   disabled: PropTypes.bool,
   viewable: PropTypes.bool,
+  onUpdateCommentsCount: PropTypes.func,
 };
 
 Post.defaultProps = {
@@ -238,6 +240,7 @@ Post.defaultProps = {
   commentsCount: 0,
   disabled: false,
   viewable: false,
+  onUpdateCommentsCount: () => null,
 };
 
 export default React.memo(Post);

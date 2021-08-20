@@ -44,6 +44,7 @@ function Comments({ route }) {
 
   const {
     postId,
+    onUpdateCommentsCount,
   } = route?.params;
 
   const [comments, setComments] = useState([]);
@@ -143,6 +144,8 @@ function Comments({ route }) {
       setCommentValue('');
       setComments([comment, ...comments]);
 
+      onUpdateCommentsCount(postId);
+
       analyticsService.logEvent({
         name: analyticsService.events.FAN_SENT_POST_COMMENT,
         data: {
@@ -154,7 +157,7 @@ function Comments({ route }) {
       showFailure();
     }
     setIsButtonDisabled(false);
-  }, [showFailure, postId, commentValue, comments, userId]);
+  }, [showFailure, postId, commentValue, comments, userId, onUpdateCommentsCount]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -287,6 +290,7 @@ Comments.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       postId: PropTypes.string.isRequired,
+      onUpdateCommentsCount: PropTypes.func,
     }),
   }).isRequired,
 };

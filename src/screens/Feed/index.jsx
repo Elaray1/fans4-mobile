@@ -146,6 +146,23 @@ function Feed() {
     }, {}));
   }, [setViewablePosts]);
 
+  const onUpdateCommentsCount = useCallback(async (postId) => {
+    try {
+      const updatedPost = await postApi.getPost(postId);
+
+      const updatedPosts = posts.map((post) => {
+        if (post._id === updatedPost._id) {
+          return updatedPost;
+        }
+        return post;
+      });
+
+      setPosts(updatedPosts);
+    } catch (error) {
+      showFailure();
+    }
+  }, [showFailure, posts]);
+
   const renderItem = ({ item }) => {
     return (
       <View style={styles.post} key={item._id}>
@@ -159,6 +176,7 @@ function Feed() {
           likedUserIds={item.likedUserIds}
           commentsCount={item.commentsCount}
           viewable={!!viewablePosts[item._id]}
+          onUpdateCommentsCount={onUpdateCommentsCount}
         />
       </View>
     );

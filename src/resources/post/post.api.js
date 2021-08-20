@@ -15,6 +15,9 @@ export const getMyFeedPosts = ({ page, perPage }) => apiClient
     perPage,
   });
 
+export const getPost = postId => apiClient
+  .get(`posts/${postId}`);
+
 export const getFighterPosts = ({ _id, page, perPage }) => {
   return apiClient
     .get(`posts/fighter/${_id}`, {
