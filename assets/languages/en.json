@@ -69,7 +69,7 @@
   },
   "VerificationPending": {
     "title": "Verification Pending",
-    "description": "We are processing the information you submitted.",
+    "description": "Thank you! We are processing the data you submitted. We will let you know as soon as it is complete.\n\n Please remain on this screen.",
     "linkText": "Back to sign in page"
   },
   "VerificationSuccessful": {
