@@ -124,5 +124,6 @@ export default StyleSheet.create({
   },
   pendingText: {
     color: colors.fightingStatusText,
+    fontSize: fonts.size.caption,
   },
 });
