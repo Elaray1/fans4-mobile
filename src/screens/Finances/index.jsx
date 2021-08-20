@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
-import { SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, AppState } from 'react-native';
+import { SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, AppState, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSelector } from 'react-redux';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -358,6 +358,10 @@ function Finances() {
     );
   }, [deleteWithdrawalMethod, updateBankAccount, isBankAccountModal, onChangeBankAccountModalVisibility]);
 
+  const webViewStateChangeProps = Platform.OS === 'ios'
+    ? { onShouldStartLoadWithRequest: onWebViewStateChange }
+    : { onNavigationStateChange: onWebViewStateChange };
+
   return (
     <>
       {!isRefreshing && isConfirmationModal && (
@@ -377,7 +381,7 @@ function Finances() {
         {webViewUrl && (
           <WebView
             source={{ uri: webViewUrl }}
-            onShouldStartLoadWithRequest={onWebViewStateChange}
+            {...webViewStateChangeProps}
             startInLoadingState
           />
         )}
