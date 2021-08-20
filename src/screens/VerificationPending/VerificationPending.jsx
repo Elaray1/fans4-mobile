@@ -10,6 +10,8 @@ import IllustrationScreen from 'components/IllustrationScreen';
 
 import PendingIllustration from 'assets/illustrations/verification-pending.svg';
 
+import styles from './styles';
+
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userApi from 'resources/user/user.api';
@@ -103,7 +105,7 @@ function VerificationPending() {
     <IllustrationScreen
       description={t('VerificationPending.description')}
       title={t('VerificationPending.title')}
-      illustration={<PendingIllustration />}
+      illustration={<PendingIllustration style={styles.illustration} />}
       onBackButtonPress={goToSignIn}
     />
   );
