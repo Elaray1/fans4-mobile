@@ -26,7 +26,6 @@ function TermsOfUse() {
   const userType = useSelector(userSelectors.getUserType);
   const userId = useSelector(userSelectors.getUserId);
 
-
   const isFan = userType === USER_TYPES.FAN;
 
   const onAccept = useCallback(() => {
@@ -55,10 +54,10 @@ function TermsOfUse() {
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.title}>{t(`TermsOfUse.${userType}.firstParagraphTitle`)}</Text>
-          <Text style={styles.text}>{t(`TermsOfUse.${userType}.firstParagraphText`)}</Text>
-          <Text style={styles.title}>{t(`TermsOfUse.${userType}.secondParagraphTitle`)}</Text>
-          <Text style={styles.text}>{t(`TermsOfUse.${userType}.secondParagraphText`)}</Text>
+          <Text style={styles.title}>{t('TermsOfUse.firstParagraphTitle')}</Text>
+          <Text style={styles.text}>{t('TermsOfUse.firstParagraphText')}</Text>
+          <Text style={styles.title}>{t('TermsOfUse.secondParagraphTitle')}</Text>
+          <Text style={styles.text}>{t('TermsOfUse.secondParagraphText')}</Text>
         </ScrollView>
         <Button
           title={t('TermsOfUse.buttonText')}

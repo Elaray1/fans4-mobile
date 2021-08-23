@@ -31,4 +31,13 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
     marginBottom: 20,
   },
+  loadingView: {
+    flex: 1,
+    backgroundColor: colors.main,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+  },
 });
