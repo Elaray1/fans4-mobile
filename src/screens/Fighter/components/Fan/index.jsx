@@ -136,6 +136,7 @@ function Fighter({ fighterId }) {
         likedUserIds={item.likedUserIds}
         commentsCount={item.commentsCount}
         disabled={isDisabled}
+        createdOn={item.createdOn}
         viewable={!!viewablePosts[item._id]}
       />
     );

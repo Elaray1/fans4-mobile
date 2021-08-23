@@ -176,6 +176,7 @@ function Feed() {
           likedUserIds={item.likedUserIds}
           commentsCount={item.commentsCount}
           viewable={!!viewablePosts[item._id]}
+          createdOn={item.createdOn}
           onUpdateCommentsCount={onUpdateCommentsCount}
         />
       </View>
