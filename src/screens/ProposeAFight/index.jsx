@@ -133,12 +133,12 @@ const ProposeAFight = ({ route }) => {
               {firstFighter
                 ? (
 
-                  <View>
+                  <View style={styles.leftFighter}>
                     <FastImage
                       style={styles.image}
                       source={{ uri: firstFighter.avatarUrl }}
                     />
-                    <Text style={[styles.caption, styles.leftFighter]}>{firstFighter.fullName}</Text>
+                    <Text style={styles.caption}>{firstFighter.fullName}</Text>
                   </View>
                 )
                 : <View style={styles.fighterPicturePlaceholder} />

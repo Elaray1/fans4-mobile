@@ -77,6 +77,6 @@ export default StyleSheet.create({
     flex: 1,
   },
   leftFighter: {
-    textAlign: 'right',
+    alignItems: 'flex-end',
   },
 });
