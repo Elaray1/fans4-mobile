@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { InteractionManager } from 'react-native';
+import { InteractionManager, AppState } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
@@ -21,6 +21,9 @@ import pushNotificationService from 'services/pushNotification.service';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
+
+import useToast from 'hooks/useToast';
+
 import { USER_STATUSES } from 'resources/user/user.constants';
 
 import config from 'resources/config';
@@ -104,6 +107,7 @@ const linking = {
 };
 
 const handleUserStatusUpdated = (user) => {
+  console.log('user-status-updated');
   store.dispatch(userActions.setUserData(user));
 
   let screen;
@@ -152,6 +156,7 @@ const pushNotificationHandlersByType = {
 function AppNavigation() {
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
+  const { showFailure } = useToast();
 
   const routeNameRef = useRef();
 
@@ -162,6 +167,7 @@ function AppNavigation() {
 
   const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
+  const userStatus = useSelector(userSelectors.getUserStatus);
 
   useEffect(() => {
     const handle = async () => {
@@ -198,6 +204,41 @@ function AppNavigation() {
 
     routeNameRef.current = currentRouteName;
   }, [userId, userType]);
+
+  const blockAccountIfNeeded = useCallback(async () => {
+    if (userStatus && userStatus !== USER_STATUSES.BLOCKED) {
+      try {
+        const user = await dispatch(userActions.getUserData());
+        if (user.status === USER_STATUSES.BLOCKED) {
+          rootNavigation.resetToScreen('AppStack', 'AccountBlocked');
+        }
+      } catch (error) {
+        showFailure();
+      }
+    }
+  }, [dispatch, showFailure, userStatus]);
+
+  const connectSocketServiceIfNeeded = useCallback(() => {
+    if (socketsService.disconnected()) {
+      socketsService.connect();
+    }
+  }, []);
+
+  useEffect(() => {
+    const checkIsAccountBlocked = (appState) => {
+      if (appState === 'active') {
+        connectSocketServiceIfNeeded();
+        blockAccountIfNeeded();
+      }
+    };
+
+    AppState.addEventListener('change', checkIsAccountBlocked);
+
+    return () => {
+      AppState.removeEventListener('change', checkIsAccountBlocked);
+    };
+  }, [blockAccountIfNeeded, connectSocketServiceIfNeeded]);
+
 
   return (
     <ToastProvider placement="top" offset={30}>

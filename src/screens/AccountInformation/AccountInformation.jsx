@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
-  SafeAreaView, ScrollView, View, TouchableOpacity,
+  SafeAreaView, ScrollView, View, TouchableOpacity, AppState,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
@@ -23,6 +23,7 @@ import styles from './AccountInformation.styles';
 
 function AccountInformation() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const { t } = useTranslation();
   const { showFailure } = useToast();
   const dispatch = useDispatch();
@@ -80,6 +81,28 @@ function AccountInformation() {
     }
     setIsDatePickerVisible(false);
   }, [dispatch, showFailure, t]);
+
+  const checkIfNewEmailConfirmed = useCallback(() => {
+    try {
+      dispatch(userActions.getUserData());
+    } catch (error) {
+      showFailure();
+    }
+  }, [dispatch, showFailure]);
+
+  useEffect(() => {
+    const checkAccountOnFocus = async (appState) => {
+      if (isFocused && appState === 'active') {
+        await checkIfNewEmailConfirmed();
+      }
+    };
+
+    AppState.addEventListener('change', checkAccountOnFocus);
+
+    return () => {
+      AppState.removeEventListener('change', checkAccountOnFocus);
+    };
+  }, [isFocused, navigation, checkIfNewEmailConfirmed]);
 
 
   return (
