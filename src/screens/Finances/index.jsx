@@ -47,7 +47,7 @@ function Finances() {
   const [isConfirmationModal, setIsConfirmationModal] = useState(false);
   const [isBankAccountModal, setIsBankAccountModal] = useState(false);
 
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(true);
 
   const userId = useSelector(userSelectors.getUserId);
 
@@ -261,9 +261,11 @@ function Finances() {
     return null;
   }, [account?.typeMetadata?.bankAccount, t]);
 
+  console.log(isRefreshing, withdrawalMethod);
+
   const WithdrawalMethod = () => {
     return (
-      withdrawalMethod
+      !isRefreshing && withdrawalMethod
         ? (
           <View>
             {account.status === ACCOUNT_STATUSES.RESTRICTED && (
