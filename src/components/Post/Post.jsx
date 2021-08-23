@@ -40,6 +40,7 @@ function Post({
   disabled,
   viewable,
   onUpdateCommentsCount,
+  createdOn,
 }) {
   const navigation = useNavigation();
   const { showFailure } = useToast();
@@ -189,7 +190,7 @@ function Post({
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.time}>{formatTime(checkedOn)}</Text>
+          <Text style={styles.time}>{formatTime(checkedOn || createdOn)}</Text>
 
         </View>
       )}
@@ -228,6 +229,7 @@ Post.propTypes = {
   commentsCount: PropTypes.number,
   disabled: PropTypes.bool,
   viewable: PropTypes.bool,
+  createdOn: PropTypes.string,
   onUpdateCommentsCount: PropTypes.func,
 };
 
@@ -236,6 +238,7 @@ Post.defaultProps = {
   media: null,
   author: null,
   checkedOn: null,
+  createdOn: null,
   likedUserIds: [],
   commentsCount: 0,
   disabled: false,
