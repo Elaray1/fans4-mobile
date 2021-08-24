@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, AppState,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, AppState, Platform,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -240,7 +240,7 @@ function Feed() {
         ) : (
           <ScrollView
             contentContainerStyle={styles.emptyScroll}
-            refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+            refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
             keyboardShouldPersistTaps="handled"
           >
             <EmptyView />
@@ -249,7 +249,7 @@ function Feed() {
 
         <ScrollView
           contentContainerStyle={styles.emptyScroll}
-          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+          refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
           keyboardShouldPersistTaps="handled"
         >
           {!fightersList?.length && <NoSubscriptions />}
