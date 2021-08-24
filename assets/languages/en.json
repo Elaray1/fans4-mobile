@@ -73,7 +73,7 @@
     "title": "Verification Failed",
     "description": "Sorry, your verification has failed. If you think that this may be an error, please contact Support.",
     "buttonText": "Contact Support",
-    "linkText": "Back to sign up page"
+    "linkText": "Back to sign in page"
   },
   "OnBoarding1": {
     "fan": {
@@ -285,7 +285,7 @@
     "title": "Your Account is Blocked",
     "description": "Your account has been blocked. If you think that this may be an error, please contact Support.",
     "buttonText": "Contact Support",
-    "linkText": "Back to sign up page"
+    "linkText": "Back to sign in page"
   },
   "ForgotPassword": {
     "title": "Forgot password",

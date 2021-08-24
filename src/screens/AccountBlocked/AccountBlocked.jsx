@@ -17,14 +17,35 @@ function AccountBlocked() {
   const dispatch = useDispatch();
 
   const userName = useSelector(userSelectors.getUserFullName);
+  const userType = useSelector(userSelectors.getUserType);
 
   const onButtonPress = useCallback(() => {
     Linking.openURL(`mailto:admin@fans4.com?subject=Blocked account. ${userName}`);
   }, [userName]);
 
   const onLinkPress = useCallback(async () => {
+    navigation.reset({
+      index: 1,
+      routes: [{
+        name: 'AuthStack',
+        state: {
+          routes: [{
+            name: 'SelectUserType',
+          }],
+        },
+      }, {
+        name: 'AuthStack',
+        state: {
+          routes: [{
+            name: 'SignIn',
+            params: {
+              userType,
+            },
+          }],
+        },
+      }],
+    });
     await dispatch(userActions.logout());
-    navigation.reset({ routes: [{ name: 'AuthStack', params: { screen: 'SelectUserType' } }] });
   }, [navigation, dispatch]);
 
   return (
