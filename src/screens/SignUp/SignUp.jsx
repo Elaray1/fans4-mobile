@@ -7,6 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -16,7 +17,7 @@ import * as userActions from 'resources/user/user.actions';
 
 import colors from 'themes/colors';
 
-import Logo from 'assets/icons/logo';
+import LogoAsset from 'assets/logo.png';
 import ErrorIcon from 'assets/icons/error';
 import BackArrowIcon from 'assets/icons/back-arrow';
 
@@ -160,7 +161,7 @@ function SignUp({ route }) {
         <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
           <View style={styles.keyboardAvoidingChildContainer}>
             <View>
-              <Logo style={styles.logo} />
+              <Image style={styles.logo} source={LogoAsset} />
 
               <View style={styles.titleContainer}>
                 <TouchableOpacity

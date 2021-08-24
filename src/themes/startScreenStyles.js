@@ -23,6 +23,8 @@ if (height <= VERY_SMALL_SCREEN_HEIGHT) {
 
 export const startScreensStyles = {
   logo: {
+    height: 80,
+    width: 80,
     marginTop: 100,
     marginBottom: 60,
     alignSelf: 'center',

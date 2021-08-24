@@ -1,14 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity, Linking,
+  SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity, Linking, Image,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 
 import colors from 'themes/colors';
-import Logo from 'assets/icons/logo';
+
+import LogoAsset from 'assets/logo.png';
 import ErrorIcon from 'assets/icons/error';
 import BackArrowIcon from 'assets/icons/back-arrow';
 
@@ -159,7 +160,7 @@ function SignIn({ route }) {
         <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
           <View style={styles.keyboardAvoidingChildContainer}>
             <View>
-              <Logo style={styles.logo} />
+              <Image style={styles.logo} source={LogoAsset} />
 
               <View style={styles.titleContainer}>
                 <TouchableOpacity

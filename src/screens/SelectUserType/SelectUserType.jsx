@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
-import { SafeAreaView, View, StatusBar, ScrollView } from 'react-native';
+import { SafeAreaView, View, StatusBar, ScrollView , Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import colors from 'themes/colors';
 
-import Logo from 'assets/icons/logo';
+import LogoAsset from 'assets/logo.png';
 
 import Text from 'components/Text';
 import Button from 'components/Button';
@@ -42,8 +42,7 @@ function SelectUserType() {
         style={styles.content}
         contentContainerStyle={styles.scrollContent}
       >
-
-        <Logo style={styles.logo} />
+        <Image style={styles.logo} source={LogoAsset} />
         <Text style={styles.title}>{t('SelectRole.selectYourRole')}</Text>
         <View>
           <Button
