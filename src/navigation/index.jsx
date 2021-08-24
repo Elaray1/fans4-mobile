@@ -107,7 +107,6 @@ const linking = {
 };
 
 const handleUserStatusUpdated = (user) => {
-  console.log('user-status-updated');
   store.dispatch(userActions.setUserData(user));
 
   let screen;
@@ -218,16 +217,9 @@ function AppNavigation() {
     }
   }, [dispatch, showFailure, userStatus]);
 
-  const connectSocketServiceIfNeeded = useCallback(() => {
-    if (socketsService.disconnected()) {
-      socketsService.connect();
-    }
-  }, []);
-
   useEffect(() => {
     const checkIsAccountBlocked = (appState) => {
-      if (appState === 'active') {
-        connectSocketServiceIfNeeded();
+      if (appState === 'active' && userAuthenticated) {
         blockAccountIfNeeded();
       }
     };
@@ -237,7 +229,7 @@ function AppNavigation() {
     return () => {
       AppState.removeEventListener('change', checkIsAccountBlocked);
     };
-  }, [blockAccountIfNeeded, connectSocketServiceIfNeeded]);
+  }, [blockAccountIfNeeded, userAuthenticated]);
 
 
   return (

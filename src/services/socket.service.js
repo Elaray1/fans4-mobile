@@ -37,6 +37,7 @@ export const connect = async () => {
 
   socket.on('disconnect', () => {
     console.log('WS disconnected');
+    socket.connect();
   });
 };
 
