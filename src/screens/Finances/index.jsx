@@ -261,8 +261,6 @@ function Finances() {
     return null;
   }, [account?.typeMetadata?.bankAccount, t]);
 
-  console.log(isRefreshing, withdrawalMethod);
-
   const WithdrawalMethod = () => {
     return (
       !isRefreshing && withdrawalMethod
