@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import { AppState } from 'react-native';
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
 
 import config from 'resources/config';
@@ -37,7 +38,6 @@ export const connect = async () => {
 
   socket.on('disconnect', () => {
     console.log('WS disconnected');
-    socket.connect();
   });
 };
 
@@ -53,3 +53,11 @@ export const disconnected = () => {
 export const connected = () => {
   return socket && socket.connected;
 };
+
+const connectSocketsIfNeeded = () => {
+  if (disconnected()) {
+    connect();
+  }
+};
+
+AppState.addEventListener('change', connectSocketsIfNeeded);
