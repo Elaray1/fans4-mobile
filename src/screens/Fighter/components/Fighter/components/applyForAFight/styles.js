@@ -26,6 +26,7 @@ export default StyleSheet.create({
     color: colors.grayText,
     fontWeight: fonts.weight.medium,
     fontSize: fonts.size.caption,
+    width: '100%',
   },
   createdFightTextWrapper: {
     flexDirection: 'row',
