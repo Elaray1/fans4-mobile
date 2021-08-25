@@ -35,7 +35,7 @@ export default StyleSheet.create({
     paddingBottom: 49,
   },
   addBiographyText: {
-    color: colors.primary,
+    color: colors.link,
     fontSize: fonts.size.small,
     lineHeight: fonts.lineHeight.small,
     fontFamily: fonts.family.bold,

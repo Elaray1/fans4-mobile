@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { color } from 'react-native-reanimated';
 
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
@@ -24,6 +25,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
+  },
+  selectedOptionText: {
+    color: colors.primaryButtonText,
   },
   optionText: {
     marginVertical: 10,

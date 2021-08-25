@@ -31,7 +31,7 @@ export default StyleSheet.create({
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
     lineHeight: fonts.lineHeight.small,
-    color: colors.primary,
+    color: colors.link,
   },
   plusText: {
     marginLeft: 3,

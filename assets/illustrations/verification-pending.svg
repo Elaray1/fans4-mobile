@@ -1,11 +1,11 @@
 <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="100" cy="100" r="66" stroke="#6A7DDD" stroke-width="2" />
-    <path d="M100.433 54.6129V103.026L120.749 123.342" stroke="#6A7DDD" stroke-width="2" stroke-linecap="round"
+    <circle cx="100" cy="100" r="66" stroke="#FFFFFF" stroke-width="2" />
+    <path d="M100.433 54.6129V103.026L120.749 123.342" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"
         stroke-linejoin="round" />
-    <path d="M100 33.8645V38.1871" stroke="#6A7DDD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-    <path d="M100 161.813V166.135" stroke="#6A7DDD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-    <path d="M34.0811 99.7839L38.4036 99.7839" stroke="#6A7DDD" stroke-width="2" stroke-linecap="round"
+    <path d="M100 33.8645V38.1871" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M100 161.813V166.135" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M34.0811 99.7839L38.4036 99.7839" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"
         stroke-linejoin="round" />
-    <path d="M161.164 99.7839L165.487 99.7839" stroke="#6A7DDD" stroke-width="2" stroke-linecap="round"
+    <path d="M161.164 99.7839L165.487 99.7839" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"
         stroke-linejoin="round" />
 </svg>

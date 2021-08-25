@@ -41,7 +41,7 @@ export default StyleSheet.create({
   },
   noItemsButtonText: {
     marginTop: 10,
-    color: colors.primary,
+    color: colors.link,
     fontSize: fonts.size.small,
     fontWeight: fonts.weight.bold,
     fontFamily: fonts.family.bold,

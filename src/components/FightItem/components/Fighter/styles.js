@@ -12,7 +12,7 @@ export default StyleSheet.create({
     left: 23,
     paddingHorizontal: 9,
     paddingVertical: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.link,
     borderRadius: 9,
   },
   winnerText: {
@@ -21,7 +21,7 @@ export default StyleSheet.create({
   },
   winnerImage: {
     borderWidth: 2,
-    borderColor: colors.primary,
+    borderColor: colors.link,
   },
   photoImage: {
     width: 100,

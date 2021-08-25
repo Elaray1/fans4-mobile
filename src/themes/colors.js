@@ -6,10 +6,16 @@ const colors = {
   green: '#62C573',
   yellow: '#FF9800',
 
-  primary: '#6A7DDD',
+  primary: '#FFFFFF',
+  primaryButtonText: '#28282E',
   disabledPrimary: '#3D4776',
-  errorContainer: '#FF000029',
-  error: '#F34C4C',
+
+  error: '#DA8230',
+  errorText: '#DA8230', // check
+  errorContainer: '#FF000029', // check
+  errorBackground: 'rgba(218, 130, 48, 0.12);',
+
+  link: '#3B89FD',
 
   baseFont: '#FFFFFF',
   textSecondary: '#8B8E98',
@@ -37,9 +43,6 @@ const colors = {
   whiteDisabled: 'rgba(255, 255, 255, 0.6)',
 
   whiteBackground: 'rgba(255, 255, 255, 0.3)',
-
-  errorBackground: 'rgba(243, 76, 76, 0.12)',
-  errorText: '#F34C4C',
 
   grayBlock: '#1A1A1F',
 

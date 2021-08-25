@@ -24,8 +24,8 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
   },
   activeCheckbox: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    backgroundColor: colors.link,
+    borderColor: colors.link,
   },
   disabled: {
     color: colors.grayText,
