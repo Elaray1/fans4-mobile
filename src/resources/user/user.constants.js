@@ -21,8 +21,8 @@ export const FIGHTER_GENDERS = {
 };
 
 export const FAN_GENDERS = {
-  FEMALE: 'female',
   MALE: 'male',
+  FEMALE: 'female',
   NONBINARY: 'nonbinary',
   OTHER: 'other',
   PREFER_NOT_TO_SAY: 'prefer_not_to_say',
