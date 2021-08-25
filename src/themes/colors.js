@@ -11,6 +11,7 @@ const colors = {
   disabledPrimary: '#3D4776',
 
   error: '#DA8230',
+  errorText: '#da8230',
   errorContainer: '#FF000029', // check
   errorBackground: 'rgba(218, 130, 48, 0.12);',
 
