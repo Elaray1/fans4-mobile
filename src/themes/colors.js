@@ -11,9 +11,10 @@ const colors = {
   disabledPrimary: '#3D4776',
 
   error: '#DA8230',
-  errorText: '#DA8230', // check
   errorContainer: '#FF000029', // check
   errorBackground: 'rgba(218, 130, 48, 0.12);',
+
+  primaryRed: '#F34C4C',
 
   link: '#3B89FD',
 
