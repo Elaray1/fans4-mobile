@@ -102,7 +102,7 @@ function FightItem({
 
             <View style={styles.votesContainer}>
               <View style={styles.votes}>
-                <Text style={styles.votesText}>{`${fight.votedUserIds.length} ${t('Fight.votes')}`}</Text>
+                <Text style={styles.votesText}>{`${fight.votedUserIds.length} ${t(fight.votedUserIds.length === 1 ? 'Fight.voteCount' :'Fight.votes')}`}</Text>
               </View>
             </View>
 
