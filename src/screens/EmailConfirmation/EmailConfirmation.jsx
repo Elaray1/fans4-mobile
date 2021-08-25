@@ -18,7 +18,7 @@ import * as userApi from 'resources/user/user.api';
 
 import colors from 'themes/colors';
 
-import Logo from 'assets/icons/logo';
+import LogoAsset from 'assets/logo.svg';
 import Checkmark from 'assets/icons/checkmark';
 
 import Text from 'components/Text';
@@ -107,7 +107,7 @@ function EmailConfirmation() {
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View>
-          <Logo style={styles.logo} />
+          <LogoAsset style={styles.logo} />
           <Text style={styles.title}>
             {t('EmailConfirmation.ConfirmYourEmailAddress')}
           </Text>

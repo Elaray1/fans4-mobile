@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 
 import colors from 'themes/colors';
 
-import LogoAsset from 'assets/logo.png';
+import LogoAsset from 'assets/logo.svg';
 import ErrorIcon from 'assets/icons/error';
 import BackArrowIcon from 'assets/icons/back-arrow';
 
@@ -160,7 +160,7 @@ function SignIn({ route }) {
         <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
           <View style={styles.keyboardAvoidingChildContainer}>
             <View>
-              <Image style={styles.logo} source={LogoAsset} />
+              <LogoAsset style={styles.logo} />
 
               <View style={styles.titleContainer}>
                 <TouchableOpacity
