@@ -80,6 +80,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 6,
     backgroundColor: colors.errorBackground,
+    borderRadius: 5,
   },
   errorText: {
     marginLeft: 8,
@@ -87,7 +88,6 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     color: colors.errorText,
     fontSize: fonts.size.caption,
-    width: '89%',
   },
   title: {
     fontFamily: fonts.family.bold,
@@ -100,7 +100,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   forgotPassword: {
-    marginTop: 5,
+    marginTop: 16,
     textAlign: 'right',
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.medium,

@@ -9,7 +9,7 @@ import Text from 'components/Text';
 import _ from 'lodash';
 
 import PaperclipIcon from 'assets/icons/paperclip.svg';
-import RedBin from 'assets/icons/red-bin.svg';
+import Bin from 'assets/icons/bin.svg';
 
 import styles from './UploadMediaButton.styles';
 import { MEDIA_TYPES } from './UploadMediaButton.constants';
@@ -145,7 +145,7 @@ function UploadMediaButton({
           activeOpacity={0.7}
           onPress={onBinPress}
         >
-          <RedBin />
+          <Bin />
         </TouchableOpacity>
       </View>
     );
@@ -158,7 +158,7 @@ function UploadMediaButton({
           activeOpacity={0.7}
           onPress={onBinPress}
         >
-          <RedBin />
+          <Bin />
         </TouchableOpacity>
       </View>
     );

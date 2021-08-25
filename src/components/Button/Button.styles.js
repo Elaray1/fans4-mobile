@@ -14,6 +14,11 @@ export default StyleSheet.create({
     borderRadius: 5,
     alignSelf: 'center',
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   buttonTitle: {
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
@@ -24,13 +29,10 @@ export default StyleSheet.create({
     backgroundColor: colors.primary,
   },
   primaryButtonTitle: {
-    color: colors.white,
+    color: colors.primaryButtonText,
   },
   disabledPrimaryButton: {
     backgroundColor: hexToRgba(colors.primary, 0.4),
-  },
-  disabledPrimaryButtonTitle: {
-    opacity: 0.4,
   },
   doneButton: {
     backgroundColor: hexToRgba(colors.primary, 0.12),

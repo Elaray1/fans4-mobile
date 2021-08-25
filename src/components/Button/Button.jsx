@@ -43,7 +43,7 @@ function Button({
       ]}
     >
       {isLoading ? <ActivityIndicator size="large" color={hexToRgba(colors.white, 0.4)} /> : (
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={styles.buttonContainer}>
           {type === TYPES.DONE && (
           <View style={{ marginRight: 8 }}>
             <SuccessIcon />
@@ -56,7 +56,6 @@ function Button({
               type === TYPES.SECONDARY && styles.secondaryButtonTitle,
               type === TYPES.DONE && styles.doneButtonTitle,
               type === TYPES.LINK && styles.link,
-              isDisabled && type === TYPES.PRIMARY && styles.disabledPrimaryButtonTitle,
               isDisabled && type === TYPES.SECONDARY && styles.disabledSecondaryButtonTitle,
               isDisabled && disabledTitleStyle,
               titleStyle,

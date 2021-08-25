@@ -65,7 +65,7 @@ export default StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 5,
-    backgroundColor: colors.buttonNotification,
+    backgroundColor: hexToRgba(colors.primary, 0.12),
     alignSelf: 'center',
   },
   votesText: {
@@ -74,7 +74,7 @@ export default StyleSheet.create({
     color: colors.primary,
   },
   fanVoted: {
-    backgroundColor: colors.buttonNotification,
+    backgroundColor: hexToRgba(colors.primary, 0.12),
     borderRadius: 5,
     height: 40,
     width: '100%',

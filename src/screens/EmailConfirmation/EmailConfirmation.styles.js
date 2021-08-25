@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import colors from 'themes/colors';
 import { commonStyles } from 'themes/commonStyles';
+import hexToRgba from 'helpers/hexToRgba';
 
 import fonts from 'themes/fonts';
 
@@ -42,7 +43,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 4,
-    backgroundColor: colors.buttonNotification,
+    backgroundColor: hexToRgba(colors.primary, 0.12),
     borderRadius: 5,
   },
   checkmarkBox: {

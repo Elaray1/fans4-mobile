@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+import hexToRgba from 'helpers/hexToRgba';
 
 export default StyleSheet.create({
   applyButton: {
     height: 40,
   },
   createdFightContainer: {
-    backgroundColor: colors.buttonNotification,
+    backgroundColor: hexToRgba(colors.primary, 0.12),
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',

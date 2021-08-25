@@ -31,7 +31,7 @@ function Toggle({
           activeOpacity={1}
           onPress={() => onItemPress(item)}
         >
-          <Text style={styles.optionText}>{item.value}</Text>
+          <Text style={[styles.optionText, item.id === selectedItemId && styles.selectedOptionText]}>{item.value}</Text>
         </TouchableOpacity>
       ))}
     </View>
