@@ -170,7 +170,7 @@ const Voting = ({ route }) => {
       return;
     }
 
-    const { status, fight } = route.params;
+    const { status, fight } = route.params.params;
 
     if (status === 'created') {
       showSuccess(t('Voting.created'));
@@ -266,8 +266,10 @@ const Voting = ({ route }) => {
 Voting.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
-      status: PropTypes.string,
-      fight: PropTypes.shape(),
+      params: PropTypes.shape({
+        status: PropTypes.string,
+        fight: PropTypes.shape(),
+      }),
     }),
   }).isRequired,
 };
