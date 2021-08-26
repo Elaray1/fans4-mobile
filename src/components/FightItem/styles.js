@@ -22,6 +22,9 @@ export default StyleSheet.create({
   firstFighter: {
     alignItems: 'flex-end',
   },
+  fighter: {
+   width: '50%',
+  },
   vs: {
     alignSelf: 'flex-end',
     marginHorizontal: 4,

@@ -200,13 +200,14 @@ function FightItem({
           <Fighter
             fighter={firstFighter}
             isWinner={firstFighter._id === fight.results?.winnerId}
-            style={styles.firstFighter}
+            style={[styles.fighter, styles.firstFighter]}
             onPress={onFighterPress}
           />
           <Text style={[styles.captionText, styles.vs]}>
             {t('Fight.vs')}
           </Text>
           <Fighter
+            style={styles.fighter}
             fighter={secondFighter}
             isWinner={secondFighter._id === fight.results?.winnerId}
             onPress={onFighterPress}
