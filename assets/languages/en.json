@@ -181,12 +181,10 @@
       "answer4": "You will need to add your bank account details in order to receive payment. Go to Profile > Settings > Finances > Add bank account and follow the instructions. The more fans you have, the more you earn!"
     },
     "fan": {
-      "question1": "How can I subscribe to fighter?",
-      "answer1": "To subscribe to a fighter, please visit the fans4.com official website. For now, you can't subscribe to a Fighter in the app. We know it’s a hassle. But after you subscribe, you can enjoy all the exclusive content in the app!",
-      "question2": "Why are some features not available to me?",
-      "answer2": "Some features are only available with subscription. For example, viewing fighter's content or proposing a fight with that fighter is only available once you are subscribed.",
-      "question3": "How can I propose a fight?",
-      "answer3": "You can propose a fight only with the fighters who you are subscribed to. To do this, go to Voting > Propose > Choose your Fighter > Next > Choose opponent > Submit. Once approved, you will be able to vote your fighter in for the next event. Be sure to track the proposal status on 'Your Proposals' tab on the Voting page."
+      "question1": "Why are some features not available to me?",
+      "answer1": "Some features are only available with subscription. For example, viewing fighter's content or proposing a fight with that fighter is only available once you are subscribed.",
+      "question2": "How can I propose a fight?",
+      "answer2": "You can propose a fight only with the fighters who you are subscribed to. To do this, go to Voting > Propose > Choose your Fighter > Next > Choose opponent > Submit. Once approved, you will be able to vote your fighter in for the next event. Be sure to track the proposal status on 'Your Proposals' tab on the Voting page."
     }
   },
   "SettingsModal": {
@@ -275,7 +273,7 @@
     "Posts": "Posts",
     "addYourFirstPost": "Add your first post for your fans!",
     "addPost": "Add post",
-    "subscribeToFighter": "Subscribe to this fighter for full access to Posts.",
+    "subscribeToFighter": "Become a fan for access to exclusive content!",
     "updateBankAccount": "Update Bank Account",
     "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
     "later": "Later",
@@ -410,7 +408,7 @@
   "Feed": {
     "feed": "Feed",
     "noSubscriptionsYet": "No subscriptions, yet",
-    "beSureToSubscribe": "Be sure to subscribe to receive full access to your fighter, pairing and voting for the next live event!",
+    "beSureToSubscribe": "Become a fan to receive full access to your fighter’s content, pairing and voting for live events!",
     "noPostsYet": "No posts, yet",
     "onceFighterWillAddPostsYouWillSeeThemHere": "Once fighter will add posts, you will see them here.",
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh."
@@ -453,8 +451,8 @@
     "vote": "Vote",
     "voted": "voted",
     "ok": "OK",
-    "subscription": "Subscription",
-    "youHaveToBeSubscribed": "You have to be subscribed to these fighters to vote. Please go to Fans4 official website to learn more.",
+    "subscription": "Voting",
+    "youHaveToBeSubscribed": "Become a fan to vote them into the next live event",
     "upcoming": "In upcoming event",
     "votingClosed": "Voting closed. In admin review",
     "pending": "In admin review",
@@ -499,7 +497,7 @@
   "AccountFan": {
     "username": "username",
     "YourSubscriptions": "Your subscriptions",
-    "YouCantSubscribe": "You can't subscribe for a Fighters in the app. We know it’s a hassle. After you subscribed, you can enjoy the content in the app.",
+    "YouCantSubscribe": "Become a fan for access to exclusive content!",
     "PleaseGoToFans4": "Please go to Fans4 official website to learn more.",
     "subscriptionExpiresOn": "Expires on"
   },
@@ -544,8 +542,8 @@
     "vote": "Vote",
     "youVoted": "You voted",
     "ok": "OK",
-    "subscription": "Subscription",
-    "youHaveToBeSubscribed": "To propose a fight you have to be subscribed to fighter. Please go to Fans4 official website to learn more.",
+    "subscription": "Propose a fight!",
+    "youHaveToBeSubscribed": "Become a fan to propose a fight.",
     "created": "Fight was sent to admin for review",
     "voted": "Fight already created, we saved your vote",
     "pending": "Fight already is in admin review",

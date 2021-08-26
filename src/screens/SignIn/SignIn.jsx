@@ -223,15 +223,17 @@ function SignIn({ route }) {
                 isLoading={isLoading}
               />
 
-              <View style={styles.signUpTextWrapper}>
-                <Text style={styles.signUpText}>{t('SignIn.DontHaveAccount?')}</Text>
-                <Button
-                  type="link"
-                  title={t('SignIn.SignUp')}
-                  onPress={onPressSignUp}
-                  style={styles.signUpTextLinkWrapper}
-                />
-              </View>
+              {userType === USER_TYPES.FIGHTER && (
+                <View style={styles.signUpTextWrapper}>
+                  <Text style={styles.signUpText}>{t('SignIn.DontHaveAccount?')}</Text>
+                  <Button
+                    type="link"
+                    title={t('SignIn.SignUp')}
+                    onPress={onPressSignUp}
+                    style={styles.signUpTextLinkWrapper}
+                  />
+                </View>
+              )}
             </View>
           </View>
         </KeyboardAvoidingView>
