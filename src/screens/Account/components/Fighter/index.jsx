@@ -41,7 +41,7 @@ function FighterAccount() {
   const { showFailure } = useToast();
 
   const userId = useSelector(userSelectors.getUserId);
-  const isUpdateBankAccountModal = useSelector(userSelectors.getIsUpdateBankAccountModal);
+  const isBankAccountWarning = useSelector(userSelectors.getIsBankAccountWarning);
 
   const [postsCount, setPostsCount] = useState(null);
   const [fansCount, setFansCount] = useState(null);
@@ -226,7 +226,7 @@ function FighterAccount() {
 
   return (
     <>
-      {isUpdateBankAccountModal && (
+      {isBankAccountWarning && (
       <Modal
         title={t('Account.updateBankAccount')}
         text={t('Account.toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails')}

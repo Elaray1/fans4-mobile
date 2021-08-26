@@ -28,7 +28,7 @@ export const getUserBiographyAbout = ({ user }) => user?.role?.biography?.about 
 export const getWeightClasses = ({ user }) => user?.role?.profile?.weightClasses;
 export const getUserBirthdate = ({ user }) => new Date(user?.role?.biography?.birthdate);
 export const getUserGender = ({ user }) => user?.role?.biography?.gender;
-export const getIsUpdateBankAccountModal = ({ user }) => user?.appState?.isUpdateBankAccountModal;
+export const getIsBankAccountWarning = ({ user }) => user?.appState?.isBankAccountWarning;
 
 
 /* Fighters selectors: end */
