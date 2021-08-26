@@ -53,6 +53,7 @@ export default StyleSheet.create({
   },
   signInButtonWrapper: {
     width: '100%',
+    marginBottom: 20,
   },
   signUpTextWrapper: {
     alignSelf: 'center',
