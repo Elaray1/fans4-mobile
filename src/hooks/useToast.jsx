@@ -11,7 +11,7 @@ const defaultOptions = {
   style: {
     paddingHorizontal: 0,
     paddingVertical: 0,
-    width: '100%',
+    width: '112%',
   },
 };
 
