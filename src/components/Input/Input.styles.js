@@ -1,9 +1,7 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
-
-const isIos = Platform.OS === 'ios';
 
 export default StyleSheet.create({
   inputContainer: {
@@ -68,7 +66,7 @@ export default StyleSheet.create({
   },
   inputMultiline: {
     paddingVertical: 0,
-    textAlignVertical: isIos ? 'top' : 'bottom',
+    textAlignVertical: 'top',
   },
   button: {
     marginLeft: 20,
