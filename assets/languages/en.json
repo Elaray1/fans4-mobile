@@ -181,10 +181,10 @@
       "answer4": "You will need to add your bank account details in order to receive payment. Go to Profile > Settings > Finances > Add bank account and follow the instructions. The more fans you have, the more you earn!"
     },
     "fan": {
-      "question1": "Why are some features not available to me?",
-      "answer1": "Some features are only available with subscription. For example, viewing fighter's content or proposing a fight with that fighter is only available once you are subscribed.",
+      "question1": "Why some features are not available for me?",
+      "answer1": "Some features are only available when becoming a fan. To view fighter's content, propose a fight and vote for the next live event, become a Fans4 fan!",
       "question2": "How can I propose a fight?",
-      "answer2": "You can propose a fight only with the fighters who you are subscribed to. To do this, go to Voting > Propose > Choose your Fighter > Next > Choose opponent > Submit. Once approved, you will be able to vote your fighter in for the next event. Be sure to track the proposal status on 'Your Proposals' tab on the Voting page."
+      "answer2": "To do this, you have to go to Voting > Propose > Choose your Fighter > Next > Choose opponent > Submit. Then your proposal will be sent for admin review. You can track proposal status on 'your proposals' tab on Voting page."
     }
   },
   "SettingsModal": {

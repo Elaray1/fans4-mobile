@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity, Linking, Image,
+  SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity, Linking
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
