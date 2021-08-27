@@ -106,7 +106,7 @@ function Fans() {
         title={t('Fans.fans')}
         leftItemType="backArrow"
       />
-      {fans.length
+      {fans.length || page === INITIAL_PAGE
         ? (
           <FlatList
             data={fans}
