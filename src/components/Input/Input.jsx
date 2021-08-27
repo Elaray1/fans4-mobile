@@ -30,6 +30,7 @@ function Input({
   errors,
   returnKeyType,
   style,
+  multilineStyle,
   errorStyle,
   labelStyle,
   multiline,
@@ -107,7 +108,7 @@ function Input({
           secureTextEntry={type === 'password' && !isPasswordVisible}
           keyboardType={getKeyboardType(type)}
           returnKeyType={returnKeyType}
-          style={[styles.input, multiline && styles.inputMultiline]}
+          style={[styles.input, multiline && styles.inputMultiline, multilineStyle]}
           maxLength={maxLength}
           multiline={multiline}
           autoCapitalize={autoCapitalize}
@@ -163,6 +164,7 @@ Input.propTypes = {
   onBlur: PropTypes.func,
   returnKeyType: PropTypes.string,
   style: PropTypes.shape(),
+  multilineStyle: PropTypes.shape(),
   labelStyle: RNText.propTypes.style,
   errorStyle: RNText.propTypes.style,
   blurOnSubmit: PropTypes.bool,
@@ -192,6 +194,7 @@ Input.defaultProps = {
   onSubmitEditing: null,
   maxLength: null,
   style: {},
+  multilineStyle: {},
   labelStyle: {},
   errorStyle: {},
   multiline: false,

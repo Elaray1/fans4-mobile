@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { commonStyles } from 'themes/commonStyles';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
@@ -57,5 +57,8 @@ export default StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'space-between',
+  },
+  multiline: {
+    textAlignVertical: Platform.OS === 'ios' ? 'top' : 'bottom',
   },
 });

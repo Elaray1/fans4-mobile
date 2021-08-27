@@ -272,6 +272,7 @@ function Comments({ route }) {
                   multilineSmall
                   autogrowHeight
                   style={styles.input}
+                  multilineStyle={styles.multiline}
                   buttonTitle={t('Comments.post')}
                   onButtonPress={onCreateComment}
                   disabled={isButtonDisabled}
