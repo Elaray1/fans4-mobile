@@ -9,3 +9,7 @@ export const PUSH_NOTIFICATION_TYPES = {
   FIGHTER_REGISTRATION_DECLINED: 'fighter_registration_declined',
   STRIPE_PAYOUT_ACCOUNT_STATUS_CHANGED: 'stripe_payout_account_status_changed',
 };
+
+export const FANS4_ACCOUNT = {
+  _id: 'fans4',
+};

@@ -69,4 +69,29 @@ export default StyleSheet.create({
     color: colors.textSecondary,
     fontWeight: fonts.weight.medium,
   },
+  fans4Container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 18,
+    backgroundColor: colors.gray,
+    borderRadius: 5,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+  },
+  fans4Image: {
+    width: 54,
+    height: 54,
+    marginRight: 16,
+    borderRadius: 50,
+  },
+  fans4FullName: {
+    fontSize: fonts.size.small,
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+  },
+  fans4Text: {
+    marginTop: 4,
+    fontSize: fonts.size.caption,
+    color: colors.textSecondary,
+  },
 });

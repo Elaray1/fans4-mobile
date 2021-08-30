@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, StatusBar, ActivityIndicator, FlatList } from 'react-native';
+import { SafeAreaView, View, StatusBar, ActivityIndicator, FlatList, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ import Statistic from 'components/FighterAccount/Statistic';
 import Biography from 'components/FighterAccount/Biography';
 import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 import Post from 'components/Post';
+import Fans4Profile from 'screens/Fighter/components/Fans4Profile';
 
 import useDidUpdate from 'hooks/useDidUpdate';
 
@@ -25,6 +26,8 @@ import * as userSelectors from 'resources/user/user.selectors';
 import { USER_STATUSES } from 'resources/user/user.constants';
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
+
+import { FANS4_ACCOUNT } from 'helpers/constants';
 
 import analyticsService from 'services/analytics.service';
 
@@ -142,71 +145,80 @@ function Fighter({ fighterId }) {
     );
   };
 
-  const ProfileHeader = !fighter ? null : (
-    <View style={styles.flatListHeader}>
-      <Profile
-        avatarUrl={fighter.avatarUrl}
-        fullName={fighter.fullName}
-        nickname={fighter.role.biography.nickname}
-        location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
-        status={fighter.status}
-        fightingStatus={fighter.role.fightingStatus}
-      />
+  const isFans4Account = useMemo(() => fighter?._id === FANS4_ACCOUNT._id, [fighter?._id]);
+  let ProfileHeader = null;
 
-      <View style={styles.line} />
+  if (fighter) {
+    ProfileHeader = isFans4Account
+      ? (
+        <Fans4Profile fighter={fighter} />
+      )
+      : (
+        <View style={styles.flatListHeader}>
+          <Profile
+            avatarUrl={fighter.avatarUrl}
+            fullName={fighter.fullName}
+            nickname={fighter.role.biography.nickname}
+            location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
+            status={fighter.status}
+            fightingStatus={fighter.role.fightingStatus}
+          />
 
-      <View style={styles.postsAndFansBlock}>
-        {isSubscribed && (
-          <>
-            <Button
-              style={styles.subscribedButton}
-              type="done"
-              title={t('Fighter.subscribed')}
-            />
+          <View style={styles.line} />
 
-            {fighter.status === USER_STATUSES.BLOCKED ? (
-              <Text style={styles.blockedSupportedFighterText}>
-                {t('Fighter.subscribeToAnotherWhenBlocked')}
-              </Text>
-            ) : (
-              <Button
-                title={t('Fighter.proposeAFight')}
-                style={styles.applyButton}
-                onPress={goToProposeAFight}
-              />
+          <View style={styles.postsAndFansBlock}>
+            {isSubscribed && (
+              <>
+                <Button
+                  style={styles.subscribedButton}
+                  type="done"
+                  title={t('Fighter.subscribed')}
+                />
+
+                {fighter.status === USER_STATUSES.BLOCKED ? (
+                  <Text style={styles.blockedSupportedFighterText}>
+                    {t('Fighter.subscribeToAnotherWhenBlocked')}
+                  </Text>
+                ) : (
+                  <Button
+                    title={t('Fighter.proposeAFight')}
+                    style={styles.applyButton}
+                    onPress={goToProposeAFight}
+                  />
+                )}
+              </>
             )}
-          </>
-        )}
 
-        <Statistic
-          postsCount={postsCount}
-          fansCount={fansCount}
-          recordCount={fighter.role.profile.record}
-        />
-      </View>
+            <Statistic
+              postsCount={postsCount}
+              fansCount={fansCount}
+              recordCount={fighter.role.profile.record}
+            />
+          </View>
 
-      <View style={styles.line} />
+          <View style={styles.line} />
 
-      <Biography
-        biography={fighter.role.biography.about}
-      />
+          <Biography
+            biography={fighter.role.biography.about}
+          />
 
-      <View style={styles.line} />
+          <View style={styles.line} />
 
-      <PersonalInfo
-        age={dayjs().diff(fighter.role.biography.birthdate, 'year')}
-        weight={fighter.role.profile.weight}
-        height={fighter.role.profile.height}
-        reach={fighter.role.profile.reach}
-      />
+          <PersonalInfo
+            age={dayjs().diff(fighter.role.biography.birthdate, 'year')}
+            weight={fighter.role.profile.weight}
+            height={fighter.role.profile.height}
+            reach={fighter.role.profile.reach}
+          />
 
-      <View style={styles.line} />
+          <View style={styles.line} />
 
-      <Text style={[styles.blockTitle, styles.postsTitle]}>{t('Account.Posts')}</Text>
-      {!userSubscriptions.map(f => f._id).includes(fighterId)
-         && <Text style={styles.grayText}>{t('Account.subscribeToFighter')}</Text>}
-    </View>
-  );
+          <Text style={[styles.blockTitle, styles.postsTitle]}>{t('Account.Posts')}</Text>
+          {!userSubscriptions.map(f => f._id).includes(fighterId)
+           && <Text style={styles.grayText}>{t('Account.subscribeToFighter')}</Text>}
+        </View>
+      );
+  }
 
   const renderNoPosts = () => <Text style={styles.grayText}>{t('Fighter.checkBack')}</Text>;
 
@@ -250,7 +262,7 @@ function Fighter({ fighterId }) {
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
 
       <Header
-        title={t('Fighter.fightersProfile')}
+        title={isFans4Account ? t('Fighter.profile') : t('Fighter.fightersProfile')}
         leftItemType="backArrow"
       />
 

@@ -337,7 +337,8 @@
     "fighters": "Fighters",
     "search": "Search",
     "noFighters": "No fighters, yet",
-    "youWillSeeThemHere": "Check back for the full list of fighters."
+    "youWillSeeThemHere": "Check back for the full list of fighters.",
+    "checkAllTheLatestNewsFromUs": "Check all the latest news from us!"
   },
   "WeightClassSelectModal": {
     "cancel": "Cancel",
@@ -399,7 +400,10 @@
     "fighterBlocked_0": "You cannot apply for a fight with",
     "fighterBlocked_1": "because this fighter is blocked.",
     "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter.",
-    "checkBack": "Check back to view your fighter's first exclusive post!"
+    "checkBack": "Check back to view your fighter's first exclusive post!",
+    "profile": "Profile",
+    "checkAllTheLatestNewsFromUs": "Check all the latest news from us!",
+    "aboutUs": "About Us"
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",

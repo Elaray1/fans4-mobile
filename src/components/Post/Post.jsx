@@ -66,8 +66,15 @@ function Post({
     return null;
   }, [_id, media]);
 
+  const onPressFighter = useCallback((fighterId) => {
+    navigation.navigate('Fighter', { _id: fighterId });
+  }, [navigation]);
+
   const authorView = author ? (
-    <View style={styles.author}>
+    <TouchableOpacity
+      onPress={() => onPressFighter(author._id)}
+      style={styles.author}
+    >
       <FastImage
         style={styles.authorAvatar}
         source={{ uri: author.avatarUrl }}
@@ -75,7 +82,7 @@ function Post({
       <Text style={styles.authorFullName}>
         {author.fullName}
       </Text>
-    </View>
+    </TouchableOpacity>
   ) : null;
 
 

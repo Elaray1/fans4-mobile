@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
@@ -30,6 +30,7 @@ function SearchFighters() {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
+  const [fans4Account, setFans4Account] = useState(null);
   const [fighters, setFighters] = useState([]);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -77,6 +78,7 @@ function SearchFighters() {
         const {
           fighters: fetchedFighters,
           totalCount: fetchedTotalCount,
+          fans4Account: fetchedFans4Account,
         } = await userApi.getFighters({
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
@@ -85,6 +87,7 @@ function SearchFighters() {
 
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
+        setFans4Account(fetchedFans4Account);
         setFighters([...currentFighters, ...fetchedFighters]);
       } catch (error) {
         console.error(error);
@@ -174,6 +177,19 @@ function SearchFighters() {
           onChangeText={setSearchValue}
           placeholder={t('SearchFighters.search')}
         />
+
+        {fans4Account && (
+        <TouchableOpacity
+          onPress={() => onPressFighter(fans4Account._id)}
+          style={styles.fans4Container}
+        >
+          <Image style={styles.fans4Image} source={{ uri: fans4Account.avatarUrl }} />
+          <View>
+            <Text style={styles.fans4FullName}>{fans4Account.fullName}</Text>
+            <Text style={styles.fans4Text}>{t('SearchFighters.checkAllTheLatestNewsFromUs')}</Text>
+          </View>
+        </TouchableOpacity>
+        )}
 
         {/* eslint-disable-next-line no-extra-boolean-cast */}
         {isLoading || !!fighters.length ? (
