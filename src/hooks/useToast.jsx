@@ -1,9 +1,12 @@
 import React, { useCallback } from 'react';
+import { Dimensions } from 'react-native';
 import { useToast } from 'react-native-fast-toast';
 import { useTranslation } from 'react-i18next';
 
 import SuccessToast from 'components/SuccessToast';
 import FailureToast from 'components/FailureToast';
+
+const windowWidth = Dimensions.get('window').width;
 
 const defaultOptions = {
   placement: 'top',
@@ -11,7 +14,7 @@ const defaultOptions = {
   style: {
     paddingHorizontal: 0,
     paddingVertical: 0,
-    width: '112%',
+    width: windowWidth - 40,
   },
 };
 
