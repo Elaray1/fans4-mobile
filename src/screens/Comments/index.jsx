@@ -256,7 +256,7 @@ function Comments({ route }) {
           <View style={styles.content}>
             {renderList()}
 
-            {userType === USER_TYPES.FAN && !isRefreshing && (
+            {!isRefreshing && (
               <View style={styles.commentContainer}>
                 <View style={styles.line} />
                 <Text style={styles.secondaryText}>
