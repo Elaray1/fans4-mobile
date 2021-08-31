@@ -126,6 +126,7 @@ const FanAccount = () => {
 
   const supportedFighterView = (item, i) => {
     const subscription = userSubscriptions.find(s => s._id === item._id);
+
     const { nickname } = item.role.biography;
     const { cityName, stateCode } = item.role.biography.hometown;
 

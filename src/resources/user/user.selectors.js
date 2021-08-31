@@ -1,4 +1,7 @@
 import dayjs from 'dayjs';
+import { createSelector } from 'reselect';
+
+import { FANS4_ACCOUNT } from 'helpers/constants';
 
 export const getAuthenticated = ({ user }) => user !== null;
 
@@ -35,7 +38,12 @@ export const getIsBankAccountWarning = ({ user }) => user?.appState?.isBankAccou
 
 /* Fans selectors: start */
 
-export const getSupportedFighters = ({ user }) => user?.role?.subscription?.fighters;
+export const getAllSupportedFighters = ({ user }) => user?.role?.subscription?.fighters;
+export const getSupportedFighters = createSelector(
+  getAllSupportedFighters,
+  fighters => fighters && fighters.filter(fighter => fighter._id !== FANS4_ACCOUNT._id),
+);
+
 export const getUserName = ({ user }) => user?.role?.biography?.userName;
 
 /* Fighters selectors: end */

@@ -18,7 +18,7 @@ export default StyleSheet.create({
     marginRight: 16,
   },
   fightersList: {
-    marginTop: 27,
+    marginTop: 18,
   },
   fighter: {
     flexDirection: 'row',
@@ -68,5 +68,30 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     color: colors.textSecondary,
     fontWeight: fonts.weight.medium,
+  },
+  fans4Container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.gray,
+    borderRadius: 5,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    marginBottom: 27,
+  },
+  fans4Image: {
+    width: 54,
+    height: 54,
+    marginRight: 16,
+    borderRadius: 50,
+  },
+  fans4FullName: {
+    fontSize: fonts.size.small,
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+  },
+  fans4Text: {
+    marginTop: 4,
+    fontSize: fonts.size.caption,
+    color: colors.textSecondary,
   },
 });
