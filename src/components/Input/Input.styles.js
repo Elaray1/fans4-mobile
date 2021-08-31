@@ -72,7 +72,7 @@ export default StyleSheet.create({
     marginLeft: 20,
   },
   buttonTitle: {
-    color: colors.primary,
+    color: colors.link,
     textDecorationLine: 'none',
     lineHeight: 19,
   },

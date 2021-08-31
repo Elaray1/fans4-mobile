@@ -83,7 +83,7 @@ export default StyleSheet.create({
   live: {
     position: 'absolute',
     flexDirection: 'row',
-    bottom: 12,
+    bottom: 22,
     left: 12,
     backgroundColor: colors.primaryRed,
     width: 75,

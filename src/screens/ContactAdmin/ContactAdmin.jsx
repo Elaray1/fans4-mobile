@@ -72,7 +72,7 @@ function ContactAdmin() {
   ]), [t, userType]);
 
   const onButtonPress = useCallback(() => {
-    Linking.openURL(`mailto:admin@fans4.com?subject=${items[selectedItem - 1].title} ${userName}`);
+    Linking.openURL(`mailto:admin@fans4.com?subject=${items[selectedItem - 1].title}. ${userName}`);
   }, [items, selectedItem, userName]);
 
   return (

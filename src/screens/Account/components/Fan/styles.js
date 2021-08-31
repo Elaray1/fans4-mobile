@@ -39,6 +39,9 @@ export default StyleSheet.create({
     color: colors.white,
     marginVertical: 19,
   },
+  emptyView: {
+    marginBottom: 0,
+  },
   subscriptions: {
     paddingBottom: 20,
   },

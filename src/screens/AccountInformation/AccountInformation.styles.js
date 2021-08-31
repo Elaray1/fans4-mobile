@@ -49,10 +49,10 @@ export default StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 5,
-    backgroundColor: colors.buttonNotification,
+    backgroundColor: colors.backgroundLink,
   },
   emailPendingText: {
-    color: colors.primary,
+    color: colors.link,
     fontSize: fonts.size.caption,
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,

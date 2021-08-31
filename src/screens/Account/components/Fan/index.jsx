@@ -187,7 +187,7 @@ const FanAccount = () => {
 
       {isLoading ? <Loader /> : (
         <View style={styles.subscriptions}>
-          <Text style={styles.title}>
+          <Text style={[styles.title, !shownFighters.length && styles.emptyView]}>
             {t('AccountFan.YourSubscriptions')}
           </Text>
 

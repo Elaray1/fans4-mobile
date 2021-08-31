@@ -22,7 +22,7 @@ import useDidUpdate from 'hooks/useDidUpdate';
 
 
 import * as userSelectors from 'resources/user/user.selectors';
-import { USER_STATUSES } from 'resources/user/user.constants';
+import { FIGHTING_STATUSES, USER_STATUSES } from 'resources/user/user.constants';
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 
@@ -169,11 +169,15 @@ function Fighter({ fighterId }) {
                 {t('Fighter.subscribeToAnotherWhenBlocked')}
               </Text>
             ) : (
-              <Button
-                title={t('Fighter.proposeAFight')}
-                style={styles.applyButton}
-                onPress={goToProposeAFight}
-              />
+              <>
+                {fighter.role.fightingStatus === FIGHTING_STATUSES.READY_FOR_FIGHTS && (
+                <Button
+                  title={t('Fighter.proposeAFight')}
+                  style={styles.applyButton}
+                  onPress={goToProposeAFight}
+                />
+                )}
+              </>
             )}
           </>
         )}

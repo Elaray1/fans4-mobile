@@ -136,7 +136,7 @@ function AccountInformation() {
                       </Text>
                       {userNewEmail && (
                       <View style={styles.emailPending}>
-                        <Text style={styles.emailPendingText}>Pending</Text>
+                        <Text style={styles.emailPendingText}>{t('AccountInformation.pending')}</Text>
                       </View>
                       )}
                     </View>
