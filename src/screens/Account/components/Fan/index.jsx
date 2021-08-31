@@ -159,14 +159,12 @@ const FanAccount = () => {
             </Text>
           )}
 
-          {cityName && (
           <Text style={styles.city}>
             {toFixLength({ text: cityName, length: 30 })}
             ,
             {' '}
             {toFixLength({ text: stateCode, length: 30 })}
           </Text>
-          )}
 
           {!subscription.autorenewal && (
             <Text style={styles.expirationDate}>
