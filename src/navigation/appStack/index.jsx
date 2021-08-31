@@ -64,6 +64,12 @@ function Tabs() {
 }
 
 function AppScreens() {
+  const userAuthenticated = useSelector(userSelectors.getAuthenticated);
+
+  if (!userAuthenticated) {
+    return null;
+  }
+
   return (
     <AppStack.Navigator
       headerMode="none"
