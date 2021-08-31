@@ -41,7 +41,7 @@ export const getIsUpdateBankAccountModal = ({ user }) => user?.appState?.isUpdat
 export const getAllSupportedFighters = ({ user }) => user?.role?.subscription?.fighters;
 export const getSupportedFighters = createSelector(
   getAllSupportedFighters,
-  fighters => fighters.filter(fighter => fighter._id !== FANS4_ACCOUNT._id),
+  fighters => fighters && fighters.filter(fighter => fighter._id !== FANS4_ACCOUNT._id),
 );
 
 export const getUserName = ({ user }) => user?.role?.biography?.userName;
