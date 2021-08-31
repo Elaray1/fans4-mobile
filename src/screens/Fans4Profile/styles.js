@@ -1,8 +1,15 @@
 import { StyleSheet } from 'react-native';
+import { commonStyles } from 'themes/commonStyles';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
+  screen: {
+    ...commonStyles.screen,
+  },
+  content: {
+    ...commonStyles.screenContent,
+  },
   fans4Container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -47,5 +54,9 @@ export default StyleSheet.create({
   },
   postsTitle: {
     paddingVertical: 18,
+  },
+  loaderWrapper: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });

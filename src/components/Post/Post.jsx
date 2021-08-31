@@ -23,6 +23,7 @@ import useToast from 'hooks/useToast';
 import colors from 'themes/colors';
 import { MEDIA_TYPES, POST_STATUSES } from 'resources/post/post.constants';
 import { USER_TYPES } from 'resources/user/user.constants';
+import { FANS4_ACCOUNT } from 'helpers/constants';
 
 import { formatCount, formatTime } from './Post.helpers';
 
@@ -66,13 +67,17 @@ function Post({
     return null;
   }, [_id, media]);
 
-  const onPressFighter = useCallback((fighterId) => {
-    navigation.navigate('Fighter', { _id: fighterId });
-  }, [navigation]);
+  const onPressFighter = useCallback(() => {
+    if (author?._id === FANS4_ACCOUNT._id) {
+      navigation.navigate('Fans4Profile');
+    } else {
+      navigation.navigate('Fighter', { _id: author?._id });
+    }
+  }, [navigation, author?._id]);
 
   const authorView = author ? (
     <TouchableOpacity
-      onPress={() => onPressFighter(author._id)}
+      onPress={onPressFighter}
       style={styles.author}
     >
       <FastImage
@@ -141,7 +146,7 @@ function Post({
 
   const onCommentsPress = useCallback(() => {
     navigation.navigate('Comments', { postId: _id, onUpdateCommentsCount });
-  }, [navigation, _id]);
+  }, [navigation, _id, onUpdateCommentsCount]);
 
   const onLikePress = useCallback(async () => {
     if (userType === USER_TYPES.FIGHTER) {

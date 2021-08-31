@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
@@ -15,6 +15,9 @@ import { USER_TYPES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import { toFixLength } from 'helpers/modifyText';
+import { FANS4_ACCOUNT } from 'helpers/constants';
+
+import useToast from 'hooks/useToast';
 
 import analyticsService from 'services/analytics.service';
 
@@ -30,6 +33,8 @@ function SearchFighters() {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
+  const { showFailure } = useToast();
+
   const [fans4Account, setFans4Account] = useState(null);
   const [fighters, setFighters] = useState([]);
   const [page, setPage] = useState(1);
@@ -39,6 +44,20 @@ function SearchFighters() {
 
   const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
+
+  useEffect(() => {
+    const fetchFans4Account = async () => {
+      try {
+        const { fighter: fetchedFighter } = await userApi.getFighter({ _id: FANS4_ACCOUNT._id });
+
+        setFans4Account(fetchedFighter);
+      } catch (error) {
+        showFailure();
+      }
+    };
+
+    fetchFans4Account();
+  }, [showFailure]);
 
   useEffect(() => {
     if (userType === USER_TYPES.FIGHTER) {
@@ -78,7 +97,6 @@ function SearchFighters() {
         const {
           fighters: fetchedFighters,
           totalCount: fetchedTotalCount,
-          fans4Account: fetchedFans4Account,
         } = await userApi.getFighters({
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
@@ -87,7 +105,6 @@ function SearchFighters() {
 
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
-        setFans4Account(fetchedFans4Account);
         setFighters([...currentFighters, ...fetchedFighters]);
       } catch (error) {
         console.error(error);
@@ -108,6 +125,12 @@ function SearchFighters() {
   const onPressFighter = useCallback((fighterId) => {
     navigation.navigate('Fighter', { _id: fighterId });
   }, [navigation]);
+
+  const onPressFans4Profile = useCallback(() => {
+    navigation.navigate('Fans4Profile');
+  }, [navigation]);
+
+  const fans4Source = useMemo(() => ({ uri: fans4Account?.avatarUrl }), [fans4Account?.avatarUrl]);
 
   const renderItem = ({ item }) => {
     const { nickname } = item.role.biography;
@@ -166,6 +189,21 @@ function SearchFighters() {
     </View>
   );
 
+  const Fans4Account = () => (fans4Account
+    ? (
+      <TouchableOpacity
+        onPress={onPressFans4Profile}
+        style={styles.fans4Container}
+      >
+        <FastImage style={styles.fans4Image} source={fans4Source} />
+        <View>
+          <Text style={styles.fans4FullName}>{fans4Account.fullName}</Text>
+          <Text style={styles.fans4Text}>{t('SearchFighters.checkAllTheLatestNewsFromUs')}</Text>
+        </View>
+      </TouchableOpacity>
+    )
+    : null);
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -178,19 +216,6 @@ function SearchFighters() {
           placeholder={t('SearchFighters.search')}
         />
 
-        {fans4Account && (
-        <TouchableOpacity
-          onPress={() => onPressFighter(fans4Account._id)}
-          style={styles.fans4Container}
-        >
-          <Image style={styles.fans4Image} source={{ uri: fans4Account.avatarUrl }} />
-          <View>
-            <Text style={styles.fans4FullName}>{fans4Account.fullName}</Text>
-            <Text style={styles.fans4Text}>{t('SearchFighters.checkAllTheLatestNewsFromUs')}</Text>
-          </View>
-        </TouchableOpacity>
-        )}
-
         {/* eslint-disable-next-line no-extra-boolean-cast */}
         {isLoading || !!fighters.length ? (
           <FlatList
@@ -201,6 +226,7 @@ function SearchFighters() {
             onEndReached={fetchNewItems}
             style={styles.fightersList}
             showsVerticalScrollIndicator={false}
+            ListHeaderComponent={Fans4Account}
             ListFooterComponent={renderFooter}
           />
         ) : <EmptyView /> }

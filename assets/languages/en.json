@@ -401,9 +401,12 @@
     "fighterBlocked_1": "because this fighter is blocked.",
     "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter.",
     "checkBack": "Check back to view your fighter's first exclusive post!",
+  },
+  "Fans4Account": {
     "profile": "Profile",
     "checkAllTheLatestNewsFromUs": "Check all the latest news from us!",
-    "aboutUs": "About Us"
+    "aboutUs": "About Us",
+    "posts": "Posts"
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",

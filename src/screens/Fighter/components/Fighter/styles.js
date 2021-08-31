@@ -56,11 +56,4 @@ export default StyleSheet.create({
   createdFightTextWrapper: {
     flexDirection: 'row',
   },
-  grayText: {
-    fontSize: fonts.size.small,
-    fontFamily: fonts.family.medium,
-    fontWeight: fonts.weight.medium,
-    color: colors.grayText,
-    marginBottom: 16,
-  },
 });

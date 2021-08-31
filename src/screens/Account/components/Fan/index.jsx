@@ -21,7 +21,6 @@ import useToast from 'hooks/useToast';
 import Text from 'components/Text';
 import GrayscaledImage from 'components/GrayscaledImage';
 
-import { FANS4_ACCOUNT } from 'helpers/constants';
 import { toFixLength } from 'helpers/modifyText';
 
 import colors from 'themes/colors';
@@ -116,8 +115,7 @@ const FanAccount = () => {
   const shownFighters = fighters.filter((f) => {
     const fighterSubscription = userSubscriptions.find(s => s._id === f._id);
     return fighterSubscription
-      && (fighterSubscription.autorenewal || moment(fighterSubscription.renewalDate).isAfter(new Date()))
-      && f._id !== FANS4_ACCOUNT._id;
+      && (fighterSubscription.autorenewal || moment(fighterSubscription.renewalDate).isAfter(new Date()));
   });
 
   const Loader = () => (
@@ -128,15 +126,9 @@ const FanAccount = () => {
 
   const supportedFighterView = (item, i) => {
     const subscription = userSubscriptions.find(s => s._id === item._id);
-    const isFans4Account = item._id === FANS4_ACCOUNT._id;
 
-    let nickname;
-    let cityName;
-    let stateCode;
-    if (!isFans4Account) {
-      ({ nickname } = item.role.biography);
-      ({ cityName, stateCode } = item.role.biography.hometown);
-    }
+    const { nickname } = item.role.biography;
+    const { cityName, stateCode } = item.role.biography.hometown;
 
     return (
       <TouchableOpacity

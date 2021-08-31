@@ -18,7 +18,7 @@ export default StyleSheet.create({
     marginRight: 16,
   },
   fightersList: {
-    marginTop: 27,
+    marginTop: 18,
   },
   fighter: {
     flexDirection: 'row',
@@ -72,11 +72,11 @@ export default StyleSheet.create({
   fans4Container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 18,
     backgroundColor: colors.gray,
     borderRadius: 5,
     paddingVertical: 14,
     paddingHorizontal: 18,
+    marginBottom: 27,
   },
   fans4Image: {
     width: 54,
