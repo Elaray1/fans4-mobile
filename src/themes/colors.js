@@ -18,6 +18,7 @@ const colors = {
   primaryRed: '#F34C4C',
 
   link: '#3B89FD',
+  backgroundLink: '#151F2C',
 
   baseFont: '#FFFFFF',
   textSecondary: '#8B8E98',

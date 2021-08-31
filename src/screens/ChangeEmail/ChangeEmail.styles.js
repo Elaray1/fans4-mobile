@@ -16,6 +16,6 @@ export default StyleSheet.create({
     opacity: 0.5,
   },
   emailInput: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
 });

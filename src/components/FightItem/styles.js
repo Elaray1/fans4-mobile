@@ -77,7 +77,7 @@ export default StyleSheet.create({
     color: colors.primary,
   },
   fanVoted: {
-    backgroundColor: hexToRgba(colors.primary, 0.12),
+    backgroundColor: hexToRgba(colors.link, 0.12),
     borderRadius: 5,
     height: 40,
     width: '100%',
@@ -87,7 +87,7 @@ export default StyleSheet.create({
   },
   fanVotedText: {
     marginLeft: 8,
-    color: colors.primary,
+    color: colors.link,
     fontSize: fonts.size.caption,
   },
   button: {
