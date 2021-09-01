@@ -150,6 +150,9 @@ const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.STRIPE_PAYOUT_ACCOUNT_STATUS_CHANGED]: () => {
     rootNavigation.navigate('Finances');
   },
+  [PUSH_NOTIFICATION_TYPES.NEW_SUBSCRIBER]: () => {
+    rootNavigation.navigate('Account');
+  },
 };
 
 function AppNavigation() {
