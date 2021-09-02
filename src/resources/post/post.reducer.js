@@ -2,6 +2,7 @@ import {
   UPLOADING_POST_STATUSES,
   SET_UPLOADING_POSTS_DATA,
   REMOVE_FAILED_UPLOADING_POSTS_DATA,
+  REMOVE_COMPLETED_UPLOADING_POSTS_DATA,
 } from './post.constants';
 
 export default (state = [], action) => {
@@ -13,6 +14,8 @@ export default (state = [], action) => {
       });
     case REMOVE_FAILED_UPLOADING_POSTS_DATA:
       return state.filter(post => post.status !== UPLOADING_POST_STATUSES.ERROR);
+    case REMOVE_COMPLETED_UPLOADING_POSTS_DATA:
+      return state.filter(post => post.status !== UPLOADING_POST_STATUSES.COMPLETED);
     default:
       return state;
   }

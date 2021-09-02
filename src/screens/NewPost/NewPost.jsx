@@ -28,6 +28,8 @@ function NewPost() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const userId = useSelector(userSelectors.getUserId);
+
   const [text, setText] = useState('');
   const [uploadingMedia, setUploadingMedia] = useState(null);
   const [uploadingPoster, setUploadingPoster] = useState(null);
@@ -42,8 +44,6 @@ function NewPost() {
       setUploadingPoster(poster);
     }
   }, [setUploadingMedia]);
-
-  const userId = useSelector(userSelectors.getUserId);
 
   useEffect(() => {
     analyticsService.logEvent({
@@ -100,7 +100,7 @@ function NewPost() {
         name: 'file',
         type: uploadingMedia.mime,
         uri,
-      }, { onUploadStarted: goToAccount, onUploadProgress, onUploadCompleted: goToAccount });
+      }, { onUploadStarted: goToAccount, onUploadProgress });
 
       if (!uploadingMedia) {
         goToAccount();

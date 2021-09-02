@@ -1,15 +1,12 @@
 import {
-  UPLOADING_POST_STATUSES,
   SET_UPLOADING_POSTS_DATA,
   REMOVE_FAILED_UPLOADING_POSTS_DATA,
+  REMOVE_COMPLETED_UPLOADING_POSTS_DATA,
 } from './post.constants';
 
 const updateUploadingPostsState = ({ oldUploadingPostsData, uploadingPostData }) => {
   const { id } = uploadingPostData;
   if (oldUploadingPostsData.some(post => post.id === id)) {
-    if (uploadingPostData.status === UPLOADING_POST_STATUSES.COMPLETED) {
-      return oldUploadingPostsData.filter(post => post.id !== id);
-    }
     return oldUploadingPostsData.map(post => (post.id === id ? { ...post, ...uploadingPostData } : post));
   }
   return [
@@ -26,4 +23,8 @@ export const updateUploadingPostsData = ({ id, data, file, progress, status }) =
 
 export const removeFailedUploadingPosts = () => async (dispatch) => {
   dispatch({ type: REMOVE_FAILED_UPLOADING_POSTS_DATA });
+};
+
+export const removeCompletedUploadingPosts = () => async (dispatch) => {
+  dispatch({ type: REMOVE_COMPLETED_UPLOADING_POSTS_DATA });
 };
