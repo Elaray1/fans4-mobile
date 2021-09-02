@@ -11,8 +11,6 @@ import * as postActions from 'resources/post/post.actions';
 
 import * as postApi from 'resources/post/post.api';
 
-import * as rootNavigation from 'helpers/rootNavigation';
-
 import { UPLOADING_POST_STATUSES } from 'resources/post/post.constants';
 
 import styles from './styles';
@@ -33,20 +31,15 @@ function UploadingPosts() {
     await dispatch(postActions.updateUploadingPostsData({ id, data, file, progress, status }));
   }, [dispatch]);
 
-  const onUploadCompleted = useCallback(async () => {
-    setIsLoading(false);
-    rootNavigation.resetToScreen('AppStack', 'Account');
-  }, []);
-
   const onReuploadPost = useCallback(async (item) => {
     setIsLoading(true);
     if (item.length) {
       await Promise.all(item.map(postData => postApi.createPost(postData.data, postData.file,
-        { onUploadStarted, onUploadProgress, onUploadCompleted })));
+        { onUploadStarted, onUploadProgress })));
     } else {
-      await postApi.createPost(item.data, item.file, { onUploadProgress, onUploadCompleted });
+      await postApi.createPost(item.data, item.file, { onUploadProgress });
     }
-  }, [onUploadProgress, onUploadCompleted]);
+  }, [onUploadProgress, onUploadStarted]);
 
   const ErrorView = useCallback((uploadingPostData) => {
     return (
@@ -70,11 +63,19 @@ function UploadingPosts() {
   }, [t, onReuploadPost, isLoading]);
 
   const UploadingView = useCallback((uploadingPostData) => {
+    const progress = uploadingPostData.length
+      ? uploadingPostData.reduce((acc, post) => acc + post.progress, 0) / uploadingPostData.length
+      : uploadingPostData.progress;
+
     return (
       <>
-        <Text style={styles.loadingPostText}>{t('Account.postIsLoading')}</Text>
+        <Text style={styles.loadingPostText}>
+          {uploadingPostData.length
+            ? `${uploadingPostData.length} ${t('Account.postsAreLoading')}`
+            : t('Account.postIsLoading')}
+        </Text>
         <View style={styles.progressBarContainer}>
-          <View style={[styles.progressBar, { width: `${uploadingPostData.progress}%` }]} />
+          <View style={[styles.progressBar, { width: `${progress}%` }]} />
         </View>
       </>
     );
@@ -85,34 +86,44 @@ function UploadingPosts() {
     [UPLOADING_POST_STATUSES.UPLOADING]: UploadingView,
   }), [ErrorView, UploadingView]);
 
-  const failedPosts = useMemo(() => {
+  const failedPostsArray = useMemo(() => {
     return uploadingPosts.filter(post => post.status === UPLOADING_POST_STATUSES.ERROR);
   }, [uploadingPosts]);
 
-  const posts = useMemo(() => {
-    if (failedPosts.length > 1) {
-      return uploadingPosts.filter(post => post.status !== UPLOADING_POST_STATUSES.ERROR);
-    }
-    return uploadingPosts;
-  }, [uploadingPosts, failedPosts]);
+  const uploadingPostsArray = useMemo(() => {
+    return uploadingPosts.filter(post => post.status === UPLOADING_POST_STATUSES.UPLOADING);
+  }, [uploadingPosts]);
+
+  const postsArray = useMemo(() => {
+    return uploadingPosts.filter((post) => {
+      if ((failedPostsArray.length > 1 && post.status === UPLOADING_POST_STATUSES.ERROR)
+      || (uploadingPostsArray.length > 1 && post.status === UPLOADING_POST_STATUSES.UPLOADING)) {
+        return false;
+      }
+      return true;
+    });
+  }, [uploadingPosts, failedPostsArray, uploadingPostsArray]);
 
   return (
     <>
-      {failedPosts.length > 1 && (
+      {failedPostsArray.length > 1 && (
       <View
         style={[
           styles.loadingPostContainer,
           styles.loadingErrorContainer,
         ]}
       >
-        {viewByStatus[UPLOADING_POST_STATUSES.ERROR](failedPosts)}
+        {viewByStatus[UPLOADING_POST_STATUSES.ERROR](failedPostsArray)}
       </View>
       )}
-      {Boolean(posts.length) && posts.map((uploadingPostData) => {
-        if (uploadingPostData.status === UPLOADING_POST_STATUSES.ERROR
-          && failedPosts.length > 1) {
-          return null;
-        }
+      {uploadingPostsArray.length > 1 && (
+      <View
+        style={styles.loadingPostContainer}
+      >
+        {viewByStatus[UPLOADING_POST_STATUSES.UPLOADING](uploadingPostsArray)}
+      </View>
+      )}
+      {postsArray.map((uploadingPostData) => {
         return (
           <View
             style={[

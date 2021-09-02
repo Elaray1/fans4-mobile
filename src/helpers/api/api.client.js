@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { Platform } from 'react-native';
+
+// react-native-background-upload with version (github:cristianoccazinspd) not working for android
 import backgroundUploaderIOS from 'react-native-background-upload';
 import backgroundUploaderAndroid from 'react-native-background-upload-android';
 

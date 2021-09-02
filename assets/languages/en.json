@@ -280,6 +280,7 @@
     "later": "Later",
     "update": "Update",
     "postIsLoading": "Post is loading...",
+    "postsAreLoading": "posts are loading...",
     "postFailedToUpload": "Post failed to upload.",
     "postsFailedToUpload": "Posts failed to upload.",
     "pleaseTryAgain": "Please try again.",
@@ -404,7 +405,7 @@
     "fighterBlocked_0": "You cannot apply for a fight with",
     "fighterBlocked_1": "because this fighter is blocked.",
     "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter.",
-    "checkBack": "Check back to view your fighter's first exclusive post!",
+    "checkBack": "Check back to view your fighter's first exclusive post!"
   },
   "Fans4Account": {
     "profile": "Profile",

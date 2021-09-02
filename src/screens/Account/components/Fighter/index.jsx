@@ -16,8 +16,10 @@ import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import * as postSelectors from 'resources/post/post.selectors';
 
 import * as userActions from 'resources/user/user.actions';
+import * as postActions from 'resources/post/post.actions';
 
 import analyticsService from 'services/analytics.service';
 import * as socketService from 'services/socket.service';
@@ -42,6 +44,7 @@ function FighterAccount() {
 
   const userId = useSelector(userSelectors.getUserId);
   const isBankAccountWarning = useSelector(userSelectors.getIsBankAccountWarning);
+  const completedUploadingPosts = useSelector(postSelectors.getCompletedUploadingPosts);
 
   const [postsCount, setPostsCount] = useState(null);
   const [fansCount, setFansCount] = useState(null);
@@ -108,6 +111,17 @@ function FighterAccount() {
 
     init();
   }, [userId, showFailure]);
+
+  useEffect(() => {
+    const init = async () => {
+      if (completedUploadingPosts.length) {
+        await dispatch(postActions.removeCompletedUploadingPosts());
+        await refreshPosts();
+      }
+    };
+
+    init();
+  }, [completedUploadingPosts.length, refreshPosts, dispatch]);
 
   const onAddBiographyPress = useCallback(() => {
     analyticsService.logEvent({
