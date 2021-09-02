@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity, Linking
+  SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity, Linking,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -117,8 +117,10 @@ function SignIn({ route }) {
           navigation,
         }));
       } catch (err) {
+        console.error('Login error:', err);
         setApiError(extractApiErrorMessage(err));
         setIsLoading(false);
+        console.error('Login error after:', err);
       }
     }
   }, [emailValue, passwordValue, userType, dispatch, inputErrors, t, navigation]);

@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, View, ActivityIndicator } from 'react-native';
+import { SafeAreaView, ScrollView, StatusBar, View, ActivityIndicator, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 import colors from 'themes/colors';
@@ -11,6 +11,8 @@ import Input from 'components/Input';
 import UploadMediaButton from 'components/UploadMediaButton';
 
 import * as postApi from 'resources/post/post.api';
+import * as postActions from 'resources/post/post.actions';
+
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as rootNavigation from 'helpers/rootNavigation';
@@ -24,6 +26,8 @@ const TEXT_NUMBER_OF_LINES = 4;
 
 function NewPost() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
   const [text, setText] = useState('');
   const [uploadingMedia, setUploadingMedia] = useState(null);
   const [uploadingPoster, setUploadingPoster] = useState(null);
@@ -51,17 +55,22 @@ function NewPost() {
   }, [userId]);
 
   const goToAccount = useCallback(() => {
+    setLoading(false);
     setUploadingMedia(null);
     setText('');
 
     rootNavigation.resetToScreen('AppStack', 'Account');
   }, []);
 
+  const onUploadProgress = useCallback(async ({ id, data, file, progress, status }) => {
+    await dispatch(postActions.updateUploadingPostsData({ id, data, file, progress, status }));
+  }, [dispatch]);
+
   const submit = useCallback(async () => {
     const params = { text };
     if (uploadingMedia) {
-      params.width = uploadingMedia.width;
-      params.height = uploadingMedia.height;
+      params.width = uploadingMedia.width.toString();
+      params.height = uploadingMedia.height.toString();
     }
 
     setLoading(true);
@@ -82,17 +91,20 @@ function NewPost() {
       }
 
       if (uploadingMedia && uploadingMedia.mime.includes('video')) {
-        params.duration = uploadingMedia.duration;
+        params.duration = uploadingMedia.duration.toString();
       }
+
+      const uri = Platform.OS === 'ios' ? uploadingMedia.path : uploadingMedia.path.replace('file://', '');
 
       await postApi.createPost(params, uploadingMedia && {
         name: 'file',
         type: uploadingMedia.mime,
-        uri: uploadingMedia.path,
-      });
+        uri,
+      }, { onUploadStarted: goToAccount, onUploadProgress, onUploadCompleted: goToAccount });
 
-      setLoading(false);
-      goToAccount();
+      if (!uploadingMedia) {
+        goToAccount();
+      }
 
       analyticsService.logEvent({
         name: analyticsService.events.FIGHTER_ADDED_POST,
@@ -105,7 +117,7 @@ function NewPost() {
     } finally {
       setLoading(false);
     }
-  }, [text, uploadingMedia, goToAccount, userId, uploadingPoster]);
+  }, [text, uploadingMedia, goToAccount, userId, uploadingPoster, onUploadProgress]);
 
   return (
     <SafeAreaView style={styles.screen}>

@@ -78,7 +78,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     bottom: 28,
     left: 22,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primaryRed,
     width: 75,
     height: 28,
     justifyContent: 'space-between',

@@ -85,11 +85,9 @@ export const emailSignIn = ({
   }
 
   const deviceId = getMaskedDeviceId();
-
   const { user, accessToken } = await api.emailSignIn({
     email, password, userType, deviceId,
   });
-
   config.accessToken = accessToken;
 
   sockets.disconnect();

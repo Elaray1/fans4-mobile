@@ -39,6 +39,8 @@
     "react": "17.0.1",
     "react-i18next": "11.8.13",
     "react-native": "0.64.0",
+    "react-native-background-upload": "github:cristianoccazinsp/react-native-background-upload",
+    "react-native-background-upload-android": "npm:react-native-background-upload@6.4.1",
     "react-native-color-matrix-image-filters": "5.2.10",
     "react-native-config": "1.4.2",
     "react-native-create-thumbnail": "1.4.1",

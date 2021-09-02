@@ -278,7 +278,12 @@
     "updateBankAccount": "Update Bank Account",
     "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
     "later": "Later",
-    "update": "Update"
+    "update": "Update",
+    "postIsLoading": "Post is loading...",
+    "postFailedToUpload": "Post failed to upload.",
+    "postsFailedToUpload": "Posts failed to upload.",
+    "pleaseTryAgain": "Please try again.",
+    "tryAgain": "Try again"
   },
   "AccountBlocked": {
     "title": "Your Account is Blocked",
