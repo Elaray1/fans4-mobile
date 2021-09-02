@@ -1,7 +1,12 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
+import backgroundUploaderIOS from 'react-native-background-upload';
+import backgroundUploaderAndroid from 'react-native-background-upload-android';
 
 import config from 'resources/config';
 import i18n from 'services/i18n.service';
+
+import { UPLOADING_POST_STATUSES } from 'resources/post/post.constants';
 
 import ApiError from './api.error';
 
@@ -101,10 +106,70 @@ export const postWithFileRequest = httpRequest('postWithFile');
 export const putRequest = httpRequest('put');
 export const deleteRequest = httpRequest('delete');
 
+const postWithFileInBackgroundRequest = async (url, data, file,
+  { onUploadStarted, onUploadProgress, onUploadCompleted }) => {
+  return new Promise(async (resolve, reject) => {
+    let urlWithSlash = url;
+    if (urlWithSlash[0] !== '/') {
+      urlWithSlash = `/${urlWithSlash}`;
+    }
+
+    const backgroundUploader = Platform.OS === 'ios' ? backgroundUploaderIOS : backgroundUploaderAndroid;
+
+    const uploadingId = await backgroundUploader.startUpload({
+      type: 'multipart',
+      url: `${config.apiUrl}${urlWithSlash}`,
+      path: file.uri,
+      method: 'POST',
+      field: file.name,
+      parameters: data,
+      headers: {
+        Authorization: `Bearer ${config.accessToken}`,
+        'X-Application-ID': config.applicationId,
+        'X-Language': i18n.language,
+      },
+    });
+
+    if (onUploadStarted) {
+      onUploadStarted();
+    }
+
+    backgroundUploader.addListener('progress', uploadingId, (event) => {
+      if (onUploadProgress) {
+        onUploadProgress({
+          id: event.id,
+          data,
+          file,
+          progress: event.progress,
+          status: UPLOADING_POST_STATUSES.UPLOADING,
+        });
+      }
+    });
+
+    backgroundUploader.addListener('error', uploadingId, (event) => {
+      if (onUploadProgress) {
+        onUploadProgress({ id: event.id, data, file, status: UPLOADING_POST_STATUSES.ERROR });
+      }
+      console.log(`Error: ${event.error}`);
+    });
+
+    backgroundUploader.addListener('completed', uploadingId, (event) => {
+      if (onUploadProgress) {
+        onUploadProgress({ id: event.id, data, file, status: UPLOADING_POST_STATUSES.COMPLETED });
+      }
+      if (onUploadCompleted) {
+        onUploadCompleted({ id: event.id, data, file, status: UPLOADING_POST_STATUSES.COMPLETED });
+      }
+      resolve();
+    });
+  });
+};
+
 const apiClient = {
   get: getRequest,
   post: postRequest,
   postWithFile: postWithFileRequest,
+  postWithFileInBackground: postWithFileInBackgroundRequest,
   put: putRequest,
   delete: deleteRequest,
 };

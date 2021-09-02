@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity, View, Image, Alert } from 'react-native';
+import { TouchableOpacity, View, Image, Alert, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import ImagePicker from 'react-native-image-crop-picker';
 import { createThumbnail } from 'react-native-create-thumbnail';
@@ -41,6 +41,7 @@ function UploadMediaButton({
       width: 335,
       height: 335,
       multiple: false,
+      forceJpg: true,
     } : {
       mediaType,
       compressVideoPreset: 'HighestQuality',
@@ -49,6 +50,8 @@ function UploadMediaButton({
 
     try {
       let mediaData = await ImagePicker.openPicker(options);
+      mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
+
       if (mediaData.mime.includes('image') && !croppingAvatar) {
         const { width, height, path } = mediaData;
 

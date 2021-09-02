@@ -10,6 +10,7 @@ import Profile from 'components/FighterAccount/Profile';
 import Statistic from 'components/FighterAccount/Statistic';
 import Biography from 'components/FighterAccount/Biography';
 import PersonalInfo from 'components/FighterAccount/PersonalInfo';
+import UploadingPosts from 'screens/Account/components/Fighter/UploadingPosts';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -71,6 +72,8 @@ function FighterHeader({ postsCount, fansCount, onAddBiographyPress }) {
       <View style={styles.line} />
 
       <Text style={[styles.blockTitle, styles.postsTitle]}>{t('Account.Posts')}</Text>
+
+      <UploadingPosts />
 
     </View>
   );

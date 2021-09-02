@@ -89,6 +89,7 @@ function FighterAccount() {
         fetchedPostsCount = postsTotalCount;
         fetchedPosts = initPosts;
       } catch (err) {
+        console.log('Account screen initialization error:', err);
         showFailure();
         return;
       }
@@ -129,6 +130,7 @@ function FighterAccount() {
 
       dispatch(userActions.setUserData(user));
     } catch (error) {
+      console.log('hideBankAccountWarning error:', error);
       showFailure();
     }
   }, [dispatch, showFailure]);

@@ -52,6 +52,7 @@ function SearchFighters() {
 
         setFans4Account(fetchedFighter);
       } catch (error) {
+        console.error('fetchFans4Account error:', error);
         showFailure();
       }
     };

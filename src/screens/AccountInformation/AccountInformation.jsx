@@ -86,6 +86,7 @@ function AccountInformation() {
     try {
       dispatch(userActions.getUserData());
     } catch (error) {
+      console.error('checkIfNewEmailConfirmed error', error);
       showFailure();
     }
   }, [dispatch, showFailure]);

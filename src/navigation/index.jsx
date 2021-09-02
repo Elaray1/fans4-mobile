@@ -212,6 +212,7 @@ function AppNavigation() {
           rootNavigation.resetToScreen('AppStack', 'AccountBlocked');
         }
       } catch (error) {
+        console.log('blockAccountIfNeeded error', error);
         showFailure();
       }
     }

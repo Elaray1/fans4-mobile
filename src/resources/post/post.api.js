@@ -3,8 +3,13 @@ import { apiClient } from 'helpers/api';
 export const getPostsCount = () => apiClient
   .get('posts/count');
 
-export const createPost = (data, file) => apiClient
-  .postWithFile('posts', data, file);
+export const createPost = (data, file, { onUploadStarted, onUploadProgress, onUploadCompleted }) => {
+  if (file) {
+    return apiClient.postWithFileInBackground('posts', data, file,
+      { onUploadStarted, onUploadProgress, onUploadCompleted });
+  }
+  return apiClient.postWithFile('posts', data);
+};
 
 export const createVideoPoster = (data, file) => apiClient
   .postWithFile('posts/video-poster', data, file);

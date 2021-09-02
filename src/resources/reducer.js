@@ -2,9 +2,11 @@ import { combineReducers } from 'redux';
 
 import { USER_LOGGED_OUT } from './user/user.constants';
 import user from './user/user.reducer';
+import post from './post/post.reducer';
 
 const appReducer = combineReducers({
   user,
+  post,
 });
 
 const rootReducer = (state, action) => {
