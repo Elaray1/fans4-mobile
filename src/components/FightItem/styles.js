@@ -90,6 +90,20 @@ export default StyleSheet.create({
     color: colors.link,
     fontSize: fonts.size.caption,
   },
+  voted: {
+    backgroundColor: hexToRgba(colors.white, 0.12),
+    borderRadius: 5,
+    height: 40,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  votedText: {
+    marginLeft: 8,
+    color: colors.white,
+    fontSize: fonts.size.caption,
+  },
   button: {
     height: 40,
   },

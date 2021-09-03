@@ -159,7 +159,10 @@ function Fighter({ fighterId }) {
         {isSubscribed && (
           <>
             <Button
-              style={styles.subscribedButton}
+              style={[styles.subscribedButton,
+                (fighter.role.fightingStatus !== FIGHTING_STATUSES.READY_FOR_FIGHTS
+                && fighter.status !== USER_STATUSES.BLOCKED) && styles.noMargin,
+              ]}
               type="done"
               title={t('Fighter.subscribed')}
             />

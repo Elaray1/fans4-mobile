@@ -102,7 +102,10 @@ function FightItem({
 
             <View style={styles.votesContainer}>
               <View style={styles.votes}>
-                <Text style={styles.votesText}>{`${fight.votedUserIds.length} ${t(fight.votedUserIds.length === 1 ? 'Fight.voteCount' :'Fight.votes')}`}</Text>
+                <Text style={styles.votesText}>{`${fight.votedUserIds.length} ${t(fight.votedUserIds.length === 1
+                  ? 'Fight.voteCount'
+                  : 'Fight.votes')}`}
+                </Text>
               </View>
             </View>
 
@@ -115,11 +118,11 @@ function FightItem({
             {fight.votedUserIds.includes(userId)
               ? (
                 <TouchableOpacity
-                  style={styles.fanVoted}
+                  style={styles.voted}
                   onPress={() => onPressVote(fight._id, fight.fighters)}
                 >
                   <SuccessIcon />
-                  <Text style={styles.fanVotedText}>
+                  <Text style={styles.votedText}>
                     {t('Fight.you')} {fight.suggestions.fans?.some(f => f._id === userId)
                     && t('Fight.createdAnd')}{t('Fight.voted')} ({fight.votedUserIds.length})
                   </Text>
