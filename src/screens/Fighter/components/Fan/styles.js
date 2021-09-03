@@ -37,6 +37,9 @@ export default StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
   },
+  noMargin: {
+    marginBottom: 0,
+  },
   loaderWrapper: {
     flex: 1,
     justifyContent: 'center',
