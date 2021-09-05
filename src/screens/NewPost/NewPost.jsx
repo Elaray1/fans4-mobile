@@ -100,11 +100,9 @@ function NewPost() {
         name: 'file',
         type: uploadingMedia.mime,
         uri,
-      }, { onUploadStarted: goToAccount, onUploadProgress });
+      }, { onUploadProgress });
 
-      if (!uploadingMedia) {
-        goToAccount();
-      }
+      goToAccount();
 
       analyticsService.logEvent({
         name: analyticsService.events.FIGHTER_ADDED_POST,

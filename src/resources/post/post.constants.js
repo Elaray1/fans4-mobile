@@ -13,9 +13,3 @@ export const POST_STATUSES = {
   DECLINED: 'declined',
   REMOVED: 'removed',
 };
-
-export const UPLOADING_POST_STATUSES = {
-  UPLOADING: 'uploading',
-  ERROR: 'error',
-  COMPLETED: 'completed',
-};

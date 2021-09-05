@@ -120,7 +120,6 @@ function SignIn({ route }) {
         console.error('Login error:', err);
         setApiError(extractApiErrorMessage(err));
         setIsLoading(false);
-        console.error('Login error after:', err);
       }
     }
   }, [emailValue, passwordValue, userType, dispatch, inputErrors, t, navigation]);

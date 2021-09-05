@@ -8,7 +8,7 @@ import backgroundUploaderAndroid from 'react-native-background-upload-android';
 import config from 'resources/config';
 import i18n from 'services/i18n.service';
 
-import { UPLOADING_POST_STATUSES } from 'resources/post/post.constants';
+import { MEDIA_UPLOADING_STATUSES } from 'helpers/constants';
 
 import ApiError from './api.error';
 
@@ -109,61 +109,51 @@ export const putRequest = httpRequest('put');
 export const deleteRequest = httpRequest('delete');
 
 const postWithFileInBackgroundRequest = async (url, data, file,
-  { onUploadStarted, onUploadProgress, onUploadCompleted }) => {
-  return new Promise(async (resolve, reject) => {
-    let urlWithSlash = url;
-    if (urlWithSlash[0] !== '/') {
-      urlWithSlash = `/${urlWithSlash}`;
-    }
+  { onUploadProgress }) => {
+  const backgroundUploader = Platform.OS === 'ios' ? backgroundUploaderIOS : backgroundUploaderAndroid;
+  let urlWithSlash = url;
+  if (urlWithSlash[0] !== '/') {
+    urlWithSlash = `/${urlWithSlash}`;
+  }
+  const options = {
+    type: 'multipart',
+    url: `${config.apiUrl}${urlWithSlash}`,
+    path: file.uri,
+    method: 'POST',
+    field: file.name,
+    parameters: data,
+    headers: {
+      Authorization: `Bearer ${config.accessToken}`,
+      'X-Application-ID': config.applicationId,
+      'X-Language': i18n.language,
+    },
+  };
 
-    const backgroundUploader = Platform.OS === 'ios' ? backgroundUploaderIOS : backgroundUploaderAndroid;
-
-    const uploadingId = await backgroundUploader.startUpload({
-      type: 'multipart',
-      url: `${config.apiUrl}${urlWithSlash}`,
-      path: file.uri,
-      method: 'POST',
-      field: file.name,
-      parameters: data,
-      headers: {
-        Authorization: `Bearer ${config.accessToken}`,
-        'X-Application-ID': config.applicationId,
-        'X-Language': i18n.language,
-      },
-    });
-
-    if (onUploadStarted) {
-      onUploadStarted();
-    }
-
-    backgroundUploader.addListener('progress', uploadingId, (event) => {
+  return backgroundUploader.startUpload(options).then((uploadId) => {
+    backgroundUploader.addListener('progress', uploadId, (event) => {
       if (onUploadProgress) {
         onUploadProgress({
           id: event.id,
           data,
           file,
           progress: event.progress,
-          status: UPLOADING_POST_STATUSES.UPLOADING,
+          status: MEDIA_UPLOADING_STATUSES.UPLOADING,
         });
       }
     });
-
-    backgroundUploader.addListener('error', uploadingId, (event) => {
+    backgroundUploader.addListener('error', uploadId, (event) => {
       if (onUploadProgress) {
-        onUploadProgress({ id: event.id, data, file, status: UPLOADING_POST_STATUSES.ERROR });
+        onUploadProgress({ id: event.id, data, file, status: MEDIA_UPLOADING_STATUSES.ERROR });
       }
       console.log(`Error: ${event.error}`);
     });
-
-    backgroundUploader.addListener('completed', uploadingId, (event) => {
+    backgroundUploader.addListener('completed', uploadId, (event) => {
       if (onUploadProgress) {
-        onUploadProgress({ id: event.id, data, file, status: UPLOADING_POST_STATUSES.COMPLETED });
+        onUploadProgress({ id: event.id, data, file, status: MEDIA_UPLOADING_STATUSES.COMPLETED });
       }
-      if (onUploadCompleted) {
-        onUploadCompleted({ id: event.id, data, file, status: UPLOADING_POST_STATUSES.COMPLETED });
-      }
-      resolve();
     });
+  }).catch((err) => {
+    console.log('Upload error!', err);
   });
 };
 

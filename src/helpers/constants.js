@@ -13,3 +13,9 @@ export const PUSH_NOTIFICATION_TYPES = {
 export const FANS4_ACCOUNT = {
   _id: 'fans4',
 };
+
+export const MEDIA_UPLOADING_STATUSES = {
+  UPLOADING: 'uploading',
+  ERROR: 'error',
+  COMPLETED: 'completed',
+};

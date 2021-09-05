@@ -1,10 +1,19 @@
-import { UPLOADING_POST_STATUSES } from 'resources/post/post.constants';
+import { createSelector } from 'reselect';
+import { MEDIA_UPLOADING_STATUSES } from 'helpers/constants';
 
-export const getUloadingPosts = ({ post }) => post.filter((item) => {
-  return item.status === UPLOADING_POST_STATUSES.UPLOADING
-      || item.status === UPLOADING_POST_STATUSES.ERROR;
-});
+export const getPosts = ({ post }) => post;
 
-export const getCompletedUploadingPosts = ({ post }) => post.filter((item) => {
-  return item.status === UPLOADING_POST_STATUSES.COMPLETED;
-});
+export const getUploadingPosts = createSelector(
+  getPosts,
+  posts => posts.filter((post) => {
+    return post.status === MEDIA_UPLOADING_STATUSES.UPLOADING
+        || post.status === MEDIA_UPLOADING_STATUSES.ERROR;
+  }),
+);
+
+export const getCompletedUploadingPosts = createSelector(
+  getPosts,
+  posts => posts.filter((post) => {
+    return post.status === MEDIA_UPLOADING_STATUSES.COMPLETED;
+  }),
+);

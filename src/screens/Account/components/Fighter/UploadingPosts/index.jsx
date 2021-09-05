@@ -11,7 +11,7 @@ import * as postActions from 'resources/post/post.actions';
 
 import * as postApi from 'resources/post/post.api';
 
-import { UPLOADING_POST_STATUSES } from 'resources/post/post.constants';
+import { MEDIA_UPLOADING_STATUSES } from 'helpers/constants';
 
 import styles from './styles';
 
@@ -19,13 +19,9 @@ function UploadingPosts() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const uploadingPosts = useSelector(postSelectors.getUloadingPosts);
+  const uploadingPosts = useSelector(postSelectors.getUploadingPosts);
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const onUploadStarted = useCallback(async () => {
-    await dispatch(postActions.removeFailedUploadingPosts());
-  }, [dispatch]);
 
   const onUploadProgress = useCallback(async ({ id, data, file, progress, status }) => {
     await dispatch(postActions.updateUploadingPostsData({ id, data, file, progress, status }));
@@ -35,11 +31,12 @@ function UploadingPosts() {
     setIsLoading(true);
     if (item.length) {
       await Promise.all(item.map(postData => postApi.createPost(postData.data, postData.file,
-        { onUploadStarted, onUploadProgress })));
+        { onUploadProgress })));
+      await dispatch(postActions.removeFailedUploadingPosts());
     } else {
       await postApi.createPost(item.data, item.file, { onUploadProgress });
     }
-  }, [onUploadProgress, onUploadStarted]);
+  }, [onUploadProgress, dispatch]);
 
   const ErrorView = useCallback((uploadingPostData) => {
     return (
@@ -82,22 +79,22 @@ function UploadingPosts() {
   }, [t]);
 
   const viewByStatus = useMemo(() => ({
-    [UPLOADING_POST_STATUSES.ERROR]: ErrorView,
-    [UPLOADING_POST_STATUSES.UPLOADING]: UploadingView,
+    [MEDIA_UPLOADING_STATUSES.ERROR]: ErrorView,
+    [MEDIA_UPLOADING_STATUSES.UPLOADING]: UploadingView,
   }), [ErrorView, UploadingView]);
 
   const failedPostsArray = useMemo(() => {
-    return uploadingPosts.filter(post => post.status === UPLOADING_POST_STATUSES.ERROR);
+    return uploadingPosts.filter(post => post.status === MEDIA_UPLOADING_STATUSES.ERROR);
   }, [uploadingPosts]);
 
   const uploadingPostsArray = useMemo(() => {
-    return uploadingPosts.filter(post => post.status === UPLOADING_POST_STATUSES.UPLOADING);
+    return uploadingPosts.filter(post => post.status === MEDIA_UPLOADING_STATUSES.UPLOADING);
   }, [uploadingPosts]);
 
   const postsArray = useMemo(() => {
     return uploadingPosts.filter((post) => {
-      if ((failedPostsArray.length > 1 && post.status === UPLOADING_POST_STATUSES.ERROR)
-      || (uploadingPostsArray.length > 1 && post.status === UPLOADING_POST_STATUSES.UPLOADING)) {
+      if ((failedPostsArray.length > 1 && post.status === MEDIA_UPLOADING_STATUSES.ERROR)
+      || (uploadingPostsArray.length > 1 && post.status === MEDIA_UPLOADING_STATUSES.UPLOADING)) {
         return false;
       }
       return true;
@@ -113,14 +110,14 @@ function UploadingPosts() {
           styles.loadingErrorContainer,
         ]}
       >
-        {viewByStatus[UPLOADING_POST_STATUSES.ERROR](failedPostsArray)}
+        {viewByStatus[MEDIA_UPLOADING_STATUSES.ERROR](failedPostsArray)}
       </View>
       )}
       {uploadingPostsArray.length > 1 && (
       <View
         style={styles.loadingPostContainer}
       >
-        {viewByStatus[UPLOADING_POST_STATUSES.UPLOADING](uploadingPostsArray)}
+        {viewByStatus[MEDIA_UPLOADING_STATUSES.UPLOADING](uploadingPostsArray)}
       </View>
       )}
       {postsArray.map((uploadingPostData) => {
@@ -128,7 +125,7 @@ function UploadingPosts() {
           <View
             style={[
               styles.loadingPostContainer,
-              uploadingPostData.status === UPLOADING_POST_STATUSES.ERROR && styles.loadingErrorContainer,
+              uploadingPostData.status === MEDIA_UPLOADING_STATUSES.ERROR && styles.loadingErrorContainer,
             ]}
             key={uploadingPostData.id}
           >
