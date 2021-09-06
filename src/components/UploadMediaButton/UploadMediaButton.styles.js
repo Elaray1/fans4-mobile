@@ -25,8 +25,7 @@ export default StyleSheet.create({
   },
   label: {
     marginBottom: 6,
-    color: colors.white,
-    opacity: 0.4,
+    color: colors.textSecondary,
     fontSize: fonts.size.caption,
     fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
@@ -37,7 +36,7 @@ export default StyleSheet.create({
     width: '100%',
     resizeMode: 'contain',
   },
-  redBin: {
+  bin: {
     position: 'absolute',
     top: 10,
     right: 10,

@@ -136,6 +136,7 @@ function Video({ source, width, height, posterSource, duration, viewable }) {
   const videoStyle = useMemo(() => ({
     width: renderingWidth,
     height: renderingHeight,
+    borderRadius: 5,
   }), [renderingWidth, renderingHeight]);
 
   const posterStyle = useMemo(() => [videoStyle, viewable && styles.posterOverVideo], [viewable, videoStyle]);

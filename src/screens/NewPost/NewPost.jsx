@@ -148,7 +148,6 @@ function NewPost() {
 
           <UploadMediaButton
             label={t('NewPost.uploadMediaButtonLabel')}
-            style={styles.UploadMediaButton}
             handleMediaUpload={handleMediaUpload}
             mediaType="any"
           />

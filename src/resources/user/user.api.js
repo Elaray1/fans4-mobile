@@ -77,7 +77,7 @@ export const fillRegistrationForm = ({
 };
 
 export const updateUserInfo = ({
-  about, birthdate, fullName, userName, gender,
+  about, birthdate, fullName, userName, gender, removeIntroVideo,
 }) => apiClient
   .put('users', {
     ...(about && { about }),
@@ -85,6 +85,7 @@ export const updateUserInfo = ({
     ...(fullName && { fullName }),
     ...(userName && { userName }),
     ...(gender && { gender }),
+    ...(removeIntroVideo && { removeIntroVideo }),
   });
 
 export const completeOnboarding = () => {
@@ -126,3 +127,8 @@ export const suggestFight = ({ firstFighterId, secondFighterId }) => apiClient
 
 export const getPasswordResetToken = ({ deviceId }) => apiClient
   .get('users/password-reset-token-checking', { deviceId });
+
+export const addIntroVideo = (data, file, { onUploadProgress }) => {
+  return apiClient.postWithFileInBackground('users/intro-video', data, file,
+    { onUploadProgress });
+};

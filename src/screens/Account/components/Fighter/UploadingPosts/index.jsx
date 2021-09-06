@@ -3,6 +3,8 @@ import { View, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
+import useToast from 'hooks/useToast';
+
 import Text from 'components/Text';
 
 import * as postSelectors from 'resources/post/post.selectors';
@@ -18,6 +20,7 @@ import styles from './styles';
 function UploadingPosts() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { showFailure } = useToast();
 
   const uploadingPosts = useSelector(postSelectors.getUploadingPosts);
 
@@ -29,14 +32,19 @@ function UploadingPosts() {
 
   const onReuploadPost = useCallback(async (item) => {
     setIsLoading(true);
-    if (item.length) {
-      await Promise.all(item.map(postData => postApi.createPost(postData.data, postData.file,
-        { onUploadProgress })));
-      await dispatch(postActions.removeFailedUploadingPosts());
-    } else {
-      await postApi.createPost(item.data, item.file, { onUploadProgress });
+    try {
+      if (item.length) {
+        await Promise.all(item.map(postData => postApi.createPost(postData.data, postData.file,
+          { onUploadProgress })));
+        await dispatch(postActions.removeFailedUploadingPosts());
+      } else {
+        await postApi.createPost(item.data, item.file, { onUploadProgress });
+      }
+    } catch (error) {
+      showFailure();
     }
-  }, [onUploadProgress, dispatch]);
+    setIsLoading(false);
+  }, [onUploadProgress, dispatch, showFailure]);
 
   const ErrorView = useCallback((uploadingPostData) => {
     return (

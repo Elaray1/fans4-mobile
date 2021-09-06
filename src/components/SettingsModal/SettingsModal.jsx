@@ -134,7 +134,9 @@ function SettingsModal({
                     {t('SettingsModal.accountInformation')}
                   </Text>
                   <Text style={styles.settingText}>
-                    {isFan ? t('SettingsModal.updateYourNameEmailEtc') : t('SettingsModal.updateYourEmailBiography')}
+                    {isFan
+                      ? t('SettingsModal.updateYourNameEmailEtc')
+                      : t('SettingsModal.updateYourEmailBiographyIntroVideo')}
                   </Text>
                 </View>
               </TouchableOpacity>

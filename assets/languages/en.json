@@ -190,7 +190,7 @@
   "SettingsModal": {
     "settings": "Settings",
     "accountInformation": "Account Information",
-    "updateYourEmailBiography": "Update your email, biography",
+    "updateYourEmailBiographyIntroVideo": "Update your email, biography, intro video",
     "updateYourNameEmailEtc": "Update your name, email, etc.",
     "security": "Security",
     "changePassword": "Change password",
@@ -212,7 +212,8 @@
     "changeBiography": "Change Biography",
     "save": "Save",
     "biography": "Biography (max. 300 characters)",
-    "updated": "Biography updated successfully."
+    "updated": "Biography updated successfully.",
+    "introVideo": "Intro Video",
   },
   "AccountInformation": {
     "accountInformation": "Account Information",
@@ -284,7 +285,11 @@
     "postFailedToUpload": "Post failed to upload.",
     "postsFailedToUpload": "Posts failed to upload.",
     "pleaseTryAgain": "Please try again.",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "addIntroVideo": "Add intro video",
+    "addBiographyAndIntroVideo": "Add biography and intro video",
+    "videoIsLoading": "Video is loading",
+    "videoFailedToUpload": "Video failed to upload."
   },
   "AccountBlocked": {
     "title": "Your Account is Blocked",
