@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { Image, useWindowDimensions } from 'react-native';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
@@ -21,17 +20,16 @@ import styles from './styles';
 
 const MAX_WIDTH_HEIGHT_PERCENT = 55;
 
-function OnBoarding3({ route }) {
-  const {
-    userType,
-  } = route?.params;
+function OnBoarding3(props) {
   const { t } = useTranslation();
   const navigation = useNavigation();
+
+  const userId = useSelector(userSelectors.getUserId);
+  const userType = useSelector(userSelectors.getUserType);
+
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
   const height = screenHeight * MAX_WIDTH_HEIGHT_PERCENT / 100;
-
-  const userId = useSelector(userSelectors.getUserId);
 
   const Illustration = userType === USER_TYPES.FAN ? FanIllustration : FighterIllustration;
 
@@ -40,7 +38,6 @@ function OnBoarding3({ route }) {
 
     try {
       await userApi.completeOnboarding();
-
       if (userType === USER_TYPES.FIGHTER) {
         analyticsService.logEvent({
           name: analyticsService.events.FIGHTER_ONBOARDING_COMPLETED,
@@ -64,22 +61,15 @@ function OnBoarding3({ route }) {
   return (
     <IllustrationScreen
       contentStyles={styles.content}
-      ilustrationContainerStyles={styles.ilustrationContainer}
+      illustrationContainerStyles={styles.ilustrationContainer}
       buttonText={t(`OnBoarding3.${userType}.buttonText`)}
       description={t(`OnBoarding3.${userType}.description`)}
       title={t(`OnBoarding3.${userType}.title`)}
       illustration={<Image source={Illustration} resizeMode="cover" style={{ width: screenWidth, height }} />}
       onButtonPress={onNext}
+      {...props}
     />
   );
 }
-
-OnBoarding3.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({
-      userType: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
-};
 
 export default React.memo(OnBoarding3);

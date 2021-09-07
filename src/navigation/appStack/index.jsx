@@ -9,9 +9,7 @@ import TermsOfUse from 'screens/TermsOfUse';
 import VerificationPending from 'screens/VerificationPending';
 import VerificationSuccessful from 'screens/VerificationSuccessful';
 import VerificationFailed from 'screens/VerificationFailed';
-import OnBoarding1 from 'screens/OnBoarding1';
-import OnBoarding2 from 'screens/OnBoarding2';
-import OnBoarding3 from 'screens/OnBoarding3';
+import OnBoarding from 'screens/OnBoarding';
 import ContactAdmin from 'screens/ContactAdmin';
 import Support from 'screens/Support';
 import ChangeBiography from 'screens/ChangeBiography';
@@ -88,9 +86,7 @@ function AppScreens() {
       <AppStack.Screen name="VerificationPending" component={VerificationPending} />
       <AppStack.Screen name="VerificationSuccessful" component={VerificationSuccessful} />
       <AppStack.Screen name="VerificationFailed" component={VerificationFailed} />
-      <AppStack.Screen name="OnBoarding1" component={OnBoarding1} />
-      <AppStack.Screen name="OnBoarding2" component={OnBoarding2} />
-      <AppStack.Screen name="OnBoarding3" component={OnBoarding3} />
+      <AppStack.Screen name="OnBoarding" component={OnBoarding} />
       <AppStack.Screen name="ContactAdmin" component={ContactAdmin} />
       <AppStack.Screen name="Support" component={Support} />
       <AppStack.Screen name="ChangeBiography" component={ChangeBiography} />

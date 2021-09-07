@@ -14,7 +14,7 @@ import styles from './IllustrationScreen.styles';
 
 function IllustrationScreen({
   buttonText, linkText, title, description, illustration, onButtonPress, onLinkPress, headerText,
-  contentStyles, ilustrationContainerStyles, onBackButtonPress,
+  contentStyles, illustrationContainerStyles, titleStyles, onBackButtonPress,
 }) {
   return (
     <SafeAreaView style={styles.screen}>
@@ -32,13 +32,13 @@ function IllustrationScreen({
       )}
 
       <View style={[styles.content, headerText && styles.header, contentStyles]}>
-        <View style={[styles.illustrationContainer, ilustrationContainerStyles]}>
+        <View style={[styles.illustrationContainer, illustrationContainerStyles]}>
           {illustration}
         </View>
 
         <View style={styles.container}>
           <View style={styles.textContainer}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={[styles.title, titleStyles]}>{title}</Text>
             <Text style={styles.text}>
               {description}
             </Text>
@@ -65,7 +65,8 @@ IllustrationScreen.propTypes = {
   onLinkPress: PropTypes.func,
   onBackButtonPress: PropTypes.func,
   contentStyles: ViewPropTypes.style,
-  ilustrationContainerStyles: ViewPropTypes.style,
+  illustrationContainerStyles: ViewPropTypes.style,
+  titleStyles: PropTypes.shape(),
 };
 
 IllustrationScreen.defaultProps = {
@@ -75,7 +76,8 @@ IllustrationScreen.defaultProps = {
   onButtonPress: () => null,
   onLinkPress: () => null,
   contentStyles: null,
-  ilustrationContainerStyles: null,
+  illustrationContainerStyles: null,
+  titleStyles: null,
   onBackButtonPress: null,
 };
 
