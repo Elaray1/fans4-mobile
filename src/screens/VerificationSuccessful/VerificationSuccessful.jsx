@@ -18,7 +18,7 @@ function VerificationSuccessful() {
   const userId = useSelector(userSelectors.getUserId);
 
   const onNext = useCallback(() => {
-    navigation.navigate('OnBoarding1');
+    navigation.navigate('OnBoarding');
   }, [navigation]);
 
   useEffect(() => {

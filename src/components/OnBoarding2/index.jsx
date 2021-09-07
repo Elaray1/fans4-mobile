@@ -1,10 +1,12 @@
-import React, { useCallback } from 'react';
-import { Image, useWindowDimensions } from 'react-native';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { Image, useWindowDimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 import IllustrationScreen from 'components/IllustrationScreen';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import FighterIllustration from 'assets/illustrations/onboarding2-fighter.png'; // eslint-disable-line import/extensions
 import FanIllustration from 'assets/illustrations/onboarding2-fan.png'; // eslint-disable-line import/extensions
@@ -15,42 +17,37 @@ import styles from './styles';
 
 const MAX_WIDTH_HEIGHT_PERCENT = 55;
 
-function OnBoarding2({ route }) {
-  const {
-    userType,
-  } = route?.params;
-
-  const navigation = useNavigation();
+function OnBoarding2({ onNext, ...props }) {
   const { t } = useTranslation();
+
+  const userType = useSelector(userSelectors.getUserType);
+
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
   const height = screenHeight * MAX_WIDTH_HEIGHT_PERCENT / 100;
 
   const Illustration = userType === USER_TYPES.FAN ? FanIllustration : FighterIllustration;
 
-  const onNext = useCallback(() => {
-    navigation.navigate('OnBoarding3', { userType });
-  }, [navigation, userType]);
-
   return (
     <IllustrationScreen
       contentStyles={styles.content}
-      ilustrationContainerStyles={styles.ilustrationContainer}
+      illustrationContainerStyles={styles.ilustrationContainer}
       buttonText={t(`OnBoarding2.${userType}.buttonText`)}
       description={t(`OnBoarding2.${userType}.description`)}
       title={t(`OnBoarding2.${userType}.title`)}
       illustration={<Image source={Illustration} resizeMode="cover" style={{ width: screenWidth, height }} />}
       onButtonPress={onNext}
+      {...props}
     />
   );
 }
 
 OnBoarding2.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({
-      userType: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
+  onNext: PropTypes.func,
+};
+
+OnBoarding2.defaultProps = {
+  onNext: null,
 };
 
 export default React.memo(OnBoarding2);

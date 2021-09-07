@@ -40,7 +40,7 @@ function TermsOfUse() {
 
     navigation.reset({
       index: 0,
-      routes: [{ name: isFan ? 'OnBoarding1' : 'VerificationPending' }],
+      routes: [{ name: isFan ? 'OnBoarding' : 'VerificationPending' }],
     });
   }, [isFan, navigation, userId]);
 

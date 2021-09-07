@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Image, useWindowDimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import * as userSelectors from 'resources/user/user.selectors';
@@ -17,8 +17,7 @@ import styles from './styles';
 
 const MAX_WIDTH_HEIGHT_PERCENT = 55;
 
-function OnBoarding1() {
-  const navigation = useNavigation();
+function OnBoarding1({ onNext, ...props }) {
   const { t } = useTranslation();
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
@@ -28,21 +27,26 @@ function OnBoarding1() {
 
   const Illustration = userType === USER_TYPES.FAN ? FanIllustration : FighterIllustration;
 
-  const onNext = useCallback(() => {
-    navigation.navigate('OnBoarding2', { userType });
-  }, [navigation, userType]);
-
   return (
     <IllustrationScreen
       contentStyles={styles.content}
-      ilustrationContainerStyles={styles.ilustrationContainer}
+      illustrationContainerStyles={styles.ilustrationContainer}
       buttonText={t(`OnBoarding1.${userType}.buttonText`)}
       description={t(`OnBoarding1.${userType}.description`)}
       title={t(`OnBoarding1.${userType}.title`)}
       illustration={<Image source={Illustration} resizeMode="cover" style={{ width: screenWidth, height }} />}
       onButtonPress={onNext}
+      {...props}
     />
   );
 }
+
+OnBoarding1.propTypes = {
+  onNext: PropTypes.func,
+};
+
+OnBoarding1.defaultProps = {
+  onNext: null,
+};
 
 export default React.memo(OnBoarding1);
