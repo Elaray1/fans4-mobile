@@ -71,15 +71,15 @@ const Biography = ({
 
   const posterSource = useMemo(() => {
     return {
-      uri: userIntroVideo.posterStorageUrl,
+      uri: userIntroVideo?.posterStorageUrl,
     };
-  }, [userIntroVideo.posterStorageUrl]);
+  }, [userIntroVideo?.posterStorageUrl]);
 
   const source = useMemo(() => {
     return {
-      uri: userIntroVideo.storageUrl,
+      uri: userIntroVideo?.storageUrl,
     };
-  }, [userIntroVideo.storageUrl]);
+  }, [userIntroVideo?.storageUrl]);
 
   const uploadingVideoView = useMemo(() => {
     if (uploadingIntroVideo?.status === MEDIA_UPLOADING_STATUSES.UPLOADING) {

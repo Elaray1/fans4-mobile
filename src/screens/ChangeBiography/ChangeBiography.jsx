@@ -142,15 +142,15 @@ function ChangeBiography() {
 
   const posterSource = useMemo(() => {
     return {
-      uri: initialMedia.posterStorageUrl,
+      uri: initialMedia?.posterStorageUrl,
     };
-  }, [initialMedia.posterStorageUrl]);
+  }, [initialMedia?.posterStorageUrl]);
 
   const source = useMemo(() => {
     return {
-      uri: initialMedia.storageUrl,
+      uri: initialMedia?.storageUrl,
     };
-  }, [initialMedia.storageUrl]);
+  }, [initialMedia?.storageUrl]);
 
   const introVideoView = useCallback(() => {
     return initialMedia && (initialMedia === uploadingMedia) ? (
