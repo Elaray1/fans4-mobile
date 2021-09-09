@@ -44,5 +44,5 @@ export const FIGHTER_WEIGHT_CATEGORIES = {
   MIDDLEWEIGHT: 'Middleweight',
   LIGHT_HEAVYWEIGHT: 'Light Heavyweight',
   HEAVYWEIGHT: 'Heavyweight',
-  SUPER_HEAVYWEIGHT: 'Super heavyweight',
+  SUPER_HEAVYWEIGHT: 'Super Heavyweight',
 };
