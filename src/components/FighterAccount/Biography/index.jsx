@@ -19,8 +19,6 @@ import * as userSelectors from 'resources/user/user.selectors';
 import * as userApi from 'resources/user/user.api';
 import * as userActions from 'resources/user/user.actions';
 
-import config from 'resources/config';
-
 import { MEDIA_UPLOADING_STATUSES } from 'helpers/constants';
 
 import styles from './styles';
@@ -37,6 +35,7 @@ const Biography = ({
 
   const uploadingIntroVideo = useSelector(introVideoSelectors.getIntroVideo);
   const currentUserId = useSelector(userSelectors.getUserId);
+  const userIntroVideo = useSelector(userSelectors.getUserIntroVideo);
 
   const [isOpen, setIsOpen] = useState(currentUserId === userId ? !(biography && introVideo) : Boolean(introVideo));
   const [isLoading, setIsLoading] = useState(false);
@@ -72,23 +71,15 @@ const Biography = ({
 
   const posterSource = useMemo(() => {
     return {
-      uri: `${config.apiUrl}/users/${userId}/intro-video-poster`,
-      headers: {
-        Authorization: `Bearer ${config.accessToken}`,
-        'X-Application-ID': config.applicationId,
-      },
+      uri: userIntroVideo.posterStorageUrl,
     };
-  }, [userId]);
+  }, [userIntroVideo.posterStorageUrl]);
 
   const source = useMemo(() => {
     return {
-      uri: `${config.apiUrl}/users/${userId}/intro-video`,
-      headers: {
-        Authorization: `Bearer ${config.accessToken}`,
-        'X-Application-ID': config.applicationId,
-      },
+      uri: userIntroVideo.storageUrl,
     };
-  }, [userId]);
+  }, [userIntroVideo.storageUrl]);
 
   const uploadingVideoView = useMemo(() => {
     if (uploadingIntroVideo?.status === MEDIA_UPLOADING_STATUSES.UPLOADING) {

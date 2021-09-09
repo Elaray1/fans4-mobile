@@ -17,6 +17,7 @@ import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userApi from 'resources/user/user.api';
 
+import * as introVideoSelectors from 'resources/introVideo/introVideo.selectors';
 import * as introVideoActions from 'resources/introVideo/introVideo.actions';
 
 import * as postApi from 'resources/post/post.api';
@@ -26,8 +27,6 @@ import { MEDIA_TYPES } from 'components/UploadMediaButton/UploadMediaButton.cons
 import analyticsService from 'services/analytics.service';
 
 import useToast from 'hooks/useToast';
-
-import config from 'resources/config';
 
 import colors from 'themes/colors';
 
@@ -39,6 +38,7 @@ function ChangeBiography() {
   const dispatch = useDispatch();
   const { showFailure, showSuccess } = useToast();
 
+  const uploadingIntroVideo = useSelector(introVideoSelectors.getIntroVideo);
   const initialValue = useSelector(userSelectors.getUserBiographyAbout);
   const initialMedia = useSelector(userSelectors.getUserIntroVideo);
   const userId = useSelector(userSelectors.getUserId);
@@ -82,14 +82,14 @@ function ChangeBiography() {
       dispatch(userActions.setUserData(user));
       if (uploadingPoster && uploadingMedia) {
         const {
-          storageUrl,
+          url,
         } = await postApi.createVideoPoster({ isForIntroVideo: true }, uploadingPoster && {
           name: 'file',
           type: uploadingPoster.mime,
           uri: uploadingPoster.path,
         });
 
-        params.posterStorageUrl = storageUrl;
+        params.posterStorageUrl = url;
         params.duration = uploadingMedia.duration.toString();
 
 
@@ -142,23 +142,44 @@ function ChangeBiography() {
 
   const posterSource = useMemo(() => {
     return {
-      uri: `${config.apiUrl}/users/${userId}/intro-video-poster`,
-      headers: {
-        Authorization: `Bearer ${config.accessToken}`,
-        'X-Application-ID': config.applicationId,
-      },
+      uri: initialMedia.posterStorageUrl,
     };
-  }, [userId]);
+  }, [initialMedia.posterStorageUrl]);
 
   const source = useMemo(() => {
     return {
-      uri: `${config.apiUrl}/users/${userId}/intro-video`,
-      headers: {
-        Authorization: `Bearer ${config.accessToken}`,
-        'X-Application-ID': config.applicationId,
-      },
+      uri: initialMedia.storageUrl,
     };
-  }, [userId]);
+  }, [initialMedia.storageUrl]);
+
+  const introVideoView = useCallback(() => {
+    return initialMedia && (initialMedia === uploadingMedia) ? (
+      <View style={styles.videoContainer}>
+        <Video
+          posterSource={posterSource}
+          source={source}
+          width={uploadingMedia.width}
+          height={uploadingMedia.height}
+          duration={uploadingMedia.duration}
+          viewable
+        />
+        <TouchableOpacity
+          style={styles.bin}
+          activeOpacity={0.7}
+          onPress={onBinPress}
+        >
+          <Bin />
+        </TouchableOpacity>
+      </View>
+    ) : (
+      <UploadMediaButton
+        label={t('ChangeBiography.introVideo')}
+        handleMediaUpload={handleMediaUpload}
+        mediaType={MEDIA_TYPES.VIDEO}
+        style={styles.uploadButton}
+      />
+    );
+  }, [initialMedia, uploadingMedia, onBinPress, handleMediaUpload, t, posterSource, source]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -174,32 +195,7 @@ function ChangeBiography() {
         {...saveButtonProps}
       />
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
-        {initialMedia && (initialMedia === uploadingMedia) ? (
-          <View style={styles.videoContainer}>
-            <Video
-              posterSource={posterSource}
-              source={source}
-              width={uploadingMedia.width}
-              height={uploadingMedia.height}
-              duration={uploadingMedia.duration}
-              viewable
-            />
-            <TouchableOpacity
-              style={styles.bin}
-              activeOpacity={0.7}
-              onPress={onBinPress}
-            >
-              <Bin />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <UploadMediaButton
-            label={t('ChangeBiography.introVideo')}
-            handleMediaUpload={handleMediaUpload}
-            mediaType={MEDIA_TYPES.VIDEO}
-            style={styles.uploadButton}
-          />
-        )}
+        {!uploadingIntroVideo && introVideoView()}
         <Input
           label={t('ChangeBiography.biography')}
           value={value}
