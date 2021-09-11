@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, StatusBar, ActivityIndicator, FlatList } from 'react-native';
+import { SafeAreaView, View, StatusBar, ActivityIndicator, FlatList, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import moment from 'moment';
 
@@ -20,13 +20,15 @@ import Post from 'components/Post';
 
 import useDidUpdate from 'hooks/useDidUpdate';
 
-
 import * as userSelectors from 'resources/user/user.selectors';
 import { FIGHTING_STATUSES, USER_STATUSES, FIGHTER_TYPES } from 'resources/user/user.constants';
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 
 import analyticsService from 'services/analytics.service';
+import inAppPurhaseService from 'services/inAppPurhase.service';
+import * as purchasesActions from 'store/purchases/purchases.actions';
+import * as purchasesSelectors from 'store/purchases/purchases.selectors';
 
 import styles from './styles';
 
@@ -35,11 +37,13 @@ const PER_PAGE = 10;
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
 function Fighter({ fighterId }) {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation();
 
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
   const userId = useSelector(userSelectors.getUserId);
+  const isPurchaseProcessing = useSelector(purchasesSelectors.getIsPurchaseInProcessing);
 
   const isSubscribed = useMemo(() => !!userSubscriptions.find((f) => {
     const isBeforeRenewalDate = moment(f.renewalDate).isAfter(new Date());
@@ -114,6 +118,11 @@ function Fighter({ fighterId }) {
     init();
   }, [init, fighterId]);
 
+  const subscribe = useCallback(() => {
+    dispatch(purchasesActions.startPurchaseProcessing());
+    inAppPurhaseService.purchaseProduct('subscription.fighter.0', { fighterId: fighter._id });
+  }, [dispatch, fighter]);
+
   const keyExtractor = useCallback(item => item._id, []);
 
   const updateViewableItems = useCallback(({ viewableItems }) => {
@@ -184,6 +193,15 @@ function Fighter({ fighterId }) {
               </>
             )}
           </>
+        )}
+
+        {!isSubscribed && Platform.OS === 'ios' && fighter.status !== USER_STATUSES.BLOCKED && (
+          <Button
+            isLoading={isPurchaseProcessing}
+            title={t('Fighter.subscribe')}
+            style={styles.applyButton}
+            onPress={subscribe}
+          />
         )}
 
         <Statistic

@@ -65,4 +65,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     fontSize: fonts.size.caption,
   },
+  subscribeButton: {
+    height: 40,
+  },
 });

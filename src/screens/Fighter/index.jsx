@@ -9,9 +9,7 @@ import FighterForFighter from './components/Fighter';
 import FighterForFan from './components/Fan';
 
 function Fighter({ route }) {
-  const {
-    _id,
-  } = route?.params;
+  const { _id } = route?.params;
 
   const userType = useSelector(userSelectors.getUserType);
 
