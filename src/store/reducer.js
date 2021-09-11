@@ -1,12 +1,15 @@
 import { combineReducers } from 'redux';
 
-import { USER_LOGGED_OUT } from './user/user.constants';
-import user from './user/user.reducer';
-import post from './post/post.reducer';
+import { USER_LOGGED_OUT } from 'resources/user/user.constants';
+import user from 'resources/user/user.reducer';
+import post from 'resources/post/post.reducer';
+
+import purchases from './purchases/purchases.reducer';
 import introVideo from './introVideo/introVideo.reducer';
 
 const appReducer = combineReducers({
   user,
+  purchases,
   post,
   introVideo,
 });
@@ -16,6 +19,7 @@ const rootReducer = (state, action) => {
     // eslint-disable-next-line no-param-reassign
     state = undefined;
   }
+
   return appReducer(state, action);
 };
 

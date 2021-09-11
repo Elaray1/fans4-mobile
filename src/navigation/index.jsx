@@ -18,21 +18,26 @@ import * as rootNavigation from 'helpers/rootNavigation';
 import analyticsService from 'services/analytics.service';
 import * as socketsService from 'services/socket.service';
 import pushNotificationService from 'services/pushNotification.service';
+import inAppPurhaseService from 'services/inAppPurhase.service';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
+import * as paymentApi from 'resources/payment/payment.api';
 
 import useToast from 'hooks/useToast';
 
 import { USER_STATUSES } from 'resources/user/user.constants';
 
 import config from 'resources/config';
-import store from 'resources/store';
+import store from 'store';
+import * as purchasesActions from 'store/purchases/purchases.actions';
 
 import colors from 'themes/colors';
 
 import AppScreens from './appStack';
 import AuthScreens from './authStack';
+
+import { InAppPurchaseState } from 'expo-in-app-purchases';
 
 const NAVIGATOR_CONTAINER_THEME = {
   colors: {
@@ -195,6 +200,47 @@ function AppNavigation() {
 
     handle();
   }, [userAuthenticated]);
+
+  useEffect(() => {
+    const initIap = async () => {
+      try {
+        await inAppPurhaseService.connect();
+      } catch (err) {
+        console.log('in app purchases conncetion error', err);
+        return;
+      }
+
+      inAppPurhaseService.setPurchaseListener(async (iapResponse) => {
+        dispatch(purchasesActions.finishPurchaseProcessing());
+
+        if (!inAppPurhaseService.checkIfPurchaseResponseIsSuccessfull(iapResponse)) {
+          return;
+        }
+
+        const [purchase] = iapResponse.results;
+
+        if (purchase) {
+          const metadata = await inAppPurhaseService.getSavedPurchaseMetadata(purchase.productId);
+
+          const user = await paymentApi.verifyAppleReceipt({
+            productId: purchase.productId,
+            receipt: purchase.transactionReceipt,
+            fighterId: metadata.fighterId,
+          });
+
+          userActions.setUserData(user);
+
+          if (!purchase.acknowledged) {
+            await inAppPurhaseService.finishTransaction(purchase);
+            await inAppPurhaseService.removeSavedPurchaseMetadata(purchase.productId);
+          }
+        }
+      });
+    };
+
+    initIap();
+    return () => inAppPurhaseService.disconnect();
+  }, [dispatch]);
 
   const trackScreensOpening = useCallback(() => {
     const previousRouteName = routeNameRef.current;

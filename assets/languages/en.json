@@ -378,6 +378,7 @@
     "description": "Choose 1-3 preferred weight classes for fights"
   },
   "Fighter": {
+    "subscribe": "Subscribe",
     "fightersProfile": "Fighter’s Profile",
     "posts": "posts",
     "fans": "fans",

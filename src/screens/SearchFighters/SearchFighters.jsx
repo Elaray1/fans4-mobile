@@ -155,12 +155,13 @@ function SearchFighters() {
           <View>
             <Text style={styles.fullName}>{item.fullName}</Text>
             {nickname && (
-            <Text style={styles.nickname}>
-              “
-              {toFixLength({ text: nickname, length: 30 })}
-              ”
-            </Text>
+              <Text style={styles.nickname}>
+                “
+                {toFixLength({ text: nickname, length: 30 })}
+                ”
+              </Text>
             )}
+
             <Text style={styles.city}>
               {toFixLength({ text: cityName, length: 30 })}
               ,
@@ -169,6 +170,7 @@ function SearchFighters() {
             </Text>
           </View>
         </View>
+
         <View style={styles.line} />
       </TouchableOpacity>
     );

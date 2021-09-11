@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 
 import './services/i18n.service';
 import AppNavigation from './navigation';
-import store from './resources/store';
+import store from './store';
 
 function App() {
   return (
