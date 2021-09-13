@@ -1,21 +1,14 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, ScrollView, StatusBar, TouchableOpacity, Platform,
+  SafeAreaView, View, ScrollView, StatusBar, TouchableOpacity,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-
-import * as userActions from 'resources/user/user.actions';
-import * as userSelectors from 'resources/user/user.selectors';
-
-import analyticsService from 'services/analytics.service';
 
 import colors from 'themes/colors';
 
 import Text from 'components/Text';
-import Input from 'components/Input';
 import Header from 'components/Header';
 import Button from 'components/Button';
 import WheelModal from 'components/WheelModal';
@@ -31,7 +24,6 @@ const footsToString = (foot, inch) => `${foot}’ ${inch}”`;
 function PersonalInfo({ route }) {
   const navigation = useNavigation();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
   const {
     fullName,
@@ -41,14 +33,6 @@ function PersonalInfo({ route }) {
     gender,
     photo,
   } = route?.params;
-
-  const userId = useSelector(userSelectors.getUserId);
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [wins, setWins] = useState(null);
-  const [losses, setLosses] = useState(null);
-  const [draws, setDraws] = useState(null);
 
   const [weight, setWeight] = useState(null);
   const [isWeightModalVisible, setIsWeightModalVisible] = useState(false);
@@ -136,57 +120,23 @@ function PersonalInfo({ route }) {
   }, []);
 
   const onNextPress = useCallback(async () => {
-    setIsLoading(true);
-
-    try {
-      await dispatch(userActions.fillRegistrationForm({
-        fullName,
-        nickname,
-        gender,
-        birthdate,
-        cityId,
-        weight,
-        height,
-        reach,
-        wins,
-        losses,
-        draws,
-        weightClasses: weightClasses.map(item => item.name),
-        avatar: {
-          name: 'image',
-          type: photo?.mime,
-          uri: Platform.OS === 'android' ? photo?.path : photo?.path.replace('file://', ''),
-        },
-      }));
-
-      analyticsService.logEvent({
-        name: analyticsService.events.FIGHTER_FORM_SUBMITTED,
-        data: {
-          userId,
-        },
-      });
-
-      navigation.navigate('TermsOfUse');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [dispatch, fullName, nickname,
-    gender, birthdate, cityId,
-    weight, height, reach, wins,
-    losses, draws, weightClasses,
-    photo?.mime, photo?.path, navigation, userId]);
-
-  const onChangeWins = useCallback((text) => {
-    setWins(text.replace(/[^0-9]/g, ''));
-  }, []);
-
-  const onChangeLosses = useCallback((text) => {
-    setLosses(text.replace(/[^0-9]/g, ''));
-  }, []);
-
-  const onChangeDraws = useCallback((text) => {
-    setDraws(text.replace(/[^0-9]/g, ''));
-  }, []);
+    navigation.navigate('FighterRecord', {
+      fullName,
+      nickname,
+      birthdate,
+      cityId,
+      gender,
+      photo: {
+        path: photo?.path,
+        mime: photo?.mime,
+      },
+      weight,
+      height,
+      reach,
+      weightClasses: weightClasses.map(item => item.name),
+    });
+  }, [birthdate, cityId, fullName, gender, height, navigation,
+    nickname, photo, reach, weight, weightClasses]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -227,30 +177,6 @@ function PersonalInfo({ route }) {
 
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View>
-          <View style={styles.record}>
-            <Input
-              value={wins ?? ''}
-              type="number"
-              onChange={onChangeWins}
-              label={t('PersonalInfo.wins')}
-              style={styles.recordInput}
-            />
-            <Input
-              value={losses ?? ''}
-              type="number"
-              onChange={onChangeLosses}
-              label={t('PersonalInfo.losses')}
-              style={styles.recordInput}
-            />
-            <Input
-              value={draws ?? ''}
-              type="number"
-              onChange={onChangeDraws}
-              label={t('PersonalInfo.draws')}
-              style={styles.recordInput}
-            />
-          </View>
-
           <View>
             <Text style={styles.inputLabel}>{t('PersonalInfo.weight')}</Text>
             <TouchableOpacity
@@ -299,10 +225,8 @@ function PersonalInfo({ route }) {
         </View>
 
         <Button
-          title={t('PersonalInfo.submit')}
-          isLoading={isLoading}
-          disabled={!weight || !height || !reach || !weightClasses.length || !wins || !losses
-          || !draws}
+          title={t('PersonalInfo.next')}
+          disabled={!weight || !height || !reach || !weightClasses.length}
           onPress={onNextPress}
         />
       </ScrollView>

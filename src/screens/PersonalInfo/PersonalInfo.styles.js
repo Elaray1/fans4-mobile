@@ -42,13 +42,4 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     fontWeight: fonts.weight.medium,
   },
-  record: {
-    marginBottom: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  recordInput: {
-    width: '30%',
-    borderWidth: 1,
-  },
 });

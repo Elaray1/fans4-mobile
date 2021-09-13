@@ -13,6 +13,7 @@ import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 import UploadingPosts from 'screens/Account/components/Fighter/UploadingPosts';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import { FIGHTER_TYPES } from 'resources/user/user.constants';
 
 import styles from './styles';
 
@@ -28,6 +29,7 @@ function FighterHeader({ postsCount, fansCount, onAddBiographyPress }) {
   const biography = useSelector(userSelectors.getUserBiographyAbout);
   const age = useSelector(userSelectors.getUserAge);
   const profileInfo = useSelector(userSelectors.getUserProfileInfo);
+  const fighterType = useSelector(userSelectors.getUserFighterType);
 
   const onFansPress = useCallback(() => {
     navigation.navigate('Fans');
@@ -42,6 +44,7 @@ function FighterHeader({ postsCount, fansCount, onAddBiographyPress }) {
         nickname={nickname}
         location={hometown}
         fightingStatus={fightingStatus}
+        fighterType={fighterType}
       />
 
       <View style={styles.line} />
@@ -50,7 +53,7 @@ function FighterHeader({ postsCount, fansCount, onAddBiographyPress }) {
         postsCount={postsCount}
         fansCount={fansCount}
         onFansPress={onFansPress}
-        recordCount={profileInfo?.record}
+        recordCount={fighterType === FIGHTER_TYPES.PRO ? profileInfo?.recordPro : profileInfo?.record}
       />
 
       <View style={styles.line} />

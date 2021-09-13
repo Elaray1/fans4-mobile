@@ -36,4 +36,22 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     marginBottom: 6,
   },
+  fighterBadge: {
+    backgroundColor: colors.primaryRed,
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+    position: 'absolute',
+    bottom: -8,
+    left: 14,
+    borderRadius: 5,
+  },
+  fighterBadgeText: {
+    fontFamily: fonts.family.boldItalic,
+    fontWeight: fonts.weight.bold,
+    fontSize: fonts.size.caption,
+  },
+  amateur: {
+    backgroundColor: colors.blueBadge,
+    left: 22,
+  },
 });

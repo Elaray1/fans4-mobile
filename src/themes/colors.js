@@ -19,6 +19,7 @@ const colors = {
 
   link: '#3B89FD',
   backgroundLink: '#151F2C',
+  blueBadge: '#0A5DD8',
 
   baseFont: '#FFFFFF',
   textSecondary: '#8B8E98',

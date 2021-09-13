@@ -22,7 +22,7 @@ import useDidUpdate from 'hooks/useDidUpdate';
 
 
 import * as userSelectors from 'resources/user/user.selectors';
-import { FIGHTING_STATUSES, USER_STATUSES } from 'resources/user/user.constants';
+import { FIGHTING_STATUSES, USER_STATUSES, FIGHTER_TYPES } from 'resources/user/user.constants';
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 
@@ -151,6 +151,7 @@ function Fighter({ fighterId }) {
         location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
         status={fighter.status}
         fightingStatus={fighter.role.fightingStatus}
+        fighterType={fighter.role.fighterType}
       />
 
       <View style={styles.line} />
@@ -188,7 +189,8 @@ function Fighter({ fighterId }) {
         <Statistic
           postsCount={postsCount}
           fansCount={fansCount}
-          recordCount={fighter.role.profile.record}
+          recordCount={fighter.role.fighterType === FIGHTER_TYPES.PRO
+            ? fighter.role.profile.recordPro : fighter.role.profile.record}
         />
       </View>
 

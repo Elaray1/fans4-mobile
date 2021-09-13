@@ -17,7 +17,7 @@ import * as userApi from 'resources/user/user.api';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as fightApi from 'resources/fight/fight.api';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
-import { USER_STATUSES } from 'resources/user/user.constants';
+import { USER_STATUSES, FIGHTER_TYPES } from 'resources/user/user.constants';
 
 import analyticsService from 'services/analytics.service';
 
@@ -104,6 +104,7 @@ function Fighter({ fighterId }) {
               fightingStatus={fighter.status === USER_STATUSES.BLOCKED
                 ? USER_STATUSES.BLOCKED
                 : fighter.role.fightingStatus}
+              fighterType={fighter.role.fighterType}
             />
 
             <View style={[styles.line, styles.lineIndent]} />
@@ -114,7 +115,8 @@ function Fighter({ fighterId }) {
               <Statistic
                 postsCount={postsCount}
                 fansCount={fansCount}
-                recordCount={fighter.role.profile.record}
+                recordCount={fighter.role.fighterType === FIGHTER_TYPES.PRO
+                  ? fighter.role.profile.recordPro : fighter.role.profile.record}
               />
             </View>
 

@@ -6,6 +6,8 @@ const family = {
   // for iOS it should be FontFamily that identical for those both fonts
   base: isIOS ? 'Noto Sans' : 'NotoSans-Regular',
   bold: isIOS ? 'Noto Sans' : 'NotoSans-Bold',
+  italic: 'NotoSans-Italic',
+  boldItalic: 'NotoSans-BoldItalic',
 };
 
 const size = {
@@ -21,6 +23,7 @@ const size = {
   small: 14,
   caption: 12,
   tiny: 10,
+  verySmall: 8,
 };
 
 const weight = {

@@ -146,7 +146,7 @@
     "weightClass": "Weight class",
     "height": "Height",
     "reach": "Reach",
-    "submit": "Submit",
+    "next": "Next",
     "wins": "Wins",
     "losses": "Losses",
     "draws": "Draws"
@@ -343,7 +343,8 @@
     "search": "Search",
     "noFighters": "No fighters, yet",
     "youWillSeeThemHere": "Check back for the full list of fighters.",
-    "checkAllTheLatestNewsFromUs": "Check all the latest news from us!"
+    "checkAllTheLatestNewsFromUs": "Check all the latest news from us!",
+    "p": "P"
   },
   "WeightClassSelectModal": {
     "cancel": "Cancel",
@@ -405,7 +406,9 @@
     "fighterBlocked_0": "You cannot apply for a fight with",
     "fighterBlocked_1": "because this fighter is blocked.",
     "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter.",
-    "checkBack": "Check back to view your fighter's first exclusive post!"
+    "checkBack": "Check back to view your fighter's first exclusive post!",
+    "pro": "Pro Fighter",
+    "amateur": "Amateur"
   },
   "Fans4Account": {
     "profile": "Profile",
@@ -593,5 +596,16 @@
     "description": "Your account is under review. Once status changes to \"Active\", you will be able to receive funds into that account.",
     "linkText": "Done",
     "header": "Finances"
+  },
+  "FighterRecord": {
+    "fighterRecord": "Fighter Record",
+    "proRecord": "Pro record",
+    "amateurRecord": "Amateur record (optional)",
+    "submit": "Submit",
+    "wins": "Wins",
+    "losses": "Losses",
+    "draws": "Draws",
+    "amateur": "Amateur",
+    "pro": "Pro"
   }
 }

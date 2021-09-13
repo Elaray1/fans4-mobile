@@ -11,7 +11,7 @@ import SearchInput from 'components/SearchInput';
 import Text from 'components/Text';
 
 import * as userApi from 'resources/user/user.api';
-import { USER_TYPES } from 'resources/user/user.constants';
+import { FIGHTER_TYPES, USER_TYPES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import { toFixLength } from 'helpers/modifyText';
@@ -146,6 +146,12 @@ function SearchFighters() {
             style={styles.fighterImage}
             source={{ uri: item.avatarUrl }}
           />
+          {item.role.fighterType === FIGHTER_TYPES.PRO
+          && (
+          <View style={styles.proBadge}>
+            <Text style={styles.proBadgeText}>{t('SearchFighters.p')}</Text>
+          </View>
+          )}
           <View>
             <Text style={styles.fullName}>{item.fullName}</Text>
             {nickname && (

@@ -20,6 +20,11 @@ export const FIGHTER_GENDERS = {
   MALE: 'male',
 };
 
+export const FIGHTER_TYPES = {
+  PRO: 'pro',
+  AMATEUR: 'amateur',
+};
+
 export const FAN_GENDERS = {
   MALE: 'male',
   FEMALE: 'female',

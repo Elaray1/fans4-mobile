@@ -94,4 +94,20 @@ export default StyleSheet.create({
     fontSize: fonts.size.caption,
     color: colors.textSecondary,
   },
+  proBadge: {
+    backgroundColor: colors.primaryRed,
+    height: 14,
+    width: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    borderRadius: 4,
+    top: 2,
+    left: 42,
+  },
+  proBadgeText: {
+    fontSize: fonts.size.verySmall,
+    fontFamily: fonts.family.boldItalic,
+    fontWeight: fonts.weight.bold,
+  },
 });

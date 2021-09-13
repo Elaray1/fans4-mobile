@@ -119,9 +119,13 @@ export const fillRegistrationForm = ({
   weight,
   height,
   reach,
+  fighterType,
   wins,
   losses,
   draws,
+  winsPro,
+  lossesPro,
+  drawsPro,
   weightClasses,
   avatar,
 }) => async (dispatch) => {
@@ -134,9 +138,13 @@ export const fillRegistrationForm = ({
     weight,
     height,
     reach,
+    fighterType,
     wins,
     losses,
     draws,
+    winsPro,
+    lossesPro,
+    drawsPro,
     weightClasses,
   }, avatar);
 
