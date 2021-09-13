@@ -654,20 +654,20 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
-				DEVELOPMENT_TEAM = LPL8LR83TR;
+				CURRENT_PROJECT_VERSION = 86;
+				DEVELOPMENT_TEAM = TC6636PQ6N;
 				INFOPLIST_FILE = fans4/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.25;
+				MARKETING_VERSION = 1.8.26;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.paralect.fans4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fans4.app;
 				PRODUCT_NAME = fans4;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=*]" = "";
@@ -709,21 +709,21 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
-				DEVELOPMENT_TEAM = LPL8LR83TR;
+				CURRENT_PROJECT_VERSION = 86;
+				DEVELOPMENT_TEAM = TC6636PQ6N;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = fans4/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.25;
+				MARKETING_VERSION = 1.8.26;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.paralect.fans4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fans4.app;
 				PRODUCT_NAME = fans4;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -741,20 +741,20 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
-				DEVELOPMENT_TEAM = LPL8LR83TR;
+				CURRENT_PROJECT_VERSION = 86;
+				DEVELOPMENT_TEAM = TC6636PQ6N;
 				INFOPLIST_FILE = fans4/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.25;
+				MARKETING_VERSION = 1.8.26;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.paralect.fans4;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fans4.app;
 				PRODUCT_NAME = fans4;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=*]" = "";
