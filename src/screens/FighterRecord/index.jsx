@@ -25,12 +25,16 @@ const FighterRecord = ({ route }) => {
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [wins, setWins] = useState(null);
-  const [losses, setLosses] = useState(null);
-  const [draws, setDraws] = useState(null);
-  const [winsPro, setWinsPro] = useState(null);
-  const [lossesPro, setLossesPro] = useState(null);
-  const [drawsPro, setDrawsPro] = useState(null);
+  const [record, setRecord] = useState({
+    wins: '',
+    losses: '',
+    draws: '',
+  });
+  const [recordPro, setRecordPro] = useState({
+    wins: '',
+    losses: '',
+    draws: '',
+  });
   const [type, setType] = useState(FIGHTER_TYPES.AMATEUR);
 
   const userId = useSelector(userSelectors.getUserId);
@@ -53,33 +57,27 @@ const FighterRecord = ({ route }) => {
     weightClasses,
   } = route?.params;
 
-  const isDisabled = (type === FIGHTER_TYPES.AMATEUR)
-    ? (!wins || !draws || !losses)
-    : (!winsPro || !drawsPro || !lossesPro);
+  const isDisabled = useMemo(() => {
+    return (type === FIGHTER_TYPES.AMATEUR)
+      ? (!record.wins || !record.draws || !record.losses)
+      : (!recordPro.wins || !recordPro.draws || !recordPro.losses);
+  }, [record.draws, record.losses, record.wins, recordPro.draws, recordPro.losses, recordPro.wins, type]);
 
-  const onChangeWins = useCallback((text) => {
-    setWins(text.replace(/[^0-9]/g, ''));
-  }, []);
+  const onRecordChange = useCallback((text, field) => {
+    const rec = {
+      ...record,
+      [field]: text.replace(/[^0-9]/g, text),
+    };
+    setRecord(rec);
+  }, [record]);
 
-  const onChangeLosses = useCallback((text) => {
-    setLosses(text.replace(/[^0-9]/g, ''));
-  }, []);
-
-  const onChangeDraws = useCallback((text) => {
-    setDraws(text.replace(/[^0-9]/g, ''));
-  }, []);
-
-  const onChangeWinsPro = useCallback((text) => {
-    setWinsPro(text.replace(/[^0-9]/g, ''));
-  }, []);
-
-  const onChangeLossesPro = useCallback((text) => {
-    setLossesPro(text.replace(/[^0-9]/g, ''));
-  }, []);
-
-  const onChangeDrawsPro = useCallback((text) => {
-    setDrawsPro(text.replace(/[^0-9]/g, ''));
-  }, []);
+  const onRecordProChange = useCallback((text, field) => {
+    const rec = {
+      ...recordPro,
+      [field]: text.replace(/[^0-9]/g, text),
+    };
+    setRecordPro(rec);
+  }, [recordPro]);
 
   const onToggleSelect = useCallback((item) => {
     setType(item.id);
@@ -98,12 +96,12 @@ const FighterRecord = ({ route }) => {
         height,
         reach,
         fighterType: type,
-        wins,
-        losses,
-        draws,
-        winsPro,
-        lossesPro,
-        drawsPro,
+        wins: record.wins,
+        losses: record.losses,
+        draws: record.draws,
+        winsPro: recordPro.wins,
+        lossesPro: recordPro.losses,
+        drawsPro: recordPro.draws,
         weightClasses,
         avatar: {
           name: 'image',
@@ -122,12 +120,12 @@ const FighterRecord = ({ route }) => {
       navigation.navigate('TermsOfUse');
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }, [dispatch, fullName, nickname, gender, birthdate,
-    cityId, weight, height, reach, type, wins, losses,
-    draws, winsPro, lossesPro, drawsPro, weightClasses,
+    cityId, weight, height, reach, type, record.wins,
+    record.losses, record.draws, recordPro.wins,
+    recordPro.losses, recordPro.draws, weightClasses,
     photo?.mime, photo?.path, userId, navigation]);
 
   return (
@@ -144,23 +142,23 @@ const FighterRecord = ({ route }) => {
             <><Text style={styles.text}>{t('FighterRecord.proRecord')}</Text>
               <View style={styles.record}>
                 <Input
-                  value={winsPro ?? ''}
+                  value={recordPro.wins}
                   type="number"
-                  onChange={onChangeWinsPro}
+                  onChange={text => onRecordProChange(text, 'wins')}
                   label={t('FighterRecord.wins')}
                   style={styles.recordInput}
                 />
                 <Input
-                  value={lossesPro ?? ''}
+                  value={recordPro.losses}
                   type="number"
-                  onChange={onChangeLossesPro}
+                  onChange={text => onRecordProChange(text, 'losses')}
                   label={t('FighterRecord.losses')}
                   style={styles.recordInput}
                 />
                 <Input
-                  value={drawsPro ?? ''}
+                  value={recordPro.draws}
                   type="number"
-                  onChange={onChangeDrawsPro}
+                  onChange={text => onRecordProChange(text, 'draws')}
                   label={t('FighterRecord.draws')}
                   style={styles.recordInput}
                 />
@@ -170,23 +168,23 @@ const FighterRecord = ({ route }) => {
           )}
           <View style={styles.record}>
             <Input
-              value={wins ?? ''}
+              value={record.wins}
               type="number"
-              onChange={onChangeWins}
+              onChange={text => onRecordChange(text, 'wins')}
               label={t('FighterRecord.wins')}
               style={styles.recordInput}
             />
             <Input
-              value={losses ?? ''}
+              value={record.losses}
               type="number"
-              onChange={onChangeLosses}
+              onChange={text => onRecordChange(text, 'losses')}
               label={t('FighterRecord.losses')}
               style={styles.recordInput}
             />
             <Input
-              value={draws ?? ''}
+              value={record.draws}
               type="number"
-              onChange={onChangeDraws}
+              onChange={text => onRecordChange(text, 'draws')}
               label={t('FighterRecord.draws')}
               style={styles.recordInput}
             />
