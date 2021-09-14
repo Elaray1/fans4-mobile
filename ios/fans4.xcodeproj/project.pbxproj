@@ -12,12 +12,12 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		4E018D3E96C118CFDF997C87 /* libPods-fans4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91247A77CB5989263595F6A4 /* libPods-fans4.a */; };
+		4E35BFF034EE473D86321E3B /* NotoSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6296309C0A994DC7BEB143F1 /* NotoSans-BoldItalic.ttf */; };
 		63D5C2144E024511AD4A902F /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60E7A83B4D764378BF1387B8 /* NotoSans-Bold.ttf */; };
 		7E6707E4FE3FC481F796F4AE /* libPods-fans4-fans4Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 854115D88383EDB01DFAEE8A /* libPods-fans4-fans4Tests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		F61FA07EEF1D4872B0331DB7 /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A5741374B944335BFB9E535 /* NotoSans-Regular.ttf */; };
 		F22A0C0E981540188EDA4163 /* NotoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37EE8AB64AD640EF916EE0E5 /* NotoSans-Italic.ttf */; };
-		4E35BFF034EE473D86321E3B /* NotoSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6296309C0A994DC7BEB143F1 /* NotoSans-BoldItalic.ttf */; };
+		F61FA07EEF1D4872B0331DB7 /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A5741374B944335BFB9E535 /* NotoSans-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,9 +45,11 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = fans4/main.m; sourceTree = "<group>"; };
 		1A5741374B944335BFB9E535 /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSans-Regular.ttf"; path = "../assets/fonts/NotoSans-Regular.ttf"; sourceTree = "<group>"; };
 		25C750D729DE2443225C8336 /* Pods-fans4.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4.staging.xcconfig"; path = "Target Support Files/Pods-fans4/Pods-fans4.staging.xcconfig"; sourceTree = "<group>"; };
+		37EE8AB64AD640EF916EE0E5 /* NotoSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSans-Italic.ttf"; path = "../assets/fonts/NotoSans-Italic.ttf"; sourceTree = "<group>"; };
 		3BF4A783CDD3F8AFC18A8797 /* Pods-fans4-fans4Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4-fans4Tests.release.xcconfig"; path = "Target Support Files/Pods-fans4-fans4Tests/Pods-fans4-fans4Tests.release.xcconfig"; sourceTree = "<group>"; };
 		4F4054BFF500972123FEEF15 /* Pods-fans4.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4.debug.xcconfig"; path = "Target Support Files/Pods-fans4/Pods-fans4.debug.xcconfig"; sourceTree = "<group>"; };
 		60E7A83B4D764378BF1387B8 /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSans-Bold.ttf"; path = "../assets/fonts/NotoSans-Bold.ttf"; sourceTree = "<group>"; };
+		6296309C0A994DC7BEB143F1 /* NotoSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSans-BoldItalic.ttf"; path = "../assets/fonts/NotoSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		6DEA1402261DBC43000119B3 /* fans4.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = fans4.entitlements; path = fans4/fans4.entitlements; sourceTree = "<group>"; };
 		77FFDCFA00E96E62BA95EDC7 /* Pods-fans4.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4.release.xcconfig"; path = "Target Support Files/Pods-fans4/Pods-fans4.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = fans4/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -56,8 +58,6 @@
 		C938DE5D9946D802E700EEB2 /* Pods-fans4-fans4Tests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4-fans4Tests.staging.xcconfig"; path = "Target Support Files/Pods-fans4-fans4Tests/Pods-fans4-fans4Tests.staging.xcconfig"; sourceTree = "<group>"; };
 		E72F620CC8673E25F2F759AB /* Pods-fans4-fans4Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fans4-fans4Tests.debug.xcconfig"; path = "Target Support Files/Pods-fans4-fans4Tests/Pods-fans4-fans4Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		37EE8AB64AD640EF916EE0E5 /* NotoSans-Italic.ttf */ = {isa = PBXFileReference; name = "NotoSans-Italic.ttf"; path = "../assets/fonts/NotoSans-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		6296309C0A994DC7BEB143F1 /* NotoSans-BoldItalic.ttf */ = {isa = PBXFileReference; name = "NotoSans-BoldItalic.ttf"; path = "../assets/fonts/NotoSans-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -662,14 +662,14 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 86;
+				CURRENT_PROJECT_VERSION = 87;
 				DEVELOPMENT_TEAM = TC6636PQ6N;
 				INFOPLIST_FILE = fans4/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.26;
+				MARKETING_VERSION = 1.8.27;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -717,7 +717,7 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 86;
+				CURRENT_PROJECT_VERSION = 87;
 				DEVELOPMENT_TEAM = TC6636PQ6N;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -726,7 +726,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.26;
+				MARKETING_VERSION = 1.8.27;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -750,14 +750,14 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 86;
+				CURRENT_PROJECT_VERSION = 87;
 				DEVELOPMENT_TEAM = TC6636PQ6N;
 				INFOPLIST_FILE = fans4/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.26;
+				MARKETING_VERSION = 1.8.27;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
