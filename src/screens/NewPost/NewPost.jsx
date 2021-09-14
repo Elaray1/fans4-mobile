@@ -67,20 +67,15 @@ function NewPost() {
   }, [dispatch]);
 
   const submit = useCallback(async () => {
-    const params = { text };
-    if (uploadingMedia) {
-      params.width = uploadingMedia.width.toString();
-      params.height = uploadingMedia.height.toString();
-    }
-
     setLoading(true);
 
     try {
+      const params = {
+        text,
+      };
+
       if (uploadingPoster) {
-        const {
-          postId,
-          storageUrl,
-        } = await postApi.createVideoPoster({}, uploadingPoster && {
+        const { postId, storageUrl } = await postApi.createVideoPoster({}, {
           name: 'file',
           type: uploadingPoster.mime,
           uri: uploadingPoster.path,
@@ -90,17 +85,24 @@ function NewPost() {
         params.posterStorageUrl = storageUrl;
       }
 
-      if (uploadingMedia && uploadingMedia.mime.includes('video')) {
-        params.duration = uploadingMedia.duration.toString();
+      let file = null;
+
+      if (uploadingMedia) {
+        params.width = uploadingMedia.width.toString();
+        params.height = uploadingMedia.height.toString();
+
+        if (uploadingMedia.mime.includes('video')) {
+          params.duration = uploadingMedia.duration.toString();
+        }
+
+        file = {
+          name: 'file',
+          type: uploadingMedia.mime,
+          uri: Platform.OS === 'ios' ? uploadingMedia.path : uploadingMedia.path.replace('file://', ''),
+        };
       }
 
-      const uri = Platform.OS === 'ios' ? uploadingMedia.path : uploadingMedia.path.replace('file://', '');
-
-      await postApi.createPost(params, uploadingMedia && {
-        name: 'file',
-        type: uploadingMedia.mime,
-        uri,
-      }, { onUploadProgress });
+      await postApi.createPost(params, file, { onUploadProgress });
 
       goToAccount();
 

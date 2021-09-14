@@ -16,7 +16,7 @@ import IllustrationScreen from 'components/IllustrationScreen';
 import EmailIllustration from 'assets/illustrations/email';
 
 const handleReceivingResetToken = async ({ resetPasswordToken, userType }) => {
-  rootNavigation.resetToScreen('AppStack', 'ChangePassword', { resetPasswordToken, userType });
+  rootNavigation.resetToScreen('AuthStack', 'ChangePassword', { resetPasswordToken, userType });
 };
 
 function ResetPasswordLink({ route }) {

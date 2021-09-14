@@ -7,6 +7,7 @@ import SignIn from 'screens/SignIn';
 import ForgotPassword from 'screens/ForgotPassword';
 import ResetPasswordLink from 'screens/ResetPasswordLink';
 import PasswordReseted from 'screens/PasswordReseted';
+import ChangePassword from 'screens/ChangePassword';
 
 import colors from 'themes/colors';
 
@@ -29,6 +30,7 @@ function AuthScreens() {
       <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} />
       <AuthStack.Screen name="ResetPasswordLink" component={ResetPasswordLink} />
       <AuthStack.Screen name="PasswordReseted" component={PasswordReseted} />
+      <AuthStack.Screen name="ChangePassword" component={ChangePassword} />
     </AuthStack.Navigator>
   );
 }

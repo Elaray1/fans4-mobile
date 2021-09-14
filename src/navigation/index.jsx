@@ -235,7 +235,6 @@ function AppNavigation() {
     };
   }, [blockAccountIfNeeded, userAuthenticated]);
 
-
   return (
     <ToastProvider placement="top" offset={30}>
       <NavigationContainer
