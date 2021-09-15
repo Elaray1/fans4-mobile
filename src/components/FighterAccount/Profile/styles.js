@@ -1,6 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+
+const isIOS = Platform.OS === 'ios';
 
 export default StyleSheet.create({
   profileBlock: {
@@ -47,7 +49,7 @@ export default StyleSheet.create({
   },
   fighterBadgeText: {
     fontFamily: fonts.family.boldItalic,
-    fontWeight: fonts.weight.bold,
+    ...(isIOS && { fontWeight: fonts.weight.bold }),
     fontSize: fonts.size.caption,
   },
   amateur: {

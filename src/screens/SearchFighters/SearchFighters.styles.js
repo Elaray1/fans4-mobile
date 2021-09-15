@@ -1,7 +1,9 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { commonStyles } from 'themes/commonStyles';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+
+const isIOS = Platform.OS === 'ios';
 
 export default StyleSheet.create({
   screen: {
@@ -108,6 +110,6 @@ export default StyleSheet.create({
   proBadgeText: {
     fontSize: fonts.size.verySmall,
     fontFamily: fonts.family.boldItalic,
-    fontWeight: fonts.weight.bold,
+    ...(isIOS && { fontWeight: fonts.weight.bold }),
   },
 });
