@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+import hexToRgba from 'helpers/hexToRgba';
 
 export default StyleSheet.create({
   biographyBlock: {
@@ -31,14 +32,57 @@ export default StyleSheet.create({
   addBiographyContainter: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 36,
-    paddingBottom: 49,
   },
-  addBiographyText: {
+  addText: {
     color: colors.link,
     fontSize: fonts.size.small,
     lineHeight: fonts.lineHeight.small,
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
+  },
+  addBiographyAndVideoText: {
+    marginTop: 36,
+    marginBottom: 49,
+  },
+  addVideoText: {
+    marginVertical: 32,
+  },
+  addBiographyText: {
+    marginVertical: 24,
+  },
+  loadingPostText: {
+    color: colors.textSecondary,
+    fontSize: fonts.size.caption,
+    fontFamily: fonts.family.medium,
+    fontWeight: fonts.weight.medium,
+  },
+  progressBarContainer: {
+    height: 8,
+    backgroundColor: hexToRgba(colors.primary, 0.15),
+    borderRadius: 4,
+    marginTop: 12,
+  },
+  progressBar: {
+    height: 8,
+    backgroundColor: colors.primary,
+    borderRadius: 4,
+  },
+  tryAgain: {
+    marginRight: 8.5,
+  },
+  uploadFailedText: {
+    marginTop: 5,
+  },
+  tryAgainText: {
+    color: colors.link,
+    fontSize: fonts.size.small,
+    fontWeight: fonts.weight.bold,
+    fontFamily: fonts.family.bold,
+  },
+  uploadingContainer: {
+    marginTop: 10,
+  },
+  introVideo: {
+    marginTop: 14,
   },
 });

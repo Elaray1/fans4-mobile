@@ -19,6 +19,7 @@ function UploadMediaButton({
   label,
   mediaType,
   croppingAvatar,
+  style,
 }) {
   const { t } = useTranslation();
 
@@ -157,7 +158,7 @@ function UploadMediaButton({
       <View>
         <Video source={videoSource} width={media.width} height={media.height} duration={media.duration} />
         <TouchableOpacity
-          style={styles.redBin}
+          style={styles.bin}
           activeOpacity={0.7}
           onPress={onBinPress}
         >
@@ -168,23 +169,25 @@ function UploadMediaButton({
   }
 
   return (
-    <View style={styles.buttonWrapper}>
+    <View style={[styles.buttonWrapper, style]}>
       <Text style={styles.label}>{label}</Text>
       {contentView}
     </View>
   );
 }
 
-UploadMediaButton.defaultProps = {
-  mediaType: MEDIA_TYPES.ANY,
-  croppingAvatar: false,
-};
-
 UploadMediaButton.propTypes = {
   label: PropTypes.string.isRequired,
   handleMediaUpload: PropTypes.func.isRequired,
   mediaType: PropTypes.oneOf([...Object.values(MEDIA_TYPES)]),
   croppingAvatar: PropTypes.bool,
+  style: PropTypes.shape(),
+};
+
+UploadMediaButton.defaultProps = {
+  mediaType: MEDIA_TYPES.ANY,
+  croppingAvatar: false,
+  style: {},
 };
 
 export default React.memo(UploadMediaButton);

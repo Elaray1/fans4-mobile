@@ -21,12 +21,14 @@ function FighterHeader({ postsCount, fansCount, onAddBiographyPress }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
+  const userId = useSelector(userSelectors.getUserId);
   const fullName = useSelector(userSelectors.getUserFullName);
   const nickname = useSelector(userSelectors.getUserNickname);
   const hometown = useSelector(userSelectors.getHometown);
   const fightingStatus = useSelector(userSelectors.getFightingStatus);
   const avatarUrl = useSelector(userSelectors.getAvatarUrl);
   const biography = useSelector(userSelectors.getUserBiographyAbout);
+  const introVideo = useSelector(userSelectors.getUserIntroVideo);
   const age = useSelector(userSelectors.getUserAge);
   const profileInfo = useSelector(userSelectors.getUserProfileInfo);
   const fighterType = useSelector(userSelectors.getUserFighterType);
@@ -59,7 +61,9 @@ function FighterHeader({ postsCount, fansCount, onAddBiographyPress }) {
       <View style={styles.line} />
 
       <Biography
+        userId={userId}
         biography={biography}
+        introVideo={introVideo}
         onAddBiographyPress={onAddBiographyPress}
       />
 

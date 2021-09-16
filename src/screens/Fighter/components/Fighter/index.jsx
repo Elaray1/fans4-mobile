@@ -123,7 +123,9 @@ function Fighter({ fighterId }) {
             <View style={styles.line} />
 
             <Biography
+              userId={fighter._id}
               biography={fighter.role.biography.about}
+              introVideo={fighter.role.biography.introVideo}
             />
 
             <View style={styles.line} />
