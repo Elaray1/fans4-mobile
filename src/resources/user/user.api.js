@@ -132,3 +132,6 @@ export const addIntroVideo = (data, file, { onUploadProgress }) => {
   return apiClient.postWithFileInBackground('users/intro-video', data, file,
     { onUploadProgress });
 };
+
+export const createIntroVideoPoster = (data, file) => apiClient
+  .postWithFile('users/intro-video-poster', data, file);

@@ -20,8 +20,6 @@ import * as userApi from 'resources/user/user.api';
 import * as introVideoSelectors from 'resources/introVideo/introVideo.selectors';
 import * as introVideoActions from 'resources/introVideo/introVideo.actions';
 
-import * as postApi from 'resources/post/post.api';
-
 import { MEDIA_TYPES } from 'components/UploadMediaButton/UploadMediaButton.constants';
 
 import analyticsService from 'services/analytics.service';
@@ -83,7 +81,7 @@ function ChangeBiography() {
       if (uploadingPoster && uploadingMedia) {
         const {
           url,
-        } = await postApi.createVideoPoster({ isForIntroVideo: true }, uploadingPoster && {
+        } = await userApi.createIntroVideoPoster({}, uploadingPoster && {
           name: 'file',
           type: uploadingPoster.mime,
           uri: uploadingPoster.path,
