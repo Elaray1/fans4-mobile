@@ -7,11 +7,11 @@ import NewPost from 'screens/NewPost';
 import SearchFighters from 'screens/SearchFighters';
 import Account from 'screens/Account';
 
-import FightsIcon from 'assets/icons/tab-bar/fights.svg';
 import EventsIcon from 'assets/icons/tab-bar/events.svg';
 import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
 import FightersIcon from 'assets/icons/tab-bar/fighters.svg';
 import AccountIcon from 'assets/icons/tab-bar/account.svg';
+import ActivityIcon from 'assets/icons/tab-bar/activity.svg';
 
 import BottomTabBar from './BottomTabBar';
 
@@ -28,10 +28,21 @@ function FighterTabNavigator() {
       tabBar={renderTabBar}
       lazy={false}
     >
-      <Tab.Screen name="Fights" component={Fights} options={{ icon: FightsIcon }} />
-      <Tab.Screen name="Events" component={Events} options={{ icon: EventsIcon }} />
-      <Tab.Screen name="NewPost" component={NewPost} options={{ icon: NewPostIcon, tabBarVisible: false }} />
       <Tab.Screen name="Fighters" component={SearchFighters} options={{ icon: FightersIcon }} />
+      <Tab.Screen name="Events" component={Events} options={{ icon: EventsIcon }} />
+      <Tab.Screen
+        name="NewPost"
+        component={NewPost}
+        options={{ icon: NewPostIcon,
+          tabBarVisible: false,
+          hideLabel: true,
+        }}
+      />
+      <Tab.Screen
+        name="Activity"
+        component={Fights} // TODO: Replace with activity page
+        options={{ icon: ActivityIcon }}
+      />
       <Tab.Screen name="Account" component={Account} options={{ icon: AccountIcon }} />
     </Tab.Navigator>
   );

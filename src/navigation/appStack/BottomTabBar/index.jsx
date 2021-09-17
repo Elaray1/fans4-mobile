@@ -34,10 +34,12 @@ const TabBarRoute = React.memo(({ navigation, route, index, state, descriptors }
         icon={options.icon}
         focused={isFocused}
       />
-
+      {!options.hideLabel
+      && (
       <Text style={[styles.buttonText, isFocused && styles.focused]}>
         {label}
       </Text>
+      )}
     </TouchableOpacity>
   );
 });
