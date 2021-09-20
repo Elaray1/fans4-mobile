@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Events from 'screens/Events';
@@ -12,6 +13,9 @@ import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
 import FightersIcon from 'assets/icons/tab-bar/fighters.svg';
 import AccountIcon from 'assets/icons/tab-bar/account.svg';
 import ActivityIcon from 'assets/icons/tab-bar/activity.svg';
+import UnreadActivityIcon from 'assets/icons/tab-bar/unread-activity.svg';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import BottomTabBar from './BottomTabBar';
 
@@ -22,6 +26,8 @@ function renderTabBar(props) {
 }
 
 function FighterTabNavigator() {
+  const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
+
   return (
     <Tab.Navigator
       initialRouteName="Account"
@@ -41,7 +47,7 @@ function FighterTabNavigator() {
       <Tab.Screen
         name="Activity"
         component={Activity}
-        options={{ icon: ActivityIcon }}
+        options={{ icon: isUnreadActivities ? UnreadActivityIcon : ActivityIcon }}
       />
       <Tab.Screen name="Account" component={Account} options={{ icon: AccountIcon }} />
     </Tab.Navigator>
