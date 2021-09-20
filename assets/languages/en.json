@@ -213,7 +213,7 @@
     "save": "Save",
     "biography": "Biography (max. 300 characters)",
     "updated": "Biography updated successfully.",
-    "introVideo": "Intro Video",
+    "introVideo": "Intro Video"
   },
   "AccountInformation": {
     "accountInformation": "Account Information",
@@ -612,5 +612,21 @@
     "draws": "Draws",
     "amateur": "Amateur",
     "pro": "Pro"
+  },
+  "Activity": {
+    "activity": "Activity",
+    "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh.",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "thisWeek": "This week",
+    "thisMonth": "This month",
+    "noActivityHereYet": "No activity here yet...",
+    "createPostToSeeFeedbackFromPeople": "Create post to see feedback from people."
+  },
+  "ActivityItem": {
+    "becameYourFan": "became your fan!",
+    "sayHi": "Say hi!",
+    "commented": "commented:",
+    "likedYourPost": "liked your post"
   }
 }

@@ -144,8 +144,11 @@ function Comments({ route }) {
       setCommentValue('');
       setComments([comment, ...comments]);
 
-      onUpdateCommentsCount(postId);
+      if (onUpdateCommentsCount) {
+        onUpdateCommentsCount(postId);
+      }
 
+      // TODO: need to change this logic, because fighters can leave comments too
       analyticsService.logEvent({
         name: analyticsService.events.FAN_SENT_POST_COMMENT,
         data: {
