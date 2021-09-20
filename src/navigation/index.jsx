@@ -137,6 +137,10 @@ const handleFanSubscriptionsUpdated = (user) => {
   store.dispatch(userActions.setUserData(user));
 };
 
+const handleUserActivityIndicatorUpdated = (user) => {
+  store.dispatch(userActions.setUserData(user));
+};
+
 const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
     rootNavigation.navigate('Account');
@@ -177,6 +181,7 @@ function AppNavigation() {
         socketsService.on('user:status-updated', handleUserStatusUpdated);
         socketsService.on('fighter:updated', handleFighterUpdated);
         socketsService.on('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
+        socketsService.on('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
 
         pushNotificationService.startNotificationHandling(pushNotificationHandlersByType);
       } else {
@@ -184,6 +189,7 @@ function AppNavigation() {
         socketsService.removeListener('user:status-updated', handleUserStatusUpdated);
         socketsService.removeListener('fighter:updated', handleFighterUpdated);
         socketsService.removeListener('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
+        socketsService.removeListener('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
       }
     };
 

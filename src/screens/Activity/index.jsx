@@ -2,10 +2,14 @@ import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, Platform,
 } from 'react-native';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import * as activityApi from 'resources/activity/activity.api';
+import * as activityActions from 'resources/activity/activity.actions';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import NoAcitivtiesIllustration from 'assets/illustrations/no-events.svg';
 
@@ -25,6 +29,10 @@ const PER_PAGE_COUNT = 20;
 function Activity() {
   const { t } = useTranslation();
   const { showFailure } = useToast();
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+
+  const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
 
   const [activities, setActivities] = useState({
     today: [],
@@ -87,6 +95,16 @@ function Activity() {
     await fetchNewItems({ refresh: true });
     setIsRefreshing(false);
   }, [fetchNewItems]);
+
+  useEffect(() => {
+    const readActivities = async () => {
+      await dispatch(activityActions.readActivities());
+    };
+
+    if (isUnreadActivities && isFocused) {
+      readActivities();
+    }
+  }, [dispatch, isUnreadActivities, isFocused]);
 
   useEffect(() => {
     const fetchActivities = async () => {

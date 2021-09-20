@@ -148,19 +148,20 @@ function Comments({ route }) {
         onUpdateCommentsCount(postId);
       }
 
-      // TODO: need to change this logic, because fighters can leave comments too
-      analyticsService.logEvent({
-        name: analyticsService.events.FAN_SENT_POST_COMMENT,
-        data: {
-          userId,
-          postId,
-        },
-      });
+      if (userType === USER_TYPES.FAN) {
+        analyticsService.logEvent({
+          name: analyticsService.events.FAN_SENT_POST_COMMENT,
+          data: {
+            userId,
+            postId,
+          },
+        });
+      }
     } catch (error) {
       showFailure();
     }
     setIsButtonDisabled(false);
-  }, [showFailure, postId, commentValue, comments, userId, onUpdateCommentsCount]);
+  }, [showFailure, postId, commentValue, comments, userId, onUpdateCommentsCount, userType]);
 
   useEffect(() => {
     const fetchComments = async () => {
