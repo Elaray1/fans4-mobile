@@ -1,11 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Fights from 'screens/Fights';
 import Events from 'screens/Events';
 import NewPost from 'screens/NewPost';
 import SearchFighters from 'screens/SearchFighters';
 import Account from 'screens/Account';
+import Activity from 'screens/Activity';
 
 import EventsIcon from 'assets/icons/tab-bar/events.svg';
 import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
@@ -40,7 +40,7 @@ function FighterTabNavigator() {
       />
       <Tab.Screen
         name="Activity"
-        component={Fights} // TODO: Replace with activity page
+        component={Activity}
         options={{ icon: ActivityIcon }}
       />
       <Tab.Screen name="Account" component={Account} options={{ icon: AccountIcon }} />
