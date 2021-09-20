@@ -40,7 +40,7 @@ jobs:
       - name: Distribute app via Firebase App Distribution
         env:
           firebaseToken: ${{ secrets.FIREBASE_TOKEN }}
-          firebaseGroups: default
+          firebaseGroups: 'default, fighters'
           firebaseAppId: ${{ secrets.FIREBASE_ANDROID_APP_ID_PRODUCTION }}
           notes: ${{ github.event.head_commit.message }}
         run: |
