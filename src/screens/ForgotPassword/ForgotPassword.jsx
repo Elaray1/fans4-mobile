@@ -44,7 +44,7 @@ function ForgotPassword({ route }) {
 
     try {
       await userApi.forgotPassword({ email, deviceId, userType });
-      navigation.navigate('ResetPasswordLink', { email });
+      navigation.navigate('ResetPasswordLink', { email, userType });
     } catch (error) {
       console.error(error);
       showFailure();
