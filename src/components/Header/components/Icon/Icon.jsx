@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import BackArrowIcon from 'assets/icons/back-arrow';
 import MenuIcon from 'assets/icons/menu';
+import DotsIcon from 'assets/icons/dots';
+
 
 import { ITEM_TYPES } from 'components/Header/Header.constants';
 
@@ -33,6 +35,9 @@ function Icon({
     case ITEM_TYPES.ICON:
       IconItem = icon;
       break;
+    case ITEM_TYPES.DOTS:
+      IconItem = DotsIcon;
+      break;
     default:
       break;
   }
@@ -54,7 +59,7 @@ Icon.propTypes = {
   icon: PropTypes.func,
   onPress: PropTypes.func,
   style: PropTypes.shape(),
-  type: PropTypes.oneOf([ITEM_TYPES.BACK_ARROW, ITEM_TYPES.MENU, ITEM_TYPES.ICON]),
+  type: PropTypes.oneOf([ITEM_TYPES.BACK_ARROW, ITEM_TYPES.MENU, ITEM_TYPES.DOTS, ITEM_TYPES.ICON]),
 };
 
 Icon.defaultProps = {

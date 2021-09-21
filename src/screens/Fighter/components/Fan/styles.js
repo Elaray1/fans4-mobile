@@ -29,17 +29,6 @@ export default StyleSheet.create({
   loader: {
     paddingVertical: 10,
   },
-  applyButton: {
-    height: 40,
-  },
-  subscribedButton: {
-    height: 40,
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  noMargin: {
-    marginBottom: 0,
-  },
   loaderWrapper: {
     flex: 1,
     justifyContent: 'center',
@@ -60,12 +49,26 @@ export default StyleSheet.create({
     color: colors.grayText,
     marginBottom: 16,
   },
-  blockedSupportedFighterText: {
-    color: colors.grayText,
-    fontWeight: fonts.weight.medium,
-    fontSize: fonts.size.caption,
-  },
+
   subscribeButton: {
     height: 40,
+  },
+  processingIosPurchaseModalContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.black,
+  },
+  processingIosPurchaseTitle: {
+    marginTop: 40,
+    fontSize: fonts.size.regular,
+    color: colors.white,
+    fontWeight: fonts.weight.bold,
+    marginBottom: 20,
+  },
+  processingIosPurchaseInfoText: {
+    fontSize: fonts.size.small,
+    color: colors.grayText,
+    fontWeight: fonts.weight.medium,
   },
 });

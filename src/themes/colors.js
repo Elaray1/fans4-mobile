@@ -14,6 +14,7 @@ const colors = {
   errorText: '#da8230',
   errorContainer: '#FF000029', // check
   errorBackground: 'rgba(218, 130, 48, 0.12);',
+  errorBackground2: 'rgba(218, 130, 48, 0.15);',
 
   primaryRed: '#F34C4C',
 

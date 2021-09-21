@@ -12,8 +12,8 @@ import ArrowDownIcon from 'assets/icons/arrow-down';
 import Text from 'components/Text';
 import Video from 'components/Video';
 
-import * as introVideoActions from 'resources/introVideo/introVideo.actions';
-import * as introVideoSelectors from 'resources/introVideo/introVideo.selectors';
+import * as introVideoActions from 'store/introVideo/introVideo.actions';
+import * as introVideoSelectors from 'store/introVideo/introVideo.selectors';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userApi from 'resources/user/user.api';

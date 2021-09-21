@@ -347,16 +347,6 @@ function Finances() {
 
   const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
 
-  const BankModal = useMemo(() => {
-    return (
-      <BankAccountModal
-        visible={isBankAccountModal}
-        onClose={onChangeBankAccountModalVisibility}
-        onUpdateBankAccount={updateBankAccount}
-        onDeleteBankAccount={deleteWithdrawalMethod}
-      />
-    );
-  }, [deleteWithdrawalMethod, updateBankAccount, isBankAccountModal, onChangeBankAccountModalVisibility]);
 
   const webViewStateChangeProps = useMemo(() => (Platform.OS === 'ios'
     ? { onShouldStartLoadWithRequest: onWebViewStateChange }
@@ -375,7 +365,12 @@ function Finances() {
         />
       )}
 
-      {BankModal}
+      <BankAccountModal
+        visible={isBankAccountModal}
+        onClose={onChangeBankAccountModalVisibility}
+        onUpdateBankAccount={updateBankAccount}
+        onDeleteBankAccount={deleteWithdrawalMethod}
+      />
 
       <SafeAreaView style={styles.screen}>
         {webViewUrl && (
