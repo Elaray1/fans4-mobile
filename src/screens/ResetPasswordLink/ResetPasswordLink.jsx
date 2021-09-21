@@ -15,6 +15,8 @@ import IllustrationScreen from 'components/IllustrationScreen';
 
 import EmailIllustration from 'assets/illustrations/email';
 
+import { USER_TYPES } from 'resources/user/user.constants';
+
 const handleReceivingResetToken = async ({ resetPasswordToken, userType }) => {
   rootNavigation.resetToScreen('AuthStack', 'ChangePassword', { resetPasswordToken, userType });
 };
@@ -26,16 +28,14 @@ function ResetPasswordLink({ route }) {
 
   const checkTokenIntervalTimerRef = useRef();
 
-  const { email } = route.params;
+  const { email, userType } = route.params;
 
   const checkToken = useCallback(async () => {
     let resetPasswordToken;
-    let userType;
 
     try {
-      const res = await userApi.getPasswordResetToken({ deviceId: getMaskedDeviceId() });
+      const res = await userApi.getPasswordResetToken({ deviceId: getMaskedDeviceId(), email, userType });
       resetPasswordToken = res && res.resetPasswordToken;
-      userType = res && res.userType;
     } catch (err) {
       console.error('getting password reset token error:', err);
     }
@@ -44,7 +44,7 @@ function ResetPasswordLink({ route }) {
       handleReceivingResetToken({ resetPasswordToken, userType });
       clearInterval(checkTokenIntervalTimerRef.current);
     }
-  }, []);
+  }, [email, userType]);
 
   useEffect(() => {
     checkTokenIntervalTimerRef.current = setInterval(checkToken, 3000);
@@ -96,6 +96,7 @@ ResetPasswordLink.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       email: PropTypes.string.isRequired,
+      userType: PropTypes.oneOf(Object.values(USER_TYPES)).isRequired,
     }),
   }).isRequired,
 };

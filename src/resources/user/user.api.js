@@ -125,8 +125,8 @@ export const hideBankAccountWarning = () => apiClient
 export const suggestFight = ({ firstFighterId, secondFighterId }) => apiClient
   .post('fights/suggest', { firstFighterId, secondFighterId });
 
-export const getPasswordResetToken = ({ deviceId }) => apiClient
-  .get('users/password-reset-token-checking', { deviceId });
+export const getPasswordResetToken = ({ deviceId, email }) => apiClient
+  .get('users/password-reset-token-checking', { deviceId, email });
 
 export const addIntroVideo = (data, file, { onUploadProgress }) => {
   return apiClient.postWithFileInBackground('users/intro-video', data, file,
