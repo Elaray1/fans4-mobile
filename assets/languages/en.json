@@ -1,4 +1,7 @@
 {
+  "AppStack": {
+    "iosPaymentFailedBanner": "Subscription payment failed. Check your payment card or your subscription will be terminated."
+  },
   "AuthAppLoader": {
     "searchByFighterName": "Search by fighter's name",
     "yourSearchDidNotMatchAnyFighters": "Your search did not match any fighters.",
@@ -87,7 +90,6 @@
       "buttonText": "Next"
     }
   },
-
   "OnBoarding2": {
     "fan": {
       "title": "Create a pairing",
@@ -414,7 +416,26 @@
     "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter.",
     "checkBack": "Check back to view your fighter's first exclusive post!",
     "pro": "Pro Fighter",
-    "amateur": "Amateur"
+    "amateur": "Amateur",
+    "subscriptionCongratulation": "Congratulations!",
+    "accessToContent": "You now have access to exclusive content.",
+    "subscriptionPossibility1": "Full access to fighters’ content",
+    "subscriptionPossibility2": "Proposing fighter matchups",
+    "subscriptionPossibility3": "Voting them in for the next live event",
+    "subscriptionPossibility4": "Exclusive live-streaming events",
+    "maxInAppSubscriptions": "You have maximum number of in-app subscriptions",
+    "done": "Done",
+    "processingIosPurchaseTitle": "Processing...",
+    "processingIosPurchaseInfoText1": "We are processing your subscription.",
+    "processingIosPurchaseInfoText2": "Please wait.",
+    "unsubscribe": "Unsubscribe",
+    "noPossibilityToUnsubscribeInApp": "No possibility to unsubscribe from this fighter in the app.",
+    "ok": "OK",
+    "youSubscribedToThisFighterInIos": "You subscribed to this fighter in iOS mobile app. Please go to Apple subscriptions to unsubscribe",
+    "unsubscribeText1": "Your subscription for the ",
+    "unsubscribeText2": " fighter will be cancelled, but you can see content until ",
+    "keepIt": "Keep it",
+    "youWillBeRedirectedToResubscribeTo": "You will be redirected to ios settings to resubscribe to the "
   },
   "Fans4Account": {
     "profile": "Profile",

@@ -51,3 +51,8 @@ export const FIGHTER_WEIGHT_CATEGORIES = {
   HEAVYWEIGHT: 'Heavyweight',
   SUPER_HEAVYWEIGHT: 'Super Heavyweight',
 };
+
+export const SUBSCRIPTION_PLATFORMS = {
+  WEB: 'web',
+  IOS: 'ios',
+};

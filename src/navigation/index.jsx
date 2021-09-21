@@ -37,7 +37,6 @@ import colors from 'themes/colors';
 import AppScreens from './appStack';
 import AuthScreens from './authStack';
 
-import { InAppPurchaseState } from 'expo-in-app-purchases';
 
 const NAVIGATOR_CONTAINER_THEME = {
   colors: {
@@ -134,6 +133,10 @@ const handleUserStatusUpdated = (user) => {
   rootNavigation.resetToScreen('AppStack', screen);
 };
 
+const handleUserUpdated = (user) => {
+  store.dispatch(userActions.setUserData(user));
+};
+
 const handleFighterUpdated = (user) => {
   store.dispatch(userActions.setUserData(user));
 };
@@ -145,6 +148,16 @@ const handleFanSubscriptionsUpdated = (user) => {
 const handleUserActivityIndicatorUpdated = (user) => {
   store.dispatch(userActions.setUserData(user));
 };
+
+AppState.addEventListener('change', async (appState) => {
+  if (appState === 'active') {
+    try {
+      await store.dispatch(userActions.getUserData());
+    } catch (err) {
+      console.error('Failed updating user after app went to foreground', err);
+    }
+  }
+});
 
 const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
@@ -187,14 +200,17 @@ function AppNavigation() {
         socketsService.on('fighter:updated', handleFighterUpdated);
         socketsService.on('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
         socketsService.on('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
+        socketsService.on('user:updated', handleUserUpdated);
 
         pushNotificationService.startNotificationHandling(pushNotificationHandlersByType);
       } else {
         pushNotificationService.stopNotificationHandling();
+
         socketsService.removeListener('user:status-updated', handleUserStatusUpdated);
         socketsService.removeListener('fighter:updated', handleFighterUpdated);
         socketsService.removeListener('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
         socketsService.removeListener('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
+        socketsService.removeListener('user:updated', handleUserUpdated);
       }
     };
 
@@ -206,35 +222,37 @@ function AppNavigation() {
       try {
         await inAppPurhaseService.connect();
       } catch (err) {
-        console.log('in app purchases conncetion error', err);
+        console.log('in app purchases connection error', err);
         return;
       }
 
-      inAppPurhaseService.setPurchaseListener(async (iapResponse) => {
-        dispatch(purchasesActions.finishPurchaseProcessing());
+      inAppPurhaseService.setPurchaseListener(async (purchase) => {
+        const metadata = await inAppPurhaseService.getSavedPurchaseMetadata(purchase.productId);
 
-        if (!inAppPurhaseService.checkIfPurchaseResponseIsSuccessfull(iapResponse)) {
-          return;
-        }
+        let user;
 
-        const [purchase] = iapResponse.results;
-
-        if (purchase) {
-          const metadata = await inAppPurhaseService.getSavedPurchaseMetadata(purchase.productId);
-
-          const user = await paymentApi.verifyAppleReceipt({
+        try {
+          user = await paymentApi.verifyAppleReceipt({
             productId: purchase.productId,
             receipt: purchase.transactionReceipt,
             fighterId: metadata.fighterId,
           });
-
-          userActions.setUserData(user);
-
-          if (!purchase.acknowledged) {
-            await inAppPurhaseService.finishTransaction(purchase);
-            await inAppPurhaseService.removeSavedPurchaseMetadata(purchase.productId);
-          }
+        } catch (err) {
+          await inAppPurhaseService.finishMakingPurchase(purchase);
+          dispatch(purchasesActions.finishPurchaseProcessing());
+          console.error('verifyAppleReceipt error:', err);
+          return;
         }
+
+        dispatch(userActions.setUserData(user));
+        dispatch(purchasesActions.finishPurchaseProcessing());
+
+        await inAppPurhaseService.finishMakingPurchase(purchase);
+      });
+
+      inAppPurhaseService.setPurchaseErrorListener((err) => {
+        console.error('in app purchases error:', err);
+        dispatch(purchasesActions.finishPurchaseProcessing());
       });
     };
 

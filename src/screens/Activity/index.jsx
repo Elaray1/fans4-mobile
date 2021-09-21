@@ -20,7 +20,6 @@ import Text from 'components/Text';
 import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
-import store from 'resources/store';
 
 import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
 
@@ -45,6 +44,7 @@ function Activity() {
     thisWeek: [],
     thisMonth: [],
   });
+
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
   const [isFiltersOpened, setIsFiltersOpened] = useState(false);
@@ -116,7 +116,7 @@ function Activity() {
     const readActivities = async () => {
       const user = await activityApi.readActivities();
 
-      store.dispatch(userActions.setUserData(user));
+      dispatch(userActions.setUserData(user));
     };
 
     if (isUnreadActivities && isFocused) {

@@ -19,6 +19,7 @@ function IllustrationScreen({
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+
       {onBackButtonPress && (
       <TouchableOpacity style={styles.backArrow} onPress={onBackButtonPress}>
         <BackArrowIcon />

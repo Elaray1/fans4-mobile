@@ -4,10 +4,6 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-#import <UMCore/UMModuleRegistry.h>
-#import <UMReactNativeAdapter/UMNativeModulesProxy.h>
-#import <UMReactNativeAdapter/UMModuleRegistryAdapter.h>
-
 #import <React/RCTLinkingManager.h>
 #import "RNSplashScreen.h"
 #import "RNFBMessagingModule.h"
@@ -16,40 +12,32 @@
 #import <RNCPushNotificationIOS.h>
 #import <VydiaRNFileUploader.h>
 
-#ifdef FB_SONARKIT_ENABLED
-#import <FlipperKit/FlipperClient.h>
-#import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
-#import <FlipperKitUserDefaultsPlugin/FKUserDefaultsPlugin.h>
-#import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
-#import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
-#import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
+// #ifdef FB_SONARKIT_ENABLED
+// #import <FlipperKit/FlipperClient.h>
+// #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
+// #import <FlipperKitUserDefaultsPlugin/FKUserDefaultsPlugin.h>
+// #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
+// #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
+// #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 
-static void InitializeFlipper(UIApplication *application) {
-  FlipperClient *client = [FlipperClient sharedClient];
-  SKDescriptorMapper *layoutDescriptorMapper = [[SKDescriptorMapper alloc] initWithDefaults];
-  [client addPlugin:[[FlipperKitLayoutPlugin alloc] initWithRootNode:application withDescriptorMapper:layoutDescriptorMapper]];
-  [client addPlugin:[[FKUserDefaultsPlugin alloc] initWithSuiteName:nil]];
-  [client addPlugin:[FlipperKitReactPlugin new]];
-  [client addPlugin:[[FlipperKitNetworkPlugin alloc] initWithNetworkAdapter:[SKIOSNetworkAdapter new]]];
-  [client start];
-}
-#endif
-
-@interface AppDelegate () <RCTBridgeDelegate>
- 
-@property (nonatomic, strong) UMModuleRegistryAdapter *moduleRegistryAdapter;
- 
-@end
+// static void InitializeFlipper(UIApplication *application) {
+//   FlipperClient *client = [FlipperClient sharedClient];
+//   SKDescriptorMapper *layoutDescriptorMapper = [[SKDescriptorMapper alloc] initWithDefaults];
+//   [client addPlugin:[[FlipperKitLayoutPlugin alloc] initWithRootNode:application withDescriptorMapper:layoutDescriptorMapper]];
+//   [client addPlugin:[[FKUserDefaultsPlugin alloc] initWithSuiteName:nil]];
+//   [client addPlugin:[FlipperKitReactPlugin new]];
+//   [client addPlugin:[[FlipperKitNetworkPlugin alloc] initWithNetworkAdapter:[SKIOSNetworkAdapter new]]];
+//   [client start];
+// }
+// #endif
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#ifdef FB_SONARKIT_ENABLED
-  InitializeFlipper(application);
-#endif
-
-  self.moduleRegistryAdapter = [[UMModuleRegistryAdapter alloc] initWithModuleRegistryProvider:[[UMModuleRegistryProvider alloc] init]];
+// #ifdef FB_SONARKIT_ENABLED
+//   InitializeFlipper(application);
+// #endif
 
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
@@ -73,21 +61,12 @@ static void InitializeFlipper(UIApplication *application) {
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
 
-  [super application:application didFinishLaunchingWithOptions:launchOptions];
-
   // Define UNUserNotificationCenter
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
 
   [RNSplashScreen show];
   return YES;
-}
-
-- (NSArray<id<RCTBridgeModule>> *)extraModulesForBridge:(RCTBridge *)bridge
-{
-    NSArray<id<RCTBridgeModule>> *extraModules = [_moduleRegistryAdapter extraModulesForBridge:bridge];
-    // If you'd like to export some custom RCTBridgeModules that are not Expo modules, add them here!
-    return extraModules;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

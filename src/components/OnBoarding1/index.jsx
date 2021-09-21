@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Image, useWindowDimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';

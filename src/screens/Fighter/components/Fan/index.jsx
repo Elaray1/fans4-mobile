@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, StatusBar, ActivityIndicator, FlatList, Platform } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView, View, StatusBar, ActivityIndicator, FlatList, Modal } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import moment from 'moment';
 
 import colors from 'themes/colors';
 
 import Header from 'components/Header';
-import Button from 'components/Button';
 import Text from 'components/Text';
 import Profile from 'components/FighterAccount/Profile';
 import Statistic from 'components/FighterAccount/Statistic';
@@ -18,18 +16,16 @@ import Biography from 'components/FighterAccount/Biography';
 import PersonalInfo from 'components/FighterAccount/PersonalInfo';
 import Post from 'components/Post';
 
-import useDidUpdate from 'hooks/useDidUpdate';
-
 import * as userSelectors from 'resources/user/user.selectors';
-import { FIGHTING_STATUSES, USER_STATUSES, FIGHTER_TYPES } from 'resources/user/user.constants';
+import { FIGHTER_TYPES } from 'resources/user/user.constants';
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 
 import analyticsService from 'services/analytics.service';
-import inAppPurhaseService from 'services/inAppPurhase.service';
-import * as purchasesActions from 'store/purchases/purchases.actions';
-import * as purchasesSelectors from 'store/purchases/purchases.selectors';
 
+import ConfirmedIosPurchase from '../ConfirmedIosPurhase';
+import ActionButtonsForFan from '../ActionButtonsForFan';
+import useSubscribing from '../../hooks/useSubscribing';
 import styles from './styles';
 
 const INITIAL_PAGE = 1;
@@ -37,13 +33,10 @@ const PER_PAGE = 10;
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
 function Fighter({ fighterId }) {
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
   const { t } = useTranslation();
 
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
   const userId = useSelector(userSelectors.getUserId);
-  const isPurchaseProcessing = useSelector(purchasesSelectors.getIsPurchaseInProcessing);
 
   const isSubscribed = useMemo(() => !!userSubscriptions.find((f) => {
     const isBeforeRenewalDate = moment(f.renewalDate).isAfter(new Date());
@@ -61,9 +54,13 @@ function Fighter({ fighterId }) {
 
   const [viewablePosts, setViewablePosts] = useState({});
 
-  const goToProposeAFight = useCallback(() => {
-    navigation.navigate('ProposeAFight', { preselectedFighterId: fighter._id });
-  }, [navigation, fighter]);
+  const {
+    resubscribe,
+    subscribe,
+    isMakingPurchase,
+    finishMakingPurchaseAfterSucessPayment,
+    unsubscribe,
+  } = useSubscribing({ fighterId });
 
   const init = useCallback(async () => {
     try {
@@ -99,7 +96,11 @@ function Fighter({ fighterId }) {
     }
   }, [fighterId]);
 
-  useDidUpdate(async () => {
+  useEffect(() => {
+    init();
+  }, [init]);
+
+  useEffect(() => {
     if (isSubscribed) {
       init();
     }
@@ -113,15 +114,6 @@ function Fighter({ fighterId }) {
       },
     });
   }, [userId]);
-
-  useEffect(() => {
-    init();
-  }, [init, fighterId]);
-
-  const subscribe = useCallback(() => {
-    dispatch(purchasesActions.startPurchaseProcessing());
-    inAppPurhaseService.purchaseProduct('fighter.subscription.0', { fighterId: fighter._id });
-  }, [dispatch, fighter]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -166,43 +158,12 @@ function Fighter({ fighterId }) {
       <View style={styles.line} />
 
       <View style={styles.postsAndFansBlock}>
-        {isSubscribed && (
-          <>
-            <Button
-              style={[styles.subscribedButton,
-                (fighter.role.fightingStatus !== FIGHTING_STATUSES.READY_FOR_FIGHTS
-                && fighter.status !== USER_STATUSES.BLOCKED) && styles.noMargin,
-              ]}
-              type="done"
-              title={t('Fighter.subscribed')}
-            />
-
-            {fighter.status === USER_STATUSES.BLOCKED ? (
-              <Text style={styles.blockedSupportedFighterText}>
-                {t('Fighter.subscribeToAnotherWhenBlocked')}
-              </Text>
-            ) : (
-              <>
-                {fighter.role.fightingStatus === FIGHTING_STATUSES.READY_FOR_FIGHTS && (
-                <Button
-                  title={t('Fighter.proposeAFight')}
-                  style={styles.applyButton}
-                  onPress={goToProposeAFight}
-                />
-                )}
-              </>
-            )}
-          </>
-        )}
-
-        {!isSubscribed && Platform.OS === 'ios' && fighter.status !== USER_STATUSES.BLOCKED && (
-          <Button
-            isLoading={isPurchaseProcessing}
-            title={t('Fighter.subscribe')}
-            style={styles.applyButton}
-            onPress={subscribe}
-          />
-        )}
+        <ActionButtonsForFan
+          subscribe={subscribe}
+          unsubscribe={unsubscribe}
+          fighter={fighter}
+          resubscribe={resubscribe}
+        />
 
         <Statistic
           postsCount={postsCount}
@@ -276,6 +237,21 @@ function Fighter({ fighterId }) {
 
   return (
     <SafeAreaView style={styles.screen}>
+      <Modal visible={isMakingPurchase} animationType="slide">
+        <View style={styles.processingIosPurchaseModalContainer}>
+          {!isSubscribed && (
+            <>
+              <ActivityIndicator size="large" />
+              <Text style={styles.processingIosPurchaseTitle}>{t('Fighter.processingIosPurchaseTitle')}</Text>
+              <Text style={styles.processingIosPurchaseInfoText}>{t('Fighter.processingIosPurchaseInfoText1')}</Text>
+              <Text style={styles.processingIosPurchaseInfoText}>{t('Fighter.processingIosPurchaseInfoText2')}</Text>
+            </>
+          )}
+
+          {isSubscribed && <ConfirmedIosPurchase handleDonePress={finishMakingPurchaseAfterSucessPayment} />}
+        </View>
+      </Modal>
+
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
 
       <Header
