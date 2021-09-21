@@ -1,4 +1,5 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import {
   View, TouchableOpacity, FlatList, ActivityIndicator,
 } from 'react-native';
@@ -33,14 +34,16 @@ import FighterHeader from './FighterHeader';
 import styles from './styles';
 
 const INITIAL_PAGE = 1;
-const PER_PAGE = 10;
+const PER_PAGE = 2;
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
-function FighterAccount() {
+function FighterAccount({ postId }) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { showFailure } = useToast();
+
+  const postsListRef = useRef();
 
   const userId = useSelector(userSelectors.getUserId);
   const isBankAccountWarning = useSelector(userSelectors.getIsBankAccountWarning);
@@ -50,8 +53,11 @@ function FighterAccount() {
   const [fansCount, setFansCount] = useState(null);
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
-  const [isAllPostsLoaded, setIsAllPostsLoaded] = useState(false);
   const [viewablePosts, setViewablePosts] = useState({});
+
+  const [postIdToBeScrolled, setPostIdToBeScrolled] = useState(postId);
+
+  const isAllPostsLoaded = useMemo(() => postsCount <= posts.length, [posts.length, postsCount]);
 
   const refreshPosts = useCallback(async () => {
     const {
@@ -95,12 +101,6 @@ function FighterAccount() {
         console.log('Account screen initialization error:', err);
         showFailure();
         return;
-      }
-
-      if (fetchedPosts?.length < PER_PAGE) {
-        setIsAllPostsLoaded(true);
-      } else {
-        setIsAllPostsLoaded(false);
       }
 
       setPostsCount(fetchedPostsCount);
@@ -192,26 +192,63 @@ function FighterAccount() {
 
   const renderItemSeparator = () => <View style={styles.space} />;
 
-  const fetchMorePosts = useCallback(async () => {
+  const fetchMorePosts = useCallback(async ({ scrollPostId, oldPosts, oldPage } = {}) => {
     if (page !== INITIAL_PAGE && !isAllPostsLoaded) {
-      const { posts: newPosts } = await postApi.getMyPosts({
-        page,
-        perPage: PER_PAGE,
-      });
+      if (scrollPostId) {
+        if (oldPosts.findIndex(post => post._id === scrollPostId) !== -1) {
+          setPage(oldPage);
+          setPosts(oldPosts);
+        } else {
+          const fetchPage = oldPage || page;
+          const { posts: newPosts } = await postApi.getMyPosts({
+            page: fetchPage,
+            perPage: PER_PAGE,
+          });
 
-      if (newPosts.length < PER_PAGE) {
-        setIsAllPostsLoaded(true);
+          if (newPosts.length) {
+            await fetchMorePosts({ scrollPostId, oldPosts: [...oldPosts, ...newPosts], oldPage: fetchPage + 1 });
+          }
+        }
       } else {
-        setIsAllPostsLoaded(false);
+        setPage(page + 1);
+        const { posts: newPosts } = await postApi.getMyPosts({
+          page,
+          perPage: PER_PAGE,
+        });
+        setPosts([...posts, ...newPosts]);
       }
-      setPosts([...posts, ...newPosts]);
     }
   }, [page, isAllPostsLoaded, posts]);
 
-  const handleLoadMore = useCallback(async () => {
-    setPage(page + 1);
-    await fetchMorePosts();
-  }, [fetchMorePosts, page]);
+  const updateIsScrollNeeded = useCallback(() => {
+    if (postId) {
+      setPostIdToBeScrolled(postId);
+    }
+  }, [postId]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', updateIsScrollNeeded);
+    return unsubscribe;
+  }, [navigation, updateIsScrollNeeded]);
+
+  useEffect(() => {
+    const fetchPostToScroll = async () => {
+      if (postIdToBeScrolled) {
+        const postIndex = posts?.findIndex(post => post._id === postId);
+        if (postIndex !== -1) {
+          postsListRef.current.scrollToIndex({
+            index: postIndex,
+            viewPosition: 0,
+          });
+          setPostIdToBeScrolled(null);
+        } else {
+          await fetchMorePosts({ scrollPostId: postId, oldPosts: posts });
+        }
+      }
+    };
+
+    fetchPostToScroll();
+  }, [postId, posts, postIdToBeScrolled, fetchMorePosts]);
 
   const renderFooter = () => {
     if (isAllPostsLoaded) {
@@ -253,14 +290,15 @@ function FighterAccount() {
       />
       )}
       <FlatList
+        ref={postsListRef}
         style={styles.content}
         data={posts}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         ItemSeparatorComponent={renderItemSeparator}
-        onEndReached={handleLoadMore}
+        onEndReached={fetchMorePosts}
         onEndReachedThreshold={0.1}
-        initialNumToRender={10}
+        initialNumToRender={PER_PAGE}
         ListHeaderComponent={(
           <FighterHeader
             postsCount={postsCount}
@@ -272,9 +310,23 @@ function FighterAccount() {
         ListEmptyComponent={renderNoItems}
         onViewableItemsChanged={updateViewableItems}
         viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
+        onScrollToIndexFailed={(info) => {
+          const wait = new Promise(resolve => setTimeout(resolve, 500));
+          wait.then(() => {
+            postsListRef.current?.scrollToIndex({ index: info.index, viewPosition: 0 });
+          });
+        }}
       />
     </>
   );
 }
+
+FighterAccount.propTypes = {
+  postId: PropTypes.string,
+};
+
+FighterAccount.defaultProps = {
+  postId: null,
+};
 
 export default React.memo(FighterAccount);

@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   SafeAreaView, StatusBar,
 } from 'react-native';
@@ -19,8 +20,10 @@ import FighterAccount from './components/Fighter';
 
 import styles from './Account.styles';
 
-function Account() {
+function Account({ route }) {
   const { t } = useTranslation();
+
+  const postId = route?.params?.postId;
 
   const isFan = useSelector(userSelectors.getUserType) === USER_TYPES.FAN;
 
@@ -49,10 +52,18 @@ function Account() {
         onRightItemPress={onBurgerPress}
       />
 
-      {isFan ? <FanAccount /> : <FighterAccount />}
+      {isFan ? <FanAccount /> : <FighterAccount {...(postId && { postId })} />}
 
     </SafeAreaView>
   );
 }
+
+Account.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      postId: PropTypes.string,
+    }),
+  }).isRequired,
+};
 
 export default React.memo(Account);

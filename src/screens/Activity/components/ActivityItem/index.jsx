@@ -26,6 +26,10 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
     navigation.navigate('Comments', { postId: data.post?._id });
   }, [data.post?._id, navigation]);
 
+  const onPostPress = useCallback(() => {
+    navigation.navigate('Account', { postId: data.post?._id });
+  }, [data.post?._id, navigation]);
+
   const NewFanView = useCallback(() => (
     <View style={styles.activityContainer}>
       <View>
@@ -84,7 +88,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
 
   const NewPostLikeView = useCallback(() => (
     <TouchableOpacity
-      onPress={() => null}
+      onPress={onPostPress}
       style={styles.activityContainer}
       activeOpacity={0.7}
     >
