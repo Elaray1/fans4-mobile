@@ -45,4 +45,8 @@ export default StyleSheet.create({
     borderRadius: 5,
     marginLeft: -80,
   },
+  headerTitleConteiner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });

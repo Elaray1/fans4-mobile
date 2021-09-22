@@ -37,4 +37,8 @@ export default StyleSheet.create({
   emptyScroll: {
     flexGrow: 1,
   },
+  headerIcon: {
+    marginLeft: 15,
+    marginTop: 5,
+  },
 });

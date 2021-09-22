@@ -11,6 +11,7 @@ import * as activityActions from 'resources/activity/activity.actions';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
+import ArrowDownIcon from 'assets/icons/arrow-down.svg';
 import NoAcitivtiesIllustration from 'assets/illustrations/no-events.svg';
 
 import Header from 'components/Header';
@@ -20,7 +21,10 @@ import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
 
+import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
+
 import ActivityItem from './components/ActivityItem';
+import FiltersModal from './components/FiltersModal';
 
 import styles from './styles';
 
@@ -42,6 +46,8 @@ function Activity() {
   });
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
+  const [isFiltersOpened, setIsFiltersOpened] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState(Object.values(ACTIVITY_TYPES));
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -95,6 +101,15 @@ function Activity() {
     await fetchNewItems({ refresh: true });
     setIsRefreshing(false);
   }, [fetchNewItems]);
+
+  const onPressActivivtyFilters = useCallback(() => {
+    setIsFiltersOpened(!isFiltersOpened);
+  }, [isFiltersOpened]);
+
+  const onCloseFiltersModal = useCallback((newSelectedFilters) => {
+    setSelectedFilters(newSelectedFilters);
+    setIsFiltersOpened(false);
+  }, []);
 
   useEffect(() => {
     const readActivities = async () => {
@@ -201,17 +216,30 @@ function Activity() {
     );
   };
 
+  const filteredActivitiesArray = useMemo(() => activitiesArray
+    .filter(activity => selectedFilters.includes(activity.type)), [activitiesArray, selectedFilters]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
         title={t('Activity.activity')}
+        titleIcon={<ArrowDownIcon style={styles.headerIcon} />}
+        onTitlePress={onPressActivivtyFilters}
       />
+      {isFiltersOpened
+      && (
+      <FiltersModal
+        visible
+        onClose={onCloseFiltersModal}
+        selectedFilters={selectedFilters}
+      />
+      )}
       <View style={styles.content}>
         {isRefreshing && <Loader />}
 
-        {!isRefreshing && (activitiesArray.length ? (
+        {!isRefreshing && (filteredActivitiesArray.length ? (
           <FlatList
-            data={activitiesArray}
+            data={filteredActivitiesArray}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             onEndReachedThreshold={0.3}
