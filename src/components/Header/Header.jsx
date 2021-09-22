@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 
 import Text from 'components/Text';
 
@@ -11,6 +11,8 @@ import styles from './Header.styles';
 
 function Header({
   title,
+  titleIcon,
+  onTitlePress,
   leftItemType,
   rightItemType,
   onLeftItemPress,
@@ -43,11 +45,32 @@ function Header({
     text: rightItemText,
   });
 
+  const headerTitle = useMemo(() => (
+    <>
+      <Text style={styles.title}>{title}</Text>
+      {titleIcon}
+    </>
+  ), [title, titleIcon]);
+
   return (
     <View style={styles.headerWrapper}>
       <View style={styles.header}>
         {leftItem}
-        <Text style={styles.title}>{title}</Text>
+        {onTitlePress
+          ? (
+            <TouchableOpacity
+              onPress={onTitlePress}
+              activeOpacity={0.7}
+              style={titleIcon && styles.headerTitleConteiner}
+            >
+              {headerTitle}
+            </TouchableOpacity>
+          )
+          : (
+            <View style={titleIcon && styles.headerTitleConteiner}>
+              {headerTitle}
+            </View>
+          )}
         {rightItem}
       </View>
       {isBottomLine && (
@@ -60,6 +83,7 @@ function Header({
 }
 
 Header.propTypes = {
+  onTitlePress: PropTypes.func,
   isBottomLine: PropTypes.bool,
   title: PropTypes.string.isRequired,
   leftItemType: PropTypes.oneOf([...Object.values(ITEM_TYPES), null]),
@@ -72,9 +96,11 @@ Header.propTypes = {
   rightItemDisabled: PropTypes.bool,
   leftItemStyle: PropTypes.shape(),
   rightItemStyle: PropTypes.shape(),
+  titleIcon: PropTypes.shape(),
 };
 
 Header.defaultProps = {
+  onTitlePress: null,
   isBottomLine: true,
   leftItemType: null,
   rightItemType: null,
@@ -86,6 +112,7 @@ Header.defaultProps = {
   rightItemDisabled: false,
   leftItemStyle: {},
   rightItemStyle: {},
+  titleIcon: null,
 };
 
 export default React.memo(Header);

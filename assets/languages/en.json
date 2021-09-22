@@ -628,5 +628,11 @@
     "sayHi": "Say hi!",
     "commented": "commented:",
     "likedYourPost": "liked your post"
+  },
+  "FiltersModal": {
+    "allActivity": "All activity",
+    "likes": "Likes",
+    "commentsAndReplies": "Comments and replies",
+    "newFans": "New fans"
   }
 }
