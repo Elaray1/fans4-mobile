@@ -4,7 +4,9 @@ import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 import { variables } from 'themes/commonStyles';
 
-const { width } = Dimensions.get('window');
+const { width, fontScale } = Dimensions.get('window');
+
+const textWidth = fontScale > 1 ? 170 : null;
 
 export default StyleSheet.create({
   modal: {
@@ -44,6 +46,7 @@ export default StyleSheet.create({
   },
   headerTitle: {
     marginLeft: 20,
+    width: textWidth,
     fontSize: fonts.size.regular,
     lineHeight: fonts.lineHeight.regular,
     fontFamily: fonts.family.bold,
