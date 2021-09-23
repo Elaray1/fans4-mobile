@@ -35,7 +35,9 @@ const Biography = ({
 
   const uploadingIntroVideo = useSelector(introVideoSelectors.getIntroVideo);
   const currentUserId = useSelector(userSelectors.getUserId);
-  const userIntroVideo = useSelector(userSelectors.getUserIntroVideo);
+  const currentUserIntroVideo = useSelector(userSelectors.getUserIntroVideo);
+
+  const userIntroVideo = currentUserId === userId ? currentUserIntroVideo : introVideo;
 
   const [isOpen, setIsOpen] = useState(currentUserId === userId ? !(biography && introVideo) : Boolean(introVideo));
   const [isLoading, setIsLoading] = useState(false);
