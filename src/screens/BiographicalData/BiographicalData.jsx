@@ -23,6 +23,11 @@ import { USER_TYPES, FIGHTER_GENDERS } from 'resources/user/user.constants';
 
 import styles from './BiographicalData.styles';
 
+const titleCase = (str) => {
+  const splitStr = str.split(' ');
+  return splitStr.map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
+};
+
 function BiographicalData() {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -112,6 +117,8 @@ function BiographicalData() {
     setGender(item.id);
   }, []);
 
+  const onSetFullName = useCallback(value => setFullName(titleCase(value)), []);
+
   return (
     <SafeAreaView style={styles.screen}>
       <DatePickerModal
@@ -141,7 +148,7 @@ function BiographicalData() {
           <Input
             label={t('BiographicalData.firstAndLastName')}
             value={fullName}
-            onChange={setFullName}
+            onChange={onSetFullName}
           />
 
           <Input
