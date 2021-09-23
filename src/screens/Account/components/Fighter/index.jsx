@@ -64,17 +64,24 @@ function FighterAccount() {
     setPage(INITIAL_PAGE + 1);
   }, []);
 
+  const refreshFansCount = useCallback(async () => {
+    const { totalCount: fansTotalCount } = await userApi.getMyFans({ page: 1, perPage: 1 });
+    setFansCount(fansTotalCount);
+  }, []);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', refreshPosts);
     return unsubscribe;
   }, [navigation, refreshPosts]);
 
   useEffect(() => {
+    socketService.on('fighter:subscribers-updated', refreshFansCount);
     socketService.on('post:status-updated', refreshPosts);
     return () => {
+      socketService.removeListener('fighter:subscribers-updated', refreshFansCount);
       socketService.removeListener('post:status-updated', refreshPosts);
     };
-  }, [refreshPosts]);
+  }, [refreshFansCount, refreshPosts]);
 
   useEffect(() => {
     const init = async () => {
