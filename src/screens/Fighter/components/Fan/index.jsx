@@ -120,7 +120,7 @@ function Fighter({ fighterId }) {
 
   const subscribe = useCallback(() => {
     dispatch(purchasesActions.startPurchaseProcessing());
-    inAppPurhaseService.purchaseProduct('subscription.fighter.0', { fighterId: fighter._id });
+    inAppPurhaseService.purchaseProduct('fighter.subscription.0', { fighterId: fighter._id });
   }, [dispatch, fighter]);
 
   const keyExtractor = useCallback(item => item._id, []);

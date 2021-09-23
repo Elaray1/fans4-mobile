@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* fans4Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* fans4Tests.m */; };
-		09A3373C26EB93A40069589E /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 09A3373B26EB93A40069589E /* Configuration.storekit */; };
 		09A4DEC426E6AC710037F7AD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09A4DEC326E6AC710037F7AD /* StoreKit.framework */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -39,7 +38,6 @@
 		0956E5D026A87AE300C98201 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0956E5D226A87AE300C98201 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0956E5D426A87AE300C98201 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		09A3373B26EB93A40069589E /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		09A4DEC326E6AC710037F7AD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		13B07F961A680F5B00A75B9A /* fans4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fans4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = fans4/AppDelegate.h; sourceTree = "<group>"; };
@@ -186,7 +184,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				09A3373B26EB93A40069589E /* Configuration.storekit */,
 				13B07FAE1A68108700A75B9A /* fans4 */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* fans4Tests */,
@@ -318,7 +315,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				09A3373C26EB93A40069589E /* Configuration.storekit in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				63D5C2144E024511AD4A902F /* NotoSans-Bold.ttf in Resources */,
 				F61FA07EEF1D4872B0331DB7 /* NotoSans-Regular.ttf in Resources */,
@@ -670,7 +666,11 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< HEAD
 				CURRENT_PROJECT_VERSION = 97;
+=======
+				CURRENT_PROJECT_VERSION = 85;
+>>>>>>> Update apple creds
 				DEVELOPMENT_TEAM = TC6636PQ6N;
 				INFOPLIST_FILE = fans4/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -726,7 +726,11 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< HEAD
 				CURRENT_PROJECT_VERSION = 97;
+=======
+				CURRENT_PROJECT_VERSION = 85;
+>>>>>>> Update apple creds
 				DEVELOPMENT_TEAM = TC6636PQ6N;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -760,7 +764,11 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< HEAD
 				CURRENT_PROJECT_VERSION = 97;
+=======
+				CURRENT_PROJECT_VERSION = 85;
+>>>>>>> Update apple creds
 				DEVELOPMENT_TEAM = TC6636PQ6N;
 				INFOPLIST_FILE = fans4/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
