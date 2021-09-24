@@ -80,7 +80,7 @@ export const updateUserInfo = ({
   about, birthdate, fullName, userName, gender, removeIntroVideo,
 }) => apiClient
   .put('users', {
-    ...(about && { about }),
+    ...((about || about === '') && { about }),
     ...(birthdate && { birthdate }),
     ...(fullName && { fullName }),
     ...(userName && { userName }),
