@@ -34,7 +34,7 @@ import FighterHeader from './FighterHeader';
 import styles from './styles';
 
 const INITIAL_PAGE = 1;
-const PER_PAGE = 2;
+const PER_PAGE = 10;
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
 function FighterAccount({ postId }) {
@@ -43,7 +43,7 @@ function FighterAccount({ postId }) {
   const navigation = useNavigation();
   const { showFailure } = useToast();
 
-  const postsListRef = useRef();
+  const postsListRef = useRef(null);
 
   const userId = useSelector(userSelectors.getUserId);
   const isBankAccountWarning = useSelector(userSelectors.getIsBankAccountWarning);
@@ -71,9 +71,11 @@ function FighterAccount({ postId }) {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', refreshPosts);
-    return unsubscribe;
-  }, [navigation, refreshPosts]);
+    if (!postId) {
+      const unsubscribe = navigation.addListener('focus', refreshPosts);
+      return unsubscribe;
+    }
+  }, [navigation, refreshPosts, postId]);
 
   useEffect(() => {
     socketService.on('post:status-updated', refreshPosts);
@@ -220,11 +222,16 @@ function FighterAccount({ postId }) {
     }
   }, [page, isAllPostsLoaded, posts]);
 
-  const updateIsScrollNeeded = useCallback(() => {
+  const updateIsScrollNeeded = useCallback(async () => {
     if (postId) {
-      setPostIdToBeScrolled(postId);
+      postsListRef.current.scrollToOffset({ offset: 0, animated: true });
+      const wait = new Promise(resolve => setTimeout(resolve, 300));
+      wait.then(async () => {
+        await refreshPosts();
+        setPostIdToBeScrolled(postId);
+      });
     }
-  }, [postId]);
+  }, [postId, refreshPosts]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', updateIsScrollNeeded);
