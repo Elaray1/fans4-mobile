@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -28,6 +28,8 @@ function renderTabBar(props) {
 function FighterTabNavigator() {
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
 
+  const activityIcon = useMemo(() => (isUnreadActivities ? UnreadActivityIcon : ActivityIcon), [isUnreadActivities]);
+
   return (
     <Tab.Navigator
       initialRouteName="Account"
@@ -47,7 +49,7 @@ function FighterTabNavigator() {
       <Tab.Screen
         name="Activity"
         component={Activity}
-        options={{ icon: isUnreadActivities ? UnreadActivityIcon : ActivityIcon }}
+        options={{ icon: activityIcon }}
       />
       <Tab.Screen name="Account" component={Account} options={{ icon: AccountIcon }} />
     </Tab.Navigator>

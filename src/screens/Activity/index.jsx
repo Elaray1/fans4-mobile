@@ -7,8 +7,8 @@ import { useIsFocused } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import * as activityApi from 'resources/activity/activity.api';
-import * as activityActions from 'resources/activity/activity.actions';
 
+import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import ArrowDownIcon from 'assets/icons/arrow-down.svg';
@@ -20,6 +20,7 @@ import Text from 'components/Text';
 import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
+import store from 'resources/store';
 
 import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
 
@@ -113,7 +114,9 @@ function Activity() {
 
   useEffect(() => {
     const readActivities = async () => {
-      await dispatch(activityActions.readActivities());
+      const user = await activityApi.readActivities();
+
+      store.dispatch(userActions.setUserData(user));
     };
 
     if (isUnreadActivities && isFocused) {

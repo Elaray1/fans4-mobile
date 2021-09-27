@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   SafeAreaView, StatusBar,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 import colors from 'themes/colors';
 
@@ -22,8 +23,27 @@ import styles from './Account.styles';
 
 function Account({ route }) {
   const { t } = useTranslation();
+  const navigation = useNavigation();
 
   const postId = route?.params?.postId;
+
+  const [isNavigateToPostId, setIsNavigateToPostId] = useState(!!postId);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setIsNavigateToPostId(true);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
+      setIsNavigateToPostId(false);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const isFan = useSelector(userSelectors.getUserType) === USER_TYPES.FAN;
 
@@ -52,7 +72,7 @@ function Account({ route }) {
         onRightItemPress={onBurgerPress}
       />
 
-      {isFan ? <FanAccount /> : <FighterAccount {...(postId && { postId })} />}
+      {isFan ? <FanAccount /> : <FighterAccount {...(postId && isNavigateToPostId && { postId })} />}
 
     </SafeAreaView>
   );
