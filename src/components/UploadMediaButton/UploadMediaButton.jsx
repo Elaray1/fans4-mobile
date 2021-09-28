@@ -145,7 +145,7 @@ function UploadMediaButton({
         />
 
         <TouchableOpacity
-          style={styles.redBin}
+          style={styles.bin}
           activeOpacity={0.7}
           onPress={onBinPress}
         >
