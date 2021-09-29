@@ -19,6 +19,8 @@ function Header({
   onRightItemPress,
   leftItemText,
   rightItemText,
+  leftItemIcon,
+  rightItemIcon,
   leftItemDisabled,
   rightItemDisabled,
   leftItemStyle,
@@ -38,11 +40,13 @@ function Header({
     type: leftItemType,
     props: leftItemProps,
     text: leftItemText,
+    icon: leftItemIcon,
   });
   const rightItem = getHeaderItem({
     type: rightItemType,
     props: rightItemProps,
     text: rightItemText,
+    icon: rightItemIcon,
   });
 
   const headerTitle = useMemo(() => (
@@ -92,6 +96,8 @@ Header.propTypes = {
   onRightItemPress: PropTypes.func,
   leftItemText: PropTypes.string,
   rightItemText: PropTypes.string,
+  leftItemIcon: PropTypes.func,
+  rightItemIcon: PropTypes.func,
   leftItemDisabled: PropTypes.bool,
   rightItemDisabled: PropTypes.bool,
   leftItemStyle: PropTypes.shape(),
@@ -108,6 +114,8 @@ Header.defaultProps = {
   onRightItemPress: null,
   leftItemText: '',
   rightItemText: '',
+  leftItemIcon: null,
+  rightItemIcon: null,
   leftItemDisabled: false,
   rightItemDisabled: false,
   leftItemStyle: {},

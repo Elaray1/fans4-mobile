@@ -35,6 +35,7 @@ import SettingsPrivacyPolicy from 'screens/SettingsPrivacyPolicy';
 import BankAccountAdded from 'screens/BankAccountAdded';
 import Fans4Profile from 'screens/Fans4Profile';
 import FighterRecord from 'screens/FighterRecord';
+import SearchFighters from 'screens/SearchFighters';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import { USER_TYPES } from 'resources/user/user.constants';
@@ -112,6 +113,7 @@ function AppScreens() {
       <AppStack.Screen name="BankAccountAdded" component={BankAccountAdded} />
       <AppStack.Screen name="Fans4Profile" component={Fans4Profile} />
       <AppStack.Screen name="FighterRecord" component={FighterRecord} />
+      <AppStack.Screen name="SearchFighters" component={SearchFighters} />
     </AppStack.Navigator>
   );
 }
