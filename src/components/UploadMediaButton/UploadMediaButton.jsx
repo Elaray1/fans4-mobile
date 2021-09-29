@@ -16,6 +16,7 @@ import { MEDIA_TYPES } from './UploadMediaButton.constants';
 
 function UploadMediaButton({
   handleMediaUpload,
+  onDelete,
   label,
   mediaType,
   croppingAvatar,
@@ -110,10 +111,11 @@ function UploadMediaButton({
           style: 'default',
           onPress: () => {
             setMedia(null);
+            onDelete();
           },
         }],
     );
-  }, [t]);
+  }, [onDelete, t]);
 
   let contentView = null;
 
@@ -179,6 +181,7 @@ function UploadMediaButton({
 UploadMediaButton.propTypes = {
   label: PropTypes.string.isRequired,
   handleMediaUpload: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   mediaType: PropTypes.oneOf([...Object.values(MEDIA_TYPES)]),
   croppingAvatar: PropTypes.bool,
   style: PropTypes.shape(),

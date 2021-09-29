@@ -138,6 +138,14 @@ function ChangeBiography() {
     setIsLoading(false);
   }, [setUploadingMedia]);
 
+  const onDelete = useCallback(() => {
+    setUploadingMedia(null);
+
+    if (setUploadingPoster) {
+      setUploadingPoster(null);
+    }
+  }, [setUploadingMedia]);
+
   const posterSource = useMemo(() => {
     return {
       uri: initialMedia?.posterStorageUrl,
@@ -175,9 +183,10 @@ function ChangeBiography() {
         handleMediaUpload={handleMediaUpload}
         mediaType={MEDIA_TYPES.VIDEO}
         style={styles.uploadButton}
+        onDelete={onDelete}
       />
     );
-  }, [initialMedia, uploadingMedia, onBinPress, handleMediaUpload, t, posterSource, source]);
+  }, [initialMedia, uploadingMedia, posterSource, source, onBinPress, t, handleMediaUpload, onDelete]);
 
   return (
     <SafeAreaView style={styles.screen}>
