@@ -52,7 +52,7 @@ function Fans() {
   const renderItem = ({ item }) => {
     return (
       <View style={styles.listItem}>
-        <Text style={styles.listItemCity}>{item.fullName}</Text>
+        <Text style={styles.listItemCity}>{item.role.biography.userName}</Text>
       </View>
     );
   };
