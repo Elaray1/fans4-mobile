@@ -33,10 +33,10 @@ function UploadingPosts() {
   const onReuploadPost = useCallback(async (item) => {
     setIsLoading(true);
     try {
+      await dispatch(postActions.removeFailedUploadingPosts());
       if (item.length) {
         await Promise.all(item.map(postData => postApi.createPost(postData.data, postData.file,
           { onUploadProgress })));
-        await dispatch(postActions.removeFailedUploadingPosts());
       } else {
         await postApi.createPost(item.data, item.file, { onUploadProgress });
       }
