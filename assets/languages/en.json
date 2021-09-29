@@ -634,5 +634,13 @@
     "likes": "Likes",
     "commentsAndReplies": "Comments and replies",
     "newFans": "New fans"
+  },
+  "Chat": {
+    "noMessagesHereYet": "No messages here yet...",
+    "sayHiToStartAConversation": "Say “Hi!” to start a conversation.",
+    "typeAMessage": "Type a message...",
+    "post": "Post",
+    "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh.",
+    "messageNotSentPleaseTryAgain": "Message not sent. Please try again"
   }
 }
