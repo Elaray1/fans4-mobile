@@ -45,6 +45,13 @@ function NewPost() {
     }
   }, [setUploadingMedia]);
 
+  const onDelete = useCallback(() => {
+    setUploadingMedia(null);
+    if (setUploadingPoster) {
+      setUploadingPoster(null);
+    }
+  }, []);
+
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FIGHTER_NEW_POST_ADDING_STARTED,
@@ -149,6 +156,7 @@ function NewPost() {
           <UploadMediaButton
             label={t('NewPost.uploadMediaButtonLabel')}
             handleMediaUpload={handleMediaUpload}
+            onDelete={onDelete}
             mediaType="any"
           />
         </ScrollView>

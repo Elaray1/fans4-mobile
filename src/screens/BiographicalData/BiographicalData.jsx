@@ -52,6 +52,10 @@ function BiographicalData() {
     setIsDatePickerVisible(true);
   }, []);
 
+  const onDeletePhoto = useCallback(() => {
+    setPhoto(null);
+  }, []);
+
   const onCloseDatePickerModal = useCallback(() => {
     setIsDatePickerVisible(false);
   }, []);
@@ -196,6 +200,7 @@ function BiographicalData() {
             handleMediaUpload={setPhoto}
             mediaType="image"
             croppingAvatar
+            onDelete={onDeletePhoto}
           />
         </View>
 
