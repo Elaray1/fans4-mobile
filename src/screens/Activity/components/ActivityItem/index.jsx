@@ -25,7 +25,10 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
   const onPressSayHi = useCallback(async () => {
     const chat = await chatApi.getChatByParticipantIds([data.author._id]);
 
-    navigation.navigate('Chat', { chatId: chat._id, userFullName: data.author?.fullName });
+    navigation.navigate('Chat', {
+      chatId: chat._id,
+      userFullName: data.author?.fullName,
+    });
   }, [data.author?.fullName, navigation, data.author._id]);
 
   const onCommentPress = useCallback(() => {

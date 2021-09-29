@@ -61,4 +61,12 @@ export default StyleSheet.create({
   horizontalPaddings: {
     paddingHorizontal: 20,
   },
+  dateSeparator: {
+    alignSelf: 'center',
+    marginTop: 8,
+    marginBottom: 16,
+    fontSize: fonts.size.small,
+    fontWeight: fonts.weight.medium,
+    color: colors.textSecondary,
+  },
 });

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { ITEM_TYPES } from 'components/Header/Header.constants';
 
@@ -43,6 +44,20 @@ export const getHeaderItem = ({ type, props, text, icon }) => {
         >
           <PlusIcon />
           <Text style={[styles.plusText, props.style]}>{text}</Text>
+        </TouchableOpacity>
+      );
+      break;
+    case ITEM_TYPES.IMAGE:
+      item = (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          disabled={!props.onPress}
+          onPress={props.onPress}
+        >
+          <FastImage
+            style={styles.image}
+            source={{ uri: props.imageUrl }}
+          />
         </TouchableOpacity>
       );
       break;

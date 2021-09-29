@@ -23,6 +23,8 @@ function Header({
   rightItemIcon,
   leftItemDisabled,
   rightItemDisabled,
+  leftItemImageUrl,
+  rightItemImageUrl,
   leftItemStyle,
   rightItemStyle,
   isBottomLine,
@@ -30,10 +32,12 @@ function Header({
   const leftItemProps = {
     onPress: leftItemDisabled ? null : onLeftItemPress,
     style: leftItemStyle,
+    imageUrl: leftItemImageUrl,
   };
   const rightItemProps = {
     onPress: rightItemDisabled ? null : onRightItemPress,
     style: rightItemStyle,
+    imageUrl: rightItemImageUrl,
   };
 
   const leftItem = getHeaderItem({
@@ -100,6 +104,8 @@ Header.propTypes = {
   rightItemIcon: PropTypes.func,
   leftItemDisabled: PropTypes.bool,
   rightItemDisabled: PropTypes.bool,
+  leftItemImageUrl: PropTypes.string,
+  rightItemImageUrl: PropTypes.string,
   leftItemStyle: PropTypes.shape(),
   rightItemStyle: PropTypes.shape(),
   titleIcon: PropTypes.shape(),
@@ -118,6 +124,8 @@ Header.defaultProps = {
   rightItemIcon: null,
   leftItemDisabled: false,
   rightItemDisabled: false,
+  leftItemImageUrl: '',
+  rightItemImageUrl: '',
   leftItemStyle: {},
   rightItemStyle: {},
   titleIcon: null,

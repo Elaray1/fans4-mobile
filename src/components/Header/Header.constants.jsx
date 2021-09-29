@@ -4,4 +4,5 @@ export const ITEM_TYPES = {
   ICON: 'icon',
   TEXT: 'text',
   PLUS_AND_TEXT: 'plus_and_text',
+  IMAGE: 'image',
 };

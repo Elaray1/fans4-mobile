@@ -1,11 +1,15 @@
 import React, {
-  useState, useCallback, useEffect,
+  useState, useCallback, useEffect, useMemo,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
   SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import * as socketService from 'services/socket.service';
 
@@ -21,6 +25,10 @@ import colors from 'themes/colors';
 
 import NoMessagesIllustration from 'assets/illustrations/no-events.svg';
 
+import Message from './Message';
+
+import { addDateSepatorsToMessages } from './Chat.helpers';
+
 import styles from './styles';
 
 const PER_PAGE_COUNT = 25;
@@ -32,9 +40,14 @@ const keyboardVerticalOffset = Platform.OS === 'ios' ? 0 : 16;
 function Chat({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
+  const navigation = useNavigation();
+
+  const userId = useSelector(userSelectors.getUserId);
 
   const {
-    userFullName,
+    userId: otherUserId,
+    userFullName: otherUserFullName,
+    userAvatar: otherUserAvatar,
     chatId,
   } = route?.params;
 
@@ -47,6 +60,8 @@ function Chat({ route }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(true);
+
+  const messagesWithSeparators = useMemo(() => addDateSepatorsToMessages(messages), [messages]);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;
@@ -95,8 +110,8 @@ function Chat({ route }) {
   }, []);
 
   const updateMessageList = useCallback((newMessage) => {
-    if (messages.find(message => message._id === newMessage._id) === -1) {
-      setMessages([...messages, newMessage]);
+    if (!messages.find(message => message._id === newMessage._id)) {
+      setMessages([newMessage, ...messages]);
     }
   }, [messages]);
 
@@ -125,12 +140,16 @@ function Chat({ route }) {
         chatId,
       });
       setMessageValue('');
-      setMessages([...messages, message]);
+      setMessages([message, ...messages]);
     } catch (error) {
       showFailure(t('Chat.messageNotSentPleaseTryAgain'));
     }
     setIsButtonDisabled(false);
   }, [messages, showFailure, t, messageValue, chatId]);
+
+  const onUserAvatarPress = useCallback(() => {
+    navigation.navigate('Fighter', { _id: otherUserId });
+  }, [navigation, otherUserId]);
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
@@ -143,8 +162,19 @@ function Chat({ route }) {
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
+    if (item.isDateSeparator) {
+      return (
+        <Text style={styles.dateSeparator}>{item.text}</Text>
+      );
+    }
+
     return (
-      <View />
+      <Message
+        key={item._id}
+        text={item.text}
+        time={item.createdOn}
+        isSender={item.sender._id === userId}
+      />
     );
   };
 
@@ -177,7 +207,7 @@ function Chat({ route }) {
 
     return (
       <FlatList
-        data={messages}
+        data={messagesWithSeparators}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         onEndReachedThreshold={0.3}
@@ -187,6 +217,7 @@ function Chat({ route }) {
         onRefresh={onRefresh}
         refreshing={isRefreshing}
         style={styles.horizontalPaddings}
+        inverted
       />
     );
   };
@@ -200,8 +231,13 @@ function Chat({ route }) {
       >
         <View style={styles.keyboardAvoidingChildContainer}>
           <Header
-            title={userFullName}
+            title={otherUserFullName}
             leftItemType="backArrow"
+            rightItemType="image"
+            {...(otherUserAvatar && {
+              rightItemImageUrl: otherUserAvatar,
+              onRightItemPress: onUserAvatarPress,
+            })}
           />
           <View style={styles.content}>
             {renderList()}
@@ -240,7 +276,9 @@ function Chat({ route }) {
 Chat.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
+      userId: PropTypes.string,
       userFullName: PropTypes.string.isRequired,
+      userAvatar: PropTypes.string,
       chatId: PropTypes.string.isRequired,
     }),
   }).isRequired,
