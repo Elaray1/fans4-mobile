@@ -11,6 +11,7 @@ import { ITEM_TYPES } from 'components/Header/Header.constants';
 import styles from './Icon.styles';
 
 function Icon({
+  icon,
   onPress,
   style,
   type,
@@ -28,6 +29,9 @@ function Icon({
       break;
     case ITEM_TYPES.MENU:
       IconItem = MenuIcon;
+      break;
+    case ITEM_TYPES.ICON:
+      IconItem = icon;
       break;
     default:
       break;
@@ -47,12 +51,14 @@ function Icon({
 }
 
 Icon.propTypes = {
+  icon: PropTypes.func,
   onPress: PropTypes.func,
   style: PropTypes.shape(),
-  type: PropTypes.oneOf([ITEM_TYPES.BACK_ARROW, ITEM_TYPES.MENU]),
+  type: PropTypes.oneOf([ITEM_TYPES.BACK_ARROW, ITEM_TYPES.MENU, ITEM_TYPES.ICON]),
 };
 
 Icon.defaultProps = {
+  icon: null,
   onPress: null,
   style: {},
   type: ITEM_TYPES.BACK_ARROW,

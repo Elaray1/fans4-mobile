@@ -12,14 +12,15 @@ import styles from './Header.styles';
 
 const WIDTH_ICON = 32;
 
-export const getHeaderItem = ({ type, props, text }) => {
+export const getHeaderItem = ({ type, props, text, icon }) => {
   let item = null;
   const defaultItem = <View style={{ width: WIDTH_ICON }} />;
 
   switch (type) {
     case ITEM_TYPES.BACK_ARROW:
     case ITEM_TYPES.MENU:
-      item = <Icon {...props} type={type} />;
+    case ITEM_TYPES.ICON:
+      item = <Icon {...props} type={type} icon={icon} />;
       break;
     case ITEM_TYPES.TEXT:
       item = (

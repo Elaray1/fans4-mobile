@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 
 import checkIfSubscriptionChanged from 'helpers/checkIfSubscriptionChanged';
 
+import SearchFightersIcon from 'assets/icons/search-people';
+
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userApi from 'resources/user/user.api';
 import * as userActions from 'resources/user/user.actions';
@@ -23,7 +25,7 @@ import useDidUpdate from 'hooks/useDidUpdate';
 
 import colors from 'themes/colors';
 
-import NoPostsIllustration from 'assets/illustrations/no-events.svg';
+import NoPostsIllustration from 'assets/illustrations/no-events';
 
 import styles from './styles';
 
@@ -163,6 +165,10 @@ function Feed() {
     }
   }, [showFailure, posts]);
 
+  const onSearchFighters = useCallback(() => {
+    navigation.navigate('SearchFighters');
+  }, [navigation]);
+
   const renderItem = ({ item }) => {
     return (
       <View style={styles.post} key={item._id}>
@@ -218,6 +224,9 @@ function Feed() {
     <SafeAreaView style={styles.screen}>
       <Header
         title={t('Feed.feed')}
+        rightItemType="icon"
+        onRightItemPress={onSearchFighters}
+        rightItemIcon={SearchFightersIcon}
       />
       <View style={styles.content}>
         {isRefreshing && <Loader />}
