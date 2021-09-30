@@ -164,7 +164,7 @@ function Chat({ route }) {
   const renderItem = ({ item }) => {
     if (item.isDateSeparator) {
       return (
-        <Text style={styles.dateSeparator}>{item.text}</Text>
+        <Text key={item.text} style={styles.dateSeparator}>{item.text}</Text>
       );
     }
 

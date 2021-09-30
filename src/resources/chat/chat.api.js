@@ -1,4 +1,4 @@
 import { apiClient } from 'helpers/api';
 
-export const getChatByParticipantIds = participantsIds => apiClient
-  .get('chats', { participantsIds });
+export const getChatByParticipantIds = participantIds => apiClient
+  .get('chats', { participantIds });
