@@ -5,7 +5,7 @@ import { View, TouchableOpacity } from 'react-native';
 import Text from 'components/Text';
 
 import { ITEM_TYPES } from './Header.constants';
-import { getHeaderItem } from './Header.helpers';
+import { GetHeaderItem } from './Header.helpers';
 
 import styles from './Header.styles';
 
@@ -40,13 +40,13 @@ function Header({
     imageUrl: rightItemImageUrl,
   };
 
-  const leftItem = getHeaderItem({
+  const leftItem = GetHeaderItem({
     type: leftItemType,
     props: leftItemProps,
     text: leftItemText,
     icon: leftItemIcon,
   });
-  const rightItem = getHeaderItem({
+  const rightItem = GetHeaderItem({
     type: rightItemType,
     props: rightItemProps,
     text: rightItemText,

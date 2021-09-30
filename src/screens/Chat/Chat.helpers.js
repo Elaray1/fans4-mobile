@@ -1,4 +1,5 @@
 import moment from 'moment';
+import _ from 'lodash';
 
 const formatDateSeparator = (date) => {
   const today = moment(moment()).startOf('day').format();
@@ -14,28 +15,9 @@ const formatDateSeparator = (date) => {
 };
 
 export const addDateSepatorsToMessages = (messages) => {
-  const messagesByDays = messages.reduce((acc, message) => {
-    const day = moment(message.createdOn).startOf('day').format();
-    if (acc[day]) {
-      acc[day].push(message);
-    } else {
-      acc[day] = [message];
-    }
+  const messagesByDays = _.groupBy(messages, m => moment(m.createdOn).startOf('day').format());
 
-    return acc;
-  }, {});
-
-  const firstDayMessages = Object.keys(messagesByDays).map((day) => {
-    const dayMessages = messagesByDays[day];
-    const firstMessage = dayMessages.reduce((acc, message) => {
-      if (message.createdOn < acc.createdOn) {
-        return message;
-      }
-      return acc;
-    }, dayMessages[0]);
-
-    return firstMessage;
-  });
+  const firstDayMessages = _.map(messagesByDays, messagesOfDay => _.minBy(messagesOfDay, 'createdOn'));
 
   return messages.reduce((acc, message) => {
     acc.push(message);

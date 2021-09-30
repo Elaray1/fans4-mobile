@@ -195,7 +195,7 @@ function Chat({ route }) {
     if (!messages.length) {
       return (
         <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={styles.scrollView}
           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
           keyboardShouldPersistTaps="handled"
           style={styles.horizontalPaddings}

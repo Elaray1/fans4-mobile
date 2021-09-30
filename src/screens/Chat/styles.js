@@ -69,4 +69,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     color: colors.textSecondary,
   },
+  scrollView: {
+    flexGrow: 1,
+  },
 });
