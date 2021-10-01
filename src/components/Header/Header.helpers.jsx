@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, TouchableOpacity } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { ITEM_TYPES } from 'components/Header/Header.constants';
 
@@ -12,9 +13,11 @@ import styles from './Header.styles';
 
 const WIDTH_ICON = 32;
 
-export const getHeaderItem = ({ type, props, text, icon }) => {
+export const GetHeaderItem = ({ type, props, text, icon }) => {
   let item = null;
   const defaultItem = <View style={{ width: WIDTH_ICON }} />;
+
+  const imageSource = useMemo(() => ({ source: { uri: props.imageUrl } }), [props.imageUrl]);
 
   switch (type) {
     case ITEM_TYPES.BACK_ARROW:
@@ -43,6 +46,20 @@ export const getHeaderItem = ({ type, props, text, icon }) => {
         >
           <PlusIcon />
           <Text style={[styles.plusText, props.style]}>{text}</Text>
+        </TouchableOpacity>
+      );
+      break;
+    case ITEM_TYPES.IMAGE:
+      item = (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          disabled={!props.onPress}
+          onPress={props.onPress}
+        >
+          <FastImage
+            style={styles.image}
+            source={imageSource}
+          />
         </TouchableOpacity>
       );
       break;

@@ -209,7 +209,7 @@ function Activity() {
     <View style={styles.noActivities}>
       <NoAcitivtiesIllustration style={styles.illustration} />
       <Text style={styles.titleText}>{t('Activity.noActivityHereYet')}</Text>
-      <Text style={styles.text}>{t('Activity.createPostToSeeFeedbackFromPeople')}</Text>
+      <Text style={styles.text}>{t('Activity.createYourFirstPostToSeeCommentsFromYourFans')}</Text>
     </View>
   );
 

@@ -8,6 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import { useTranslation } from 'react-i18next';
 
+import * as chatApi from 'resources/chat/chat.api';
+
 import Text from 'components/Text';
 
 import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
@@ -20,7 +22,14 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const onPressSayHi = useCallback(() => {}, []);
+  const onPressSayHi = useCallback(async () => {
+    const chat = await chatApi.getChatByParticipantIds([data.author._id]);
+
+    navigation.navigate('Chat', {
+      chatId: chat._id,
+      userFullName: data.author?.fullName,
+    });
+  }, [data.author?.fullName, navigation, data.author._id]);
 
   const onCommentPress = useCallback(() => {
     navigation.navigate('Comments', { postId: data.post?._id });
@@ -121,6 +130,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
     data.author.fullName, t, createdOn, showTime,
     data.post?.media,
     data.post?.text,
+    onPostPress,
   ]);
 
 

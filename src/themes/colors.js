@@ -55,6 +55,8 @@ const colors = {
 
   fightingStatusBadge: '#313236',
   fightingStatusText: '#919192',
+
+  message: '#404249',
 };
 
 export default colors;

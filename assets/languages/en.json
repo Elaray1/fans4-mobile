@@ -621,7 +621,7 @@
     "thisWeek": "This week",
     "thisMonth": "This month",
     "noActivityHereYet": "No activity here yet...",
-    "createPostToSeeFeedbackFromPeople": "Create post to see feedback from people."
+    "createYourFirstPostToSeeCommentsFromYourFans": "Create your first post to see comments from your fans"
   },
   "ActivityItem": {
     "becameYourFan": "became your fan!",
@@ -634,5 +634,13 @@
     "likes": "Likes",
     "commentsAndReplies": "Comments and replies",
     "newFans": "New fans"
+  },
+  "Chat": {
+    "noMessagesHereYet": "No messages here yet...",
+    "sayHiToStartAConversation": "Say “Hi!” to start a conversation.",
+    "typeAMessage": "Type a message...",
+    "post": "Post",
+    "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh.",
+    "messageNotSentPleaseTryAgain": "Message not sent. Please try again"
   }
 }

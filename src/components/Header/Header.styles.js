@@ -49,4 +49,9 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  image: {
+    width: 32,
+    height: 32,
+    borderRadius: 100,
+  },
 });

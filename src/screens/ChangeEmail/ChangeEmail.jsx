@@ -34,11 +34,16 @@ function ChangeEmail() {
     setEmailValue((value || '').trim().toLowerCase());
   }, []);
 
-  useEffect(() => {
-    socketService.on('new-email:verified', (updatedUser) => {
-      dispatch(userActions.setUserData(updatedUser));
-    });
+  const newEmailVerified = useCallback((updatedUser) => {
+    dispatch(userActions.setUserData(updatedUser));
   }, [dispatch]);
+
+  useEffect(() => {
+    socketService.on('new-email:verified', newEmailVerified);
+    return () => {
+      socketService.removeListener('new-email:verified', newEmailVerified);
+    };
+  }, [newEmailVerified]);
 
   const onEmailBlur = useCallback(() => {
     if (validateEmail(emailValue)) {
