@@ -101,11 +101,11 @@ function Chat({ route }) {
   }, [fetchNewItems]);
 
   useEffect(() => {
-    const fetchComments = async () => {
+    const fetchMessages = async () => {
       await fetchNewItems({ refresh: true });
     };
 
-    fetchComments();
+    fetchMessages();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -150,6 +150,11 @@ function Chat({ route }) {
   const onUserAvatarPress = useCallback(() => {
     navigation.navigate('Fighter', { _id: otherUserId });
   }, [navigation, otherUserId]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', onRefresh);
+    return unsubscribe;
+  }, [navigation, onRefresh]);
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
