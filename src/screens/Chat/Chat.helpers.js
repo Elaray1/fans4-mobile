@@ -11,7 +11,7 @@ const formatDateSeparator = (date) => {
 
   const isDifferentYears = moment(date).year() !== currentYear;
 
-  return moment(date).format(`MMMM D${isDifferentYears && ', YYYY'}`);
+  return moment(date).format(`MMMM D${isDifferentYears ? ', YYYY' : ''}`);
 };
 
 export const addDateSepatorsToMessages = (messages) => {
