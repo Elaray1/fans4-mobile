@@ -668,6 +668,11 @@
     "subscriptionPossibility1": "Full access to fighters’ content",
     "subscriptionPossibility2": "Proposing fighter matchups",
     "subscriptionPossibility3": "Voting them in for the next live event",
-    "subscriptionPossibility4": "Exclusive live-streaming events",
+    "subscriptionPossibility4": "Exclusive live-streaming events"
+  },
+  "ChatsList": {
+    "chats": "Chats",
+    "startChatting": "Start chatting with your fans",
+    "clickTheIcon": "Click the icon in the right hand corner to start a conversation."
   }
 }

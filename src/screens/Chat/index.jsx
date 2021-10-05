@@ -15,6 +15,8 @@ import * as socketService from 'services/socket.service';
 
 import * as messageApi from 'resources/message/message.api';
 
+import * as chatApi from 'resources/chat/chat.api';
+
 import Header from 'components/Header';
 import Text from 'components/Text';
 import Input from 'components/Input';
@@ -103,6 +105,7 @@ function Chat({ route }) {
   useEffect(() => {
     const fetchMessages = async () => {
       await fetchNewItems({ refresh: true });
+      await chatApi.readMessages({ _id: chatId });
     };
 
     fetchMessages();

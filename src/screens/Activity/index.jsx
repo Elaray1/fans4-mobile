@@ -3,7 +3,7 @@ import {
   SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, Platform,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import * as activityApi from 'resources/activity/activity.api';
@@ -13,6 +13,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 
 import ArrowDownIcon from 'assets/icons/arrow-down.svg';
 import NoAcitivtiesIllustration from 'assets/illustrations/no-events.svg';
+import ChatIcon from 'assets/icons/chat.svg';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
@@ -20,6 +21,8 @@ import Text from 'components/Text';
 import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
+
+import config from 'resources/config';
 
 import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
 
@@ -32,6 +35,7 @@ const PER_PAGE_COUNT = 20;
 
 function Activity() {
   const { t } = useTranslation();
+  const navigation = useNavigation();
   const { showFailure } = useToast();
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
@@ -111,6 +115,10 @@ function Activity() {
     setSelectedFilters(newSelectedFilters);
     setIsFiltersOpened(false);
   }, []);
+
+  const onChatsPress = useCallback(() => {
+    navigation.navigate('ChatsList');
+  }, [navigation]);
 
   useEffect(() => {
     const readActivities = async () => {
@@ -196,7 +204,7 @@ function Activity() {
     return [...todayActivities, ...yesterdayActivities, ...thisWeekActivities, ...thisMonthActivities];
   }, [activities.today, activities.yesterday, activities.thisWeek, activities.thisMonth, t]);
 
-  const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
+  const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
 
   const renderFooter = () => {
     if (!isLoading) {
@@ -228,6 +236,9 @@ function Activity() {
         title={t('Activity.activity')}
         titleIcon={<ArrowDownIcon style={styles.headerIcon} />}
         onTitlePress={onPressActivivtyFilters}
+        rightItemType={config.mode === 'PROD' ? null : 'icon'} // TODO: remove when tested
+        rightItemIcon={ChatIcon}
+        onRightItemPress={onChatsPress}
       />
       {isFiltersOpened
       && (

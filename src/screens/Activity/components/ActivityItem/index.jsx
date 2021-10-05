@@ -15,6 +15,7 @@ import Text from 'components/Text';
 import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
 
 import { formatTime } from 'components/Post/Post.helpers';
+import config from 'resources/config';
 
 import styles from './styles';
 
@@ -49,7 +50,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
         {showTime && <Text style={styles.time}>{formatTime(createdOn)}</Text>}
       </View>
       <TouchableOpacity
-        onPress={onPressSayHi}
+        onPress={config.mode === 'PROD' ? () => {} : onPressSayHi}
         activeOpacity={0.7}
       >
         <Text style={styles.sayHi}>{t('ActivityItem.sayHi')}</Text>
