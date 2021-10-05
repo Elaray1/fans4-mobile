@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, SafeAreaView, FlatList, ActivityIndicator, ScrollView, RefreshControl, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import Text from 'components/Text';
 import Header from 'components/Header';
@@ -8,6 +9,8 @@ import Header from 'components/Header';
 import useToast from 'hooks/useToast';
 
 import * as chatApi from 'resources/chat/chat.api';
+import * as userSelectors from 'resources/user/user.selectors';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 import NewChatIcon from 'assets/icons/new-chat.svg';
@@ -32,13 +35,16 @@ const ChatsList = () => {
   const [page, setPage] = useState(INITIAL_PAGE);
   const [totalCount, setTotalCount] = useState(0);
 
+  const userType = useSelector(userSelectors.getUserType);
+  const isFan = userType === USER_TYPES.FAN;
+
   const keyExtractor = useCallback(item => item._id, []);
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
       <NoFightsIllustration style={styles.illustration} />
-      <Text style={styles.titleText}>{t('ChatsList.startChatting')}</Text>
-      <Text style={styles.text}>{t('ChatsList.clickTheIcon')}</Text>
+      <Text style={styles.titleText}>{t(isFan ? 'ChatsList.noSubscriptions' : 'ChatsList.startChatting')}</Text>
+      <Text style={styles.text}>{t(isFan ? 'ChatsList.subscribe' : 'ChatsList.clickTheIcon')}</Text>
     </View>
   );
 
@@ -115,7 +121,7 @@ const ChatsList = () => {
       <Header
         title={t('ChatsList.chats')}
         leftItemType="backArrow"
-        rightItemType="icon"
+        rightItemType={isFan ? null : 'icon'}
         rightItemIcon={NewChatIcon}
         onRightItemPress={() => {}}
       />
