@@ -18,7 +18,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
   },
   message: {
-    fontSize: fonts.size.caption,
+    fontSize: fonts.size.small,
   },
   counter: {
     width: 18,
@@ -46,5 +46,9 @@ export default StyleSheet.create({
   },
   chatInfo: {
     flex: 1,
+  },
+  text: {
+    color: colors.tabBarInactive,
+    fontSize: fonts.size.small,
   },
 });

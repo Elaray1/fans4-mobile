@@ -3,6 +3,7 @@ import { View, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 
@@ -18,6 +19,7 @@ import styles from './styles';
 
 const ChatItem = ({ chat, setNewChat, resetUnread }) => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   const userId = useSelector(userSelectors.getUserId);
 
@@ -57,8 +59,11 @@ const ChatItem = ({ chat, setNewChat, resetUnread }) => {
          && <Text style={styles.time}>{moment(chat.lastMessage.createdOn).format('h:mm a')}</Text>}
         </View>
         <View style={styles.row}>
-          {chat?.lastMessage?.text
-        && <Text style={styles.message}>{toFixLength({ text: chat.lastMessage.text, length: 50 })}</Text>}
+          {chat?.lastMessage?.text ? (
+            <Text style={styles.message}>
+              {toFixLength({ text: chat.lastMessage.text, length: 50 })}
+            </Text>
+          ) : <Text style={styles.text}>{`${t('ChatsList.startChattingWith')} ${chatName}`}</Text>}
           {Boolean(unreadMessagesNumber) && (
           <View style={styles.counter}>
             <Text style={styles.counterText}>{unreadMessagesNumber}</Text>
