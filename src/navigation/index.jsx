@@ -238,7 +238,6 @@ function AppNavigation() {
             fighterId: metadata.fighterId,
           });
         } catch (err) {
-          await inAppPurhaseService.finishMakingPurchase(purchase);
           dispatch(purchasesActions.finishPurchaseProcessing());
           console.error('verifyAppleReceipt error:', err);
           return;
