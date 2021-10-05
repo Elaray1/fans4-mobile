@@ -11,6 +11,9 @@ import Feed from 'screens/Feed';
 import Events from 'screens/Events';
 import Voting from 'screens/Voting';
 import Account from 'screens/Account';
+import ChatsList from 'screens/ChatsList';
+
+import config from 'resources/config';
 
 import BottomTabBar from './BottomTabBar';
 
@@ -31,7 +34,13 @@ function FanTabNavigator() {
       <Tab.Screen name="Voting" component={Voting} options={{ icon: VotingIcon }} />
       <Tab.Screen name="Events" component={Events} options={{ icon: EventsIcon }} />
       {/* TODO: replace Account component with Chats component */}
-      <Tab.Screen name="Messages" component={Account} options={{ icon: MessageIcon }} />
+      <Tab.Screen
+        name="Messages"
+        component={config.mode === 'PROD'
+          ? Account
+          : ChatsList}
+        options={{ icon: MessageIcon }}
+      />
       <Tab.Screen name="Account" component={Account} options={{ icon: AccountIcon }} />
     </Tab.Navigator>
   );

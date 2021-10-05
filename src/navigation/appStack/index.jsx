@@ -40,6 +40,7 @@ import Fans4Profile from 'screens/Fans4Profile';
 import FighterRecord from 'screens/FighterRecord';
 import SearchFighters from 'screens/SearchFighters';
 import Chat from 'screens/Chat';
+import ChatsList from 'screens/ChatsList';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import { USER_TYPES, SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
@@ -141,6 +142,7 @@ function AppScreens() {
         <AppStack.Screen name="FighterRecord" component={FighterRecord} />
         <AppStack.Screen name="SearchFighters" component={SearchFighters} />
         <AppStack.Screen name="Chat" component={Chat} />
+        <AppStack.Screen name="ChatsList" component={ChatsList} />
       </AppStack.Navigator>
     </>
   );
