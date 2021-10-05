@@ -675,6 +675,7 @@
     "startChatting": "Start chatting with your fans",
     "clickTheIcon": "Click the icon in the right hand corner to start a conversation.",
     "noSubscriptions": "No subscriptions, yet",
-    "subscribe": "Subscribe to your favorite fighters and start a chat!"
+    "subscribe": "Subscribe to your favorite fighters and start a chat!",
+    "startChattingWith": "Start chatting with"
   }
 }
