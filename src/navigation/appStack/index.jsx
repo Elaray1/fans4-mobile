@@ -82,7 +82,7 @@ function AppScreens() {
 
   const isFanWithFailedIosSubscription = userType === USER_TYPES.FAN
     && userSubscriptions.find(f => f.platform === SUBSCRIPTION_PLATFORMS.IOS
-      && f.autorewal
+      && f.autorenewal
       && moment(f.renewalDate).isBefore(moment())
       && moment(f.gracePeriodEndDate).isAfter(moment()));
 
