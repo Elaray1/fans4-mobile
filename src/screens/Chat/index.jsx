@@ -109,7 +109,7 @@ function Chat({ route }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateMessageList = useCallback((newMessage) => {
+  const updateMessageList = useCallback(({ message: newMessage }) => {
     if (!messages.find(message => message._id === newMessage._id)) {
       setMessages([newMessage, ...messages]);
     }
@@ -117,10 +117,10 @@ function Chat({ route }) {
 
   useEffect(() => {
     socketService.emit('subscribe', `chat-${chatId}`);
-    socketService.on('message:created', updateMessageList);
+    socketService.on(`chat-${chatId}-message:created`, updateMessageList);
     return () => {
       socketService.emit('unsubscribe', `chat-${chatId}`);
-      socketService.removeListener('message:created', updateMessageList);
+      socketService.removeListener(`chat-${chatId}-message:created`, updateMessageList);
     };
   }, [updateMessageList, chatId]);
 
