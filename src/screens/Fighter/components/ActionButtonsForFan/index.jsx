@@ -65,8 +65,8 @@ const ActionButtonsForFan = ({ fighter, subscribe, unsubscribe, resubscribe }) =
     firstActionButton = (
       <Button
         onPress={canResubcribeInApp ? resubscribe : unsubscribe}
+        title={canResubcribeInApp ? t('Fighter.resubscribe') : t('Fighter.subscribed')}
         type="done"
-        title={t('Fighter.subscribed')}
         style={firstActionButtonStyles}
       />
     );

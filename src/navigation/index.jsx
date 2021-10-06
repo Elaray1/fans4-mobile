@@ -141,10 +141,6 @@ const handleFighterUpdated = (user) => {
   store.dispatch(userActions.setUserData(user));
 };
 
-const handleFanSubscriptionsUpdated = (user) => {
-  store.dispatch(userActions.setUserData(user));
-};
-
 const handleUserActivityIndicatorUpdated = (user) => {
   store.dispatch(userActions.setUserData(user));
 };
@@ -198,7 +194,6 @@ function AppNavigation() {
       if (userAuthenticated) {
         socketsService.on('user:status-updated', handleUserStatusUpdated);
         socketsService.on('fighter:updated', handleFighterUpdated);
-        socketsService.on('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
         socketsService.on('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
         socketsService.on('user:updated', handleUserUpdated);
 
@@ -208,7 +203,6 @@ function AppNavigation() {
 
         socketsService.removeListener('user:status-updated', handleUserStatusUpdated);
         socketsService.removeListener('fighter:updated', handleFighterUpdated);
-        socketsService.removeListener('fan:subscriptions-updated', handleFanSubscriptionsUpdated);
         socketsService.removeListener('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
         socketsService.removeListener('user:updated', handleUserUpdated);
       }

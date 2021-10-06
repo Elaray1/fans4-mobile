@@ -38,12 +38,6 @@ const useSubscribing = ({ fighterId }) => {
 
   const isPurchaseProcessing = useSelector(purchasesSelectors.getIsPurchaseInProcessing);
 
-  useEffect(() => {
-    if (!isPurchaseProcessing) {
-      setIsMakingPurchase(false);
-    }
-  }, [isPurchaseProcessing, setIsMakingPurchase]);
-
   const unsubscribe = useCallback(() => {
     if (subscription.platform === 'web') {
       Alert.alert(t('Fighter.unsubscribe'), t('Fighter.noPossibilityToUnsubscribeInApp'), { text: t('Fighter.ok') });
@@ -104,6 +98,7 @@ const useSubscribing = ({ fighterId }) => {
       dispatch(purchasesActions.startPurchaseProcessing());
     } catch (err) {
       setIsMakingPurchase(false);
+      dispatch(purchasesActions.finishPurchaseProcessing());
     }
   }, [dispatch, fighterId, userSubscriptions, showFailure, t]);
 
