@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, SafeAreaView, FlatList, ActivityIndicator, ScrollView, RefreshControl, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 import Text from 'components/Text';
 import Header from 'components/Header';
@@ -27,6 +28,7 @@ const PER_PAGE = 20;
 const ChatsList = () => {
   const { t } = useTranslation();
   const { showFailure } = useToast();
+  const navigation = useNavigation();
 
   const [chats, setChats] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -101,6 +103,10 @@ const ChatsList = () => {
     setChats(newChats);
   }, [chats]);
 
+  const onNewChatPress = useCallback((chat) => {
+    navigation.navigate('NewChat');
+  }, [navigation]);
+
   const renderItem = ({ item }) => {
     return (
       <ChatItem chat={item} setNewChat={onNewMessages} resetUnread={resetUnread} />
@@ -123,7 +129,7 @@ const ChatsList = () => {
         leftItemType="backArrow"
         rightItemType={isFan ? null : 'icon'}
         rightItemIcon={NewChatIcon}
-        onRightItemPress={() => {}}
+        onRightItemPress={onNewChatPress}
       />
       <View style={styles.content}>
         {isRefreshing && <Loader />}

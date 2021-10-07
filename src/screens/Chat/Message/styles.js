@@ -8,7 +8,7 @@ const { width } = Dimensions.get('window');
 export default StyleSheet.create({
   message: {
     flexDirection: 'row',
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-start',
     maxWidth: width - variables.paddingHorizontal * 2 - 40,
     paddingHorizontal: 15,
     paddingVertical: 10,
@@ -17,7 +17,7 @@ export default StyleSheet.create({
     borderRadius: 5,
   },
   senderMessage: {
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-end',
     backgroundColor: colors.message,
   },
   text: {
