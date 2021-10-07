@@ -23,6 +23,14 @@ function renderTabBar(props) {
   return <BottomTabBar {...props} />;
 }
 
+const optionsByScreen = {
+  feed: { icon: FeedIcon },
+  voting: { icon: VotingIcon },
+  events: { icon: EventsIcon },
+  message: { icon: MessageIcon },
+  account: { icon: AccountIcon },
+};
+
 function FanTabNavigator() {
   return (
     <Tab.Navigator
@@ -30,18 +38,13 @@ function FanTabNavigator() {
       tabBar={renderTabBar}
       lazy={false}
     >
-      <Tab.Screen name="Feed" component={Feed} options={{ icon: FeedIcon }} />
-      <Tab.Screen name="Voting" component={Voting} options={{ icon: VotingIcon }} />
-      <Tab.Screen name="Events" component={Events} options={{ icon: EventsIcon }} />
+      <Tab.Screen name="Feed" component={Feed} options={optionsByScreen.feed} />
+      <Tab.Screen name="Voting" component={Voting} options={optionsByScreen.voting} />
+      <Tab.Screen name="Events" component={Events} options={optionsByScreen.events} />
       {/* TODO: replace Account component with Chats component */}
-      <Tab.Screen
-        name="Messages"
-        component={config.mode === 'PROD'
-          ? Account
-          : ChatsList}
-        options={{ icon: MessageIcon }}
-      />
-      <Tab.Screen name="Account" component={Account} options={{ icon: AccountIcon }} />
+      {config.mode !== 'PROD'
+      && <Tab.Screen name="Messages" component={ChatsList} options={optionsByScreen.message} />}
+      <Tab.Screen name="Account" component={Account} options={optionsByScreen.account} />
     </Tab.Navigator>
   );
 }
