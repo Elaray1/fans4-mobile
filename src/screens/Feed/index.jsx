@@ -3,12 +3,13 @@ import {
   SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, AppState, Platform,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import _ from 'lodash';
 
-import checkIfSubscriptionChanged from 'helpers/checkIfSubscriptionChanged';
+import { FANS4_ACCOUNT } from 'helpers/constants';
 
+import NoPostsIllustration from 'assets/illustrations/no-events';
 import SearchFightersIcon from 'assets/icons/search-people';
 
 import * as userSelectors from 'resources/user/user.selectors';
@@ -16,34 +17,57 @@ import * as userApi from 'resources/user/user.api';
 import * as userActions from 'resources/user/user.actions';
 import * as postApi from 'resources/post/post.api';
 
+import isSubscribedService from 'services/isSubscribed.service';
+
 import Header from 'components/Header';
 import Post from 'components/Post';
 import Text from 'components/Text';
 
 import useToast from 'hooks/useToast';
-import useDidUpdate from 'hooks/useDidUpdate';
 
 import colors from 'themes/colors';
-
-import NoPostsIllustration from 'assets/illustrations/no-events';
 
 import styles from './styles';
 
 const PER_PAGE_COUNT = 20;
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+const checkIfSomeSubscriptionAddedOrRemoved = (oldSupportedFighters, newSupportedFighters) => {
+  let oldOnes = (oldSupportedFighters || [])
+    .filter(f => f._id !== FANS4_ACCOUNT._id && isSubscribedService.isSubscribed({ subscriptionToFighter: f }));
+
+  let newOnes = (newSupportedFighters || [])
+    .filter(f => f._id !== FANS4_ACCOUNT._id && isSubscribedService.isSubscribed({ subscriptionToFighter: f }));
+
+  if (oldOnes.length !== newOnes.length) {
+    return true;
+  }
+
+  oldOnes = _.sortBy(oldOnes, '_id');
+  newOnes = _.sortBy(newOnes, '_id');
+
+  return oldOnes.some((f, i) => {
+    const oldSubscription = f;
+    const newSubscription = newOnes[i];
+
+    return oldSubscription._id !== newSubscription._id;
+  });
+};
+
 function Feed() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation();
   const { showFailure } = useToast();
-  const isFocused = useIsFocused();
 
   const fightersList = useSelector(userSelectors.getSupportedFighters);
 
   const [posts, setPosts] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -51,22 +75,18 @@ function Feed() {
   const [viewablePosts, setViewablePosts] = useState({});
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
-    if (!fightersList?.length) {
+    if (isLoading) {
       return;
     }
 
-    let fetchingPage = 1;
-    let currentPosts = [];
+    const fetchingPage = refresh ? 1 : page + 1;
+    const currentPosts = refresh ? [] : posts;
 
-    if (!refresh) {
-      fetchingPage = page;
-      currentPosts = posts;
-    }
-
-    if (fetchingPage === 1 || currentPosts.length < totalCount) {
+    if (refresh || currentPosts.length < totalCount || !isFetchedFirstTime) {
       setIsLoading(true);
 
       try {
+        await sleep(3000);
         const {
           posts: fetchedPosts,
           totalCount: fetchedTotalCount,
@@ -75,16 +95,20 @@ function Feed() {
           perPage: PER_PAGE_COUNT,
         });
 
-        setPage(fetchingPage + 1);
+        setPage(page + 1);
         setTotalCount(fetchedTotalCount);
         setPosts([...currentPosts, ...fetchedPosts]);
       } catch (error) {
         showFailure(t('Feed.couldntRefreshTheFeedPullToRefresh'));
       }
 
+      if (!isFetchedFirstTime) {
+        setIsFetchedFirstTime(true);
+      }
+
       setIsLoading(false);
     }
-  }, [posts, page, totalCount, fightersList?.length, showFailure, t]);
+  }, [posts, page, totalCount, showFailure, t, isFetchedFirstTime, isLoading]);
 
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -92,52 +116,44 @@ function Feed() {
     setIsRefreshing(false);
   }, [fetchNewItems]);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      await fetchNewItems();
-    };
-
-    fetchPosts();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const updateSubscriptionIfNeeded = useCallback(async () => {
+    console.log('updateSubscriptionIfNeeded');
+    if (!isFetchedFirstTime) {
+      return;
+    }
+
     try {
       const fetchedUser = await userApi.getUserData();
-      const isChanged = checkIfSubscriptionChanged(fightersList, fetchedUser.role.subscription.fighters);
+      const isChanged = checkIfSomeSubscriptionAddedOrRemoved(fightersList, fetchedUser.role.subscription.fighters);
+
       if (isChanged) {
-        dispatch(userActions.setFanSubscriptions(fetchedUser?.role?.subscription?.fighters));
+        dispatch(userActions.setUserData(fetchedUser));
         onRefresh();
       }
     } catch (err) {
       console.error('getting user data error:', err);
     }
-  }, [dispatch, fightersList, onRefresh]);
+  }, [dispatch, fightersList, onRefresh, isFetchedFirstTime]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', updateSubscriptionIfNeeded);
-    return unsubscribe;
-  }, [navigation, updateSubscriptionIfNeeded]);
+    fetchNewItems();
+    // empty array because we need to use fetchNewItems only once here an with initial values of dependencies
+  }, []);
 
   useEffect(() => {
-    const checkSubscriptionsOnFocus = (appState) => {
-      if (isFocused && appState === 'active') {
+    const checkSubscriptionsWhenAppInForeground = (appState) => {
+      if (appState === 'active') {
         updateSubscriptionIfNeeded();
       }
     };
 
-    AppState.addEventListener('change', checkSubscriptionsOnFocus);
+    AppState.addEventListener('change', checkSubscriptionsWhenAppInForeground);
+    return () => AppState.removeEventListener('change', checkSubscriptionsWhenAppInForeground);
+  }, [updateSubscriptionIfNeeded, isFetchedFirstTime]);
 
-    return () => {
-      AppState.removeEventListener('change', checkSubscriptionsOnFocus);
-    };
-  }, [isFocused, updateSubscriptionIfNeeded]);
-
-  useDidUpdate(() => {
-    if (!isFocused) {
-      onRefresh();
-    }
-  }, [fightersList]);
+  useEffect(() => {
+    updateSubscriptionIfNeeded();
+  }, [updateSubscriptionIfNeeded, fightersList]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -192,9 +208,10 @@ function Feed() {
   const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
 
   const renderFooter = () => {
-    if (!isLoading) {
+    if (isRefreshing || !isLoading) {
       return null;
     }
+
     return <Loader />;
   };
 
@@ -214,11 +231,7 @@ function Feed() {
     </View>
   );
 
-  const EmptyView = () => {
-    return (
-      !isLoading ? <NoPosts /> : <Loader />
-    );
-  };
+  const isNoPostsToShow = isFetchedFirstTime && !posts.length;
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -228,10 +241,19 @@ function Feed() {
         onRightItemPress={onSearchFighters}
         rightItemIcon={SearchFightersIcon}
       />
-      <View style={styles.content}>
-        {isRefreshing && <Loader />}
 
-        {!isRefreshing && Boolean(fightersList?.length) && (posts.length ? (
+      <View style={styles.content}>
+        {isNoPostsToShow && (
+          <ScrollView
+            contentContainerStyle={styles.emptyScroll}
+            refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
+            keyboardShouldPersistTaps="handled"
+          >
+            {!fightersList?.length ? <NoSubscriptions /> : <NoPosts />}
+          </ScrollView>
+        )}
+
+        {!isNoPostsToShow && (
           <FlatList
             data={posts}
             renderItem={renderItem}
@@ -246,23 +268,7 @@ function Feed() {
             viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
             onViewableItemsChanged={updateViewableItems}
           />
-        ) : (
-          <ScrollView
-            contentContainerStyle={styles.emptyScroll}
-            refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
-            keyboardShouldPersistTaps="handled"
-          >
-            <EmptyView />
-          </ScrollView>
-        ))}
-
-        <ScrollView
-          contentContainerStyle={styles.emptyScroll}
-          refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
-          keyboardShouldPersistTaps="handled"
-        >
-          {!fightersList?.length && <NoSubscriptions />}
-        </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );

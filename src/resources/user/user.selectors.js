@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { createSelector } from 'reselect';
 
 import { FANS4_ACCOUNT } from 'helpers/constants';
+import isSubscribedService from 'services/isSubscribed.service';
 
 export const getAuthenticated = ({ user }) => user !== null;
 
@@ -25,6 +26,7 @@ export const getHometown = ({ user }) => {
     return `${cityName}, ${stateCode}`;
   }
 };
+
 export const getAvatarUrl = ({ user }) => user?.avatarUrl;
 export const getUserAge = ({ user }) => dayjs().diff(user?.role?.biography?.birthdate, 'year');
 export const getUserProfileInfo = ({ user }) => user?.role?.profile;
@@ -44,7 +46,9 @@ export const getIsBankAccountWarning = ({ user }) => user?.appState?.isBankAccou
 export const getAllSupportedFighters = ({ user }) => user?.role?.subscription?.fighters;
 export const getSupportedFighters = createSelector(
   getAllSupportedFighters,
-  fighters => fighters && fighters.filter(fighter => fighter._id !== FANS4_ACCOUNT._id),
+  fighters => fighters
+    && fighters.filter(fighter => fighter._id !== FANS4_ACCOUNT._id
+      && isSubscribedService.isSubscribed({ subscriptionToFighter: fighter })),
 );
 
 export const getUserName = ({ user }) => user?.role?.biography?.userName;

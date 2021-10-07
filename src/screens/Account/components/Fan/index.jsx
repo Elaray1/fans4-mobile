@@ -93,7 +93,7 @@ const FanAccount = () => {
     };
 
     updateUserSubscriptions();
-  }, [dispatch, showFailure, userSubscriptions]);
+  }, [dispatch, showFailure]);
 
   useEffect(() => {
     socketService.on('supportedFighter:status-updated', ({ _id, status }) => {
