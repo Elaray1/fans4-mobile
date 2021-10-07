@@ -17,7 +17,7 @@ export const GetHeaderItem = ({ type, props, text, icon }) => {
   let item = null;
   const defaultItem = <View style={{ width: WIDTH_ICON }} />;
 
-  const imageSource = useMemo(() => ({ source: { uri: props.imageUrl } }), [props.imageUrl]);
+  const imageSource = useMemo(() => ({ uri: props.imageUrl }), [props.imageUrl]);
 
   switch (type) {
     case ITEM_TYPES.BACK_ARROW:

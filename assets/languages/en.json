@@ -677,5 +677,11 @@
     "noSubscriptions": "No subscriptions, yet",
     "subscribe": "Subscribe to your favorite fighters and start a chat!",
     "startChattingWith": "Start chatting with"
+  },
+  "NewChat": {
+    "newChat": "New chat",
+    "search": "Search",
+    "noSearchResults": "No search results.",
+    "showFullList": "Show full list"
   }
 }

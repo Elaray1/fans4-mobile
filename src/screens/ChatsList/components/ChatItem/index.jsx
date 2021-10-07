@@ -5,11 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import FastImage from 'react-native-fast-image';
-import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
 import { toFixLength } from 'helpers/modifyText';
+import { formatTime } from 'components/Post/Post.helpers';
 
 import * as socketService from 'services/socket.service';
 
@@ -26,8 +26,7 @@ const ChatItem = ({ chat, setNewChat, resetUnread }) => {
   const { participants } = chat;
 
   const { unreadMessagesNumber } = participants.find(u => u._id === userId);
-  const { name: chatName } = participants.find(u => u._id !== userId);
-  const { avatarUrl } = participants.find(u => u._id !== userId);
+  const { name: chatName, avatarUrl, _id } = participants.find(u => u._id !== userId);
 
   useEffect(() => {
     socketService.emit('subscribe', `chat-${chat._id}`);
@@ -45,9 +44,11 @@ const ChatItem = ({ chat, setNewChat, resetUnread }) => {
     resetUnread(newChat);
     navigation.navigate('Chat', {
       chatId: chat._id,
+      userId: _id,
       userFullName: chatName,
+      userAvatar: avatarUrl,
     });
-  }, [chat, participants, resetUnread, navigation, chatName, userId]);
+  }, [chat, participants, resetUnread, navigation, _id, chatName, avatarUrl, userId]);
 
   return (
     <TouchableOpacity style={styles.chat} onPress={onChatPress}>
@@ -56,7 +57,7 @@ const ChatItem = ({ chat, setNewChat, resetUnread }) => {
         <View style={[styles.row, styles.topRow]}>
           <Text style={styles.name}>{chatName}</Text>
           {chat?.lastMessage?.createdOn
-         && <Text style={styles.time}>{moment(chat.lastMessage.createdOn).format('h:mm a')}</Text>}
+         && <Text style={styles.time}>{formatTime(chat.lastMessage.createdOn)}</Text>}
         </View>
         <View style={styles.row}>
           {chat?.lastMessage?.text ? (
