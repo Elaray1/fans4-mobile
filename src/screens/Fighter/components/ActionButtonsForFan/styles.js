@@ -19,4 +19,7 @@ export default StyleSheet.create({
   applyButton: {
     height: 40,
   },
+  applyButtonMargin: {
+    marginBottom: 20,
+  },
 });

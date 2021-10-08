@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { Linking, Alert, Platform } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
@@ -51,7 +51,7 @@ const useSubscribing = ({ fighterId }) => {
       }
 
       // eslint-disable-next-line max-len
-      const unsubscribeText = `${t('Fighter.unsubscribeText1')}${getIosSubscriptionNumberFromProductId(subscription.apple.productId)}${t('Fighter.unsubscribeText1')}${moment(subscription.renewalDate).format('MMM DD, YYYY')}`;
+      const unsubscribeText = `${t('Fighter.unsubscribeText1')}${getIosSubscriptionNumberFromProductId(subscription.apple.productId)}${t('Fighter.unsubscribeText2')}${moment(subscription.renewalDate).format('MMM DD, YYYY')}`;
 
       Alert.alert(t('Fighter.unsubscribe'), unsubscribeText, [
         { text: t('Fighter.keepIt') },

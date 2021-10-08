@@ -64,8 +64,8 @@ class InAppPurchaseService {
   }
 
   async finishMakingPurchase(purchase) {
-    await iap.finishTransaction(purchase);
     await this.removeSavedPurchaseMetadata(purchase.productId);
+    await iap.finishTransaction(purchase);
   }
 
   async getSavedPurchaseMetadata(productId) {

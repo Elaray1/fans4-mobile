@@ -234,6 +234,7 @@ function AppNavigation() {
         } catch (err) {
           dispatch(purchasesActions.finishPurchaseProcessing());
           console.error('verifyAppleReceipt error:', err);
+
           return;
         }
 
