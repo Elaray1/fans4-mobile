@@ -13,13 +13,18 @@ import Header from 'components/Header';
 import Button from 'components/Button';
 
 import { USER_TYPES } from 'resources/user/user.constants';
+
+import * as userApi from 'resources/user/user.api';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import analyticsService from 'services/analytics.service';
 
+import useToast from 'hooks/useToast';
+
 import styles from './TermsOfUse.styles';
 
 function TermsOfUse() {
+  const { showFailure } = useToast();
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -28,7 +33,13 @@ function TermsOfUse() {
 
   const isFan = userType === USER_TYPES.FAN;
 
-  const onAccept = useCallback(() => {
+  const onAccept = useCallback(async () => {
+    try {
+      await userApi.acceptTermsOfUse();
+    } catch (error) {
+      showFailure();
+    }
+
     if (!isFan) {
       analyticsService.logEvent({
         name: analyticsService.events.FIGHTER_TOS_ACCEPTED,
@@ -42,7 +53,7 @@ function TermsOfUse() {
       index: 0,
       routes: [{ name: isFan ? 'OnBoarding' : 'VerificationPending' }],
     });
-  }, [isFan, navigation, userId]);
+  }, [isFan, navigation, userId, showFailure]);
 
   return (
     <SafeAreaView style={styles.screen}>
