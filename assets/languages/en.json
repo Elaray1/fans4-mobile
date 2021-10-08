@@ -419,10 +419,6 @@
     "amateur": "Amateur",
     "subscriptionCongratulation": "Congratulations!",
     "accessToContent": "You now have access to exclusive content.",
-    "subscriptionPossibility1": "Full access to fighters’ content",
-    "subscriptionPossibility2": "Proposing fighter matchups",
-    "subscriptionPossibility3": "Voting them in for the next live event",
-    "subscriptionPossibility4": "Exclusive live-streaming events",
     "maxInAppSubscriptions": "You have maximum number of in-app subscriptions",
     "done": "Done",
     "processingIosPurchaseTitle": "Processing...",
@@ -542,9 +538,11 @@
   "AccountFan": {
     "username": "username",
     "YourSubscriptions": "Your subscriptions",
-    "YouCantSubscribe": "Become a fan for access to exclusive content!",
     "PleaseGoToFans4": "Please go to Fans4 official website to learn more.",
-    "subscriptionExpiresOn": "Expires on"
+    "subscriptionExpiresOn": "Expires on",
+    "youWillEnjoy": "Once you subscribe to a fighter, you will enjoy:",
+    "chooseFighters": "Choose Fighters",
+    "paymentFailed": "Payment Failed"
   },
   "genderPicker": {
     "male": "Male",
@@ -572,7 +570,7 @@
     "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method monthly.",
     "updateBankAccount": "Update Bank Account",
     "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
-    "update": "Update"
+    "update": "Update",
   },
   "BankAccountModal": {
     "updateBankAccount": "Update Bank Account",
@@ -665,5 +663,11 @@
     "post": "Post",
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh.",
     "messageNotSentPleaseTryAgain": "Message not sent. Please try again"
+  },
+  "SubscriptionPosibilities": {
+    "subscriptionPossibility1": "Full access to fighters’ content",
+    "subscriptionPossibility2": "Proposing fighter matchups",
+    "subscriptionPossibility3": "Voting them in for the next live event",
+    "subscriptionPossibility4": "Exclusive live-streaming events",
   }
 }

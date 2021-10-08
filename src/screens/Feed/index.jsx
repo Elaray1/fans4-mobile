@@ -32,8 +32,6 @@ import styles from './styles';
 const PER_PAGE_COUNT = 20;
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 const checkIfSomeSubscriptionAddedOrRemoved = (oldSupportedFighters, newSupportedFighters) => {
   let oldOnes = (oldSupportedFighters || [])
     .filter(f => f._id !== FANS4_ACCOUNT._id && isSubscribedService.isSubscribed({ subscriptionToFighter: f }));
@@ -86,7 +84,6 @@ function Feed() {
       setIsLoading(true);
 
       try {
-        await sleep(3000);
         const {
           posts: fetchedPosts,
           totalCount: fetchedTotalCount,
@@ -117,7 +114,6 @@ function Feed() {
   }, [fetchNewItems]);
 
   const updateSubscriptionIfNeeded = useCallback(async () => {
-    console.log('updateSubscriptionIfNeeded');
     if (!isFetchedFirstTime) {
       return;
     }

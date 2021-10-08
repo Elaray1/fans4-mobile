@@ -192,12 +192,12 @@ const ProposeAFight = ({ route }) => {
           {isLoading && <Loader />}
 
           {!fighters.length && !isLoading && (
-          <View style={styles.emptyView}>
-            <Text>{t('ProposeAFight.noFighters')}</Text>
-            <TouchableOpacity style={styles.showFullListButton} onPress={onReload}>
-              <Text style={styles.showFullListButtonText}>{t('ProposeAFight.showFullList')}</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.emptyView}>
+              <Text>{t('ProposeAFight.noFighters')}</Text>
+              <TouchableOpacity style={styles.showFullListButton} onPress={onReload}>
+                <Text style={styles.showFullListButtonText}>{t('ProposeAFight.showFullList')}</Text>
+              </TouchableOpacity>
+            </View>
           )}
         </ScrollView>
       </View>

@@ -11,7 +11,7 @@ import checkIfSubscriptionChanged from 'helpers/checkIfSubscriptionChanged';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as userApi from 'resources/user/user.api';
-import { USER_STATUSES } from 'resources/user/user.constants';
+import { USER_STATUSES, SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
 import * as userActions from 'resources/user/user.actions';
 
 import * as socketService from 'services/socket.service';
@@ -26,6 +26,7 @@ import { toFixLength } from 'helpers/modifyText';
 import colors from 'themes/colors';
 
 import styles from './styles';
+import NoSubscriptions from '../NoSubscriptions';
 
 const FanAccount = () => {
   const dispatch = useDispatch();
@@ -45,55 +46,23 @@ const FanAccount = () => {
     navigation.navigate('Fighter', { _id });
   }, [navigation]);
 
-  const updateSubscriptionIfNeeded = useCallback(async () => {
+  const updateUserSubscriptions = useCallback(async () => {
+    setIsLoading(true);
+
     try {
-      const fetchedUser = await userApi.getUserData();
-      const isChanged = checkIfSubscriptionChanged(userSubscriptions, fetchedUser.role.subscription.fighters);
-
-      if (isChanged) {
-        dispatch(userActions.setFanSubscriptions(fetchedUser?.role?.subscription?.fighters));
-      }
+      const { fighters: fetchedFighters } = await userApi.getMyFighters();
+      setFighters(fetchedFighters);
     } catch (err) {
-      console.error('getting user data error:', err);
+      console.error(err);
+      showFailure();
     }
-  }, [dispatch, userSubscriptions]);
+
+    setIsLoading(false);
+  }, [showFailure]);
 
   useEffect(() => {
-    const checkSubscriptionsOnFocus = (appState) => {
-      if (appState === 'active') {
-        updateSubscriptionIfNeeded();
-      }
-    };
-
-    AppState.addEventListener('change', checkSubscriptionsOnFocus);
-
-    return () => {
-      AppState.removeEventListener('change', checkSubscriptionsOnFocus);
-    };
-  }, [navigation, updateSubscriptionIfNeeded]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', updateSubscriptionIfNeeded);
-    return unsubscribe;
-  }, [navigation, updateSubscriptionIfNeeded]);
-
-  useEffect(() => {
-    const updateUserSubscriptions = async () => {
-      setIsLoading(true);
-
-      try {
-        const { fighters: fetchedFighters } = await userApi.getMyFighters();
-        setFighters(fetchedFighters);
-      } catch (err) {
-        console.error(err);
-        showFailure();
-      }
-
-      setIsLoading(false);
-    };
-
     updateUserSubscriptions();
-  }, [dispatch, showFailure]);
+  }, [dispatch, showFailure, updateUserSubscriptions, userSubscriptions]);
 
   useEffect(() => {
     socketService.on('supportedFighter:status-updated', ({ _id, status }) => {
@@ -112,12 +81,6 @@ const FanAccount = () => {
     });
   }, [fighters]);
 
-  const shownFighters = fighters.filter((f) => {
-    const fighterSubscription = userSubscriptions.find(s => s._id === f._id);
-    return fighterSubscription
-      && (fighterSubscription.autorenewal || moment(fighterSubscription.renewalDate).isAfter(new Date()));
-  });
-
   const Loader = () => (
     <View style={styles.loader}>
       <ActivityIndicator size="large" color={colors.primary} />
@@ -129,6 +92,11 @@ const FanAccount = () => {
 
     const { nickname } = item.role.biography;
     const { cityName, stateCode } = item.role.biography.hometown;
+
+    const isFailedIosSubscription = subscription.platform === SUBSCRIPTION_PLATFORMS.IOS
+      && subscription.autorenewal
+      && moment(subscription.renewalDate).isBefore(moment())
+      && moment(subscription.gracePeriodEndDate).isAfter(moment());
 
     return (
       <TouchableOpacity
@@ -149,8 +117,11 @@ const FanAccount = () => {
           />
         )}
 
-        <View>
-          <Text style={styles.fullName}>{item.fullName}</Text>
+        <View style={{ alignItems: 'flex-start' }}>
+          <Text style={styles.fullName}>
+            {item.fullName}
+          </Text>
+
           {nickname && (
             <Text style={styles.nickname}>
               “
@@ -171,6 +142,12 @@ const FanAccount = () => {
               {t('AccountFan.subscriptionExpiresOn')}{' '}{moment(subscription.renewalDate).format('MMM, D, YYYY')}
             </Text>
           )}
+
+          {isFailedIosSubscription && (
+            <View style={styles.iosPaymentFailedContainer}>
+              <Text style={styles.iosPaymentFailedText}>{t('AccountFan.paymentFailed')}</Text>
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     );
@@ -183,23 +160,23 @@ const FanAccount = () => {
           <Text style={styles.name}>{userName}</Text>
           <Text style={styles.caption}>({t('AccountFan.username')})</Text>
         </View>
+
         <Text style={styles.grayText}>{fullName} • {email}</Text>
       </View>
 
-      {isLoading ? <Loader /> : (
+      {isLoading && <Loader />}
+
+      {!isLoading && !fighters.length && <NoSubscriptions />}
+
+      {!isLoading && !!fighters.length && (
         <View style={styles.subscriptions}>
-          <Text style={[styles.title, !shownFighters.length && styles.emptyView]}>
+          <Text style={styles.title}>
             {t('AccountFan.YourSubscriptions')}
           </Text>
 
-          {shownFighters.map(supportedFighterView)}
+          {fighters.map(supportedFighterView)}
         </View>
       )}
-
-      <View style={styles.textContainer}>
-        <Text style={styles.grayText}>{t('AccountFan.YouCantSubscribe')}
-        </Text>
-      </View>
     </ScrollView>
   );
 };
