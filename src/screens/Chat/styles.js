@@ -72,4 +72,11 @@ export default StyleSheet.create({
   scrollView: {
     flexGrow: 1,
   },
+  typingMessage: {
+    marginTop: 8,
+    marginBottom: 4,
+    fontSize: fonts.size.small,
+    color: colors.textSecondary,
+    fontWeight: fonts.weight.medium,
+  },
 });
