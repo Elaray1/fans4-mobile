@@ -12,6 +12,7 @@ export default StyleSheet.create({
     borderBottomColor: colors.line,
     paddingBottom: 24,
     paddingTop: 30,
+    marginBottom: 19,
   },
   name: {
     fontSize: fonts.size.medium,
@@ -34,16 +35,11 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: fonts.size.small,
-    fontFamily: fonts.family.medium,
-    fontWeight: fonts.weight.medium,
+    fontWeight: fonts.weight.bold,
     color: colors.white,
-    marginVertical: 19,
   },
   emptyView: {
     marginBottom: 0,
-  },
-  subscriptions: {
-    paddingBottom: 20,
   },
   nameContainer: {
     flexDirection: 'row',
@@ -94,5 +90,18 @@ export default StyleSheet.create({
   },
   textContainer: {
     marginBottom: 20,
+  },
+  iosPaymentFailedContainer: {
+    backgroundColor: colors.errorBackground2,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'flex-start',
+  },
+  iosPaymentFailedText: {
+    color: colors.error,
+    fontSize: fonts.size.tiny,
+    fontWeight: fonts.weight.bold,
   },
 });

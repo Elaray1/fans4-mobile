@@ -50,7 +50,7 @@ class InAppPurchaseService {
     try {
       await iap.requestPurchase(productId);
     } catch (err) {
-      storage.removeItem(productId);
+      await this.removeSavedPurchaseMetadata(productId);
       throw err;
     }
   }
@@ -64,7 +64,8 @@ class InAppPurchaseService {
   }
 
   async finishMakingPurchase(purchase) {
-    return iap.finishTransaction(purchase);
+    await iap.finishTransaction(purchase);
+    await this.removeSavedPurchaseMetadata(purchase.productId);
   }
 
   async getSavedPurchaseMetadata(productId) {

@@ -5,9 +5,9 @@ import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 
 import Button from 'components/Button';
+import SubscriptionPosibilities from 'components/SubscriptionPosibilities';
 
 import illustrationSource from 'assets/illustrations/onboarding2-fighter.png';
-import CheckmarkIcon from 'assets/icons/success.svg';
 
 import styles from './styles';
 
@@ -34,39 +34,9 @@ const ConfirmedIosPurchase = ({ handleDonePress }) => {
           <Text style={styles.processingIosPurchaseInfoText}>{t('Fighter.accessToContent')}</Text>
         </View>
 
-        <View style={styles.subscriptionPosibilities}>
-          <View style={styles.subscriptionPosibilityContainer}>
-            <CheckmarkIcon />
-            <Text style={[styles.subscriptionPosibility, styles.subscriptionPosibilityMargin]}>
-              {t('Fighter.subscriptionPossibility1')}
-            </Text>
-          </View>
+        <SubscriptionPosibilities />
 
-          <View style={styles.subscriptionPosibilityContainer}>
-            <CheckmarkIcon />
-            <Text style={[styles.subscriptionPosibility, styles.subscriptionPosibilityMargin]}>
-              {t('Fighter.subscriptionPossibility2')}
-            </Text>
-          </View>
-
-          <View style={styles.subscriptionPosibilityContainer}>
-            <CheckmarkIcon />
-
-            <Text style={[styles.subscriptionPosibility, styles.subscriptionPosibilityMargin]}>
-              {t('Fighter.subscriptionPossibility3')}
-            </Text>
-          </View>
-
-          <View style={styles.subscriptionPosibilityContainer}>
-            <CheckmarkIcon />
-
-            <Text style={styles.subscriptionPosibility}>
-              {t('Fighter.subscriptionPossibility4')}
-            </Text>
-          </View>
-        </View>
-
-        <Button title={t('Fighter.done')} onPress={handleDonePress} />
+        <Button style={styles.doneButton} title={t('Fighter.done')} onPress={handleDonePress} />
       </View>
     </View>
   );
