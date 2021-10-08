@@ -135,3 +135,7 @@ export const addIntroVideo = (data, file, { onUploadProgress }) => {
 
 export const createIntroVideoPoster = (data, file) => apiClient
   .postWithFile('users/intro-video-poster', data, file);
+
+export const acceptTermsOfUse = () => {
+  return apiClient.put('users/terms-of-use');
+};
