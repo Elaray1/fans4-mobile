@@ -27,6 +27,8 @@ import colors from 'themes/colors';
 
 import NoMessagesIllustration from 'assets/illustrations/no-events.svg';
 
+import { USER_TYPES } from 'resources/user/user.constants';
+
 import Message from './Message';
 
 import { addDateSepatorsToMessages } from './Chat.helpers';
@@ -44,7 +46,7 @@ function Chat({ route }) {
   const { showFailure } = useToast();
   const navigation = useNavigation();
 
-  const userId = useSelector(userSelectors.getUserId);
+  const user = useSelector(userSelectors.getUserData);
 
   const {
     userId: otherUserId,
@@ -63,7 +65,11 @@ function Chat({ route }) {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(true);
 
-  const messagesWithSeparators = useMemo(() => addDateSepatorsToMessages(messages), [messages]);
+  const [timeouts, setTimeouts] = useState([]);
+
+  const messagesWithSeparators = useMemo(() => (messages.length === 1 && messages[0].isTyping
+    ? messages
+    : addDateSepatorsToMessages(messages)), [messages]);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;
@@ -114,18 +120,59 @@ function Chat({ route }) {
 
   const updateMessageList = useCallback(({ message: newMessage }) => {
     if (!messages.find(message => message._id === newMessage._id)) {
-      setMessages([newMessage, ...messages]);
+      if (messages[0]?.isTyping) {
+        setMessages([messages[0], newMessage, ...messages.slice(1)]);
+      } else {
+        setMessages([newMessage, ...messages]);
+      }
     }
   }, [messages]);
+
+  const removeTimeouts = useCallback(() => {
+    setTimeouts([]);
+  }, []);
+
+  useEffect(() => {
+    if (!timeouts.length && messages.find(m => m.isTyping)) {
+      setMessages(messages.filter(m => !m.isTyping));
+    }
+  }, [timeouts.length, messages]);
+
+  const onUserTyping = useCallback(({ user: typingUser }) => {
+    const oldMessages = messages[0]?.isTyping ? messages.slice(1) : messages;
+    const updatedMessages = [
+      { isTyping: true, user: typingUser },
+      ...oldMessages,
+    ];
+    setMessages(updatedMessages);
+
+    timeouts.forEach((timeoutId) => { clearTimeout(timeoutId); });
+    const newTimeoutId = setTimeout(() => {
+      removeTimeouts();
+    }, 1000);
+    setTimeouts([newTimeoutId]);
+  }, [messages, timeouts, removeTimeouts]);
 
   useEffect(() => {
     socketService.emit('subscribe', `chat-${chatId}`);
     socketService.on(`chat-${chatId}-message:created`, updateMessageList);
+    socketService.on(`chat-${chatId}-typing`, onUserTyping);
     return () => {
       socketService.emit('unsubscribe', `chat-${chatId}`);
       socketService.removeListener(`chat-${chatId}-message:created`, updateMessageList);
+      socketService.removeListener(`chat-${chatId}-typing`, onUserTyping);
     };
-  }, [updateMessageList, chatId]);
+  }, [updateMessageList, chatId, onUserTyping]);
+
+  const onMessageTextChange = useCallback((messageText) => {
+    setMessageValue(messageText);
+    const name = user.role.type === USER_TYPES.FIGHTER ? user.fullName : user.role.biography.nickname;
+    socketService.emit('emit', {
+      roomId: `chat-${chatId}`,
+      eventName: `chat-${chatId}-typing`,
+      data: { user: { name } },
+    });
+  }, [chatId, user.role.type, user.fullName, user.role.biography.nickname]);
 
   const onInputFocus = useCallback(() => {
     setIsInputFocused(true);
@@ -143,7 +190,11 @@ function Chat({ route }) {
         chatId,
       });
       setMessageValue('');
-      setMessages([message, ...messages]);
+      if (messages[0]?.isTyping) {
+        setMessages([messages[0], message, ...messages.slice(1)]);
+      } else {
+        setMessages([message, ...messages]);
+      }
     } catch (error) {
       showFailure(t('Chat.messageNotSentPleaseTryAgain'));
     }
@@ -170,6 +221,14 @@ function Chat({ route }) {
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
+    if (item.isTyping) {
+      return (
+        <Text key="typing" style={styles.typingMessage}>
+          {`${item.user.name} is typing...`}
+        </Text>
+      );
+    }
+
     if (item.isDateSeparator) {
       return (
         <Text key={item.text} style={styles.dateSeparator}>{item.text}</Text>
@@ -181,7 +240,7 @@ function Chat({ route }) {
         key={item._id}
         text={item.text}
         time={item.createdOn}
-        isSender={item.sender._id === userId}
+        isSender={item.sender._id === user._id}
       />
     );
   };
@@ -256,7 +315,7 @@ function Chat({ route }) {
                 <View style={styles.horizontalPaddings}>
                   <Input
                     value={messageValue}
-                    onChange={setMessageValue}
+                    onChange={onMessageTextChange}
                     onFocus={onInputFocus}
                     onBlur={onInputBlur}
                     placeholder={t('Chat.typeAMessage')}
