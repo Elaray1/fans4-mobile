@@ -432,7 +432,8 @@
     "unsubscribeText2": " fighter will be cancelled, but you can see content until ",
     "keepIt": "Keep it",
     "youWillBeRedirectedToResubscribeTo": "You will be redirected to ios settings to resubscribe to the ",
-    "resubscribe": "Resubscribe"
+    "resubscribe": "Resubscribe",
+    "noPossibilityToResubscribe": "No possibility to resubscribe to this fighter in the app."
   },
   "Fans4Account": {
     "profile": "Profile",
@@ -570,7 +571,7 @@
     "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method monthly.",
     "updateBankAccount": "Update Bank Account",
     "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
-    "update": "Update",
+    "update": "Update"
   },
   "BankAccountModal": {
     "updateBankAccount": "Update Bank Account",

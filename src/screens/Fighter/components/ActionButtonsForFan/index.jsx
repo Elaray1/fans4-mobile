@@ -53,21 +53,20 @@ const ActionButtonsForFan = ({ fighter, subscribe, unsubscribe, resubscribe }) =
   let secondActionButton = null;
 
   if (isSubscribed) {
-    const canResubcribeInApp = isSubscribedButWillBeStopped && Platform.OS === 'ios'
-      && subscription.platform === SUBSCRIPTION_PLATFORMS.IOS;
+    const isResubcribeShown = isSubscribedButWillBeStopped;
 
     const firstActionButtonStyles = [
-      canResubcribeInApp ? styles.applyButton : styles.subscribedButton,
-      canResubcribeInApp && styles.applyButtonMargin,
+      isResubcribeShown ? styles.applyButton : styles.subscribedButton,
+      isResubcribeShown && styles.applyButtonMargin,
       (fighter.role.fightingStatus !== FIGHTING_STATUSES.READY_FOR_FIGHTS && fighter.status !== USER_STATUSES.BLOCKED)
         && styles.noMargin,
     ];
 
     firstActionButton = (
       <Button
-        onPress={canResubcribeInApp ? resubscribe : unsubscribe}
-        title={canResubcribeInApp ? t('Fighter.resubscribe') : t('Fighter.subscribed')}
-        type={canResubcribeInApp ? undefined : 'done'}
+        onPress={isResubcribeShown ? resubscribe : unsubscribe}
+        title={isResubcribeShown ? t('Fighter.resubscribe') : t('Fighter.subscribed')}
+        type={isResubcribeShown ? undefined : 'done'}
         style={firstActionButtonStyles}
       />
     );

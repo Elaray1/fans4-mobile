@@ -18,7 +18,7 @@ import * as rootNavigation from 'helpers/rootNavigation';
 import analyticsService from 'services/analytics.service';
 import * as socketsService from 'services/socket.service';
 import pushNotificationService from 'services/pushNotification.service';
-import inAppPurhaseService from 'services/inAppPurhase.service';
+import inAppPurhaseService from 'services/inAppPurhase.service.ios';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
@@ -221,11 +221,25 @@ function AppNavigation() {
       }
 
       inAppPurhaseService.setPurchaseListener(async (purchase) => {
-        const metadata = await inAppPurhaseService.getSavedPurchaseMetadata(purchase.productId);
+        try {
+          const { isProcessed } = await paymentApi.checkIfIosTransactionProcessed({
+            appleTransactionId: purchase.transactionId,
+          });
+
+          if (isProcessed) {
+            await inAppPurhaseService.finishMakingPurchase(purchase);
+            return;
+          }
+        } catch (err) {
+          console.error('check if ios transaction processed err:', err);
+          return;
+        }
 
         let user;
 
         try {
+          const metadata = await inAppPurhaseService.getSavedPurchaseMetadata(purchase.productId);
+
           user = await paymentApi.verifyAppleReceipt({
             productId: purchase.productId,
             receipt: purchase.transactionReceipt,
@@ -234,7 +248,6 @@ function AppNavigation() {
         } catch (err) {
           dispatch(purchasesActions.finishPurchaseProcessing());
           console.error('verifyAppleReceipt error:', err);
-
           return;
         }
 
@@ -250,9 +263,12 @@ function AppNavigation() {
       });
     };
 
-    initIap();
-    return () => inAppPurhaseService.disconnect();
-  }, [dispatch]);
+    if (userAuthenticated) {
+      initIap();
+    } else {
+      return () => inAppPurhaseService.disconnect();
+    }
+  }, [dispatch, userAuthenticated]);
 
   const trackScreensOpening = useCallback(() => {
     const previousRouteName = routeNameRef.current;

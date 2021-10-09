@@ -6,11 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import Config from 'react-native-config';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import * as userApi from 'resources/user/user.api';
 import { SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
 
 import useToast from 'hooks/useToast';
 
-import inAppPurhaseService from 'services/inAppPurhase.service';
+import inAppPurhaseService from 'services/inAppPurhase.service.ios';
 
 import * as purchasesActions from 'store/purchases/purchases.actions';
 import * as purchasesSelectors from 'store/purchases/purchases.selectors';
@@ -29,7 +30,7 @@ const useSubscribing = ({ fighterId }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
+  const userSubscriptions = useSelector(userSelectors.getAllSupportedFighters);
   const subscription = userSubscriptions.find(f => f._id === fighterId);
 
   const finishMakingPurchaseAfterSucessPayment = useCallback(() => {
@@ -61,46 +62,74 @@ const useSubscribing = ({ fighterId }) => {
   }, [t, subscription]);
 
   const resubscribe = useCallback(() => {
-    // eslint-disable-next-line max-len
-    const resubscribeText = `${t('Fighter.youWillBeRedirectedToResubscribeTo')}${getIosSubscriptionNumberFromProductId(subscription.apple.productId)}`;
+    if (subscription.platform === SUBSCRIPTION_PLATFORMS.IOS && Platform.OS === 'ios') {
+      // eslint-disable-next-line max-len
+      const resubscribeText = `${t('Fighter.youWillBeRedirectedToResubscribeTo')}${getIosSubscriptionNumberFromProductId(subscription.apple.productId)}`;
 
-    Alert.alert('Resubscribe', resubscribeText, [
-      { text: 'Continue', onPress: () => Linking.openURL(IOS_SUBSCRIPTIONS_DEEP_LINK) },
+      Alert.alert('Resubscribe', resubscribeText, [
+        { text: 'Continue', onPress: () => Linking.openURL(IOS_SUBSCRIPTIONS_DEEP_LINK) },
+      ]);
+
+      return;
+    }
+
+    Alert.alert('Resubscribe', t('Fighter.noPossibilityToResubscribe'), [
+      { text: 'OK', onPress: () => Linking.openURL(IOS_SUBSCRIPTIONS_DEEP_LINK) },
     ]);
   }, [subscription, t]);
 
   const subscribe = useCallback(async () => {
-    const boughtIosProductIds = userSubscriptions
-      .filter(s => s.platform === SUBSCRIPTION_PLATFORMS.IOS)
-      .map(s => s.apple.productId);
-
-    const boughtOnIosButExpiredSubscription = userSubscriptions.find((s) => {
-      return s._id === fighterId
-        && s.platform === SUBSCRIPTION_PLATFORMS.IOS
-        && moment(s.renewalDate).isBefore(moment())
-        && moment(s.gracePeriodEndDate).isBefore(moment());
-    });
-
-    const buyingProductId = boughtOnIosButExpiredSubscription
-      ? boughtOnIosButExpiredSubscription.apple.productId
-      : inAppPurhaseService.getAvailableSubscriptionProductIds()
-        .find(productId => !boughtIosProductIds.includes(productId));
-
-    if (!buyingProductId) {
-      showFailure(t('Fighter.maxInAppSubscriptions'));
-      return;
-    }
-
     setIsMakingPurchase(true);
 
     try {
+      let fetchedUser;
+
+      try {
+        fetchedUser = await userApi.getUserData();
+      } catch (err) {
+        console.error(err);
+        showFailure();
+
+        setIsMakingPurchase(false);
+        dispatch(purchasesActions.finishPurchaseProcessing());
+
+        return;
+      }
+
+      const boughtIosProductIds = fetchedUser.role.subscription.fighters
+        .filter(s => s.platform === SUBSCRIPTION_PLATFORMS.IOS)
+        .map(s => s.apple.productId);
+
+      const boughtOnIosButExpiredSubscription = fetchedUser.role.subscription.fighters.find((s) => {
+        return s._id === fighterId
+          && s.platform === SUBSCRIPTION_PLATFORMS.IOS
+          && moment(s.renewalDate).isBefore(moment())
+          && moment(s.gracePeriodEndDate).isBefore(moment());
+      });
+
+      const buyingProductId = boughtOnIosButExpiredSubscription
+        ? boughtOnIosButExpiredSubscription.apple.productId
+        : inAppPurhaseService.getAvailableSubscriptionProductIds()
+          .find(productId => !boughtIosProductIds.includes(productId));
+
+      if (!buyingProductId) {
+        showFailure(t('Fighter.maxInAppSubscriptions'));
+        return;
+      }
+
       await inAppPurhaseService.makePurchase(buyingProductId, { fighterId });
       dispatch(purchasesActions.startPurchaseProcessing());
     } catch (err) {
+      if (err.code !== 'E_USER_CANCELLED') {
+        showFailure();
+      }
+
+      console.error(err);
+
       setIsMakingPurchase(false);
       dispatch(purchasesActions.finishPurchaseProcessing());
     }
-  }, [dispatch, fighterId, userSubscriptions, showFailure, t]);
+  }, [dispatch, fighterId, showFailure, t]);
 
   return {
     subscribe,
