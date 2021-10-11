@@ -38,21 +38,30 @@ const ChatItem = ({ chat, setNewChat, resetUnread }) => {
   }, [chat._id, setNewChat]);
 
   const onChatPress = useCallback(async () => {
-    const newChat = Object.assign({}, chat);
-    const index = participants.findIndex(u => u._id === userId);
-    newChat.participants[index].unreadMessagesNumber = 0;
-    resetUnread(newChat);
+    resetUnread({
+      ...chat,
+      participants: chat.participants.map(p => (
+        p._id === userId ? { ...p, unreadMessagesNumber: 0 } : p
+      )),
+    });
+
     navigation.navigate('Chat', {
       chatId: chat._id,
       userId: _id,
       userFullName: chatName,
       userAvatar: avatarUrl,
     });
-  }, [chat, participants, resetUnread, navigation, _id, chatName, avatarUrl, userId]);
+  }, [chat, resetUnread, navigation, _id, chatName, avatarUrl, userId]);
 
   return (
-    <TouchableOpacity style={styles.chat} onPress={onChatPress}>
-      {avatarUrl && <FastImage source={{ uri: avatarUrl }} style={styles.photoImage} />}
+    <TouchableOpacity style={_id === 'fans4' ? styles.fans4Chat : styles.chat} onPress={onChatPress}>
+      {avatarUrl && (
+      <FastImage
+        source={{ uri: avatarUrl }}
+        style={_id === 'fans4'
+          ? styles.fans4Photo : styles.photoImage}
+      />
+      )}
       <View style={styles.chatInfo}>
         <View style={[styles.row, styles.topRow]}>
           <Text style={styles.name}>{chatName}</Text>
