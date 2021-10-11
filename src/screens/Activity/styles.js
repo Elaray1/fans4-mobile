@@ -9,10 +9,7 @@ export default StyleSheet.create({
   },
   content: {
     ...commonStyles.screenContent,
-    marginTop: 30,
-  },
-  activity: {
-    marginBottom: 10,
+    marginTop: 14,
   },
   noActivities: {
     flex: 1,

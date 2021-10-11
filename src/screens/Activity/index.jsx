@@ -11,6 +11,8 @@ import * as activityApi from 'resources/activity/activity.api';
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 
+import * as socketService from 'services/socket.service';
+
 import ArrowDownIcon from 'assets/icons/arrow-down.svg';
 import NoAcitivtiesIllustration from 'assets/illustrations/no-events.svg';
 import ChatIcon from 'assets/icons/chat.svg';
@@ -141,20 +143,37 @@ function Activity() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const onActivityCreated = useCallback((activity) => {
+    setActivities({
+      today: [activity, ...activities.today],
+      yesterday: activities.yesterday,
+      thisWeek: activities.thisWeek,
+      thisMonth: activities.thisMonth,
+    });
+  }, [activities.today, activities.yesterday,
+    activities.thisWeek, activities.thisMonth]);
+
+  useEffect(() => {
+    socketService.on('activity:created', onActivityCreated);
+
+    return () => {
+      socketService.removeListener('activity:created', onActivityCreated);
+    };
+  }, [onActivityCreated]);
+
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
     return (
-      <View style={styles.activity} key={item._id}>
-        <ActivityItem
-          createdOn={item.createdOn}
-          type={item.type}
-          data={item.data}
-          title={item.title}
-          showTime={item.showTime}
-          isLast={item.isLast}
-        />
-      </View>
+      <ActivityItem
+        key={item._id}
+        createdOn={item.createdOn}
+        type={item.type}
+        data={item.data}
+        title={item.title}
+        showTime={item.showTime}
+        isLast={item.isLast}
+      />
     );
   };
 

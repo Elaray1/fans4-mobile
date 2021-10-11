@@ -8,6 +8,7 @@ const { width: windowWidth } = Dimensions.get('window');
 
 export default StyleSheet.create({
   title: {
+    marginTop: 16,
     marginBottom: 8,
     color: colors.textSecondary,
     fontSize: fonts.size.small,
@@ -43,8 +44,10 @@ export default StyleSheet.create({
   activityContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     marginTop: 16,
+  },
+  alignItemsCenter: {
+    alignItems: 'center',
   },
   time: {
     color: colors.textSecondary,
