@@ -94,14 +94,16 @@ const ChatsList = () => {
   }, [fetchChats]);
 
   const onNewMessages = useCallback(({ chat }) => {
-    const newChats = chats.filter(c => c._id !== chat._id);
-    setChats([chat, ...newChats]);
-  }, [chats]);
+    setChats((oldChats) => {
+      const newChats = oldChats.filter(c => c._id !== chat._id);
+      newChats.splice(1, 0, chat);
+      return newChats;
+    });
+  }, []);
 
   const resetUnread = useCallback((chat) => {
-    const newChats = chats.map(c => (c._id === chat._id ? chat : c));
-    setChats(newChats);
-  }, [chats]);
+    setChats(oldChats => oldChats.map(c => (c._id === chat._id ? chat : c)));
+  }, []);
 
   const onNewChatPress = useCallback((chat) => {
     navigation.navigate('NewChat');
@@ -133,7 +135,7 @@ const ChatsList = () => {
       />
       <View style={styles.content}>
         {isRefreshing && <Loader />}
-        {chats.length || page === INITIAL_PAGE
+        {chats.length > 0 || page === INITIAL_PAGE
           ? (
             <FlatList
               style={styles.flatList}

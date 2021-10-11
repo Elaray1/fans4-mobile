@@ -9,6 +9,15 @@ export default StyleSheet.create({
     paddingVertical: 16,
     flexDirection: 'row',
   },
+  fans4Chat: {
+    backgroundColor: colors.gray,
+    borderRadius: 5,
+    paddingVertical: 16,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 14,
+  },
   time: {
     color: colors.tabBarInactive,
     fontSize: fonts.size.caption,
@@ -43,6 +52,12 @@ export default StyleSheet.create({
     width: 50,
     borderRadius: 25,
     marginRight: 8,
+  },
+  fans4Photo: {
+    height: 34,
+    width: 34,
+    borderRadius: 17,
+    marginRight: 13,
   },
   chatInfo: {
     flex: 1,
