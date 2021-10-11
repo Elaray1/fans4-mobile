@@ -40,7 +40,7 @@ class InAppPurchaseService {
 
   async makePurchase(productId, metadata) {
     // it's required to fetch products before make actual purchase
-    await this.getSubscriptions([productId]);
+    const subscriptions = await this.getSubscriptions([productId]);
 
     const unfinishedPurchase = await storage.getItem(productId);
     if (!unfinishedPurchase) {
@@ -50,6 +50,7 @@ class InAppPurchaseService {
     try {
       await iap.requestPurchase(productId);
     } catch (err) {
+      console.log('requestPurchase error', err);
       await this.removeSavedPurchaseMetadata(productId);
       throw err;
     }

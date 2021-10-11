@@ -8,7 +8,7 @@ import moment from 'moment';
 
 import { useTranslation } from 'react-i18next';
 
-import { FIGHTING_STATUSES, USER_STATUSES, SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
+import { FIGHTING_STATUSES, USER_STATUSES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import Text from 'components/Text';

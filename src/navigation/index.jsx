@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { InteractionManager, AppState } from 'react-native';
+import { InteractionManager, AppState, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
@@ -212,7 +212,7 @@ function AppNavigation() {
   }, [userAuthenticated]);
 
   useEffect(() => {
-    if (inAppPurhaseService.OS !== 'ios') {
+    if (Platform.OS !== 'ios') {
       return;
     }
 
@@ -220,7 +220,7 @@ function AppNavigation() {
       try {
         await inAppPurhaseService.connect();
       } catch (err) {
-        console.log('in app purchases connection error', err);
+        console.error('in app purchases connection error', err);
         return;
       }
 

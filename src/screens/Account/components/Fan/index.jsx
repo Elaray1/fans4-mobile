@@ -6,13 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 
-import checkIfSubscriptionChanged from 'helpers/checkIfSubscriptionChanged';
-
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as userApi from 'resources/user/user.api';
 import { USER_STATUSES, SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
-import * as userActions from 'resources/user/user.actions';
 
 import * as socketService from 'services/socket.service';
 
@@ -89,6 +86,10 @@ const FanAccount = () => {
 
   const supportedFighterView = (item, i) => {
     const subscription = userSubscriptions.find(s => s._id === item._id);
+
+    if (!subscription) {
+      return null;
+    }
 
     const { nickname } = item.role.biography;
     const { cityName, stateCode } = item.role.biography.hometown;
