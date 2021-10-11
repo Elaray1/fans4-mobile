@@ -431,7 +431,9 @@
     "unsubscribeText1": "Your subscription for the ",
     "unsubscribeText2": " fighter will be cancelled, but you can see content until ",
     "keepIt": "Keep it",
-    "youWillBeRedirectedToResubscribeTo": "You will be redirected to ios settings to resubscribe to the ",
+    "youWillBeRedirectedToResubscribeTo1": "Your subscription for the ",
+    "youWillBeRedirectedToResubscribeTo2": " fighter will be renewed",
+
     "resubscribe": "Resubscribe",
     "noPossibilityToResubscribe": "No possibility to resubscribe to this fighter in the app."
   },

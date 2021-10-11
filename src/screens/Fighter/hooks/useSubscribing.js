@@ -41,13 +41,17 @@ const useSubscribing = ({ fighterId }) => {
 
   const unsubscribe = useCallback(() => {
     if (subscription.platform === 'web') {
-      Alert.alert(t('Fighter.unsubscribe'), t('Fighter.noPossibilityToUnsubscribeInApp'), { text: t('Fighter.ok') });
+      Alert.alert(t('Fighter.unsubscribe'), t('Fighter.noPossibilityToUnsubscribeInApp'), [{ text: t('Fighter.ok') }]);
       return;
     }
 
     if (subscription.platform === SUBSCRIPTION_PLATFORMS.IOS) {
       if (Platform.OS === 'android') {
-        Alert.alert(t('Fighter.unsubscribe'), t('Fighter.youSubscribedToThisFighterInIos'), { text: t('Fighter.ok') });
+        Alert.alert(
+          t('Fighter.unsubscribe'),
+          t('Fighter.youSubscribedToThisFighterInIos'),
+          [{ text: t('Fighter.ok') }],
+        );
         return;
       }
 
@@ -64,10 +68,12 @@ const useSubscribing = ({ fighterId }) => {
   const resubscribe = useCallback(() => {
     if (subscription.platform === SUBSCRIPTION_PLATFORMS.IOS && Platform.OS === 'ios') {
       // eslint-disable-next-line max-len
-      const resubscribeText = `${t('Fighter.youWillBeRedirectedToResubscribeTo')}${getIosSubscriptionNumberFromProductId(subscription.apple.productId)}`;
+      const resubscribeText = `${t('Fighter.youWillBeRedirectedToResubscribeTo1')}${getIosSubscriptionNumberFromProductId(subscription.apple.productId)}${t('Fighter.youWillBeRedirectedToResubscribeTo2')}`;
 
       Alert.alert('Resubscribe', resubscribeText, [
-        { text: 'Continue', onPress: () => Linking.openURL(IOS_SUBSCRIPTIONS_DEEP_LINK) },
+        { text: 'No', style: 'cancel' },
+
+        { text: 'Yes', onPress: () => Linking.openURL(IOS_SUBSCRIPTIONS_DEEP_LINK) },
       ]);
 
       return;
@@ -118,6 +124,7 @@ const useSubscribing = ({ fighterId }) => {
       }
 
       await inAppPurhaseService.makePurchase(buyingProductId, { fighterId });
+
       dispatch(purchasesActions.startPurchaseProcessing());
     } catch (err) {
       if (err.code !== 'E_USER_CANCELLED') {

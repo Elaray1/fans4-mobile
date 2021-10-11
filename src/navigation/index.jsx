@@ -212,6 +212,10 @@ function AppNavigation() {
   }, [userAuthenticated]);
 
   useEffect(() => {
+    if (inAppPurhaseService.OS !== 'ios') {
+      return;
+    }
+
     const initIap = async () => {
       try {
         await inAppPurhaseService.connect();
