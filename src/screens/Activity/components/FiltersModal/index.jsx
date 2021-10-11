@@ -22,10 +22,6 @@ function FiltersModal({
   const { t } = useTranslation();
   const [selectedActionTypes, setSelectedActionTypes] = useState(selectedFilters);
 
-  const onSelectFilter = useCallback((types) => {
-    setSelectedActionTypes(types);
-  }, []);
-
   const filters = useMemo(() => [
     {
       title: t('FiltersModal.allActivity'),
@@ -45,9 +41,14 @@ function FiltersModal({
     },
   ], [t]);
 
-  const onCloseModal = useCallback(() => {
-    onClose(selectedActionTypes);
+  const onCloseModal = useCallback((types) => {
+    onClose(types || selectedActionTypes);
   }, [selectedActionTypes, onClose]);
+
+  const onSelectFilter = useCallback((types) => {
+    setSelectedActionTypes(types);
+    onCloseModal(types);
+  }, [onCloseModal]);
 
   return (
     <Modal

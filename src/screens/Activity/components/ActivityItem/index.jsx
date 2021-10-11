@@ -15,6 +15,8 @@ import Text from 'components/Text';
 import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
 
 import { formatTime } from 'components/Post/Post.helpers';
+import { toFixLength } from 'helpers/modifyText';
+
 import config from 'resources/config';
 
 import styles from './styles';
@@ -41,7 +43,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
   }, [data.post?._id, navigation]);
 
   const NewFanView = useCallback(() => (
-    <View style={styles.activityContainer}>
+    <View style={[styles.activityContainer, styles.alignItemsCenter]}>
       <View>
         <View style={styles.textContainer}>
           <Text style={styles.textBold}>{data.author.fullName} </Text>
@@ -69,10 +71,14 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
           <Text style={styles.textBold}>{data.author.fullName} </Text>
           <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.commented')}</Text>
         </View>
-        {data.comment.text && <Text style={[styles.text, styles.commentText]}>{data.comment.text}</Text>}
+        {data.comment.text && (
+        <Text style={[styles.text, styles.commentText]}>
+          {toFixLength({ text: data.comment.text, length: 110 })}
+        </Text>
+        )}
         {data.post.text && (
         <View style={styles.textPostContainer}>
-          <Text style={styles.text}>{data.post.text}</Text>
+          <Text style={styles.text}>{toFixLength({ text: data.post.text, length: 90 })}</Text>
           {data.post.media && (
           <FastImage
             style={styles.postImage}
@@ -109,7 +115,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
         </View>
         {data.post.text && (
         <View style={styles.textPostContainer}>
-          <Text style={styles.text}>{data.post.text}</Text>
+          <Text style={styles.text}>{toFixLength({ text: data.post.text, length: 100 })}</Text>
           {data.post.media && (
           <FastImage
             style={styles.postImage}
