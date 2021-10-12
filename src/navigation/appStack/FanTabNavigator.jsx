@@ -43,7 +43,7 @@ function FanTabNavigator() {
       <Tab.Screen name="Events" component={Events} options={optionsByScreen.events} />
       {/* TODO: replace Account component with Chats component */}
       {config.mode !== 'PROD'
-      && <Tab.Screen name="Messages" component={ChatsList} options={optionsByScreen.message} />}
+      && <Tab.Screen name="Chat" component={ChatsList} options={optionsByScreen.message} />}
       <Tab.Screen name="Account" component={Account} options={optionsByScreen.account} />
     </Tab.Navigator>
   );

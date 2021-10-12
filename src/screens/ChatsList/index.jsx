@@ -128,7 +128,7 @@ const ChatsList = () => {
     <SafeAreaView>
       <Header
         title={t('ChatsList.chats')}
-        leftItemType="backArrow"
+        leftItemType={isFan ? null : 'backArrow'}
         rightItemType={isFan ? null : 'icon'}
         rightItemIcon={NewChatIcon}
         onRightItemPress={onNewChatPress}

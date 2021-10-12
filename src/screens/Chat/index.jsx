@@ -224,7 +224,7 @@ function Chat({ route }) {
     if (item.isTyping) {
       return (
         <Text key="typing" style={styles.typingMessage}>
-          {`${item.user.name} is typing...`}
+          {`${otherUserFullName} is typing...`}
         </Text>
       );
     }
