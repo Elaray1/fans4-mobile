@@ -10,7 +10,7 @@ import cookies from '@react-native-cookies/cookies';
 import 'react-native-gesture-handler';
 
 import { STORAGE_KEYS, PUSH_NOTIFICATION_TYPES } from 'helpers/constants';
-import { getItem, setItem } from 'helpers/storage';
+import { getItem } from 'helpers/storage';
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
 import getInitialScreen from 'helpers/getInitialScreen';
 import * as rootNavigation from 'helpers/rootNavigation';
@@ -48,10 +48,7 @@ const Stack = createStackNavigator();
 
 const init = async (dispatch) => {
   const wasOpenedBefore = await getItem(STORAGE_KEYS.WAS_OPENED_BEFORE);
-  if (!wasOpenedBefore) {
-    analyticsService.logEvent({ name: analyticsService.events.FIRST_LAUNCH });
-    await setItem(STORAGE_KEYS.WAS_OPENED_BEFORE, JSON.stringify(true)); // without JSON.stringify() it doesn't work
-  } else {
+  if (wasOpenedBefore) {
     analyticsService.logEvent({ name: analyticsService.events.LAUNCH });
   }
 
