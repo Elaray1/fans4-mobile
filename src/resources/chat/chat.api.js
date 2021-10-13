@@ -8,6 +8,3 @@ export const getChatsList = ({ page, perPage }) => apiClient
 
 export const getListOfFans = ({ page, perPage, search }) => apiClient
   .get('chats/list/new-chat', { page, perPage, search });
-
-export const readMessages = ({ _id }) => apiClient
-  .put(`chats/${_id}`);
