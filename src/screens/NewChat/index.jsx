@@ -11,6 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
 
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +19,8 @@ import { useNavigation } from '@react-navigation/native';
 import useToast from 'hooks/useToast';
 
 import * as chatApi from 'resources/chat/chat.api';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
@@ -37,6 +40,7 @@ function NewChat() {
   const navigation = useNavigation();
   const { showFailure } = useToast();
 
+  const userId = useSelector(userSelectors.getUserId);
 
   const [page, setPage] = useState(INITIAL_PAGE);
   const [chats, setChats] = useState([]);
@@ -100,10 +104,11 @@ function NewChat() {
 
   const keyExtractor = useCallback(item => item._id, []);
 
-  const onChatPress = useCallback(async (id, name) => {
+  const onChatPress = useCallback(async (id, name, unreadCount) => {
     navigation.navigate('Chat', {
       chatId: id,
       userFullName: name,
+      unreadMessagesCount: unreadCount,
     });
   }, [navigation]);
 
@@ -113,9 +118,10 @@ function NewChat() {
 
   const renderItem = ({ item }) => {
     const { name: chatName } = item.participants;
+    const unreadCount = item.participants.find(p => p._id === userId).unreadMessagesNumber;
 
     return (
-      <TouchableOpacity style={styles.listItem} onPress={() => onChatPress(item._id, chatName)}>
+      <TouchableOpacity style={styles.listItem} onPress={() => onChatPress(item._id, chatName, unreadCount)}>
         <Text style={styles.listItemCity}>{chatName}</Text>
       </TouchableOpacity>
     );

@@ -17,7 +17,7 @@ import Text from 'components/Text';
 
 import styles from './styles';
 
-const ChatItem = ({ chat, setNewChat, resetUnread }) => {
+const ChatItem = ({ chat, setNewChat, onRefreshChats }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -38,20 +38,15 @@ const ChatItem = ({ chat, setNewChat, resetUnread }) => {
   }, [chat._id, setNewChat]);
 
   const onChatPress = useCallback(async () => {
-    resetUnread({
-      ...chat,
-      participants: chat.participants.map(p => (
-        p._id === userId ? { ...p, unreadMessagesNumber: 0 } : p
-      )),
-    });
-
     navigation.navigate('Chat', {
       chatId: chat._id,
       userId: _id,
       userFullName: chatName,
+      unreadMessagesCount: unreadMessagesNumber,
       userAvatar: avatarUrl,
+      onGoBack: onRefreshChats,
     });
-  }, [chat, resetUnread, navigation, _id, chatName, avatarUrl, userId]);
+  }, [chat, navigation, _id, chatName, avatarUrl, unreadMessagesNumber, onRefreshChats]);
 
   return (
     <TouchableOpacity style={_id === 'fans4' ? styles.fans4Chat : styles.chat} onPress={onChatPress}>
@@ -88,7 +83,7 @@ const ChatItem = ({ chat, setNewChat, resetUnread }) => {
 ChatItem.propTypes = {
   chat: PropTypes.shape().isRequired,
   setNewChat: PropTypes.func.isRequired,
-  resetUnread: PropTypes.func.isRequired,
+  onRefreshChats: PropTypes.func.isRequired,
 };
 
 export default React.memo(ChatItem);

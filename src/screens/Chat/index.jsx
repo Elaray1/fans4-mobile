@@ -1,5 +1,5 @@
 import React, {
-  useState, useCallback, useEffect, useMemo,
+  useState, useCallback, useEffect, useMemo, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -15,8 +15,6 @@ import * as socketService from 'services/socket.service';
 
 import * as messageApi from 'resources/message/message.api';
 
-import * as chatApi from 'resources/chat/chat.api';
-
 import Header from 'components/Header';
 import Text from 'components/Text';
 import Input from 'components/Input';
@@ -31,7 +29,7 @@ import { USER_TYPES } from 'resources/user/user.constants';
 
 import Message from './Message';
 
-import { addDateSepatorsToMessages } from './Chat.helpers';
+import { addDateSepatorsToMessages, addUnreadMessagesLabel, getUnreadMessageId } from './Chat.helpers';
 
 import styles from './styles';
 
@@ -46,6 +44,8 @@ function Chat({ route }) {
   const { showFailure } = useToast();
   const navigation = useNavigation();
 
+  const messagesListRef = useRef(null);
+
   const user = useSelector(userSelectors.getUserData);
 
   const {
@@ -53,11 +53,12 @@ function Chat({ route }) {
     userFullName: otherUserFullName,
     userAvatar: otherUserAvatar,
     chatId,
+    unreadMessagesCount,
+    onGoBack,
   } = route?.params;
 
   const [messages, setMessages] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [page, setPage] = useState(1);
   const [messageValue, setMessageValue] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
@@ -67,22 +68,41 @@ function Chat({ route }) {
 
   const [timeouts, setTimeouts] = useState([]);
 
+  const [unreadLabelMessageId, setUnreadLabelMessageId] = useState(null);
+  const [updatedMessages, setUpdatedMessages] = useState([]);
+
+  const isMessageToBeScrolledRef = useRef(!!unreadMessagesCount);
+
   const messagesWithSeparators = useMemo(() => (messages.length === 1 && messages[0].isTyping
     ? messages
     : addDateSepatorsToMessages(messages)), [messages]);
 
+  useEffect(() => {
+    if (!unreadLabelMessageId && unreadMessagesCount && messages.length) {
+      setUnreadLabelMessageId(getUnreadMessageId({ messages: messagesWithSeparators, userId: user._id }));
+    }
+  }, [messagesWithSeparators, user._id,
+    unreadMessagesCount, unreadLabelMessageId,
+    messages.length]);
+
+  const messagesWithUnreadLabel = useMemo(() => (unreadLabelMessageId
+    ? addUnreadMessagesLabel({
+      messages: messagesWithSeparators,
+      unreadLabelMessageId,
+      unreadCount: unreadMessagesCount })
+    : messagesWithSeparators),
+  [messagesWithSeparators, unreadMessagesCount, unreadLabelMessageId]);
+
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
-    let fetchingPage = 1;
     let currentMessages = [];
 
     if (!refresh) {
-      fetchingPage = page;
       currentMessages = messages;
     } else {
       setIsRefreshing(true);
     }
 
-    if (fetchingPage === 1 || currentMessages.length < totalCount) {
+    if (messages.length === 0 || currentMessages.length < totalCount) {
       setIsLoading(true);
       try {
         const {
@@ -90,19 +110,18 @@ function Chat({ route }) {
           totalCount: fetchedTotalCount,
         } = await messageApi.getChatMessages({
           chatId,
-          page: fetchingPage,
-          perPage: PER_PAGE_COUNT,
+          offset: currentMessages.length,
+          perPage: unreadMessagesCount > PER_PAGE_COUNT ? unreadMessagesCount + 5 : PER_PAGE_COUNT,
         });
         setTotalCount(fetchedTotalCount);
         setMessages([...currentMessages, ...fetchedMessages]);
-        setPage(fetchingPage + 1);
       } catch (error) {
         showFailure(t('Chat.couldntRefreshTheFeedPullToRefresh'));
       }
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [messages, page, totalCount, showFailure, t, chatId]);
+  }, [messages, totalCount, showFailure, t, chatId, unreadMessagesCount]);
 
   const onRefresh = useCallback(async () => {
     await fetchNewItems({ refresh: true });
@@ -111,12 +130,28 @@ function Chat({ route }) {
   useEffect(() => {
     const fetchMessages = async () => {
       await fetchNewItems({ refresh: true });
-      await chatApi.readMessages({ _id: chatId });
     };
 
     fetchMessages();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const scrollToUnreadLabel = async () => {
+      if (messagesListRef?.current && isMessageToBeScrolledRef.current) {
+        const messageToScrollIndex = messagesWithUnreadLabel.findIndex(message => message.isNewMessagesLabel);
+        if (messageToScrollIndex !== -1) {
+          messagesListRef.current.scrollToIndex({
+            index: messageToScrollIndex,
+            viewPosition: 1,
+            animated: false,
+          });
+        }
+      }
+    };
+
+    scrollToUnreadLabel();
+  }, [messagesWithUnreadLabel]);
 
   const updateMessageList = useCallback(({ message: newMessage }) => {
     if (!messages.find(message => message._id === newMessage._id)) {
@@ -140,11 +175,11 @@ function Chat({ route }) {
 
   const onUserTyping = useCallback(({ user: typingUser }) => {
     const oldMessages = messages[0]?.isTyping ? messages.slice(1) : messages;
-    const updatedMessages = [
+    const newUpdatedMessages = [
       { isTyping: true, user: typingUser },
       ...oldMessages,
     ];
-    setMessages(updatedMessages);
+    setMessages(newUpdatedMessages);
 
     timeouts.forEach((timeoutId) => { clearTimeout(timeoutId); });
     const newTimeoutId = setTimeout(() => {
@@ -154,11 +189,9 @@ function Chat({ route }) {
   }, [messages, timeouts, removeTimeouts]);
 
   useEffect(() => {
-    socketService.emit('subscribe', `chat-${chatId}`);
     socketService.on(`chat-${chatId}-message:created`, updateMessageList);
     socketService.on(`chat-${chatId}-typing`, onUserTyping);
     return () => {
-      socketService.emit('unsubscribe', `chat-${chatId}`);
       socketService.removeListener(`chat-${chatId}-message:created`, updateMessageList);
       socketService.removeListener(`chat-${chatId}-typing`, onUserTyping);
     };
@@ -205,10 +238,62 @@ function Chat({ route }) {
     navigation.navigate('Fighter', { _id: otherUserId });
   }, [navigation, otherUserId]);
 
+  const onViewableItemsChanged = useCallback(async ({ changed }) => {
+    const readedMessagesIndexes = changed.filter(({ isViewable, item }) => {
+      if (!item._id) {
+        return false;
+      }
+
+      if (isViewable) {
+        const isUserMessageUnread = item.participants.find(p => p._id === user._id).isUnread;
+
+        if (isUserMessageUnread) {
+          return true;
+        }
+      }
+
+      return false;
+    }).map(({ item }) => item._id);
+
+    const newUpdatedMessages = await Promise.all(readedMessagesIndexes.map(async (messageId) => {
+      const message = await messageApi.readMessage(messageId);
+      return message;
+    }));
+
+    if (newUpdatedMessages.length) {
+      setUpdatedMessages(newUpdatedMessages);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const viewConfigRef = useRef({
+    viewAreaCoveragePercentThreshold: 50,
+    waitForInteraction: true,
+  });
+
+  useEffect(() => {
+    if (updatedMessages.length) {
+      setMessages(messages
+        .map((oldMessage) => {
+          const updatedMessage = updatedMessages.find(message => message._id === oldMessage._id);
+
+          return updatedMessage || oldMessage;
+        }));
+      setUpdatedMessages([]);
+    }
+  }, [updatedMessages, messages]);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', onRefresh);
     return unsubscribe;
   }, [navigation, onRefresh]);
+
+  const onBackNavigation = useCallback(() => {
+    if (onGoBack) {
+      onGoBack();
+    }
+    navigation.goBack();
+  }, [navigation, onGoBack]);
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
@@ -221,6 +306,19 @@ function Chat({ route }) {
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
+    if (item.isNewMessagesLabel) {
+      return (
+        <View style={styles.newMessageContainer}>
+          <View style={styles.newMessage}>
+            <Text key="newMessagesCount" style={styles.newMessagesText}>
+              {`${item.unreadCount} ${item.unreadCount > 1 ? t('Chat.newMessages') : t('Chat.newMessage')}`}
+            </Text>
+          </View>
+          <View style={styles.newMessagesLine} />
+        </View>
+      );
+    }
+
     if (item.isTyping) {
       return (
         <Text key="typing" style={styles.typingMessage}>
@@ -245,7 +343,11 @@ function Chat({ route }) {
     );
   };
 
-  const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
+  const Loader = () => (
+    <View style={[styles.loader, styles.contentMargin]}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
 
   const renderFooter = () => {
     if (!isLoading) {
@@ -259,13 +361,13 @@ function Chat({ route }) {
       return <Loader />;
     }
 
-    if (!messages.length) {
+    if (!messagesWithUnreadLabel.length) {
       return (
         <ScrollView
           contentContainerStyle={styles.scrollView}
           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
           keyboardShouldPersistTaps="handled"
-          style={styles.horizontalPaddings}
+          style={[styles.horizontalPaddings, styles.contentMargin]}
         >
           <EmptyView />
         </ScrollView>
@@ -273,19 +375,37 @@ function Chat({ route }) {
     }
 
     return (
-      <FlatList
-        data={messagesWithSeparators}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        onEndReachedThreshold={0.3}
-        onEndReached={fetchNewItems}
-        showsVerticalScrollIndicator={false}
-        ListFooterComponent={renderFooter}
-        onRefresh={onRefresh}
-        refreshing={isRefreshing}
-        style={styles.horizontalPaddings}
-        inverted
-      />
+      <>
+        <View style={!isMessageToBeScrolledRef.current && styles.hidden}>
+          <Loader />
+        </View>
+        <FlatList
+          ref={messagesListRef}
+          data={messagesWithUnreadLabel}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          onEndReachedThreshold={0.3}
+          onEndReached={fetchNewItems}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={renderFooter}
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
+          style={[styles.horizontalPaddings, isMessageToBeScrolledRef.current && styles.hidden]}
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={viewConfigRef.current}
+          onScrollToIndexFailed={(info) => {
+            const wait = new Promise(resolve => setTimeout(resolve, 500));
+            wait.then(() => {
+              messagesListRef.current?.scrollToIndex({ index: info.index, viewPosition: 1, animated: false });
+              setTimeout(() => {
+                isMessageToBeScrolledRef.current = false;
+                messagesListRef.current?.recordInteraction();
+              }, 300);
+            });
+          }}
+          inverted
+        />
+      </>
     );
   };
 
@@ -300,6 +420,7 @@ function Chat({ route }) {
           <Header
             title={otherUserFullName}
             leftItemType="backArrow"
+            onLeftItemPress={onBackNavigation}
             rightItemType="image"
             {...(otherUserAvatar && {
               rightItemImageUrl: otherUserAvatar,
@@ -347,6 +468,8 @@ Chat.propTypes = {
       userFullName: PropTypes.string.isRequired,
       userAvatar: PropTypes.string,
       chatId: PropTypes.string.isRequired,
+      unreadMessagesCount: PropTypes.number.isRequired,
+      onGoBack: PropTypes.func,
     }),
   }).isRequired,
 };

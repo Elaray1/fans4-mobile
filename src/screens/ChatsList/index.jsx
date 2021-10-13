@@ -86,7 +86,6 @@ const ChatsList = () => {
     init();
   }, [fetchChats]);
 
-
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
     await fetchChats({ refresh: true });
@@ -101,17 +100,13 @@ const ChatsList = () => {
     });
   }, []);
 
-  const resetUnread = useCallback((chat) => {
-    setChats(oldChats => oldChats.map(c => (c._id === chat._id ? chat : c)));
-  }, []);
-
   const onNewChatPress = useCallback((chat) => {
     navigation.navigate('NewChat');
   }, [navigation]);
 
   const renderItem = ({ item }) => {
     return (
-      <ChatItem chat={item} setNewChat={onNewMessages} resetUnread={resetUnread} />
+      <ChatItem chat={item} setNewChat={onNewMessages} onRefreshChats={onRefresh} />
     );
   };
 

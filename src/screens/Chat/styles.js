@@ -10,8 +10,10 @@ export default StyleSheet.create({
     ...commonStyles.screen,
   },
   content: {
-    marginTop: 45,
     flex: 1,
+  },
+  contentMargin: {
+    marginTop: 45,
   },
   emptyView: {
     flex: 1,
@@ -78,5 +80,34 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     color: colors.textSecondary,
     fontWeight: fonts.weight.medium,
+  },
+  newMessagesText: {
+    color: colors.gray,
+    fontSize: fonts.size.caption,
+    fontWeight: fonts.weight.medium,
+  },
+  newMessage: {
+    width: 120,
+    backgroundColor: colors.primary,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 6,
+    borderRadius: 5,
+    zIndex: 1,
+    elevation: 1,
+  },
+  newMessagesLine: {
+    position: 'absolute',
+    top: 16,
+    height: 1,
+    width: '100%',
+    backgroundColor: colors.line,
+  },
+  newMessageContainer: {
+    marginVertical: 16,
+  },
+  hidden: {
+    opacity: 0,
   },
 });

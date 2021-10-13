@@ -665,7 +665,9 @@
     "typeAMessage": "Type a message...",
     "post": "Post",
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh.",
-    "messageNotSentPleaseTryAgain": "Message not sent. Please try again"
+    "messageNotSentPleaseTryAgain": "Message not sent. Please try again",
+    "newMessage": "new message",
+    "newMessages": "new messages"
   },
   "SubscriptionPosibilities": {
     "subscriptionPossibility1": "Full access to fighters’ content",
