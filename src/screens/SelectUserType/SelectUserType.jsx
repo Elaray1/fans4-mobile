@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { SafeAreaView, View, StatusBar, ScrollView, Image } from 'react-native';
+import { SafeAreaView, View, StatusBar, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
@@ -22,18 +22,18 @@ import styles from './SelectUserType.styles';
 function SelectUserType() {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const wasOpenedBefore = getItem(STORAGE_KEYS.WAS_OPENED_BEFORE);
 
-  const onChooseUserType = useCallback((userType) => {
+  const onChooseUserType = useCallback(async (userType) => {
     if (userType === USER_TYPES.FAN) {
       navigation.navigate('SignIn', { userType });
       analyticsService.logEvent({ name: analyticsService.events.IAM_FAN_PRESSED });
       return;
     }
 
+    const wasOpenedBefore = await getItem(STORAGE_KEYS.WAS_OPENED_BEFORE);
     navigation.navigate(wasOpenedBefore ? 'SignIn' : 'SignUp', { userType });
     analyticsService.logEvent({ name: analyticsService.events.IAM_FIGHTER_PRESSED });
-  }, [navigation, wasOpenedBefore]);
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.screen}>

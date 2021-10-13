@@ -7,11 +7,15 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
+
+import { STORAGE_KEYS } from 'helpers/constants';
+import { getItem, setItem } from 'helpers/storage';
+
+import analyticsService from 'services/analytics.service';
 
 import * as userActions from 'resources/user/user.actions';
 
@@ -124,6 +128,12 @@ function SignUp({ route }) {
           password: passwordValue,
           userType,
         }));
+
+        const wasOpenedBefore = await getItem(STORAGE_KEYS.WAS_OPENED_BEFORE);
+        if (!wasOpenedBefore) {
+          await setItem(STORAGE_KEYS.WAS_OPENED_BEFORE, JSON.stringify(true));
+          analyticsService.logEvent({ name: analyticsService.events.FIRST_LAUNCH });
+        }
       } catch (err) {
         console.error('Signup error:', err);
         setIsLoading(false);
