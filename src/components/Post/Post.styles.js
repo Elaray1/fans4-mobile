@@ -35,10 +35,10 @@ export default StyleSheet.create({
     borderRadius: 5,
   },
   description: {
-    color: colors.textSecondary,
+    color: colors.white,
     fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
-    fontSize: fonts.size.caption,
+    fontSize: fonts.size.small,
     lineHeight: fonts.lineHeight.small,
     marginBottom: 12,
   },
@@ -61,6 +61,14 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     fontSize: fonts.size.tiny,
     lineHeight: fonts.lineHeight.small,
+  },
+  likedBy: {
+    color: colors.textSecondary,
+    fontFamily: fonts.family.base,
+    fontWeight: fonts.weight.medium,
+    fontSize: fonts.size.caption,
+    lineHeight: fonts.lineHeight.small,
+    marginBottom: 12,
   },
   postActions: {
     flexDirection: 'row',

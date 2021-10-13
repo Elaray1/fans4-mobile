@@ -42,6 +42,7 @@ import SearchFighters from 'screens/SearchFighters';
 import Chat from 'screens/Chat';
 import ChatsList from 'screens/ChatsList';
 import NewChat from 'screens/NewChat';
+import LikesList from 'screens/LikesList';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import { USER_TYPES, SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
@@ -145,6 +146,7 @@ function AppScreens() {
         <AppStack.Screen name="Chat" component={Chat} />
         <AppStack.Screen name="ChatsList" component={ChatsList} />
         <AppStack.Screen name="NewChat" component={NewChat} />
+        <AppStack.Screen name="LikesList" component={LikesList} />
       </AppStack.Navigator>
     </>
   );

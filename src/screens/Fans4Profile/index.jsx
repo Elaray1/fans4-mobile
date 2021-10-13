@@ -87,6 +87,7 @@ function Fans4Profile() {
         text={item.text}
         status={item.status}
         checkedOn={item.checkedOn}
+        lastLikeName={item.lastLikeName}
         likedUserIds={item.likedUserIds}
         commentsCount={item.commentsCount}
         createdOn={item.createdOn}
