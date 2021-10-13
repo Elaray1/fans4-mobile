@@ -5,11 +5,13 @@ import { variables } from 'themes/commonStyles';
 
 const { width } = Dimensions.get('window');
 
+const maxMessageWidth = width - variables.paddingHorizontal * 2 - 40;
+
 export default StyleSheet.create({
   message: {
     flexDirection: 'row',
     alignSelf: 'flex-start',
-    maxWidth: width - variables.paddingHorizontal * 2 - 40,
+    maxWidth: maxMessageWidth,
     paddingHorizontal: 15,
     paddingVertical: 10,
     marginBottom: 8,
@@ -25,6 +27,7 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
+    maxWidth: maxMessageWidth - 80,
   },
   time: {
     alignSelf: 'flex-end',

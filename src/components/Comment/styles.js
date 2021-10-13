@@ -30,7 +30,7 @@ export default StyleSheet.create({
     color: colors.textSecondary,
     fontSize: fonts.size.caption,
     fontWeight: fonts.weight.medium,
-    maxWidth: 240,
+    maxWidth: 230,
   },
   date: {
     alignSelf: 'flex-end',
