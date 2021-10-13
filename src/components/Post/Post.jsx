@@ -42,6 +42,7 @@ function Post({
   viewable,
   onUpdateCommentsCount,
   createdOn,
+  lastLikeName,
 }) {
   const navigation = useNavigation();
   const { showFailure } = useToast();
@@ -51,6 +52,7 @@ function Post({
 
   const [likesCount, setLikesCount] = useState(likedUserIds.length);
   const [isLiked, setIsLiked] = useState(likedUserIds.some(id => id === userId));
+  const [likeNames, setLikedNames] = useState(lastLikeName);
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
   const isFighter = userType === USER_TYPES.FIGHTER;
 
@@ -162,10 +164,15 @@ function Post({
       }
       setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
       setIsLiked(updatedPost.likedUserIds.some(id => id === userId));
+      setLikedNames(updatedPost.lastLikeName);
     } catch (error) {
       showFailure();
     }
   }, [userType, isLiked, likesCount, _id, userId, showFailure]);
+
+  const onSeeLikes = useCallback(() => {
+    navigation.navigate('LikesList', { _id });
+  }, [_id, navigation]);
 
   return (
     <View style={styles.post}>
@@ -173,37 +180,44 @@ function Post({
       {contentContainerView}
       {status === POST_STATUSES.APPROVED && (
         <View style={[styles.status, styles.approvedStatus]}>
-          <View style={styles.postActions}>
-            <TouchableOpacity
-              onPress={onLikePress}
-              activeOpacity={0.7}
-              style={styles.postAction}
-              disabled={disabled || isFighter}
-            >
-              {isLiked ? (
-                <LikeIcon
-                  stroke={iconsColor}
-                  fill={iconsColor}
-                />
-              ) : <LikeIcon stroke={isFighter ? colors.whiteDisabled : iconsColor} />}
-              <Text style={[styles.postActionText, (disabled || isFighter)
+          <View>
+            {Boolean(likesCount) && (
+              <TouchableOpacity onPress={onSeeLikes}>
+                <Text style={styles.likedBy}>
+                  {`Liked by ${likeNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1}` : ''}`}
+                </Text>
+              </TouchableOpacity>
+            )}
+            <View style={styles.postActions}>
+              <TouchableOpacity
+                onPress={onLikePress}
+                activeOpacity={0.7}
+                style={styles.postAction}
+                disabled={disabled || isFighter}
+              >
+                {isLiked ? (
+                  <LikeIcon
+                    stroke={iconsColor}
+                    fill={iconsColor}
+                  />
+                ) : <LikeIcon stroke={isFighter ? colors.whiteDisabled : iconsColor} />}
+                <Text style={[styles.postActionText, (disabled || isFighter)
                  && styles.disabled]}
-              >{formatCount(likesCount)}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={onCommentsPress}
-              activeOpacity={0.7}
-              style={[styles.postAction, styles.postActionRight]}
-              disabled={disabled}
-            >
-              <CommentIcon stroke={iconsColor} />
-              <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(commentsCount)}</Text>
-            </TouchableOpacity>
+                >{formatCount(likesCount)}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={onCommentsPress}
+                activeOpacity={0.7}
+                style={[styles.postAction, styles.postActionRight]}
+                disabled={disabled}
+              >
+                <CommentIcon stroke={iconsColor} />
+                <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(commentsCount)}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-
           <Text style={styles.time}>{formatTime(checkedOn || createdOn)}</Text>
-
         </View>
       )}
 
@@ -242,6 +256,7 @@ Post.propTypes = {
   disabled: PropTypes.bool,
   viewable: PropTypes.bool,
   createdOn: PropTypes.string,
+  lastLikeName: PropTypes.string,
   onUpdateCommentsCount: PropTypes.func,
 };
 
@@ -251,6 +266,7 @@ Post.defaultProps = {
   author: null,
   checkedOn: null,
   createdOn: null,
+  lastLikeName: null,
   likedUserIds: [],
   commentsCount: 0,
   disabled: false,

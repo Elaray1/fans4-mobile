@@ -189,6 +189,7 @@ function FighterAccount({ postId }) {
         media={item.media}
         text={item.text}
         status={item.status}
+        lastLikeName={item.lastLikeName}
         checkedOn={item.checkedOn}
         likedUserIds={item.likedUserIds}
         commentsCount={item.commentsCount}

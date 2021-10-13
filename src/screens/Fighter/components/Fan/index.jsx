@@ -126,7 +126,6 @@ function Fighter({ fighterId }) {
 
   const renderItem = ({ item }) => {
     const isDisabled = !userSubscriptions.map(f => f._id).includes(item.author._id);
-
     return (
       <Post
         _id={item._id}
@@ -136,6 +135,7 @@ function Fighter({ fighterId }) {
         checkedOn={item.checkedOn}
         likedUserIds={item.likedUserIds}
         commentsCount={item.commentsCount}
+        lastLikeName={item.lastLikeName}
         disabled={isDisabled}
         createdOn={item.createdOn}
         viewable={!!viewablePosts[item._id]}
