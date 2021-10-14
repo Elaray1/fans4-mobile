@@ -68,6 +68,9 @@ function NewChat() {
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setChats(refresh ? fetchedChats : [...chats, ...fetchedChats]);
+        if (refresh) {
+          setSearchValue('');
+        }
       } catch (error) {
         console.error(error);
         showFailure(t('Activity.couldntRefreshTheFeedPullToRefresh'));
@@ -108,7 +111,7 @@ function NewChat() {
   }, [navigation]);
 
   const onLinkPress = useCallback(() => {
-    setSearchValue('');
+    onRefresh();
   }, []);
 
   const renderItem = ({ item }) => {
