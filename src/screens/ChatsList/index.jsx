@@ -42,6 +42,9 @@ const ChatsList = () => {
 
   const keyExtractor = useCallback(item => item._id, []);
 
+  const fans4 = chats.find(c => c.participants.find(p => p._id === 'fans4'));
+  const filteredChats = chats.filter(c => !c.participants.some(p => p._id === 'fans4'));
+
   const EmptyView = () => (
     <View style={styles.emptyView}>
       <NoFightsIllustration style={styles.illustration} />
@@ -130,11 +133,12 @@ const ChatsList = () => {
       />
       <View style={styles.content}>
         {isRefreshing && <Loader />}
-        {chats.length > 0 || page === INITIAL_PAGE
+        {fans4 && renderItem({ item: fans4 })}
+        {chats.length > (isFan ? 0 : 1) || page === INITIAL_PAGE
           ? (
             <FlatList
               style={styles.flatList}
-              data={chats}
+              data={filteredChats}
               keyExtractor={keyExtractor}
               renderItem={renderItem}
               onEndReached={fetchChats}
