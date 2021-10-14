@@ -56,4 +56,11 @@ export default StyleSheet.create({
     marginTop: 30,
     marginLeft: 20,
   },
+  linearGradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '120%',
+    height: '40%',
+  },
 });

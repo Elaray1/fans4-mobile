@@ -325,7 +325,7 @@ function Chat({ route }) {
                     autogrowHeight
                     style={styles.input}
                     multilineStyle={styles.multiline}
-                    buttonTitle={t('Chat.post')}
+                    buttonTitle={t('Chat.send')}
                     onButtonPress={onSendMessage}
                     disabled={isButtonDisabled}
                     autoFocus={isInputFocused}

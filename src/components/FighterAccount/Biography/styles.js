@@ -30,6 +30,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
   },
   addBiographyContainter: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -40,12 +41,15 @@ export default StyleSheet.create({
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
   },
-  addBiographyAndVideoText: {
-    marginTop: 36,
-    marginBottom: 49,
+  addBiographyAndVideo: {
+    paddingTop: 36,
+    paddingBottom: 49,
   },
-  addVideoText: {
-    marginVertical: 32,
+  addVideo: {
+    paddingVertical: 32,
+  },
+  addIcon: {
+    marginRight: 8,
   },
   addBiographyText: {
     marginVertical: 24,
