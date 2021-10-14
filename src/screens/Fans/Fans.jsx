@@ -4,7 +4,6 @@ import {
   View,
   StatusBar,
   FlatList,
-  ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -19,30 +18,15 @@ import colors from 'themes/colors';
 
 import styles from './Fans.styles';
 
-const INITIAL_PAGE = 1;
-const PER_PAGE = 25;
-
 function Fans() {
   const { t } = useTranslation();
   const [fans, setFans] = useState([]);
-  const [page, setPage] = useState(INITIAL_PAGE);
-  const [isAllFansLoaded, setIsAllFansLoaded] = useState(false);
 
   useEffect(() => {
     const initialLoad = async () => {
-      const { fans: fetchedFans } = await userApi.getMyFans({
-        page: INITIAL_PAGE,
-        perPage: PER_PAGE,
-      });
-
-      if (fetchedFans.length < PER_PAGE) {
-        setIsAllFansLoaded(true);
-      } else {
-        setIsAllFansLoaded(false);
-      }
-
+      const { fans: fetchedFans } = await userApi.getMyFans();
+      console.log(fetchedFans);
       setFans(fetchedFans);
-      setPage(INITIAL_PAGE + 1);
     };
     initialLoad();
   }, []);
@@ -59,38 +43,6 @@ function Fans() {
 
   const renderItemSeparator = () => <View style={styles.line} />;
 
-  const fetchMoreFans = useCallback(async () => {
-    if (page !== INITIAL_PAGE && !isAllFansLoaded) {
-      const { fans: newFans } = await userApi.getMyFans({
-        page,
-        perPage: PER_PAGE,
-      });
-
-      if (newFans.length < PER_PAGE) {
-        setIsAllFansLoaded(true);
-      } else {
-        setIsAllFansLoaded(false);
-      }
-      setFans([...fans, ...newFans]);
-    }
-  }, [fans, page, isAllFansLoaded]);
-
-  const handleLoadMore = useCallback(async () => {
-    setPage(page + 1);
-    await fetchMoreFans(page + 1);
-  }, [fetchMoreFans, page]);
-
-  const renderFooter = () => {
-    if (isAllFansLoaded) {
-      return null;
-    }
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-  };
-
   const EmptyView = () => (
     <View style={styles.emptyView}>
       <NoFightsIllustration style={styles.illustration} />
@@ -106,17 +58,15 @@ function Fans() {
         title={t('Fans.fans')}
         leftItemType="backArrow"
       />
-      {fans.length || page === INITIAL_PAGE
+      {fans.length
         ? (
           <FlatList
             data={fans}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             ItemSeparatorComponent={renderItemSeparator}
-            onEndReached={handleLoadMore}
             onEndReachedThreshold={0.3}
-            initialNumToRender={25}
-            ListFooterComponent={renderFooter}
+            initialNumToRender={1000}
           />
         )
         : <EmptyView />

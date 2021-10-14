@@ -71,7 +71,7 @@ function FighterAccount({ postId }) {
   }, []);
 
   const refreshFansCount = useCallback(async () => {
-    const { totalCount: fansTotalCount } = await userApi.getMyFans({ page: 1, perPage: 1 });
+    const { totalCount: fansTotalCount } = await userApi.getMyFans();
     setFansCount(fansTotalCount);
   }, []);
 
@@ -189,9 +189,8 @@ function FighterAccount({ postId }) {
         media={item.media}
         text={item.text}
         status={item.status}
-        lastLikeName={item.lastLikeName}
         checkedOn={item.checkedOn}
-        likedUserIds={item.likedUserIds}
+        likedUsers={item.likedUsers}
         commentsCount={item.commentsCount}
         viewable={!!viewablePosts[item._id]}
         createdOn={item.createdOn}

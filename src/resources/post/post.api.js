@@ -44,6 +44,3 @@ export const likePost = _id => apiClient
 
 export const removeLikeFromPost = _id => apiClient
   .delete(`posts/${_id}/likes`);
-
-export const getLikesPost = ({ _id, page, perPage }) => apiClient
-  .get(`posts/${_id}/likes`, { page, perPage });
