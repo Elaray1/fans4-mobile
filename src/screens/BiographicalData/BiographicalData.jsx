@@ -80,7 +80,7 @@ function BiographicalData() {
 
   const onNext = useCallback(() => {
     navigation.navigate('PersonalInfo', {
-      fullName,
+      fullName: titleCase(fullName),
       nickname,
       birthdate: dayjs(birthdate).format('MM/DD/YYYY'),
       cityId: hometown?.cityId,
@@ -121,8 +121,6 @@ function BiographicalData() {
     setGender(item.id);
   }, []);
 
-  const onSetFullName = useCallback(value => setFullName(titleCase(value)), []);
-
   return (
     <SafeAreaView style={styles.screen}>
       <DatePickerModal
@@ -152,7 +150,7 @@ function BiographicalData() {
           <Input
             label={t('BiographicalData.firstAndLastName')}
             value={fullName}
-            onChange={onSetFullName}
+            onChange={setFullName}
           />
 
           <Input
