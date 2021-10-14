@@ -1,35 +1,36 @@
 import React from 'react';
-import {
-  SafeAreaView, ScrollView, StatusBar, View,
-} from 'react-native';
+import { ActivityIndicator, SafeAreaView, StatusBar, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { WebView } from 'react-native-webview';
 
 import colors from 'themes/colors';
 
-import Text from 'components/Text';
 import Header from 'components/Header';
 
 import styles from './styles';
 
+const TERMS_OF_USE_URL_SOURCE = { uri: 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/' };
+
 function SettingsTermsOfUse() {
   const { t } = useTranslation();
+
+  const renderLoading = () => (
+    <View style={styles.loadingView}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
-      <Header leftItemType="backArrow" title={t('TermsOfUse.headerTitle')} />
-      <View style={styles.content}>
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-        >
-          <Text style={styles.title}>{t('TermsOfUse.firstParagraphTitle')}</Text>
-          <Text style={styles.text}>{t('TermsOfUse.firstParagraphText')}</Text>
-          <Text style={styles.title}>{t('TermsOfUse.secondParagraphTitle')}</Text>
-          <Text style={styles.text}>{t('TermsOfUse.secondParagraphText')}</Text>
-        </ScrollView>
-      </View>
+
+      <Header leftItemType="backArrow" title={t('SettingsTermsOfUse.title')} />
+
+      <WebView
+        source={TERMS_OF_USE_URL_SOURCE}
+        startInLoadingState
+        renderLoading={renderLoading}
+      />
     </SafeAreaView>
   );
 }

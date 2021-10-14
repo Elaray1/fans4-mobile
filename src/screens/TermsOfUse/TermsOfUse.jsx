@@ -1,14 +1,12 @@
 import React, { useCallback } from 'react';
-import {
-  SafeAreaView, ScrollView, StatusBar, View,
-} from 'react-native';
+import { SafeAreaView, ActivityIndicator, StatusBar, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { WebView } from 'react-native-webview';
 
 import colors from 'themes/colors';
 
-import Text from 'components/Text';
 import Header from 'components/Header';
 import Button from 'components/Button';
 
@@ -18,6 +16,8 @@ import * as userSelectors from 'resources/user/user.selectors';
 import analyticsService from 'services/analytics.service';
 
 import styles from './TermsOfUse.styles';
+
+const TERMS_OF_USE_URL_SOURCE = { uri: 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/' };
 
 function TermsOfUse() {
   const navigation = useNavigation();
@@ -44,25 +44,30 @@ function TermsOfUse() {
     });
   }, [isFan, navigation, userId]);
 
+
+  const renderLoading = () => (
+    <View style={styles.loadingView}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+
       <Header leftItemType="backArrow" title={t('TermsOfUse.headerTitle')} />
+
       <View style={styles.content}>
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-        >
-          <Text style={styles.title}>{t('TermsOfUse.firstParagraphTitle')}</Text>
-          <Text style={styles.text}>{t('TermsOfUse.firstParagraphText')}</Text>
-          <Text style={styles.title}>{t('TermsOfUse.secondParagraphTitle')}</Text>
-          <Text style={styles.text}>{t('TermsOfUse.secondParagraphText')}</Text>
-        </ScrollView>
+        <WebView
+          source={TERMS_OF_USE_URL_SOURCE}
+          startInLoadingState
+          renderLoading={renderLoading}
+        />
+
         <Button
           title={t('TermsOfUse.buttonText')}
           onPress={onAccept}
-          buttonStyles={styles.button}
+          style={styles.button}
         />
       </View>
     </SafeAreaView>

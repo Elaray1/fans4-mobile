@@ -620,6 +620,9 @@
   "SettingsPrivacyPolicy": {
     "privacyPolicy": "Privacy Policy"
   },
+  "SettingsTermsOfUse": {
+    "title": "Terms of Use"
+  },
   "BankAccountAdded": {
     "title": "Bank Account Added",
     "description": "Your account is under review. Once status changes to \"Active\", you will be able to receive funds into that account.",

@@ -5,12 +5,20 @@ import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
+  loadingView: {
+    flex: 1,
+    backgroundColor: colors.main,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+  },
   screen: {
     ...commonStyles.screen,
   },
   content: {
     ...commonStyles.screenContent,
-    marginTop: 30,
   },
   scrollView: {
     marginBottom: 10,
