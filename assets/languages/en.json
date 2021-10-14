@@ -413,7 +413,7 @@
     "fighterRecovery_1": "because this fighter is in post-fight recovery.",
     "fighterBlocked_0": "You cannot apply for a fight with",
     "fighterBlocked_1": "because this fighter is blocked.",
-    "subscribeToAnotherWhenBlocked": "Please go to Fans4 official website to subscribe to another fighter.",
+    "subscribeToAnotherWhenBlocked": "Please subscribe to another fighter, as this fighter is blocked.",
     "checkBack": "Check back to view your fighter's first exclusive post!",
     "pro": "Pro Fighter",
     "amateur": "Amateur",
@@ -445,7 +445,7 @@
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",
-    "shareTheLink": "Share the link",
+    "shareTheLink": "Share the Link",
     "askYourFan": "Ask your fans to scan this QR code or share the link.",
     "invitation": "Invitation"
   },
@@ -613,7 +613,7 @@
     "nothingYet": "Nothing yet! Check back to connect with your fans."
   },
   "LegalInformation": {
-    "legalInformation": "Legal information",
+    "legalInformation": "Legal Information",
     "termsOfUse": "Terms of Use",
     "privacyPolicy": "Privacy Policy"
   },
@@ -663,7 +663,7 @@
     "noMessagesHereYet": "No messages here yet...",
     "sayHiToStartAConversation": "Say “Hi!” to start a conversation.",
     "typeAMessage": "Type a message...",
-    "post": "Post",
+    "send": "Send",
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh.",
     "messageNotSentPleaseTryAgain": "Message not sent. Please try again",
     "newMessage": "new message",

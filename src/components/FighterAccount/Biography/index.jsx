@@ -8,6 +8,7 @@ import useToast from 'hooks/useToast';
 
 import ArrowUpIcon from 'assets/icons/arrow-up';
 import ArrowDownIcon from 'assets/icons/arrow-down';
+import LinkWarningIcon from 'assets/icons/link-warning';
 
 import Text from 'components/Text';
 import Video from 'components/Video';
@@ -143,11 +144,12 @@ const Biography = ({
     if (onAddBiographyPress && biography) {
       return (
         <TouchableOpacity
-          style={styles.addBiographyContainter}
+          style={[styles.addBiographyContainter, styles.addVideo]}
           activeOpacity={0.7}
           onPress={onAddBiographyPress}
         >
-          <Text style={[styles.addText, styles.addVideoText]}>
+          <LinkWarningIcon style={styles.addIcon} />
+          <Text style={styles.addText}>
             {t('Account.addIntroVideo')}
           </Text>
         </TouchableOpacity>
@@ -180,11 +182,12 @@ const Biography = ({
     if (onAddBiographyPress) {
       return (
         <TouchableOpacity
-          style={styles.addBiographyContainter}
+          style={[styles.addBiographyContainter, introVideo ? styles.addVideo : styles.addBiographyAndVideo]}
           activeOpacity={0.7}
           onPress={onAddBiographyPress}
         >
-          <Text style={[styles.addText, introVideo ? styles.addBiographyText : styles.addBiographyAndVideoText]}>
+          <LinkWarningIcon style={styles.addIcon} />
+          <Text style={styles.addText}>
             {introVideo ? t('Account.addBiography') : t('Account.addBiographyAndIntroVideo')}
           </Text>
         </TouchableOpacity>

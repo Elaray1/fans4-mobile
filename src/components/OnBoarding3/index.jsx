@@ -67,6 +67,7 @@ function OnBoarding3(props) {
       title={t(`OnBoarding3.${userType}.title`)}
       illustration={<Image source={Illustration} resizeMode="cover" style={{ width: screenWidth, height }} />}
       onButtonPress={onNext}
+      isIllustrationGradient
       {...props}
     />
   );

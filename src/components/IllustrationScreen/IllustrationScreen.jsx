@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, View, StatusBar, ViewPropTypes, TouchableOpacity } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 import colors from 'themes/colors';
+import hexToRgba from 'helpers/hexToRgba';
 
 import Text from 'components/Text';
 import Button from 'components/Button';
@@ -14,7 +16,7 @@ import styles from './IllustrationScreen.styles';
 
 function IllustrationScreen({
   buttonText, linkText, title, description, illustration, onButtonPress, onLinkPress, headerText,
-  contentStyles, illustrationContainerStyles, titleStyles, onBackButtonPress,
+  contentStyles, illustrationContainerStyles, titleStyles, onBackButtonPress, isIllustrationGradient,
 }) {
   return (
     <SafeAreaView style={styles.screen}>
@@ -35,6 +37,14 @@ function IllustrationScreen({
       <View style={[styles.content, headerText && styles.header, contentStyles]}>
         <View style={[styles.illustrationContainer, illustrationContainerStyles]}>
           {illustration}
+          {isIllustrationGradient && (
+          <LinearGradient
+            start={{ x: 0, y: 1 }}
+            end={{ x: 0, y: 0 }}
+            colors={[colors.main, hexToRgba(colors.main, 0)]}
+            style={styles.linearGradient}
+          />
+          )}
         </View>
 
         <View style={styles.container}>
@@ -68,6 +78,7 @@ IllustrationScreen.propTypes = {
   contentStyles: ViewPropTypes.style,
   illustrationContainerStyles: ViewPropTypes.style,
   titleStyles: PropTypes.shape(),
+  isIllustrationGradient: PropTypes.bool,
 };
 
 IllustrationScreen.defaultProps = {
@@ -80,6 +91,7 @@ IllustrationScreen.defaultProps = {
   illustrationContainerStyles: null,
   titleStyles: null,
   onBackButtonPress: null,
+  isIllustrationGradient: false,
 };
 
 export default React.memo(IllustrationScreen);

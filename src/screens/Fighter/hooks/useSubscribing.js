@@ -23,6 +23,23 @@ const IOS_SUBSCRIPTIONS_DEEP_LINK = Config.APP_ENV === 'PROD'
 
 const getIosSubscriptionNumberFromProductId = productId => parseInt(productId.split('.').pop(), 10) + 1;
 
+const addSuffixToNumber = (i) => {
+  const j = i % 10;
+  const k = i % 100;
+
+  if (j === 1 && k !== 11) {
+    return `${i}st`;
+  }
+  if (j === 2 && k !== 12) {
+    return `${i}nd`;
+  }
+  if (j === 3 && k !== 13) {
+    return `${i}rd`;
+  }
+
+  return `${i}th`;
+};
+
 const useSubscribing = ({ fighterId }) => {
   const [isMakingPurchase, setIsMakingPurchase] = useState(false);
 
@@ -56,7 +73,7 @@ const useSubscribing = ({ fighterId }) => {
       }
 
       // eslint-disable-next-line max-len
-      const unsubscribeText = `${t('Fighter.unsubscribeText1')}${getIosSubscriptionNumberFromProductId(subscription.apple.productId)}${t('Fighter.unsubscribeText2')}${moment(subscription.renewalDate).format('MMM DD, YYYY')}`;
+      const unsubscribeText = `${t('Fighter.unsubscribeText1')}${addSuffixToNumber(getIosSubscriptionNumberFromProductId(subscription.apple.productId))}${t('Fighter.unsubscribeText2')}${moment(subscription.renewalDate).format('MMM DD, YYYY')}`;
 
       Alert.alert(t('Fighter.unsubscribe'), unsubscribeText, [
         { text: t('Fighter.keepIt') },
@@ -68,7 +85,7 @@ const useSubscribing = ({ fighterId }) => {
   const resubscribe = useCallback(() => {
     if (subscription.platform === SUBSCRIPTION_PLATFORMS.IOS && Platform.OS === 'ios') {
       // eslint-disable-next-line max-len
-      const resubscribeText = `${t('Fighter.youWillBeRedirectedToResubscribeTo1')}${getIosSubscriptionNumberFromProductId(subscription.apple.productId)}${t('Fighter.youWillBeRedirectedToResubscribeTo2')}`;
+      const resubscribeText = `${t('Fighter.youWillBeRedirectedToResubscribeTo1')}${addSuffixToNumber(getIosSubscriptionNumberFromProductId(subscription.apple.productId))}${t('Fighter.youWillBeRedirectedToResubscribeTo2')}`;
 
       Alert.alert('Resubscribe', resubscribeText, [
         { text: 'No', style: 'cancel' },
