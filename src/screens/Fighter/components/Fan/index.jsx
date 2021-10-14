@@ -133,9 +133,8 @@ function Fighter({ fighterId }) {
         text={item.text}
         status={item.status}
         checkedOn={item.checkedOn}
-        likedUserIds={item.likedUserIds}
+        likedUsers={item.likedUsers}
         commentsCount={item.commentsCount}
-        lastLikeName={item.lastLikeName}
         disabled={isDisabled}
         createdOn={item.createdOn}
         viewable={!!viewablePosts[item._id]}

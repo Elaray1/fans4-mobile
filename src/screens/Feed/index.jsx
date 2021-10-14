@@ -191,8 +191,7 @@ function Feed() {
           status={item.status}
           checkedOn={item.checkedOn}
           author={item.author}
-          likedUserIds={item.likedUserIds}
-          lastLikeName={item.lastLikeName}
+          likedUsers={item.likedUsers}
           commentsCount={item.commentsCount}
           viewable={!!viewablePosts[item._id]}
           createdOn={item.createdOn}

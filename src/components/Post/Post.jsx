@@ -36,23 +36,25 @@ function Post({
   author,
   status,
   checkedOn,
-  likedUserIds,
+  likedUsers,
   commentsCount,
   disabled,
   viewable,
   onUpdateCommentsCount,
   createdOn,
-  lastLikeName,
 }) {
   const navigation = useNavigation();
   const { showFailure } = useToast();
 
   const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
+  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
 
-  const [likesCount, setLikesCount] = useState(likedUserIds.length);
-  const [isLiked, setIsLiked] = useState(likedUserIds.some(id => id === userId));
-  const [likeNames, setLikedNames] = useState(lastLikeName);
+  const [likesCount, setLikesCount] = useState(likedUsers.length);
+  const [isLiked, setIsLiked] = useState(likedUsers.some(u => u._id === userId));
+  const [likedNames, setLikedNames] = useState(likedUsers.length === 2
+    ? `${likedUsers[likesCount - 1]?.name} and ${likedUsers[likesCount - 2]?.name}`
+    : likedUsers[likesCount - 1]?.name);
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
   const isFighter = userType === USER_TYPES.FIGHTER;
 
@@ -163,16 +165,21 @@ function Post({
         updatedPost = await postApi.likePost(_id);
       }
       setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
-      setIsLiked(updatedPost.likedUserIds.some(id => id === userId));
-      setLikedNames(updatedPost.lastLikeName);
+      setIsLiked(updatedPost.likedUsers.some(u => u._id === userId));
+      setLikedNames(updatedPost?.likedUsers?.length === 2
+        ? `${updatedPost?.likedUsers[updatedPost.likedUsers.length - 1]?.name} and ${
+          updatedPost?.likedUsers[updatedPost.likedUsers.length - 2]?.name}`
+        : updatedPost?.likedUsers[updatedPost.likedUsers.length - 1]?.name);
     } catch (error) {
       showFailure();
     }
   }, [userType, isLiked, likesCount, _id, userId, showFailure]);
 
   const onSeeLikes = useCallback(() => {
-    navigation.navigate('LikesList', { _id });
-  }, [_id, navigation]);
+    if (userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id)) {
+      navigation.navigate('LikesList', { _id });
+    }
+  }, [_id, author._id, navigation, userSubscriptions, userType]);
 
   return (
     <View style={styles.post}>
@@ -184,7 +191,7 @@ function Post({
             {Boolean(likesCount) && (
               <TouchableOpacity onPress={onSeeLikes}>
                 <Text style={styles.likedBy}>
-                  {`Liked by ${likeNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1}` : ''}`}
+                  {`Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1}` : ''}`}
                 </Text>
               </TouchableOpacity>
             )}
@@ -201,10 +208,13 @@ function Post({
                     fill={iconsColor}
                   />
                 ) : <LikeIcon stroke={isFighter ? colors.whiteDisabled : iconsColor} />}
+                {Boolean(likesCount)
+                && (
                 <Text style={[styles.postActionText, (disabled || isFighter)
                  && styles.disabled]}
                 >{formatCount(likesCount)}
                 </Text>
+                )}
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={onCommentsPress}
@@ -213,7 +223,13 @@ function Post({
                 disabled={disabled}
               >
                 <CommentIcon stroke={iconsColor} />
-                <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(commentsCount)}</Text>
+                {Boolean(commentsCount)
+                && (
+                <Text style={[styles.postActionText, disabled && styles.disabled]}>
+                  {formatCount(commentsCount)}
+                </Text>
+                )
+                }
               </TouchableOpacity>
             </View>
           </View>
@@ -251,12 +267,14 @@ Post.propTypes = {
   }),
   status: PropTypes.oneOf(Object.values(POST_STATUSES)).isRequired,
   checkedOn: PropTypes.string,
-  likedUserIds: PropTypes.arrayOf(PropTypes.string),
+  likedUsers: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })),
   commentsCount: PropTypes.number,
   disabled: PropTypes.bool,
   viewable: PropTypes.bool,
   createdOn: PropTypes.string,
-  lastLikeName: PropTypes.string,
   onUpdateCommentsCount: PropTypes.func,
 };
 
@@ -266,8 +284,7 @@ Post.defaultProps = {
   author: null,
   checkedOn: null,
   createdOn: null,
-  lastLikeName: null,
-  likedUserIds: [],
+  likedUsers: [],
   commentsCount: 0,
   disabled: false,
   viewable: false,
