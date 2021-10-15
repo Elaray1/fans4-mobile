@@ -179,7 +179,7 @@ function Post({
     if (userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id)) {
       navigation.navigate('LikesList', { _id });
     }
-  }, [_id, author._id, navigation, userSubscriptions, userType]);
+  }, [_id, author?._id, navigation, userSubscriptions, userType]);
 
   return (
     <View style={styles.post}>
