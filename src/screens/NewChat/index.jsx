@@ -115,12 +115,8 @@ function NewChat() {
     });
   }, [navigation]);
 
-  const onLinkPress = useCallback(() => {
-    onRefresh();
-  }, []);
-
   const renderItem = ({ item }) => {
-    const { name: chatName } = item.participants;
+    const { name: chatName } = item?.otherPerson[0];
     const unreadCount = item.participants.find(p => p._id === userId).unreadMessagesNumber;
 
     return (
@@ -139,12 +135,17 @@ function NewChat() {
     return <Loader />;
   };
 
-  const EmptyView = () => (
+  const onChangeSearch = useCallback((value) => {
+    if (value === '') setIsLoading(true);
+    setSearchValue(value);
+  }, []);
+
+  const EmptyView = () => !isLoading && (
     <>
       {searchValue ? (
         <View style={[styles.emptyView, styles.searchEmpty]}>
           <Text style={styles.titleText}>{t('NewChat.noSearchResults')}</Text>
-          <TouchableOpacity style={styles.link} onPress={onLinkPress}>
+          <TouchableOpacity style={styles.link} onPress={() => onChangeSearch('')}>
             <Text style={styles.linkText}>{t('NewChat.showFullList')}</Text>
           </TouchableOpacity>
         </View>
@@ -172,7 +173,7 @@ function NewChat() {
       <View style={styles.content}>
         <SearchInput
           value={searchValue}
-          onChangeText={setSearchValue}
+          onChangeText={onChangeSearch}
           placeholder={t('NewChat.search')}
         />
         {isRefreshing && <Loader />}
@@ -196,9 +197,12 @@ function NewChat() {
             <ScrollView
               style={styles.flatList}
               contentContainerStyle={styles.emptyScroll}
-              refreshControl={
-                <RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />
-        }
+              refreshControl={(
+                <RefreshControl
+                  refreshing={Platform.OS === 'ios' && isRefreshing}
+                  onRefresh={onRefresh}
+                />
+              )}
               keyboardShouldPersistTaps="handled"
             >
               <EmptyView />
