@@ -89,6 +89,7 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   textContainer: {
+    marginTop: 10,
     marginBottom: 20,
   },
   iosPaymentFailedContainer: {

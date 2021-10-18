@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, ScrollView, ActivityIndicator, TouchableOpacity, AppState } from 'react-native';
+import { View, ScrollView, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -167,7 +167,15 @@ const FanAccount = () => {
 
       {isLoading && <Loader />}
 
-      {!isLoading && !fighters.length && <NoSubscriptions />}
+      {!isLoading && !fighters.length && (
+        <>
+          {Platform.OS === 'android' ? (
+            <Text style={styles.title}>
+              {t('AccountFan.YourSubscriptions')}
+            </Text>
+          ) : <NoSubscriptions />}
+        </>
+      )}
 
       {!isLoading && !!fighters.length && (
         <View style={styles.subscriptions}>
@@ -177,6 +185,14 @@ const FanAccount = () => {
 
           {fighters.map(supportedFighterView)}
         </View>
+      )}
+      {Platform.OS === 'android'
+      && (
+      <View style={styles.textContainer}>
+        <Text style={styles.grayText}>{t('AccountFan.YouCantSubscribe')}
+        </Text>
+        <Text style={[styles.grayText, styles.bottomText]}>{t('AccountFan.PleaseGoToFans4')}</Text>
+      </View>
       )}
     </ScrollView>
   );

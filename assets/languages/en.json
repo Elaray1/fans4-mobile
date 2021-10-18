@@ -541,6 +541,7 @@
   "AccountFan": {
     "username": "username",
     "YourSubscriptions": "Your subscriptions",
+    "YouCantSubscribe": "You can't subscribe for a Fighters in the app. We know it’s a hassle. After you subscribed, you can enjoy the content in the app.",
     "PleaseGoToFans4": "Please go to Fans4 official website to learn more.",
     "subscriptionExpiresOn": "Expires on",
     "youWillEnjoy": "Once you subscribe to a fighter, you will enjoy:",
