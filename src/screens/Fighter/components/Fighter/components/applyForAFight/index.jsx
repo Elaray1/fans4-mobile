@@ -28,6 +28,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   const userWeightClasses = useSelector(userSelectors.getWeightClasses);
   const userFightingStatus = useSelector(userSelectors.getFightingStatus);
   const userGender = useSelector(userSelectors.getUserGender);
+  const userFighterType = useSelector(userSelectors.getUserFighterType);
 
   useEffect(() => {
     analyticsService.logEvent({
@@ -74,6 +75,14 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
     return (
       <Text style={styles.cannotApplyForAFightText}>
         {`${t('Fighter.fighterBlocked_0')} ${fighter.fullName} ${t('Fighter.fighterBlocked_1')}`}
+      </Text>
+    );
+  }
+
+  if (userFighterType !== fighter.role.fighterType) {
+    return (
+      <Text style={styles.cannotApplyForAFightText}>
+        {`${t('Fighter.youCannotApplyForAFight_0')} ${fighter.fullName} ${t('Fighter.youCannotApplyForAFight_3')}`}
       </Text>
     );
   }

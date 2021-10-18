@@ -397,6 +397,7 @@
     "youCannotApplyForAFight_0": "You cannot apply for a fight with",
     "youCannotApplyForAFight_1": "because you are in different weight classes.",
     "youCannotApplyForAFight_2": "because you are in different categories.",
+    "youCannotApplyForAFight_3": "because you are in different fighting categories",
     "yourFightIsInAdminReview": "Your fight is in admin review.",
     "yourFightIsAlreadyInVoting": "Your fight is already in voting.",
     "yourFightIsAlreadyInUpcomingEvent": "Your fight is already in upcoming event.",
