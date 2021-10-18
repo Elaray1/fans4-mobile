@@ -189,9 +189,7 @@ const FanAccount = () => {
       {Platform.OS === 'android'
       && (
       <View style={styles.textContainer}>
-        <Text style={styles.grayText}>{t('AccountFan.YouCantSubscribe')}
-        </Text>
-        <Text style={[styles.grayText, styles.bottomText]}>{t('AccountFan.PleaseGoToFans4')}</Text>
+        <Text style={styles.grayText}>{t('AccountFan.YouCantSubscribe')}</Text>
       </View>
       )}
     </ScrollView>
