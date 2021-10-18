@@ -32,6 +32,9 @@ export default StyleSheet.create({
     color: colors.textSecondary,
     fontSize: fonts.size.caption,
   },
+  postText: {
+    maxWidth: 270,
+  },
   actionText: {
     marginBottom: -2,
   },
