@@ -131,6 +131,7 @@ function Fighter({ fighterId }) {
         _id={item._id}
         media={item.media}
         text={item.text}
+        author={item.author}
         status={item.status}
         checkedOn={item.checkedOn}
         likedUsers={item.likedUsers}
