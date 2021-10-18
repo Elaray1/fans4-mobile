@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { STORAGE_KEYS } from './constants';
+import { STORAGE_KEYS, UNCLEEANABLE_STORAGE_KEYS } from './constants';
 
 export function getItem(key) {
   return AsyncStorage.getItem(key);
@@ -15,5 +15,6 @@ export function removeItem(key) {
 }
 
 export function clear() {
-  return AsyncStorage.multiRemove(Object.values(STORAGE_KEYS));
+  return AsyncStorage.multiRemove(Object.values(STORAGE_KEYS)
+    .filter(key => !UNCLEEANABLE_STORAGE_KEYS.includes(key)));
 }

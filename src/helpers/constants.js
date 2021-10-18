@@ -3,6 +3,8 @@ export const STORAGE_KEYS = {
   WAS_OPENED_BEFORE: 'was_opened_before',
 };
 
+export const UNCLEEANABLE_STORAGE_KEYS = [STORAGE_KEYS.WAS_OPENED_BEFORE];
+
 export const PUSH_NOTIFICATION_TYPES = {
   POST_STATUS_CHANGED: 'post_status_changed',
   FIGHTER_REGISTRATION_APPROVED: 'fighter_registration_approved',
