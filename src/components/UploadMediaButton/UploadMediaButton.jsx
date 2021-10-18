@@ -54,16 +54,16 @@ function UploadMediaButton({
       let mediaData = await ImagePicker.openPicker(options);
       mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
 
-      if (mediaData.mime.includes('image') && !croppingAvatar) {
+      if (mediaData.mime.includes('image')) {
         const { width, height, path } = mediaData;
 
-        if (width / height < 0.8) {
+        if (width / height < 0.8 || croppingAvatar) {
           const croppedHeight = width * 5 / 4;
 
           mediaData = await ImagePicker.openCropper({
             path,
-            height: croppedHeight,
-            width,
+            height: !croppingAvatar ? croppedHeight : 335,
+            width: !croppingAvatar ? width : 335,
           });
         }
       }
@@ -139,6 +139,7 @@ function UploadMediaButton({
       </>
     );
   } else if (_.includes(media.mime, 'image')) {
+    console.log({ aspectRatio: media.width / media.height });
     contentView = (
       <View>
         <Image
