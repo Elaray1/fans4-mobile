@@ -166,7 +166,7 @@ const pushNotificationHandlersByType = {
     rootNavigation.navigate('Finances');
   },
   [PUSH_NOTIFICATION_TYPES.NEW_SUBSCRIBER]: () => {
-    rootNavigation.navigate('Account');
+    rootNavigation.navigate('Activity');
   },
 };
 
