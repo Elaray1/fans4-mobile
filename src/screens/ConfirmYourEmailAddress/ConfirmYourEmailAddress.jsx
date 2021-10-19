@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ function ConfirmYourEmailAddress() {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const userNewEmail = useSelector(userSelectors.getUserNewEmail);
+  const [newEmail] = useState(userNewEmail);
 
   const onNext = useCallback(() => {
     navigation.reset({
@@ -28,7 +29,7 @@ function ConfirmYourEmailAddress() {
 
   const weHaveSentYou = t('ConfirmYourEmailAddress.weHaveSentYouAConfirmationEmailTo');
   const plsCheckYourInbox = t('ConfirmYourEmailAddress.pleaseCheckYourInbox');
-  const description = `${weHaveSentYou} ${userNewEmail}.\n\n${plsCheckYourInbox}`;
+  const description = `${weHaveSentYou} ${newEmail}.\n\n${plsCheckYourInbox}`;
 
   return (
     <IllustrationScreen
