@@ -56,12 +56,15 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
         </View>
         {showTime && <Text style={styles.time}>{formatTime(createdOn)}</Text>}
       </View>
+      {config.mode !== 'PROD'
+      && (
       <TouchableOpacity
-        onPress={config.mode === 'PROD' ? () => {} : onPressSayHi}
+        onPress={onPressSayHi}
         activeOpacity={0.7}
       >
         <Text style={styles.sayHi}>{t('ActivityItem.sayHi')}</Text>
       </TouchableOpacity>
+      )}
     </View>
   ), [data.author.fullName, t, onPressSayHi, createdOn, showTime]);
 

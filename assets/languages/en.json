@@ -596,7 +596,9 @@
     "pending": "Fight already is in admin review",
     "votingClosed": "Fight already is in admin review",
     "approved": "Fight is in admin review, please wait and see whether it will be included in any event",
-    "upcoming": "Fight already is in upcoming event"
+    "upcoming": "Fight already is in upcoming event",
+    "comingSoon": "Coming soon...",
+    "soonWeWillRelease": "Soon we will release voting for a fights. Now you can let us know what fight you are interesting."
   },
   "ProposeAFight": {
     "ProposeAFight": "Propose A Fight",

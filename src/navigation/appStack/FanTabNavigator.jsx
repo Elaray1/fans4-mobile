@@ -9,9 +9,9 @@ import AccountIcon from 'assets/icons/tab-bar/account.svg';
 
 import Feed from 'screens/Feed';
 import Events from 'screens/Events';
-import Voting from 'screens/Voting';
 import Account from 'screens/Account';
 import ChatsList from 'screens/ChatsList';
+import NewVoting from 'screens/NewVoting';
 
 import config from 'resources/config';
 
@@ -39,7 +39,7 @@ function FanTabNavigator() {
       lazy={false}
     >
       <Tab.Screen name="Feed" component={Feed} options={optionsByScreen.feed} />
-      <Tab.Screen name="Voting" component={Voting} options={optionsByScreen.voting} />
+      <Tab.Screen name="Voting" component={NewVoting} options={optionsByScreen.voting} />
       <Tab.Screen name="Events" component={Events} options={optionsByScreen.events} />
       {/* TODO: replace Account component with Chats component */}
       {config.mode !== 'PROD'
