@@ -36,7 +36,7 @@ function UploadMediaButton({
 
   const onEditProfilePicture = useCallback(async () => {
     const options = croppingAvatar ? {
-      cropping: true,
+      cropping: 'cropit',
       mediaType: MEDIA_TYPES.PHOTO,
       cropperCircleOverlay: true,
       avoidEmptySpaceAroundImage: false,
@@ -61,6 +61,7 @@ function UploadMediaButton({
           const croppedHeight = width * 5 / 4;
 
           mediaData = await ImagePicker.openCropper({
+            cropperCircleOverlay: !!croppingAvatar,
             path,
             height: !croppingAvatar ? croppedHeight : 335,
             width: !croppingAvatar ? width : 335,
@@ -139,7 +140,6 @@ function UploadMediaButton({
       </>
     );
   } else if (_.includes(media.mime, 'image')) {
-    console.log({ aspectRatio: media.width / media.height });
     contentView = (
       <View>
         <Image
