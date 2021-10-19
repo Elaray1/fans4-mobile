@@ -19,7 +19,10 @@ import Input from 'components/Input';
 
 import config from 'resources/config';
 import { USER_TYPES } from 'resources/user/user.constants';
+
 import * as userActions from 'resources/user/user.actions';
+import * as userApi from 'resources/user/user.api';
+
 
 import { validateEmail, validatePassword } from 'helpers/validate';
 import extractApiErrorMessage from 'helpers/extractApiErrorMessage';
@@ -116,6 +119,8 @@ function SignIn({ route }) {
           userType,
           navigation,
         }));
+
+        await userApi.updateLastUsedOs();
       } catch (err) {
         console.error('Login error:', err);
         setApiError(extractApiErrorMessage(err));

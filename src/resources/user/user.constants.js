@@ -56,3 +56,8 @@ export const SUBSCRIPTION_PLATFORMS = {
   WEB: 'web',
   IOS: 'ios',
 };
+
+export const OS_PLATFORMS = {
+  IOS: 'ios',
+  ANDROID: 'android',
+};

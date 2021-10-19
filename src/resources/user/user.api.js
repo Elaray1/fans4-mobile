@@ -1,4 +1,7 @@
 import { apiClient } from 'helpers/api';
+import { Platform } from 'react-native';
+
+import { OS_PLATFORMS } from 'resources/user/user.constants';
 
 export const emailSignUp = ({
   email, password, userType,
@@ -135,4 +138,10 @@ export const createIntroVideoPoster = (data, file) => apiClient
 
 export const acceptTermsOfUse = () => {
   return apiClient.put('users/terms-of-use');
+};
+
+export const updateLastUsedOs = () => {
+  const lastUsedOs = Platform.OS === 'ios' ? OS_PLATFORMS.IOS : OS_PLATFORMS.ANDROID;
+
+  return apiClient.put('users/os', { lastUsedOs });
 };
