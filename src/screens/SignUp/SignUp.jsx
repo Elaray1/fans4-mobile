@@ -18,6 +18,7 @@ import { getItem, setItem } from 'helpers/storage';
 import analyticsService from 'services/analytics.service';
 
 import * as userActions from 'resources/user/user.actions';
+import * as userApi from 'resources/user/user.api';
 
 import colors from 'themes/colors';
 
@@ -128,6 +129,8 @@ function SignUp({ route }) {
           password: passwordValue,
           userType,
         }));
+
+        await userApi.updateLastUsedOs();
 
         const wasOpenedBefore = await getItem(STORAGE_KEYS.WAS_OPENED_BEFORE);
         if (!wasOpenedBefore) {
