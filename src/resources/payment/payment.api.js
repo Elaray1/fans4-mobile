@@ -10,3 +10,8 @@ export const verifyAppleReceipt = ({ receipt, fighterId, productId }) => apiClie
     receipt,
     fighterId,
   });
+
+export const notifyAboutIosProductLimit = ({ fighterId }) => apiClient.post(
+  'payments/ios-product-limit-notification',
+  { fighterId },
+);
