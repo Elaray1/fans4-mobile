@@ -8,6 +8,7 @@ import Config from 'react-native-config';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userApi from 'resources/user/user.api';
 import { SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
+import * as paymentsApi from 'resources/payment/payment.api';
 
 import useToast from 'hooks/useToast';
 
@@ -135,8 +136,18 @@ const useSubscribing = ({ fighterId }) => {
         : inAppPurhaseService.getAvailableSubscriptionProductIds()
           .find(productId => !boughtIosProductIds.includes(productId));
 
+
       if (!buyingProductId) {
+        setIsMakingPurchase(false);
+
+        try {
+          await paymentsApi.notifyAboutIosProductLimit({ fighterId });
+        } catch (err) {
+          console.error('notifyAboutIosProductLimit err:', err);
+        }
+
         showFailure(t('Fighter.maxInAppSubscriptions'));
+
         return;
       }
 
