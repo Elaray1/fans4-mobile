@@ -79,6 +79,14 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
     );
   }
 
+  if (!isSameGender) {
+    return (
+      <Text style={styles.cannotApplyForAFightText}>
+        {`${t('Fighter.youCannotApplyForAFight_0')} ${fighter.fullName} ${t('Fighter.youCannotApplyForAFight_2')}`}
+      </Text>
+    );
+  }
+
   if (userFighterType !== fighter.role.fighterType) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
@@ -138,14 +146,6 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
     return (
       <Text style={styles.cannotApplyForAFightText}>
         {`${warningTitleStart} ${fighter.fullName} ${wargningTitleEnd}`}
-      </Text>
-    );
-  }
-
-  if (!isSameGender) {
-    return (
-      <Text style={styles.cannotApplyForAFightText}>
-        {`${t('Fighter.youCannotApplyForAFight_0')} ${fighter.fullName} ${t('Fighter.youCannotApplyForAFight_2')}`}
       </Text>
     );
   }
