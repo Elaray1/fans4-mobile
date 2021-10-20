@@ -80,5 +80,6 @@ export default StyleSheet.create({
   },
   commentText: {
     marginTop: 5,
+    maxWidth: 270,
   },
 });
