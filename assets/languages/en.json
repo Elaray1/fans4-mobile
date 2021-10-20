@@ -350,7 +350,7 @@
     "search": "Search",
     "noFighters": "No fighters, yet",
     "youWillSeeThemHere": "Check back for the full list of fighters.",
-    "checkAllTheLatestNewsFromUs": "Check all the latest news from us!",
+    "checkOutAllTheLatestNewsFromUs": "Check out all the latest news from us!",
     "p": "P"
   },
   "WeightClassSelectModal": {
@@ -439,7 +439,7 @@
   },
   "Fans4Account": {
     "profile": "Profile",
-    "checkAllTheLatestNewsFromUs": "Check all the latest news from us!",
+    "checkOutAllTheLatestNewsFromUs": "Check all the latest news from us!",
     "aboutUs": "About Us",
     "posts": "Posts"
   },

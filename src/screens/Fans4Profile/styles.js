@@ -14,7 +14,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 32,
   },
   fans4Image: {
     width: 100,
@@ -32,6 +31,7 @@ export default StyleSheet.create({
     fontFamily: fonts.family.medium,
     fontWeight: fonts.weight.medium,
     fontSize: fonts.size.caption,
+    lineHeight: 20,
   },
   fans4AboutTitle: {
     marginBottom: 12,
@@ -45,6 +45,9 @@ export default StyleSheet.create({
   line: {
     backgroundColor: colors.line,
     height: 1,
+  },
+  lineMargin: {
+    marginVertical: 20,
   },
   blockTitle: {
     fontSize: fonts.size.small,
