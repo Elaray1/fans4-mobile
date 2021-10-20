@@ -21,22 +21,8 @@ import styles from './styles';
 
 function LikesList({ route }) {
   const { t } = useTranslation();
-  const [post, setPost] = useState(null);
 
-  const { _id } = route.params;
-
-  const fetchFans = useCallback(async () => {
-    try {
-      const fetchedPost = await postApi.getPost(_id);
-      setPost(fetchedPost);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [_id]);
-
-  useEffect(() => {
-    fetchFans();
-  }, [_id, fetchFans]);
+  const { likedUsers } = route.params;
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -66,10 +52,10 @@ function LikesList({ route }) {
         title={t('Fans.fans')}
         leftItemType="backArrow"
       />
-      {post?.likedUsers?.length
+      {likedUsers?.length
         ? (
           <FlatList
-            data={post?.likedUsers}
+            data={likedUsers}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             ItemSeparatorComponent={renderItemSeparator}
@@ -86,7 +72,7 @@ function LikesList({ route }) {
 LikesList.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
-      _id: PropTypes.string.isRequired,
+      likedUsers: PropTypes.arrayOf(PropTypes.shape()).isRequired,
     }),
   }).isRequired,
 };

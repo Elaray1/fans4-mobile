@@ -56,7 +56,8 @@ function Post({
     ? `${likedUsers[likesCount - 1]?.name} and ${likedUsers[likesCount - 2]?.name}`
     : likedUsers[likesCount - 1]?.name);
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
-  const isFighter = userType === USER_TYPES.FIGHTER;
+  const isSubscribedOrAuthor = userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id);
+  const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1}` : ''}`;
 
   const posterSource = useMemo(() => {
     if (media && media.type === MEDIA_TYPES.VIDEO && media.posterStorageUrl) {
@@ -153,10 +154,6 @@ function Post({
   }, [navigation, _id, onUpdateCommentsCount]);
 
   const onLikePress = useCallback(async () => {
-    if (userType === USER_TYPES.FIGHTER) {
-      return;
-    }
-
     try {
       let updatedPost;
       if (isLiked) {
@@ -173,13 +170,13 @@ function Post({
     } catch (error) {
       showFailure();
     }
-  }, [userType, isLiked, likesCount, _id, userId, showFailure]);
+  }, [isLiked, likesCount, _id, userId, showFailure]);
 
   const onSeeLikes = useCallback(() => {
-    if (userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id)) {
-      navigation.navigate('LikesList', { _id });
+    if (isSubscribedOrAuthor) {
+      navigation.navigate('LikesList', { likedUsers });
     }
-  }, [_id, author?._id, navigation, userSubscriptions, userType]);
+  }, [isSubscribedOrAuthor, likedUsers, navigation]);
 
   return (
     <View style={styles.post}>
@@ -189,30 +186,36 @@ function Post({
         <View style={[styles.status, styles.approvedStatus]}>
           <View>
             {Boolean(likesCount) && (
-              <TouchableOpacity onPress={onSeeLikes}>
-                <Text style={styles.likedBy}>
-                  {`Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1}` : ''}`}
-                </Text>
-              </TouchableOpacity>
+              <>
+                {isSubscribedOrAuthor ? (
+                  <TouchableOpacity onPress={onSeeLikes}>
+                    <Text style={styles.likedBy}>
+                      {likedByText}
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <Text style={styles.likedBy}>
+                    {likedByText}
+                  </Text>
+                )}
+              </>
             )}
             <View style={styles.postActions}>
               <TouchableOpacity
                 onPress={onLikePress}
                 activeOpacity={0.7}
                 style={styles.postAction}
-                disabled={disabled || isFighter}
+                disabled={disabled}
               >
                 {isLiked ? (
                   <LikeIcon
                     stroke={iconsColor}
                     fill={iconsColor}
                   />
-                ) : <LikeIcon stroke={isFighter ? colors.whiteDisabled : iconsColor} />}
+                ) : <LikeIcon stroke={iconsColor} />}
                 {Boolean(likesCount)
                 && (
-                <Text style={[styles.postActionText, (disabled || isFighter)
-                 && styles.disabled]}
-                >{formatCount(likesCount)}
+                <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(likesCount)}
                 </Text>
                 )}
               </TouchableOpacity>
