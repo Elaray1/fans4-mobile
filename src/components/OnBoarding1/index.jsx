@@ -37,6 +37,7 @@ function OnBoarding1({ onNext, ...props }) {
       illustration={<Image source={Illustration} resizeMode="cover" style={{ width: screenWidth, height }} />}
       onButtonPress={onNext}
       isIllustrationGradient
+      descriptionStyles={styles.description}
       {...props}
     />
   );

@@ -7,4 +7,7 @@ export default StyleSheet.create({
   ilustrationContainer: {
     marginTop: 0,
   },
+  description: {
+    maxWidth: 290,
+  },
 });
