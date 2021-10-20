@@ -63,17 +63,31 @@ const ChatsList = () => {
     if (fetchingPage === 1 || (chats.length < totalCount)) {
       setIsLoading(true);
       try {
-        const {
-          chats: fetchedChats,
-          totalCount: fetchedTotalCount,
-        } = await chatApi.getChatsList({
-          page: INITIAL_PAGE,
-          perPage: PER_PAGE,
-        });
+        if (fetchingPage === 1) {
+          const [chatWithFans4, { chats: fetchedChats, totalCount: fetchedTotalCount }] = await Promise.all([
+            chatApi.getChatWithFans4(),
+            chatApi.getChatsList({
+              page: INITIAL_PAGE,
+              perPage: PER_PAGE,
+            }),
+          ]);
 
-        setPage(fetchingPage + 1);
-        setTotalCount(fetchedTotalCount);
-        setChats(refresh ? fetchedChats : [...chats, ...fetchedChats]);
+          setPage(fetchingPage + 1);
+          setTotalCount(fetchedTotalCount);
+          setChats([chatWithFans4, ...fetchedChats]);
+        } else {
+          const {
+            chats: fetchedChats,
+            totalCount: fetchedTotalCount,
+          } = await chatApi.getChatsList({
+            page: INITIAL_PAGE,
+            perPage: PER_PAGE,
+          });
+
+          setPage(fetchingPage + 1);
+          setTotalCount(fetchedTotalCount);
+          setChats(refresh ? fetchedChats : [...chats, ...fetchedChats]);
+        }
       } catch (error) {
         console.error(error);
         showFailure(t('Activity.couldntRefreshTheFeedPullToRefresh'));
