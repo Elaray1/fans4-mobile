@@ -235,6 +235,10 @@ function Chat({ route }) {
   }, [messages, showFailure, t, messageValue, chatId]);
 
   const onUserAvatarPress = useCallback(() => {
+    if (otherUserId === 'fans4') {
+      navigation.navigate('Fans4Profile');
+      return;
+    }
     navigation.navigate('Fighter', { _id: otherUserId });
   }, [navigation, otherUserId]);
 
