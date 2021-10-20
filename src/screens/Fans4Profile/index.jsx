@@ -139,9 +139,10 @@ function Fans4Profile() {
           <FastImage style={styles.fans4Image} source={source} />
           <View>
             <Text style={styles.fans4FullName}>{fans4Account.fullName}</Text>
-            <Text style={styles.fans4Text}>{t('Fans4Account.checkAllTheLatestNewsFromUs')}</Text>
+            <Text style={styles.fans4Text}>{t('Fans4Account.checkOutAllTheLatestNewsFromUs')}</Text>
           </View>
         </View>
+        <View style={[styles.line, styles.lineMargin]} />
         <View style={styles.fans4AboutContainer}>
           <Text style={styles.fans4AboutTitle}>{t('Fans4Account.aboutUs')}</Text>
           <Text style={styles.fans4Text}>{fans4Account.role.biography.about}</Text>
