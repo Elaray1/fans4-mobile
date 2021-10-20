@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, Image, View } from 'react-native';
+import { SafeAreaView, Image, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import Illustration from 'assets/illustrations/new-voting.png'; // eslint-disable-line import/extensions
@@ -15,13 +15,13 @@ const NewVoting = () => {
   return (
     <SafeAreaView style={styles.screen}>
       <Header title={t('Voting.voting')} />
-      <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.bigText}>{t('Voting.comingSoon')}</Text>
         <Image source={Illustration} resizeMode="cover" style={styles.image} />
         <Text style={styles.text}>
           {t('Voting.soonWeWillRelease')}
         </Text>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
