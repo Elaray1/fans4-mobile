@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { commonStyles } from 'themes/commonStyles';
-import hexToRgba from 'helpers/hexToRgba';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
@@ -15,7 +14,7 @@ export default StyleSheet.create({
     opacity: 0.5,
   },
   content: {
-    marginTop: 93,
+    marginTop: 70,
     alignItems: 'center',
     marginHorizontal: 20,
   },
