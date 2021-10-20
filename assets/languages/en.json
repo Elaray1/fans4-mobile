@@ -80,31 +80,31 @@
   },
   "OnBoarding1": {
     "fan": {
-      "title": "Follow your faves",
+      "title": "Follow Your Faves",
       "description": "Get instant exclusive content curated by your favorite fighters.",
       "buttonText": "Next"
     },
     "fighter": {
-      "title": "Train hard",
+      "title": "Train Hard",
       "description": "Give fans access to unique highlights of your daily routine. Exclusive content made by you, enjoyed by fans.",
       "buttonText": "Next"
     }
   },
   "OnBoarding2": {
     "fan": {
-      "title": "Create a pairing",
+      "title": "Create a Pairing",
       "description": "Pair them with the perfect opponents for the next fight card.",
       "buttonText": "Next"
     },
     "fighter": {
-      "title": "Hook them in",
+      "title": "Hook Them In",
       "description": "Connect directly with fans through pics, clips, vlogs and comments. Your brand, your terms.",
       "buttonText": "Next"
     }
   },
   "OnBoarding3": {
     "fan": {
-      "title": "Vote them in",
+      "title": "Vote Them In",
       "description": "Get your faves in the next live event and watch it cage-side.",
       "buttonText": "Let’s Start"
     },

@@ -15,8 +15,9 @@ import BackArrowIcon from 'assets/icons/back-arrow';
 import styles from './IllustrationScreen.styles';
 
 function IllustrationScreen({
-  buttonText, linkText, title, description, illustration, onButtonPress, onLinkPress, headerText,
-  contentStyles, illustrationContainerStyles, titleStyles, onBackButtonPress, isIllustrationGradient,
+  buttonText, linkText, title, description, illustration, onButtonPress,
+  onLinkPress, headerText, contentStyles, illustrationContainerStyles,
+  titleStyles, descriptionStyles, onBackButtonPress, isIllustrationGradient,
 }) {
   return (
     <SafeAreaView style={styles.screen}>
@@ -50,7 +51,7 @@ function IllustrationScreen({
         <View style={styles.container}>
           <View style={styles.textContainer}>
             <Text style={[styles.title, titleStyles]}>{title}</Text>
-            <Text style={styles.text}>
+            <Text style={[styles.text, descriptionStyles]}>
               {description}
             </Text>
           </View>
@@ -78,6 +79,7 @@ IllustrationScreen.propTypes = {
   contentStyles: ViewPropTypes.style,
   illustrationContainerStyles: ViewPropTypes.style,
   titleStyles: PropTypes.shape(),
+  descriptionStyles: PropTypes.shape(),
   isIllustrationGradient: PropTypes.bool,
 };
 
@@ -90,6 +92,7 @@ IllustrationScreen.defaultProps = {
   contentStyles: null,
   illustrationContainerStyles: null,
   titleStyles: null,
+  descriptionStyles: null,
   onBackButtonPress: null,
   isIllustrationGradient: false,
 };
