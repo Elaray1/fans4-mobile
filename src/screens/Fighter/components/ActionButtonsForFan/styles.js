@@ -22,4 +22,17 @@ export default StyleSheet.create({
   applyButtonMargin: {
     marginBottom: 20,
   },
+  proposeAFightButton: {
+    backgroundColor: 'transparent',
+    borderColor: colors.primary,
+    borderWidth: 1,
+  },
+  proposeAFightTitle: {
+    color: colors.primary,
+  },
+  line: {
+    backgroundColor: colors.line,
+    height: 1,
+    marginBottom: 20,
+  },
 });

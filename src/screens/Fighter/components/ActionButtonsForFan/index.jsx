@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import PropTypes from 'prop-types';
@@ -81,7 +81,8 @@ const ActionButtonsForFan = ({ fighter, subscribe, unsubscribe, resubscribe }) =
       secondActionButton = (
         <Button
           title={t('Fighter.proposeAFight')}
-          style={styles.applyButton}
+          style={[styles.applyButton, isResubcribeShown && styles.proposeAFightButton]}
+          titleStyle={isResubcribeShown && styles.proposeAFightTitle}
           onPress={goToProposeAFight}
         />
       );
@@ -92,6 +93,7 @@ const ActionButtonsForFan = ({ fighter, subscribe, unsubscribe, resubscribe }) =
 
   return (
     <>
+      <View style={styles.line} />
       {firstActionButton}
       {secondActionButton}
     </>
