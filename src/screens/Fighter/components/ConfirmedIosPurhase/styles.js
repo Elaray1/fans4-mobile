@@ -9,6 +9,7 @@ export default StyleSheet.create({
   },
   descriptionContainer: {
     marginHorizontal: 20,
+    marginTop: 10,
     marginBottom: 34,
   },
   processingIosPurchaseTitle: {
@@ -29,5 +30,12 @@ export default StyleSheet.create({
   },
   doneButton: {
     marginTop: 34,
+  },
+  linearGradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '120%',
+    height: '40%',
   },
 });
