@@ -42,9 +42,6 @@ const ChatsList = () => {
 
   const keyExtractor = useCallback(item => item._id, []);
 
-  const fans4 = chats.find(c => c.participants.find(p => p._id === 'fans4'));
-  const filteredChats = chats.filter(c => !c.participants.some(p => p._id === 'fans4'));
-
   const EmptyView = () => (
     <View style={styles.emptyView}>
       <NoFightsIllustration style={styles.illustration} />
@@ -63,7 +60,7 @@ const ChatsList = () => {
     if (fetchingPage === 1 || (chats.length < totalCount)) {
       setIsLoading(true);
       try {
-        if (fetchingPage === 1) {
+        if (fetchingPage === 1 && !isFan) {
           const [chatWithFans4, { chats: fetchedChats, totalCount: fetchedTotalCount }] = await Promise.all([
             chatApi.getChatWithFans4(),
             chatApi.getChatsList({
@@ -94,7 +91,7 @@ const ChatsList = () => {
       }
     }
     setIsLoading(false);
-  }, [chats, page, showFailure, t, totalCount]);
+  }, [chats, page, showFailure, t, totalCount, isFan]);
 
   useEffect(() => {
     const init = async () => {
@@ -147,12 +144,11 @@ const ChatsList = () => {
       />
       <View style={styles.content}>
         {isRefreshing && <Loader />}
-        {fans4 && renderItem({ item: fans4 })}
         {chats.length > (isFan ? 0 : 1) || page === INITIAL_PAGE
           ? (
             <FlatList
               style={styles.flatList}
-              data={filteredChats}
+              data={chats}
               keyExtractor={keyExtractor}
               renderItem={renderItem}
               onEndReached={fetchChats}
