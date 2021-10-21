@@ -46,4 +46,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
     fontFamily: fonts.family.bold,
   },
+  refreshLoader: {
+    marginTop: 20,
+  },
 });

@@ -47,6 +47,7 @@ function Events() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const userType = useSelector(userSelectors.getUserType);
   const userId = useSelector(userSelectors.getUserId);
@@ -111,12 +112,14 @@ function Events() {
     if (!refresh) {
       fetchingPage = page;
       currentEvents = events;
-    } else {
-      setIsRefreshing(true);
     }
 
     if (fetchingPage === 1 || currentEvents.length < totalCount) {
-      setIsLoading(true);
+      if (refresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
 
       let fetchedEvents;
       let fetchedTotalCount;
@@ -155,15 +158,20 @@ function Events() {
         showFailure(t('Events.couldntLoadTheEventsPullToRefresh'));
       }
 
-      setIsLoading(false);
-      setIsRefreshing(false);
+      if (!isFetchedFirstTime) {
+        setIsFetchedFirstTime(true);
+      }
+
+      if (refresh) {
+        setIsRefreshing(false);
+      } else {
+        setIsLoading(false);
+      }
     }
-  }, [totalCount, page, events, userType, selectedTab.name, showFailure, t]);
+  }, [totalCount, page, events, userType, selectedTab.name, showFailure, t, isFetchedFirstTime]);
 
   const onRefresh = useCallback(async () => {
-    setIsRefreshing(true);
     await fetchNewItems({ refresh: true });
-    setIsRefreshing(false);
   }, [fetchNewItems]);
 
   useEffect(() => {
@@ -242,6 +250,7 @@ function Events() {
   };
 
   const onToggleSelect = useCallback(async (item) => {
+    setIsFetchedFirstTime(false);
     setSelectedTab(item);
     // await fetchNewItems({ refresh: true, eventTypes: item.eventTypes });
   }, []);
@@ -258,7 +267,7 @@ function Events() {
         {isRefreshing && <Loader />}
 
 
-        {!isRefreshing && (events.length ? (
+        {!!events.length && (
           <FlatList
             data={events}
             renderItem={renderItem}
@@ -270,7 +279,9 @@ function Events() {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-        ) : (
+        )}
+
+        {isFetchedFirstTime && !events.length && (
           <ScrollView
             contentContainerStyle={styles.scrollView}
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
@@ -278,7 +289,7 @@ function Events() {
           >
             <EmptyView />
           </ScrollView>
-        ))}
+        )}
       </View>
     </SafeAreaView>
   );

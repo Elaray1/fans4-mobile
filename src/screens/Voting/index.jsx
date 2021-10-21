@@ -48,6 +48,7 @@ const Voting = ({ route }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   useEffect(() => {
     analyticsService.logEvent({
@@ -117,12 +118,15 @@ const Voting = ({ route }) => {
     if (!refresh) {
       fetchingPage = page;
       currentFights = fights;
-    } else {
-      setIsRefreshing(true);
     }
 
     if (fetchingPage === 1 || currentFights.length < totalCount) {
-      setIsLoading(true);
+      if (refresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
+
       try {
         const {
           fights: fetchedFights,
@@ -141,19 +145,26 @@ const Voting = ({ route }) => {
       } catch (error) {
         showFailure(t('Fights.couldntRefreshTheFeedPullToRefresh'));
       }
-      setIsLoading(false);
-      setIsRefreshing(false);
+
+      if (!isFetchedFirstTime) {
+        setIsFetchedFirstTime(true);
+      }
+
+      if (refresh) {
+        setIsRefreshing(false);
+      } else {
+        setIsLoading(false);
+      }
     }
-  }, [totalCount, page, fights, selectedToggleItem.id, selectedToggleItem.createdByMe, showFailure, t]);
+  }, [totalCount, page, fights, selectedToggleItem.id,
+    selectedToggleItem.createdByMe, showFailure, t, isFetchedFirstTime]);
 
   const onToggleSelect = useCallback(async (item) => {
     setSelectedToggleItem(item);
   }, []);
 
   const onRefresh = useCallback(async () => {
-    setIsRefreshing(true);
     await fetchNewItems({ refresh: true });
-    setIsRefreshing(false);
   }, [fetchNewItems]);
 
   useEffect(() => {
@@ -237,7 +248,7 @@ const Voting = ({ route }) => {
         <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
         {isRefreshing && <Loader />}
 
-        {!isRefreshing && (fights.length ? (
+        {!!fights.length && (
           <FlatList
             data={fights}
             renderItem={renderItem}
@@ -249,7 +260,9 @@ const Voting = ({ route }) => {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-        ) : (
+        )}
+
+        {isFetchedFirstTime && !fights.length && (
           <ScrollView
             contentContainerStyle={{ flexGrow: 1 }}
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
@@ -257,7 +270,7 @@ const Voting = ({ route }) => {
           >
             <EmptyView />
           </ScrollView>
-        ))}
+        )}
       </View>
     </SafeAreaView>
   );
