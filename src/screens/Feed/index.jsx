@@ -65,10 +65,10 @@ function Feed() {
   const [posts, setPosts] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
-  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const [viewablePosts, setViewablePosts] = useState({});
 
@@ -81,7 +81,11 @@ function Feed() {
     const currentPosts = refresh ? [] : posts;
 
     if (refresh || currentPosts.length < totalCount || !isFetchedFirstTime) {
-      setIsLoading(true);
+      if (refresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
 
       try {
         const {
@@ -103,14 +107,16 @@ function Feed() {
         setIsFetchedFirstTime(true);
       }
 
-      setIsLoading(false);
+      if (refresh) {
+        setIsRefreshing(false);
+      } else {
+        setIsLoading(false);
+      }
     }
   }, [posts, page, totalCount, showFailure, t, isFetchedFirstTime, isLoading]);
 
   const onRefresh = useCallback(async () => {
-    setIsRefreshing(true);
     await fetchNewItems({ refresh: true });
-    setIsRefreshing(false);
   }, [fetchNewItems]);
 
   const updateSubscriptionIfNeeded = useCallback(async () => {
@@ -132,7 +138,7 @@ function Feed() {
   }, [dispatch, fightersList, onRefresh, isFetchedFirstTime]);
 
   useEffect(() => {
-    fetchNewItems();
+    fetchNewItems({ refresh: true });
     // empty array because we need to use fetchNewItems only once here an with initial values of dependencies
   }, []);
 
@@ -227,8 +233,6 @@ function Feed() {
     </View>
   );
 
-  const isNoPostsToShow = isFetchedFirstTime && !posts.length;
-
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -239,7 +243,24 @@ function Feed() {
       />
 
       <View style={styles.content}>
-        {isNoPostsToShow && (
+        {!!posts.length && (
+        <FlatList
+          data={posts}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          onEndReachedThreshold={0.3}
+          onEndReached={fetchNewItems}
+          style={styles.fightersList}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={renderFooter}
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
+          viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
+          onViewableItemsChanged={updateViewableItems}
+        />
+        )}
+
+        {isFetchedFirstTime && !posts.length && (
           <ScrollView
             contentContainerStyle={styles.emptyScroll}
             refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
@@ -247,23 +268,6 @@ function Feed() {
           >
             {!fightersList?.length ? <NoSubscriptions /> : <NoPosts />}
           </ScrollView>
-        )}
-
-        {!isNoPostsToShow && (
-          <FlatList
-            data={posts}
-            renderItem={renderItem}
-            keyExtractor={keyExtractor}
-            onEndReachedThreshold={0.3}
-            onEndReached={fetchNewItems}
-            style={styles.fightersList}
-            showsVerticalScrollIndicator={false}
-            ListFooterComponent={renderFooter}
-            onRefresh={onRefresh}
-            refreshing={isRefreshing}
-            viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
-            onViewableItemsChanged={updateViewableItems}
-          />
         )}
       </View>
     </SafeAreaView>

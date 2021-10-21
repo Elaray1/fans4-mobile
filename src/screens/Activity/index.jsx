@@ -58,6 +58,7 @@ function Activity() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;
@@ -76,7 +77,11 @@ function Activity() {
     if (fetchingPage === 1
       || (currentActivities.today.length + currentActivities.yesterday.length
         + currentActivities.thisWeek.length + currentActivities.thisMonth.length) < totalCount) {
-      setIsLoading(true);
+      if (refresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
 
       try {
         const {
@@ -99,14 +104,20 @@ function Activity() {
         showFailure(t('Activity.couldntRefreshTheFeedPullToRefresh'));
       }
 
-      setIsLoading(false);
+      if (!isFetchedFirstTime) {
+        setIsFetchedFirstTime(true);
+      }
+
+      if (refresh) {
+        setIsRefreshing(false);
+      } else {
+        setIsLoading(false);
+      }
     }
-  }, [activities, page, totalCount, showFailure, t]);
+  }, [activities, page, totalCount, showFailure, t, isFetchedFirstTime]);
 
   const onRefresh = useCallback(async () => {
-    setIsRefreshing(true);
     await fetchNewItems({ refresh: true });
-    setIsRefreshing(false);
   }, [fetchNewItems]);
 
   const onPressActivivtyFilters = useCallback(() => {
@@ -136,7 +147,7 @@ function Activity() {
 
   useEffect(() => {
     const fetchActivities = async () => {
-      await fetchNewItems();
+      await fetchNewItems({ refresh: true });
     };
 
     fetchActivities();
@@ -270,7 +281,7 @@ function Activity() {
       <View style={styles.content}>
         {isRefreshing && <Loader />}
 
-        {!isRefreshing && (filteredActivitiesArray.length ? (
+        {!!filteredActivitiesArray.length && (
           <FlatList
             data={filteredActivitiesArray}
             renderItem={renderItem}
@@ -283,7 +294,9 @@ function Activity() {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-        ) : (
+        )}
+
+        {isFetchedFirstTime && !filteredActivitiesArray.length && (
           <ScrollView
             contentContainerStyle={styles.emptyScroll}
             refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
@@ -291,7 +304,7 @@ function Activity() {
           >
             <EmptyView />
           </ScrollView>
-        ))}
+        )}
       </View>
     </SafeAreaView>
   );

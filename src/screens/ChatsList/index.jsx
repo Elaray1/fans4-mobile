@@ -31,11 +31,12 @@ const ChatsList = () => {
   const navigation = useNavigation();
 
   const [chats, setChats] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
   const [page, setPage] = useState(INITIAL_PAGE);
   const [totalCount, setTotalCount] = useState(0);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const userType = useSelector(userSelectors.getUserType);
   const isFan = userType === USER_TYPES.FAN;
@@ -58,7 +59,12 @@ const ChatsList = () => {
     }
 
     if (fetchingPage === 1 || (chats.length < totalCount)) {
-      setIsLoading(true);
+      if (refresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
+
       try {
         if (fetchingPage === 1 && !isFan) {
           const [chatWithFans4, { chats: fetchedChats, totalCount: fetchedTotalCount }] = await Promise.all([
@@ -90,20 +96,27 @@ const ChatsList = () => {
         showFailure(t('Activity.couldntRefreshTheFeedPullToRefresh'));
       }
     }
-    setIsLoading(false);
-  }, [chats, page, showFailure, t, totalCount, isFan]);
+
+    if (!isFetchedFirstTime) {
+      setIsFetchedFirstTime(true);
+    }
+
+    if (refresh) {
+      setIsRefreshing(false);
+    } else {
+      setIsLoading(false);
+    }
+  }, [chats, page, showFailure, t, totalCount, isFetchedFirstTime]);
 
   useEffect(() => {
     const init = async () => {
-      await fetchChats();
+      await fetchChats({ refresh: true });
     };
     init();
   }, [fetchChats]);
 
   const onRefresh = useCallback(async () => {
-    setIsRefreshing(true);
     await fetchChats({ refresh: true });
-    setIsRefreshing(false);
   }, [fetchChats]);
 
   const onNewMessages = useCallback(({ chat }) => {
@@ -144,8 +157,9 @@ const ChatsList = () => {
       />
       <View style={styles.content}>
         {isRefreshing && <Loader />}
-        {chats.length > (isFan ? 0 : 1) || page === INITIAL_PAGE
-          ? (
+
+        {chats.length > (isFan ? 0 : 1)
+          && (
             <FlatList
               style={styles.flatList}
               data={chats}
@@ -158,20 +172,20 @@ const ChatsList = () => {
               refreshing={isRefreshing}
               initialNumToRender={20}
             />
-          )
-          : (
-            <ScrollView
-              style={styles.flatList}
-              contentContainerStyle={styles.emptyScroll}
-              refreshControl={
-                <RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />
+          )}
+
+        {isFetchedFirstTime && chats.length <= (isFan ? 0 : 1) && (
+          <ScrollView
+            style={styles.flatList}
+            contentContainerStyle={styles.emptyScroll}
+            refreshControl={
+              <RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />
             }
-              keyboardShouldPersistTaps="handled"
-            >
-              <EmptyView />
-            </ScrollView>
-          )
-      }
+            keyboardShouldPersistTaps="handled"
+          >
+            <EmptyView />
+          </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );

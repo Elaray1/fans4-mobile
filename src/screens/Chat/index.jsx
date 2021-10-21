@@ -63,6 +63,8 @@ function Chat({ route }) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(true);
 
@@ -98,12 +100,15 @@ function Chat({ route }) {
 
     if (!refresh) {
       currentMessages = messages;
-    } else {
-      setIsRefreshing(true);
     }
 
     if (messages.length === 0 || currentMessages.length < totalCount) {
-      setIsLoading(true);
+      if (refresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
+
       try {
         const {
           messages: fetchedMessages,
@@ -118,10 +123,18 @@ function Chat({ route }) {
       } catch (error) {
         showFailure(t('Chat.couldntRefreshTheFeedPullToRefresh'));
       }
-      setIsLoading(false);
-      setIsRefreshing(false);
+
+      if (!isFetchedFirstTime) {
+        setIsFetchedFirstTime(true);
+      }
+
+      if (refresh) {
+        setIsRefreshing(false);
+      } else {
+        setIsLoading(false);
+      }
     }
-  }, [messages, totalCount, showFailure, t, chatId, unreadMessagesCount]);
+  }, [messages, totalCount, showFailure, t, chatId, unreadMessagesCount, isFetchedFirstTime]);
 
   const onRefresh = useCallback(async () => {
     await fetchNewItems({ refresh: true });
@@ -360,59 +373,6 @@ function Chat({ route }) {
     return <Loader />;
   };
 
-  const renderList = () => {
-    if (isRefreshing) {
-      return <Loader />;
-    }
-
-    if (!messagesWithUnreadLabel.length) {
-      return (
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
-          keyboardShouldPersistTaps="handled"
-          style={[styles.horizontalPaddings, styles.contentMargin]}
-        >
-          <EmptyView />
-        </ScrollView>
-      );
-    }
-
-    return (
-      <>
-        <View style={!isMessageToBeScrolledRef.current && styles.hidden}>
-          <Loader />
-        </View>
-        <FlatList
-          ref={messagesListRef}
-          data={messagesWithUnreadLabel}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          onEndReachedThreshold={0.3}
-          onEndReached={fetchNewItems}
-          showsVerticalScrollIndicator={false}
-          ListFooterComponent={renderFooter}
-          onRefresh={onRefresh}
-          refreshing={isRefreshing}
-          style={[styles.horizontalPaddings, isMessageToBeScrolledRef.current && styles.hidden]}
-          onViewableItemsChanged={onViewableItemsChanged}
-          viewabilityConfig={viewConfigRef.current}
-          onScrollToIndexFailed={(info) => {
-            const wait = new Promise(resolve => setTimeout(resolve, 500));
-            wait.then(() => {
-              messagesListRef.current?.scrollToIndex({ index: info.index, viewPosition: 1, animated: false });
-              setTimeout(() => {
-                isMessageToBeScrolledRef.current = false;
-                messagesListRef.current?.recordInteraction();
-              }, 300);
-            });
-          }}
-          inverted
-        />
-      </>
-    );
-  };
-
   return (
     <SafeAreaView style={styles.screen}>
       <KeyboardAvoidingView
@@ -432,9 +392,54 @@ function Chat({ route }) {
             })}
           />
           <View style={styles.content}>
-            {renderList()}
+            {!!messagesWithUnreadLabel.length && (
+              <>
+                <View style={!isMessageToBeScrolledRef.current && styles.hidden}>
+                  <Loader />
+                </View>
+                <FlatList
+                  ref={messagesListRef}
+                  data={messagesWithUnreadLabel}
+                  renderItem={renderItem}
+                  keyExtractor={keyExtractor}
+                  onEndReachedThreshold={0.3}
+                  onEndReached={fetchNewItems}
+                  showsVerticalScrollIndicator={false}
+                  ListFooterComponent={renderFooter}
+                  onRefresh={onRefresh}
+                  refreshing={isRefreshing}
+                  style={[styles.horizontalPaddings, isMessageToBeScrolledRef.current && styles.hidden]}
+                  onViewableItemsChanged={onViewableItemsChanged}
+                  viewabilityConfig={viewConfigRef.current}
+                  onScrollToIndexFailed={(info) => {
+                    const wait = new Promise(resolve => setTimeout(resolve, 500));
+                    wait.then(() => {
+                      messagesListRef.current?.scrollToIndex({ index: info.index, viewPosition: 1, animated: false });
+                      setTimeout(() => {
+                        isMessageToBeScrolledRef.current = false;
+                        messagesListRef.current?.recordInteraction();
+                      }, 300);
+                    });
+                  }}
+                  inverted
+                />
+              </>
+            )}
 
-            {!isRefreshing && (
+            {isFetchedFirstTime && !messagesWithUnreadLabel.length && (
+              <ScrollView
+                contentContainerStyle={styles.scrollView}
+                refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+                keyboardShouldPersistTaps="handled"
+                style={[styles.horizontalPaddings, styles.contentMargin]}
+              >
+                <EmptyView />
+              </ScrollView>
+            )}
+
+            {isRefreshing && <Loader />}
+
+            {isFetchedFirstTime && (
               <View style={styles.messageContainer}>
                 <View style={styles.line} />
                 <View style={styles.horizontalPaddings}>

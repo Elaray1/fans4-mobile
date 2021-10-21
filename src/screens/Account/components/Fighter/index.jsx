@@ -49,11 +49,14 @@ function FighterAccount({ postId }) {
   const isBankAccountWarning = useSelector(userSelectors.getIsBankAccountWarning);
   const completedUploadingPosts = useSelector(postSelectors.getCompletedUploadingPosts);
 
-  const [postsCount, setPostsCount] = useState(null);
   const [fansCount, setFansCount] = useState(null);
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
+  const [postsCount, setPostsCount] = useState(null);
   const [viewablePosts, setViewablePosts] = useState({});
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const [postIdToBeScrolled, setPostIdToBeScrolled] = useState(postId);
 
@@ -91,35 +94,51 @@ function FighterAccount({ postId }) {
     };
   }, [refreshFansCount, refreshPosts]);
 
+  const refreshContent = useCallback(async () => {
+    setIsRefreshing(true);
+
+    let fetchedFansCount;
+    let fetchedPostsCount;
+    let fetchedPosts;
+
+    try {
+      const [{ totalCount: fansTotalCount }, { posts: initPosts, totalCount: postsTotalCount }] = await Promise.all([
+        userApi.getMyFans({ page: 1, perPage: 1 }),
+        postApi.getMyPosts({ page: INITIAL_PAGE, perPage: PER_PAGE }),
+      ]);
+
+      fetchedFansCount = fansTotalCount;
+      fetchedPostsCount = postsTotalCount;
+      fetchedPosts = initPosts;
+    } catch (err) {
+      console.log('Account screen initialization error:', err);
+      showFailure();
+      return;
+    }
+
+    if (!isFetchedFirstTime) {
+      setIsFetchedFirstTime(true);
+    }
+
+    setPostsCount(fetchedPostsCount);
+    setFansCount(fetchedFansCount);
+    setPosts(fetchedPosts);
+    setPage(INITIAL_PAGE + 1);
+
+    setIsRefreshing(false);
+  }, [showFailure, isFetchedFirstTime]);
+
   useEffect(() => {
     const init = async () => {
-      let fetchedFansCount;
-      let fetchedPostsCount;
-      let fetchedPosts;
-
-      try {
-        const [{ totalCount: fansTotalCount }, { posts: initPosts, totalCount: postsTotalCount }] = await Promise.all([
-          userApi.getMyFans({ page: 1, perPage: 1 }),
-          postApi.getMyPosts({ page: INITIAL_PAGE, perPage: PER_PAGE }),
-        ]);
-
-        fetchedFansCount = fansTotalCount;
-        fetchedPostsCount = postsTotalCount;
-        fetchedPosts = initPosts;
-      } catch (err) {
-        console.log('Account screen initialization error:', err);
-        showFailure();
-        return;
-      }
-
-      setPostsCount(fetchedPostsCount);
-      setFansCount(fetchedFansCount);
-      setPosts(fetchedPosts);
-      setPage(INITIAL_PAGE + 1);
+      await refreshContent();
     };
 
     init();
-  }, [userId, showFailure]);
+  }, []);
+
+  const onRefresh = useCallback(async () => {
+    await refreshContent();
+  }, [refreshContent]);
 
   useEffect(() => {
     const init = async () => {
@@ -291,6 +310,12 @@ function FighterAccount({ postId }) {
     );
   };
 
+  const Loader = () => (
+    <View style={styles.refreshLoader}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
+
   return (
     <>
       {isBankAccountWarning && (
@@ -303,6 +328,11 @@ function FighterAccount({ postId }) {
         onSubmit={onUpdateBankAccount}
       />
       )}
+
+      {isRefreshing && <Loader />}
+
+
+      {postsCount !== null && fansCount !== null && (
       <FlatList
         ref={postsListRef}
         style={styles.content}
@@ -312,6 +342,8 @@ function FighterAccount({ postId }) {
         ItemSeparatorComponent={renderItemSeparator}
         onEndReached={fetchMorePosts}
         onEndReachedThreshold={0.1}
+        refreshing={isRefreshing}
+        onRefresh={onRefresh}
         initialNumToRender={PER_PAGE}
         ListHeaderComponent={(
           <FighterHeader
@@ -319,7 +351,7 @@ function FighterAccount({ postId }) {
             fansCount={fansCount}
             onAddBiographyPress={onAddBiographyPress}
           />
-      )}
+        )}
         ListFooterComponent={renderFooter}
         ListEmptyComponent={renderNoItems}
         onViewableItemsChanged={updateViewableItems}
@@ -331,6 +363,7 @@ function FighterAccount({ postId }) {
           });
         }}
       />
+      )}
     </>
   );
 }

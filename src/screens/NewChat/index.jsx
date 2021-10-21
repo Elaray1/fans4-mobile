@@ -42,13 +42,14 @@ function NewChat() {
 
   const userId = useSelector(userSelectors.getUserId);
 
-  const [page, setPage] = useState(INITIAL_PAGE);
   const [chats, setChats] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [page, setPage] = useState(INITIAL_PAGE);
+  const [totalCount, setTotalCount] = useState(0);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-
-  const [totalCount, setTotalCount] = useState(0);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const fetchChats = useCallback(async ({ search = '', refresh } = {}) => {
     let fetchingPage = 1;
@@ -58,7 +59,12 @@ function NewChat() {
     }
 
     if (fetchingPage === 1 || (chats.length < totalCount)) {
-      setIsLoading(true);
+      if (refresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
+
       try {
         const {
           chats: fetchedChats,
@@ -80,8 +86,17 @@ function NewChat() {
         showFailure(t('Activity.couldntRefreshTheFeedPullToRefresh'));
       }
     }
-    setIsLoading(false);
-  }, [chats, page, showFailure, t, totalCount]);
+
+    if (!isFetchedFirstTime) {
+      setIsFetchedFirstTime(true);
+    }
+
+    if (refresh) {
+      setIsRefreshing(false);
+    } else {
+      setIsLoading(false);
+    }
+  }, [chats, page, showFailure, t, totalCount, isFetchedFirstTime]);
 
   useEffect(() => {
     const init = async () => {
@@ -91,9 +106,7 @@ function NewChat() {
   }, []);
 
   const onRefresh = useCallback(async () => {
-    setIsRefreshing(true);
     await fetchChats({ refresh: true });
-    setIsRefreshing(false);
   }, [fetchChats]);
 
 
@@ -176,39 +189,42 @@ function NewChat() {
           onChangeText={onChangeSearch}
           placeholder={t('NewChat.search')}
         />
+
         {isRefreshing && <Loader />}
-        {chats.length || page === INITIAL_PAGE
-          ? (
-            <FlatList
-              style={styles.flatList}
-              data={chats}
-              keyExtractor={keyExtractor}
-              renderItem={renderItem}
-              onEndReached={fetchChats}
-              onEndReachedThreshold={0.3}
-              ItemSeparatorComponent={renderItemSeparator}
+
+        {!!chats.length
+        && (
+        <FlatList
+          style={styles.flatList}
+          data={chats}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          onEndReached={fetchChats}
+          onEndReachedThreshold={0.3}
+          ItemSeparatorComponent={renderItemSeparator}
+          onRefresh={onRefresh}
+          ListFooterComponent={renderFooter}
+          refreshing={isRefreshing}
+          initialNumToRender={20}
+        />
+        )}
+
+        {isFetchedFirstTime && !chats.length && (
+        <ScrollView
+          style={styles.flatList}
+          contentContainerStyle={styles.emptyScroll}
+          refreshControl={(
+            <RefreshControl
+              refreshing={Platform.OS === 'ios' && isRefreshing}
               onRefresh={onRefresh}
-              ListFooterComponent={renderFooter}
-              refreshing={isRefreshing}
-              initialNumToRender={20}
             />
-          )
-          : (
-            <ScrollView
-              style={styles.flatList}
-              contentContainerStyle={styles.emptyScroll}
-              refreshControl={(
-                <RefreshControl
-                  refreshing={Platform.OS === 'ios' && isRefreshing}
-                  onRefresh={onRefresh}
-                />
-              )}
-              keyboardShouldPersistTaps="handled"
-            >
-              <EmptyView />
-            </ScrollView>
-          )
-      }
+            )}
+          keyboardShouldPersistTaps="handled"
+        >
+          <EmptyView />
+        </ScrollView>
+        )}
+
       </View>
     </SafeAreaView>
   );

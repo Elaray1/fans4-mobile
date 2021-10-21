@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-import { SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {
+  SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, Platform, ScrollView,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
@@ -40,7 +42,12 @@ function SearchFighters() {
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [searchValue, setSearchValue] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
+
 
   const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
@@ -85,14 +92,14 @@ function SearchFighters() {
     if (!refresh) {
       fetchingPage = page;
       currentFighters = fighters;
-    } else {
-      setFighters([]);
-      setTotalCount(0);
-      setPage(1);
     }
 
     if (fetchingPage === 1 || fighters.length < totalCount) {
-      setIsLoading(true);
+      if (refresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
 
       try {
         const {
@@ -111,9 +118,21 @@ function SearchFighters() {
         console.error(error);
       }
 
-      setIsLoading(false);
+      if (!isFetchedFirstTime) {
+        setIsFetchedFirstTime(true);
+      }
+
+      if (refresh) {
+        setIsRefreshing(false);
+      } else {
+        setIsLoading(false);
+      }
     }
-  }, [fighters, page, totalCount]);
+  }, [fighters, page, totalCount, isFetchedFirstTime]);
+
+  const onRefresh = useCallback(async () => {
+    await fetchNewItems({ refresh: true });
+  }, [fetchNewItems]);
 
   const onSearchQueryChange = useRef(debounce(async (value) => {
     await fetchNewItems({ search: value, refresh: true });
@@ -213,6 +232,8 @@ function SearchFighters() {
     )
     : null);
 
+  const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -226,20 +247,34 @@ function SearchFighters() {
           placeholder={t('SearchFighters.search')}
         />
 
-        {/* eslint-disable-next-line no-extra-boolean-cast */}
-        {isLoading || !!fighters.length ? (
+        {isRefreshing && <Loader />}
+
+
+        {!!fighters.length && (
           <FlatList
             data={fighters}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             onEndReachedThreshold={0.3}
             onEndReached={fetchNewItems}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
             style={styles.fightersList}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={Fans4Account}
             ListFooterComponent={renderFooter}
           />
-        ) : <EmptyView /> }
+        )}
+
+        {isFetchedFirstTime && fighters.length <= 1 && (
+        <ScrollView
+          contentContainerStyle={styles.emptyScroll}
+          refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
+          keyboardShouldPersistTaps="handled"
+        >
+          <EmptyView />
+        </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );

@@ -54,6 +54,8 @@ function Comments({ route }) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(true);
 
@@ -74,14 +76,12 @@ function Comments({ route }) {
     if (!refresh) {
       fetchingPage = page;
       currentComments = comments;
-    } else {
-      setIsRefreshing(true);
     }
 
     if (fetchingPage === 1 || currentComments.length < totalCount) {
-      setIsLoading(true);
       try {
         if (refresh) {
+          setIsRefreshing(true);
           const [
             {
               comments: fetchedMyComments,
@@ -107,6 +107,8 @@ function Comments({ route }) {
           setTotalCount(fetchedTotalCount);
           setComments([...fetchedMyComments, ...fetchedOtherComments]);
         } else {
+          setIsLoading(true);
+
           const {
             comments: fetchedComments,
             totalCount: fetchedTotalCount,
@@ -124,10 +126,18 @@ function Comments({ route }) {
       } catch (error) {
         showFailure(t('Comments.couldntRefreshTheFeedPullToRefresh'));
       }
-      setIsLoading(false);
-      setIsRefreshing(false);
+
+      if (!isFetchedFirstTime) {
+        setIsFetchedFirstTime(true);
+      }
+
+      if (refresh) {
+        setIsRefreshing(false);
+      } else {
+        setIsLoading(false);
+      }
     }
-  }, [comments, page, totalCount, showFailure, t, postId]);
+  }, [comments, page, totalCount, showFailure, t, postId, isFetchedFirstTime]);
 
   const onRefresh = useCallback(async () => {
     await fetchNewItems({ refresh: true });
@@ -213,38 +223,6 @@ function Comments({ route }) {
     return <Loader />;
   };
 
-  const renderList = () => {
-    if (isRefreshing) {
-      return <Loader />;
-    }
-
-    if (!comments.length) {
-      return (
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
-          keyboardShouldPersistTaps="handled"
-        >
-          <EmptyView />
-        </ScrollView>
-      );
-    }
-
-    return (
-      <FlatList
-        data={comments}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        onEndReachedThreshold={0.3}
-        onEndReached={fetchNewItems}
-        showsVerticalScrollIndicator={false}
-        ListFooterComponent={renderFooter}
-        onRefresh={onRefresh}
-        refreshing={isRefreshing}
-      />
-    );
-  };
-
   return (
     <SafeAreaView style={styles.screen}>
       <KeyboardAvoidingView
@@ -258,9 +236,34 @@ function Comments({ route }) {
             leftItemType="backArrow"
           />
           <View style={styles.content}>
-            {renderList()}
+            {isRefreshing && <Loader />}
 
-            {!isRefreshing && (
+            {!!comments.length && (
+              <FlatList
+                data={comments}
+                renderItem={renderItem}
+                keyExtractor={keyExtractor}
+                onEndReachedThreshold={0.3}
+                onEndReached={fetchNewItems}
+                showsVerticalScrollIndicator={false}
+                ListFooterComponent={renderFooter}
+                onRefresh={onRefresh}
+                refreshing={isRefreshing}
+              />
+            )}
+
+            {isFetchedFirstTime && !comments.length && (
+              <ScrollView
+                contentContainerStyle={{ flexGrow: 1 }}
+                refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+                keyboardShouldPersistTaps="handled"
+              >
+                <EmptyView />
+              </ScrollView>
+            )}
+
+
+            {isFetchedFirstTime && (
               <View style={styles.commentContainer}>
                 <View style={styles.line} />
                 <Text style={styles.secondaryText}>
