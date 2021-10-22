@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import {
-  SafeAreaView, View, KeyboardAvoidingView, ScrollView,
+  SafeAreaView, View, KeyboardAvoidingView, ScrollView, Platform,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,9 @@ import useToast from 'hooks/useToast';
 import { REPORT_REASONS } from 'resources/comment/comment.constants';
 
 import styles from './styles';
+
+const keyboardAvoidingViewBehavior = Platform.OS === 'ios' ? 'position' : 'height';
+const keyboardVerticalOffset = Platform.OS === 'ios' ? 0 : 16;
 
 const REPORT_MAX_LENGTH = 160;
 function ReportComment({ route }) {
@@ -78,7 +81,11 @@ function ReportComment({ route }) {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
+      <KeyboardAvoidingView
+        behavior={keyboardAvoidingViewBehavior}
+        style={styles.keyboardAvoiding}
+        keyboardVerticalOffset={keyboardVerticalOffset}
+      >
         <View style={styles.keyboardAvoidingChildContainer}>
           <Header leftItemType="backArrow" title={t('ReportComment.reportComment')} />
           <ScrollView style={styles.content}>

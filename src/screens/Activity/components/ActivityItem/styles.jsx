@@ -82,4 +82,7 @@ export default StyleSheet.create({
     marginTop: 5,
     maxWidth: 270,
   },
+  textMaxWidth: {
+    maxWidth: 270,
+  },
 });

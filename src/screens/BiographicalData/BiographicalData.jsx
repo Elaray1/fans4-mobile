@@ -196,7 +196,7 @@ function BiographicalData() {
           <UploadMediaButton
             label={t('BiographicalData.profilePhoto')}
             handleMediaUpload={setPhoto}
-            mediaType="image"
+            mediaType="photo"
             croppingAvatar
             onDelete={onDeletePhoto}
           />
