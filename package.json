@@ -9,7 +9,13 @@
     "start:clear": "watchman watch-del-all; rm -rf /tmp/metro-*; npm start",
     "test": "jest",
     "lint": "eslint --ext .js --ext .jsx ./src",
-    "lint:fix": "eslint --fix --ext .js --ext .jsx ./src"
+    "lint:fix": "eslint --fix --ext .js --ext .jsx ./src",
+    "pre-commit": "lint-staged --quiet"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --ext js --ext jsx --fix"
+    ]
   },
   "dependencies": {
     "@amplitude/react-native": "2.3.2",
@@ -86,7 +92,9 @@
     "eslint-plugin-react": "7.23.1",
     "eslint-plugin-react-hooks": "4.2.0",
     "eslint-plugin-react-native": "3.11.0",
+    "husky": "7.0.4",
     "jest": "26.6.3",
+    "lint-staged": "11.2.3",
     "metro-react-native-babel-preset": "0.65.2",
     "react-native-rename": "2.9.0",
     "react-test-renderer": "17.0.1"
