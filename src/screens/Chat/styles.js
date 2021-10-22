@@ -13,7 +13,7 @@ export default StyleSheet.create({
     flex: 1,
   },
   contentMargin: {
-    marginTop: 45,
+    marginTop: -20,
   },
   emptyView: {
     flex: 1,
