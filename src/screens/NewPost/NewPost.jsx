@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, View, ActivityIndicator, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 
 import colors from 'themes/colors';
@@ -12,8 +12,6 @@ import UploadMediaButton from 'components/UploadMediaButton';
 
 import * as postApi from 'resources/post/post.api';
 import * as postActions from 'resources/post/post.actions';
-
-import * as userSelectors from 'resources/user/user.selectors';
 
 import * as rootNavigation from 'helpers/rootNavigation';
 
@@ -27,8 +25,6 @@ const TEXT_NUMBER_OF_LINES = 4;
 function NewPost() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
-  const userId = useSelector(userSelectors.getUserId);
 
   const [text, setText] = useState('');
   const [uploadingMedia, setUploadingMedia] = useState(null);
@@ -55,11 +51,8 @@ function NewPost() {
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FIGHTER_NEW_POST_ADDING_STARTED,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
   const goToAccount = useCallback(() => {
     setLoading(false);
@@ -115,16 +108,13 @@ function NewPost() {
 
       analyticsService.logEvent({
         name: analyticsService.events.FIGHTER_ADDED_POST,
-        data: {
-          userId,
-        },
       });
     } catch (error) {
       console.error('Submit post error:', error);
     } finally {
       setLoading(false);
     }
-  }, [text, uploadingMedia, goToAccount, userId, uploadingPoster, onUploadProgress]);
+  }, [text, uploadingMedia, goToAccount, uploadingPoster, onUploadProgress]);
 
   return (
     <SafeAreaView style={styles.screen}>

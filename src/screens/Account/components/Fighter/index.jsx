@@ -152,15 +152,10 @@ function FighterAccount({ postId }) {
   }, [completedUploadingPosts.length, refreshPosts, dispatch]);
 
   const onAddBiographyPress = useCallback(() => {
-    analyticsService.logEvent({
-      name: analyticsService.events.FIGHTER_ADD_BIOGRAPHY_STARTED,
-      data: {
-        userId,
-      },
-    });
+    analyticsService.logEvent({ name: analyticsService.events.FIGHTER_ADD_BIOGRAPHY_STARTED });
 
     navigation.navigate('ChangeBiography');
-  }, [navigation, userId]);
+  }, [navigation]);
 
   const onAddPostPress = useCallback(() => {
     rootNavigation.resetToScreen('NewPost', 'NewPost');

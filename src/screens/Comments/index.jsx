@@ -40,7 +40,6 @@ function Comments({ route }) {
   const { showFailure } = useToast();
 
   const userType = useSelector(userSelectors.getUserType);
-  const userId = useSelector(userSelectors.getUserId);
 
   const {
     postId,
@@ -63,11 +62,10 @@ function Comments({ route }) {
     analyticsService.logEvent({
       name: analyticsService.events.FAN_OPENED_POST_COMMENTS,
       data: {
-        userId,
         postId,
       },
     });
-  }, [userId, postId]);
+  }, [postId]);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;
@@ -162,7 +160,6 @@ function Comments({ route }) {
         analyticsService.logEvent({
           name: analyticsService.events.FAN_SENT_POST_COMMENT,
           data: {
-            userId,
             postId,
           },
         });
@@ -171,7 +168,7 @@ function Comments({ route }) {
       showFailure();
     }
     setIsButtonDisabled(false);
-  }, [showFailure, postId, commentValue, comments, userId, onUpdateCommentsCount, userType]);
+  }, [showFailure, postId, commentValue, comments, onUpdateCommentsCount, userType]);
 
   useEffect(() => {
     const fetchComments = async () => {

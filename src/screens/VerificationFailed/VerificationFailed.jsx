@@ -19,7 +19,6 @@ function VerificationFailed() {
   const navigation = useNavigation();
 
   const userName = useSelector(userSelectors.getUserFullName);
-  const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
 
   const onButtonPress = useCallback(() => {
@@ -49,16 +48,13 @@ function VerificationFailed() {
       }],
     });
     dispatch(userActions.logout());
-  }, [dispatch]);
+  }, [dispatch, navigation, userType]);
 
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FIGHTER_FAILED_VERIFICATION_OPENED,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
 
   return (

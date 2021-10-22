@@ -49,7 +49,6 @@ function SearchFighters() {
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
 
-  const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
 
   useEffect(() => {
@@ -71,19 +70,13 @@ function SearchFighters() {
     if (userType === USER_TYPES.FIGHTER) {
       analyticsService.logEvent({
         name: analyticsService.events.FIGHTER_OPENED_FIGHTERS_SCREEN,
-        data: {
-          userId,
-        },
       });
     } else {
       analyticsService.logEvent({
         name: analyticsService.events.FAN_OPENED_FIGHTERS_SCREEN,
-        data: {
-          userId,
-        },
       });
     }
-  }, [userType, userId]);
+  }, [userType]);
 
   const fetchNewItems = useCallback(async ({ search = '', refresh } = {}) => {
     let fetchingPage = 1;

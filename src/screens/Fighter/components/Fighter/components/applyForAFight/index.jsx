@@ -33,11 +33,8 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FIGHTER_APPLYING_FOR_A_FIGHT_STARTED,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
 
   const [loading, setLoading] = useState(false);

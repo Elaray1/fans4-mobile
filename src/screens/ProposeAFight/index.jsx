@@ -4,11 +4,9 @@ import { View, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator } f
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
-import { useSelector } from 'react-redux';
 
 import * as userApi from 'resources/user/user.api';
 import * as fightApi from 'resources/fight/fight.api';
-import * as userSelectors from 'resources/user/user.selectors';
 
 import analyticsService from 'services/analytics.service';
 
@@ -39,16 +37,11 @@ const ProposeAFight = ({ route }) => {
   const setStepOne = useCallback(() => setStep(0), []);
   const setStepTwo = useCallback(() => setStep(1), []);
 
-  const userId = useSelector(userSelectors.getUserId);
-
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FAN_STARTED_PROPOSE_FIGHT,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
     async function fetchFighters() {
@@ -96,14 +89,11 @@ const ProposeAFight = ({ route }) => {
 
       analyticsService.logEvent({
         name: analyticsService.events.FAN_PROPOSED_FIGHT,
-        data: {
-          userId,
-        },
       });
     } catch (error) {
       console.error('Suggesting fight error:', error);
     }
-  }, [firstFighter?._id, secondFighter?._id, navigation, userId]);
+  }, [firstFighter?._id, secondFighter?._id, navigation]);
 
   const disabled = (step === 0 && !firstFighter) || (step === 1 && !secondFighter);
 

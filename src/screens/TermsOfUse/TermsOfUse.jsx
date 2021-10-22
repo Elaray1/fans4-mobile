@@ -29,7 +29,6 @@ function TermsOfUse() {
   const { t } = useTranslation();
 
   const userType = useSelector(userSelectors.getUserType);
-  const userId = useSelector(userSelectors.getUserId);
 
   const isFan = userType === USER_TYPES.FAN;
 
@@ -43,9 +42,6 @@ function TermsOfUse() {
     if (!isFan) {
       analyticsService.logEvent({
         name: analyticsService.events.FIGHTER_TOS_ACCEPTED,
-        data: {
-          userId,
-        },
       });
     }
 
@@ -53,7 +49,7 @@ function TermsOfUse() {
       index: 0,
       routes: [{ name: isFan ? 'OnBoarding' : 'VerificationPending' }],
     });
-  }, [isFan, navigation, userId, showFailure]);
+  }, [isFan, navigation, showFailure]);
 
 
   const renderLoading = () => (

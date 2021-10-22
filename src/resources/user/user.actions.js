@@ -38,12 +38,7 @@ export const emailSignUp = ({
     dispatch({ type: SET_USER_DATA, user }),
   ]);
 
-  analyticsService.logEvent({
-    name: analyticsService.events.FIGHTER_SIGNED_UP,
-    data: {
-      userId: user._id,
-    },
-  });
+  analyticsService.logEvent({ name: analyticsService.events.FIGHTER_SIGNED_UP });
 
   rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'EmailConfirmation' } }] });
 };

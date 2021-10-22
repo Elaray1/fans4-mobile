@@ -40,7 +40,6 @@ const Voting = ({ route }) => {
   const navigation = useNavigation();
   const { showFailure, showSuccess } = useToast();
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
-  const userId = useSelector(userSelectors.getUserId);
 
   const [fights, setFights] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -53,11 +52,8 @@ const Voting = ({ route }) => {
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FAN_OPENED_VOTING_PAGE,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
   const toggleItems = useMemo(() => {
     return [

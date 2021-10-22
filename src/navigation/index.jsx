@@ -182,7 +182,6 @@ function AppNavigation() {
     await init(dispatch);
   }, [dispatch]);
 
-  const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
   const userStatus = useSelector(userSelectors.getUserStatus);
 
@@ -279,14 +278,13 @@ function AppNavigation() {
       analyticsService.logEvent({
         name: analyticsService.events.SCREEN_OPENED,
         data: {
-          userId,
           userType,
         },
       });
     }
 
     routeNameRef.current = currentRouteName;
-  }, [userId, userType]);
+  }, [userType]);
 
   const blockAccountIfNeeded = useCallback(async () => {
     if (userStatus && userStatus !== USER_STATUSES.BLOCKED) {

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, View, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
 import Text from 'components/Text';
@@ -12,7 +12,6 @@ import Button from 'components/Button';
 import Toggle from 'components/Toggle';
 
 import * as userActions from 'resources/user/user.actions';
-import * as userSelectors from 'resources/user/user.selectors';
 import { FIGHTER_TYPES } from 'resources/user/user.constants';
 
 import analyticsService from 'services/analytics.service';
@@ -36,8 +35,6 @@ const FighterRecord = ({ route }) => {
     draws: '',
   });
   const [type, setType] = useState(FIGHTER_TYPES.AMATEUR);
-
-  const userId = useSelector(userSelectors.getUserId);
 
   const types = useMemo(() => [
     { id: FIGHTER_TYPES.AMATEUR, value: t('FighterRecord.amateur') },
@@ -112,9 +109,6 @@ const FighterRecord = ({ route }) => {
 
       analyticsService.logEvent({
         name: analyticsService.events.FIGHTER_FORM_SUBMITTED,
-        data: {
-          userId,
-        },
       });
 
       navigation.navigate('TermsOfUse');
@@ -126,7 +120,7 @@ const FighterRecord = ({ route }) => {
     cityId, weight, height, reach, type, record.wins,
     record.losses, record.draws, recordPro.wins,
     recordPro.losses, recordPro.draws, weightClasses,
-    photo?.mime, photo?.path, userId, navigation]);
+    photo?.mime, photo?.path, navigation]);
 
   return (
     <SafeAreaView style={styles.screen}>

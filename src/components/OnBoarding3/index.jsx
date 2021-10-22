@@ -24,7 +24,6 @@ function OnBoarding3(props) {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
 
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
@@ -40,23 +39,14 @@ function OnBoarding3(props) {
       await userApi.completeOnboarding();
       if (userType === USER_TYPES.FIGHTER) {
         analyticsService.logEvent({
-          name: analyticsService.events.FIGHTER_ONBOARDING_COMPLETED,
-          data: {
-            userId,
-          },
-        });
+          name: analyticsService.events.FIGHTER_ONBOARDING_COMPLETED });
       } else {
-        analyticsService.logEvent({
-          name: analyticsService.events.FAN_ONBOARDING_COMPLETED,
-          data: {
-            userId,
-          },
-        });
+        analyticsService.logEvent({ name: analyticsService.events.FAN_ONBOARDING_COMPLETED });
       }
     } catch (err) {
       console.error(err);
     }
-  }, [navigation, userId, userType]);
+  }, [navigation, userType]);
 
   return (
     <IllustrationScreen

@@ -1,8 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-
 
 import * as fightApi from 'resources/fight/fight.api';
 
@@ -18,7 +16,6 @@ import colors from 'themes/colors';
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
-import * as userSelectors from 'resources/user/user.selectors';
 
 import analyticsService from 'services/analytics.service';
 
@@ -37,16 +34,11 @@ function Fights() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const userId = useSelector(userSelectors.getUserId);
-
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FIGHTER_OPENED_FIGHTS_SCREEN,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
   const toggleItems = useMemo(() => {
     return [

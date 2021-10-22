@@ -39,7 +39,6 @@ function ChangeBiography() {
   const uploadingIntroVideo = useSelector(introVideoSelectors.getIntroVideo);
   const initialValue = useSelector(userSelectors.getUserBiographyAbout);
   const initialMedia = useSelector(userSelectors.getUserIntroVideo);
-  const userId = useSelector(userSelectors.getUserId);
 
   const [value, setValue] = useState(initialValue);
   const [isLoading, setIsLoading] = useState(false);
@@ -107,18 +106,12 @@ function ChangeBiography() {
 
     setIsLoading(false);
 
-    analyticsService.logEvent({
-      name: analyticsService.events.FIGHTER_BIOGRAPHY_ADDED,
-      data: {
-        userId,
-      },
-    });
+    analyticsService.logEvent({ name: analyticsService.events.FIGHTER_BIOGRAPHY_ADDED });
 
     navigation.goBack();
   }, [dispatch,
     value,
     navigation,
-    userId,
     showSuccess,
     showFailure,
     t,

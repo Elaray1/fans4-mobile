@@ -1,9 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-
-import * as userSelectors from 'resources/user/user.selectors';
 
 import analyticsService from 'services/analytics.service';
 
@@ -15,8 +12,6 @@ function VerificationSuccessful() {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const userId = useSelector(userSelectors.getUserId);
-
   const onNext = useCallback(() => {
     navigation.navigate('OnBoarding');
   }, [navigation]);
@@ -24,11 +19,8 @@ function VerificationSuccessful() {
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FIGHTER_SUCCESSFULL_VERIFICATION_OPENED,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
   return (
     <IllustrationScreen

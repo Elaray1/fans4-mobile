@@ -36,7 +36,6 @@ function Fighter({ fighterId }) {
   const { t } = useTranslation();
 
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
-  const userId = useSelector(userSelectors.getUserId);
 
   const isSubscribed = useMemo(() => !!userSubscriptions.find((f) => {
     const isBeforeRenewalDate = moment(f.renewalDate).isAfter(new Date());
@@ -109,11 +108,8 @@ function Fighter({ fighterId }) {
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FAN_OPENED_FIGHTER_SCREEN,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
   const keyExtractor = useCallback(item => item._id, []);
 

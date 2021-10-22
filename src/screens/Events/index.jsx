@@ -50,25 +50,18 @@ function Events() {
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const userType = useSelector(userSelectors.getUserType);
-  const userId = useSelector(userSelectors.getUserId);
 
   useEffect(() => {
     if (userType === USER_TYPES.FIGHTER) {
       analyticsService.logEvent({
         name: analyticsService.events.FIGHTER_OPENED_EVENTS_SCREEN,
-        data: {
-          userId,
-        },
       });
     } else {
       analyticsService.logEvent({
         name: analyticsService.events.FAN_OPENED_EVENTS_SCREEN,
-        data: {
-          userId,
-        },
       });
     }
-  }, [userType, userId]);
+  }, [userType]);
 
   const tabs = useMemo(() => {
     return [

@@ -45,19 +45,17 @@ function EventFights({ route }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const userType = useSelector(userSelectors.getUserType);
-  const userId = useSelector(userSelectors.getUserId);
 
   useEffect(() => {
     if (userType === USER_TYPES.FAN) {
       analyticsService.logEvent({
         name: analyticsService.events.FAN_OPENED_EVENT_SCREEN,
         data: {
-          userId,
           eventId: event._id,
         },
       });
     }
-  }, [userType, userId, event._id]);
+  }, [userType, event._id]);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;

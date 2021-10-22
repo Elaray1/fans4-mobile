@@ -37,11 +37,8 @@ function Fighter({ fighterId }) {
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FIGHTER_OPENED_OTHER_FIGHTER_SCREEN,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
     const init = async () => {

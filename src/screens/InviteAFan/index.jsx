@@ -25,11 +25,8 @@ const InviteAFan = () => {
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FIGHTER_OPENED_INVITE_FAN,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
   const link = `${config.webUrl}/fighters/${userId}`;
 

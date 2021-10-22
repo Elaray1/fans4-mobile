@@ -21,26 +21,19 @@ function Support() {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
 
   useEffect(() => {
     if (userType === USER_TYPES.FIGHTER) {
       analyticsService.logEvent({
         name: analyticsService.events.FIGHTER_OPENED_SUPPORT_SCREEN,
-        data: {
-          userId,
-        },
       });
     } else {
       analyticsService.logEvent({
         name: analyticsService.events.FAN_OPENED_SUPPORT_SCREEN,
-        data: {
-          userId,
-        },
       });
     }
-  }, [userType, userId]);
+  }, [userType]);
 
   const questionsAnswers = t(`Support.${userType}`, { returnObjects: true });
   const optionsLength = Object.keys(questionsAnswers).length / 2;

@@ -109,11 +109,8 @@ function Finances() {
   useEffect(() => {
     analyticsService.logEvent({
       name: analyticsService.events.FIGHTER_OPENED_FINANCES_SCREEN,
-      data: {
-        userId,
-      },
     });
-  }, [userId]);
+  }, []);
 
   const createStripePayoutAccount = useCallback(async () => {
     try {
