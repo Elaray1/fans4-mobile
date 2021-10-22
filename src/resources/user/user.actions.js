@@ -181,7 +181,8 @@ export const logout = () => async (dispatch) => {
 export const updateEmail = ({ newEmail, password }) => async (dispatch) => {
   const user = await api.updateEmail({ newEmail, password });
 
-  rootNavigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'ConfirmYourEmailAddress' } }] });
+  rootNavigation.reset({ routes: [{ name: 'AppStack',
+    params: { screen: 'ConfirmYourEmailAddress', params: { newEmail } } }] });
 
   dispatch({ type: SET_USER_DATA, user });
 };
