@@ -1,5 +1,5 @@
 export const MEDIA_TYPES = {
-  PHOTO: 'image',
+  PHOTO: 'photo',
   VIDEO: 'video',
   ANY: 'any',
 };

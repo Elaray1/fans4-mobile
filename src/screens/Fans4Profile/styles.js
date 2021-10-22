@@ -33,6 +33,9 @@ export default StyleSheet.create({
     fontSize: fonts.size.caption,
     lineHeight: 20,
   },
+  textWidth: {
+    maxWidth: '90%',
+  },
   fans4AboutTitle: {
     marginBottom: 12,
     fontFamily: fonts.family.bold,

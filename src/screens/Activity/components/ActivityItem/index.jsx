@@ -123,7 +123,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
         </View>
         {data.post.text && (
         <View style={styles.textPostContainer}>
-          <Text style={styles.text}>{toFixLength({ text: data.post.text, length: 100 })}</Text>
+          <Text style={[styles.text, styles.textMaxWidth]}>{toFixLength({ text: data.post.text, length: 100 })}</Text>
           {data.post.media && (
           <FastImage
             style={styles.postImage}
