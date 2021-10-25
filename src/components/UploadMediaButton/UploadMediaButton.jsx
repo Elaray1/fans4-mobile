@@ -36,7 +36,7 @@ function UploadMediaButton({
 
   const onEditProfilePicture = useCallback(async () => {
     const options = croppingAvatar ? {
-      cropping: 'cropit',
+      cropping: Platform.OS === 'android' ? true : 'cropit',
       mediaType: MEDIA_TYPES.PHOTO,
       cropperCircleOverlay: true,
       avoidEmptySpaceAroundImage: false,
