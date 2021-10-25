@@ -72,7 +72,7 @@ function NewChat() {
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
         setChats(refresh ? fetchedChats : [...chats, ...fetchedChats]);
-        if (refresh) {
+        if (!search) {
           setSearchValue('');
         }
       } catch (error) {
