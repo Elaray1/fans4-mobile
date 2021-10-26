@@ -174,13 +174,13 @@
     "contactAdmin": "Contact Admin",
     "fighter": {
       "question1": "I want to participate in an event. How do I do that?",
-      "answer1": "All fights go through a voting process exclusively for our fans. There are three ways to be included in the voting process:\n 1. Fans4 admins nominate you;\n 2. You apply for a fight with another fighter;\n 3. Your fans nominate you through the app.",
+      "answer1": "All fights go through a voting process exclusively for our Fans. There are three ways to be included in the voting process:\n1. Fans4 admins nominate you\n2. You apply for a fight with another Fighter\n3. Your fans nominate you through the app",
       "question2": "Can I choose an opponent if I apply for a fight?",
-      "answer2": "Yes! A unique feature on Fans4 is that you can request a fight against another Fans4 fighter. To 'Apply for a Fight', select a fighter from the Fighters page and open their profile. Click on ‘Apply for a Fight'. Your request will be sent to a Fans4 admin. Note that you can only select a fighter in which:\n - your weight classes are the same;\n - you are in the same category;\n - your opponent is in 'Ready for Fights' status.",
+      "answer2": "Yes! A unique feature on Fans4 is that you can request a fight against another Fans4 Fighter. To 'Apply for a Fight':\n1. Select a Fighter from the Fighters page\n2. Open their profile\n3. Click on ‘Apply for a Fight'\n4. Your request will be sent to a Fans4 admin.\nNote that you can only select a Fighter in which:\n- your weight classes are the same\n- you are in the same category\n- your opponent is in 'Ready for Fights' status",
       "question3": "How can I start earning money?",
-      "answer3": "Fans4 is the only platform to offer financial reward to our fighters. You will receive money for every fan that subscribes to your Fans4 page. Be sure to invite followers who will support you via your own personalied QR code found in the app (Profile > Settings > Invite a Fan > scan the QR code). Be an active user on our app, post quality content, apply for fights and participate in events so fans stay tuned to your content.",
+      "answer3": "Fans4 is the only platform to offer financial reward to our Fighters. You will receive money for every Fan that subscribes to your Fans4 page. Be sure to invite followers who will support you via your own personalised QR code found in the app (Profile > Settings > Invite a Fan > scan the QR code). Be an active user on our app, post quality content, apply for fights and participate in events so Fans stay tuned to your content.",
       "question4": "How will I receive payment?",
-      "answer4": "You will need to add your bank account details in order to receive payment. Go to Profile > Settings > Finances > Add bank account and follow the instructions. The more fans you have, the more you earn!"
+      "answer4": "You will need to add your bank account details in order to receive payment. Go to Profile > Settings > Finances > Add bank account and follow the instructions. The more Fans you have, the more you earn!"
     },
     "fan": {
       "question1": "Why some features are not available for me?",
