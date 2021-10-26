@@ -1,7 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Platform, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
@@ -17,12 +16,7 @@ import Button from 'components/Button';
 import styles from './styles';
 
 const ActionButtonsForFan = ({ fighter, subscribe, unsubscribe, resubscribe }) => {
-  const navigation = useNavigation();
   const { t } = useTranslation();
-
-  const goToProposeAFight = useCallback(() => {
-    navigation.navigate('ProposeAFight', { preselectedFighterId: fighter._id });
-  }, [navigation, fighter]);
 
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
   const subscription = userSubscriptions.find(f => f._id === fighter._id);
@@ -76,15 +70,6 @@ const ActionButtonsForFan = ({ fighter, subscribe, unsubscribe, resubscribe }) =
         <Text style={styles.blockedSupportedFighterText}>
           {t('Fighter.subscribeToAnotherWhenBlocked')}
         </Text>
-      );
-    } else if (fighter.role.fightingStatus === FIGHTING_STATUSES.READY_FOR_FIGHTS) {
-      secondActionButton = (
-        <Button
-          title={t('Fighter.proposeAFight')}
-          style={[styles.applyButton, isResubcribeShown && styles.proposeAFightButton]}
-          titleStyle={isResubcribeShown && styles.proposeAFightTitle}
-          onPress={goToProposeAFight}
-        />
       );
     }
   } else if (Platform.OS === 'ios' && fighter.status !== USER_STATUSES.BLOCKED) {
