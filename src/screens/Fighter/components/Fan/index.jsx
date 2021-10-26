@@ -23,6 +23,8 @@ import * as postApi from 'resources/post/post.api';
 
 import analyticsService from 'services/analytics.service';
 
+import useToast from 'hooks/useToast';
+
 import ConfirmedIosPurchase from '../ConfirmedIosPurhase';
 import ActionButtonsForFan from '../ActionButtonsForFan';
 import useSubscribing from '../../hooks/useSubscribing';
@@ -33,6 +35,7 @@ const PER_PAGE = 10;
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
 function Fighter({ fighterId }) {
+  const { showFailure } = useToast();
   const { t } = useTranslation();
 
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
@@ -54,6 +57,9 @@ function Fighter({ fighterId }) {
 
   const [viewablePosts, setViewablePosts] = useState({});
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
+
   const {
     resubscribe,
     subscribe,
@@ -62,7 +68,9 @@ function Fighter({ fighterId }) {
     unsubscribe,
   } = useSubscribing({ fighterId });
 
-  const init = useCallback(async () => {
+  const refreshContent = useCallback(async () => {
+    setIsRefreshing(true);
+
     try {
       const [{
         fighter: fetchedFighter,
@@ -86,25 +94,35 @@ function Fighter({ fighterId }) {
         setIsAllPostsLoaded(false);
       }
 
+      if (!isFetchedFirstTime) {
+        setIsFetchedFirstTime(true);
+      }
+
       setFighter(fetchedFighter);
       setPostsCount(fetchedPostsCount);
       setFansCount(fetchedFansCount);
       setPosts(fetchedPosts);
       setPage(INITIAL_PAGE + 1);
     } catch (error) {
-      console.error(error);
+      showFailure();
     }
-  }, [fighterId]);
+
+    setIsRefreshing(false);
+  }, [fighterId, showFailure, isFetchedFirstTime]);
 
   useEffect(() => {
+    const init = async () => {
+      await refreshContent();
+    };
+
     init();
-  }, [init]);
+  }, []);
 
   useEffect(() => {
     if (isSubscribed) {
-      init();
+      refreshContent();
     }
-  }, [init, isSubscribed]);
+  }, [refreshContent, isSubscribed]);
 
   useEffect(() => {
     analyticsService.logEvent({
@@ -114,6 +132,10 @@ function Fighter({ fighterId }) {
       },
     });
   }, [userId]);
+
+  const onRefresh = useCallback(async () => {
+    await refreshContent();
+  }, [refreshContent]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -259,7 +281,7 @@ function Fighter({ fighterId }) {
         leftItemType="backArrow"
       />
 
-      {fighter ? (
+      {fighter && postsCount !== null && fansCount !== null && (
         <FlatList
           style={styles.content}
           data={posts}
@@ -269,6 +291,8 @@ function Fighter({ fighterId }) {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           initialNumToRender={10}
+          refreshing={isRefreshing}
+          onRefresh={onRefresh}
           // Do not pass function here cause of bug with remounting:
           // https://github.com/facebook/react-native/issues/13602#issuecomment-300608431
           ListHeaderComponent={ProfileHeader}
@@ -276,10 +300,12 @@ function Fighter({ fighterId }) {
           viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
           onViewableItemsChanged={updateViewableItems}
         />
-      ) : (
-        <View style={styles.loaderWrapper}>
-          <ActivityIndicator color={colors.primary} size="large" />
-        </View>
+      )}
+
+      {!isFetchedFirstTime && (
+      <View style={styles.loaderWrapper}>
+        <ActivityIndicator color={colors.primary} size="large" />
+      </View>
       )}
     </SafeAreaView>
   );

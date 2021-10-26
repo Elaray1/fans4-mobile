@@ -190,7 +190,7 @@ function NewChat() {
           placeholder={t('NewChat.search')}
         />
 
-        {isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
         {!!chats.length
         && (

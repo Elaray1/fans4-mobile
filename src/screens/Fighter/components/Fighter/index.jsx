@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, StatusBar, ScrollView, ActivityIndicator } from 'react-native';
+import { SafeAreaView, View, StatusBar, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -19,20 +19,26 @@ import * as fightApi from 'resources/fight/fight.api';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 import { USER_STATUSES, FIGHTER_TYPES } from 'resources/user/user.constants';
 
+import useToast from 'hooks/useToast';
+
 import analyticsService from 'services/analytics.service';
 
 import ApplyForAFight from './components/applyForAFight';
 import styles from './styles';
 
 function Fighter({ fighterId }) {
+  const { showFailure } = useToast();
   const { t } = useTranslation();
+
+  const userId = useSelector(userSelectors.getUserId);
 
   const [fighter, setFighter] = useState(null);
   const [postsCount, setPostsCount] = useState(null);
   const [fansCount, setFansCount] = useState(null);
   const [fight, setFight] = useState(null);
 
-  const userId = useSelector(userSelectors.getUserId);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   useEffect(() => {
     analyticsService.logEvent({
@@ -43,45 +49,61 @@ function Fighter({ fighterId }) {
     });
   }, [userId]);
 
+  const refreshContent = useCallback(async () => {
+    setIsRefreshing(true);
+
+    try {
+      const [
+        {
+          fighter: fetchedFighter,
+          postsCount: fetchedPostsCount,
+          fansCount: fetchedFansCount,
+        },
+        {
+          fights: [fetchedFight],
+        },
+      ] = await Promise.all([
+        userApi.getFighter({
+          _id: fighterId,
+        }),
+        fightApi.getFights({
+          betweenFighterIds: [fighterId, userId],
+          statuses: [
+            FIGHT_STATUSES.PENDING,
+            FIGHT_STATUSES.APPROVED,
+            FIGHT_STATUSES.UPCOMING,
+            FIGHT_STATUSES.IN_VOTING,
+            FIGHT_STATUSES.VOTING_CLOSED,
+          ],
+        }),
+      ]);
+
+      if (!isFetchedFirstTime) {
+        setIsFetchedFirstTime(true);
+      }
+
+      setFight(fetchedFight);
+      setFighter(fetchedFighter);
+      setPostsCount(fetchedPostsCount);
+      setFansCount(fetchedFansCount);
+    } catch (error) {
+      showFailure();
+    }
+
+    setIsRefreshing(false);
+  }, [fighterId, isFetchedFirstTime, showFailure, userId]);
+
   useEffect(() => {
     const init = async () => {
-      try {
-        const [
-          {
-            fighter: fetchedFighter,
-            postsCount: fetchedPostsCount,
-            fansCount: fetchedFansCount,
-          },
-          {
-            fights: [fetchedFight],
-          },
-        ] = await Promise.all([
-          userApi.getFighter({
-            _id: fighterId,
-          }),
-          fightApi.getFights({
-            betweenFighterIds: [fighterId, userId],
-            statuses: [
-              FIGHT_STATUSES.PENDING,
-              FIGHT_STATUSES.APPROVED,
-              FIGHT_STATUSES.UPCOMING,
-              FIGHT_STATUSES.IN_VOTING,
-              FIGHT_STATUSES.VOTING_CLOSED,
-            ],
-          }),
-        ]);
-
-        setFight(fetchedFight);
-        setFighter(fetchedFighter);
-        setPostsCount(fetchedPostsCount);
-        setFansCount(fetchedFansCount);
-      } catch (error) {
-        console.error(error);
-      }
+      await refreshContent();
     };
 
     init();
-  }, [fighterId, userId]);
+  }, []);
+
+  const onRefresh = useCallback(async () => {
+    await refreshContent();
+  }, [refreshContent]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -92,8 +114,17 @@ function Fighter({ fighterId }) {
         leftItemType="backArrow"
       />
 
-      {fighter ? (
-        <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      {fighter && postsCount !== null && fansCount !== null && (
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.scrollContent}
+          refreshControl={(
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+            />
+        )}
+        >
           <View style={styles.flatListHeader}>
             <Profile
               status={fighter.status}
@@ -140,10 +171,12 @@ function Fighter({ fighterId }) {
             <View style={styles.line} />
           </View>
         </ScrollView>
-      ) : (
-        <View style={styles.loaderWrapper}>
-          <ActivityIndicator color={colors.primary} size="large" />
-        </View>
+      )}
+
+      {!isFetchedFirstTime && (
+      <View style={styles.loaderWrapper}>
+        <ActivityIndicator color={colors.primary} size="large" />
+      </View>
       )}
     </SafeAreaView>
   );

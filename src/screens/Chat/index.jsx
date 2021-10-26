@@ -437,7 +437,7 @@ function Chat({ route }) {
               </ScrollView>
             )}
 
-            {isRefreshing && <Loader />}
+            {!isFetchedFirstTime && isRefreshing && <Loader />}
 
             {isFetchedFirstTime && (
               <View style={styles.messageContainer}>

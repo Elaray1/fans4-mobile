@@ -264,7 +264,7 @@ function Events() {
       <View style={styles.content}>
         <Toggle items={tabs} onSelect={onToggleSelect} selectedItemId={selectedTab.id} />
 
-        {isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
 
         {!!events.length && (

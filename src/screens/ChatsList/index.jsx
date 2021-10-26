@@ -156,7 +156,7 @@ const ChatsList = () => {
         onRightItemPress={onNewChatPress}
       />
       <View style={styles.content}>
-        {isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
         {chats.length > (isFan ? 0 : 1)
           && (
