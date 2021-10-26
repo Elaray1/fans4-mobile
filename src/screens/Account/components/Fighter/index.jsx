@@ -324,7 +324,7 @@ function FighterAccount({ postId }) {
       />
       )}
 
-      {isRefreshing && <Loader />}
+      {!isFetchedFirstTime && isRefreshing && <Loader />}
 
 
       {postsCount !== null && fansCount !== null && (

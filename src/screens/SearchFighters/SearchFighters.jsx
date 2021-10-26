@@ -240,7 +240,7 @@ function SearchFighters() {
           placeholder={t('SearchFighters.search')}
         />
 
-        {isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
 
         {!!fighters.length && (

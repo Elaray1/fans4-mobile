@@ -279,7 +279,7 @@ function Activity() {
       />
       )}
       <View style={styles.content}>
-        {isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
         {!!filteredActivitiesArray.length && (
           <FlatList

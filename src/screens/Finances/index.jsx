@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
-import { SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, AppState, Platform } from 'react-native';
+import {
+  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, AppState, Platform, RefreshControl,
+} from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSelector } from 'react-redux';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -48,6 +50,7 @@ function Finances() {
   const [isBankAccountModal, setIsBankAccountModal] = useState(false);
 
   const [isRefreshing, setIsRefreshing] = useState(true);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const userId = useSelector(userSelectors.getUserId);
 
@@ -81,7 +84,15 @@ function Finances() {
     }
 
     setIsRefreshing(false);
-  }, [showFailure, navigation]);
+
+    if (!isFetchedFirstTime) {
+      setIsFetchedFirstTime(true);
+    }
+  }, [showFailure, navigation, isFetchedFirstTime]);
+
+  const onRefresh = useCallback(async () => {
+    await getUserWithdrawalMethod();
+  }, [getUserWithdrawalMethod]);
 
   useEffect(() => {
     const updateAccount = (updatedAccount) => {
@@ -391,8 +402,14 @@ function Finances() {
                 contentContainerStyle={styles.scrollContent}
                 style={styles.scrollView}
                 showsVerticalScrollIndicator={false}
+                refreshControl={(
+                  <RefreshControl
+                    refreshing={isFetchedFirstTime && isRefreshing}
+                    onRefresh={onRefresh}
+                  />
+                )}
               >
-                {isRefreshing ? <Loader /> : (
+                {!isFetchedFirstTime ? <Loader /> : (
                   <>
                     <WithdrawalMethod />
                     {income?.length ? <Income /> : <EmptyView />}

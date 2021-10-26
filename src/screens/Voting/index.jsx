@@ -242,7 +242,7 @@ const Voting = ({ route }) => {
 
       <View style={styles.content}>
         <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
-        {isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
         {!!fights.length && (
           <FlatList

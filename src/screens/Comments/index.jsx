@@ -233,7 +233,7 @@ function Comments({ route }) {
             leftItemType="backArrow"
           />
           <View style={styles.content}>
-            {isRefreshing && <Loader />}
+            {!isFetchedFirstTime && isRefreshing && <Loader />}
 
             {!!comments.length && (
               <FlatList

@@ -33,6 +33,7 @@ function Fights() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   useEffect(() => {
     analyticsService.logEvent({
@@ -89,12 +90,14 @@ function Fights() {
     if (!refresh) {
       fetchingPage = page;
       currentFights = fights;
-    } else {
-      setIsRefreshing(true);
     }
 
     if (fetchingPage === 1 || currentFights.length < totalCount) {
-      setIsLoading(true);
+      if (refresh) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
+      }
 
       try {
         const {
@@ -112,15 +115,21 @@ function Fights() {
       } catch (error) {
         showFailure(t('Fights.couldntRefreshTheFeedPullToRefresh'));
       }
-      setIsLoading(false);
-      setIsRefreshing(false);
+
+      if (!isFetchedFirstTime) {
+        setIsFetchedFirstTime(true);
+      }
+
+      if (refresh) {
+        setIsRefreshing(false);
+      } else {
+        setIsLoading(false);
+      }
     }
-  }, [fights, page, totalCount, showFailure, t, selectedToggleItem.statuses]);
+  }, [fights, page, totalCount, showFailure, t, selectedToggleItem.statuses, isFetchedFirstTime]);
 
   const onRefresh = useCallback(async () => {
-    setIsRefreshing(true);
     await fetchNewItems({ refresh: true });
-    setIsRefreshing(false);
   }, [fetchNewItems]);
 
   useEffect(() => {
@@ -162,9 +171,9 @@ function Fights() {
       <View style={styles.content}>
         <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
 
-        {isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
-        {!isRefreshing && (fights.length ? (
+        {!!fights.length && (
           <FlatList
             data={fights}
             renderItem={renderItem}
@@ -176,15 +185,17 @@ function Fights() {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-        ) : (
-          <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
-            keyboardShouldPersistTaps="handled"
-          >
-            <EmptyView />
-          </ScrollView>
-        ))}
+        )}
+
+        {isFetchedFirstTime && fights.length <= 1 && (
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+          keyboardShouldPersistTaps="handled"
+        >
+          <EmptyView />
+        </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );
