@@ -106,14 +106,14 @@ const ChatsList = () => {
     } else {
       setIsLoading(false);
     }
-  }, [chats, page, showFailure, t, totalCount, isFetchedFirstTime]);
+  }, [chats, totalCount, isFetchedFirstTime, page, isFan, showFailure, t]);
 
   useEffect(() => {
     const init = async () => {
       await fetchChats({ refresh: true });
     };
     init();
-  }, [fetchChats]);
+  }, []);
 
   const onRefresh = useCallback(async () => {
     await fetchChats({ refresh: true });
