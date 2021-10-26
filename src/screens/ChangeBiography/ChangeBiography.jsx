@@ -77,7 +77,9 @@ function ChangeBiography() {
         about: value,
         ...(!uploadingMedia && { removeIntroVideo: true }),
       });
+
       dispatch(userActions.setUserData(user));
+
       if (uploadingPoster && uploadingMedia) {
         const {
           url,
@@ -99,6 +101,7 @@ function ChangeBiography() {
           uri,
         }, { onUploadProgress });
       }
+
       showSuccess(t('ChangeBiography.updated'));
     } catch (err) {
       console.error('Updating biography error:', err);

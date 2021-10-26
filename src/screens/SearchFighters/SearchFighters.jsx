@@ -219,7 +219,7 @@ function SearchFighters() {
         <FastImage style={styles.fans4Image} source={fans4Source} />
         <View>
           <Text style={styles.fans4FullName}>{fans4Account.fullName}</Text>
-          <Text style={styles.fans4Text}>{t('SearchFighters.checkOutAllTheLatestNewsFromUs')}</Text>
+          <Text style={styles.fans4Text}>{t('SearchFighters.checkAllTheLatestNewsFromUs')}</Text>
         </View>
       </TouchableOpacity>
     )

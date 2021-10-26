@@ -140,7 +140,7 @@ function Fans4Profile() {
           <View>
             <Text style={styles.fans4FullName}>{fans4Account.fullName}</Text>
             <Text style={[styles.fans4Text, styles.textWidth]}>
-              {t('Fans4Account.connectingFansToFightersLikeNeverBefore')}
+              {t('Fans4Account.checkAllTheLatestNewsFromUs')}
             </Text>
           </View>
         </View>

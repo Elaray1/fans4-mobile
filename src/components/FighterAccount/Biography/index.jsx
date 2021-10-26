@@ -126,6 +126,7 @@ const Biography = ({
     if (userId === currentUserId && uploadingIntroVideo) {
       return uploadingVideoView;
     }
+
     if (introVideo) {
       return (
         <View style={styles.introVideo}>
