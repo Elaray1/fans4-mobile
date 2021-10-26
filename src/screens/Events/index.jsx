@@ -71,7 +71,7 @@ function Events() {
         value: t('Events.upcoming'),
         emptyView: {
           title: t('Events.noEventsYet'),
-          text: userType === USER_TYPES.FAN ? t('Events.checkBackFan') : t('Events.checkBack'),
+          text: userType === USER_TYPES.FAN ? t('Events.fanUpcoming') : t('Events.fighterUpcoming'),
         },
       },
       {
@@ -81,8 +81,8 @@ function Events() {
         emptyView: {
           title: t('Events.noEventsYet'),
           text: userType === USER_TYPES.FAN
-            ? t('Events.checkBackFan')
-            : t('Events.onceYouParticipateInAnEvent'),
+            ? t('Events.fanPast')
+            : t('Events.fighterPast'),
         },
       },
     ];

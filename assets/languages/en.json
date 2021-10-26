@@ -1,6 +1,6 @@
 {
   "AppStack": {
-    "iosPaymentFailedBanner": "Subscription payment failed. Check your payment card or your subscription will be terminated."
+    "iosPaymentFailedBanner": "Subscription payment failed. Check your payment card or your subscription will be cancelled."
   },
   "AuthAppLoader": {
     "searchByFighterName": "Search by fighter's name",
@@ -20,7 +20,7 @@
     "SignUpAsFan": "Sign up as a Fan",
     "Email": "Email",
     "Password": "Password",
-    "SignUp": "Sign up",
+    "SignUp": "Sign Up",
     "AlreadyHaveAccount": "Already have an account?",
     "SignIn": "Sign in",
     "EmailIsInvalid": "Email is invalid",
@@ -40,12 +40,12 @@
     "Email": "Email",
     "Password": "Password",
     "ForgotPassword?": "Forgot password?",
-    "SignIn": "Sign in",
+    "SignIn": "Sign In",
     "DontHaveAccount?": "Don’t have an account?",
     "SignUp": "Sign up",
     "EmailIsInvalid": "Email is invalid",
     "PasswordMustContainAtLeast6Characters": "Password must contain at least 6 characters",
-    "InvalidEmailAndOrPassword": "Invalid email and/or password"
+    "InvalidEmailAndOrPassword": "Invalid email and/or password."
   },
   "CitySelectModal": {
     "noSearchResults": "No search results",
@@ -64,7 +64,7 @@
   },
   "VerificationPending": {
     "title": "Verification Pending",
-    "description": "Thank you! We are processing the data you submitted. We will let you know as soon as it is complete.\n\n Please remain on this screen.",
+    "description": "Thank you! We are processing the info you submitted.\n\n We will let you know as soon as it is complete.\n\n Please remain on this screen.",
     "linkText": "Back to sign in page"
   },
   "VerificationSuccessful": {
@@ -80,37 +80,37 @@
   },
   "OnBoarding1": {
     "fan": {
-      "title": "Follow Your Faves",
-      "description": "Get instant exclusive content curated by your favorite fighters.",
+      "title": "Follow Your Fighters",
+      "description": "Access unique content from your favorite Fighters created exclusively for their Fans.\n\n By Fighters. For Fans.",
       "buttonText": "Next"
     },
     "fighter": {
-      "title": "Train Hard",
-      "description": "Give fans access to unique highlights of your daily routine. Exclusive content made by you, enjoyed by fans.",
+      "title": "Gain Fans",
+      "description": "Hook them in! Connect directly with your Fans through pics, videos, and exclusive content. \n\n Made by Fighters. Enjoyed by Fans.",
       "buttonText": "Next"
     }
   },
   "OnBoarding2": {
     "fan": {
-      "title": "Create a Pairing",
-      "description": "Pair them with the perfect opponents for the next fight card.",
+      "title": "Be the Matchmaker",
+      "description": "Pair your Fighters with the perfect opponents and vote them in for future fights.\n\n Your cage. Your terms.",
       "buttonText": "Next"
     },
     "fighter": {
-      "title": "Hook Them In",
-      "description": "Connect directly with fans through pics, clips, vlogs and comments. Your brand, your terms.",
+      "title": "Get Fights",
+      "description": "Train hard! Gain the exposure you need to take your fight game to the next level. \n\nYour brand. Your terms.",
       "buttonText": "Next"
     }
   },
   "OnBoarding3": {
     "fan": {
-      "title": "Vote Them In",
-      "description": "Get your faves in the next live event and watch it cage-side.",
+      "title": "Watch the Action",
+      "description": "Get a cageside view! Cheer on your Fighters as they compete in live events worldwide.\n\n Stream fights. Watch anywhere.",
       "buttonText": "Let’s Start"
     },
     "fighter": {
-      "title": "Hustle",
-      "description": "Build your influence like a champ by getting fans to subscribe to your channel. Gain fans, earn monthly.",
+      "title": "Earn Monthly",
+      "description": "Hustle like a champ! Work hard and get Fans to subscribe and follow you.\n\nBuild influence. Get paid.",
       "buttonText": "Let’s Start"
     }
   },
@@ -121,14 +121,14 @@
   },
   "BiographicalData": {
     "BiographicalData": "Biographical Data",
-    "firstAndLastName": "First and last name",
+    "firstAndLastName": "First and Last Name",
     "nicknameOptional": "Nickname - optional",
     "birthdate": "Birth Date",
     "hometown": "Hometown",
     "genderByBirth": "Gender by Birth",
     "male": "male",
     "female": "female",
-    "profilePhoto": "Profile photo",
+    "profilePhoto": "Profile Photo",
     "next": "Next"
   },
   "DatePickerModal": {
@@ -140,12 +140,12 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "upload": "Upload",
-    "provideAccessToTheLibrary": "Please provide access to the library in mobile settings"
+    "provideAccessToTheLibrary": "Providing access to your Library allows you to share photos and videos with your Fans in the Fans4 app."
   },
   "PersonalInfo": {
     "PersonalInfo": "Personal Info",
-    "weight": "Preferred fighting weight",
-    "weightClass": "Weight class",
+    "weight": "Preferred Fighting Weight",
+    "weightClass": "Weight Class",
     "height": "Height",
     "reach": "Reach",
     "next": "Next",
@@ -157,7 +157,7 @@
     "done": "Done"
   },
   "ContactAdmin": {
-    "contactAdmin": "Contact Admin",
+    "contactAdmin": "Contact Support",
     "sendEmail": "Send Email",
     "updateMyPersonalInfo": "Update my personal info",
     "updateMyStatus": "Update my fighting status",
@@ -199,12 +199,12 @@
     "finances": "Finances",
     "manageBankAccount": "Manage bank account, view income details",
     "support": "Support",
-    "contactAdminFAQ": "Contact Admin, FAQ",
+    "contactAdminFAQ": "Contact Support, FAQ",
     "inviteFan": "Invite a Fan",
     "scanQRCode": "Scan QR code, share the link",
     "legalInformation": "Legal Information",
     "terms": "Terms of Use and Privacy Policy",
-    "logOut": "Log out",
+    "logOut": "Log Out",
     "doYouWantToLogOutOfTheAccount": "Do you want to log out of the account?",
     "cancel": "Cancel",
     "yes": "Yes"
@@ -215,11 +215,12 @@
     "save": "Save",
     "biography": "Biography (max. 300 characters)",
     "updated": "Biography updated successfully.",
-    "introVideo": "Intro Video"
+    "introVideo": "Intro Video",
+    "descriptionText": "Here is where you can market yourself and attract more fans. Upload a short video and write about yourself.\n\n Here is a good example:\n Follow me to greatness. On a journey to become #1. Loving husband, father of two. My motto: \"Train insane or remain the same.\""
   },
   "AccountInformation": {
     "accountInformation": "Account Information",
-    "biography": "Biography",
+    "biography": "Biography, Intro Video",
     "email": "Email",
     "nameUsernameGender": "Name, Username, Gender",
     "birthDate": "Birth Date",
@@ -237,8 +238,8 @@
   "Security": {
     "security": "Security",
     "save": "Save",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
     "PasswordMustContainAtLeast6Characters": "Password must contain at least 6 characters",
     "yourNewPasswordCannotBeTheSameAsYourOldPassword": "Your new password cannot be the same as your old password."
   },
@@ -268,7 +269,7 @@
     "fans": "Fans",
     "record": "Record",
     "biography": "Biography",
-    "addBiography": "Add biography",
+    "addBiography": "Add Biography",
     "personalInfo": "Personal Info",
     "age": "Age",
     "weight": "Weight",
@@ -277,7 +278,7 @@
     "Posts": "Posts",
     "addYourFirstPost": "Add your first post for your fans!",
     "addPost": "Add post",
-    "subscribeToFighter": "Become a fan for access to exclusive content!",
+    "subscribeToFighter": "Become a Fan for access to exclusive content!",
     "updateBankAccount": "Update Bank Account",
     "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
     "later": "Later",
@@ -288,13 +289,13 @@
     "postsFailedToUpload": "Posts failed to upload.",
     "pleaseTryAgain": "Please try again.",
     "tryAgain": "Try again",
-    "addIntroVideo": "Add intro video",
-    "addBiographyAndIntroVideo": "Add biography and intro video",
+    "addIntroVideo": "Add Intro Video",
+    "addBiographyAndIntroVideo": "Add Biography and Intro Video",
     "videoIsLoading": "Video is loading",
     "videoFailedToUpload": "Video failed to upload."
   },
   "AccountBlocked": {
-    "title": "Your Account is Blocked",
+    "title": "Your Account Is Blocked",
     "description": "Your account has been blocked. If you think that this may be an error, please contact Support.",
     "buttonText": "Contact Support",
     "linkText": "Back to sign in page"
@@ -304,10 +305,10 @@
     "inputLabel": "Email",
     "button": "Send Me a Reset Link",
     "link": "Back to sign in page",
-    "text": "Please enter your email address"
+    "text": "Please enter the email address associated with your Fans4 account."
   },
   "ResetPassword": {
-    "title": "Reset Link has been Sent",
+    "title": "Reset Link Sent",
     "description_0": "A link to reset your password has been sent to ",
     "description_1": ". Please check your Inbox.",
     "linkText": "Back to sign in page"
@@ -320,7 +321,7 @@
   "ChangePassword": {
     "title": "Change Password",
     "inputLabel": "New Password",
-    "button": "Save password",
+    "button": "Save Password",
     "link": "Back to sign in page",
     "text": "Please enter new password"
   },
@@ -348,9 +349,9 @@
   "SearchFighters": {
     "fighters": "Fighters",
     "search": "Search",
-    "noFighters": "No fighters, yet",
-    "youWillSeeThemHere": "Check back for the full list of fighters.",
-    "checkOutAllTheLatestNewsFromUs": "Check out all the latest news from us!",
+    "noFighters": "No Fighters yet",
+    "youWillSeeThemHere": "Check back for the full list of Fighters.",
+    "checkAllTheLatestNewsFromUs": "Check out all the latest news from us!",
     "p": "P"
   },
   "WeightClassSelectModal": {
@@ -377,7 +378,7 @@
     "LightHeavyweightWithWeight": "Light Heavyweight — 205 lbs",
     "HeavyweightWithWeight": "Heavyweight — 265 lbs",
     "SuperHeavyweightWithWeight": "Super Heavyweight — over 265 lbs",
-    "description": "Choose 1-3 preferred weight classes for fights"
+    "description": "Choose 1-3 preferred weight classes:"
   },
   "Fighter": {
     "subscribe": "Subscribe",
@@ -397,10 +398,10 @@
     "youCannotApplyForAFight_0": "You cannot apply for a fight with",
     "youCannotApplyForAFight_1": "because you are in different weight classes.",
     "youCannotApplyForAFight_2": "because you are in different categories.",
-    "youCannotApplyForAFight_3": "because you are in different fighting categories",
-    "yourFightIsInAdminReview": "Your fight is in admin review.",
-    "yourFightIsAlreadyInVoting": "Your fight is already in voting.",
-    "yourFightIsAlreadyInUpcomingEvent": "Your fight is already in upcoming event.",
+    "youCannotApplyForAFight_3": "because you are in different fighting categories.",
+    "yourFightIsInAdminReview": "Your fight is under admin review.",
+    "yourFightIsAlreadyInVoting": "Your fight is already open for voting.",
+    "yourFightIsAlreadyInUpcomingEvent": "Your fight is already in an upcoming event.",
     "youApplied": "You applied. Pending",
     "youAppliedForAFight": "You applied for a fight.",
     "unableToApplyForAFight": "Unable to apply for a fight. Please try again.",
@@ -409,13 +410,13 @@
     "youRecovery_0": "You cannot apply for a fight with",
     "youRecovery_1": "because you are in post-fight recovery.",
     "fighterInjured_0": "You cannot apply for a fight with",
-    "fighterInjured_1": "because this fighter is injured.",
+    "fighterInjured_1": "because this fighter is injured",
     "fighterRecovery_0": "You can not apply for a fight with",
     "fighterRecovery_1": "because this fighter is in post-fight recovery.",
     "fighterBlocked_0": "You cannot apply for a fight with",
     "fighterBlocked_1": "because this fighter is blocked.",
-    "subscribeToAnotherWhenBlocked": "Please subscribe to another fighter, as this fighter is blocked.",
-    "checkBack": "Check back to view your fighter's first exclusive post!",
+    "subscribeToAnotherWhenBlocked": "Please subscribe to another Fighter, as this fighter is blocked.",
+    "checkBack": "Once fighter adds a post you will see it here.",
     "pro": "Pro Fighter",
     "amateur": "Amateur",
     "subscriptionCongratulation": "Congratulations!",
@@ -426,35 +427,35 @@
     "processingIosPurchaseInfoText1": "We are processing your subscription.",
     "processingIosPurchaseInfoText2": "Please wait.",
     "unsubscribe": "Unsubscribe",
-    "noPossibilityToUnsubscribeInApp": "No possibility to unsubscribe from this fighter in the app.",
+    "noPossibilityToUnsubscribeInApp": "You cannot unsubscribe from this Fighter in the app.",
     "ok": "OK",
     "youSubscribedToThisFighterInIos": "You subscribed to this fighter in iOS mobile app. Please go to Apple subscriptions to unsubscribe",
-    "unsubscribeText1": "Your subscription for the ",
-    "unsubscribeText2": " fighter will be cancelled, but you can see content until ",
+    "unsubscribeText1": "Your subscription to the ",
+    "unsubscribeText2": " Fighter will be cancelled, but you can still access their content until ",
     "keepIt": "Keep it",
     "youWillBeRedirectedToResubscribeTo1": "Your subscription for the ",
     "youWillBeRedirectedToResubscribeTo2": " fighter will be renewed",
     "resubscribe": "Resubscribe",
-    "noPossibilityToResubscribe": "No possibility to resubscribe to this fighter in the app."
+    "noPossibilityToResubscribe": "You cannot resubscribe to this Fighter in the app."
   },
   "Fans4Account": {
     "profile": "Profile",
-    "connectingFansToFightersLikeNeverBefore": "Connecting fans to fighters like never before.",
+    "checkAllTheLatestNewsFromUs": "Connecting Fans to Fighters like never before.",
     "aboutUs": "About Us",
     "posts": "Posts"
   },
   "InviteAFan": {
     "inviteAFan": "Invite a Fan",
     "shareTheLink": "Share the Link",
-    "askYourFan": "Ask your fans to scan this QR code or share the link.",
+    "askYourFan": "Ask your Fan to scan this QR code\n or click to share the link with them.",
     "invitation": "Invitation"
   },
   "Feed": {
     "feed": "Feed",
-    "noSubscriptionsYet": "No subscriptions, yet",
-    "beSureToSubscribe": "Become a fan to receive full access to your fighter’s content, pairing and voting for live events!",
-    "noPostsYet": "No posts, yet",
-    "onceFighterWillAddPostsYouWillSeeThemHere": "Once fighter will add posts, you will see them here.",
+    "noSubscriptionsYet": "No subscriptions yet",
+    "beSureToSubscribe": "Become a Fan for full access to your Fighter's content, pairing, and voting for live events!",
+    "noPostsYet": "No posts yet",
+    "onceFighterWillAddPostsYouWillSeeThemHere": "Check back to view your Fighter's first exclusive post!",
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh."
   },
   "Events": {
@@ -463,10 +464,11 @@
     "upcoming": "Upcoming",
     "past": "Past",
     "canceled": "Canceled",
-    "noEventsYet": "No events, yet",
-    "checkBack": "Check back to view the first event.",
-    "checkBackFan": "Check back to view the first live event!",
-    "onceYouParticipateInAnEvent": "Once you participate in an event, you will see it here.",
+    "noEventsYet": "No events yet",
+    "fanUpcoming": "Check back to view the first live event!",
+    "fanPast": "Once we hold an event, it will be shown on this page.",
+    "fighterUpcoming": "Once events are scheduled, you will see them here.",
+    "fighterPast": "Once you participate in an event, it will be shown  on this page.",
     "live": "Live",
     "stayTuned": "Stay tuned for results."
   },
@@ -505,9 +507,9 @@
   "Comments": {
     "comments": "Comments",
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh.",
-    "noCommentsYet": "No comments, yet",
-    "beTheFirstFanToCommentOnThisPost": "Be the first fan to comment on this post.",
-    "addComment": "Add comment",
+    "noCommentsYet": "No comments yet ",
+    "beTheFirstFanToCommentOnThisPost": "Be the first Fan to comment on this post.",
+    "addComment": "Add a comment",
     "max160Characters": "max. 160 characters",
     "post": "Post",
     "nothingYet": "Check back to view your fans' first post."
@@ -530,20 +532,20 @@
     "falseInformation": "False information",
     "other": "Other",
     "report": "Report",
-    "writeHereTheReasonMax160Characters": "Write here the reason (max. 160 characters)"
+    "writeHereTheReasonMax160Characters": "Explain the reason (max. 160 characters)"
   },
   "ThanksForReporting": {
     "reportComment": "Report Comment",
     "thanksForReporting": "Thanks for Reporting!",
-    "thanksYourFeedback": "Thank you for your feedback and ensuring Fans4 is a safer community. Your comment was submitted for review.",
+    "thanksYourFeedback": "Thanks, we will review this comment. Your feedback helps us make Fans4 a great place for everyone.",
     "done": "Done"
   },
   "AccountFan": {
     "username": "username",
     "YourSubscriptions": "Your subscriptions",
-    "YouCantSubscribe": "You can't subscribe for a Fighters in the app. We know it’s a hassle. After you subscribed, you can enjoy the content in the app.",
+    "YouCantSubscribe": "You can't subscribe to Fighters in the app. After you've subscribed, you can enjoy the content in the app.",
     "subscriptionExpiresOn": "Expires on",
-    "youWillEnjoy": "Once you subscribe to a fighter, you will enjoy:",
+    "youWillEnjoy": "Once you subscribe to a Fighter, you will enjoy:",
     "chooseFighters": "Choose Fighters",
     "paymentFailed": "Payment Failed"
   },
@@ -562,15 +564,15 @@
     "addBankAccount": "Add Bank Account",
     "incomeWillBePaid": "Income will be paid by this method on a monthly basis. You can track all financial information in this section.",
     "bankAccount": "Bank Account",
-    "noIncomeYet": "No income, yet",
+    "noIncomeYet": "No income yet",
     "checkBack": "Check back to view how much you've earned!",
-    "bankAccountWillBeDeletedButWeWillStoreTheData": "Bank account will be deleted, but we will store the data.",
+    "bankAccountWillBeDeletedButWeWillStoreTheData": "Bank account will be deleted, but income history will be saved.",
     "cancel": "Cancel",
     "deleteBankAccount": "Delete Bank Account",
     "delete": "Delete",
     "income": "Income",
     "perPeriod": "per month",
-    "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method monthly.",
+    "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method.",
     "updateBankAccount": "Update Bank Account",
     "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
     "update": "Update"
@@ -597,7 +599,7 @@
     "approved": "Fight is in admin review, please wait and see whether it will be included in any event",
     "upcoming": "Fight already is in upcoming event",
     "comingSoon": "Coming soon...",
-    "soonWeWillRelease": "Soon we will release voting for a fights. Now you can let us know what fight you are interesting."
+    "soonWeWillRelease": "Soon we will open the voting for fights. Please check back later."
   },
   "ProposeAFight": {
     "ProposeAFight": "Propose A Fight",
@@ -633,8 +635,8 @@
   },
   "FighterRecord": {
     "fighterRecord": "Fighter Record",
-    "proRecord": "Pro record",
-    "amateurRecord": "Amateur record (optional)",
+    "proRecord": "Pro Record",
+    "amateurRecord": "Amateur Record (optional)",
     "submit": "Submit",
     "wins": "Wins",
     "losses": "Losses",
@@ -650,10 +652,10 @@
     "thisWeek": "This week",
     "thisMonth": "This month",
     "noActivityHereYet": "No activity here yet...",
-    "createYourFirstPostToSeeCommentsFromYourFans": "Create your first post to see comments from your fans"
+    "createYourFirstPostToSeeCommentsFromYourFans": "Create your first post to interact with your Fans!"
   },
   "ActivityItem": {
-    "becameYourFan": "became your fan!",
+    "becameYourFan": "became your Fan!",
     "sayHi": "Say hi!",
     "commented": "commented:",
     "likedYourPost": "liked your post"
@@ -662,7 +664,7 @@
     "allActivity": "All activity",
     "likes": "Likes",
     "commentsAndReplies": "Comments and replies",
-    "newFans": "New fans"
+    "newFans": "New Fans"
   },
   "Chat": {
     "noMessagesHereYet": "No messages here yet...",
@@ -675,9 +677,9 @@
     "newMessages": "new messages"
   },
   "SubscriptionPosibilities": {
-    "subscriptionPossibility1": "Full access to fighters’ content",
+    "subscriptionPossibility1": "Full access to Fighter's content",
     "subscriptionPossibility2": "Proposing fighter matchups",
-    "subscriptionPossibility3": "Voting them in for the next live event",
+    "subscriptionPossibility3": "Voting for fights in future events",
     "subscriptionPossibility4": "Exclusive live-streaming events"
   },
   "ChatsList": {

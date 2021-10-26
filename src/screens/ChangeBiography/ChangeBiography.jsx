@@ -12,6 +12,7 @@ import Header from 'components/Header';
 import Input from 'components/Input';
 import UploadMediaButton from 'components/UploadMediaButton';
 import Video from 'components/Video';
+import Text from 'components/Text';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
@@ -205,6 +206,9 @@ function ChangeBiography() {
           multiline
           numberOfLines={20}
         />
+        <View style={styles.textContainer}>
+          <Text style={styles.grayText}>{t('ChangeBiography.descriptionText')}</Text>
+        </View>
       </ScrollView>
       {isLoading && (
         <>

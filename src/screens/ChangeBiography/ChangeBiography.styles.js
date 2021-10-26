@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { commonStyles } from 'themes/commonStyles';
 import colors from 'themes/colors';
+import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   screen: {
@@ -46,5 +47,12 @@ export default StyleSheet.create({
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  grayText: {
+    color: colors.grayText,
+    fontSize: fonts.size.small,
+  },
+  textContainer: {
+    marginTop: 30,
   },
 });

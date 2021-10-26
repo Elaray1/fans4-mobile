@@ -8,7 +8,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 
-import FighterIllustration from 'assets/illustrations/onboarding1-fighter.png'; // eslint-disable-line import/extensions
+import FighterIllustration from 'assets/illustrations/onboarding2-fighter.png'; // eslint-disable-line import/extensions
 import FanIllustration from 'assets/illustrations/onboarding1-fan.png'; // eslint-disable-line import/extensions
 
 import { USER_TYPES } from 'resources/user/user.constants';
