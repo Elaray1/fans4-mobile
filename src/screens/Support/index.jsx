@@ -63,14 +63,12 @@ function Support() {
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+
       <Header leftItemType="backArrow" title={t('Support.support')} />
+
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View>
-          {items.map(
-            item => (
-              <Question title={item.title} text={item.text} key={item._id} />
-            ),
-          )}
+          {items.map(item => <Question title={item.title} text={item.text} key={item._id} />)}
         </View>
         <Button title={t('Support.contactAdmin')} onPress={onButtonPress} />
       </ScrollView>

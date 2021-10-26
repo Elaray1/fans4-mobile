@@ -25,6 +25,7 @@ function Question({ title, text }) {
           <Text style={styles.title}>{title}</Text>
           {isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
         </View>
+
         {isOpen && <Text style={styles.text}>{text}</Text>}
       </TouchableOpacity>
       <View style={styles.line} />

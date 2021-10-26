@@ -183,10 +183,14 @@
       "answer4": "You will need to add your bank account details in order to receive payment. Go to Profile > Settings > Finances > Add bank account and follow the instructions. The more Fans you have, the more you earn!"
     },
     "fan": {
-      "question1": "Why some features are not available for me?",
-      "answer1": "Some features are only available when becoming a fan. To view fighter's content, propose a fight and vote for the next live event, become a Fans4 fan!",
-      "question2": "How can I propose a fight?",
-      "answer2": "To do this, you have to go to Voting > Propose > Choose your Fighter > Next > Choose opponent > Submit. Then your proposal will be sent for admin review. You can track proposal status on 'your proposals' tab on Voting page."
+      "question1": "Why are some features not available to me?",
+      "answer1": "Some features are only available with a subscription to Fans4. For example, viewing a Fighter's exclusive content or proposing a fight between Fighters is only available once you are subscribed.",
+      "question2": "When can I start pairing and voting for my Fighter?",
+      "answer2": "Playing matchmaker is a very unique and exciting feature of the Fans4 app. Very soon you will enjoy added features and functionality on Fans4!",
+      "question3": "When is the next live event and how to I watch it?",
+      "answer3": "We are planning for a Fans4 event in the first quarter of 2022. Stay tuned for more details including live streaming options.",
+      "question4": "How can I propose a fight?",
+      "answer4": "To do this, you have to go to Voting > Propose > Choose your Fighter > Next > Choose opponent > Submit. Then your proposal will be sent for admin review. You can track proposal status on 'your proposals' tab on Voting page."
     }
   },
   "SettingsModal": {

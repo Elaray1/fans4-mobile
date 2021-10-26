@@ -8,6 +8,7 @@ export default StyleSheet.create({
     borderColor: colors.line,
     borderBottomWidth: 1,
     paddingVertical: 18,
+
   },
   titleContainer: {
     flexDirection: 'row',
@@ -15,6 +16,8 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   title: {
+    // this fix wrap
+    flexShrink: 1,
     fontSize: fonts.size.small,
     lineHeight: fonts.lineHeight.small,
     fontFamily: fonts.family.bold,
