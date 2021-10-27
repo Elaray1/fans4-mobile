@@ -233,6 +233,7 @@ function SearchFighters() {
         {...(userType === USER_TYPES.FAN && { leftItemType: 'backArrow' })}
         title={t('SearchFighters.fighters')}
       />
+
       <View style={styles.content}>
         <SearchInput
           value={searchValue}
