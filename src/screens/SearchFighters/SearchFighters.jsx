@@ -43,11 +43,15 @@ function SearchFighters() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchValue, setSearchValue] = useState('');
 
-
   const [isLoading, setIsLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
+  const doSearch = useCallback((v) => {
+    setIsSearching(true);
+    setSearchValue(v);
+  }, []);
 
   const userType = useSelector(userSelectors.getUserType);
 
@@ -87,7 +91,7 @@ function SearchFighters() {
       currentFighters = fighters;
     }
 
-    if (fetchingPage === 1 || fighters.length < totalCount) {
+    if (!isFetchedFirstTime || fighters.length < totalCount) {
       if (refresh) {
         setIsRefreshing(true);
       } else {
@@ -121,6 +125,8 @@ function SearchFighters() {
         setIsLoading(false);
       }
     }
+
+    setIsSearching(false);
   }, [fighters, page, totalCount, isFetchedFirstTime]);
 
   const onRefresh = useCallback(async () => {
@@ -210,22 +216,20 @@ function SearchFighters() {
     </View>
   );
 
-  const Fans4Account = () => (fans4Account
-    ? (
-      <TouchableOpacity
-        onPress={onPressFans4Profile}
-        style={styles.fans4Container}
-      >
-        <FastImage style={styles.fans4Image} source={fans4Source} />
-        <View>
-          <Text style={styles.fans4FullName}>{fans4Account.fullName}</Text>
-          <Text style={styles.fans4Text}>{t('SearchFighters.checkAllTheLatestNewsFromUs')}</Text>
-        </View>
-      </TouchableOpacity>
-    )
-    : null);
+  const Fans4Account = fans4Account ? (
+    <TouchableOpacity
+      onPress={onPressFans4Profile}
+      style={styles.fans4Container}
+    >
+      <FastImage style={styles.fans4Image} source={fans4Source} />
+      <View>
+        <Text style={styles.fans4FullName}>{fans4Account.fullName}</Text>
+        <Text style={styles.fans4Text}>{t('SearchFighters.checkAllTheLatestNewsFromUs')}</Text>
+      </View>
+    </TouchableOpacity>
+  ) : null;
 
-  const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
+  const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -237,14 +241,13 @@ function SearchFighters() {
       <View style={styles.content}>
         <SearchInput
           value={searchValue}
-          onChangeText={setSearchValue}
+          onChangeText={doSearch}
           placeholder={t('SearchFighters.search')}
         />
 
-        {!isFetchedFirstTime && isRefreshing && <Loader />}
+        {((!isFetchedFirstTime && isRefreshing) || isSearching) && <Loader />}
 
-
-        {!!fighters.length && (
+        {(!!fighters.length && !isSearching) && (
           <FlatList
             data={fighters}
             renderItem={renderItem}
@@ -255,12 +258,12 @@ function SearchFighters() {
             refreshing={isRefreshing}
             style={styles.fightersList}
             showsVerticalScrollIndicator={false}
-            ListHeaderComponent={Fans4Account}
+            ListHeaderComponent={searchValue ? null : Fans4Account}
             ListFooterComponent={renderFooter}
           />
         )}
 
-        {isFetchedFirstTime && fighters.length <= 1 && (
+        {(!isSearching && (isFetchedFirstTime && fighters.length <= (searchValue ? 0 : 1))) && (
         <ScrollView
           contentContainerStyle={styles.emptyScroll}
           refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
