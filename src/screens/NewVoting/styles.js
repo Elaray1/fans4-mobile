@@ -17,6 +17,7 @@ export default StyleSheet.create({
     marginTop: 70,
     alignItems: 'center',
     marginHorizontal: 20,
+    paddingBottom: 50,
   },
   bigText: {
     fontSize: fonts.size.h1,
