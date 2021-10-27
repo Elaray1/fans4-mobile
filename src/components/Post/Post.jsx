@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -53,11 +53,20 @@ function Post({
   const [likesCount, setLikesCount] = useState(likedUsers.length);
   const [isLiked, setIsLiked] = useState(likedUsers.some(u => u._id === userId));
   const [likedNames, setLikedNames] = useState(likedUsers.length === 2
-    ? `${likedUsers[likesCount - 1]?.name} and ${likedUsers[likesCount - 2]?.name}`
-    : likedUsers[likesCount - 1]?.name);
+    ? `${likedUsers[1]?.name} and ${likedUsers[0]?.name}`
+    : likedUsers[0]?.name);
+
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
   const isSubscribedOrAuthor = userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id);
   const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1}` : ''}`;
+
+  useEffect(() => {
+    setLikesCount(likedUsers.length);
+    setIsLiked(likedUsers.some(u => u._id === userId));
+    setLikedNames(likedUsers.length === 2
+      ? `${likedUsers[1]?.name} and ${likedUsers[0]?.name}`
+      : likedUsers[0]?.name);
+  }, [userId, likedUsers]);
 
   const posterSource = useMemo(() => {
     if (media && media.type === MEDIA_TYPES.VIDEO && media.posterStorageUrl) {
