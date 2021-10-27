@@ -98,7 +98,7 @@ const useSubscribing = ({ fighterId }) => {
     }
 
     Alert.alert('Resubscribe', t('Fighter.noPossibilityToResubscribe'), [
-      { text: 'OK', onPress: () => Linking.openURL(IOS_SUBSCRIPTIONS_DEEP_LINK) },
+      { text: 'OK' },
     ]);
   }, [subscription, t]);
 
