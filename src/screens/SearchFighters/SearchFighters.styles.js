@@ -47,7 +47,7 @@ export default StyleSheet.create({
     lineHeight: fonts.lineHeight.caption,
   },
   loader: {
-    paddingVertical: 10,
+    paddingVertical: 20,
   },
   emptyView: {
     flex: 1,
