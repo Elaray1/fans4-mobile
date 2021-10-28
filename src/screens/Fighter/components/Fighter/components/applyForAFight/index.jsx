@@ -152,7 +152,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
       <View style={styles.createdFightContainer}>
         <View style={styles.createdFightTextWrapper}>
           <SuccessToastIcon />
-          <Text style={styles.createdFightText}>{t('Fighter.youApplied')}</Text>
+          <Text style={styles.createdFightText}>{t('Fighter.yourFightIsInAdminReview')}</Text>
         </View>
       </View>
     );
