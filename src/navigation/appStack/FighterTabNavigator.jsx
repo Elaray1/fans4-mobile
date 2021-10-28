@@ -30,9 +30,9 @@ function FighterTabNavigator() {
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
 
-  const activityIcon = useMemo(() => ((isUnreadActivities || isUnreadMessages)
+  const activityIcon = (isUnreadActivities || isUnreadMessages)
     ? UnreadActivityIcon
-    : ActivityIcon), [isUnreadActivities, isUnreadMessages]);
+    : ActivityIcon;
 
   return (
     <Tab.Navigator

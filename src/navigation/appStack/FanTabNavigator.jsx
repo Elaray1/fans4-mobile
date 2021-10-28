@@ -37,7 +37,9 @@ const optionsByScreen = {
 function FanTabNavigator() {
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
 
-  const chatsIcon = useMemo(() => (isUnreadMessages ? UnreadMessageIcon : MessageIcon), [isUnreadMessages]);
+  const chatsIcon = isUnreadMessages ? UnreadMessageIcon : MessageIcon;
+
+  const chatsOptions = useMemo(() => ({ icon: chatsIcon }), [chatsIcon]);
 
   return (
     <Tab.Navigator
@@ -50,7 +52,7 @@ function FanTabNavigator() {
       <Tab.Screen name="Events" component={Events} options={optionsByScreen.events} />
       {/* TODO: replace Account component with Chats component */}
       {config.mode !== 'PROD'
-      && <Tab.Screen name="Chats" component={ChatsList} options={{ icon: chatsIcon }} />}
+      && <Tab.Screen name="Chats" component={ChatsList} options={chatsOptions} />}
       <Tab.Screen name="Account" component={Account} options={optionsByScreen.account} />
     </Tab.Navigator>
   );
