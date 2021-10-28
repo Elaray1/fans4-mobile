@@ -90,8 +90,12 @@ function AppScreens() {
         return null;
       }
 
-      const messageIds = await messageApi.getUnreadMessageIds();
-      await dispatch(messageActions.setUnreadMessages(messageIds));
+      try {
+        const messageIds = await messageApi.getUnreadMessageIds();
+        await dispatch(messageActions.setUnreadMessages(messageIds));
+      } catch (error) {
+        console.log('media button error:', error);
+      }
     };
 
     fetchUnreadMessages();

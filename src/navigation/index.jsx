@@ -146,8 +146,6 @@ const handleUserActivityIndicatorUpdated = (user) => {
 };
 
 const handleUserUnreadMessagesUpdated = ({ messageId }) => {
-  console.log(messageId);
-
   store.dispatch(messageActions.addUnreadMessage(messageId));
 };
 

@@ -12,6 +12,6 @@ export const addUnreadMessage = messageId => async (dispatch) => {
   dispatch({ type: ADD_UNREAD_MESSAGE, messageId });
 };
 
-export const removeUnreadMessage = messageId => async (dispatch) => {
+export const removeUnreadMessage = messageId => (dispatch) => {
   dispatch({ type: REMOVE_UNREAD_MESSAGE, messageId });
 };

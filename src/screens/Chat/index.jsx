@@ -277,7 +277,7 @@ function Chat({ route }) {
     const newUpdatedMessages = await Promise.all(readedMessagesIndexes.map(async (messageId) => {
       const message = await messageApi.readMessage(messageId);
 
-      await dispatch(messageActions.removeUnreadMessage(messageId));
+      dispatch(messageActions.removeUnreadMessage(messageId));
       return message;
     }));
 
