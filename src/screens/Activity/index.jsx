@@ -13,9 +13,12 @@ import * as userSelectors from 'resources/user/user.selectors';
 
 import * as socketService from 'services/socket.service';
 
+import * as messageSelectors from 'resources/message/message.selectors';
+
 import ArrowDownIcon from 'assets/icons/arrow-down.svg';
 import NoAcitivtiesIllustration from 'assets/illustrations/no-events.svg';
 import ChatIcon from 'assets/icons/chat.svg';
+import UnreadChatIcon from 'assets/icons/unread-chat.svg';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
@@ -43,6 +46,7 @@ function Activity() {
   const dispatch = useDispatch();
 
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
+  const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
 
   const [activities, setActivities] = useState({
     today: [],
@@ -267,7 +271,7 @@ function Activity() {
         titleIcon={<ArrowDownIcon style={styles.headerIcon} />}
         onTitlePress={onPressActivivtyFilters}
         rightItemType={config.mode === 'PROD' ? null : 'icon'} // TODO: remove when tested
-        rightItemIcon={ChatIcon}
+        rightItemIcon={isUnreadMessages ? UnreadChatIcon : ChatIcon}
         onRightItemPress={onChatsPress}
       />
       {isFiltersOpened

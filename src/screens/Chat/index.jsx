@@ -6,7 +6,7 @@ import {
   SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
 import * as userSelectors from 'resources/user/user.selectors';
@@ -14,6 +14,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 import * as socketService from 'services/socket.service';
 
 import * as messageApi from 'resources/message/message.api';
+import * as messageActions from 'resources/message/message.actions';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
@@ -43,6 +44,7 @@ function Chat({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const messagesListRef = useRef(null);
 
@@ -274,6 +276,8 @@ function Chat({ route }) {
 
     const newUpdatedMessages = await Promise.all(readedMessagesIndexes.map(async (messageId) => {
       const message = await messageApi.readMessage(messageId);
+
+      await dispatch(messageActions.removeUnreadMessage(messageId));
       return message;
     }));
 

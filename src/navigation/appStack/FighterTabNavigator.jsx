@@ -16,6 +16,7 @@ import ActivityIcon from 'assets/icons/tab-bar/activity.svg';
 import UnreadActivityIcon from 'assets/icons/tab-bar/unread-activity.svg';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import * as messageSelectors from 'resources/message/message.selectors';
 
 import BottomTabBar from './BottomTabBar';
 
@@ -27,8 +28,11 @@ function renderTabBar(props) {
 
 function FighterTabNavigator() {
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
+  const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
 
-  const activityIcon = useMemo(() => (isUnreadActivities ? UnreadActivityIcon : ActivityIcon), [isUnreadActivities]);
+  const activityIcon = useMemo(() => ((isUnreadActivities || isUnreadMessages)
+    ? UnreadActivityIcon
+    : ActivityIcon), [isUnreadActivities, isUnreadMessages]);
 
   return (
     <Tab.Navigator

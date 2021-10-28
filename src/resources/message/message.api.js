@@ -8,3 +8,6 @@ export const sendMessage = ({ text, chatId }) => apiClient
 
 export const readMessage = _id => apiClient
   .put(`messages/${_id}/read`);
+
+export const getUnreadMessageIds = _id => apiClient
+  .get('messages/unread');
