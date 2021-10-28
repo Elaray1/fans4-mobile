@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { USER_LOGGED_OUT } from 'resources/user/user.constants';
 import user from 'resources/user/user.reducer';
 import post from 'resources/post/post.reducer';
+import message from 'resources/message/message.reducer';
 
 import purchases from './purchases/purchases.reducer';
 import introVideo from './introVideo/introVideo.reducer';
@@ -12,6 +13,7 @@ const appReducer = combineReducers({
   purchases,
   post,
   introVideo,
+  message,
 });
 
 const rootReducer = (state, action) => {

@@ -10,7 +10,6 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
 import debounce from 'lodash.debounce';
 import { useTranslation } from 'react-i18next';
 
@@ -32,7 +31,6 @@ function CitySelectModal({
   cityId, onClose, onSubmit, visible,
 }) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
   const [selectedCityId, setSelectedCityId] = useState(cityId);
   const [cities, setCities] = useState([]);
@@ -62,7 +60,7 @@ function CitySelectModal({
       debounced.current(search);
     };
     initialSearch();
-  }, [dispatch, search]);
+  }, [search]);
 
   const renderItem = ({ item }) => {
     const isSelected = item._id === selectedCityId;

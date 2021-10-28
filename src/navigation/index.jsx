@@ -22,7 +22,10 @@ import inAppPurhaseService from 'services/inAppPurhase.service.ios';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
+
 import * as paymentApi from 'resources/payment/payment.api';
+
+import * as messageActions from 'resources/message/message.actions';
 
 import useToast from 'hooks/useToast';
 
@@ -142,6 +145,12 @@ const handleUserActivityIndicatorUpdated = (user) => {
   store.dispatch(userActions.setUserData(user));
 };
 
+const handleUserUnreadMessagesUpdated = ({ messageId }) => {
+  console.log(messageId);
+
+  store.dispatch(messageActions.addUnreadMessage(messageId));
+};
+
 AppState.addEventListener('change', async (appState) => {
   if (appState === 'active') {
     try {
@@ -192,6 +201,7 @@ function AppNavigation() {
         socketsService.on('fighter:updated', handleFighterUpdated);
         socketsService.on('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
         socketsService.on('user:updated', handleUserUpdated);
+        socketsService.on('user:unread-messages-updated', handleUserUnreadMessagesUpdated);
 
         pushNotificationService.startNotificationHandling(pushNotificationHandlersByType);
       } else {
@@ -201,6 +211,7 @@ function AppNavigation() {
         socketsService.removeListener('fighter:updated', handleFighterUpdated);
         socketsService.removeListener('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
         socketsService.removeListener('user:updated', handleUserUpdated);
+        socketsService.removeListener('user:unread-messages-updated', handleUserUnreadMessagesUpdated);
       }
     };
 

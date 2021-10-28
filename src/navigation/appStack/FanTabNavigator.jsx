@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import FeedIcon from 'assets/icons/tab-bar/feed.svg';
 import MessageIcon from 'assets/icons/tab-bar/message.svg';
+import UnreadMessageIcon from 'assets/icons/tab-bar/unread-message.svg';
 import EventsIcon from 'assets/icons/tab-bar/events.svg';
 import VotingIcon from 'assets/icons/tab-bar/voting.svg';
 import AccountIcon from 'assets/icons/tab-bar/account.svg';
@@ -12,6 +14,8 @@ import Events from 'screens/Events';
 import Account from 'screens/Account';
 import ChatsList from 'screens/ChatsList';
 import NewVoting from 'screens/NewVoting';
+
+import * as messageSelectors from 'resources/message/message.selectors';
 
 import config from 'resources/config';
 
@@ -27,11 +31,14 @@ const optionsByScreen = {
   feed: { icon: FeedIcon },
   voting: { icon: VotingIcon },
   events: { icon: EventsIcon },
-  message: { icon: MessageIcon },
   account: { icon: AccountIcon },
 };
 
 function FanTabNavigator() {
+  const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
+
+  const chatsIcon = useMemo(() => (isUnreadMessages ? UnreadMessageIcon : MessageIcon), [isUnreadMessages]);
+
   return (
     <Tab.Navigator
       initialRouteName="Feed"
@@ -43,7 +50,7 @@ function FanTabNavigator() {
       <Tab.Screen name="Events" component={Events} options={optionsByScreen.events} />
       {/* TODO: replace Account component with Chats component */}
       {config.mode !== 'PROD'
-      && <Tab.Screen name="Chats" component={ChatsList} options={optionsByScreen.message} />}
+      && <Tab.Screen name="Chats" component={ChatsList} options={{ icon: chatsIcon }} />}
       <Tab.Screen name="Account" component={Account} options={optionsByScreen.account} />
     </Tab.Navigator>
   );

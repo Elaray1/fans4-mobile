@@ -25,7 +25,7 @@ function Fans() {
   useEffect(() => {
     const initialLoad = async () => {
       const { fans: fetchedFans } = await userApi.getMyFans();
-      console.log(fetchedFans);
+
       setFans(fetchedFans);
     };
     initialLoad();

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 
@@ -45,6 +45,10 @@ import NewChat from 'screens/NewChat';
 import LikesList from 'screens/LikesList';
 
 import * as userSelectors from 'resources/user/user.selectors';
+
+import * as messageApi from 'resources/message/message.api';
+import * as messageActions from 'resources/message/message.actions';
+
 import { USER_TYPES, SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
 
 import Text from 'components/Text';
@@ -74,10 +78,24 @@ function Tabs() {
 
 function AppScreens() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
   const userType = useSelector(userSelectors.getUserType);
+
+  useEffect(() => {
+    const fetchUnreadMessages = async () => {
+      if (!userAuthenticated) {
+        return null;
+      }
+
+      const messageIds = await messageApi.getUnreadMessageIds();
+      await dispatch(messageActions.setUnreadMessages(messageIds));
+    };
+
+    fetchUnreadMessages();
+  }, [userAuthenticated, dispatch]);
 
   if (!userAuthenticated) {
     return null;
