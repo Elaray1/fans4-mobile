@@ -15,7 +15,6 @@ export default StyleSheet.create({
   author: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
   },
   authorAvatar: {
     width: 36,
@@ -97,5 +96,11 @@ export default StyleSheet.create({
   },
   disabled: {
     color: colors.whiteDisabled,
+  },
+  postHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
   },
 });
