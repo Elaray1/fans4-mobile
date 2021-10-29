@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
+import { useTranslation } from 'react-i18next';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -12,10 +13,13 @@ import * as postApi from 'resources/post/post.api';
 import Text from 'components/Text';
 import StatusBadge from 'components/StatusBadge';
 import Video from 'components/Video';
+import Modal from 'components/Modal';
+import PostModal from 'components/Post/components/PostModal';
 
 import LikeIcon from 'assets/icons/like';
 import CommentIcon from 'assets/icons/comment';
 import LockIcon from 'assets/icons/lock';
+import DotsIcon from 'assets/icons/dots';
 
 import config from 'resources/config';
 
@@ -41,8 +45,10 @@ function Post({
   disabled,
   viewable,
   onUpdateCommentsCount,
+  onHidePostFromFeed,
   createdOn,
 }) {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const { showFailure } = useToast();
 
@@ -57,9 +63,15 @@ function Post({
     ? `${likedUsersState[1]?.name} and ${likedUsersState[0]?.name}`
     : likedUsersState[0]?.name);
 
+  const [isEditPostModal, setIsEditPostModal] = useState(false);
+  const [isRemoveFromFeedConfirmationModal, setIsRemoveFromFeedConfirmationModal] = useState(false);
+  const [isRemovePostConfirmationModal, setIsRemovePostConfirmationModal] = useState(false);
+
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
   const isSubscribedOrAuthor = userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id);
+
   const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1} others` : ''}`;
+  const isPostAuthor = userId === author._id;
 
   useEffect(() => {
     setLikesCount(likedUsersState.length);
@@ -90,19 +102,65 @@ function Post({
     }
   }, [navigation, author?._id]);
 
+  const onOpenEditPostModal = useCallback(() => {
+    setIsEditPostModal(true);
+  }, []);
+
+  const onCloseEditPostModal = useCallback(() => {
+    setIsEditPostModal(false);
+  }, []);
+
+  const onOpenRemovePostFromFeedConfirmationModal = useCallback((isRemovedByAdmin) => {
+    if (isRemovedByAdmin) {
+      setIsRemoveFromFeedConfirmationModal(true);
+    } else {
+      setIsRemovePostConfirmationModal(true);
+    }
+    setIsEditPostModal(false);
+  }, []);
+
+  const onCloseRemoveFromFeedConfirmationModal = useCallback(() => {
+    setIsRemoveFromFeedConfirmationModal(false);
+    setIsRemovePostConfirmationModal(false);
+  }, []);
+
+  const onRemovePostFromFeedConfirmation = useCallback(async () => {
+    try {
+      const updatedPost = await postApi.removePostFromFeed(_id);
+      onHidePostFromFeed(updatedPost);
+    } catch (error) {
+      showFailure();
+    }
+
+    setIsRemoveFromFeedConfirmationModal(false);
+    setIsRemovePostConfirmationModal(false);
+    setIsEditPostModal(false);
+  }, [showFailure, onHidePostFromFeed, _id]);
+
+  const onEditPost = useCallback(() => {}, []); // TODO
+
   const authorView = author ? (
-    <TouchableOpacity
-      onPress={onPressFighter}
-      style={styles.author}
-    >
-      <FastImage
-        style={styles.authorAvatar}
-        source={{ uri: author.avatarUrl }}
-      />
-      <Text style={styles.authorFullName}>
-        {author.fullName}
-      </Text>
-    </TouchableOpacity>
+    <View style={styles.postHeader}>
+      <TouchableOpacity
+        onPress={onPressFighter}
+        style={styles.author}
+      >
+        <FastImage
+          style={styles.authorAvatar}
+          source={{ uri: author.avatarUrl }}
+        />
+        <Text style={styles.authorFullName}>
+          {author.fullName}
+        </Text>
+      </TouchableOpacity>
+      {isPostAuthor && (
+      <TouchableOpacity
+        onPress={onOpenEditPostModal}
+      >
+        <DotsIcon />
+      </TouchableOpacity>
+      )}
+    </View>
   ) : null;
 
 
@@ -184,10 +242,38 @@ function Post({
   }, [isSubscribedOrAuthor, likedUsersState, navigation]);
 
   return (
-    <View style={styles.post}>
-      {authorView}
-      {contentContainerView}
-      {status === POST_STATUSES.APPROVED && (
+    <>
+      {isRemoveFromFeedConfirmationModal && (
+      <Modal
+        title={t('Post.removePost')}
+        text={t('Post.thisPostWillNoLongerBeVisibleInYourFeed')}
+        closeButtonText={t('Post.keepIt')}
+        submitButtonText={t('Post.remove')}
+        onClose={onCloseRemoveFromFeedConfirmationModal}
+        onSubmit={onRemovePostFromFeedConfirmation}
+      />
+      )}
+      {isRemovePostConfirmationModal && (
+      <Modal
+        title={t('Post.deletePost')}
+        text={t('Post.thisPostWillNoLongerBeAvailableForYouAndYourFans')}
+        closeButtonText={t('Post.keepIt')}
+        submitButtonText={t('Post.delete')}
+        onClose={onCloseRemoveFromFeedConfirmationModal}
+        onSubmit={onRemovePostFromFeedConfirmation}
+      />
+      )}
+      <PostModal
+        onClose={onCloseEditPostModal}
+        visible={isEditPostModal}
+        isRemovedByAdmin={status === POST_STATUSES.REMOVED}
+        onEdit={onEditPost}
+        onRemoveFromFeed={onOpenRemovePostFromFeedConfirmationModal}
+      />
+      <View style={styles.post}>
+        {authorView}
+        {contentContainerView}
+        {status === POST_STATUSES.APPROVED && (
         <View style={[styles.status, styles.approvedStatus]}>
           <View>
             {Boolean(likesCount) && (
@@ -243,18 +329,18 @@ function Post({
           </View>
           <Text style={styles.time}>{formatTime(checkedOn || createdOn)}</Text>
         </View>
-      )}
+        )}
 
-      {(status === POST_STATUSES.PENDING
+        {(status === POST_STATUSES.PENDING
       || status === POST_STATUSES.DECLINED
       || status === POST_STATUSES.REMOVED
-      ) && (
-      <View style={styles.status}>
-        <StatusBadge status={status} />
+        ) && (
+        <View style={styles.status}>
+          <StatusBadge status={status} />
+        </View>
+        )}
       </View>
-      )}
-
-    </View>
+    </>
   );
 }
 
@@ -284,6 +370,7 @@ Post.propTypes = {
   viewable: PropTypes.bool,
   createdOn: PropTypes.string,
   onUpdateCommentsCount: PropTypes.func,
+  onHidePostFromFeed: PropTypes.func,
 };
 
 Post.defaultProps = {
@@ -297,6 +384,7 @@ Post.defaultProps = {
   disabled: false,
   viewable: false,
   onUpdateCommentsCount: () => null,
+  onHidePostFromFeed: () => null,
 };
 
 export default React.memo(Post);

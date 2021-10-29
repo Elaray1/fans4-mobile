@@ -61,6 +61,7 @@ function FighterAccount({ postId }) {
   const [postIdToBeScrolled, setPostIdToBeScrolled] = useState(postId);
 
   const isAllPostsLoaded = useMemo(() => postsCount <= posts.length, [posts.length, postsCount]);
+  const visiblePosts = useMemo(() => posts.filter(post => !post.isHiddenFromAuthor), [posts]);
 
   const refreshPosts = useCallback(async () => {
     const {
@@ -190,6 +191,10 @@ function FighterAccount({ postId }) {
     }, {}));
   }, [setViewablePosts]);
 
+  const onHidePostFromFeed = useCallback((updatedPost) => {
+    setPosts(prevPosts => prevPosts.map(post => (post._id === updatedPost._id ? updatedPost : post)));
+  }, []);
+
   const renderItem = ({ item }) => {
     const props = {
       ...(userId !== item.author._id && {
@@ -208,6 +213,8 @@ function FighterAccount({ postId }) {
         commentsCount={item.commentsCount}
         viewable={!!viewablePosts[item._id]}
         createdOn={item.createdOn}
+        author={item.author}
+        onHidePostFromFeed={onHidePostFromFeed}
         {...props}
       />
     );
@@ -327,11 +334,13 @@ function FighterAccount({ postId }) {
       {!isFetchedFirstTime && isRefreshing && <Loader />}
 
 
-      {postsCount !== null && fansCount !== null && (
+      {postsCount !== null
+      && fansCount !== null
+      && (
       <FlatList
         ref={postsListRef}
         style={styles.content}
-        data={posts}
+        data={visiblePosts}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         ItemSeparatorComponent={renderItemSeparator}

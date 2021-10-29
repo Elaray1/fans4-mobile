@@ -259,7 +259,7 @@
     "recovery": "Post-fight Recovery",
     "pending": "In admin review",
     "declined": "Declined",
-    "removed": "Removed",
+    "removed": "Deleted by Admin",
     "blocked": "Blocked"
   },
   "StripeAccountStatus": {
@@ -707,5 +707,16 @@
     "button": "Done",
     "title": "Fight Was Sent to Review!",
     "description": "Thanks for your proposed pairing! Our admin will review ASAP."
+  },
+  "Post": {
+    "removePost": "Remove post",
+    "thisPostWillNoLongerBeVisibleInYourFeed": "This post will no longer be visible in your feed.",
+    "keepIt": "Keep it",
+    "remove": "Remove",
+    "removeFromFeed": "Remove from Feed",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deletePost": "Delete post",
+    "thisPostWillNoLongerBeAvailableForYouAndYourFans": "This post will no longer be available for you and your fans."
   }
 }
