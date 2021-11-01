@@ -58,7 +58,7 @@ function Post({
 
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
   const isSubscribedOrAuthor = userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id);
-  const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1}` : ''}`;
+  const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1} others` : ''}`;
 
   useEffect(() => {
     setLikesCount(likedUsers.length);
