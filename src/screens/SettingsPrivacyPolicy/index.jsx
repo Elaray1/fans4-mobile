@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView, ScrollView, StatusBar, View,
-} from 'react-native';
+import { ActivityIndicator, SafeAreaView, StatusBar, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { WebView } from 'react-native-webview';
 
@@ -12,7 +9,7 @@ import Header from 'components/Header';
 
 import styles from './styles';
 
-const PRIVACY_POLICY_URL_SOURCE = { uri: 'https://www.fans4.com/privacy-policy-mobile' };
+const PRIVACY_POLICY_URL_SOURCE = { uri: 'https://www.fans4.com/privacy-policy' };
 
 function SettingsPrivacyPolicy() {
   const { t } = useTranslation();

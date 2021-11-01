@@ -21,7 +21,7 @@ import useToast from 'hooks/useToast';
 
 import styles from './TermsOfUse.styles';
 
-const TERMS_OF_USE_URL_SOURCE = { uri: 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/' };
+const TERMS_OF_USE_URL_SOURCE = { uri: 'https://www.fans4.com/terms-of-use' };
 
 function TermsOfUse() {
   const { showFailure } = useToast();

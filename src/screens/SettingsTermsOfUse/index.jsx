@@ -9,7 +9,7 @@ import Header from 'components/Header';
 
 import styles from './styles';
 
-const TERMS_OF_USE_URL_SOURCE = { uri: 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/' };
+const TERMS_OF_USE_URL_SOURCE = { uri: 'https://www.fans4.com/terms-of-use' };
 
 function SettingsTermsOfUse() {
   const { t } = useTranslation();
