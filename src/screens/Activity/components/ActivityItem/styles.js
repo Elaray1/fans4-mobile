@@ -67,6 +67,7 @@ export default StyleSheet.create({
   postImage: {
     width: 40,
     height: 40,
+    borderRadius: 5,
   },
   textPostContainer: {
     flexDirection: 'row',
