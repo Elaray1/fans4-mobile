@@ -128,8 +128,7 @@ function Activity() {
     setIsFiltersOpened(!isFiltersOpened);
   }, [isFiltersOpened]);
 
-  const onCloseFiltersModal = useCallback((newSelectedFilters) => {
-    setSelectedFilters(newSelectedFilters);
+  const onCloseFiltersModal = useCallback(() => {
     setIsFiltersOpened(false);
   }, []);
 
@@ -280,6 +279,7 @@ function Activity() {
         visible
         onClose={onCloseFiltersModal}
         selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
       />
       )}
       <View style={styles.content}>
