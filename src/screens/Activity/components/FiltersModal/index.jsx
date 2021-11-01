@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   View, TouchableOpacity, Modal, Pressable,
@@ -18,9 +18,9 @@ function FiltersModal({
   onClose,
   visible,
   selectedFilters,
+  setSelectedFilters,
 }) {
   const { t } = useTranslation();
-  const [selectedActionTypes, setSelectedActionTypes] = useState(selectedFilters);
 
   const filters = useMemo(() => [
     {
@@ -41,14 +41,14 @@ function FiltersModal({
     },
   ], [t]);
 
-  const onCloseModal = useCallback((types) => {
-    onClose(types || selectedActionTypes);
-  }, [selectedActionTypes, onClose]);
+  const onCloseModal = useCallback(() => {
+    onClose(selectedFilters);
+  }, [selectedFilters, onClose]);
 
   const onSelectFilter = useCallback((types) => {
-    setSelectedActionTypes(types);
-    onCloseModal(types);
-  }, [onCloseModal]);
+    setSelectedFilters(types);
+    onCloseModal();
+  }, [onCloseModal, setSelectedFilters]);
 
   return (
     <Modal
@@ -68,9 +68,9 @@ function FiltersModal({
               style={styles.filter}
             >
               <Text style={styles.title}>{title}</Text>
-              {selectedActionTypes.length === Object.values(ACTIVITY_TYPES).length
+              {selectedFilters.length === Object.values(ACTIVITY_TYPES).length
                 ? title === t('FiltersModal.allActivity') && <SelectedFilterIcon />
-                : _.difference(types, selectedActionTypes).length === 0 && <SelectedFilterIcon />}
+                : _.difference(types, selectedFilters).length === 0 && <SelectedFilterIcon />}
             </TouchableOpacity>
             {index < filters.length - 1 && <View style={styles.line} />}
           </View>
@@ -85,6 +85,7 @@ FiltersModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
   selectedFilters: PropTypes.arrayOf(PropTypes.oneOf(Object.values(ACTIVITY_TYPES))).isRequired,
+  setSelectedFilters: PropTypes.func.isRequired,
 };
 
 export default React.memo(FiltersModal);
