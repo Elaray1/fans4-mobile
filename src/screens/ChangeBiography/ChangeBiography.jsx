@@ -5,6 +5,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import _ from 'lodash';
 
 import Bin from 'assets/icons/bin.svg';
 
@@ -156,7 +157,7 @@ function ChangeBiography() {
   }, [initialMedia?.storageUrl]);
 
   const introVideoView = useCallback(() => {
-    return initialMedia && (initialMedia === uploadingMedia) ? (
+    return initialMedia && (_.isEqual(initialMedia, uploadingMedia)) ? (
       <View style={styles.videoContainer}>
         <Video
           posterSource={posterSource}
