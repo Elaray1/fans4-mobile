@@ -271,7 +271,7 @@ function Finances() {
 
   const WithdrawalMethod = () => {
     return (
-      !isRefreshing && withdrawalMethod
+      withdrawalMethod
         ? (
           <View>
             {account.status === ACCOUNT_STATUSES.RESTRICTED && (
@@ -318,8 +318,6 @@ function Finances() {
               <Text style={styles.title}>{t('Finances.addBankAccount')}</Text>
             </TouchableOpacity>
 
-            {/*  Do not replace "!!: because it will cause a bug: */}
-            {/*  Text strings must be rendered within <Text> component */}
             {!!income && !!income.length && (
             <Text style={[styles.secondaryText, styles.incomeText]}>
               {t('Finances.incomeWillBePaidToByThisMethodMonthly')}
