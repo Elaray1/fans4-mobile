@@ -213,6 +213,7 @@ function FighterAccount({ postId }) {
         commentsCount={item.commentsCount}
         viewable={!!viewablePosts[item._id]}
         createdOn={item.createdOn}
+        editedOn={item.editedOn}
         author={item.author}
         onHidePostFromFeed={onHidePostFromFeed}
         {...props}

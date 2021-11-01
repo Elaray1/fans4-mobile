@@ -103,4 +103,12 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
+  textContainer: {
+    flexDirection: 'row',
+  },
+  editedLabel: {
+    marginLeft: 4,
+    color: colors.grayText,
+    fontSize: fonts.size.caption,
+  },
 });
