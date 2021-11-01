@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, useWindowDimensions } from 'react-native';
+import { View, Text, useWindowDimensions, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,7 @@ import illustrationSource from 'assets/illustrations/onboarding2-fighter.png';
 
 import styles from './styles';
 
-const MAX_WIDTH_HEIGHT_PERCENT = 50;
+const MAX_WIDTH_HEIGHT_PERCENT = 45;
 
 const ConfirmedIosPurchase = ({ handleDonePress }) => {
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ const ConfirmedIosPurchase = ({ handleDonePress }) => {
     { width, height }), [height, width]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View>
         <View>
           <FastImage
@@ -53,10 +53,10 @@ const ConfirmedIosPurchase = ({ handleDonePress }) => {
 
           <SubscriptionPosibilities />
         </View>
-
-        <Button style={styles.doneButton} title={t('Fighter.done')} onPress={handleDonePress} />
       </View>
-    </View>
+
+      <Button style={styles.doneButton} title={t('Fighter.done')} onPress={handleDonePress} />
+    </ScrollView>
   );
 };
 

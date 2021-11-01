@@ -1,11 +1,16 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+
+import { variables } from 'themes/commonStyles';
+
+const { width } = Dimensions.get('window');
+
+const buttonWidth = width - variables.paddingHorizontal * 2;
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
   },
   descriptionContainer: {
     marginHorizontal: 20,
@@ -29,7 +34,7 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   doneButton: {
-    marginTop: 34,
+    width: buttonWidth,
   },
   linearGradient: {
     position: 'absolute',
