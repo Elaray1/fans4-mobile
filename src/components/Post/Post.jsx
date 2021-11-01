@@ -47,6 +47,7 @@ function Post({
   onUpdateCommentsCount,
   onHidePostFromFeed,
   createdOn,
+  editedOn,
 }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -137,7 +138,10 @@ function Post({
     setIsEditPostModal(false);
   }, [showFailure, onHidePostFromFeed, _id]);
 
-  const onEditPost = useCallback(() => {}, []); // TODO
+  const onEditPost = useCallback(() => {
+    setIsEditPostModal(false);
+    navigation.navigate('ChangePost', { postId: _id });
+  }, [navigation, _id]);
 
   const authorView = author ? (
     <View style={styles.postHeader}>
@@ -202,12 +206,24 @@ function Post({
     contentContainerView = (
       <>
         {mediaView}
-        {Boolean(text) && <Text style={styles.description}>{text}</Text>}
+        {Boolean(text) && (
+          <View style={styles.textContainer}>
+            <Text style={styles.description}>
+              {text}
+            </Text>
+            {editedOn && <Text style={[styles.description, styles.editedLabel]}>({t('Post.edited')})</Text>}
+          </View>
+        )}
       </>
     );
   } else if (text) {
     contentContainerView = (
-      <Text style={styles.description}>{text}</Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.description}>
+          {text}
+        </Text>
+        {editedOn && <Text style={[styles.description, styles.editedLabel]}>({t('Post.edited')})</Text>}
+      </View>
     );
   } else {
     contentContainerView = (
@@ -369,6 +385,7 @@ Post.propTypes = {
   disabled: PropTypes.bool,
   viewable: PropTypes.bool,
   createdOn: PropTypes.string,
+  editedOn: PropTypes.string,
   onUpdateCommentsCount: PropTypes.func,
   onHidePostFromFeed: PropTypes.func,
 };
@@ -379,6 +396,7 @@ Post.defaultProps = {
   author: null,
   checkedOn: null,
   createdOn: null,
+  editedOn: null,
   likedUsers: [],
   commentsCount: 0,
   disabled: false,

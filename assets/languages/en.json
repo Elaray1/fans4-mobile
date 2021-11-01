@@ -717,6 +717,19 @@
     "edit": "Edit",
     "delete": "Delete",
     "deletePost": "Delete post",
-    "thisPostWillNoLongerBeAvailableForYouAndYourFans": "This post will no longer be available for you and your fans."
+    "thisPostWillNoLongerBeAvailableForYouAndYourFans": "This post will no longer be available for you and your fans.",
+    "edited": "edited"
+  },
+  "ChangePost": {
+    "editPost": "Edit Post",
+    "noMediaWasAdded": "No media was added",
+    "postMedia": "Post Media",
+    "updated": "Post updated successfully.",
+    "postTextMax160Characters": "Post Text (max. 160 characters)",
+    "save": "Save",
+    "unsavedChanges": "Unsaved changes",
+    "youHaveUnsavedChanges": "You have unsaved changes. Are you sure you want to discard them?",
+    "saveChanges": "Save changes",
+    "discard": "Discard"
   }
 }

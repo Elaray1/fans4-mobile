@@ -47,3 +47,6 @@ export const removeLikeFromPost = _id => apiClient
 
 export const removePostFromFeed = _id => apiClient
   .delete(`posts/${_id}`);
+
+export const editPost = ({ postId, text }) => apiClient
+  .put(`posts/${postId}`, { text });

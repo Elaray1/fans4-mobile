@@ -6,6 +6,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import TrashIcon from 'assets/icons/trash';
+import EditIcon from 'assets/icons/pencil';
 
 import Text from 'components/Text';
 
@@ -41,7 +42,7 @@ function PostModal({
               onPress={onEdit}
               activeOpacity={0.7}
             >
-              <TrashIcon style={styles.settingIcon} />
+              <EditIcon style={styles.settingIcon} />
               <Text style={styles.settingTitle}>
                 {t('Post.edit')}
               </Text>

@@ -90,6 +90,7 @@ function Fans4Profile() {
         likedUsers={item.likedUsers}
         commentsCount={item.commentsCount}
         createdOn={item.createdOn}
+        editedOn={item.editedOn}
         viewable={!!viewablePosts[item._id]}
       />
     );

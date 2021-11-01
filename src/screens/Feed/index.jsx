@@ -201,6 +201,7 @@ function Feed() {
           commentsCount={item.commentsCount}
           viewable={!!viewablePosts[item._id]}
           createdOn={item.createdOn}
+          editedOn={item.editedOn}
           onUpdateCommentsCount={onUpdateCommentsCount}
         />
       </View>

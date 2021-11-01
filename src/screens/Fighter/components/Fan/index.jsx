@@ -154,6 +154,7 @@ function Fighter({ fighterId }) {
         commentsCount={item.commentsCount}
         disabled={isDisabled}
         createdOn={item.createdOn}
+        editedOn={item.editedOn}
         viewable={!!viewablePosts[item._id]}
       />
     );
