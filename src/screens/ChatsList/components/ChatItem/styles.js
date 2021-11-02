@@ -63,7 +63,13 @@ export default StyleSheet.create({
     flex: 1,
   },
   text: {
-    color: colors.tabBarInactive,
+    color: colors.grayText,
     fontSize: fonts.size.small,
+  },
+  opacityImage: {
+    opacity: 0.6,
+  },
+  closedChatText: {
+    color: colors.grayText,
   },
 });

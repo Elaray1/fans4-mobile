@@ -10,6 +10,8 @@ import * as userSelectors from 'resources/user/user.selectors';
 
 import { toFixLength } from 'helpers/modifyText';
 import { formatTime } from 'components/Post/Post.helpers';
+import { CHAT_STATUSES } from 'resources/chat/chat.constants';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import * as socketService from 'services/socket.service';
 
@@ -22,8 +24,10 @@ const ChatItem = ({ chat, setNewChat, onRefreshChats }) => {
   const { t } = useTranslation();
 
   const userId = useSelector(userSelectors.getUserId);
+  const userType = useSelector(userSelectors.getUserType);
 
-  const { participants } = chat;
+  const { participants, status } = chat;
+  const isChatClosed = status === CHAT_STATUSES.CLOSED;
 
   const { unreadMessagesNumber } = participants.find(u => u._id === userId);
   const { name: chatName, avatarUrl, _id } = participants.find(u => u._id !== userId);
@@ -45,6 +49,7 @@ const ChatItem = ({ chat, setNewChat, onRefreshChats }) => {
       unreadMessagesCount: unreadMessagesNumber,
       userAvatar: avatarUrl,
       onGoBack: onRefreshChats,
+      closingReason: chat.closingReason,
     });
   }, [chat, navigation, _id, chatName, avatarUrl, unreadMessagesNumber, onRefreshChats]);
 
@@ -53,19 +58,21 @@ const ChatItem = ({ chat, setNewChat, onRefreshChats }) => {
       {avatarUrl && (
       <FastImage
         source={{ uri: avatarUrl }}
-        style={_id === 'fans4'
-          ? styles.fans4Photo : styles.photoImage}
+        style={[
+          _id === 'fans4' ? styles.fans4Photo : styles.photoImage,
+          userType === USER_TYPES.FAN && isChatClosed && styles.opacityImage,
+        ]}
       />
       )}
       <View style={styles.chatInfo}>
         <View style={[styles.row, styles.topRow]}>
-          <Text style={styles.name}>{chatName}</Text>
-          {chat?.lastMessage?.createdOn
+          <Text style={[styles.name, isChatClosed && styles.closedChatText]}>{chatName}</Text>
+          {chat?.lastMessage?.createdOn && !isChatClosed
          && <Text style={styles.time}>{formatTime(chat.lastMessage.createdOn)}</Text>}
         </View>
         <View style={styles.row}>
           {chat?.lastMessage?.text ? (
-            <Text style={styles.message}>
+            <Text style={[styles.message, isChatClosed && styles.closedChatText]}>
               {toFixLength({ text: chat.lastMessage.text, length: 50 })}
             </Text>
           ) : <Text style={styles.text}>{`${t('ChatsList.startChattingWith')} ${chatName}`}</Text>}

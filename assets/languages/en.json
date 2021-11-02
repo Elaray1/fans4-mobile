@@ -678,7 +678,10 @@
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh.",
     "messageNotSentPleaseTryAgain": "Message not sent. Please try again",
     "newMessage": "new message",
-    "newMessages": "new messages"
+    "newMessages": "new messages",
+    "fighterSubscriptionEndText": "The chat is only available for fans and their fighters.",
+    "fanSubscriptionEndText": "The chat is only available for fans and their fighters. Become their fan to continue chatting.",
+    "fighterIsBlocked": "This fighter is blocked. You have no more possibility to send and receive messages."
   },
   "SubscriptionPosibilities": {
     "subscriptionPossibility1": "Full access to Fighter's content",

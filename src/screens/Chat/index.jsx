@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
+import ErrorIcon from 'assets/icons/error.svg';
+
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as socketService from 'services/socket.service';
@@ -26,6 +28,8 @@ import colors from 'themes/colors';
 import NoMessagesIllustration from 'assets/illustrations/no-events.svg';
 
 import { USER_TYPES } from 'resources/user/user.constants';
+import { CLOSING_CHAT_REASONS } from 'resources/chat/chat.constants';
+
 
 import Message from './Message';
 
@@ -55,7 +59,15 @@ function Chat({ route }) {
     chatId,
     unreadMessagesCount,
     onGoBack,
+    closingReason,
   } = route?.params;
+
+  const textByClosingReason = useMemo(() => (closingReason ? {
+    [CLOSING_CHAT_REASONS.SUBSCRIPTION_IS_TERMINATED]: user.role.type === USER_TYPES.FIGHTER
+      ? t('Chat.fighterSubscriptionEndText')
+      : t('Chat.fanSubscriptionEndText'),
+    [CLOSING_CHAT_REASONS.USER_IS_BLOCKED]: t('Chat.fighterIsBlocked'),
+  } : null), [user.role.type, closingReason, t]);
 
   const [messages, setMessages] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -443,23 +455,32 @@ function Chat({ route }) {
               <View style={styles.messageContainer}>
                 <View style={styles.line} />
                 <View style={styles.horizontalPaddings}>
-                  <Input
-                    value={messageValue}
-                    onChange={onMessageTextChange}
-                    onFocus={onInputFocus}
-                    onBlur={onInputBlur}
-                    placeholder={t('Chat.typeAMessage')}
-                    maxLength={MESSAGE_MAX_LEGHT}
-                    multiline
-                    multilineSmall
-                    autogrowHeight
-                    style={styles.input}
-                    multilineStyle={styles.multiline}
-                    buttonTitle={t('Chat.send')}
-                    onButtonPress={onSendMessage}
-                    disabled={isButtonDisabled}
-                    autoFocus={isInputFocused}
-                  />
+                  {closingReason
+                    ? (
+                      <View style={styles.closingReasonContainer}>
+                        <ErrorIcon style={styles.errorIcon} />
+                        <Text style={styles.closingReasonText}>{textByClosingReason[closingReason]}</Text>
+                      </View>
+                    )
+                    : (
+                      <Input
+                        value={messageValue}
+                        onChange={onMessageTextChange}
+                        onFocus={onInputFocus}
+                        onBlur={onInputBlur}
+                        placeholder={t('Chat.typeAMessage')}
+                        maxLength={MESSAGE_MAX_LEGHT}
+                        multiline
+                        multilineSmall
+                        autogrowHeight
+                        style={styles.input}
+                        multilineStyle={styles.multiline}
+                        buttonTitle={t('Chat.send')}
+                        onButtonPress={onSendMessage}
+                        disabled={isButtonDisabled}
+                        autoFocus={isInputFocused}
+                      />
+                    )}
                 </View>
               </View>
             )}
