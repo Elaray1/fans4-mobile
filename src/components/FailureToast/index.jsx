@@ -2,14 +2,14 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
-import FailureToastIcon from 'assets/icons/failureToast.svg';
+import ErrorIcon from 'assets/icons/error.svg';
 
 import styles from './styles';
 
 const FailureToast = ({ text }) => {
   return (
     <View style={styles.container}>
-      <FailureToastIcon />
+      <ErrorIcon />
       <Text style={styles.text}>
         {text}
       </Text>

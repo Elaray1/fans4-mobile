@@ -110,4 +110,21 @@ export default StyleSheet.create({
   hidden: {
     opacity: 0,
   },
+  closingReasonContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 26,
+    paddingVertical: 16,
+    backgroundColor: colors.gray,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: colors.error,
+  },
+  closingReasonText: {
+    maxWidth: '90%',
+    fontSize: fonts.size.small,
+  },
+  errorIcon: {
+    marginRight: 10,
+    marginTop: 2,
+  },
 });
