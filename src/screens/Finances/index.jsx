@@ -90,10 +90,6 @@ function Finances() {
     }
   }, [showFailure, navigation, isFetchedFirstTime]);
 
-  const onRefresh = useCallback(async () => {
-    await getUserWithdrawalMethod();
-  }, [getUserWithdrawalMethod]);
-
   useEffect(() => {
     const updateAccount = (updatedAccount) => {
       setAccount(updatedAccount);
@@ -190,6 +186,12 @@ function Finances() {
 
     setIsRefreshing(false);
   }, [showFailure]);
+
+  const onRefresh = useCallback(async () => {
+    await getUserWithdrawalMethod();
+    await getUserIncome();
+  }, [getUserWithdrawalMethod, getUserIncome]);
+
 
   const onWebViewStateChange = useCallback(async (webViewState) => {
     if (webViewState.url.includes('saving')) {
