@@ -86,6 +86,7 @@ function ChangePost({ route }) {
         setValue(fetchedPost.text);
         setMedia(fetchedPost.media);
       } catch (error) {
+        console.error(error);
         showFailure();
       }
 
@@ -94,7 +95,7 @@ function ChangePost({ route }) {
 
     getPost();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [showFailure]);
 
   const onPressSave = useCallback(async () => {
     setIsDiscardConfirmationModal(false);
@@ -109,7 +110,8 @@ function ChangePost({ route }) {
       showSuccess(t('ChangePost.updated'));
 
       navigation.goBack();
-    } catch (err) {
+    } catch (error) {
+      console.error(error);
       showFailure();
     }
 
@@ -128,7 +130,7 @@ function ChangePost({ route }) {
     navigation.goBack();
   }, [navigation]);
 
-  const postMediaView = useCallback(() => {
+  const postMediaView = () => {
     if (media?.type === MEDIA_TYPES.IMAGE) {
       return (
         <View style={styles.mediaContainer}>
@@ -161,19 +163,19 @@ function ChangePost({ route }) {
         <Text style={styles.grayText}>{t('ChangePost.noMediaWasAdded')}</Text>
       </View>
     );
-  }, [posterSource, t, media?.duration, media?.width, media?.height, media?.type, source]);
+  };
 
   return (
     <>
       {isDiscardConfirmationModal && (
-      <Modal
-        title={t('ChangePost.unsavedChanges')}
-        text={t('ChangePost.youHaveUnsavedChanges')}
-        closeButtonText={t('ChangePost.saveChanges')}
-        submitButtonText={t('ChangePost.discard')}
-        onClose={onPressSave}
-        onSubmit={onDiscardChanges}
-      />
+        <Modal
+          title={t('ChangePost.unsavedChanges')}
+          text={t('ChangePost.youHaveUnsavedChanges')}
+          closeButtonText={t('ChangePost.saveChanges')}
+          submitButtonText={t('ChangePost.discard')}
+          onClose={onPressSave}
+          onSubmit={onDiscardChanges}
+        />
       )}
       <SafeAreaView style={styles.screen}>
         <Header
