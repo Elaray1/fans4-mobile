@@ -172,7 +172,7 @@ function SearchFighters() {
   const onSubscribeIconPress = useCallback((fighterId) => {
     setSelectedFighterId(fighterId);
 
-    subscribe();
+    subscribe(fighterId);
 
     setSelectedFighterId(null);
   }, [subscribe]);
@@ -181,17 +181,17 @@ function SearchFighters() {
     setSelectedFighterId(fighterId);
 
     const subscription = supportedFighters.find((f) => {
-      return f._id === selectedFighterId;
+      return f._id === fighterId;
     });
     const isBeforeRenewalDate = moment(subscription.renewalDate).isAfter(moment());
     const isSubscribedButWillBeStopped = isBeforeRenewalDate && !subscription.autorenewal;
 
     if (isSubscribedButWillBeStopped) {
-      resubscribe();
+      resubscribe(subscription);
     } else {
-      unsubscribe();
+      unsubscribe(subscription);
     }
-  }, [supportedFighters, selectedFighterId, resubscribe, unsubscribe]);
+  }, [supportedFighters, resubscribe, unsubscribe]);
 
   const fans4Source = useMemo(() => ({ uri: fans4Account?.avatarUrl }), [fans4Account?.avatarUrl]);
 
