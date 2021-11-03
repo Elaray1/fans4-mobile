@@ -117,4 +117,22 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  processingIosPurchaseModalContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.black,
+  },
+  processingIosPurchaseTitle: {
+    marginTop: 40,
+    fontSize: fonts.size.regular,
+    color: colors.white,
+    fontWeight: fonts.weight.bold,
+    marginBottom: 20,
+  },
+  processingIosPurchaseInfoText: {
+    fontSize: fonts.size.small,
+    color: colors.grayText,
+    fontWeight: fonts.weight.medium,
+  },
 });
