@@ -158,7 +158,7 @@ const ChatsList = () => {
       <View style={styles.content}>
         {!isFetchedFirstTime && isRefreshing && <Loader />}
 
-        {chats.length > (isFan ? 0 : 1)
+        {!!chats.length
           && (
             <FlatList
               style={styles.flatList}
@@ -174,7 +174,7 @@ const ChatsList = () => {
             />
           )}
 
-        {isFetchedFirstTime && chats.length <= (isFan ? 0 : 1) && (
+        {isFetchedFirstTime && !!chats.length && (
           <ScrollView
             style={styles.flatList}
             contentContainerStyle={styles.emptyScroll}
