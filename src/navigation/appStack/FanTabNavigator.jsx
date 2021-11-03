@@ -14,6 +14,7 @@ import Events from 'screens/Events';
 import Account from 'screens/Account';
 import ChatsList from 'screens/ChatsList';
 import NewVoting from 'screens/NewVoting';
+import Voting from 'screens/Voting';
 
 import * as messageSelectors from 'resources/message/message.selectors';
 
@@ -48,7 +49,12 @@ function FanTabNavigator() {
       lazy={false}
     >
       <Tab.Screen name="Feed" component={Feed} options={optionsByScreen.feed} />
-      <Tab.Screen name="Voting" component={NewVoting} options={optionsByScreen.voting} />
+      <Tab.Screen
+        name="Voting"
+        component={config.mode === 'PROD'
+          ? NewVoting : Voting}
+        options={optionsByScreen.voting}
+      />
       <Tab.Screen name="Events" component={Events} options={optionsByScreen.events} />
       {/* TODO: replace Account component with Chats component */}
       {config.mode !== 'PROD'

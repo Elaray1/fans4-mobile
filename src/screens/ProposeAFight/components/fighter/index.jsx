@@ -10,7 +10,7 @@ import RadioButtonSelectedIcon from 'assets/icons/radio-button-selected';
 import Text from 'components/Text';
 import StatusBadge from 'components/StatusBadge';
 
-import { USER_STATUSES, FIGHTING_STATUSES } from 'resources/user/user.constants';
+import { USER_STATUSES, FIGHTING_STATUSES, FIGHTER_TYPES } from 'resources/user/user.constants';
 
 import styles from './styles';
 
@@ -38,30 +38,39 @@ const Fighter = ({
 
   const isDisabled = Boolean(reason);
 
+  const record = fighter.role.fighterType === FIGHTER_TYPES.PRO
+    ? fighter.role.profile.recordPro : fighter.role.profile.record;
+
   return (
     <TouchableOpacity
       style={[styles.container, isSelected && styles.selected]}
       onPress={() => setFighter(fighter)}
       disabled={isDisabled}
     >
-      <FastImage
-        style={[styles.image, isDisabled && styles.grayImage]}
-        source={{ uri: fighter.avatarUrl }}
-      />
+      <View>
+        <FastImage
+          style={[styles.image, isDisabled && styles.grayImage]}
+          source={{ uri: fighter.avatarUrl }}
+        />
+        {fighter.role.fighterType === FIGHTER_TYPES.PRO
+        && (
+        <View style={[styles.proLabel, isDisabled && styles.disabledProLabel]}>
+          <Text style={styles.proLabelText}>P</Text>
+        </View>
+        )}
+      </View>
 
       <View style={[styles.textContainer, isDisabled && styles.disabledTextContainer]}>
         <Text style={[styles.name, isDisabled && styles.opacity]}>
           {fighter.fullName}
         </Text>
 
-        {fighter?.role?.biography?.nickname && (
-          <Text style={[styles.nickname, isDisabled && styles.opacity]}>
-            {`"${fighter?.role?.biography?.nickname}"`}
-          </Text>
-        )}
-
         <Text style={[styles.location, isDisabled && styles.opacity]}>
           {fighter?.role?.biography?.hometown?.cityName}, {fighter?.role?.biography?.hometown?.stateCode}
+        </Text>
+
+        <Text style={[styles.name, isDisabled && styles.opacity]}>
+          {record.wins ?? 0}-{record.losses ?? 0}-{record.draws ?? 0}
         </Text>
 
         {reason === 'status' && (
