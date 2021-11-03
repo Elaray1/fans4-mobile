@@ -21,13 +21,12 @@ import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 
 import analyticsService from 'services/analytics.service';
-import isSubscribedService from 'services/isSubscribed.service';
 
 import useToast from 'hooks/useToast';
+import useSubscribing from 'hooks/useSubscribing';
 
-import ConfirmedIosPurchase from '../ConfirmedIosPurhase';
+import ConfirmedIosPurchase from 'components/ConfirmedIosPurhase';
 import ActionButtonsForFan from '../ActionButtonsForFan';
-import useSubscribing from '../../hooks/useSubscribing';
 import styles from './styles';
 
 const INITIAL_PAGE = 1;
@@ -42,7 +41,7 @@ function Fighter({ fighterId }) {
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
 
   const isSubscribed = useMemo(() => !!userSubscriptions.find((f) => {
-    return f._id === fighterId && isSubscribedService.isSubscribed({ subscriptionToFighter: f });
+    return f._id === fighterId;
   }), [fighterId, userSubscriptions]);
 
   const [fighter, setFighter] = useState(null);

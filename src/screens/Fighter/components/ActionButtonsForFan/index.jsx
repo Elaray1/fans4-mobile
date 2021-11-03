@@ -3,15 +3,16 @@ import { Platform, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-
-
 import { useTranslation } from 'react-i18next';
 
-import { FIGHTING_STATUSES, USER_STATUSES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import Text from 'components/Text';
 import Button from 'components/Button';
+
+import { FIGHTING_STATUSES, USER_STATUSES } from 'resources/user/user.constants';
+
+import isSubscribedService from 'services/isSubscribed.service';
 
 import styles from './styles';
 
@@ -26,10 +27,7 @@ const ActionButtonsForFan = ({ fighter, subscribe, unsubscribe, resubscribe }) =
       return false;
     }
 
-    const isBeforeRenewalDate = moment(subscription.renewalDate).isAfter(moment());
-    const isBeforeGracePeriodEndDate = moment(subscription.gracePeriodEndDate).isAfter(moment());
-
-    return isBeforeRenewalDate || isBeforeGracePeriodEndDate;
+    return isSubscribedService.isSubscribed({ subscriptionToFighter: subscription });
   }, [subscription]);
 
 

@@ -1,16 +1,23 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import {
-  SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, Platform, ScrollView,
+  SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, Platform, ScrollView, Modal,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
+
+import NoFightsIllustration from 'assets/illustrations/no-events.svg';
+
+import SuccessIcon from 'assets/icons/success_24x24.svg';
+import AddFighterIcon from 'assets/icons/add-man.svg';
 
 import Header from 'components/Header';
 import SearchInput from 'components/SearchInput';
 import Text from 'components/Text';
+import ConfirmedIosPurchase from 'components/ConfirmedIosPurhase';
 
 import * as userApi from 'resources/user/user.api';
 import { FIGHTER_TYPES, USER_TYPES } from 'resources/user/user.constants';
@@ -20,10 +27,9 @@ import { toFixLength } from 'helpers/modifyText';
 import { FANS4_ACCOUNT } from 'helpers/constants';
 
 import useToast from 'hooks/useToast';
+import useSubscribing from 'hooks/useSubscribing';
 
 import analyticsService from 'services/analytics.service';
-
-import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 
 import colors from 'themes/colors';
 
@@ -37,6 +43,9 @@ function SearchFighters() {
 
   const { showFailure } = useToast();
 
+  const userType = useSelector(userSelectors.getUserType);
+  const supportedFighters = useSelector(userSelectors.getSupportedFighters);
+
   const [fans4Account, setFans4Account] = useState(null);
   const [fighters, setFighters] = useState([]);
   const [page, setPage] = useState(1);
@@ -48,12 +57,23 @@ function SearchFighters() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
+  const [selectedFighterId, setSelectedFighterId] = useState(null);
+  const {
+    resubscribe,
+    subscribe,
+    isMakingPurchase,
+    finishMakingPurchaseAfterSucessPayment,
+    unsubscribe,
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  } = userType === USER_TYPES.FAN ? useSubscribing({ fighterId: selectedFighterId }) : {};
+  const isSelectedFighterInSubscription = userType === USER_TYPES.FAN && !!supportedFighters.find((f) => {
+    return f._id === selectedFighterId;
+  });
+
   const doSearch = useCallback((v) => {
     setIsSearching(true);
     setSearchValue(v);
   }, []);
-
-  const userType = useSelector(userSelectors.getUserType);
 
   useEffect(() => {
     const fetchFans4Account = async () => {
@@ -149,44 +169,88 @@ function SearchFighters() {
     navigation.navigate('Fans4Profile');
   }, [navigation]);
 
+  const onSubscribeIconPress = useCallback((fighterId) => {
+    setSelectedFighterId(fighterId);
+
+    subscribe();
+
+    setSelectedFighterId(null);
+  }, [subscribe]);
+
+  const onSubscribedIconPress = useCallback((fighterId) => {
+    setSelectedFighterId(fighterId);
+
+    const subscription = supportedFighters.find((f) => {
+      return f._id === selectedFighterId;
+    });
+    const isBeforeRenewalDate = moment(subscription.renewalDate).isAfter(moment());
+    const isSubscribedButWillBeStopped = isBeforeRenewalDate && !subscription.autorenewal;
+
+    if (isSubscribedButWillBeStopped) {
+      resubscribe();
+    } else {
+      unsubscribe();
+    }
+  }, [supportedFighters, selectedFighterId, resubscribe, unsubscribe]);
+
   const fans4Source = useMemo(() => ({ uri: fans4Account?.avatarUrl }), [fans4Account?.avatarUrl]);
 
   const renderItem = ({ item }) => {
     const { nickname } = item.role.biography;
     const { cityName, stateCode } = item.role.biography.hometown;
 
+    const isFighterInSubscription = userType === USER_TYPES.FAN
+    && !!supportedFighters.find(fighter => item._id === fighter._id);
+
     return (
       <TouchableOpacity
         onPress={() => onPressFighter(item._id)}
       >
-        <View style={styles.fighter}>
-          <FastImage
-            style={styles.fighterImage}
-            source={{ uri: item.avatarUrl }}
-          />
-          {item.role.fighterType === FIGHTER_TYPES.PRO
+        <View style={styles.fighterContainer}>
+          <View style={styles.fighter}>
+            <FastImage
+              style={styles.fighterImage}
+              source={{ uri: item.avatarUrl }}
+            />
+            {item.role.fighterType === FIGHTER_TYPES.PRO
           && (
           <View style={styles.proBadge}>
             <Text style={styles.proBadgeText}>{t('SearchFighters.p')}</Text>
           </View>
           )}
-          <View>
-            <Text style={styles.fullName}>{item.fullName}</Text>
-            {nickname && (
+            <View>
+              <Text style={styles.fullName}>{item.fullName}</Text>
+              {nickname && (
               <Text style={styles.nickname}>
                 “
                 {toFixLength({ text: nickname, length: 30 })}
                 ”
               </Text>
-            )}
+              )}
 
-            <Text style={styles.city}>
-              {toFixLength({ text: cityName, length: 30 })}
-              ,
-              {' '}
-              {toFixLength({ text: stateCode, length: 30 })}
-            </Text>
+              <Text style={styles.city}>
+                {toFixLength({ text: cityName, length: 30 })}
+                ,
+                {' '}
+                {toFixLength({ text: stateCode, length: 30 })}
+              </Text>
+            </View>
           </View>
+
+
+          {Platform.OS === 'ios' && isFighterInSubscription ? (
+            <TouchableOpacity
+              onPress={() => onSubscribedIconPress(item._id)}
+            >
+              <SuccessIcon />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => onSubscribeIconPress(item._id)}
+            >
+              <AddFighterIcon />
+            </TouchableOpacity>
+          )}
         </View>
 
         <View style={styles.line} />
@@ -233,6 +297,23 @@ function SearchFighters() {
 
   return (
     <SafeAreaView style={styles.screen}>
+      {userType === USER_TYPES.FAN && (
+        <Modal visible={isMakingPurchase} animationType="slide">
+          <View style={styles.processingIosPurchaseModalContainer}>
+            {!isSelectedFighterInSubscription && (
+              <>
+                <ActivityIndicator size="large" />
+                <Text style={styles.processingIosPurchaseTitle}>{t('Fighter.processingIosPurchaseTitle')}</Text>
+                <Text style={styles.processingIosPurchaseInfoText}>{t('Fighter.processingIosPurchaseInfoText1')}</Text>
+                <Text style={styles.processingIosPurchaseInfoText}>{t('Fighter.processingIosPurchaseInfoText2')}</Text>
+              </>
+            )}
+
+            {isSelectedFighterInSubscription
+            && <ConfirmedIosPurchase handleDonePress={finishMakingPurchaseAfterSucessPayment} />}
+          </View>
+        </Modal>
+      )}
       <Header
         {...(userType === USER_TYPES.FAN && { leftItemType: 'backArrow' })}
         title={t('SearchFighters.fighters')}

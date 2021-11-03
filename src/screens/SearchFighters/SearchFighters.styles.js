@@ -112,4 +112,9 @@ export default StyleSheet.create({
     fontFamily: fonts.family.boldItalic,
     ...(isIOS && { fontWeight: fonts.weight.bold }),
   },
+  fighterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 });
