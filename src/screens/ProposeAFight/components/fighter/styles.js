@@ -63,4 +63,23 @@ export default StyleSheet.create({
     fontSize: fonts.size.caption,
     textTransform: 'capitalize',
   },
+  proLabel: {
+    backgroundColor: colors.primaryRed,
+    position: 'absolute',
+    width: 13,
+    height: 14,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: 4,
+    right: 4,
+  },
+  proLabelText: {
+    fontSize: fonts.size.verySmall,
+    fontFamily: fonts.family.boldItalic,
+    fontWeight: fonts.weight.bold,
+  },
+  disabledProLabel: {
+    opacity: 0.8,
+  },
 });

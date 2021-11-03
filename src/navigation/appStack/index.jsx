@@ -43,6 +43,7 @@ import Chat from 'screens/Chat';
 import ChatsList from 'screens/ChatsList';
 import NewChat from 'screens/NewChat';
 import LikesList from 'screens/LikesList';
+import FightWasSentToReview from 'screens/FightWasSentToReview';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -169,6 +170,7 @@ function AppScreens() {
         <AppStack.Screen name="ChatsList" component={ChatsList} />
         <AppStack.Screen name="NewChat" component={NewChat} />
         <AppStack.Screen name="LikesList" component={LikesList} />
+        <AppStack.Screen name="FightWasSentToReview" component={FightWasSentToReview} />
       </AppStack.Navigator>
     </>
   );

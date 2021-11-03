@@ -74,18 +74,12 @@ const ProposeAFight = ({ route }) => {
 
   const suggestAFight = useCallback(async () => {
     try {
-      const { status, fight } = await fightApi.suggestFight({
+      await fightApi.suggestFight({
         firstFighterId: firstFighter._id,
         secondFighterId: secondFighter._id,
       });
 
-      navigation.navigate('Tabs', {
-        screen: 'Voting',
-        params: {
-          screen: 'Voting',
-          params: { status, fight },
-        },
-      });
+      navigation.navigate('FightWasSentToReview');
 
       analyticsService.logEvent({
         name: analyticsService.events.FAN_PROPOSED_FIGHT,

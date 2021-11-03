@@ -595,7 +595,7 @@
     "youVoted": "You voted",
     "ok": "OK",
     "subscription": "Propose a fight!",
-    "youHaveToBeSubscribed": "Become a fan to propose a fight.",
+    "youHaveToBeSubscribed": "To propose a fight you have to be subscribed to a fighter.",
     "created": "Fight was sent to admin for review",
     "voted": "Fight already created, we saved your vote",
     "pending": "Fight already is in admin review",
@@ -610,7 +610,7 @@
     "next": "Next",
     "create": "Create",
     "chooseOpponent": "Choose opponent for this fight",
-    "noFighters": "No fighters who fits your request.",
+    "noFighters": "No fighters who fit your request.",
     "showFullList": "Show full list",
     "chooseFighter": "Choose your fighter to create a fight",
     "search": "Search by name or nickname"
@@ -699,5 +699,10 @@
     "search": "Search",
     "noSearchResults": "No search results.",
     "showFullList": "Show full list"
+  }, 
+  "FightSentToReview": {
+    "button": "Done",
+    "title": "Fight Was Sent to Review!",
+    "description": "Thanks for your proposed pairing! Our admin will review ASAP."
   }
 }
