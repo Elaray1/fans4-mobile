@@ -4,7 +4,6 @@ import { SafeAreaView, View, StatusBar, ActivityIndicator, FlatList, Modal } fro
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
-import moment from 'moment';
 
 import colors from 'themes/colors';
 
@@ -22,6 +21,7 @@ import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
 
 import analyticsService from 'services/analytics.service';
+import isSubscribedService from 'services/isSubscribed.service';
 
 import useToast from 'hooks/useToast';
 
@@ -34,6 +34,7 @@ const INITIAL_PAGE = 1;
 const PER_PAGE = 10;
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
+
 function Fighter({ fighterId }) {
   const { showFailure } = useToast();
   const { t } = useTranslation();
@@ -41,10 +42,7 @@ function Fighter({ fighterId }) {
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
 
   const isSubscribed = useMemo(() => !!userSubscriptions.find((f) => {
-    const isBeforeRenewalDate = moment(f.renewalDate).isAfter(new Date());
-    const isBeforeGracePeriodEndDate = moment(f.gracePeriodEndDate).isAfter(new Date());
-
-    return f._id === fighterId && (isBeforeRenewalDate || isBeforeGracePeriodEndDate);
+    return f._id === fighterId && isSubscribedService.isSubscribed({ subscriptionToFighter: f });
   }), [fighterId, userSubscriptions]);
 
   const [fighter, setFighter] = useState(null);
