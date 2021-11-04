@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity, View, Image, Alert, Platform } from 'react-native';
+import { TouchableOpacity, View, Image, Alert, Platform, Linking } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import ImagePicker from 'react-native-image-crop-picker';
 import { createThumbnail } from 'react-native-create-thumbnail';
@@ -10,8 +10,11 @@ import PaperclipIcon from 'assets/icons/paperclip.svg';
 import Bin from 'assets/icons/bin.svg';
 
 import Viewable from 'components/Viewable';
+import Modal from 'components/Modal';
 import Video from 'components/Video';
 import Text from 'components/Text';
+
+import UploadingMethodModal from './components/UploadingMethodModal';
 
 import styles from './UploadMediaButton.styles';
 import { MEDIA_TYPES } from './UploadMediaButton.constants';
@@ -22,12 +25,16 @@ function UploadMediaButton({
   label,
   mediaType,
   croppingAvatar,
+  isUploadFromCameraPossibility,
   style,
 }) {
   const { t } = useTranslation();
 
-  const [errorText, setErrorText] = useState(null);
   const [media, setMedia] = useState(null);
+  const [errorText, setErrorText] = useState(null);
+
+  const [isChooseUploadingMethodModal, setIsChooseUploadingMethodModal] = useState(false);
+  const [allowModalData, setAllowModalData] = useState(null); // { title, text }
 
   const videoSource = useMemo(() => {
     if (!media) {
@@ -37,7 +44,15 @@ function UploadMediaButton({
     return { uri: media.path };
   }, [media]);
 
-  const onEditProfilePicture = useCallback(async () => {
+  const onOpenUploadingMethodModal = useCallback(() => {
+    setIsChooseUploadingMethodModal(true);
+  }, []);
+
+  const onCloseUploadingMethodModal = useCallback(() => {
+    setIsChooseUploadingMethodModal(false);
+  }, []);
+
+  const onUploadFromGallery = useCallback(async () => {
     const options = croppingAvatar ? {
       cropping: Platform.OS === 'android' ? true : 'cropit',
       mediaType: MEDIA_TYPES.PHOTO,
@@ -55,6 +70,7 @@ function UploadMediaButton({
 
     try {
       let mediaData = await ImagePicker.openPicker(options);
+
       mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
 
       if (mediaData.mime.includes('image')) {
@@ -88,7 +104,6 @@ function UploadMediaButton({
       } else {
         handleMediaUpload(mediaData);
       }
-
       setMedia(mediaData);
 
       setErrorText(null);
@@ -96,23 +111,95 @@ function UploadMediaButton({
       console.log('media button error:', error);
 
       if (error.code === 'E_NO_LIBRARY_PERMISSION') {
-        setErrorText(t('uploadMediaButton.provideAccessToTheLibrary'));
+        setErrorText(t('UploadMediaButton.provideAccessToTheLibrary'));
+
+        setAllowModalData({
+          title: t('UploadMediaButton.accessToGalleryNeeded'),
+          text: t('UploadMediaButton.provideAccessToTheLibrary'),
+        });
       }
     }
-  }, [handleMediaUpload, t, mediaType, croppingAvatar]);
+
+    onCloseUploadingMethodModal(false);
+  }, [handleMediaUpload, t, mediaType, croppingAvatar, onCloseUploadingMethodModal]);
+
+  const onUploadFromCamera = useCallback(async () => {
+    const options = {
+      mediaType: 'video',
+    };
+
+    try {
+      let mediaData = await ImagePicker.openCamera(options);
+
+      mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
+
+      if (mediaData.mime.includes('image')) {
+        const { width, height, path } = mediaData;
+
+        if (width / height < 0.8) {
+          const croppedHeight = width * 5 / 4;
+
+          mediaData = await ImagePicker.openCropper({
+            path,
+            height: croppedHeight,
+            width,
+          });
+        }
+      }
+
+      if (mediaData.mime.includes('video')) {
+        const res = await createThumbnail({
+          format: 'png',
+          url: mediaData.path,
+          timeStamp: mediaData.duration >= 1000 ? 1000 : Math.round(mediaData.duration / 2),
+        });
+
+        mediaData.duration /= 1000;
+
+        handleMediaUpload(mediaData, {
+          path: res.path,
+          mime: 'image/png',
+        });
+      } else {
+        handleMediaUpload(mediaData);
+      }
+      setMedia(mediaData);
+
+      setErrorText(null);
+    } catch (error) {
+      console.log('media button error:', error);
+
+      if (error.code === 'E_NO_CAMERA_PERMISSION') {
+        setAllowModalData({
+          title: t('UploadMediaButton.accessToCameraNeeded'),
+          text: t('UploadMediaButton.provideAccessToTheCamera'),
+        });
+      }
+    }
+
+    onCloseUploadingMethodModal(false);
+  }, [onCloseUploadingMethodModal, t, handleMediaUpload]);
+
+  const onCloseAllowModal = useCallback(() => {
+    setAllowModalData(null);
+  }, []);
+
+  const onGoToSettings = useCallback(() => {
+    Linking.openSettings();
+  }, []);
 
 
   const onBinPress = useCallback(() => {
     Alert.alert(
-      t('uploadMediaButton.deleteMedia'),
-      t('uploadMediaButton.uploadedMediaWillBeDeleted'),
+      t('UploadMediaButton.deleteMedia'),
+      t('UploadMediaButton.uploadedMediaWillBeDeleted'),
       [
         {
-          text: t('uploadMediaButton.cancel'),
+          text: t('UploadMediaButton.cancel'),
           style: 'cancel',
         },
         {
-          text: t('uploadMediaButton.delete'),
+          text: t('UploadMediaButton.delete'),
           style: 'default',
           onPress: () => {
             setMedia(null);
@@ -129,10 +216,10 @@ function UploadMediaButton({
       <>
         <TouchableOpacity
           style={styles.button}
-          onPress={onEditProfilePicture}
+          onPress={isUploadFromCameraPossibility ? onOpenUploadingMethodModal : onUploadFromGallery}
           activeOpacity={0.7}
         >
-          <Text style={styles.text}>{t('uploadMediaButton.upload')}</Text>
+          <Text style={styles.text}>{t('UploadMediaButton.upload')}</Text>
           <PaperclipIcon />
         </TouchableOpacity>
 
@@ -183,10 +270,30 @@ function UploadMediaButton({
   }
 
   return (
-    <View style={[styles.buttonWrapper, style]}>
-      <Text style={styles.label}>{label}</Text>
-      {contentView}
-    </View>
+    <>
+      {isChooseUploadingMethodModal && (
+        <UploadingMethodModal
+          visible={isChooseUploadingMethodModal}
+          onClose={onCloseUploadingMethodModal}
+          onUploadFromGallery={onUploadFromGallery}
+          onUploadFromCamera={onUploadFromCamera}
+        />
+      )}
+      {allowModalData && (
+        <Modal
+          title={allowModalData.title}
+          text={allowModalData.text}
+          closeButtonText={t('UploadMediaButton.cancel')}
+          submitButtonText={t('UploadMediaButton.goToSettings')}
+          onClose={onCloseAllowModal}
+          onSubmit={onGoToSettings}
+        />
+      )}
+      <View style={[styles.buttonWrapper, style]}>
+        <Text style={styles.label}>{label}</Text>
+        {contentView}
+      </View>
+    </>
   );
 }
 
@@ -196,12 +303,14 @@ UploadMediaButton.propTypes = {
   onDelete: PropTypes.func.isRequired,
   mediaType: PropTypes.oneOf([...Object.values(MEDIA_TYPES)]),
   croppingAvatar: PropTypes.bool,
+  isUploadFromCameraPossibility: PropTypes.bool,
   style: PropTypes.shape(),
 };
 
 UploadMediaButton.defaultProps = {
   mediaType: MEDIA_TYPES.ANY,
   croppingAvatar: false,
+  isUploadFromCameraPossibility: false,
   style: {},
 };
 
