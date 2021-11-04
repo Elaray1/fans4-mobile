@@ -49,7 +49,7 @@ const useSubscribing = ({ fighterId }) => {
   const { t } = useTranslation();
 
   const userSubscriptions = useSelector(userSelectors.getAllSupportedFighters);
-  const subscription = userSubscriptions.find(f => f._id === fighterId);
+  const subscription = userSubscriptions && userSubscriptions.find(f => f._id === fighterId);
 
   const finishMakingPurchaseAfterSucessPayment = useCallback(() => {
     setIsMakingPurchase(false);
@@ -57,15 +57,13 @@ const useSubscribing = ({ fighterId }) => {
 
   const isPurchaseProcessing = useSelector(purchasesSelectors.getIsPurchaseInProcessing);
 
-  const unsubscribe = useCallback((defaultSubscription) => {
-    const updatedSubscription = defaultSubscription || subscription;
-
-    if (updatedSubscription.platform === 'web') {
+  const unsubscribe = useCallback(() => {
+    if (subscription.platform === 'web') {
       Alert.alert(t('Fighter.unsubscribe'), t('Fighter.noPossibilityToUnsubscribeInApp'), [{ text: t('Fighter.ok') }]);
       return;
     }
 
-    if (updatedSubscription.platform === SUBSCRIPTION_PLATFORMS.IOS) {
+    if (subscription.platform === SUBSCRIPTION_PLATFORMS.IOS) {
       if (Platform.OS === 'android') {
         Alert.alert(
           t('Fighter.unsubscribe'),
@@ -76,7 +74,7 @@ const useSubscribing = ({ fighterId }) => {
       }
 
       // eslint-disable-next-line max-len
-      const unsubscribeText = `${t('Fighter.unsubscribeText1')}${addSuffixToNumber(getIosSubscriptionNumberFromProductId(updatedSubscription.apple.productId))}${t('Fighter.unsubscribeText2')}${moment(updatedSubscription.renewalDate).format('MMM DD, YYYY')}`;
+      const unsubscribeText = `${t('Fighter.unsubscribeText1')}${addSuffixToNumber(getIosSubscriptionNumberFromProductId(subscription.apple.productId))}${t('Fighter.unsubscribeText2')}${moment(subscription.renewalDate).format('MMM DD, YYYY')}`;
 
       Alert.alert(t('Fighter.unsubscribe'), unsubscribeText, [
         { text: t('Fighter.keepIt') },
@@ -85,12 +83,10 @@ const useSubscribing = ({ fighterId }) => {
     }
   }, [t, subscription]);
 
-  const resubscribe = useCallback((defaultSubscription) => {
-    const updatedSubscription = defaultSubscription || subscription;
-
-    if (updatedSubscription.platform === SUBSCRIPTION_PLATFORMS.IOS && Platform.OS === 'ios') {
+  const resubscribe = useCallback(() => {
+    if (subscription.platform === SUBSCRIPTION_PLATFORMS.IOS && Platform.OS === 'ios') {
       // eslint-disable-next-line max-len
-      const resubscribeText = `${t('Fighter.youWillBeRedirectedToResubscribeTo1')}${addSuffixToNumber(getIosSubscriptionNumberFromProductId(updatedSubscription.apple.productId))}${t('Fighter.youWillBeRedirectedToResubscribeTo2')}`;
+      const resubscribeText = `${t('Fighter.youWillBeRedirectedToResubscribeTo1')}${addSuffixToNumber(getIosSubscriptionNumberFromProductId(subscription.apple.productId))}${t('Fighter.youWillBeRedirectedToResubscribeTo2')}`;
 
       Alert.alert('Resubscribe', resubscribeText, [
         { text: 'No', style: 'cancel' },
@@ -106,9 +102,7 @@ const useSubscribing = ({ fighterId }) => {
     ]);
   }, [subscription, t]);
 
-  const subscribe = useCallback(async (defaultFighterId) => {
-    const updatedFighterId = defaultFighterId || fighterId;
-
+  const subscribe = useCallback(async () => {
     setIsMakingPurchase(true);
 
     try {
@@ -157,7 +151,7 @@ const useSubscribing = ({ fighterId }) => {
         return;
       }
 
-      await inAppPurhaseService.makePurchase(buyingProductId, { fighterId: updatedFighterId });
+      await inAppPurhaseService.makePurchase(buyingProductId, { fighterId });
 
       dispatch(purchasesActions.startPurchaseProcessing());
     } catch (err) {

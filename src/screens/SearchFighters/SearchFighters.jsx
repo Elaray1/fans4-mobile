@@ -65,7 +65,7 @@ function SearchFighters() {
     finishMakingPurchaseAfterSucessPayment,
     unsubscribe,
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  } = userType === USER_TYPES.FAN ? useSubscribing({ fighterId: selectedFighterId }) : {};
+  } = useSubscribing({ fighterId: selectedFighterId });
   const isSelectedFighterInSubscription = userType === USER_TYPES.FAN && !!supportedFighters.find((f) => {
     return f._id === selectedFighterId;
   });
@@ -169,29 +169,34 @@ function SearchFighters() {
     navigation.navigate('Fans4Profile');
   }, [navigation]);
 
+  useEffect(() => {
+    const init = async () => {
+      if (userType === USER_TYPES.FAN && selectedFighterId) {
+        const subscription = supportedFighters.find((f) => {
+          return f._id === selectedFighterId;
+        });
+
+        if (!subscription) {
+          await subscribe();
+        } else {
+          const isBeforeRenewalDate = moment(subscription.renewalDate).isAfter(moment());
+          const isSubscribedButWillBeStopped = isBeforeRenewalDate && !subscription.autorenewal;
+
+          if (isSubscribedButWillBeStopped) {
+            resubscribe();
+          } else {
+            unsubscribe();
+          }
+        }
+      }
+    };
+
+    init();
+  }, [supportedFighters, selectedFighterId, subscribe, resubscribe, unsubscribe, userType]);
+
   const onSubscribeIconPress = useCallback((fighterId) => {
     setSelectedFighterId(fighterId);
-
-    subscribe(fighterId);
-
-    setSelectedFighterId(null);
-  }, [subscribe]);
-
-  const onSubscribedIconPress = useCallback((fighterId) => {
-    setSelectedFighterId(fighterId);
-
-    const subscription = supportedFighters.find((f) => {
-      return f._id === fighterId;
-    });
-    const isBeforeRenewalDate = moment(subscription.renewalDate).isAfter(moment());
-    const isSubscribedButWillBeStopped = isBeforeRenewalDate && !subscription.autorenewal;
-
-    if (isSubscribedButWillBeStopped) {
-      resubscribe(subscription);
-    } else {
-      unsubscribe(subscription);
-    }
-  }, [supportedFighters, resubscribe, unsubscribe]);
+  }, []);
 
   const fans4Source = useMemo(() => ({ uri: fans4Account?.avatarUrl }), [fans4Account?.avatarUrl]);
 
@@ -237,18 +242,11 @@ function SearchFighters() {
             </View>
           </View>
 
-
-          {Platform.OS === 'ios' && isFighterInSubscription ? (
-            <TouchableOpacity
-              onPress={() => onSubscribedIconPress(item._id)}
-            >
-              <SuccessIcon />
-            </TouchableOpacity>
-          ) : (
+          {Platform.OS === 'ios' && userType === USER_TYPES.FAN && (
             <TouchableOpacity
               onPress={() => onSubscribeIconPress(item._id)}
             >
-              <AddFighterIcon />
+              {isFighterInSubscription ? <SuccessIcon /> : <AddFighterIcon />}
             </TouchableOpacity>
           )}
         </View>
@@ -310,7 +308,7 @@ function SearchFighters() {
             )}
 
             {isSelectedFighterInSubscription
-            && <ConfirmedIosPurchase handleDonePress={finishMakingPurchaseAfterSucessPayment} />}
+              && <ConfirmedIosPurchase handleDonePress={finishMakingPurchaseAfterSucessPayment} />}
           </View>
         </Modal>
       )}
