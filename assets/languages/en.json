@@ -134,13 +134,17 @@
   "DatePickerModal": {
     "done": "Done"
   },
-  "uploadMediaButton": {
+  "UploadMediaButton": {
     "deleteMedia": "Delete Media",
     "uploadedMediaWillBeDeleted": "Uploaded media will be deleted.",
     "delete": "Delete",
     "cancel": "Cancel",
     "upload": "Upload",
-    "provideAccessToTheLibrary": "Providing access to your Library allows you to share photos and videos with your Fans in the Fans4 app."
+    "provideAccessToTheLibrary": "Providing access to your Library allows you to share photos and videos with your Fans in Fans4 app.",
+    "goToSettings": "Go to Settings",
+    "accessToGalleryNeeded": "Access to Gallery Needed",
+    "provideAccessToTheCamera": "Providing access to your camera allows you to share photos and videos with your Fans in the Fans4 app.",
+    "accessToCameraNeeded": "Access to Camera Needed"
   },
   "PersonalInfo": {
     "PersonalInfo": "Personal Info",
@@ -731,5 +735,9 @@
     "youHaveUnsavedChanges": "You have unsaved changes. Are you sure you want to discard them?",
     "saveChanges": "Save changes",
     "discard": "Discard"
+  },
+  "UploadingMethodModal": {
+    "uploadFromGallery": "Upload from Gallery",
+    "openCamera": "Open Camera"
   }
 }

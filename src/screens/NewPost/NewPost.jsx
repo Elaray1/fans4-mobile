@@ -148,6 +148,7 @@ function NewPost() {
             handleMediaUpload={handleMediaUpload}
             onDelete={onDelete}
             mediaType="any"
+            isUploadFromCameraPossibility
           />
         </ScrollView>
 
