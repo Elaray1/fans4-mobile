@@ -11,7 +11,7 @@ import colors from 'themes/colors';
 
 import SettingsModal from 'components/SettingsModal';
 import Header from 'components/Header';
-
+import ScrollToTop from 'components/ScrollToTop';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import { USER_TYPES } from 'resources/user/user.constants';
@@ -58,23 +58,24 @@ function Account({ route }) {
   }, []);
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.main} />
+    <ScrollToTop>
+      <SafeAreaView style={styles.screen}>
+        <StatusBar barStyle="light-content" backgroundColor={colors.main} />
 
-      <SettingsModal
-        visible={isSettingsVisible}
-        onClose={onSettingsClose}
-      />
+        <SettingsModal
+          visible={isSettingsVisible}
+          onClose={onSettingsClose}
+        />
 
-      <Header
-        title={t('Account.account')}
-        rightItemType="menu"
-        onRightItemPress={onBurgerPress}
-      />
+        <Header
+          title={t('Account.account')}
+          rightItemType="menu"
+          onRightItemPress={onBurgerPress}
+        />
 
-      {isFan ? <FanAccount /> : <FighterAccount {...(postId && isNavigateToPostId && { postId })} />}
-
-    </SafeAreaView>
+        {isFan ? <FanAccount /> : <FighterAccount {...(postId && isNavigateToPostId && { postId })} />}
+      </SafeAreaView>
+    </ScrollToTop>
   );
 }
 

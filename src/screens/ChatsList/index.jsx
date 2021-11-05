@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import Text from 'components/Text';
 import Header from 'components/Header';
+import ScrollToTop from 'components/ScrollToTop';
 
 import useToast from 'hooks/useToast';
 
@@ -30,6 +31,8 @@ const ChatsList = () => {
   const { showFailure } = useToast();
   const navigation = useNavigation();
 
+  const userType = useSelector(userSelectors.getUserType);
+
   const [chats, setChats] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
   const [totalCount, setTotalCount] = useState(0);
@@ -38,7 +41,6 @@ const ChatsList = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
-  const userType = useSelector(userSelectors.getUserType);
   const isFan = userType === USER_TYPES.FAN;
 
   const keyExtractor = useCallback(item => item._id, []);
@@ -113,6 +115,7 @@ const ChatsList = () => {
       await fetchChats({ refresh: true });
     };
     init();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onRefresh = useCallback(async () => {
@@ -147,18 +150,19 @@ const ChatsList = () => {
   };
 
   return (
-    <SafeAreaView>
-      <Header
-        title={t('ChatsList.chats')}
-        leftItemType={isFan ? null : 'backArrow'}
-        rightItemType={isFan ? null : 'icon'}
-        rightItemIcon={NewChatIcon}
-        onRightItemPress={onNewChatPress}
-      />
-      <View style={styles.content}>
-        {!isFetchedFirstTime && isRefreshing && <Loader />}
+    <ScrollToTop>
+      <SafeAreaView>
+        <Header
+          title={t('ChatsList.chats')}
+          leftItemType={isFan ? null : 'backArrow'}
+          rightItemType={isFan ? null : 'icon'}
+          rightItemIcon={NewChatIcon}
+          onRightItemPress={onNewChatPress}
+        />
+        <View style={styles.content}>
+          {!isFetchedFirstTime && isRefreshing && <Loader />}
 
-        {!!chats.length
+          {!!chats.length
           && (
             <FlatList
               style={styles.flatList}
@@ -174,7 +178,7 @@ const ChatsList = () => {
             />
           )}
 
-        {isFetchedFirstTime && !!chats.length && (
+          {isFetchedFirstTime && !!chats.length && (
           <ScrollView
             style={styles.flatList}
             contentContainerStyle={styles.emptyScroll}
@@ -185,9 +189,10 @@ const ChatsList = () => {
           >
             <EmptyView />
           </ScrollView>
-        )}
-      </View>
-    </SafeAreaView>
+          )}
+        </View>
+      </SafeAreaView>
+    </ScrollToTop>
   );
 };
 

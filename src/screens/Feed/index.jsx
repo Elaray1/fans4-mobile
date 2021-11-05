@@ -22,6 +22,7 @@ import isSubscribedService from 'services/isSubscribed.service';
 import Header from 'components/Header';
 import Post from 'components/Post';
 import Text from 'components/Text';
+import ScrollToTop from 'components/ScrollToTop';
 
 import useToast from 'hooks/useToast';
 
@@ -63,14 +64,13 @@ function Feed() {
   const fightersList = useSelector(userSelectors.getSupportedFighters);
 
   const [posts, setPosts] = useState([]);
+  const [viewablePosts, setViewablePosts] = useState({});
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
-
-  const [viewablePosts, setViewablePosts] = useState({});
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     if (isLoading) {
@@ -139,7 +139,7 @@ function Feed() {
 
   useEffect(() => {
     fetchNewItems({ refresh: true });
-    // empty array because we need to use fetchNewItems only once here an with initial values of dependencies
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -234,33 +234,34 @@ function Feed() {
   );
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <Header
-        title={t('Feed.feed')}
-        rightItemType="icon"
-        onRightItemPress={onSearchFighters}
-        rightItemIcon={SearchFightersIcon}
-      />
-
-      <View style={styles.content}>
-        {!!posts.length && (
-        <FlatList
-          data={posts}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          onEndReachedThreshold={0.3}
-          onEndReached={fetchNewItems}
-          style={styles.fightersList}
-          showsVerticalScrollIndicator={false}
-          ListFooterComponent={renderFooter}
-          onRefresh={onRefresh}
-          refreshing={isRefreshing}
-          viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
-          onViewableItemsChanged={updateViewableItems}
+    <ScrollToTop>
+      <SafeAreaView style={styles.screen}>
+        <Header
+          title={t('Feed.feed')}
+          rightItemType="icon"
+          onRightItemPress={onSearchFighters}
+          rightItemIcon={SearchFightersIcon}
         />
-        )}
 
-        {isFetchedFirstTime && !posts.length && (
+        <View style={styles.content}>
+          {!!posts.length && (
+          <FlatList
+            data={posts}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            onEndReachedThreshold={0.3}
+            onEndReached={fetchNewItems}
+            style={styles.fightersList}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={renderFooter}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
+            viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
+            onViewableItemsChanged={updateViewableItems}
+          />
+          )}
+
+          {isFetchedFirstTime && !posts.length && (
           <ScrollView
             contentContainerStyle={styles.emptyScroll}
             refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
@@ -268,9 +269,10 @@ function Feed() {
           >
             {!fightersList?.length ? <NoSubscriptions /> : <NoPosts />}
           </ScrollView>
-        )}
-      </View>
-    </SafeAreaView>
+          )}
+        </View>
+      </SafeAreaView>
+    </ScrollToTop>
   );
 }
 
