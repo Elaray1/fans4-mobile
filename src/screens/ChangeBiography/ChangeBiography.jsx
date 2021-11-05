@@ -14,6 +14,7 @@ import Input from 'components/Input';
 import UploadMediaButton from 'components/UploadMediaButton';
 import Video from 'components/Video';
 import Text from 'components/Text';
+import Viewable from 'components/Viewable';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
@@ -46,6 +47,7 @@ function ChangeBiography() {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadingPoster, setUploadingPoster] = useState(null);
   const [uploadingMedia, setUploadingMedia] = useState(initialMedia);
+  const [isVideoViwable, setIsVideoViewable] = useState(true);
 
   const isSaveButtonDisabled = isLoading
   || (!value && !uploadingMedia)
@@ -54,6 +56,10 @@ function ChangeBiography() {
   const saveButtonProps = isSaveButtonDisabled
     ? { rightItemStyle: styles.disabledText }
     : {};
+
+  const onViewableChanged = useCallback((isViewable) => {
+    setIsVideoViewable(isViewable);
+  }, []);
 
   const onUploadProgress = useCallback(async ({ id, data, file, progress, status }) => {
     await dispatch(introVideoActions.updateUploadingIntroVideoData({ id, data, file, progress, status }));
@@ -159,14 +165,16 @@ function ChangeBiography() {
   const introVideoView = useCallback(() => {
     return initialMedia && (_.isEqual(initialMedia, uploadingMedia)) ? (
       <View style={styles.videoContainer}>
-        <Video
-          posterSource={posterSource}
-          source={source}
-          width={uploadingMedia.width}
-          height={uploadingMedia.height}
-          duration={uploadingMedia.duration}
-          viewable
-        />
+        <Viewable onViewableChanged={onViewableChanged}>
+          <Video
+            posterSource={posterSource}
+            source={source}
+            width={uploadingMedia.width}
+            height={uploadingMedia.height}
+            duration={uploadingMedia.duration}
+            viewable={isVideoViwable}
+          />
+        </Viewable>
         <TouchableOpacity
           style={styles.bin}
           activeOpacity={0.7}
@@ -184,7 +192,8 @@ function ChangeBiography() {
         onDelete={onDelete}
       />
     );
-  }, [initialMedia, uploadingMedia, posterSource, source, onBinPress, t, handleMediaUpload, onDelete]);
+  }, [initialMedia, uploadingMedia, posterSource, source, onBinPress,
+    t, handleMediaUpload, onDelete, isVideoViwable, onViewableChanged]);
 
   return (
     <SafeAreaView style={styles.screen}>

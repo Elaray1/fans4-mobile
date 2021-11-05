@@ -1,8 +1,9 @@
-import React, { useCallback, useRef, useState, useMemo } from 'react';
+import React, { useCallback, useRef, useState, useMemo, useEffect } from 'react';
 import { TouchableOpacity, Pressable, View, Text, Modal, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import ReactNativeVideo from 'react-native-video';
 import FastImage from 'react-native-fast-image';
+import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
 
 import PlayIcon from 'assets/icons/play';
@@ -21,6 +22,7 @@ const formatDuration = seconds => moment(moment.duration(seconds, 's').asMillise
 
 function Video({ source, width, height, posterSource, duration, viewable }) {
   const [paused, setPaused] = useState(true);
+  const isFocused = useIsFocused();
   const [renderingWidth, setRenderingWidth] = useState(0);
   const [playedTime, setPlayedTime] = useState(0);
   const playedTimeAsRef = useRef(0);
@@ -128,6 +130,12 @@ function Video({ source, width, height, posterSource, duration, viewable }) {
   const showFullScreen = useCallback(() => {
     videoRef.current.presentFullscreenPlayer();
   }, []);
+
+  useEffect(() => {
+    if (!paused && (!viewable || !isFocused)) {
+      pause();
+    }
+  }, [viewable, pause, paused, isFocused]);
 
   const renderingHeight = width / height < MAX_VERTICAL_VIDEO_ASPECT_RATIO
     ? renderingWidth * (1 / MAX_VERTICAL_VIDEO_ASPECT_RATIO)

@@ -4,12 +4,14 @@ import { TouchableOpacity, View, Image, Alert, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import ImagePicker from 'react-native-image-crop-picker';
 import { createThumbnail } from 'react-native-create-thumbnail';
-import Video from 'components/Video';
-import Text from 'components/Text';
 import _ from 'lodash';
 
 import PaperclipIcon from 'assets/icons/paperclip.svg';
 import Bin from 'assets/icons/bin.svg';
+
+import Viewable from 'components/Viewable';
+import Video from 'components/Video';
+import Text from 'components/Text';
 
 import styles from './UploadMediaButton.styles';
 import { MEDIA_TYPES } from './UploadMediaButton.constants';
@@ -26,6 +28,8 @@ function UploadMediaButton({
 
   const [errorText, setErrorText] = useState(null);
   const [media, setMedia] = useState(null);
+  const [isVideoViwable, setIsVideoViewable] = useState(true);
+
   const videoSource = useMemo(() => {
     if (!media) {
       return null;
@@ -98,6 +102,10 @@ function UploadMediaButton({
     }
   }, [handleMediaUpload, t, mediaType, croppingAvatar]);
 
+  const onViewableChanged = useCallback((isViewable) => {
+    setIsVideoViewable(isViewable);
+  }, []);
+
   const onBinPress = useCallback(() => {
     Alert.alert(
       t('uploadMediaButton.deleteMedia'),
@@ -159,7 +167,15 @@ function UploadMediaButton({
   } else {
     contentView = (
       <View>
-        <Video source={videoSource} width={media.width} height={media.height} duration={media.duration} />
+        <Viewable onViewableChanged={onViewableChanged}>
+          <Video
+            source={videoSource}
+            width={media.width}
+            height={media.height}
+            duration={media.duration}
+            viewable={isVideoViwable}
+          />
+        </Viewable>
         <TouchableOpacity
           style={styles.bin}
           activeOpacity={0.7}
