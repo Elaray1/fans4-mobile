@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import Header from 'components/Header';
 import SearchInput from 'components/SearchInput';
 import Text from 'components/Text';
+import ScrollToTop from 'components/ScrollToTop';
 
 import * as userApi from 'resources/user/user.api';
 import { FIGHTER_TYPES, USER_TYPES } from 'resources/user/user.constants';
@@ -232,22 +233,23 @@ function SearchFighters() {
   const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <Header
-        {...(userType === USER_TYPES.FAN && { leftItemType: 'backArrow' })}
-        title={t('SearchFighters.fighters')}
-      />
-
-      <View style={styles.content}>
-        <SearchInput
-          value={searchValue}
-          onChangeText={doSearch}
-          placeholder={t('SearchFighters.search')}
+    <ScrollToTop>
+      <SafeAreaView style={styles.screen}>
+        <Header
+          {...(userType === USER_TYPES.FAN && { leftItemType: 'backArrow' })}
+          title={t('SearchFighters.fighters')}
         />
 
-        {((!isFetchedFirstTime && isRefreshing) || isSearching) && <Loader />}
+        <View style={styles.content}>
+          <SearchInput
+            value={searchValue}
+            onChangeText={doSearch}
+            placeholder={t('SearchFighters.search')}
+          />
 
-        {(!!fighters.length && !isSearching) && (
+          {((!isFetchedFirstTime && isRefreshing) || isSearching) && <Loader />}
+
+          {(!!fighters.length && !isSearching) && (
           <FlatList
             data={fighters}
             renderItem={renderItem}
@@ -261,19 +263,20 @@ function SearchFighters() {
             ListHeaderComponent={searchValue ? null : Fans4Account}
             ListFooterComponent={renderFooter}
           />
-        )}
+          )}
 
-        {(!isSearching && (isFetchedFirstTime && fighters.length <= (searchValue ? 0 : 1))) && (
-        <ScrollView
-          contentContainerStyle={styles.emptyScroll}
-          refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
-          keyboardShouldPersistTaps="handled"
-        >
-          <EmptyView />
-        </ScrollView>
-        )}
-      </View>
-    </SafeAreaView>
+          {(!isSearching && (isFetchedFirstTime && fighters.length <= (searchValue ? 0 : 1))) && (
+          <ScrollView
+            contentContainerStyle={styles.emptyScroll}
+            refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
+            keyboardShouldPersistTaps="handled"
+          >
+            <EmptyView />
+          </ScrollView>
+          )}
+        </View>
+      </SafeAreaView>
+    </ScrollToTop>
   );
 }
 

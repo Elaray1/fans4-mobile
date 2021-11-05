@@ -22,6 +22,7 @@ import Header from 'components/Header';
 import Toggle from 'components/Toggle';
 import FightItem from 'components/FightItem';
 import Text from 'components/Text';
+import ScrollToTop from 'components/ScrollToTop';
 
 import PlusIcon from 'assets/icons/big-plus';
 import NoPostsIllustration from 'assets/illustrations/no-events';
@@ -232,19 +233,20 @@ const Voting = ({ route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <Header
-        title={t('Voting.voting')}
-        rightItemType={ITEM_TYPES.PLUS_AND_TEXT}
-        rightItemText={t('Voting.propose')}
-        onRightItemPress={navigateToPropose}
-      />
+    <ScrollToTop>
+      <SafeAreaView style={styles.screen}>
+        <Header
+          title={t('Voting.voting')}
+          rightItemType={ITEM_TYPES.PLUS_AND_TEXT}
+          rightItemText={t('Voting.propose')}
+          onRightItemPress={navigateToPropose}
+        />
 
-      <View style={styles.content}>
-        <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
-        {!isFetchedFirstTime && isRefreshing && <Loader />}
+        <View style={styles.content}>
+          <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
+          {!isFetchedFirstTime && isRefreshing && <Loader />}
 
-        {!!fights.length && (
+          {!!fights.length && (
           <FlatList
             data={fights}
             renderItem={renderItem}
@@ -256,9 +258,9 @@ const Voting = ({ route }) => {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-        )}
+          )}
 
-        {isFetchedFirstTime && !fights.length && (
+          {isFetchedFirstTime && !fights.length && (
           <ScrollView
             contentContainerStyle={{ flexGrow: 1 }}
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
@@ -266,9 +268,10 @@ const Voting = ({ route }) => {
           >
             <EmptyView />
           </ScrollView>
-        )}
-      </View>
-    </SafeAreaView>
+          )}
+        </View>
+      </SafeAreaView>
+    </ScrollToTop>
   );
 };
 

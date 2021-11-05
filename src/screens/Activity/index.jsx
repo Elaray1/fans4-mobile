@@ -22,6 +22,7 @@ import UnreadChatIcon from 'assets/icons/unread-chat.svg';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
+import ScrollToTop from 'components/ScrollToTop';
 
 import useToast from 'hooks/useToast';
 
@@ -264,16 +265,17 @@ function Activity() {
     .filter(activity => selectedFilters.includes(activity.type)), [activitiesArray, selectedFilters]);
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <Header
-        title={t('Activity.activity')}
-        titleIcon={<ArrowDownIcon style={styles.headerIcon} />}
-        onTitlePress={onPressActivivtyFilters}
-        rightItemType={config.mode === 'PROD' ? null : 'icon'} // TODO: remove when tested
-        rightItemIcon={isUnreadMessages ? UnreadChatIcon : ChatIcon}
-        onRightItemPress={onChatsPress}
-      />
-      {isFiltersOpened
+    <ScrollToTop>
+      <SafeAreaView style={styles.screen}>
+        <Header
+          title={t('Activity.activity')}
+          titleIcon={<ArrowDownIcon style={styles.headerIcon} />}
+          onTitlePress={onPressActivivtyFilters}
+          rightItemType={config.mode === 'PROD' ? null : 'icon'} // TODO: remove when tested
+          rightItemIcon={isUnreadMessages ? UnreadChatIcon : ChatIcon}
+          onRightItemPress={onChatsPress}
+        />
+        {isFiltersOpened
       && (
       <FiltersModal
         visible
@@ -282,10 +284,10 @@ function Activity() {
         setSelectedFilters={setSelectedFilters}
       />
       )}
-      <View style={styles.content}>
-        {!isFetchedFirstTime && isRefreshing && <Loader />}
+        <View style={styles.content}>
+          {!isFetchedFirstTime && isRefreshing && <Loader />}
 
-        {!!filteredActivitiesArray.length && (
+          {!!filteredActivitiesArray.length && (
           <FlatList
             data={filteredActivitiesArray}
             renderItem={renderItem}
@@ -298,9 +300,9 @@ function Activity() {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-        )}
+          )}
 
-        {isFetchedFirstTime && !filteredActivitiesArray.length && (
+          {isFetchedFirstTime && !filteredActivitiesArray.length && (
           <ScrollView
             contentContainerStyle={styles.emptyScroll}
             refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
@@ -308,9 +310,10 @@ function Activity() {
           >
             <EmptyView />
           </ScrollView>
-        )}
-      </View>
-    </SafeAreaView>
+          )}
+        </View>
+      </SafeAreaView>
+    </ScrollToTop>
   );
 }
 
