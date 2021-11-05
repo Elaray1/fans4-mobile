@@ -43,7 +43,7 @@ export default StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 1,
     position: 'absolute',
-    bottom: -8,
+    bottom: -2,
     left: 14,
     borderRadius: 5,
   },
@@ -54,6 +54,6 @@ export default StyleSheet.create({
   },
   amateur: {
     backgroundColor: colors.blueBadge,
-    left: 22,
+    left: 20,
   },
 });
