@@ -51,22 +51,23 @@ function Post({
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
 
   const [likesCount, setLikesCount] = useState(likedUsers.length);
-  const [isLiked, setIsLiked] = useState(likedUsers.some(u => u._id === userId));
-  const [likedNames, setLikedNames] = useState(likedUsers.length === 2
-    ? `${likedUsers[1]?.name} and ${likedUsers[0]?.name}`
-    : likedUsers[0]?.name);
+  const [likedUsersState, setLikedUsersState] = useState(likedUsers);
+  const [isLiked, setIsLiked] = useState(likedUsersState.some(u => u._id === userId));
+  const [likedNames, setLikedNames] = useState(likedUsersState.length === 2
+    ? `${likedUsersState[1]?.name} and ${likedUsersState[0]?.name}`
+    : likedUsersState[0]?.name);
 
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
   const isSubscribedOrAuthor = userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id);
   const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1} others` : ''}`;
 
   useEffect(() => {
-    setLikesCount(likedUsers.length);
-    setIsLiked(likedUsers.some(u => u._id === userId));
-    setLikedNames(likedUsers.length === 2
-      ? `${likedUsers[1]?.name} and ${likedUsers[0]?.name}`
-      : likedUsers[0]?.name);
-  }, [userId, likedUsers]);
+    setLikesCount(likedUsersState.length);
+    setIsLiked(likedUsersState.some(u => u._id === userId));
+    setLikedNames(likedUsersState.length === 2
+      ? `${likedUsersState[1]?.name} and ${likedUsersState[0]?.name}`
+      : likedUsersState[0]?.name);
+  }, [userId, likedUsersState]);
 
   const posterSource = useMemo(() => {
     if (media && media.type === MEDIA_TYPES.VIDEO && media.posterStorageUrl) {
@@ -170,22 +171,17 @@ function Post({
       } else {
         updatedPost = await postApi.likePost(_id);
       }
-      setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
-      setIsLiked(updatedPost.likedUsers.some(u => u._id === userId));
-      setLikedNames(updatedPost?.likedUsers?.length === 2
-        ? `${updatedPost?.likedUsers[updatedPost.likedUsers.length - 1]?.name} and ${
-          updatedPost?.likedUsers[updatedPost.likedUsers.length - 2]?.name}`
-        : updatedPost?.likedUsers[updatedPost.likedUsers.length - 1]?.name);
+      setLikedUsersState(updatedPost.likedUsers);
     } catch (error) {
       showFailure();
     }
-  }, [isLiked, likesCount, _id, userId, showFailure]);
+  }, [isLiked, _id, showFailure]);
 
   const onSeeLikes = useCallback(() => {
     if (isSubscribedOrAuthor) {
-      navigation.navigate('LikesList', { likedUsers });
+      navigation.navigate('LikesList', { likedUsers: likedUsersState });
     }
-  }, [isSubscribedOrAuthor, likedUsers, navigation]);
+  }, [isSubscribedOrAuthor, likedUsersState, navigation]);
 
   return (
     <View style={styles.post}>
