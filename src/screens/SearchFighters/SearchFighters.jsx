@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import moment from 'moment';
 
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 
@@ -59,12 +58,9 @@ function SearchFighters() {
 
   const [selectedFighterId, setSelectedFighterId] = useState(null);
   const {
-    resubscribe,
-    subscribe,
+    toggleSubscriptionState,
     isMakingPurchase,
     finishMakingPurchaseAfterSucessPayment,
-    unsubscribe,
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   } = useSubscribing({ fighterId: selectedFighterId });
   const isSelectedFighterInSubscription = userType === USER_TYPES.FAN && !!supportedFighters.find((f) => {
     return f._id === selectedFighterId;
@@ -172,27 +168,12 @@ function SearchFighters() {
   useEffect(() => {
     const init = async () => {
       if (userType === USER_TYPES.FAN && selectedFighterId) {
-        const subscription = supportedFighters.find((f) => {
-          return f._id === selectedFighterId;
-        });
-
-        if (!subscription) {
-          await subscribe();
-        } else {
-          const isBeforeRenewalDate = moment(subscription.renewalDate).isAfter(moment());
-          const isSubscribedButWillBeStopped = isBeforeRenewalDate && !subscription.autorenewal;
-
-          if (isSubscribedButWillBeStopped) {
-            resubscribe();
-          } else {
-            unsubscribe();
-          }
-        }
+        toggleSubscriptionState();
       }
     };
 
     init();
-  }, [supportedFighters, selectedFighterId, subscribe, resubscribe, unsubscribe, userType]);
+  }, [supportedFighters, selectedFighterId, toggleSubscriptionState, userType]);
 
   const onSubscribeIconPress = useCallback((fighterId) => {
     setSelectedFighterId(fighterId);
