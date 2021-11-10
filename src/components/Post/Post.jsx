@@ -14,7 +14,7 @@ import Text from 'components/Text';
 import StatusBadge from 'components/StatusBadge';
 import Video from 'components/Video';
 import Modal from 'components/Modal';
-import PostModal from 'components/Post/components/PostModal';
+import EditPostModal from 'components/Post/components/EditPostModal';
 
 import LikeIcon from 'assets/icons/like';
 import CommentIcon from 'assets/icons/comment';
@@ -140,7 +140,7 @@ function Post({
 
   const onEditPost = useCallback(() => {
     setIsEditPostModal(false);
-    navigation.navigate('ChangePost', { postId: _id });
+    navigation.navigate('EditPost', { postId: _id });
   }, [navigation, _id]);
 
   const authorView = author ? (
@@ -158,11 +158,11 @@ function Post({
         </Text>
       </TouchableOpacity>
       {isPostAuthor && (
-      <TouchableOpacity
-        onPress={onOpenEditPostModal}
-      >
-        <DotsIcon />
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={onOpenEditPostModal}
+        >
+          <DotsIcon />
+        </TouchableOpacity>
       )}
     </View>
   ) : null;
@@ -260,26 +260,26 @@ function Post({
   return (
     <>
       {isRemoveFromFeedConfirmationModal && (
-      <Modal
-        title={t('Post.removePost')}
-        text={t('Post.thisPostWillNoLongerBeVisibleInYourFeed')}
-        closeButtonText={t('Post.keepIt')}
-        submitButtonText={t('Post.remove')}
-        onClose={onCloseRemoveFromFeedConfirmationModal}
-        onSubmit={onRemovePostFromFeedConfirmation}
-      />
+        <Modal
+          title={t('Post.removePost')}
+          text={t('Post.thisPostWillNoLongerBeVisibleInYourFeed')}
+          closeButtonText={t('Post.keepIt')}
+          submitButtonText={t('Post.remove')}
+          onClose={onCloseRemoveFromFeedConfirmationModal}
+          onSubmit={onRemovePostFromFeedConfirmation}
+        />
       )}
       {isRemovePostConfirmationModal && (
-      <Modal
-        title={t('Post.deletePost')}
-        text={t('Post.thisPostWillNoLongerBeAvailableForYouAndYourFans')}
-        closeButtonText={t('Post.keepIt')}
-        submitButtonText={t('Post.delete')}
-        onClose={onCloseRemoveFromFeedConfirmationModal}
-        onSubmit={onRemovePostFromFeedConfirmation}
-      />
+        <Modal
+          title={t('Post.deletePost')}
+          text={t('Post.thisPostWillNoLongerBeAvailableForYouAndYourFans')}
+          closeButtonText={t('Post.keepIt')}
+          submitButtonText={t('Post.delete')}
+          onClose={onCloseRemoveFromFeedConfirmationModal}
+          onSubmit={onRemovePostFromFeedConfirmation}
+        />
       )}
-      <PostModal
+      <EditPostModal
         onClose={onCloseEditPostModal}
         visible={isEditPostModal}
         isRemovedByAdmin={status === POST_STATUSES.REMOVED}
@@ -290,70 +290,70 @@ function Post({
         {authorView}
         {contentContainerView}
         {status === POST_STATUSES.APPROVED && (
-        <View style={[styles.status, styles.approvedStatus]}>
-          <View>
-            {Boolean(likesCount) && (
-              <>
-                {isSubscribedOrAuthor ? (
-                  <TouchableOpacity onPress={onSeeLikes}>
+          <View style={[styles.status, styles.approvedStatus]}>
+            <View>
+              {Boolean(likesCount) && (
+                <>
+                  {isSubscribedOrAuthor ? (
+                    <TouchableOpacity onPress={onSeeLikes}>
+                      <Text style={styles.likedBy}>
+                        {likedByText}
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
                     <Text style={styles.likedBy}>
                       {likedByText}
                     </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <Text style={styles.likedBy}>
-                    {likedByText}
+                  )}
+                </>
+              )}
+              <View style={styles.postActions}>
+                <TouchableOpacity
+                  onPress={onLikePress}
+                  activeOpacity={0.7}
+                  style={styles.postAction}
+                  disabled={disabled}
+                >
+                  {isLiked ? (
+                    <LikeIcon
+                      stroke={iconsColor}
+                      fill={iconsColor}
+                    />
+                  ) : <LikeIcon stroke={iconsColor} />}
+                  {Boolean(likesCount)
+                  && (
+                  <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(likesCount)}
                   </Text>
-                )}
-              </>
-            )}
-            <View style={styles.postActions}>
-              <TouchableOpacity
-                onPress={onLikePress}
-                activeOpacity={0.7}
-                style={styles.postAction}
-                disabled={disabled}
-              >
-                {isLiked ? (
-                  <LikeIcon
-                    stroke={iconsColor}
-                    fill={iconsColor}
-                  />
-                ) : <LikeIcon stroke={iconsColor} />}
-                {Boolean(likesCount)
-                && (
-                <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(likesCount)}
-                </Text>
-                )}
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={onCommentsPress}
-                activeOpacity={0.7}
-                style={[styles.postAction, styles.postActionRight]}
-                disabled={disabled}
-              >
-                <CommentIcon stroke={iconsColor} />
-                {Boolean(commentsCount)
-                && (
-                <Text style={[styles.postActionText, disabled && styles.disabled]}>
-                  {formatCount(commentsCount)}
-                </Text>
-                )
-                }
-              </TouchableOpacity>
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={onCommentsPress}
+                  activeOpacity={0.7}
+                  style={[styles.postAction, styles.postActionRight]}
+                  disabled={disabled}
+                >
+                  <CommentIcon stroke={iconsColor} />
+                  {Boolean(commentsCount)
+                  && (
+                  <Text style={[styles.postActionText, disabled && styles.disabled]}>
+                    {formatCount(commentsCount)}
+                  </Text>
+                  )
+                  }
+                </TouchableOpacity>
+              </View>
             </View>
+            <Text style={styles.time}>{formatTime(checkedOn || createdOn)}</Text>
           </View>
-          <Text style={styles.time}>{formatTime(checkedOn || createdOn)}</Text>
-        </View>
         )}
 
         {(status === POST_STATUSES.PENDING
       || status === POST_STATUSES.DECLINED
       || status === POST_STATUSES.REMOVED
         ) && (
-        <View style={styles.status}>
-          <StatusBadge status={status} />
-        </View>
+          <View style={styles.status}>
+            <StatusBadge status={status} />
+          </View>
         )}
       </View>
     </>

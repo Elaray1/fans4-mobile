@@ -12,7 +12,7 @@ import Text from 'components/Text';
 
 import styles from './styles';
 
-function PostModal({
+function EditPostModal({
   onClose,
   visible,
   isRemovedByAdmin,
@@ -36,19 +36,19 @@ function PostModal({
       <View style={styles.modal}>
         <View>
           {!isRemovedByAdmin && onEdit && (
-          <View>
-            <TouchableOpacity
-              style={[styles.settingsOption, styles.firstSettingsOption]}
-              onPress={onEdit}
-              activeOpacity={0.7}
-            >
-              <EditIcon style={styles.settingIcon} />
-              <Text style={styles.settingTitle}>
-                {t('Post.edit')}
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.line} />
-          </View>
+            <View>
+              <TouchableOpacity
+                style={[styles.settingsOption, styles.firstSettingsOption]}
+                onPress={onEdit}
+                activeOpacity={0.7}
+              >
+                <EditIcon style={styles.settingIcon} />
+                <Text style={styles.settingTitle}>
+                  {t('Post.edit')}
+                </Text>
+              </TouchableOpacity>
+              <View style={styles.line} />
+            </View>
           )}
 
           <View>
@@ -69,7 +69,7 @@ function PostModal({
   );
 }
 
-PostModal.propTypes = {
+EditPostModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
   isRemovedByAdmin: PropTypes.bool.isRequired,
@@ -77,8 +77,8 @@ PostModal.propTypes = {
   onEdit: PropTypes.func,
 };
 
-PostModal.defaultProps = {
+EditPostModal.defaultProps = {
   onEdit: null,
 };
 
-export default React.memo(PostModal);
+export default React.memo(EditPostModal);
