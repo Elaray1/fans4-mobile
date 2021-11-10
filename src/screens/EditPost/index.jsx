@@ -25,13 +25,13 @@ import colors from 'themes/colors';
 
 import styles from './styles';
 
-function ChangePost({ route }) {
+function EditPost({ route }) {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const { showSuccess, showFailure } = useToast();
 
-  const [initialValue, setInitialValue] = useState('');
-  const [value, setValue] = useState('');
+  const [initialPostText, setInitialPostText] = useState('');
+  const [postText, setPostText] = useState('');
   const [media, setMedia] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -42,8 +42,8 @@ function ChangePost({ route }) {
   } = route?.params;
 
   const isSaveButtonDisabled = isLoading
-  || (!value)
-  || (value === initialValue);
+  || (!postText)
+  || (postText === initialPostText);
 
   const saveButtonProps = isSaveButtonDisabled
     ? { rightItemStyle: styles.disabledText }
@@ -82,8 +82,8 @@ function ChangePost({ route }) {
       try {
         const fetchedPost = await postApi.getPost(postId);
 
-        setInitialValue(fetchedPost.text);
-        setValue(fetchedPost.text);
+        setInitialPostText(fetchedPost.text);
+        setPostText(fetchedPost.text);
         setMedia(fetchedPost.media);
       } catch (error) {
         console.error(error);
@@ -94,8 +94,7 @@ function ChangePost({ route }) {
     };
 
     getPost();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showFailure]);
+  }, [showFailure, postId]);
 
   const onPressSave = useCallback(async () => {
     setIsDiscardConfirmationModal(false);
@@ -104,7 +103,7 @@ function ChangePost({ route }) {
     try {
       await postApi.editPost({
         postId,
-        text: value,
+        text: postText,
       });
 
       showSuccess(t('ChangePost.updated'));
@@ -116,15 +115,15 @@ function ChangePost({ route }) {
     }
 
     setIsLoading(false);
-  }, [value, navigation, showSuccess, showFailure, postId, t]);
+  }, [postText, navigation, showSuccess, showFailure, postId, t]);
 
   const onShowDiscardModal = useCallback(() => {
-    if (value !== initialValue) {
+    if (postText !== initialPostText) {
       setIsDiscardConfirmationModal(true);
     } else {
       navigation.goBack();
     }
-  }, [value, initialValue, navigation]);
+  }, [postText, initialPostText, navigation]);
 
   const onDiscardChanges = useCallback(() => {
     navigation.goBack();
@@ -191,8 +190,8 @@ function ChangePost({ route }) {
         <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
           <Input
             label={t('ChangePost.postTextMax160Characters')}
-            value={value}
-            onChange={setValue}
+            value={postText}
+            onChange={setPostText}
             maxLength={160}
             style={styles.input}
             multiline
@@ -213,7 +212,7 @@ function ChangePost({ route }) {
   );
 }
 
-ChangePost.propTypes = {
+EditPost.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       postId: PropTypes.string,
@@ -221,4 +220,4 @@ ChangePost.propTypes = {
   }).isRequired,
 };
 
-export default React.memo(ChangePost);
+export default React.memo(EditPost);
