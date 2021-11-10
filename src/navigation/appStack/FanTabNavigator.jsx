@@ -16,6 +16,8 @@ import ChatsList from 'screens/ChatsList';
 import NewVoting from 'screens/NewVoting';
 import Voting from 'screens/Voting';
 
+import ScrollToTop from 'components/ScrollToTop';
+
 import * as messageSelectors from 'resources/message/message.selectors';
 
 import config from 'resources/config';
@@ -27,6 +29,10 @@ const Tab = createBottomTabNavigator();
 function renderTabBar(props) {
   return <BottomTabBar {...props} />;
 }
+
+const scrollToTopWrapper = (children) => {
+  return <ScrollToTop>{children}</ScrollToTop>;
+};
 
 const optionsByScreen = {
   feed: { icon: FeedIcon },
@@ -41,25 +47,35 @@ function FanTabNavigator() {
   const chatsIcon = isUnreadMessages ? UnreadMessageIcon : MessageIcon;
 
   const chatsOptions = useMemo(() => ({ icon: chatsIcon }), [chatsIcon]);
-
   return (
     <Tab.Navigator
       initialRouteName="Feed"
       tabBar={renderTabBar}
       lazy={false}
     >
-      <Tab.Screen name="Feed" component={Feed} options={optionsByScreen.feed} />
+      <Tab.Screen name="Feed" options={optionsByScreen.feed}>
+        {() => scrollToTopWrapper(<Feed />)}
+      </Tab.Screen>
       <Tab.Screen
         name="Voting"
-        component={config.mode === 'PROD'
-          ? NewVoting : Voting}
         options={optionsByScreen.voting}
-      />
-      <Tab.Screen name="Events" component={Events} options={optionsByScreen.events} />
+      >
+        {() => scrollToTopWrapper(config.mode === 'PROD'
+          ? <NewVoting /> : <Voting />)}
+      </Tab.Screen>
+      <Tab.Screen name="Events" options={optionsByScreen.events}>
+        {() => scrollToTopWrapper(<Events />)}
+      </Tab.Screen>
       {/* TODO: replace Account component with Chats component */}
       {config.mode !== 'PROD'
-      && <Tab.Screen name="Chats" component={ChatsList} options={chatsOptions} />}
-      <Tab.Screen name="Account" component={Account} options={optionsByScreen.account} />
+      && (
+      <Tab.Screen name="Chats" options={chatsOptions}>
+        {() => scrollToTopWrapper(<ChatsList />)}
+      </Tab.Screen>
+      )}
+      <Tab.Screen name="Account" options={optionsByScreen.account}>
+        {() => scrollToTopWrapper(<Account />)}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

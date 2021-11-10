@@ -18,7 +18,6 @@ import { USER_TYPES } from 'resources/user/user.constants';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import Toggle from 'components/Toggle';
-import ScrollToTop from 'components/ScrollToTop';
 
 import useToast from 'hooks/useToast';
 
@@ -250,19 +249,18 @@ function Events() {
   }, []);
 
   return (
-    <ScrollToTop>
-      <SafeAreaView style={styles.screen}>
-        <Header
-          title={t('Events.events')}
-        />
+    <SafeAreaView style={styles.screen}>
+      <Header
+        title={t('Events.events')}
+      />
 
-        <View style={styles.content}>
-          <Toggle items={tabs} onSelect={onToggleSelect} selectedItemId={selectedTab.id} />
+      <View style={styles.content}>
+        <Toggle items={tabs} onSelect={onToggleSelect} selectedItemId={selectedTab.id} />
 
-          {!isFetchedFirstTime && isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
 
-          {!!events.length && (
+        {!!events.length && (
           <FlatList
             data={events}
             renderItem={renderItem}
@@ -274,9 +272,9 @@ function Events() {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-          )}
+        )}
 
-          {isFetchedFirstTime && !events.length && (
+        {isFetchedFirstTime && !events.length && (
           <ScrollView
             contentContainerStyle={styles.scrollView}
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
@@ -284,10 +282,9 @@ function Events() {
           >
             <EmptyView />
           </ScrollView>
-          )}
-        </View>
-      </SafeAreaView>
-    </ScrollToTop>
+        )}
+      </View>
+    </SafeAreaView>
   );
 }
 
