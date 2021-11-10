@@ -51,19 +51,34 @@ const useSubscribing = ({ fighterId }) => {
   const userSubscriptions = useSelector(userSelectors.getAllSupportedFighters);
   const subscription = userSubscriptions && userSubscriptions.find(f => f._id === fighterId);
 
+  const subscriptionRenewalDate = subscription && subscription.renewalDate;
+  const subscriptionPlatform = subscription && subscription.platform;
+  const subscriptionAppleProductId = subscription && subscription.apple && subscription.apple.productId;
+
+  const isSubscriptionActive = subscription
+    && subscription.autorenewal && moment(subscription.renewalDate).isAfter(moment());
+
+  const isSubscriptionStopped = !subscription || moment(subscription.renewalDate).isBefore(moment());
+
+  const isSubscriptionActiveButWillBeStopped = subscription
+    && !subscription.autorenewal && moment(subscription.renewalDate).isAfter(moment());
+
+  const isSubsscriptionInGracePeriod = subscription
+    && subscription.autorenewal && moment(subscription.gracePeriodEndDate).isAfter(moment());
+
   const finishMakingPurchaseAfterSucessPayment = useCallback(() => {
     setIsMakingPurchase(false);
-  }, [setIsMakingPurchase]);
+  }, []);
 
   const isPurchaseProcessing = useSelector(purchasesSelectors.getIsPurchaseInProcessing);
 
   const unsubscribe = useCallback(() => {
-    if (subscription.platform === 'web') {
+    if (subscriptionPlatform === 'web') {
       Alert.alert(t('Fighter.unsubscribe'), t('Fighter.noPossibilityToUnsubscribeInApp'), [{ text: t('Fighter.ok') }]);
       return;
     }
 
-    if (subscription.platform === SUBSCRIPTION_PLATFORMS.IOS) {
+    if (subscriptionPlatform === SUBSCRIPTION_PLATFORMS.IOS) {
       if (Platform.OS === 'android') {
         Alert.alert(
           t('Fighter.unsubscribe'),
@@ -74,19 +89,19 @@ const useSubscribing = ({ fighterId }) => {
       }
 
       // eslint-disable-next-line max-len
-      const unsubscribeText = `${t('Fighter.unsubscribeText1')}${addSuffixToNumber(getIosSubscriptionNumberFromProductId(subscription.apple.productId))}${t('Fighter.unsubscribeText2')}${moment(subscription.renewalDate).format('MMM DD, YYYY')}`;
+      const unsubscribeText = `${t('Fighter.unsubscribeText1')}${addSuffixToNumber(getIosSubscriptionNumberFromProductId(subscriptionAppleProductId))}${t('Fighter.unsubscribeText2')}${moment(subscriptionRenewalDate).format('MMM DD, YYYY')}`;
 
       Alert.alert(t('Fighter.unsubscribe'), unsubscribeText, [
         { text: t('Fighter.keepIt') },
         { text: t('Fighter.unsubscribe'), onPress: () => Linking.openURL(IOS_SUBSCRIPTIONS_DEEP_LINK) },
       ]);
     }
-  }, [t, subscription]);
+  }, [t, subscriptionPlatform, subscriptionRenewalDate, subscriptionAppleProductId]);
 
   const resubscribe = useCallback(() => {
-    if (subscription.platform === SUBSCRIPTION_PLATFORMS.IOS && Platform.OS === 'ios') {
+    if (subscriptionPlatform === SUBSCRIPTION_PLATFORMS.IOS && Platform.OS === 'ios') {
       // eslint-disable-next-line max-len
-      const resubscribeText = `${t('Fighter.youWillBeRedirectedToResubscribeTo1')}${addSuffixToNumber(getIosSubscriptionNumberFromProductId(subscription.apple.productId))}${t('Fighter.youWillBeRedirectedToResubscribeTo2')}`;
+      const resubscribeText = `${t('Fighter.youWillBeRedirectedToResubscribeTo1')}${addSuffixToNumber(getIosSubscriptionNumberFromProductId(subscriptionAppleProductId))}${t('Fighter.youWillBeRedirectedToResubscribeTo2')}`;
 
       Alert.alert('Resubscribe', resubscribeText, [
         { text: 'No', style: 'cancel' },
@@ -100,7 +115,7 @@ const useSubscribing = ({ fighterId }) => {
     Alert.alert('Resubscribe', t('Fighter.noPossibilityToResubscribe'), [
       { text: 'OK' },
     ]);
-  }, [subscription, t]);
+  }, [subscriptionPlatform, subscriptionAppleProductId, t]);
 
   const subscribe = useCallback(async () => {
     setIsMakingPurchase(true);
@@ -166,7 +181,32 @@ const useSubscribing = ({ fighterId }) => {
     }
   }, [dispatch, fighterId, showFailure, t]);
 
+  const toggleSubscriptionState = useCallback(() => {
+    if (isSubscriptionActive || isSubsscriptionInGracePeriod) {
+      unsubscribe();
+      return;
+    }
+
+    if (isSubscriptionStopped) {
+      subscribe();
+      return;
+    }
+
+    if (isSubscriptionActiveButWillBeStopped) {
+      resubscribe();
+    }
+  }, [
+    isSubscriptionActive,
+    isSubscriptionStopped,
+    isSubscriptionActiveButWillBeStopped,
+    isSubsscriptionInGracePeriod,
+    unsubscribe,
+    subscribe,
+    resubscribe,
+  ]);
+
   return {
+    toggleSubscriptionState,
     subscribe,
     unsubscribe,
     resubscribe,
