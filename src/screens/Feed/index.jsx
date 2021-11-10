@@ -22,7 +22,6 @@ import isSubscribedService from 'services/isSubscribed.service';
 import Header from 'components/Header';
 import Post from 'components/Post';
 import Text from 'components/Text';
-import ScrollToTop from 'components/ScrollToTop';
 
 import useToast from 'hooks/useToast';
 
@@ -234,17 +233,16 @@ function Feed() {
   );
 
   return (
-    <ScrollToTop>
-      <SafeAreaView style={styles.screen}>
-        <Header
-          title={t('Feed.feed')}
-          rightItemType="icon"
-          onRightItemPress={onSearchFighters}
-          rightItemIcon={SearchFightersIcon}
-        />
+    <SafeAreaView style={styles.screen}>
+      <Header
+        title={t('Feed.feed')}
+        rightItemType="icon"
+        onRightItemPress={onSearchFighters}
+        rightItemIcon={SearchFightersIcon}
+      />
 
-        <View style={styles.content}>
-          {!!posts.length && (
+      <View style={styles.content}>
+        {!!posts.length && (
           <FlatList
             data={posts}
             renderItem={renderItem}
@@ -259,9 +257,9 @@ function Feed() {
             viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
             onViewableItemsChanged={updateViewableItems}
           />
-          )}
+        )}
 
-          {isFetchedFirstTime && !posts.length && (
+        {isFetchedFirstTime && !posts.length && (
           <ScrollView
             contentContainerStyle={styles.emptyScroll}
             refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
@@ -269,10 +267,9 @@ function Feed() {
           >
             {!fightersList?.length ? <NoSubscriptions /> : <NoPosts />}
           </ScrollView>
-          )}
-        </View>
-      </SafeAreaView>
-    </ScrollToTop>
+        )}
+      </View>
+    </SafeAreaView>
   );
 }
 

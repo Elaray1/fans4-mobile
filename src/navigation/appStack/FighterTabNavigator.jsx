@@ -2,18 +2,20 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Events from 'screens/Events';
-import NewPost from 'screens/NewPost';
-import SearchFighters from 'screens/SearchFighters';
-import Account from 'screens/Account';
-import Activity from 'screens/Activity';
-
 import EventsIcon from 'assets/icons/tab-bar/events.svg';
 import NewPostIcon from 'assets/icons/tab-bar/new-post.svg';
 import FightersIcon from 'assets/icons/tab-bar/fighters.svg';
 import AccountIcon from 'assets/icons/tab-bar/account.svg';
 import ActivityIcon from 'assets/icons/tab-bar/activity.svg';
 import UnreadActivityIcon from 'assets/icons/tab-bar/unread-activity.svg';
+
+import Events from 'screens/Events';
+import NewPost from 'screens/NewPost';
+import SearchFighters from 'screens/SearchFighters';
+import Account from 'screens/Account';
+import Activity from 'screens/Activity';
+
+import ScrollToTop from 'components/ScrollToTop';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as messageSelectors from 'resources/message/message.selectors';
@@ -25,6 +27,10 @@ const Tab = createBottomTabNavigator();
 function renderTabBar(props) {
   return <BottomTabBar {...props} />;
 }
+
+const scrollToTopWrapper = (children) => {
+  return <ScrollToTop>{children}</ScrollToTop>;
+};
 
 function FighterTabNavigator() {
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
@@ -40,8 +46,12 @@ function FighterTabNavigator() {
       tabBar={renderTabBar}
       lazy={false}
     >
-      <Tab.Screen name="Fighters" component={SearchFighters} options={{ icon: FightersIcon }} />
-      <Tab.Screen name="Events" component={Events} options={{ icon: EventsIcon }} />
+      <Tab.Screen name="Fighters" options={{ icon: FightersIcon }}>
+        {() => scrollToTopWrapper(<SearchFighters />)}
+      </Tab.Screen>
+      <Tab.Screen name="Events" options={{ icon: EventsIcon }}>
+        {() => scrollToTopWrapper(<Events />)}
+      </Tab.Screen>
       <Tab.Screen
         name="NewPost"
         component={NewPost}
@@ -50,12 +60,12 @@ function FighterTabNavigator() {
           hideLabel: true,
         }}
       />
-      <Tab.Screen
-        name="Activity"
-        component={Activity}
-        options={{ icon: activityIcon }}
-      />
-      <Tab.Screen name="Account" component={Account} options={{ icon: AccountIcon }} />
+      <Tab.Screen name="Activity" options={{ icon: activityIcon }}>
+        {() => scrollToTopWrapper(<Activity />)}
+      </Tab.Screen>
+      <Tab.Screen name="Account" component={Account} options={{ icon: AccountIcon }}>
+        {() => scrollToTopWrapper(<Account />)}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

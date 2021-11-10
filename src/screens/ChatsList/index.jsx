@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 
 import Text from 'components/Text';
 import Header from 'components/Header';
-import ScrollToTop from 'components/ScrollToTop';
 
 import useToast from 'hooks/useToast';
 
@@ -150,19 +149,18 @@ const ChatsList = () => {
   };
 
   return (
-    <ScrollToTop>
-      <SafeAreaView>
-        <Header
-          title={t('ChatsList.chats')}
-          leftItemType={isFan ? null : 'backArrow'}
-          rightItemType={isFan ? null : 'icon'}
-          rightItemIcon={NewChatIcon}
-          onRightItemPress={onNewChatPress}
-        />
-        <View style={styles.content}>
-          {!isFetchedFirstTime && isRefreshing && <Loader />}
+    <SafeAreaView>
+      <Header
+        title={t('ChatsList.chats')}
+        leftItemType={isFan ? null : 'backArrow'}
+        rightItemType={isFan ? null : 'icon'}
+        rightItemIcon={NewChatIcon}
+        onRightItemPress={onNewChatPress}
+      />
+      <View style={styles.content}>
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
-          {!!chats.length
+        {!!chats.length
           && (
             <FlatList
               style={styles.flatList}
@@ -178,7 +176,7 @@ const ChatsList = () => {
             />
           )}
 
-          {isFetchedFirstTime && !!chats.length && (
+        {isFetchedFirstTime && !!chats.length && (
           <ScrollView
             style={styles.flatList}
             contentContainerStyle={styles.emptyScroll}
@@ -189,10 +187,9 @@ const ChatsList = () => {
           >
             <EmptyView />
           </ScrollView>
-          )}
-        </View>
-      </SafeAreaView>
-    </ScrollToTop>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
