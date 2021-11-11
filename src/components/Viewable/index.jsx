@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   FlatList,
@@ -6,22 +6,31 @@ import {
 
 const VIDEO_VIEWABILITY_CONFIG = { waitForInteraction: true, itemVisiblePercentThreshold: 1 };
 
-function Viewable({ children, onViewableChanged }) {
+function Viewable({ children }) {
+  const [isViewable, setIsViewable] = useState(true);
+
+  const childrenWithProps = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child, { viewable: isViewable });
+    }
+    return child;
+  });
+
   const renderItem = useCallback(() => {
-    return children;
-  }, [children]);
+    return childrenWithProps;
+  }, [childrenWithProps]);
 
   const keyExtractor = useCallback(item => item, []);
 
   const onViewableItemsChanged = useCallback(({ viewableItems }) => {
     if (viewableItems.length) {
-      onViewableChanged(true);
+      setIsViewable(true);
     } else {
-      onViewableChanged(false);
+      setIsViewable(false);
     }
-  }, [onViewableChanged]);
+  }, []);
 
-  return (
+  const flatList = (
     <FlatList
       data={['viwableItem']}
       keyExtractor={keyExtractor}
@@ -30,6 +39,8 @@ function Viewable({ children, onViewableChanged }) {
       viewabilityConfig={VIDEO_VIEWABILITY_CONFIG}
     />
   );
+
+  return flatList;
 }
 
 Viewable.propTypes = {
