@@ -478,7 +478,8 @@
     "fighterUpcoming": "Once events are scheduled, you will see them here.",
     "fighterPast": "Once you participate in an event, it will be shown  on this page.",
     "live": "Live",
-    "stayTuned": "Stay tuned for results."
+    "stayTuned": "Stay tuned for results.",
+    "voting": "Voting"
   },
   "EventFights": {
     "couldntLoadTheFightsPullToRefresh": "Couldn’t load the fights. Pull to refresh."
@@ -510,7 +511,10 @@
     "upcoming": "In upcoming event",
     "votingClosed": "Voting closed. In admin review",
     "pending": "In admin review",
-    "declined": "Declined"
+    "declined": "Declined",
+    "votingClosedCounter": "Voting Closed",
+    "yes": "YES",
+    "no": "NO"
   },
   "Comments": {
     "comments": "Comments",
@@ -607,7 +611,9 @@
     "approved": "Fight is in admin review, please wait and see whether it will be included in any event",
     "upcoming": "Fight already is in upcoming event",
     "comingSoon": "Coming soon...",
-    "soonWeWillRelease": "Soon we will open the voting for fights. Please check back later."
+    "soonWeWillRelease": "Soon we will open the voting for fights. Please check back later.",
+    "wantToSeeThis": "Want to see this fight in an upcoming event?",
+    "description": "Check back to see which fights are in voting! \n\n Want to see your Fighter in an upcoming fight?"
   },
   "ProposeAFight": {
     "ProposeAFight": "Propose A Fight",
@@ -740,5 +746,11 @@
     "uploadFromGallery": "Upload from Gallery",
     "takeAPhotoFromCamera": "Take a Photo from Camera",
     "recordVideoFromCamera": "Record Video from Camera"
+  },
+  "FighterVoting": {
+    "voting": "Voting",
+    "noFightsYet": "No fights yet",
+    "description":"There are no fights on voting now.\n\n If you want a matchup you can choose a Fighter (opponent) and apply for a fight.",
+    "chooseFighter": "Choose Fighter"
   }
 }
