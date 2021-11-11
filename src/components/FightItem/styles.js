@@ -8,8 +8,8 @@ export default StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     backgroundColor: colors.gray,
-    paddingVertical: 16,
-    paddingHorizontal: 11.5,
+    paddingBottom: 16,
+    paddingHorizontal: 12,
   },
   fightersInfo: {
     justifyContent: 'center',
@@ -23,11 +23,16 @@ export default StyleSheet.create({
     alignItems: 'flex-end',
   },
   fighter: {
-   width: '50%',
+    width: '50%',
   },
   vs: {
-    alignSelf: 'flex-end',
-    marginHorizontal: 4,
+    alignSelf: 'center',
+    marginHorizontal: 26,
+  },
+  time: {
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+    marginBottom: 20,
   },
   captionText: {
     fontSize: fonts.size.caption,
@@ -59,22 +64,78 @@ export default StyleSheet.create({
   locationTextRight: {
     textAlign: 'right',
   },
-  votesContainer: {
-    width: '33%',
-  },
   votes: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    borderRadius: 5,
-    backgroundColor: hexToRgba(colors.primary, 0.12),
-    alignSelf: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  percentageBar: {
+    width: 125,
+    height: 12,
+    flexDirection: 'row',
+  },
+  grayTriangele: {
+    width: 0,
+    height: 0,
+    borderStyle: 'solid',
+    borderBottomWidth: 12,
+    borderLeftWidth: 8,
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: colors.textSecondary,
+    borderLeftColor: 'transparent',
+  },
+  redTriangele: {
+    width: 0,
+    height: 0,
+    borderStyle: 'solid',
+    borderBottomWidth: 12,
+    borderLeftWidth: 8,
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: colors.primaryRed,
+    borderLeftColor: colors.textSecondary,
+  },
+  blackTriangele: {
+    width: 0,
+    height: 0,
+    borderStyle: 'solid',
+    borderBottomWidth: 12,
+    borderLeftWidth: 8,
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: 'transparent',
+    borderLeftColor: colors.primaryRed,
+  },
+  percentageNo: {
+    backgroundColor: colors.textSecondary,
+    height: '100%',
+  },
+  percentageYes: {
+    backgroundColor: colors.primaryRed,
+    height: '100%',
+  },
+  fightType: {
+    color: colors.textSecondary,
+    fontSize: fonts.size.caption,
   },
   votesText: {
     fontSize: fonts.size.caption,
-    fontWeight: fonts.weight.medium,
     color: colors.primary,
+  },
+  votesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexBasis: '30%',
+  },
+  centerContainer: {
+    flexBasis: '40%',
+  },
+  checkMark: {
+    marginHorizontal: 6,
+  },
+  rightVotesContainer: {
+    justifyContent: 'flex-end',
   },
   fanVoted: {
     backgroundColor: hexToRgba(colors.link, 0.12),

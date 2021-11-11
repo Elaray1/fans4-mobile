@@ -34,6 +34,7 @@ const colors = {
   bigModalHeader: '#2B2B2B',
   primaryModalButton: '#3888FF',
   secondaryModalButton: '#2F80ED',
+  timerHeader: '#2F3035',
 
   tabBarInactive: '#8B8D98',
   tabBarActive: '#FFFFFF',

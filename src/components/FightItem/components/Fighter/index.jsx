@@ -11,7 +11,7 @@ import { toFixLength } from 'helpers/modifyText';
 import styles from './styles';
 
 function Fighter({
-  fighter, isWinner, style, onPress,
+  fighter, isWinner, style, onPress, inVotingMode,
 }) {
   const { t } = useTranslation();
 
@@ -35,6 +35,16 @@ function Fighter({
       <Text style={styles.captionText}>
         {toFixLength({ text: fighter.fullName, length: 30 })}
       </Text>
+      {inVotingMode && (
+        <>
+          <Text style={styles.location}>
+            {fighter?.hometown?.cityName}, {fighter?.hometown?.stateCode}
+          </Text>
+          <Text style={styles.captionText}>
+            {fighter.role.record.wins ?? 0}-{fighter.role.record.losses ?? 0}-{fighter.role.record.draws ?? 0}
+          </Text>
+        </>
+      )}
     </TouchableOpacity>
   );
 }
@@ -44,10 +54,12 @@ Fighter.propTypes = {
   isWinner: PropTypes.bool,
   style: PropTypes.shape(),
   onPress: PropTypes.func,
+  inVotingMode: PropTypes.bool,
 };
 
 Fighter.defaultProps = {
   isWinner: false,
+  inVotingMode: false,
   style: {},
   onPress: () => null,
 };
