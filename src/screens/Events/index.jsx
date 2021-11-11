@@ -24,6 +24,8 @@ import useToast from 'hooks/useToast';
 import LiveIcon from 'assets/icons/live.svg';
 import NoEventsIllustration from 'assets/illustrations/no-events.svg';
 
+import { ITEM_TYPES } from 'components/Header/Header.constants';
+
 import colors from 'themes/colors';
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
@@ -248,10 +250,17 @@ function Events() {
     // await fetchNewItems({ refresh: true, eventTypes: item.eventTypes });
   }, []);
 
+  const navigateToVoting = useCallback(() => {
+    navigation.navigate('FighterVoting');
+  }, [navigation]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
         title={t('Events.events')}
+        rightItemType={userType === USER_TYPES.FAN ? null : ITEM_TYPES.PLUS_AND_TEXT}
+        rightItemText={t('Events.voting')}
+        onRightItemPress={navigateToVoting}
       />
 
       <View style={styles.content}>
