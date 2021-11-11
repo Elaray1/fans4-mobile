@@ -47,7 +47,6 @@ function ChangeBiography() {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadingPoster, setUploadingPoster] = useState(null);
   const [uploadingMedia, setUploadingMedia] = useState(initialMedia);
-  const [isVideoViwable, setIsVideoViewable] = useState(true);
 
   const isSaveButtonDisabled = isLoading
   || (!value && !uploadingMedia)
@@ -56,10 +55,6 @@ function ChangeBiography() {
   const saveButtonProps = isSaveButtonDisabled
     ? { rightItemStyle: styles.disabledText }
     : {};
-
-  const onViewableChanged = useCallback((isViewable) => {
-    setIsVideoViewable(isViewable);
-  }, []);
 
   const onUploadProgress = useCallback(async ({ id, data, file, progress, status }) => {
     await dispatch(introVideoActions.updateUploadingIntroVideoData({ id, data, file, progress, status }));
@@ -165,14 +160,13 @@ function ChangeBiography() {
   const introVideoView = useCallback(() => {
     return initialMedia && (_.isEqual(initialMedia, uploadingMedia)) ? (
       <View style={styles.videoContainer}>
-        <Viewable onViewableChanged={onViewableChanged}>
+        <Viewable>
           <Video
             posterSource={posterSource}
             source={source}
             width={uploadingMedia.width}
             height={uploadingMedia.height}
             duration={uploadingMedia.duration}
-            viewable={isVideoViwable}
           />
         </Viewable>
         <TouchableOpacity
@@ -193,7 +187,7 @@ function ChangeBiography() {
       />
     );
   }, [initialMedia, uploadingMedia, posterSource, source, onBinPress,
-    t, handleMediaUpload, onDelete, isVideoViwable, onViewableChanged]);
+    t, handleMediaUpload, onDelete]);
 
   return (
     <SafeAreaView style={styles.screen}>

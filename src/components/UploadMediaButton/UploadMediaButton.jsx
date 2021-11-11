@@ -28,7 +28,6 @@ function UploadMediaButton({
 
   const [errorText, setErrorText] = useState(null);
   const [media, setMedia] = useState(null);
-  const [isVideoViwable, setIsVideoViewable] = useState(true);
 
   const videoSource = useMemo(() => {
     if (!media) {
@@ -102,9 +101,6 @@ function UploadMediaButton({
     }
   }, [handleMediaUpload, t, mediaType, croppingAvatar]);
 
-  const onViewableChanged = useCallback((isViewable) => {
-    setIsVideoViewable(isViewable);
-  }, []);
 
   const onBinPress = useCallback(() => {
     Alert.alert(
@@ -167,13 +163,12 @@ function UploadMediaButton({
   } else {
     contentView = (
       <View>
-        <Viewable onViewableChanged={onViewableChanged}>
+        <Viewable>
           <Video
             source={videoSource}
             width={media.width}
             height={media.height}
             duration={media.duration}
-            viewable={isVideoViwable}
           />
         </Viewable>
         <TouchableOpacity

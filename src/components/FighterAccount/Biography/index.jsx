@@ -43,7 +43,6 @@ const Biography = ({
 
   const [isOpen, setIsOpen] = useState(currentUserId === userId ? !(biography && introVideo) : Boolean(introVideo));
   const [isLoading, setIsLoading] = useState(false);
-  const [isVideoViwable, setIsVideoViewable] = useState(true);
 
   const onUploadProgress = useCallback(async ({ id, data, file, progress, status }) => {
     await dispatch(introVideoActions.updateUploadingIntroVideoData({ id, data, file, progress, status }));
@@ -73,10 +72,6 @@ const Biography = ({
   const onBiographyPress = () => {
     setIsOpen(!isOpen);
   };
-
-  const onViewableChanged = useCallback((isViewable) => {
-    setIsVideoViewable(isViewable);
-  }, []);
 
   const posterSource = useMemo(() => {
     return {
@@ -136,14 +131,13 @@ const Biography = ({
     if (introVideo) {
       return (
         <View style={styles.introVideo}>
-          <Viewable onViewableChanged={onViewableChanged}>
+          <Viewable>
             <Video
               posterSource={posterSource}
               source={source}
               width={introVideo.width}
               height={introVideo.height}
               duration={introVideo.duration}
-              viewable={isVideoViwable}
             />
           </Viewable>
         </View>
@@ -177,8 +171,6 @@ const Biography = ({
     userId,
     posterSource,
     source,
-    isVideoViwable,
-    onViewableChanged,
   ]);
 
   const biographyView = useMemo(() => {
