@@ -31,5 +31,10 @@ export default StyleSheet.create({
   },
   captionText: {
     fontSize: fonts.size.caption,
+    fontWeight: fonts.weight.bold,
+  },
+  location: {
+    fontSize: fonts.size.caption,
+    color: colors.disabledText,
   },
 });

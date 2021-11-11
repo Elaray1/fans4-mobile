@@ -1,44 +1,47 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { View, TouchableOpacity, Alert } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import 'moment-duration-format';
-import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import { USER_TYPES } from 'resources/user/user.constants';
-import * as fightApi from 'resources/fight/fight.api';
 
 import Text from 'components/Text';
-import Button from 'components/Button';
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
-import useToast from 'hooks/useToast';
+import colors from 'themes/colors';
 
-import SuccessIcon from 'assets/icons/success.svg';
+import CheckmarkIcon from 'assets/icons/check-mark-winner.svg';
 
 import { FIGHT_VIEW_TYPE } from './constants';
 import Fighter from './components/Fighter';
 import PastFightInfo from './components/PastFightInfo';
+import Countdown from './components/Countdown';
+
 
 import styles from './styles';
 import getLocation from './getLocation';
 
+const FIGHT_TYPE_LABEL = {
+  pro: 'Pro Fight',
+  amateur: 'Amateur Fight',
+};
+
 function FightItem({
   fight,
   viewType,
-  onVote,
+  inVotingMode,
+  onEventPage,
 }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { showFailure } = useToast();
 
   const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
-  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
 
   const onFighterPress = useCallback((fighterId) => {
     if (userId === fighterId) {
@@ -50,38 +53,8 @@ function FightItem({
 
   const [firstFighter, secondFighter] = fight.fighters;
 
-  const onPressVote = useCallback(async (fightId, fighters) => {
-    const supportedFighterIds = userSubscriptions
-      .filter((f) => {
-        const isBeforeRenewalDate = moment(f.renewalDate).isAfter(new Date());
-        const isBeforeGracePeriodEndDate = moment(f.gracePeriodEndDate).isAfter(new Date());
-
-        return f._id && (isBeforeRenewalDate || isBeforeGracePeriodEndDate);
-      })
-      .map(f => f._id);
-
-    if (supportedFighterIds.includes(fighters[0]._id) || supportedFighterIds.includes(fighters[1]._id)) {
-      try {
-        if (!fight.votedUserIds.includes(userId)) {
-          await fightApi.vote({ fightId });
-        } else {
-          await fightApi.unvote({ fightId });
-        }
-
-        onVote(fightId, userId);
-      } catch {
-        showFailure();
-      }
-    } else {
-      Alert.alert(
-        t('Fight.subscription'),
-        t('Fight.youHaveToBeSubscribed'),
-        [
-          { text: t('Fight.ok') },
-        ],
-      );
-    }
-  }, [fight.votedUserIds, onVote, showFailure, t, userId, userSubscriptions]);
+  const isResultsShown = (fight.votedNoUserIds.includes(userId) || fight.votedYesUserIds.includes(userId))
+  || userType === USER_TYPES.FIGHTER;
 
   const FIGHT_INFO = {
     [FIGHT_VIEW_TYPE.EVENT_UPCOMING]: () => (
@@ -92,53 +65,56 @@ function FightItem({
     ),
     [FIGHT_VIEW_TYPE.EVENT_PAST]: () => <PastFightInfo fight={fight} />,
     [FIGHT_VIEW_TYPE.PAST]: () => <PastFightInfo fight={fight} />,
-    [FIGHT_VIEW_TYPE.IN_VOTING]: () => (
-      <>
-        {userType === USER_TYPES.FIGHTER ? (
-          <View style={styles.location}>
-            <Text style={[styles.text, styles.locationText, styles.locationTextLeft]}>
-              {getLocation(firstFighter.hometown)}
-            </Text>
-
-            <View style={styles.votesContainer}>
-              <View style={styles.votes}>
-                <Text style={styles.votesText}>{`${fight.votedUserIds.length} ${t(fight.votedUserIds.length === 1
-                  ? 'Fight.voteCount'
-                  : 'Fight.votes')}`}
+    [FIGHT_VIEW_TYPE.IN_VOTING]: () => {
+      const totalValue = fight.votedYesUserIds.length + fight.votedNoUserIds.length;
+      const percentage = (count) => {
+        return (100 * count) / totalValue;
+      };
+      return (
+        <>
+          {isResultsShown ? (
+            <View style={styles.votes}>
+              <View style={styles.votesContainer}>
+                <Text style={styles.votesText}>
+                  {percentage(fight.votedNoUserIds.length)}%
+                  - {t('Fight.no')}
+                </Text>
+                {fight.votedNoUserIds.includes(userId) && <CheckmarkIcon style={styles.checkMark} />}
+              </View>
+              <View style={styles.centerContainer}>
+                <View style={styles.percentageBar}>
+                  {Boolean(fight.votedNoUserIds.length) && <View style={styles.grayTriangele} />}
+                  <View style={[styles.percentageNo, { width: percentage(fight.votedNoUserIds.length) }]} />
+                  {Boolean(fight.votedYesUserIds.length) && (
+                  <View style={[styles.redTriangele, !fight.votedNoUserIds.length
+              && { borderLeftColor: 'transparent' }]}
+                  />
+                  )}
+                  <View style={[styles.percentageYes, { width: percentage(fight.votedYesUserIds.length) }]} />
+                  <View style={[styles.blackTriangele, !fight.votedYesUserIds.length
+              && { borderLeftColor: colors.textSecondary }]}
+                  />
+                </View>
+              </View>
+              <View style={[styles.votesContainer, styles.rightVotesContainer]}>
+                {fight.votedYesUserIds.includes(userId) && <CheckmarkIcon style={styles.checkMark} />}
+                <Text style={styles.votesText}>
+                  {percentage(fight.votedYesUserIds.length)}%
+                  - {t('Fight.yes')}
                 </Text>
               </View>
             </View>
-
-            <Text style={[styles.text, styles.locationText, styles.locationTextRight]}>
-              {getLocation(secondFighter.hometown)}
-            </Text>
-          </View>
-        ) : (
-          <View style={styles.location}>
-            {fight.votedUserIds.includes(userId)
-              ? (
-                <TouchableOpacity
-                  style={styles.voted}
-                  onPress={() => onPressVote(fight._id, fight.fighters)}
-                >
-                  <SuccessIcon />
-                  <Text style={styles.votedText}>
-                    {t('Fight.you')} {fight.suggestions.fans?.some(f => f._id === userId)
-                    && t('Fight.createdAnd')}{t('Fight.voted')} ({fight.votedUserIds.length})
-                  </Text>
-                </TouchableOpacity>
-              )
-              : (
-                <Button
-                  title={t('Fight.vote')}
-                  onPress={() => onPressVote(fight._id, fight.fighters)}
-                  style={styles.button}
-                />
-              )}
-          </View>
-        )}
-      </>
-    ),
+          )
+            : (
+              <View>
+                <Text style={styles.fightType}>
+                  {FIGHT_TYPE_LABEL[fight.fightersType]} | {fight.fightersWeightCategory}
+                </Text>
+              </View>
+            )}
+        </>
+      );
+    },
     [FIGHT_VIEW_TYPE.VOTING_CLOSED]: () => (
       <View style={styles.fanVoted}>
         <Text style={styles.fanVotedText}>
@@ -195,9 +171,9 @@ function FightItem({
     ),
   };
 
-
   return (
     <View style={styles.fight} key={fight._id}>
+      {onEventPage ? <View style={styles.time} /> : <Countdown date={fight.votingFinishedOn} />}
       <View style={styles.fightersInfo}>
         <View style={styles.fighters}>
           <Fighter
@@ -205,6 +181,7 @@ function FightItem({
             isWinner={firstFighter._id === fight.results?.winnerId}
             style={[styles.fighter, styles.firstFighter]}
             onPress={onFighterPress}
+            inVotingMode={inVotingMode}
           />
           <Text style={[styles.captionText, styles.vs]}>
             {t('Fight.vs')}
@@ -214,6 +191,7 @@ function FightItem({
             fighter={secondFighter}
             isWinner={secondFighter._id === fight.results?.winnerId}
             onPress={onFighterPress}
+            inVotingMode={inVotingMode}
           />
         </View>
 
@@ -228,12 +206,14 @@ function FightItem({
 FightItem.propTypes = {
   fight: PropTypes.shape().isRequired,
   viewType: PropTypes.oneOf(Object.values(FIGHT_VIEW_TYPE)),
-  onVote: PropTypes.func,
+  inVotingMode: PropTypes.bool,
+  onEventPage: PropTypes.bool,
 };
 
 FightItem.defaultProps = {
   viewType: null,
-  onVote: null,
+  inVotingMode: false,
+  onEventPage: false,
 };
 
 export default React.memo(FightItem);
