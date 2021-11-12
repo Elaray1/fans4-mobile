@@ -175,6 +175,22 @@ const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.NEW_SUBSCRIBER]: () => {
     rootNavigation.navigate('Activity');
   },
+  [PUSH_NOTIFICATION_TYPES.FIGHTER_IN_FIGHT_VOTING]: () => {
+    // TODO: navigate to Voting Results screen (show this fight first)
+  },
+  [PUSH_NOTIFICATION_TYPES.FAN_PROPOSED_FIGHT_IN_VOTING]: () => {
+    // TODO: navigate to Voting screen (show this fight first)
+  },
+  [PUSH_NOTIFICATION_TYPES.FAN_PROPOSED_FIGHT_IN_UPCOMING_EVENT]: ({ event }) => {
+    const parsedEvent = JSON.parse(event);
+
+    rootNavigation.navigate('EventFights', { event: parsedEvent });
+  },
+  [PUSH_NOTIFICATION_TYPES.FAN_PROPOSED_FIGHT_IN_UPCOMING_EVENT]: ({ event }) => {
+    const parsedEvent = JSON.parse(event);
+
+    rootNavigation.navigate('EventFights', { event: parsedEvent });
+  },
 };
 
 function AppNavigation() {
