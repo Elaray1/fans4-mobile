@@ -56,6 +56,46 @@ function FightItem({
   const isResultsShown = (fight.votedNoUserIds.includes(userId) || fight.votedYesUserIds.includes(userId))
   || userType === USER_TYPES.FIGHTER;
 
+  const fightResults = () => {
+    const totalValue = fight.votedYesUserIds.length + fight.votedNoUserIds.length;
+    const percentage = (count) => {
+      return (100 * count) / totalValue;
+    };
+    return (
+      <View style={styles.votes}>
+        <View style={styles.votesContainer}>
+          <Text style={styles.votesText}>
+            {percentage(fight.votedNoUserIds.length)}%
+            - {t('Fight.no')}
+          </Text>
+          {fight.votedNoUserIds.includes(userId) && <CheckmarkIcon style={styles.checkMark} />}
+        </View>
+        <View style={styles.centerContainer}>
+          <View style={styles.percentageBar}>
+            {Boolean(fight.votedNoUserIds.length) && <View style={styles.grayTriangele} />}
+            <View style={[styles.percentageNo, { width: percentage(fight.votedNoUserIds.length) }]} />
+            {Boolean(fight.votedYesUserIds.length) && (
+            <View style={[styles.redTriangele, !fight.votedNoUserIds.length
+    && { borderLeftColor: 'transparent' }]}
+            />
+            )}
+            <View style={[styles.percentageYes, { width: percentage(fight.votedYesUserIds.length) }]} />
+            <View style={[styles.blackTriangele, !fight.votedYesUserIds.length
+    && { borderLeftColor: colors.textSecondary }]}
+            />
+          </View>
+        </View>
+        <View style={[styles.votesContainer, styles.rightVotesContainer]}>
+          {fight.votedYesUserIds.includes(userId) && <CheckmarkIcon style={styles.checkMark} />}
+          <Text style={styles.votesText}>
+            {percentage(fight.votedYesUserIds.length)}%
+            - {t('Fight.yes')}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
   const FIGHT_INFO = {
     [FIGHT_VIEW_TYPE.EVENT_UPCOMING]: () => (
       <View style={styles.location}>
@@ -66,45 +106,9 @@ function FightItem({
     [FIGHT_VIEW_TYPE.EVENT_PAST]: () => <PastFightInfo fight={fight} />,
     [FIGHT_VIEW_TYPE.PAST]: () => <PastFightInfo fight={fight} />,
     [FIGHT_VIEW_TYPE.IN_VOTING]: () => {
-      const totalValue = fight.votedYesUserIds.length + fight.votedNoUserIds.length;
-      const percentage = (count) => {
-        return (100 * count) / totalValue;
-      };
       return (
         <>
-          {isResultsShown ? (
-            <View style={styles.votes}>
-              <View style={styles.votesContainer}>
-                <Text style={styles.votesText}>
-                  {percentage(fight.votedNoUserIds.length)}%
-                  - {t('Fight.no')}
-                </Text>
-                {fight.votedNoUserIds.includes(userId) && <CheckmarkIcon style={styles.checkMark} />}
-              </View>
-              <View style={styles.centerContainer}>
-                <View style={styles.percentageBar}>
-                  {Boolean(fight.votedNoUserIds.length) && <View style={styles.grayTriangele} />}
-                  <View style={[styles.percentageNo, { width: percentage(fight.votedNoUserIds.length) }]} />
-                  {Boolean(fight.votedYesUserIds.length) && (
-                  <View style={[styles.redTriangele, !fight.votedNoUserIds.length
-              && { borderLeftColor: 'transparent' }]}
-                  />
-                  )}
-                  <View style={[styles.percentageYes, { width: percentage(fight.votedYesUserIds.length) }]} />
-                  <View style={[styles.blackTriangele, !fight.votedYesUserIds.length
-              && { borderLeftColor: colors.textSecondary }]}
-                  />
-                </View>
-              </View>
-              <View style={[styles.votesContainer, styles.rightVotesContainer]}>
-                {fight.votedYesUserIds.includes(userId) && <CheckmarkIcon style={styles.checkMark} />}
-                <Text style={styles.votesText}>
-                  {percentage(fight.votedYesUserIds.length)}%
-                  - {t('Fight.yes')}
-                </Text>
-              </View>
-            </View>
-          )
+          {isResultsShown ? fightResults()
             : (
               <View>
                 <Text style={styles.fightType}>
@@ -115,13 +119,7 @@ function FightItem({
         </>
       );
     },
-    [FIGHT_VIEW_TYPE.VOTING_CLOSED]: () => (
-      <View style={styles.fanVoted}>
-        <Text style={styles.fanVotedText}>
-          {t('Fight.votingClosed')} ({fight.votedUserIds.length})
-        </Text>
-      </View>
-    ),
+    [FIGHT_VIEW_TYPE.VOTING_CLOSED]: () => fightResults(),
     [FIGHT_VIEW_TYPE.UPCOMING]: () => (
       <>
         {userType === USER_TYPES.FIGHTER ? (
