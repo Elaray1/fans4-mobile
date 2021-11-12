@@ -88,7 +88,7 @@ class PushNotificationService {
 
     const handleNotification = (notification) => {
       if (this.notificationHandlers[notification.data.type]) {
-        this.notificationHandlers[notification.data.type]();
+        this.notificationHandlers[notification.data.type](notification.data);
       }
     };
 
