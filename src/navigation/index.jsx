@@ -186,7 +186,7 @@ const pushNotificationHandlersByType = {
 
     rootNavigation.navigate('EventFights', { event: parsedEvent });
   },
-  [PUSH_NOTIFICATION_TYPES.FAN_PROPOSED_FIGHT_IN_UPCOMING_EVENT]: ({ event }) => {
+  [PUSH_NOTIFICATION_TYPES.FAN_VOTED_FIGHT_IN_UPCOMING_EVENT]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
 
     rootNavigation.navigate('EventFights', { event: parsedEvent });
