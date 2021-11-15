@@ -123,46 +123,68 @@ function UploadMediaButton({
     onCloseUploadingMethodModal(false);
   }, [handleMediaUpload, t, mediaType, croppingAvatar, onCloseUploadingMethodModal]);
 
-  const onUploadFromCamera = useCallback(async () => {
+  const onUploadPhotoFromCamera = useCallback(async () => {
     const options = {
-      mediaType: 'video',
+      mediaType: MEDIA_TYPES.PHOTO,
     };
 
     try {
       let mediaData = await ImagePicker.openCamera(options);
 
       mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
+      const { width, height, path } = mediaData;
 
-      if (mediaData.mime.includes('image')) {
-        const { width, height, path } = mediaData;
+      if (width / height < 0.8) {
+        const croppedHeight = width * 5 / 4;
 
-        if (width / height < 0.8) {
-          const croppedHeight = width * 5 / 4;
-
-          mediaData = await ImagePicker.openCropper({
-            path,
-            height: croppedHeight,
-            width,
-          });
-        }
+        mediaData = await ImagePicker.openCropper({
+          path,
+          height: croppedHeight,
+          width,
+        });
       }
 
-      if (mediaData.mime.includes('video')) {
-        const res = await createThumbnail({
-          format: 'png',
-          url: mediaData.path,
-          timeStamp: mediaData.duration >= 1000 ? 1000 : Math.round(mediaData.duration / 2),
-        });
+      handleMediaUpload(mediaData);
+      setMedia(mediaData);
 
-        mediaData.duration /= 1000;
+      setErrorText(null);
+    } catch (error) {
+      console.log('media button error:', error);
 
-        handleMediaUpload(mediaData, {
-          path: res.path,
-          mime: 'image/png',
+      if (error.code === 'E_NO_CAMERA_PERMISSION') {
+        setAllowModalData({
+          title: t('UploadMediaButton.accessToCameraNeeded'),
+          text: t('UploadMediaButton.provideAccessToTheCamera'),
         });
-      } else {
-        handleMediaUpload(mediaData);
       }
+    }
+
+    onCloseUploadingMethodModal(false);
+  }, [onCloseUploadingMethodModal, t, handleMediaUpload]);
+
+  const onUploadVideoFromCamera = useCallback(async () => {
+    const options = {
+      mediaType: MEDIA_TYPES.VIDEO,
+    };
+
+    try {
+      const mediaData = await ImagePicker.openCamera(options);
+
+      mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
+
+      const res = await createThumbnail({
+        format: 'png',
+        url: mediaData.path,
+        timeStamp: mediaData.duration >= 1000 ? 1000 : Math.round(mediaData.duration / 2),
+      });
+
+      mediaData.duration /= 1000;
+
+      handleMediaUpload(mediaData, {
+        path: res.path,
+        mime: 'image/png',
+      });
+
       setMedia(mediaData);
 
       setErrorText(null);
@@ -276,7 +298,8 @@ function UploadMediaButton({
           visible={isChooseUploadingMethodModal}
           onClose={onCloseUploadingMethodModal}
           onUploadFromGallery={onUploadFromGallery}
-          onUploadFromCamera={onUploadFromCamera}
+          onUploadPhotoFromCamera={onUploadPhotoFromCamera}
+          onUploadVideoFromCamera={onUploadVideoFromCamera}
         />
       )}
       {allowModalData && (

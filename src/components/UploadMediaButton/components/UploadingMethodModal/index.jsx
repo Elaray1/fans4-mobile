@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import GaleryIcon from 'assets/icons/galery';
 import CameraIcon from 'assets/icons/camera';
+import VideoCameraIcon from 'assets/icons/video-camera';
 
 import Text from 'components/Text';
 
@@ -16,7 +17,8 @@ function UploadingMethodModal({
   onClose,
   visible,
   onUploadFromGallery,
-  onUploadFromCamera,
+  onUploadPhotoFromCamera,
+  onUploadVideoFromCamera,
 }) {
   const { t } = useTranslation();
 
@@ -47,12 +49,25 @@ function UploadingMethodModal({
           <View>
             <TouchableOpacity
               style={styles.settingsOption}
-              onPress={onUploadFromCamera}
+              onPress={onUploadPhotoFromCamera}
               activeOpacity={0.7}
             >
               <CameraIcon style={styles.settingIcon} />
               <Text style={styles.settingTitle}>
-                {t('UploadingMethodModal.openCamera')}
+                {t('UploadingMethodModal.takeAPhotoFromCamera')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View>
+            <TouchableOpacity
+              style={styles.settingsOption}
+              onPress={onUploadVideoFromCamera}
+              activeOpacity={0.7}
+            >
+              <VideoCameraIcon style={styles.settingIcon} />
+              <Text style={styles.settingTitle}>
+                {t('UploadingMethodModal.recordVideoFromCamera')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -66,7 +81,8 @@ UploadingMethodModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
   onUploadFromGallery: PropTypes.func.isRequired,
-  onUploadFromCamera: PropTypes.func.isRequired,
+  onUploadPhotoFromCamera: PropTypes.func.isRequired,
+  onUploadVideoFromCamera: PropTypes.func.isRequired,
 };
 
 export default React.memo(UploadingMethodModal);

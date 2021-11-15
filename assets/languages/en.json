@@ -738,6 +738,7 @@
   },
   "UploadingMethodModal": {
     "uploadFromGallery": "Upload from Gallery",
-    "openCamera": "Open Camera"
+    "takeAPhotoFromCamera": "Take a Photo from Camera",
+    "recordVideoFromCamera": "Record Video from Camera"
   }
 }
