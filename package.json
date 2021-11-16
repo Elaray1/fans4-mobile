@@ -51,6 +51,7 @@
     "react-native-config": "1.4.4",
     "react-native-create-thumbnail": "1.4.1",
     "react-native-date-picker": "3.2.10",
+    "react-native-deck-swiper": "2.0.5",
     "react-native-device-info": "8.0.8",
     "react-native-fast-image": "8.3.7",
     "react-native-fast-toast": "2.3.0",

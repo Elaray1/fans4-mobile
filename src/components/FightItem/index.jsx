@@ -36,6 +36,7 @@ function FightItem({
   viewType,
   inVotingMode,
   isCountdownShown,
+  cardPosition,
 }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -62,43 +63,47 @@ function FightItem({
       return (100 * count) / totalValue;
     };
     return (
-      <View style={styles.votes}>
-        <View style={styles.votesContainer}>
-          <Text style={styles.votesText}>
-            {percentage(fight.votedNoUserIds.length)}%
-            - {t('Fight.no')}
-          </Text>
-          {fight.votedNoUserIds.includes(userId) && <CheckmarkIcon style={styles.checkMark} />}
-        </View>
-        <View style={styles.centerContainer}>
-          <View style={styles.percentageBar}>
-            {!!fight.votedNoUserIds.length && <View style={styles.grayTriangele} />}
-            <View style={[styles.percentageNo, { width: percentage(fight.votedNoUserIds.length) }]} />
-            {!!fight.votedYesUserIds.length && (
+      <>
+        {!!totalValue && (
+        <View style={styles.votes}>
+          <View style={styles.votesContainer}>
+            <Text style={styles.votesText}>
+              {percentage(fight.votedNoUserIds.length)}%
+              - {t('Fight.no')}
+            </Text>
+            {fight.votedNoUserIds.includes(userId) && <CheckmarkIcon style={styles.checkMark} />}
+          </View>
+          <View style={styles.centerContainer}>
+            <View style={styles.percentageBar}>
+              {!!fight.votedNoUserIds.length && <View style={styles.grayTriangele} />}
+              <View style={[styles.percentageNo, { width: percentage(fight.votedNoUserIds.length) }]} />
+              {!!fight.votedYesUserIds.length && (
               <View
                 style={[
                   styles.redTriangele,
                   !fight.votedNoUserIds.length && { borderLeftColor: 'transparent' },
                 ]}
               />
-            )}
-            <View style={[styles.percentageYes, { width: percentage(fight.votedYesUserIds.length) }]} />
-            <View
-              style={[
-                styles.blackTriangele,
-                !fight.votedYesUserIds.length && { borderLeftColor: colors.textSecondary },
-              ]}
-            />
+              )}
+              <View style={[styles.percentageYes, { width: percentage(fight.votedYesUserIds.length) }]} />
+              <View
+                style={[
+                  styles.blackTriangele,
+                  !fight.votedYesUserIds.length && { borderLeftColor: colors.textSecondary },
+                ]}
+              />
+            </View>
+          </View>
+          <View style={[styles.votesContainer, styles.rightVotesContainer]}>
+            {fight.votedYesUserIds.includes(userId) && <CheckmarkIcon style={styles.checkMark} />}
+            <Text style={styles.votesText}>
+              {percentage(fight.votedYesUserIds.length)}%
+              - {t('Fight.yes')}
+            </Text>
           </View>
         </View>
-        <View style={[styles.votesContainer, styles.rightVotesContainer]}>
-          {fight.votedYesUserIds.includes(userId) && <CheckmarkIcon style={styles.checkMark} />}
-          <Text style={styles.votesText}>
-            {percentage(fight.votedYesUserIds.length)}%
-            - {t('Fight.yes')}
-          </Text>
-        </View>
-      </View>
+        )}
+      </>
     );
   };
 
@@ -180,6 +185,7 @@ function FightItem({
       {isCountdownShown ? <View style={styles.time} /> : <Countdown date={fight.votingFinishedOn} />}
       <View style={styles.fightersInfo}>
         <View style={styles.fighters}>
+          {cardPosition > 0 && <Text style={[styles.helper, styles.yes]}>YES</Text>}
           <Fighter
             fighter={firstFighter}
             isWinner={firstFighter._id === fight.results?.winnerId}
@@ -197,6 +203,7 @@ function FightItem({
             onPress={onFighterPress}
             inVotingMode={inVotingMode}
           />
+          {cardPosition < 0 && <Text style={[styles.helper, styles.no]}>NO</Text>}
         </View>
 
         <View style={styles.line} />
@@ -212,12 +219,14 @@ FightItem.propTypes = {
   viewType: PropTypes.oneOf(Object.values(FIGHT_VIEW_TYPE)),
   inVotingMode: PropTypes.bool,
   isCountdownShown: PropTypes.bool,
+  cardPosition: PropTypes.number,
 };
 
 FightItem.defaultProps = {
   viewType: null,
   inVotingMode: false,
   isCountdownShown: false,
+  cardPosition: 0,
 };
 
 export default React.memo(FightItem);
