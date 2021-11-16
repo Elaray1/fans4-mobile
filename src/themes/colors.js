@@ -59,6 +59,8 @@ const colors = {
   fightingStatusText: '#919192',
 
   message: '#404249',
+
+  lightButton: '#404040',
 };
 
 export default colors;

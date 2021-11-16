@@ -3,11 +3,9 @@ import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
-  container: {
-    marginHorizontal: 20,
-    marginTop: 70,
-  },
   text: {
+    marginTop: 100,
+    marginHorizontal: 20,
     fontSize: fonts.size.h4,
     fontWeight: fonts.weight.bold,
     textAlign: 'center',
@@ -15,11 +13,12 @@ export default StyleSheet.create({
   buttons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 74,
+    paddingHorizontal: 94,
   },
   fight: {
     paddingTop: 65,
     paddingBottom: 40,
+    height: 400,
   },
   button: {
     borderColor: colors.primary,
@@ -33,5 +32,8 @@ export default StyleSheet.create({
   loader: {
     marginTop: 20,
     marginBottom: 20,
+  },
+  litedButton: {
+    backgroundColor: colors.lightButton,
   },
 });
