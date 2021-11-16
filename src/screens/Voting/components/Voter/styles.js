@@ -30,4 +30,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  loader: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
 });

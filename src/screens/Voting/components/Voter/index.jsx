@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { View, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import * as fightApi from 'resources/fight/fight.api';
@@ -9,6 +9,7 @@ import VoteYesIcon from 'assets/icons/vote-yes.svg';
 import VoteNoIcon from 'assets/icons/vote-no.svg';
 
 import useToast from 'hooks/useToast';
+import colors from 'themes/colors';
 
 import FightItem from 'components/FightItem';
 import Text from 'components/Text';
@@ -16,7 +17,7 @@ import Text from 'components/Text';
 import styles from './styles';
 
 
-const Voter = ({ onEnd }) => {
+const Voter = ({ onFightsToVoteEnded }) => {
   const { t } = useTranslation();
   const { showFailure } = useToast();
 
@@ -32,33 +33,43 @@ const Voter = ({ onEnd }) => {
         setFight(current);
         setFights(another);
       } catch (error) {
+        console.error(error);
         showFailure();
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     }
 
     init();
   }, [showFailure]);
+
+  const Loader = () => (
+    <View style={styles.loader}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
 
   const vote = useCallback(async ({ fightId, isYes }) => {
     try {
       await fightApi.vote({ fightId, isYes });
 
       if (fights.length === 0) {
-        onEnd();
+        onFightsToVoteEnded();
       } else {
         const [current, ...another] = fights;
         setFight(current);
         setFights(another);
       }
     } catch (error) {
+      console.error(error);
       showFailure();
     }
-  }, [fights, onEnd, showFailure]);
+  }, [fights, onFightsToVoteEnded, showFailure]);
+
+  const onVoteYes = useCallback(() => vote({ fightId: fight._id, isYes: true }), [fight?._id, vote]);
+  const onVoteNo = useCallback(() => vote({ fightId: fight._id, isYes: false }), [fight?._id, vote]);
 
   if (loading) {
-    return null;
+    return <Loader />;
   }
 
   return (
@@ -72,13 +83,13 @@ const Voter = ({ onEnd }) => {
       <View style={styles.buttons}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => vote({ fightId: fight._id, isYes: false })}
+          onPress={onVoteNo}
         >
           <VoteNoIcon />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => vote({ fightId: fight._id, isYes: true })}
+          onPress={onVoteYes}
         >
           <VoteYesIcon />
         </TouchableOpacity>
@@ -88,7 +99,7 @@ const Voter = ({ onEnd }) => {
 };
 
 Voter.propTypes = {
-  onEnd: PropTypes.func.isRequired,
+  onFightsToVoteEnded: PropTypes.func.isRequired,
 };
 
 export default React.memo(Voter);

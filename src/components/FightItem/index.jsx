@@ -35,7 +35,7 @@ function FightItem({
   fight,
   viewType,
   inVotingMode,
-  onEventPage,
+  isCountdownShown,
 }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -72,16 +72,22 @@ function FightItem({
         </View>
         <View style={styles.centerContainer}>
           <View style={styles.percentageBar}>
-            {Boolean(fight.votedNoUserIds.length) && <View style={styles.grayTriangele} />}
+            {!!fight.votedNoUserIds.length && <View style={styles.grayTriangele} />}
             <View style={[styles.percentageNo, { width: percentage(fight.votedNoUserIds.length) }]} />
-            {Boolean(fight.votedYesUserIds.length) && (
-            <View style={[styles.redTriangele, !fight.votedNoUserIds.length
-    && { borderLeftColor: 'transparent' }]}
-            />
+            {!!fight.votedYesUserIds.length && (
+              <View
+                style={[
+                  styles.redTriangele,
+                  !fight.votedNoUserIds.length && { borderLeftColor: 'transparent' },
+                ]}
+              />
             )}
             <View style={[styles.percentageYes, { width: percentage(fight.votedYesUserIds.length) }]} />
-            <View style={[styles.blackTriangele, !fight.votedYesUserIds.length
-    && { borderLeftColor: colors.textSecondary }]}
+            <View
+              style={[
+                styles.blackTriangele,
+                !fight.votedYesUserIds.length && { borderLeftColor: colors.textSecondary },
+              ]}
             />
           </View>
         </View>
@@ -171,7 +177,7 @@ function FightItem({
 
   return (
     <View style={styles.fight} key={fight._id}>
-      {onEventPage ? <View style={styles.time} /> : <Countdown date={fight.votingFinishedOn} />}
+      {isCountdownShown ? <View style={styles.time} /> : <Countdown date={fight.votingFinishedOn} />}
       <View style={styles.fightersInfo}>
         <View style={styles.fighters}>
           <Fighter
@@ -205,13 +211,13 @@ FightItem.propTypes = {
   fight: PropTypes.shape().isRequired,
   viewType: PropTypes.oneOf(Object.values(FIGHT_VIEW_TYPE)),
   inVotingMode: PropTypes.bool,
-  onEventPage: PropTypes.bool,
+  isCountdownShown: PropTypes.bool,
 };
 
 FightItem.defaultProps = {
   viewType: null,
   inVotingMode: false,
-  onEventPage: false,
+  isCountdownShown: false,
 };
 
 export default React.memo(FightItem);

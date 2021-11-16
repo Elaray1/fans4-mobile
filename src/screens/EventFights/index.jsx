@@ -108,7 +108,7 @@ function EventFights({ route }) {
     return (
       <FightItem
         fight={item}
-        onEventPage
+        isCountdownShown
         viewType={item.status === FIGHT_STATUSES.PAST ? FIGHT_VIEW_TYPE.EVENT_PAST : FIGHT_VIEW_TYPE.EVENT_UPCOMING}
       />
     );
