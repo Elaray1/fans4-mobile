@@ -19,13 +19,16 @@ import UploadingMethodModal from './components/UploadingMethodModal';
 import styles from './UploadMediaButton.styles';
 import { MEDIA_TYPES } from './UploadMediaButton.constants';
 
+const WIDTH_HEIGHT_RATIO = 0.8;
+const HEIGHT_WIDTH_RATIO = 1.25;
+
 function UploadMediaButton({
   handleMediaUpload,
   onDelete,
   label,
   mediaType,
   croppingAvatar,
-  isUploadFromCameraPossibility,
+  canUploadFromCamera,
   style,
 }) {
   const { t } = useTranslation();
@@ -76,8 +79,8 @@ function UploadMediaButton({
       if (mediaData.mime.includes('image')) {
         const { width, height, path } = mediaData;
 
-        if (width / height < 0.8 || croppingAvatar) {
-          const croppedHeight = width * 5 / 4;
+        if (width / height < WIDTH_HEIGHT_RATIO || croppingAvatar) {
+          const croppedHeight = width * HEIGHT_WIDTH_RATIO;
 
           mediaData = await ImagePicker.openCropper({
             cropperCircleOverlay: !!croppingAvatar,
@@ -134,8 +137,8 @@ function UploadMediaButton({
       mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
       const { width, height, path } = mediaData;
 
-      if (width / height < 0.8) {
-        const croppedHeight = width * 5 / 4;
+      if (width / height < WIDTH_HEIGHT_RATIO) {
+        const croppedHeight = width * HEIGHT_WIDTH_RATIO;
 
         mediaData = await ImagePicker.openCropper({
           path,
@@ -238,7 +241,7 @@ function UploadMediaButton({
       <>
         <TouchableOpacity
           style={styles.button}
-          onPress={isUploadFromCameraPossibility ? onOpenUploadingMethodModal : onUploadFromGallery}
+          onPress={canUploadFromCamera ? onOpenUploadingMethodModal : onUploadFromGallery}
           activeOpacity={0.7}
         >
           <Text style={styles.text}>{t('UploadMediaButton.upload')}</Text>
@@ -326,14 +329,14 @@ UploadMediaButton.propTypes = {
   onDelete: PropTypes.func.isRequired,
   mediaType: PropTypes.oneOf([...Object.values(MEDIA_TYPES)]),
   croppingAvatar: PropTypes.bool,
-  isUploadFromCameraPossibility: PropTypes.bool,
+  canUploadFromCamera: PropTypes.bool,
   style: PropTypes.shape(),
 };
 
 UploadMediaButton.defaultProps = {
   mediaType: MEDIA_TYPES.ANY,
   croppingAvatar: false,
-  isUploadFromCameraPossibility: false,
+  canUploadFromCamera: false,
   style: {},
 };
 
