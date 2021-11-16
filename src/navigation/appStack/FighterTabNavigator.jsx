@@ -63,7 +63,7 @@ function FighterTabNavigator() {
       <Tab.Screen name="Activity" options={{ icon: activityIcon }}>
         {() => scrollToTopWrapper(<Activity />)}
       </Tab.Screen>
-      <Tab.Screen name="Account" component={Account} options={{ icon: AccountIcon }}>
+      <Tab.Screen name="Account" options={{ icon: AccountIcon }}>
         {() => scrollToTopWrapper(<Account />)}
       </Tab.Screen>
     </Tab.Navigator>
