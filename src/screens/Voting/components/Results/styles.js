@@ -11,6 +11,9 @@ export default StyleSheet.create({
     ...commonStyles.screenContent,
     marginTop: 30,
   },
+  scrollView: {
+    flexGrow: 1,
+  },
   emptyView: {
     flex: 1,
     paddingTop: 30,

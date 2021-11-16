@@ -160,7 +160,7 @@ const FighterVoting = () => {
 
         {isFetchedFirstTime && !fights.length && (
         <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={styles.scrollView}
           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
           keyboardShouldPersistTaps="handled"
         >
