@@ -160,7 +160,7 @@ const ChatsList = () => {
       <View style={styles.content}>
         {!isFetchedFirstTime && isRefreshing && <Loader />}
 
-        {!!chats.length
+        {chats.length > (isFan ? 0 : 1)
           && (
             <FlatList
               style={styles.flatList}
@@ -176,7 +176,7 @@ const ChatsList = () => {
             />
           )}
 
-        {isFetchedFirstTime && !!chats.length && (
+        {isFetchedFirstTime && chats.length <= (isFan ? 0 : 1) && (
           <ScrollView
             style={styles.flatList}
             contentContainerStyle={styles.emptyScroll}
@@ -185,6 +185,8 @@ const ChatsList = () => {
             }
             keyboardShouldPersistTaps="handled"
           >
+            {!isFan && chats.length
+            && <ChatItem chat={chats[0]} setNewChat={onNewMessages} onRefreshChats={onRefresh} />}
             <EmptyView />
           </ScrollView>
         )}
