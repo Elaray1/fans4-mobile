@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
@@ -9,9 +10,12 @@ import * as fightApi from 'resources/fight/fight.api';
 import useToast from 'hooks/useToast';
 
 import { USER_TYPES } from 'resources/user/user.constants';
+import colors from 'themes/colors';
 
 import Voter from './components/Voter';
 import Results from './components/Results';
+
+import styles from './styles';
 
 const PAGE_MODES = {
   RESULTS: 'results',
@@ -57,6 +61,7 @@ function Voting({ route }) {
       } catch (error) {
         console.error(error);
         showFailure();
+        return;
       }
       setLoading(false);
     }
@@ -64,12 +69,18 @@ function Voting({ route }) {
     init();
   }, [showFailure, fight, userType]);
 
+  const Loader = () => (
+    <View style={styles.loader}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
+
   const onVotingEnd = useCallback(() => {
     setMode(PAGE_MODES.RESULTS);
   }, []);
 
   if (loading) {
-    return null;
+    return <Loader />;
   }
 
   if (mode === PAGE_MODES.VOTER) {
