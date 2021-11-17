@@ -1,6 +1,7 @@
 import React, {
-  useState, useCallback, useEffect,
+  useState, useCallback, useEffect, useMemo,
 } from 'react';
+import PropTypes from 'prop-types';
 import {
   View, SafeAreaView, FlatList, ScrollView, RefreshControl, ActivityIndicator, TouchableOpacity,
 } from 'react-native';
@@ -25,11 +26,12 @@ import styles from './styles';
 
 const PER_PAGE_COUNT = 20;
 
-const FighterVoting = () => {
+const FighterVoting = ({ route }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { showFailure } = useToast();
 
+  const { fight } = route?.params;
 
   const [fights, setFights] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -38,6 +40,12 @@ const FighterVoting = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
+
+  const updatedFights = useMemo(() => {
+    return fight
+      ? [fight, ...fights.filter(f => f._id !== fight._id)]
+      : fights;
+  }, [fight, fights]);
 
   const navigateToFightersList = useCallback(() => {
     navigation.navigate('Tabs', {
@@ -144,9 +152,9 @@ const FighterVoting = () => {
       <View style={styles.content}>
         {!isFetchedFirstTime && isRefreshing && <Loader />}
 
-        {!!fights.length && (
+        {!!updatedFights.length && (
         <FlatList
-          data={fights}
+          data={updatedFights}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           onEndReachedThreshold={0.3}
@@ -158,7 +166,7 @@ const FighterVoting = () => {
         />
         )}
 
-        {isFetchedFirstTime && !fights.length && (
+        {isFetchedFirstTime && !updatedFights.length && (
         <ScrollView
           contentContainerStyle={styles.scrollView}
           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
@@ -171,6 +179,14 @@ const FighterVoting = () => {
 
     </SafeAreaView>
   );
+};
+
+FighterVoting.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      fight: PropTypes.shape(),
+    }),
+  }).isRequired,
 };
 
 export default React.memo(FighterVoting);

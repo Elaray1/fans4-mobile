@@ -17,7 +17,7 @@ import Text from 'components/Text';
 import styles from './styles';
 
 
-const Voter = ({ onFightsToVoteEnded }) => {
+const Voter = ({ onFightsToVoteEnded, firstFight }) => {
   const { t } = useTranslation();
   const { showFailure } = useToast();
 
@@ -29,9 +29,15 @@ const Voter = ({ onFightsToVoteEnded }) => {
   useEffect(() => {
     async function init() {
       try {
-        const [current, ...another] = await fightApi.getFightsForVoting();
-        setFight(current);
-        setFights(another);
+        if (firstFight) {
+          const another = await fightApi.getFightsForVoting();
+          setFight(firstFight);
+          setFights(another.filter(f => f._id !== firstFight._id));
+        } else {
+          const [current, ...another] = await fightApi.getFightsForVoting();
+          setFight(current);
+          setFights(another);
+        }
       } catch (error) {
         console.error(error);
         showFailure();
@@ -40,7 +46,7 @@ const Voter = ({ onFightsToVoteEnded }) => {
     }
 
     init();
-  }, [showFailure]);
+  }, [showFailure, firstFight]);
 
   const Loader = () => (
     <View style={styles.loader}>
@@ -100,6 +106,11 @@ const Voter = ({ onFightsToVoteEnded }) => {
 
 Voter.propTypes = {
   onFightsToVoteEnded: PropTypes.func.isRequired,
+  firstFight: PropTypes.shape(),
+};
+
+Voter.defaultProps = {
+  firstFight: null,
 };
 
 export default React.memo(Voter);

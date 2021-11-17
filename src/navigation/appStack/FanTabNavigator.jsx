@@ -54,27 +54,27 @@ function FanTabNavigator() {
       lazy={false}
     >
       <Tab.Screen name="Feed" options={optionsByScreen.feed}>
-        {() => scrollToTopWrapper(<Feed />)}
+        {props => scrollToTopWrapper(<Feed {...props} />)}
       </Tab.Screen>
       <Tab.Screen
         name="Voting"
         options={optionsByScreen.voting}
       >
-        {() => scrollToTopWrapper(config.mode === 'PROD'
-          ? <NewVoting /> : <Voting />)}
+        {props => scrollToTopWrapper(config.mode === 'PROD'
+          ? <NewVoting {...props} /> : <Voting {...props} />)}
       </Tab.Screen>
       <Tab.Screen name="Events" options={optionsByScreen.events}>
-        {() => scrollToTopWrapper(<Events />)}
+        {props => scrollToTopWrapper(<Events {...props} />)}
       </Tab.Screen>
       {/* TODO: replace Account component with Chats component */}
       {config.mode !== 'PROD'
       && (
       <Tab.Screen name="Chats" options={chatsOptions}>
-        {() => scrollToTopWrapper(<ChatsList />)}
+        {props => scrollToTopWrapper(<ChatsList {...props} />)}
       </Tab.Screen>
       )}
       <Tab.Screen name="Account" options={optionsByScreen.account}>
-        {() => scrollToTopWrapper(<Account />)}
+        {props => scrollToTopWrapper(<Account {...props} />)}
       </Tab.Screen>
     </Tab.Navigator>
   );
