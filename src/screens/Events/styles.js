@@ -97,4 +97,25 @@ export default StyleSheet.create({
   scrollView: {
     flexGrow: 1,
   },
+  votingText: {
+    marginLeft: 3,
+  },
+  votingContainer: {
+    paddingVertical: 4,
+    paddingLeft: 6,
+    paddingRight: 10,
+    flexDirection: 'row',
+    backgroundColor: colors.gray,
+    borderRadius: 5,
+    marginLeft: -80,
+  },
+  votingCardsIndicator: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    width: 8,
+    height: 8,
+    backgroundColor: colors.primaryRed,
+    borderRadius: 5,
+  },
 });

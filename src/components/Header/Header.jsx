@@ -13,6 +13,8 @@ function Header({
   title,
   titleIcon,
   onTitlePress,
+  leftItem,
+  rightItem,
   leftItemType,
   rightItemType,
   onLeftItemPress,
@@ -40,13 +42,13 @@ function Header({
     imageUrl: rightItemImageUrl,
   };
 
-  const leftItem = GetHeaderItem({
+  const updatedLeftItem = leftItem || GetHeaderItem({
     type: leftItemType,
     props: leftItemProps,
     text: leftItemText,
     icon: leftItemIcon,
   });
-  const rightItem = GetHeaderItem({
+  const updatedRightItem = rightItem || GetHeaderItem({
     type: rightItemType,
     props: rightItemProps,
     text: rightItemText,
@@ -63,7 +65,7 @@ function Header({
   return (
     <View style={styles.headerWrapper}>
       <View style={styles.header}>
-        {leftItem}
+        {updatedLeftItem}
         {onTitlePress
           ? (
             <TouchableOpacity
@@ -79,7 +81,7 @@ function Header({
               {headerTitle}
             </View>
           )}
-        {rightItem}
+        {updatedRightItem}
       </View>
       {isBottomLine && (
       <View
@@ -94,6 +96,8 @@ Header.propTypes = {
   onTitlePress: PropTypes.func,
   isBottomLine: PropTypes.bool,
   title: PropTypes.string.isRequired,
+  leftItem: PropTypes.node,
+  rightItem: PropTypes.node,
   leftItemType: PropTypes.oneOf([...Object.values(ITEM_TYPES), null]),
   rightItemType: PropTypes.oneOf([...Object.values(ITEM_TYPES), null]),
   onLeftItemPress: PropTypes.func,
@@ -114,6 +118,8 @@ Header.propTypes = {
 Header.defaultProps = {
   onTitlePress: null,
   isBottomLine: true,
+  leftItem: null,
+  rightItem: null,
   leftItemType: null,
   rightItemType: null,
   onLeftItemPress: null,
