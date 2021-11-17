@@ -47,10 +47,10 @@ function FighterTabNavigator() {
       lazy={false}
     >
       <Tab.Screen name="Fighters" options={{ icon: FightersIcon }}>
-        {() => scrollToTopWrapper(<SearchFighters />)}
+        {props => scrollToTopWrapper(<SearchFighters {...props} />)}
       </Tab.Screen>
       <Tab.Screen name="Events" options={{ icon: EventsIcon }}>
-        {() => scrollToTopWrapper(<Events />)}
+        {props => scrollToTopWrapper(<Events {...props} />)}
       </Tab.Screen>
       <Tab.Screen
         name="NewPost"
@@ -61,10 +61,10 @@ function FighterTabNavigator() {
         }}
       />
       <Tab.Screen name="Activity" options={{ icon: activityIcon }}>
-        {() => scrollToTopWrapper(<Activity />)}
+        {props => scrollToTopWrapper(<Activity {...props} />)}
       </Tab.Screen>
       <Tab.Screen name="Account" options={{ icon: AccountIcon }}>
-        {() => scrollToTopWrapper(<Account />)}
+        {props => scrollToTopWrapper(<Account {...props} />)}
       </Tab.Screen>
     </Tab.Navigator>
   );

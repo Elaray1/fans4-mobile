@@ -11,10 +11,10 @@ export const PUSH_NOTIFICATION_TYPES = {
   FIGHTER_REGISTRATION_DECLINED: 'fighter_registration_declined',
   STRIPE_PAYOUT_ACCOUNT_STATUS_CHANGED: 'stripe_payout_account_status_changed',
   NEW_SUBSCRIBER: 'new_subscriber',
-  FIGHTER_IN_FIGHT_VOTING: 'FIGHTER_IN_FIGHT_VOTING',
+  FIGHTER_IN_FIGHT_VOTING: 'fighter_in_fight_voting',
   FAN_PROPOSED_FIGHT_IN_VOTING: 'fan_proposed_fight_in_voting',
-  FAN_PROPOSED_FIGHT_IN_UPCOMING_EVENT: 'fan_proposed_fight_in_voting',
-  FAN_VOTED_FIGHT_IN_UPCOMING_EVENT: 'fan_proposed_fight_in_voting',
+  FAN_PROPOSED_FIGHT_IN_UPCOMING_EVENT: 'fan_proposed_fight_in_upcoming_event',
+  FAN_VOTED_FIGHT_IN_UPCOMING_EVENT: 'fan_voted_fight_in_upcoming_event',
 };
 
 export const FANS4_ACCOUNT = {
