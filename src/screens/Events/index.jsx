@@ -24,8 +24,6 @@ import useToast from 'hooks/useToast';
 import LiveIcon from 'assets/icons/live.svg';
 import NoEventsIllustration from 'assets/illustrations/no-events.svg';
 
-import { ITEM_TYPES } from 'components/Header/Header.constants';
-
 import colors from 'themes/colors';
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
@@ -44,6 +42,7 @@ function Events() {
   const navigation = useNavigation();
 
   const userType = useSelector(userSelectors.getUserType);
+  const isVotingCardsIndicator = useSelector(userSelectors.getVotingCardsIndicator);
 
   const [events, setEvents] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -254,13 +253,26 @@ function Events() {
     navigation.navigate('FighterVoting');
   }, [navigation]);
 
+  const RightItem = () => {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={navigateToVoting}
+        style={styles.votingContainer}
+      >
+        <Text style={styles.votingText}>{t('Events.voting')}</Text>
+        {isVotingCardsIndicator && <View style={styles.votingCardsIndicator} />}
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
         title={t('Events.events')}
-        rightItemType={userType === USER_TYPES.FAN ? null : ITEM_TYPES.PLUS_AND_TEXT}
-        rightItemText={t('Events.voting')}
-        onRightItemPress={navigateToVoting}
+        {...(userType === USER_TYPES.FIGHTER
+          ? { rightItem: <RightItem /> }
+          : { rightItemText: t('Events.voting'), onRightItemPress: navigateToVoting })}
       />
 
       <View style={styles.content}>

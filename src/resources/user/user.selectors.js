@@ -15,6 +15,7 @@ export const getUserFullName = ({ user }) => user?.fullName;
 export const getUserNewEmail = ({ user }) => user?.appState?.newEmail;
 export const getUserStatus = ({ user }) => user?.status;
 export const getUserActivityIndicator = ({ user }) => user?.appState.isUnreadActivities;
+export const getVotingCardsIndicator = ({ user }) => user?.appState.isUnreadVotingCards;
 
 /* Fighters selectors: start */
 
@@ -53,4 +54,4 @@ export const getSupportedFighters = createSelector(
 
 export const getUserName = ({ user }) => user?.role?.biography?.userName;
 
-/* Fighters selectors: end */
+/* Fans selectors: end */

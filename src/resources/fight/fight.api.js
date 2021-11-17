@@ -23,3 +23,5 @@ export const vote = ({ fightId, isYes }) => apiClient.post('fights/voting', { fi
 
 export const suggestFight = ({ firstFighterId, secondFighterId }) => apiClient
   .post('fights/suggest', { firstFighterId, secondFighterId });
+
+export const readVotingCards = () => apiClient.put('fights/voting-cards');

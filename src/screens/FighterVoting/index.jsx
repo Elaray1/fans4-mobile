@@ -6,8 +6,11 @@ import {
   View, SafeAreaView, FlatList, ScrollView, RefreshControl, ActivityIndicator, TouchableOpacity,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import { useNavigation } from '@react-navigation/native';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import * as fightApi from 'resources/fight/fight.api';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
@@ -32,6 +35,7 @@ const FighterVoting = ({ route }) => {
   const { showFailure } = useToast();
 
   const { fight } = route?.params;
+  const isVotingCardsIndicator = useSelector(userSelectors.getVotingCardsIndicator);
 
   const [fights, setFights] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -46,6 +50,20 @@ const FighterVoting = ({ route }) => {
       ? [fight, ...fights.filter(f => f._id !== fight._id)]
       : fights;
   }, [fight, fights]);
+
+  useEffect(() => {
+    const readVotingCards = async () => {
+      if (isVotingCardsIndicator) {
+        try {
+          await fightApi.readVotingCards();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    readVotingCards();
+  }, [isVotingCardsIndicator]);
 
   const navigateToFightersList = useCallback(() => {
     navigation.navigate('Tabs', {
