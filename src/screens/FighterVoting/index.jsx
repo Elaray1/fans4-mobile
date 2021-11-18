@@ -34,7 +34,7 @@ const FighterVoting = ({ route }) => {
   const navigation = useNavigation();
   const { showFailure } = useToast();
 
-  const { fight } = route?.params;
+  const fight = route?.params?.fight;
   const isVotingCardsIndicator = useSelector(userSelectors.getVotingCardsIndicator);
 
   const [fights, setFights] = useState([]);
