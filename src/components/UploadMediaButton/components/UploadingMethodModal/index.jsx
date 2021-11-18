@@ -67,7 +67,7 @@ function UploadingMethodModal({
             >
               <VideoCameraIcon style={styles.settingIcon} />
               <Text style={styles.settingTitle}>
-                {t('UploadingMethodModal.recordVideoFromCamera')}
+                {t('UploadingMethodModal.recordAVideoFromCamera')}
               </Text>
             </TouchableOpacity>
           </View>

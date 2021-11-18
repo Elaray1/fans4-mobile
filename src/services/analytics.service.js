@@ -41,6 +41,9 @@ class AnalyticsService {
     FAN_OPENED_SUPPORT_SCREEN: 'fan_opened_support_screen',
     FAN_OPENED_EVENTS_SCREEN: 'fan_opened_events_screen',
     FAN_OPENED_EVENT_SCREEN: 'fan_opened_event_screen',
+    FIGHTER_UPLOAD_MEDIA_FROM_GALLERY: 'fighter_upload_media_from_gallery',
+    FIGHTER_UPLOAD_PHOTO_FROM_CAMERA: 'fighter_upload_photo_from_camera',
+    FIGHTER_UPLOAD_VIDEO_FROM_CAMERA: 'fighter_upload_video_from_camera',
   }
 
   constructor({ firebaseAnalytics, amplitudeAnalytics, amplitudeApiKey }) {
