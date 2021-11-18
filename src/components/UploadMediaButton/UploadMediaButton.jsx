@@ -4,6 +4,7 @@ import { TouchableOpacity, View, Image, Alert, Platform, Linking } from 'react-n
 import { useTranslation } from 'react-i18next';
 import ImagePicker from 'react-native-image-crop-picker';
 import { createThumbnail } from 'react-native-create-thumbnail';
+import analyticsService from 'services/analytics.service';
 import _ from 'lodash';
 
 import PaperclipIcon from 'assets/icons/paperclip.svg';
@@ -123,6 +124,10 @@ function UploadMediaButton({
       }
     }
 
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_UPLOAD_MEDIA_FROM_GALLERY,
+    });
+
     onCloseUploadingMethodModal(false);
   }, [handleMediaUpload, t, mediaType, croppingAvatar, onCloseUploadingMethodModal]);
 
@@ -160,6 +165,10 @@ function UploadMediaButton({
         });
       }
     }
+
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_UPLOAD_PHOTO_FROM_CAMERA,
+    });
 
     onCloseUploadingMethodModal(false);
   }, [onCloseUploadingMethodModal, t, handleMediaUpload]);
@@ -200,6 +209,10 @@ function UploadMediaButton({
         });
       }
     }
+
+    analyticsService.logEvent({
+      name: analyticsService.events.FIGHTER_UPLOAD_VIDEO_FROM_CAMERA,
+    });
 
     onCloseUploadingMethodModal(false);
   }, [onCloseUploadingMethodModal, t, handleMediaUpload]);
