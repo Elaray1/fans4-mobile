@@ -72,7 +72,7 @@ function Post({
   const isSubscribedOrAuthor = userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id);
 
   const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1} others` : ''}`;
-  const isPostAuthor = userId === author._id;
+  const isPostAuthor = userId === author?._id;
 
   useEffect(() => {
     setLikesCount(likedUsersState.length);
