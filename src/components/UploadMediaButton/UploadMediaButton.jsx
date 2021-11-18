@@ -134,7 +134,6 @@ function UploadMediaButton({
     try {
       let mediaData = await ImagePicker.openCamera(options);
 
-      mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
       const { width, height, path } = mediaData;
 
       if (width / height < WIDTH_HEIGHT_RATIO) {
