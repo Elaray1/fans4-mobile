@@ -60,7 +60,7 @@ function FightItem({
   const fightResults = () => {
     const totalValue = fight.votedYesUserIds.length + fight.votedNoUserIds.length;
     const percentage = (count) => {
-      return (100 * count) / totalValue;
+      return Math.round((100 * count) / totalValue);
     };
     return (
       <>

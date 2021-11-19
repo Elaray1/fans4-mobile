@@ -5,12 +5,14 @@ import {
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 
+import styles from './styles';
+
 function ScrollToTop({ children }) {
   const scrollViewRef = useRef(null);
   useScrollToTop(scrollViewRef);
 
   return (
-    <ScrollView ref={scrollViewRef}>
+    <ScrollView contentContainerStyle={styles.contentContainerStyle} ref={scrollViewRef}>
       {children}
     </ScrollView>
   );
