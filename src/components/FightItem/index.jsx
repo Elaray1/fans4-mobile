@@ -189,7 +189,7 @@ function FightItem({
           <Fighter
             fighter={firstFighter}
             isWinner={firstFighter._id === fight.results?.winnerId}
-            style={[styles.fighter, styles.firstFighter]}
+            style={styles.fighter}
             onPress={onFighterPress}
             inVotingMode={inVotingMode}
           />

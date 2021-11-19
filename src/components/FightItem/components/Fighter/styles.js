@@ -36,5 +36,6 @@ export default StyleSheet.create({
   location: {
     fontSize: fonts.size.caption,
     color: colors.disabledText,
+    marginBottom: 2,
   },
 });

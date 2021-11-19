@@ -28,11 +28,9 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  firstFighter: {
-    alignItems: 'flex-end',
-  },
   fighter: {
-    width: '50%',
+    width: '30%',
+    alignItems: 'center',
   },
   vs: {
     alignSelf: 'center',
