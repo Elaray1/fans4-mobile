@@ -1,10 +1,14 @@
 import { StyleSheet } from 'react-native';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+import metrics from 'themes/metrics';
 
 export default StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    height: metrics.screenHeight - metrics.tabBarHeight,
+  },
   text: {
-    marginTop: 100,
     marginHorizontal: 20,
     fontSize: fonts.size.h4,
     fontWeight: fonts.weight.bold,
