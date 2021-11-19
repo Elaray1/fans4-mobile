@@ -250,7 +250,6 @@ function Feed() {
             keyExtractor={keyExtractor}
             onEndReachedThreshold={0.3}
             onEndReached={fetchNewItems}
-            style={styles.fightersList}
             showsVerticalScrollIndicator={false}
             ListFooterComponent={renderFooter}
             onRefresh={onRefresh}
