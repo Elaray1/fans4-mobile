@@ -106,39 +106,41 @@ const Voter = ({ onFightsToVoteEnded, firstFight }) => {
   }
 
   return (
-    <SafeAreaView style={styles}>
-      <Text style={styles.text}>
-        {t('Voting.wantToSeeThis')}
-      </Text>
-      <View style={styles.fight}>
-        <Swiper
-          ref={useSwiper}
-          keyExtractor={fight => String(fight._id)}
-          cards={fights}
-          renderCard={renderItem}
-          stackSize={5}
-          backgroundColor="transparent"
-          verticalSwipe={false}
-          onSwipedLeft={onVoteNo}
-          onSwipedRight={onVoteYes}
-          dragEnd={() => setCardPositionX(0)}
-          onSwipedAll={onFightsToVoteEnded}
-          onSwiping={onSwiping}
-        />
-      </View>
-      <View style={styles.buttons}>
-        <TouchableOpacity
-          style={[styles.button, cardPositionX < -10 && styles.litedButton]}
-          onPress={onPressNo}
-        >
-          <VoteNoIcon />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, cardPositionX > 10 && styles.litedButton]}
-          onPress={onPressYes}
-        >
-          <VoteYesIcon />
-        </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Text style={styles.text}>
+          {t('Voting.wantToSeeThis')}
+        </Text>
+        <View style={styles.fight}>
+          <Swiper
+            ref={useSwiper}
+            keyExtractor={fight => String(fight._id)}
+            cards={fights}
+            renderCard={renderItem}
+            stackSize={5}
+            backgroundColor="transparent"
+            verticalSwipe={false}
+            onSwipedLeft={onVoteNo}
+            onSwipedRight={onVoteYes}
+            dragEnd={() => setCardPositionX(0)}
+            onSwipedAll={onFightsToVoteEnded}
+            onSwiping={onSwiping}
+          />
+        </View>
+        <View style={styles.buttons}>
+          <TouchableOpacity
+            style={[styles.button, cardPositionX < -10 && styles.litedButton]}
+            onPress={onPressNo}
+          >
+            <VoteNoIcon />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, cardPositionX > 10 && styles.litedButton]}
+            onPress={onPressYes}
+          >
+            <VoteYesIcon />
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
