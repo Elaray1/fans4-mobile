@@ -130,8 +130,8 @@ const ChatsList = () => {
   }, []);
 
   const onNewChatPress = useCallback((chat) => {
-    navigation.navigate('NewChat');
-  }, [navigation]);
+    navigation.navigate('NewChat', { onRefreshChatsList: onRefresh });
+  }, [navigation, onRefresh]);
 
   const renderItem = ({ item }) => {
     return (
