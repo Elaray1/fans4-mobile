@@ -603,7 +603,7 @@
     "youVoted": "You voted",
     "ok": "OK",
     "subscription": "Propose a fight!",
-    "youHaveToBeSubscribed": "To propose a fight you have to be subscribed to a fighter.",
+    "youHaveToBeSubscribed": "To propose a fight you have to be subscribed to a Fighter.",
     "created": "Fight was sent to admin for review",
     "voted": "Fight already created, we saved your vote",
     "pending": "Fight already is in admin review",
@@ -619,10 +619,10 @@
     "ProposeAFight": "Propose A Fight",
     "next": "Next",
     "create": "Create",
-    "chooseOpponent": "Choose opponent for this fight",
-    "noFighters": "No fighters who fit your request.",
+    "chooseOpponent": "Choose an opponent for this figh",
+    "noFighters": "There are no fighters who match your request",
     "showFullList": "Show full list",
-    "chooseFighter": "Choose your fighter to create a fight",
+    "chooseFighter": "Choose your Fighter to create a fight",
     "search": "Search by name or nickname"
   },
   "Fans": {
