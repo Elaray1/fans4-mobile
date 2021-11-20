@@ -36,7 +36,6 @@ function FightItem({
   viewType,
   inVotingMode,
   isCountdownShown,
-  cardPosition,
 }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -185,7 +184,6 @@ function FightItem({
       {isCountdownShown ? <View style={styles.time} /> : <Countdown date={fight.votingFinishedOn} />}
       <View style={styles.fightersInfo}>
         <View style={styles.fighters}>
-          {cardPosition > 0 && <Text style={[styles.helper, styles.yes]}>YES</Text>}
           <Fighter
             fighter={firstFighter}
             isWinner={firstFighter._id === fight.results?.winnerId}
@@ -203,7 +201,6 @@ function FightItem({
             onPress={onFighterPress}
             inVotingMode={inVotingMode}
           />
-          {cardPosition < 0 && <Text style={[styles.helper, styles.no]}>NO</Text>}
         </View>
 
         <View style={styles.line} />
@@ -219,14 +216,12 @@ FightItem.propTypes = {
   viewType: PropTypes.oneOf(Object.values(FIGHT_VIEW_TYPE)),
   inVotingMode: PropTypes.bool,
   isCountdownShown: PropTypes.bool,
-  cardPosition: PropTypes.number,
 };
 
 FightItem.defaultProps = {
   viewType: null,
   inVotingMode: false,
   isCountdownShown: false,
-  cardPosition: 0,
 };
 
 export default React.memo(FightItem);

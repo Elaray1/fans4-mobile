@@ -40,4 +40,20 @@ export default StyleSheet.create({
   litedButton: {
     backgroundColor: colors.lightButton,
   },
+  helper: {
+    position: 'absolute',
+    top: 65,
+    fontSize: fonts.size.h1,
+    fontWeight: fonts.weight.bold,
+    zIndex: 2,
+  },
+  yes: {
+    left: 65,
+    transform: [{ rotate: '-10deg' }],
+    color: colors.primaryRed,
+  },
+  no: {
+    right: 65,
+    transform: [{ rotate: '10deg' }],
+  },
 });

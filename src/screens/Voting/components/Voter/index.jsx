@@ -112,6 +112,7 @@ const Voter = ({ onFightsToVoteEnded, firstFight }) => {
           {t('Voting.wantToSeeThis')}
         </Text>
         <View style={styles.fight}>
+          {cardPositionX > 10 && <Text style={[styles.helper, styles.yes]}>YES</Text>}
           <Swiper
             ref={useSwiper}
             keyExtractor={fight => String(fight._id)}
@@ -126,6 +127,7 @@ const Voter = ({ onFightsToVoteEnded, firstFight }) => {
             onSwipedAll={onFightsToVoteEnded}
             onSwiping={onSwiping}
           />
+          {cardPositionX < -10 && <Text style={[styles.helper, styles.no]}>NO</Text>}
         </View>
         <View style={styles.buttons}>
           <TouchableOpacity
