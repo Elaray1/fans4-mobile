@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import {
   SafeAreaView,
   View,
@@ -35,12 +36,14 @@ import styles from './styles';
 const INITIAL_PAGE = 1;
 const PER_PAGE = 25;
 
-function NewChat() {
+function NewChat({ route }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { showFailure } = useToast();
 
   const userId = useSelector(userSelectors.getUserId);
+
+  const { onRefreshChatsList } = route?.params;
 
   const [chats, setChats] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -176,12 +179,18 @@ function NewChat() {
 
   const renderItemSeparator = () => <View style={styles.line} />;
 
+  const onGoBack = useCallback(() => {
+    navigation.goBack();
+    onRefreshChatsList();
+  }, [navigation, onRefreshChatsList]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <Header
         title={t('NewChat.newChat')}
         leftItemType="backArrow"
+        onLeftItemPress={onGoBack}
       />
       <View style={styles.content}>
         <SearchInput
@@ -229,5 +238,13 @@ function NewChat() {
     </SafeAreaView>
   );
 }
+
+NewChat.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      onRefreshChatsList: PropTypes.func,
+    }),
+  }).isRequired,
+};
 
 export default React.memo(NewChat);
