@@ -211,20 +211,4 @@ export default StyleSheet.create({
     color: colors.fightingStatusText,
     fontSize: fonts.size.caption,
   },
-  helper: {
-    position: 'absolute',
-    fontSize: fonts.size.h1,
-    fontWeight: fonts.weight.bold,
-    zIndex: 2,
-    top: -25,
-  },
-  yes: {
-    left: 35,
-    transform: [{ rotate: '-10deg' }],
-    color: colors.primaryRed,
-  },
-  no: {
-    right: 35,
-    transform: [{ rotate: '10deg' }],
-  },
 });
