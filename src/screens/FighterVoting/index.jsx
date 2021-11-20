@@ -67,7 +67,7 @@ const FighterVoting = ({ route }) => {
 
   const navigateToFightersList = useCallback(() => {
     navigation.navigate('Tabs', {
-      screen: 'SearchFighters',
+      screen: 'Fighters',
     });
   }, [navigation]);
 
