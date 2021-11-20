@@ -113,11 +113,10 @@ const ProposeAFight = ({ route }) => {
       <View style={styles.content}>
         <View style={styles.fightersContainer}>
           <View style={styles.fightersBlock}>
-            <View style={styles.leftBlock}>
+            <View>
               {firstFighter
                 ? (
-
-                  <View style={styles.leftFighter}>
+                  <View style={styles.fighter}>
                     <FastImage
                       style={styles.image}
                       source={{ uri: firstFighter.avatarUrl }}
@@ -131,10 +130,10 @@ const ProposeAFight = ({ route }) => {
 
             <Text style={styles.vs}>vs</Text>
 
-            <View style={styles.rightBlock}>
+            <View>
               {secondFighter
                 ? (
-                  <View>
+                  <View style={styles.fighter}>
                     <FastImage
                       style={styles.image}
                       source={{ uri: secondFighter.avatarUrl }}

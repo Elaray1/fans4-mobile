@@ -69,14 +69,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
     fontFamily: fonts.family.bold,
   },
-  leftBlock: {
-    flex: 1,
-    alignItems: 'flex-end',
-  },
-  rightBlock: {
-    flex: 1,
-  },
-  leftFighter: {
-    alignItems: 'flex-end',
+  fighter: {
+    alignItems: 'center',
   },
 });
