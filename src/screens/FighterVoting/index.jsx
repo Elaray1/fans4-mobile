@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as fightApi from 'resources/fight/fight.api';
-import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
+import { FIGHT_STATUSES, FIGHT_SORT_OPTIONS } from 'resources/fight/fight.constants';
 
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
@@ -117,6 +117,7 @@ const FighterVoting = ({ route }) => {
           perPage: PER_PAGE_COUNT,
           statuses: [FIGHT_STATUSES.IN_VOTING, FIGHT_STATUSES.VOTING_CLOSED],
           hasVotes: true,
+          sortOption: FIGHT_SORT_OPTIONS.STATUS,
         });
 
         setPage(fetchingPage + 1);
