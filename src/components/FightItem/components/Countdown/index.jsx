@@ -40,7 +40,12 @@ const Countdown = ({ date }) => {
           <>
             {hoursBeforeFight < 24
               ? <Text style={styles.timeText}>{moment.utc(countdown * 1000).format('HH:mm:ss')}</Text>
-              : <Text style={styles.timeText}>{formatTime(date)}</Text>}
+              : (
+                <Text style={styles.timeText}>
+                  {/* temporary solution (for now we want to show 7 days for 7 days+ time left) */}
+                  {`${hoursBeforeFight / 7 < 24 ? formatTime(date) : '7 days left'}`}
+                </Text>
+              )}
           </>
         )}
     </View>
