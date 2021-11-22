@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { TouchableOpacity, View, Image, Alert, Platform, Linking } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import ImagePicker from 'react-native-image-crop-picker';
-import { createThumbnail } from 'react-native-create-thumbnail';
 import analyticsService from 'services/analytics.service';
 import _ from 'lodash';
 
@@ -14,6 +13,8 @@ import Viewable from 'components/Viewable';
 import Modal from 'components/Modal';
 import Video from 'components/Video';
 import Text from 'components/Text';
+
+import useToast from 'hooks/useToast';
 
 import UploadingMethodModal from './components/UploadingMethodModal';
 
@@ -32,6 +33,7 @@ function UploadMediaButton({
   canUploadFromCamera,
   style,
 }) {
+  const { showFailure } = useToast();
   const { t } = useTranslation();
 
   const [media, setMedia] = useState(null);
@@ -56,6 +58,24 @@ function UploadMediaButton({
     setIsChooseUploadingMethodModal(false);
   }, []);
 
+  const onNewMediaSet = useCallback((mediaData) => {
+    handleMediaUpload(mediaData);
+    setMedia(mediaData);
+    setErrorText(null);
+  }, [handleMediaUpload]);
+
+  const handleCameraError = useCallback((error) => {
+    showFailure();
+    console.log('media button error:', error);
+
+    if (error.code === 'E_NO_CAMERA_PERMISSION') {
+      setAllowModalData({
+        title: t('UploadMediaButton.accessToCameraNeeded'),
+        text: t('UploadMediaButton.provideAccessToTheCamera'),
+      });
+    }
+  }, [showFailure, t]);
+
   const onUploadFromGallery = useCallback(async () => {
     const options = croppingAvatar ? {
       cropping: Platform.OS === 'android' ? true : 'cropit',
@@ -68,13 +88,13 @@ function UploadMediaButton({
       forceJpg: true,
     } : {
       mediaType,
-      compressVideoPreset: 'HighestQuality',
+      compressVideoPreset: 'Passthrough',
       multiple: false,
+      writeTempFile: false,
     };
 
     try {
       let mediaData = await ImagePicker.openPicker(options);
-
       mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
 
       if (mediaData.mime.includes('image')) {
@@ -90,27 +110,11 @@ function UploadMediaButton({
             width: !croppingAvatar ? width : 335,
           });
         }
-      }
-
-      if (mediaData.mime.includes('video')) {
-        const res = await createThumbnail({
-          format: 'png',
-          url: mediaData.path,
-          timeStamp: mediaData.duration >= 1000 ? 1000 : Math.round(mediaData.duration / 2),
-        });
-
-        mediaData.duration /= 1000;
-
-        handleMediaUpload(mediaData, {
-          path: res.path,
-          mime: 'image/png',
-        });
       } else {
-        handleMediaUpload(mediaData);
+        mediaData.duration = parseInt(mediaData.duration / 1000, 10);
       }
-      setMedia(mediaData);
 
-      setErrorText(null);
+      onNewMediaSet(mediaData);
     } catch (error) {
       console.log('media button error:', error);
 
@@ -129,7 +133,7 @@ function UploadMediaButton({
     });
 
     onCloseUploadingMethodModal(false);
-  }, [handleMediaUpload, t, mediaType, croppingAvatar, onCloseUploadingMethodModal]);
+  }, [onNewMediaSet, t, mediaType, croppingAvatar, onCloseUploadingMethodModal]);
 
   const onUploadPhotoFromCamera = useCallback(async () => {
     const options = {
@@ -156,14 +160,7 @@ function UploadMediaButton({
 
       setErrorText(null);
     } catch (error) {
-      console.log('media button error:', error);
-
-      if (error.code === 'E_NO_CAMERA_PERMISSION') {
-        setAllowModalData({
-          title: t('UploadMediaButton.accessToCameraNeeded'),
-          text: t('UploadMediaButton.provideAccessToTheCamera'),
-        });
-      }
+      handleCameraError(error);
     }
 
     analyticsService.logEvent({
@@ -171,43 +168,22 @@ function UploadMediaButton({
     });
 
     onCloseUploadingMethodModal(false);
-  }, [onCloseUploadingMethodModal, t, handleMediaUpload]);
+  }, [handleCameraError, onCloseUploadingMethodModal, handleMediaUpload]);
 
   const onUploadVideoFromCamera = useCallback(async () => {
     const options = {
       mediaType: MEDIA_TYPES.VIDEO,
+      compressVideoPreset: 'Passthrough',
     };
 
     try {
       const mediaData = await ImagePicker.openCamera(options);
-
       mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
+      mediaData.duration = parseInt(mediaData.duration / 1000, 10);
 
-      const res = await createThumbnail({
-        format: 'png',
-        url: mediaData.path,
-        timeStamp: mediaData.duration >= 1000 ? 1000 : Math.round(mediaData.duration / 2),
-      });
-
-      mediaData.duration /= 1000;
-
-      handleMediaUpload(mediaData, {
-        path: res.path,
-        mime: 'image/png',
-      });
-
-      setMedia(mediaData);
-
-      setErrorText(null);
+      onNewMediaSet(mediaData);
     } catch (error) {
-      console.log('media button error:', error);
-
-      if (error.code === 'E_NO_CAMERA_PERMISSION') {
-        setAllowModalData({
-          title: t('UploadMediaButton.accessToCameraNeeded'),
-          text: t('UploadMediaButton.provideAccessToTheCamera'),
-        });
-      }
+      handleCameraError(error);
     }
 
     analyticsService.logEvent({
@@ -215,7 +191,7 @@ function UploadMediaButton({
     });
 
     onCloseUploadingMethodModal(false);
-  }, [onCloseUploadingMethodModal, t, handleMediaUpload]);
+  }, [handleCameraError, onNewMediaSet, onCloseUploadingMethodModal]);
 
   const onCloseAllowModal = useCallback(() => {
     setAllowModalData(null);
@@ -224,7 +200,6 @@ function UploadMediaButton({
   const onGoToSettings = useCallback(() => {
     Linking.openSettings();
   }, []);
-
 
   const onBinPress = useCallback(() => {
     Alert.alert(

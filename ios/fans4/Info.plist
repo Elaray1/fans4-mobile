@@ -51,7 +51,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Providing access to your camera allows you to share the photos and videos with your fans in Fans4 app.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Need microphone access for recording videos</string>
 	<key>NSPhotoLibraryUsageDescription</key>

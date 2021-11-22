@@ -28,24 +28,16 @@ function NewPost() {
 
   const [text, setText] = useState('');
   const [uploadingMedia, setUploadingMedia] = useState(null);
-  const [uploadingPoster, setUploadingPoster] = useState(null);
   const [loading, setLoading] = useState(null);
   const isSubmitDisabled = loading || (text === '' && !uploadingMedia);
 
   const onChangeText = useCallback(newText => setText(newText), []);
-  const handleMediaUpload = useCallback((media, poster) => {
+  const handleMediaUpload = useCallback((media) => {
     setUploadingMedia(media);
-
-    if (setUploadingPoster) {
-      setUploadingPoster(poster);
-    }
   }, [setUploadingMedia]);
 
   const onDelete = useCallback(() => {
     setUploadingMedia(null);
-    if (setUploadingPoster) {
-      setUploadingPoster(null);
-    }
   }, []);
 
   useEffect(() => {
@@ -74,25 +66,12 @@ function NewPost() {
         text,
       };
 
-      if (uploadingPoster) {
-        const { postId, storageUrl } = await postApi.createVideoPoster({}, {
-          name: 'file',
-          type: uploadingPoster.mime,
-          uri: uploadingPoster.path,
-        });
-
-        params.postId = postId;
-        params.posterStorageUrl = storageUrl;
-      }
-
       let file = null;
 
       if (uploadingMedia) {
-        params.width = uploadingMedia.width.toString();
-        params.height = uploadingMedia.height.toString();
-
-        if (uploadingMedia.mime.includes('video')) {
-          params.duration = uploadingMedia.duration.toString();
+        if (uploadingMedia.mime.includes('image')) {
+          params.width = uploadingMedia.width.toString();
+          params.height = uploadingMedia.height.toString();
         }
 
         file = {
@@ -110,11 +89,11 @@ function NewPost() {
         name: analyticsService.events.FIGHTER_ADDED_POST,
       });
     } catch (error) {
-      console.error('Submit post error:', error);
+      console.error('VIDEO Submit post error:', error);
     } finally {
       setLoading(false);
     }
-  }, [text, uploadingMedia, goToAccount, uploadingPoster, onUploadProgress]);
+  }, [text, uploadingMedia, goToAccount, onUploadProgress]);
 
   return (
     <SafeAreaView style={styles.screen}>

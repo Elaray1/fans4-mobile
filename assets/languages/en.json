@@ -728,7 +728,8 @@
     "delete": "Delete",
     "deletePost": "Delete post",
     "thisPostWillNoLongerBeAvailableForYouAndYourFans": "This post will no longer be available for you and your fans.",
-    "edited": "edited"
+    "edited": "edited",
+    "processing": "Processing..."
   },
   "ChangePost": {
     "editPost": "Edit Post",

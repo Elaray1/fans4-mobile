@@ -1,8 +1,6 @@
 import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  View, TouchableOpacity, FlatList, ActivityIndicator,
-} from 'react-native';
+import { View, TouchableOpacity, FlatList, ActivityIndicator, AppState } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -87,13 +85,34 @@ function FighterAccount({ postId }) {
   }, [navigation, refreshPosts, postId]);
 
   useEffect(() => {
-    socketService.on('fighter:subscribers-updated', refreshFansCount);
-    socketService.on('post:status-updated', refreshPosts);
+    const listening = AppState.addEventListener('change', async (appState) => {
+      if (appState === 'active') {
+        refreshPosts();
+      }
+    });
+
+    return () => listening.remove();
+  }, [refreshPosts]);
+
+
+  useEffect(() => {
+    socketService.on('post:status-updated', (data) => {
+      refreshPosts();
+    });
+
     return () => {
-      socketService.removeListener('fighter:subscribers-updated', refreshFansCount);
       socketService.removeListener('post:status-updated', refreshPosts);
     };
-  }, [refreshFansCount, refreshPosts]);
+  }, [refreshPosts]);
+
+  useEffect(() => {
+    socketService.on('fighter:subscribers-updated', refreshFansCount);
+
+    return () => {
+      socketService.removeListener('fighter:subscribers-updated', refreshFansCount);
+    };
+  }, [refreshFansCount]);
+
 
   const refreshContent = useCallback(async () => {
     setIsRefreshing(true);
@@ -267,6 +286,7 @@ function FighterAccount({ postId }) {
     return unsubscribe;
   }, [navigation, updateIsScrollNeeded]);
 
+
   useEffect(() => {
     const fetchPostToScroll = async () => {
       if (postIdToBeScrolled) {
@@ -335,39 +355,37 @@ function FighterAccount({ postId }) {
       {!isFetchedFirstTime && isRefreshing && <Loader />}
 
 
-      {postsCount !== null
-      && fansCount !== null
-      && (
-      <FlatList
-        ref={postsListRef}
-        style={styles.content}
-        data={visiblePosts}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        ItemSeparatorComponent={renderItemSeparator}
-        onEndReached={fetchMorePosts}
-        onEndReachedThreshold={0.1}
-        refreshing={isRefreshing}
-        onRefresh={onRefresh}
-        initialNumToRender={PER_PAGE}
-        ListHeaderComponent={(
-          <FighterHeader
-            postsCount={postsCount}
-            fansCount={fansCount}
-            onAddBiographyPress={onAddBiographyPress}
-          />
-        )}
-        ListFooterComponent={renderFooter}
-        ListEmptyComponent={renderNoItems}
-        onViewableItemsChanged={updateViewableItems}
-        viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
-        onScrollToIndexFailed={(info) => {
-          const wait = new Promise(resolve => setTimeout(resolve, 500));
-          wait.then(() => {
-            postsListRef.current?.scrollToIndex({ index: info.index, viewPosition: 0 });
-          });
-        }}
-      />
+      {postsCount !== null && fansCount !== null && (
+        <FlatList
+          ref={postsListRef}
+          style={styles.content}
+          data={visiblePosts}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          ItemSeparatorComponent={renderItemSeparator}
+          onEndReached={fetchMorePosts}
+          onEndReachedThreshold={0.1}
+          refreshing={isRefreshing}
+          onRefresh={onRefresh}
+          initialNumToRender={PER_PAGE}
+          ListHeaderComponent={(
+            <FighterHeader
+              postsCount={postsCount}
+              fansCount={fansCount}
+              onAddBiographyPress={onAddBiographyPress}
+            />
+          )}
+          ListFooterComponent={renderFooter}
+          ListEmptyComponent={renderNoItems}
+          onViewableItemsChanged={updateViewableItems}
+          viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
+          onScrollToIndexFailed={(info) => {
+            const wait = new Promise(resolve => setTimeout(resolve, 500));
+            wait.then(() => {
+              postsListRef.current?.scrollToIndex({ index: info.index, viewPosition: 0 });
+            });
+          }}
+        />
       )}
     </>
   );
