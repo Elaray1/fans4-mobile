@@ -173,7 +173,12 @@ function SearchFighters() {
     };
 
     init();
-  }, [supportedFighters, selectedFighterId, toggleSubscriptionState, userType]);
+  }, [selectedFighterId, userType]);
+
+  const onFinishMakingPurchaseAfterSucessPayment = useCallback(() => {
+    setSelectedFighterId(null);
+    finishMakingPurchaseAfterSucessPayment();
+  }, [finishMakingPurchaseAfterSucessPayment]);
 
   const onSubscribeIconPress = useCallback((fighterId) => {
     setSelectedFighterId(fighterId);
@@ -289,7 +294,7 @@ function SearchFighters() {
             )}
 
             {isSelectedFighterInSubscription
-              && <ConfirmedIosPurchase handleDonePress={finishMakingPurchaseAfterSucessPayment} />}
+              && <ConfirmedIosPurchase handleDonePress={onFinishMakingPurchaseAfterSucessPayment} />}
           </View>
         </Modal>
       )}
