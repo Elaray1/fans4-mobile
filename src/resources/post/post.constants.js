@@ -8,6 +8,7 @@ export const MEDIA_TYPES = {
 };
 
 export const POST_STATUSES = {
+  PROCESSING: 'processing',
   APPROVED: 'approved',
   PENDING: 'pending',
   DECLINED: 'declined',

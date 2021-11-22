@@ -6,6 +6,23 @@ import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
+  processingText: {
+    color: colors.grayText,
+    fontSize: fonts.size.caption,
+    fontWeight: fonts.weight.medium,
+    marginBottom: 12,
+  },
+  processingMediaContainer: {
+    width: '100%',
+    height: 185,
+    backgroundColor: '#54565E',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  processingPostWithText: {
+    paddingBottom: 0,
+  },
   post: {
     paddingVertical: 14,
     paddingHorizontal: 12,
@@ -104,6 +121,7 @@ export default StyleSheet.create({
     marginBottom: 12,
   },
   textContainer: {
+    marginTop: 12,
     flexDirection: 'row',
   },
   editedLabel: {

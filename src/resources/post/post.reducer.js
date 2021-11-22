@@ -14,6 +14,7 @@ export default (state = [], action) => {
         return state.map(post => (post.id === action.uploadingPostData.id
           ? { ...post, ...action.uploadingPostData } : post));
       }
+
       return [
         ...state,
         action.uploadingPostData,

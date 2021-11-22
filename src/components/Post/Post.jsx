@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -74,13 +74,35 @@ function Post({
   const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1} others` : ''}`;
   const isPostAuthor = userId === author?._id;
 
+  const [videoLink, setVideoLink] = useState(null);
+
   useEffect(() => {
     setLikesCount(likedUsersState.length);
     setIsLiked(likedUsersState.some(u => u._id === userId));
+
     setLikedNames(likedUsersState.length === 2
       ? `${likedUsersState[1]?.name} and ${likedUsersState[0]?.name}`
       : likedUsersState[0]?.name);
   }, [userId, likedUsersState]);
+
+  useEffect(() => {
+    const getVideoLink = async () => {
+      let retryCount = 0;
+      let link;
+
+      while (retryCount < 3 && !link) {
+        try {
+          ({ link } = await postApi.getVideoLink(_id)); // eslint-disable-line no-await-in-loop
+          setVideoLink(link);
+        } catch (err) {
+          retryCount += 1;
+          console.error('getting video link error:', err);
+        }
+      }
+    };
+
+    getVideoLink();
+  }, [_id]);
 
   const posterSource = useMemo(() => {
     if (media && media.type === MEDIA_TYPES.VIDEO && media.posterStorageUrl) {
@@ -92,8 +114,19 @@ function Post({
         },
       };
     }
+
     return null;
   }, [_id, media]);
+
+  const videoSource = useMemo(() => {
+    if (!media || media.type !== MEDIA_TYPES.VIDEO || !videoLink) {
+      return null;
+    }
+
+    return {
+      uri: videoLink,
+    };
+  }, [media, videoLink]);
 
   const onPressFighter = useCallback(() => {
     if (author?._id === FANS4_ACCOUNT._id) {
@@ -157,10 +190,9 @@ function Post({
           {author.fullName}
         </Text>
       </TouchableOpacity>
+
       {isPostAuthor && (
-        <TouchableOpacity
-          onPress={onOpenEditPostModal}
-        >
+        <TouchableOpacity onPress={onOpenEditPostModal}>
           <DotsIcon />
         </TouchableOpacity>
       )}
@@ -169,17 +201,19 @@ function Post({
 
 
   let contentContainerView = null;
-  if (media) {
-    const source = {
-      uri: `${config.apiUrl}/posts/${_id}/media`,
-      headers: {
-        Authorization: `Bearer ${config.accessToken}`,
-        'X-Application-ID': config.applicationId,
-      },
-    };
 
+  if (media) {
     let mediaView;
+
     if (media.type === MEDIA_TYPES.IMAGE) {
+      const source = {
+        uri: `${config.apiUrl}/posts/${_id}/media`,
+        headers: {
+          Authorization: `Bearer ${config.accessToken}`,
+          'X-Application-ID': config.applicationId,
+        },
+      };
+
       mediaView = (
         <View style={styles.mediaContainer}>
           <FastImage
@@ -188,12 +222,21 @@ function Post({
           />
         </View>
       );
+    } else if (status === POST_STATUSES.PROCESSING) {
+      mediaView = (
+        <>
+          <Text style={styles.processingText}>{t('Post.processing')}</Text>
+          <View style={styles.processingMediaContainer}>
+            <ActivityIndicator size="small" color="white" />
+          </View>
+        </>
+      );
     } else {
       mediaView = (
         <View style={styles.mediaContainer}>
           <Video
             posterSource={posterSource}
-            source={source}
+            source={videoSource}
             width={media.width}
             height={media.height}
             duration={media.duration}
@@ -269,6 +312,7 @@ function Post({
           onSubmit={onRemovePostFromFeedConfirmation}
         />
       )}
+
       {isRemovePostConfirmationModal && (
         <Modal
           title={t('Post.deletePost')}
@@ -279,6 +323,7 @@ function Post({
           onSubmit={onRemovePostFromFeedConfirmation}
         />
       )}
+
       <EditPostModal
         onClose={onCloseEditPostModal}
         visible={isEditPostModal}
@@ -286,7 +331,13 @@ function Post({
         onEdit={onEditPost}
         onRemoveFromFeed={onOpenRemovePostFromFeedConfirmationModal}
       />
-      <View style={styles.post}>
+
+      <View
+        style={[
+          styles.post,
+          status === POST_STATUSES.PROCESSING && text && styles.processingPostWithText,
+        ]}
+      >
         {authorView}
         {contentContainerView}
         {status === POST_STATUSES.APPROVED && (
@@ -364,9 +415,9 @@ Post.propTypes = {
   _id: PropTypes.string.isRequired,
   text: PropTypes.string,
   media: PropTypes.shape({
+    width: PropTypes.number,
+    height: PropTypes.number,
     type: PropTypes.oneOf(Object.values(MEDIA_TYPES)).isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
     posterStorageUrl: PropTypes.string,
     duration: PropTypes.number,
   }),

@@ -34,6 +34,7 @@ function UploadingPosts() {
     setIsLoading(true);
     try {
       await dispatch(postActions.removeFailedUploadingPosts());
+
       if (item.length) {
         await Promise.all(item.map(postData => postApi.createPost(postData.data, postData.file,
           { onUploadProgress })));
