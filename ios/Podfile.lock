@@ -331,6 +331,8 @@ PODS:
     - React-Core
   - react-native-date-picker (3.2.10):
     - React-Core
+  - react-native-netinfo (7.1.2):
+    - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
   - react-native-splash-screen (3.2.0):
@@ -517,6 +519,7 @@ DEPENDENCIES:
   - react-native-config (from `../node_modules/react-native-config`)
   - "react-native-cookies (from `../node_modules/@react-native-cookies/cookies`)"
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-video (from `../node_modules/react-native-video`)
@@ -618,6 +621,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-cookies/cookies"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-splash-screen:
@@ -725,7 +730,8 @@ SPEC CHECKSUMS:
   react-native-config: 72d948053a442779b3178fddd571e37f118ef606
   react-native-cookies: 6004d512ffc6f2c498c5b70cda0bc040350c0585
   react-native-date-picker: 242eec7af56cea5fb2706d5db5d3837060b3884b
-  react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
+  react-native-netinfo: 07e8299fff4d2bea17d00b519d4f9c67c7dbbe9b
+  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-video: 77ce22be7abff9e373527ca10106a99dea3ba56c
   react-native-webview: b176c6404ad40d10cfc818be41c053f85a72d751

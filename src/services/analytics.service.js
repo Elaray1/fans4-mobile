@@ -44,6 +44,7 @@ class AnalyticsService {
     FIGHTER_UPLOAD_MEDIA_FROM_GALLERY: 'fighter_upload_media_from_gallery',
     FIGHTER_UPLOAD_PHOTO_FROM_CAMERA: 'fighter_upload_photo_from_camera',
     FIGHTER_UPLOAD_VIDEO_FROM_CAMERA: 'fighter_upload_video_from_camera',
+    VIDEO_PLAYBACK_STARTED: 'video_playback_started',
   }
 
   constructor({ firebaseAnalytics, amplitudeAnalytics, amplitudeApiKey }) {

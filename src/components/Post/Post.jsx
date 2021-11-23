@@ -1,14 +1,20 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
-import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
+
+import analyticsService from 'services/analytics.service';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as postApi from 'resources/post/post.api';
+
+import * as videoPlaybackApi from 'resources/video_playback/video_playback.api';
 
 import Text from 'components/Text';
 import StatusBadge from 'components/StatusBadge';
@@ -150,6 +156,33 @@ function Post({
     setIsEditPostModal(false);
   }, []);
 
+  const onVideoLoaded = useCallback(async ({ startLoadingDate, endLoadingDate }) => {
+    const delayMs = moment(endLoadingDate).diff(startLoadingDate);
+
+    const { type: networkType } = await NetInfo.fetch();
+
+    analyticsService.logEvent({
+      name: analyticsService.events.VIDEO_PLAYBACK_STARTED,
+      data: {
+        postId: _id,
+        delayMs,
+        networkType,
+      },
+    });
+
+    try {
+      await videoPlaybackApi.createVideoPlayback({
+        viewerId: userId,
+        postId: _id,
+        delayMs,
+        networkType,
+        os: Platform.OS,
+      });
+    } catch (error) {
+      console.log('creating video playback error: ', error);
+    }
+  }, [userId, _id]);
+
   const onOpenRemovePostFromFeedConfirmationModal = useCallback((isRemovedByAdmin) => {
     if (isRemovedByAdmin) {
       setIsRemoveFromFeedConfirmationModal(true);
@@ -247,6 +280,7 @@ function Post({
             height={media.height}
             duration={media.duration}
             viewable={viewable}
+            onVideoLoaded={onVideoLoaded}
           />
         </View>
       );
