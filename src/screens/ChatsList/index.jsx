@@ -10,7 +10,10 @@ import Header from 'components/Header';
 import useToast from 'hooks/useToast';
 
 import * as chatApi from 'resources/chat/chat.api';
+
 import * as userSelectors from 'resources/user/user.selectors';
+
+import { FANS4_ACCOUNT } from 'helpers/constants';
 import { USER_TYPES } from 'resources/user/user.constants';
 
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
@@ -124,10 +127,10 @@ const ChatsList = () => {
   const onNewMessages = useCallback(({ chat }) => {
     setChats((oldChats) => {
       const newChats = oldChats.filter(c => c._id !== chat._id);
-      newChats.splice(1, 0, chat);
+      newChats.splice(isFan || chat._id === FANS4_ACCOUNT._id ? 0 : 1, 0, chat);
       return newChats;
     });
-  }, []);
+  }, [isFan]);
 
   const onNewChatPress = useCallback((chat) => {
     navigation.navigate('NewChat', { onRefreshChatsList: onRefresh });
