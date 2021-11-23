@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 
@@ -173,6 +174,7 @@ function SearchFighters() {
     };
 
     init();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFighterId, userType]);
 
   const onFinishMakingPurchaseAfterSucessPayment = useCallback(() => {
@@ -190,8 +192,10 @@ function SearchFighters() {
     const { nickname } = item.role.biography;
     const { cityName, stateCode } = item.role.biography.hometown;
 
-    const isFighterInSubscription = userType === USER_TYPES.FAN
-    && !!supportedFighters.find(fighter => item._id === fighter._id);
+    const isFighterInActiveSubscription = userType === USER_TYPES.FAN
+    && !!supportedFighters.find(fighter => item._id === fighter._id
+      && fighter.autorenewal
+      && moment(fighter.renewalDate).isAfter(moment()));
 
     return (
       <TouchableOpacity
@@ -232,7 +236,7 @@ function SearchFighters() {
             <TouchableOpacity
               onPress={() => onSubscribeIconPress(item._id)}
             >
-              {isFighterInSubscription ? <SuccessIcon /> : <AddFighterIcon />}
+              {isFighterInActiveSubscription ? <SuccessIcon /> : <AddFighterIcon />}
             </TouchableOpacity>
           )}
         </View>
