@@ -111,7 +111,7 @@ function NewPost() {
       />
 
       <View style={styles.contentContainer}>
-        <ScrollView style={styles.content}>
+        <ScrollView style={styles.content} keyboardShouldPersistTaps="handled">
           <Input
             multiline
             label={t('NewPost.textInputLabel')}

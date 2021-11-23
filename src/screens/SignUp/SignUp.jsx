@@ -170,6 +170,7 @@ function SignUp({ route }) {
       <ScrollView
         style={styles.content}
         contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
       >
         <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
           <View style={styles.keyboardAvoidingChildContainer}>

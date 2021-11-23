@@ -187,7 +187,11 @@ function EditPost({ route }) {
           rightItemDisabled={isSaveButtonDisabled}
           {...saveButtonProps}
         />
-        <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+        >
           <Input
             label={t('ChangePost.postTextMax160Characters')}
             value={postText}

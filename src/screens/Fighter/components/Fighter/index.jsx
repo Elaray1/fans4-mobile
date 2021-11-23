@@ -120,7 +120,8 @@ function Fighter({ fighterId }) {
               refreshing={isRefreshing}
               onRefresh={onRefresh}
             />
-        )}
+          )}
+          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.flatListHeader}>
             <Profile

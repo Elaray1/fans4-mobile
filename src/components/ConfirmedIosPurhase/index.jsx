@@ -28,7 +28,7 @@ const ConfirmedIosPurchase = ({ handleDonePress }) => {
     { width, height }), [height, width]);
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <View>
         <View>
           <FastImage

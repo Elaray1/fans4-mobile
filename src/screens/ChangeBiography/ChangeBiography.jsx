@@ -202,7 +202,11 @@ function ChangeBiography() {
         rightItemDisabled={isSaveButtonDisabled}
         {...saveButtonProps}
       />
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         {!uploadingIntroVideo && introVideoView()}
         <Input
           label={t('ChangeBiography.biography')}

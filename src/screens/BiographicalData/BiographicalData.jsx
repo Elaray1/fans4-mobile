@@ -145,7 +145,11 @@ function BiographicalData() {
         onLeftItemPress={goToSelectType}
       />
 
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <View>
           <Input
             label={t('BiographicalData.firstAndLastName')}

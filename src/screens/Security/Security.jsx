@@ -121,7 +121,11 @@ function Security() {
         rightItemDisabled={isSaveButtonDisabled}
         {...saveButtonProps}
       />
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.oldPassword}>
           <Input
             label={t('Security.currentPassword')}

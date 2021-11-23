@@ -57,7 +57,11 @@ function ForgotPassword({ route }) {
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
       <Header leftItemType="backArrow" title={t('ForgotPassword.title')} />
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
             <Text style={styles.text}>{t('ForgotPassword.text')}</Text>

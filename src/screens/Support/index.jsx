@@ -66,7 +66,11 @@ function Support() {
 
       <Header leftItemType="backArrow" title={t('Support.support')} />
 
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <View>
           {items.map(item => <Question title={item.title} text={item.text} key={item._id} />)}
         </View>

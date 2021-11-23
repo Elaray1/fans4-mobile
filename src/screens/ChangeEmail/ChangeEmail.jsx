@@ -158,7 +158,11 @@ function ChangeEmail() {
         rightItemDisabled={isSaveButtonDisabled}
         {...saveButtonProps}
       />
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.emailInput}>
           <Input
             label={t('ChangeEmail.newEmail')}

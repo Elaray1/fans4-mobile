@@ -147,7 +147,7 @@ const ProposeAFight = ({ route }) => {
           </View>
         </View>
 
-        <ScrollView style={styles.fightersList}>
+        <ScrollView style={styles.fightersList} keyboardShouldPersistTaps="handled">
           <Text style={styles.title}>
             {step === 0 ? t('ProposeAFight.chooseFighter') : t('ProposeAFight.chooseOpponent')}
           </Text>

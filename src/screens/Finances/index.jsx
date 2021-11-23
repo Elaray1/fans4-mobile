@@ -408,6 +408,7 @@ function Finances() {
                     onRefresh={onRefresh}
                   />
                 )}
+                keyboardShouldPersistTaps="handled"
               >
                 {!isFetchedFirstTime ? <Loader /> : (
                   <>

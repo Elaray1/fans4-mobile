@@ -161,7 +161,11 @@ function ChangeFanInfo() {
         onSubmit={onSubmitGenderModal}
         gender={genderValue}
       />
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.emailInput}>
           <Input
             label={t('ChangeFanInfo.fullName')}
