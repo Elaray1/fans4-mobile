@@ -120,7 +120,11 @@ function AccountInformation() {
         leftItemType="backArrow"
         onLeftItemPress={onBackArrowPress}
       />
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         {userType === USER_TYPES.FIGHTER && (
           <>
             <View>

@@ -175,7 +175,11 @@ function PersonalInfo({ route }) {
 
       <Header leftItemType="backArrow" title={t('PersonalInfo.PersonalInfo')} />
 
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <View>
           <View>
             <Text style={styles.inputLabel}>{t('PersonalInfo.weight')}</Text>

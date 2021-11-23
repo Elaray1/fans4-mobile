@@ -155,7 +155,10 @@ const FanAccount = () => {
   };
 
   return (
-    <ScrollView style={styles.content}>
+    <ScrollView
+      style={styles.content}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.account}>
         <View style={styles.nameContainer}>
           <Text style={styles.name}>{userName}</Text>

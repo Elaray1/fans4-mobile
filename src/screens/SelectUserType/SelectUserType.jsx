@@ -41,6 +41,7 @@ function SelectUserType() {
       <ScrollView
         style={styles.content}
         contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
       >
         <LogoAsset style={styles.logo} />
         <Text style={styles.title}>{t('SelectRole.selectYourRole')}</Text>

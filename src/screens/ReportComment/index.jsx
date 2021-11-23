@@ -88,7 +88,7 @@ function ReportComment({ route }) {
       >
         <View style={styles.keyboardAvoidingChildContainer}>
           <Header leftItemType="backArrow" title={t('ReportComment.reportComment')} />
-          <ScrollView style={styles.content}>
+          <ScrollView style={styles.content} keyboardShouldPersistTaps="handled">
             <View>
               <Text style={styles.text}>{t('ReportComment.whyDoYouWantToReportThisComment')}</Text>
               <View style={styles.selectList}>

@@ -12,7 +12,11 @@ function ScrollToTop({ children }) {
   useScrollToTop(scrollViewRef);
 
   return (
-    <ScrollView contentContainerStyle={styles.contentContainerStyle} ref={scrollViewRef}>
+    <ScrollView
+      contentContainerStyle={styles.contentContainerStyle}
+      ref={scrollViewRef}
+      keyboardShouldPersistTaps="handled"
+    >
       {children}
     </ScrollView>
   );

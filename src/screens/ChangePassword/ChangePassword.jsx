@@ -62,7 +62,11 @@ function ChangePassword({ route }) {
 
       <Header leftItemType="backArrow" onLeftItemPress={onBackToSignIn} title={t('ChangePassword.title')} />
 
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
             <Text style={styles.text}>{t('ChangePassword.text')}</Text>

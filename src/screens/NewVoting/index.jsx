@@ -15,7 +15,7 @@ const NewVoting = () => {
   return (
     <SafeAreaView style={styles.screen}>
       <Header title={t('Voting.voting')} />
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <Text style={styles.bigText}>{t('Voting.comingSoon')}</Text>
         <Image source={Illustration} resizeMode="cover" style={styles.image} />
         <Text style={styles.text}>
