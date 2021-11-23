@@ -301,7 +301,7 @@ function Chat({ route }) {
 
   const viewConfigRef = useRef({
     viewAreaCoveragePercentThreshold: 50,
-    waitForInteraction: true,
+    waitForInteraction: !!unreadMessagesCount,
   });
 
   useEffect(() => {
