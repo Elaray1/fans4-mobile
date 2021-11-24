@@ -40,7 +40,6 @@ import colors from 'themes/colors';
 import AppScreens from './appStack';
 import AuthScreens from './authStack';
 
-
 const NAVIGATOR_CONTAINER_THEME = {
   colors: {
     background: colors.main,

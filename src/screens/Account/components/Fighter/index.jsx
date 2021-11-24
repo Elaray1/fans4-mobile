@@ -96,9 +96,7 @@ function FighterAccount({ postId }) {
 
 
   useEffect(() => {
-    socketService.on('post:status-updated', (data) => {
-      refreshPosts();
-    });
+    socketService.on('post:status-updated', refreshPosts);
 
     return () => {
       socketService.removeListener('post:status-updated', refreshPosts);
