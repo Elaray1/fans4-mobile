@@ -1,21 +1,22 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, FlatList, ActivityIndicator } from 'react-native';
+import {
+  SafeAreaView, View, FlatList, ActivityIndicator, TouchableOpacity, Alert, ScrollView, RefreshControl,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 import * as fightApi from 'resources/fight/fight.api';
-import { EVENT_STATUSES } from 'resources/event/event.constants';
-import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
-import { USER_TYPES } from 'resources/user/user.constants';
+
 import * as userSelectors from 'resources/user/user.selectors';
 
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
-import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
 import Text from 'components/Text';
+import Button from 'components/Button';
 
 import useToast from 'hooks/useToast';
 
@@ -23,9 +24,15 @@ import analyticsService from 'services/analytics.service';
 
 import colors from 'themes/colors';
 
+import { EVENT_STATUSES } from 'resources/event/event.constants';
+import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
+import { USER_TYPES } from 'resources/user/user.constants';
+import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
+
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
 import LiveIcon from 'assets/icons/live.svg';
+import PlusIcon from 'assets/icons/grey-plus';
 
 import styles from './styles';
 
@@ -34,6 +41,7 @@ const PER_PAGE_COUNT = 10;
 function EventFights({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
+  const navigation = useNavigation();
 
   const { event } = route?.params;
 
@@ -44,10 +52,13 @@ function EventFights({ route }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
   const userType = useSelector(userSelectors.getUserType);
 
+  const isFan = userType === USER_TYPES.FAN;
+
   useEffect(() => {
-    if (userType === USER_TYPES.FAN) {
+    if (isFan) {
       analyticsService.logEvent({
         name: analyticsService.events.FAN_OPENED_EVENT_SCREEN,
         data: {
@@ -55,7 +66,7 @@ function EventFights({ route }) {
         },
       });
     }
-  }, [userType, event._id]);
+  }, [isFan, event._id]);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;
@@ -92,6 +103,26 @@ function EventFights({ route }) {
     await fetchNewItems({ refresh: true });
     setIsRefreshing(false);
   }, [fetchNewItems]);
+
+  const navigateToPropose = useCallback(() => {
+    if (userSubscriptions.length) {
+      navigation.navigate('ProposeAFight');
+    } else {
+      Alert.alert(
+        t('Voting.subscription'),
+        t('Voting.youHaveToBeSubscribed'),
+        [
+          { text: t('Voting.ok') },
+        ],
+      );
+    }
+  }, [navigation, t, userSubscriptions?.length]);
+
+  const navigateToFightersList = useCallback(() => {
+    navigation.navigate('Tabs', {
+      screen: 'Fighters',
+    });
+  }, [navigation]);
 
   useEffect(() => {
     const fetchFights = async () => {
@@ -174,19 +205,49 @@ function EventFights({ route }) {
           </View>
         </View>
         {isLive && <Text style={styles.stayTuned}>{t('Events.stayTuned')}</Text>}
-        {isLoading ? <Loader /> : (Boolean(fights.length) && (
-        <FlatList
-          data={fights}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          onEndReachedThreshold={0.3}
-          onEndReached={fetchNewItems}
-          showsVerticalScrollIndicator={false}
-          ListFooterComponent={renderFooter}
-          onRefresh={onRefresh}
-          refreshing={isRefreshing}
-        />
-        ))}
+        {isLoading && <Loader />}
+        {!isLoading && !!fights.length
+          && (
+            <FlatList
+              data={fights}
+              renderItem={renderItem}
+              keyExtractor={keyExtractor}
+              onEndReachedThreshold={0.3}
+              onEndReached={fetchNewItems}
+              showsVerticalScrollIndicator={false}
+              ListFooterComponent={renderFooter}
+              onRefresh={onRefresh}
+              refreshing={isRefreshing}
+            />
+          )}
+        {!isLoading && !fights.length && (
+          <ScrollView
+            contentContainerStyle={styles.noFightsContainer}
+            refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+            keyboardShouldPersistTaps="handled"
+          >
+            <Text style={styles.noFightsTitle}>{t('EventFights.stayedTunedForFightCard')}</Text>
+            {isFan ? (
+              <>
+                <Text style={styles.noFightsText}>
+                  {t('EventFights.wantToSeeYourFighterInUpcomingEvents')}
+                </Text>
+                <TouchableOpacity style={styles.button} onPress={navigateToPropose}>
+                  <PlusIcon />
+                  <Text style={styles.buttonText}>{t('EventFights.propose')}</Text>
+                </TouchableOpacity>
+              </>
+            )
+              : (
+                <>
+                  <Text style={styles.noFightsText}>
+                    {t('EventFights.wantToFightInUpcomingEvents')}
+                  </Text>
+                  <Button title={t('EventFights.chooseFighter')} onPress={navigateToFightersList} />
+                </>
+              )}
+          </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );

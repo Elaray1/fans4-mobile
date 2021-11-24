@@ -482,7 +482,12 @@
     "voting": "Voting"
   },
   "EventFights": {
-    "couldntLoadTheFightsPullToRefresh": "Couldn’t load the fights. Pull to refresh."
+    "couldntLoadTheFightsPullToRefresh": "Couldn’t load the fights. Pull to refresh.",
+    "stayedTunedForFightCard": "Stayed tuned for fight card",
+    "wantToSeeYourFighterInUpcomingEvents": "Want to see your Fighter in upcoming events? Propose a fight.",
+    "wantToFightInUpcomingEvents": "Want to fight in upcoming events? You can apply for a fight by choosing a Fighter.",
+    "chooseFighter": "Choose Fighter",
+    "propose": "Propose"
   },
   "Fights": {
     "fights": "Your Fights",
