@@ -14,7 +14,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 
 import * as postApi from 'resources/post/post.api';
 
-import * as videoPlaybackApi from 'resources/video_playback/video_playback.api';
+import * as videoPlaybackApi from 'resources/videoPlayback/videoPlayback.api';
 
 import Text from 'components/Text';
 import StatusBadge from 'components/StatusBadge';
