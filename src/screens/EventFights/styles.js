@@ -3,6 +3,8 @@ import { commonStyles } from 'themes/commonStyles';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
+import hexToRgba from 'helpers/hexToRgba';
+
 export default StyleSheet.create({
   screen: {
     ...commonStyles.screen,
@@ -63,15 +65,16 @@ export default StyleSheet.create({
   line: {
     width: '100%',
     height: 10,
-    borderRadius: 5,
     backgroundColor: colors.whiteBackground,
     position: 'absolute',
     bottom: 0,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
   },
   progress: {
     backgroundColor: colors.primary,
     height: 10,
-    borderRadius: 5,
+    borderBottomLeftRadius: 5,
   },
   live: {
     position: 'absolute',
@@ -87,23 +90,40 @@ export default StyleSheet.create({
     paddingLeft: 6,
     borderRadius: 5,
   },
+  upcoming: {
+    position: 'absolute',
+    flexDirection: 'row',
+    alignItems: 'center',
+    left: 12,
+    bottom: 12,
+    width: 252,
+    paddingRight: 32,
+    paddingLeft: 10,
+    paddingVertical: 6,
+    backgroundColor: hexToRgba(colors.gray, 0.5),
+    borderRadius: 5,
+  },
+  upcomingText: {
+    marginLeft: 5,
+    fontSize: fonts.size.caption,
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+  },
   event: {
     alignItems: 'center',
     overflow: 'hidden',
     borderRadius: 5,
-    marginBottom: 10,
-    backgroundColor: colors.gray,
-    paddingBottom: 16,
+    marginBottom: 16,
     textAlign: 'center',
   },
   photoImage: {
     width: '100%',
-    height: 128,
+    height: 168,
   },
   eventImageContainer: {
     position: 'relative',
     width: '100%',
-    height: 128,
+    height: 168,
     marginBottom: 16,
   },
   imageStatus: {

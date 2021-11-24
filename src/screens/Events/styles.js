@@ -70,15 +70,16 @@ export default StyleSheet.create({
   line: {
     width: '100%',
     height: 10,
-    borderRadius: 5,
     backgroundColor: colors.whiteBackground,
     position: 'absolute',
     bottom: 0,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
   },
   progress: {
     backgroundColor: colors.primary,
     height: 10,
-    borderRadius: 5,
+    borderBottomLeftRadius: 5,
   },
   live: {
     position: 'absolute',

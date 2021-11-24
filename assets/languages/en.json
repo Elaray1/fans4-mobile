@@ -479,7 +479,9 @@
     "fighterPast": "Once you participate in an event, it will be shown  on this page.",
     "live": "Live",
     "stayTuned": "Stay tuned for results.",
-    "voting": "Voting"
+    "voting": "Voting",
+    "liveOn": "Live on",
+    "in": "in"
   },
   "EventFights": {
     "couldntLoadTheFightsPullToRefresh": "Couldn’t load the fights. Pull to refresh."
