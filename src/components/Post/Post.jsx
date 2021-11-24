@@ -85,7 +85,13 @@ function Post({
       : likedUsersState[0]?.name);
   }, [userId, likedUsersState]);
 
+  const mediaType = media && media.type;
+
   useEffect(() => {
+    if (mediaType !== MEDIA_TYPES.VIDEO) {
+      return;
+    }
+
     const getVideoLink = async () => {
       let retryCount = 0;
       let link;
@@ -102,7 +108,7 @@ function Post({
     };
 
     getVideoLink();
-  }, [_id]);
+  }, [_id, mediaType]);
 
   const posterSource = useMemo(() => {
     if (media && media.type === MEDIA_TYPES.VIDEO && media.posterStorageUrl) {
