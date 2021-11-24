@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import moment from 'moment';
 
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 
@@ -30,6 +29,7 @@ import useToast from 'hooks/useToast';
 import useSubscribing from 'hooks/useSubscribing';
 
 import analyticsService from 'services/analytics.service';
+import isSubscribedService from 'services/isSubscribed.service';
 
 import colors from 'themes/colors';
 
@@ -194,8 +194,7 @@ function SearchFighters() {
 
     const isFighterInActiveSubscription = userType === USER_TYPES.FAN
     && !!supportedFighters.find(fighter => item._id === fighter._id
-      && fighter.autorenewal
-      && moment(fighter.renewalDate).isAfter(moment()));
+      && isSubscribedService.isSubscribed({ subscriptionToFighter: fighter }));
 
     return (
       <TouchableOpacity
