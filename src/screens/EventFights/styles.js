@@ -126,4 +126,36 @@ export default StyleSheet.create({
     marginBottom: 20,
     marginTop: 8,
   },
+  button: {
+    borderRadius: 5,
+    backgroundColor: colors.primary,
+    width: '100%',
+    paddingVertical: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  buttonText: {
+    color: colors.primaryButtonText,
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+    marginLeft: 4,
+  },
+  noFightsContainer: {
+    marginTop: 41,
+    alignItems: 'center',
+  },
+  noFightsTitle: {
+    marginBottom: 20,
+    fontFamily: fonts.family.bold,
+    fontWeight: fonts.weight.bold,
+  },
+  noFightsText: {
+    marginBottom: 20,
+    textAlign: 'center',
+    color: colors.grayText,
+    fontSize: fonts.size.small,
+    fontFamily: fonts.family.base,
+    fontWeight: fonts.weight.medium,
+  },
 });
