@@ -16,6 +16,8 @@ import SearchInput from 'components/SearchInput';
 
 import colors from 'themes/colors';
 
+import { toFixLength } from 'helpers/modifyText';
+
 import Fighter from './components/fighter';
 
 import styles from './styles';
@@ -116,12 +118,12 @@ const ProposeAFight = ({ route }) => {
             <View>
               {firstFighter
                 ? (
-                  <View style={styles.fighter}>
+                  <View style={[styles.fighter, styles.firstFighter]}>
                     <FastImage
                       style={styles.image}
                       source={{ uri: firstFighter.avatarUrl }}
                     />
-                    <Text style={styles.caption}>{firstFighter.fullName}</Text>
+                    <Text style={styles.caption}>{toFixLength({ text: firstFighter.fullName, length: 30 })}</Text>
                   </View>
                 )
                 : <View style={styles.fighterPicturePlaceholder} />
@@ -133,12 +135,12 @@ const ProposeAFight = ({ route }) => {
             <View>
               {secondFighter
                 ? (
-                  <View style={styles.fighter}>
+                  <View style={[styles.fighter, styles.secondFighter]}>
                     <FastImage
                       style={styles.image}
                       source={{ uri: secondFighter.avatarUrl }}
                     />
-                    <Text style={styles.caption}>{secondFighter.fullName}</Text>
+                    <Text style={styles.caption}>{toFixLength({ text: secondFighter.fullName, length: 30 })}</Text>
                   </View>
                 )
                 : <View style={styles.fighterPicturePlaceholder} />

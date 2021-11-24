@@ -30,6 +30,8 @@ export default StyleSheet.create({
     marginBottom: 8,
   },
   captionText: {
+    maxWidth: 130,
+    textAlign: 'center',
     fontSize: fonts.size.caption,
     fontWeight: fonts.weight.bold,
   },

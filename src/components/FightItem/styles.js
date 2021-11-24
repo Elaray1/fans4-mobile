@@ -29,11 +29,10 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   fighter: {
-    width: '30%',
     alignItems: 'center',
   },
   vs: {
-    alignSelf: 'center',
+    marginTop: 50,
     marginHorizontal: 26,
   },
   time: {
@@ -55,12 +54,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  text: {
-    textAlign: 'center',
-    fontSize: fonts.size.caption,
-    color: colors.textSecondary,
-    fontWeight: fonts.weight.medium,
   },
   locationText: {
     width: '33%',
@@ -210,5 +203,15 @@ export default StyleSheet.create({
   pendingText: {
     color: colors.fightingStatusText,
     fontSize: fonts.size.caption,
+  },
+  text: {
+    textAlign: 'center',
+    fontSize: fonts.size.caption,
+    color: colors.textSecondary,
+    fontFamily: fonts.family.base,
+    fontWeight: fonts.weight.medium,
+  },
+  recordText: {
+    color: colors.primary,
   },
 });

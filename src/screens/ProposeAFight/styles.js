@@ -20,8 +20,10 @@ export default StyleSheet.create({
     borderBottomColor: colors.gray,
   },
   fightersBlock: {
+    position: 'relative',
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   fighterPicturePlaceholder: {
     height: 78,
@@ -32,9 +34,12 @@ export default StyleSheet.create({
     borderStyle: 'dashed',
   },
   vs: {
+    position: 'absolute',
+    left: '43%',
+    alignSelf: 'center',
     color: colors.disabledText,
     fontSize: fonts.size.caption,
-    marginHorizontal: 8,
+    marginHorizontal: 18,
   },
   title: {
     fontSize: fonts.size.small,
@@ -48,6 +53,7 @@ export default StyleSheet.create({
     marginBottom: 4,
   },
   caption: {
+    maxWidth: 130,
     fontSize: fonts.size.caption,
   },
   disabled: {
@@ -71,5 +77,11 @@ export default StyleSheet.create({
   },
   fighter: {
     alignItems: 'center',
+  },
+  firstFighter: {
+    marginLeft: 40,
+  },
+  secondFighter: {
+    marginRight: 40,
   },
 });

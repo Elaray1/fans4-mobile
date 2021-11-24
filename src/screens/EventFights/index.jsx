@@ -153,12 +153,15 @@ function EventFights({ route }) {
     }
     return <Loader />;
   };
+
   const progress = `${(event.fights.filter(
     fight => fight.results !== undefined,
-  )
-    .length) / event.fights.length * 100}%`;
+  ).length) / event.fights.length * 100}%`;
+
   const isLive = event.status === EVENT_STATUSES.PAST
   && event.fights.some(fight => !fight.results);
+  const isUpcoming = event.status === EVENT_STATUSES.UPCOMING;
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -175,33 +178,35 @@ function EventFights({ route }) {
               source={{ uri: event.imageUrl }}
             />
             {event.status === EVENT_STATUSES.CANCELED
-          && moment().isBefore(event.date)
-          && (
-          <View style={styles.imageStatus}>
-            <Text style={styles.imageText}>{t('Events.canceled')}</Text>
-          </View>
-          )}
+            && moment().isBefore(event.date)
+            && (
+            <View style={styles.imageStatus}>
+              <Text style={styles.imageText}>{t('Events.canceled')}</Text>
+            </View>
+            )}
             {isLive && (
-            <View style={styles.live}>
+              <>
+                <View style={styles.live}>
+                  <LiveIcon />
+                  <Text>{t('Events.live')}</Text>
+                </View>
+                <View style={styles.line}>
+                  <View style={[styles.progress, {
+                    width: progress,
+                  }]}
+                  />
+                </View>
+              </>
+            )}
+            {isUpcoming && (
+            <View style={styles.upcoming}>
               <LiveIcon />
-              <Text>{t('Events.live')}</Text>
+              <Text style={styles.upcomingText}>
+                {`${t('Events.liveOn')} ${toLocalDateAndTime(event)} `}
+                {`${t('Events.in')} ${event.location.cityName}, ${event.location.stateCode}`}
+              </Text>
             </View>
             )}
-            {isLive && (
-            <View style={styles.line}>
-              <View style={[styles.progress, {
-                width: progress,
-              }]}
-              />
-            </View>
-            )}
-          </View>
-          <View>
-            <Text style={styles.titleEvent}>{event.name}</Text>
-            <Text style={styles.text}>{toLocalDateAndTime(event)}</Text>
-            <Text style={styles.text}>
-              {`${event.location.cityName}, ${event.location.stateCode}`}
-            </Text>
           </View>
         </View>
         {isLive && <Text style={styles.stayTuned}>{t('Events.stayTuned')}</Text>}

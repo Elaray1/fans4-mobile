@@ -31,6 +31,11 @@ const FIGHT_TYPE_LABEL = {
   amateur: 'Amateur Fight',
 };
 
+const titleCase = (str) => {
+  const splitStr = str.split(' ');
+  return splitStr.map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
+};
+
 function FightItem({
   fight,
   viewType,
@@ -43,6 +48,11 @@ function FightItem({
   const userId = useSelector(userSelectors.getUserId);
   const userType = useSelector(userSelectors.getUserType);
 
+  const [firstFighter, secondFighter] = fight.fighters;
+
+  const firstFighterRecord = firstFighter.role.record;
+  const secondFighterRecord = secondFighter.role.record;
+
   const onFighterPress = useCallback((fighterId) => {
     if (userId === fighterId) {
       navigation.navigate('Account');
@@ -50,8 +60,6 @@ function FightItem({
       navigation.navigate('Fighter', { _id: fighterId });
     }
   }, [navigation, userId]);
-
-  const [firstFighter, secondFighter] = fight.fighters;
 
   const isResultsShown = (fight.votedNoUserIds.includes(userId) || fight.votedYesUserIds.includes(userId))
   || userType === USER_TYPES.FIGHTER;
@@ -109,8 +117,15 @@ function FightItem({
   const FIGHT_INFO = {
     [FIGHT_VIEW_TYPE.EVENT_UPCOMING]: () => (
       <View style={styles.location}>
-        <Text style={styles.text}>{getLocation(firstFighter.hometown)}</Text>
-        <Text style={styles.text}>{getLocation(secondFighter.hometown)}</Text>
+        <Text style={[styles.text, styles.recordText]}>
+          {`${firstFighterRecord.wins}-${firstFighterRecord.losses}-${firstFighterRecord.draws}`}
+        </Text>
+        <Text style={styles.text}>
+          {titleCase(fight.fightersType)}
+        </Text>
+        <Text style={[styles.text, styles.recordText]}>
+          {`${secondFighterRecord.wins}-${secondFighterRecord.losses}-${secondFighterRecord.draws}`}
+        </Text>
       </View>
     ),
     [FIGHT_VIEW_TYPE.EVENT_PAST]: () => <PastFightInfo fight={fight} />,
