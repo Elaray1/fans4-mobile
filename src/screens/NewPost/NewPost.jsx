@@ -89,7 +89,7 @@ function NewPost() {
         name: analyticsService.events.FIGHTER_ADDED_POST,
       });
     } catch (error) {
-      console.error('VIDEO Submit post error:', error);
+      console.error('Submit post error:', error);
     } finally {
       setLoading(false);
     }
