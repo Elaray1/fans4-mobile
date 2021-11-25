@@ -45,7 +45,6 @@ function ChangeBiography() {
 
   const [value, setValue] = useState(initialValue);
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadingPoster, setUploadingPoster] = useState(null);
   const [uploadingMedia, setUploadingMedia] = useState(initialMedia);
 
   const isSaveButtonDisabled = isLoading
@@ -62,7 +61,6 @@ function ChangeBiography() {
 
   const onBinPress = useCallback(() => {
     setUploadingMedia(null);
-    setUploadingPoster(null);
   }, []);
 
   const onPressSave = useCallback(async () => {
@@ -82,19 +80,7 @@ function ChangeBiography() {
 
       dispatch(userActions.setUserData(user));
 
-      if (uploadingPoster && uploadingMedia) {
-        const {
-          url,
-        } = await userApi.createIntroVideoPoster({}, uploadingPoster && {
-          name: 'file',
-          type: uploadingPoster.mime,
-          uri: uploadingPoster.path,
-        });
-
-        params.posterStorageUrl = url;
-        params.duration = uploadingMedia.duration.toString();
-
-
+      if (uploadingMedia) {
         const uri = Platform.OS === 'ios' ? uploadingMedia.path : uploadingMedia.path.replace('file://', '');
 
         await userApi.addIntroVideo(params, uploadingMedia && {
@@ -123,26 +109,17 @@ function ChangeBiography() {
     t,
     uploadingMedia,
     onUploadProgress,
-    uploadingPoster,
   ]);
 
   const handleMediaUpload = useCallback((media, poster) => {
     setIsLoading(true);
     setUploadingMedia(media);
 
-    if (setUploadingPoster) {
-      setUploadingPoster(poster);
-    }
-
     setIsLoading(false);
   }, [setUploadingMedia]);
 
   const onDelete = useCallback(() => {
     setUploadingMedia(null);
-
-    if (setUploadingPoster) {
-      setUploadingPoster(null);
-    }
   }, [setUploadingMedia]);
 
   const posterSource = useMemo(() => {

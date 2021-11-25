@@ -89,4 +89,19 @@ export default StyleSheet.create({
   introVideo: {
     marginTop: 14,
   },
+  processingIntroVideoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 185,
+    width: '100%',
+    backgroundColor: '#54565E',
+    borderRadius: 5,
+  },
+  processingText: {
+    color: colors.white,
+    fontSize: fonts.size.caption,
+    fontWeight: fonts.weight.medium,
+    marginTop: 5,
+    marginBottom: 12,
+  },
 });

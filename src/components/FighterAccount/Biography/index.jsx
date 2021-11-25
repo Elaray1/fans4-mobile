@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -39,10 +39,13 @@ const Biography = ({
   const currentUserId = useSelector(userSelectors.getUserId);
   const currentUserIntroVideo = useSelector(userSelectors.getUserIntroVideo);
 
+  const currentUserProcessingIntroVideo = useSelector(userSelectors.getUserProcessingIntroVideo);
+
   const userIntroVideo = currentUserId === userId ? currentUserIntroVideo : introVideo;
 
   const [isOpen, setIsOpen] = useState(currentUserId === userId ? !(biography && introVideo) : Boolean(introVideo));
   const [isLoading, setIsLoading] = useState(false);
+
 
   const onUploadProgress = useCallback(async ({ id, data, file, progress, status }) => {
     await dispatch(introVideoActions.updateUploadingIntroVideoData({ id, data, file, progress, status }));
@@ -81,9 +84,9 @@ const Biography = ({
 
   const source = useMemo(() => {
     return {
-      uri: userIntroVideo?.storageUrl,
+      uri: userIntroVideo?.cloudflareHlsLink,
     };
-  }, [userIntroVideo?.storageUrl]);
+  }, [userIntroVideo?.cloudflareHlsLink]);
 
   const uploadingVideoView = useMemo(() => {
     if (uploadingIntroVideo?.status === MEDIA_UPLOADING_STATUSES.UPLOADING) {
@@ -128,6 +131,17 @@ const Biography = ({
       return uploadingVideoView;
     }
 
+    if (userId === currentUserId && currentUserProcessingIntroVideo) {
+      return (
+        <View style={styles.introVideo}>
+          <View style={styles.processingIntroVideoContainer}>
+            <ActivityIndicator size="small" color="white" />
+            <Text style={styles.processingText}>Processing...</Text>
+          </View>
+        </View>
+      );
+    }
+
     if (introVideo) {
       return (
         <View style={styles.introVideo}>
@@ -161,6 +175,7 @@ const Biography = ({
 
     return null;
   }, [
+    currentUserProcessingIntroVideo,
     introVideo,
     t,
     onAddBiographyPress,
@@ -191,7 +206,10 @@ const Biography = ({
         >
           <LinkWarningIcon style={styles.addIcon} />
           <Text style={styles.addText}>
-            {introVideo ? t('Account.addBiography') : t('Account.addBiographyAndIntroVideo')}
+            {(introVideo || currentUserProcessingIntroVideo)
+              ? t('Account.addBiography')
+              : t('Account.addBiographyAndIntroVideo')
+            }
           </Text>
         </TouchableOpacity>
       );
@@ -206,7 +224,7 @@ const Biography = ({
         {t('Fighter.fighterHasntAddedBiographyYet')}
       </Text>
     );
-  }, [biography, onAddBiographyPress, t, introVideo]);
+  }, [biography, onAddBiographyPress, t, introVideo, currentUserProcessingIntroVideo]);
 
   return (
     <TouchableOpacity

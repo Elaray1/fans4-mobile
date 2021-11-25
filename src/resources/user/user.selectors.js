@@ -33,6 +33,7 @@ export const getUserAge = ({ user }) => dayjs().diff(user?.role?.biography?.birt
 export const getUserProfileInfo = ({ user }) => user?.role?.profile;
 export const getUserBiographyAbout = ({ user }) => user?.role?.biography?.about || '';
 export const getUserIntroVideo = ({ user }) => user?.role?.biography?.introVideo;
+export const getUserProcessingIntroVideo = ({ user }) => user?.role?.biography?.processingIntroVideo;
 export const getWeightClasses = ({ user }) => user?.role?.profile?.weightClasses;
 export const getUserBirthdate = ({ user }) => new Date(user?.role?.biography?.birthdate);
 export const getUserGender = ({ user }) => user?.role?.biography?.gender;
