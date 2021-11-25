@@ -75,7 +75,7 @@ function ChangeBiography() {
     try {
       const user = await userApi.updateUserInfo({
         about: value,
-        ...(!uploadingMedia && { removeIntroVideo: true }),
+        isIntroVideo: Boolean(uploadingMedia),
       });
 
       dispatch(userActions.setUserData(user));

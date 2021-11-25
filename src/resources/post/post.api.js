@@ -11,9 +11,6 @@ export const createPost = (data, file, { onUploadProgress }) => {
   return apiClient.postWithFile('posts', data);
 };
 
-export const createVideoPoster = (data, file) => apiClient
-  .postWithFile('posts/video-poster', data, file);
-
 export const getMyFeedPosts = ({ page, perPage }) => apiClient
   .get('posts/feed', {
     page,

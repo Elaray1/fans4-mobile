@@ -77,7 +77,7 @@ export const fillRegistrationForm = ({
 };
 
 export const updateUserInfo = ({
-  about, birthdate, fullName, userName, gender, removeIntroVideo,
+  about, birthdate, fullName, userName, gender, isIntroVideo,
 }) => apiClient
   .put('users', {
     ...((about || about === '') && { about }),
@@ -85,7 +85,7 @@ export const updateUserInfo = ({
     ...(fullName && { fullName }),
     ...(userName && { userName }),
     ...(gender && { gender }),
-    ...(removeIntroVideo && { removeIntroVideo }),
+    ...(typeof isIntroVideo === 'boolean' && { isIntroVideo }),
   });
 
 export const completeOnboarding = () => {
