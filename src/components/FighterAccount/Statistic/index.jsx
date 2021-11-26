@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { View, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -7,15 +7,34 @@ import colors from 'themes/colors';
 
 import Text from 'components/Text';
 
+import * as socketService from 'services/socket.service';
+
 import styles from './styles';
 
 const Statistic = ({
   postsCount,
-  fansCount,
+  fansCount: initialFansCount,
   onFansPress,
   recordCount,
 }) => {
   const { t } = useTranslation();
+
+  const [fansCount, setFansCount] = useState(initialFansCount);
+
+  const updateFansCount = useCallback((updatedFansCount) => {
+    setFansCount(updatedFansCount);
+  }, []);
+
+  useEffect(() => {
+    socketService.on('fans:updated', updateFansCount);
+    return () => {
+      socketService.removeListener('fans:update', updateFansCount);
+    };
+  }, [updateFansCount]);
+
+  useEffect(() => {
+    setFansCount(initialFansCount);
+  }, [initialFansCount]);
 
   const fansBlock = (
     <>

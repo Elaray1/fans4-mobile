@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { View, TouchableOpacity, FlatList, ActivityIndicator, AppState } from 'react-native';
+import { View, TouchableOpacity, FlatList, ActivityIndicator, AppState, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +10,7 @@ import colors from 'themes/colors';
 import Text from 'components/Text';
 import Post from 'components/Post';
 import Modal from 'components/Modal';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import * as userApi from 'resources/user/user.api';
 import * as postApi from 'resources/post/post.api';
@@ -121,7 +122,7 @@ function FighterAccount({ postId }) {
 
     try {
       const [{ totalCount: fansTotalCount }, { posts: initPosts, totalCount: postsTotalCount }] = await Promise.all([
-        userApi.getMyFans({ page: 1, perPage: 1 }),
+        userApi.getMyFans(),
         postApi.getMyPosts({ page: INITIAL_PAGE, perPage: PER_PAGE }),
       ]);
 
@@ -331,10 +332,11 @@ function FighterAccount({ postId }) {
     );
   };
 
-  const Loader = () => (
-    <View style={styles.refreshLoader}>
-      <ActivityIndicator size="large" color={colors.primary} />
-    </View>
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
   );
 
   return (
@@ -350,7 +352,12 @@ function FighterAccount({ postId }) {
       />
       )}
 
-      {!isFetchedFirstTime && isRefreshing && <Loader />}
+      {!isFetchedFirstTime && isRefreshing && (
+        <ScrollView
+          refreshControl={RefreshControl}
+          keyboardShouldPersistTaps="handled"
+        />
+      )}
 
 
       {postsCount !== null && fansCount !== null && (
@@ -365,6 +372,7 @@ function FighterAccount({ postId }) {
           onEndReachedThreshold={0.1}
           refreshing={isRefreshing}
           onRefresh={onRefresh}
+          refreshControl={RefreshControl}
           initialNumToRender={PER_PAGE}
           ListHeaderComponent={(
             <FighterHeader
