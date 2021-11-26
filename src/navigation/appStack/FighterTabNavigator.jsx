@@ -15,8 +15,6 @@ import SearchFighters from 'screens/SearchFighters';
 import Account from 'screens/Account';
 import Activity from 'screens/Activity';
 
-import ScrollToTop from 'components/ScrollToTop';
-
 import * as userSelectors from 'resources/user/user.selectors';
 import * as messageSelectors from 'resources/message/message.selectors';
 
@@ -27,10 +25,6 @@ const Tab = createBottomTabNavigator();
 function renderTabBar(props) {
   return <BottomTabBar {...props} />;
 }
-
-const scrollToTopWrapper = (children) => {
-  return <ScrollToTop>{children}</ScrollToTop>;
-};
 
 function FighterTabNavigator() {
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
@@ -46,12 +40,8 @@ function FighterTabNavigator() {
       tabBar={renderTabBar}
       lazy={false}
     >
-      <Tab.Screen name="Fighters" options={{ icon: FightersIcon }}>
-        {props => scrollToTopWrapper(<SearchFighters {...props} />)}
-      </Tab.Screen>
-      <Tab.Screen name="Events" options={{ icon: EventsIcon }}>
-        {props => scrollToTopWrapper(<Events {...props} />)}
-      </Tab.Screen>
+      <Tab.Screen name="Fighters" options={{ icon: FightersIcon }} component={SearchFighters} />
+      <Tab.Screen name="Events" options={{ icon: EventsIcon }} component={Events} />
       <Tab.Screen
         name="NewPost"
         component={NewPost}
@@ -60,12 +50,8 @@ function FighterTabNavigator() {
           hideLabel: true,
         }}
       />
-      <Tab.Screen name="Activity" options={{ icon: activityIcon }}>
-        {props => scrollToTopWrapper(<Activity {...props} />)}
-      </Tab.Screen>
-      <Tab.Screen name="Account" options={{ icon: AccountIcon }}>
-        {props => scrollToTopWrapper(<Account {...props} />)}
-      </Tab.Screen>
+      <Tab.Screen name="Activity" options={{ icon: activityIcon }} component={Activity} />
+      <Tab.Screen name="Account" options={{ icon: AccountIcon }} component={Account} />
     </Tab.Navigator>
   );
 }

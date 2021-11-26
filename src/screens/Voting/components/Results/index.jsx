@@ -1,6 +1,7 @@
 import React, {
   useState, useCallback, useEffect,
 } from 'react';
+import PropTypes from 'prop-types';
 import {
   View, SafeAreaView, FlatList, ScrollView, ActivityIndicator, TouchableOpacity, Alert,
 } from 'react-native';
@@ -34,7 +35,12 @@ import styles from './styles';
 
 const PER_PAGE_COUNT = 20;
 
-const Results = () => {
+const PAGE_MODES = {
+  RESULTS: 'results',
+  VOTER: 'voter',
+};
+
+const Results = ({ onPullToRefresh }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { showFailure } = useToast();
@@ -102,6 +108,14 @@ const Results = () => {
     if (fetchingPage === 1 || currentFights.length < totalCount) {
       if (refresh) {
         setIsRefreshing(true);
+
+        if (isFetchedFirstTime && onPullToRefresh) {
+          const pageMode = await onPullToRefresh();
+
+          if (pageMode !== PAGE_MODES.RESULTS) {
+            return;
+          }
+        }
       } else {
         setIsLoading(true);
       }
@@ -134,7 +148,7 @@ const Results = () => {
         setIsLoading(false);
       }
     }
-  }, [totalCount, page, fights, showFailure, t, isFetchedFirstTime]);
+  }, [totalCount, page, fights, showFailure, t, isFetchedFirstTime, onPullToRefresh]);
 
 
   const onRefresh = useCallback(async () => {
@@ -209,6 +223,14 @@ const Results = () => {
       </View>
     </SafeAreaView>
   );
+};
+
+Results.propTypes = {
+  onPullToRefresh: PropTypes.func,
+};
+
+Results.defaultProps = {
+  onPullToRefresh: null,
 };
 
 export default React.memo(Results);
