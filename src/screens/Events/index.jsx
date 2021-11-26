@@ -286,12 +286,7 @@ function Events() {
       <View style={styles.content}>
         <Toggle items={tabs} onSelect={onToggleSelect} selectedItemId={selectedTab.id} />
 
-        {!isFetchedFirstTime && isRefreshing && (
-          <ScrollView
-            refreshControl={RefreshControl}
-            keyboardShouldPersistTaps="handled"
-          />
-        )}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
 
         {!!events.length && (

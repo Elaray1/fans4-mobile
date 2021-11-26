@@ -12,9 +12,6 @@ export default StyleSheet.create({
   content: {
     flex: 1,
   },
-  contentMargin: {
-    marginTop: -20,
-  },
   emptyView: {
     flex: 1,
     alignItems: 'center',
@@ -126,5 +123,8 @@ export default StyleSheet.create({
   errorIcon: {
     marginRight: 10,
     marginTop: 2,
+  },
+  loader: {
+    margin: 15,
   },
 });

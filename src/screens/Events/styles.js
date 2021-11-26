@@ -119,4 +119,7 @@ export default StyleSheet.create({
     backgroundColor: colors.primaryRed,
     borderRadius: 5,
   },
+  loader: {
+    margin: 15,
+  },
 });

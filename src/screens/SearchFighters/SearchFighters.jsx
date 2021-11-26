@@ -55,7 +55,7 @@ function SearchFighters() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(true);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const [selectedFighterId, setSelectedFighterId] = useState(null);
@@ -248,6 +248,12 @@ function SearchFighters() {
 
   const keyExtractor = useCallback(item => item._id, []);
 
+  const Loader = () => (
+    <View style={styles.loader}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
+
   const renderFooter = () => {
     if (!isLoading) {
       return null;
@@ -320,10 +326,7 @@ function SearchFighters() {
         />
 
         {((!isFetchedFirstTime && isRefreshing) || isSearching) && (
-        <ScrollView
-          refreshControl={RefreshControl}
-          keyboardShouldPersistTaps="handled"
-        />
+          <Loader />
         )}
 
         {(!!fighters.length && !isSearching) && (

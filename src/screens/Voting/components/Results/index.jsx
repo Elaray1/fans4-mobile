@@ -189,12 +189,7 @@ const Results = ({ onPullToRefresh }) => {
       />
 
       <View style={styles.content}>
-        {!isFetchedFirstTime && isRefreshing && (
-          <ScrollView
-            refreshControl={RefreshControl}
-            keyboardShouldPersistTaps="handled"
-          />
-        )}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
         {!!fights.length && (
           <FlatList

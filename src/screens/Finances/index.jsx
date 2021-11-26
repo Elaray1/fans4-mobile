@@ -365,6 +365,8 @@ function Finances() {
     />
   );
 
+  const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
+
   return (
     <>
       {!isRefreshing && isConfirmationModal && (
@@ -410,7 +412,7 @@ function Finances() {
                 refreshControl={RefreshControl}
                 keyboardShouldPersistTaps="handled"
               >
-                {isFetchedFirstTime && (
+                {!isFetchedFirstTime ? <Loader /> : (
                   <>
                     <WithdrawalMethod />
                     {income?.length ? <Income /> : <EmptyView />}

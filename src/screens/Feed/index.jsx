@@ -69,7 +69,7 @@ function Feed() {
   const [page, setPage] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(true);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
@@ -250,13 +250,7 @@ function Feed() {
         rightItemIcon={SearchFightersIcon}
       />
 
-      {!isFetchedFirstTime && isRefreshing && (
-        <ScrollView
-          contentContainerStyle={styles.emptyScroll}
-          refreshControl={RefreshControl}
-          keyboardShouldPersistTaps="handled"
-        />
-      )}
+      {!isFetchedFirstTime && isRefreshing && <Loader />}
 
       <View style={styles.content}>
         {!!posts.length && (

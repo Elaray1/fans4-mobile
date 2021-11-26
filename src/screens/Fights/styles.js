@@ -67,4 +67,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
     fontSize: fonts.size.caption,
   },
+  loader: {
+    margin: 15,
+  },
 });

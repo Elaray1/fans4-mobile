@@ -281,23 +281,18 @@ function Activity() {
         rightItemIcon={isUnreadMessages ? UnreadChatIcon : ChatIcon}
         onRightItemPress={onChatsPress}
       />
-      {isFiltersOpened
-      && (
-      <FiltersModal
-        visible
-        onClose={onCloseFiltersModal}
-        selectedFilters={selectedFilters}
-        setSelectedFilters={setSelectedFilters}
-      />
+
+      {isFiltersOpened && (
+        <FiltersModal
+          visible
+          onClose={onCloseFiltersModal}
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+        />
       )}
+
       <View style={styles.content}>
-        {!isFetchedFirstTime && isRefreshing && (
-          <ScrollView
-            contentContainerStyle={styles.emptyScroll}
-            refreshControl={RefreshControl}
-            keyboardShouldPersistTaps="handled"
-          />
-        )}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
         {!!filteredActivitiesArray.length && (
           <FlatList

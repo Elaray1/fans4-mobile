@@ -169,12 +169,7 @@ const ChatsList = () => {
         onRightItemPress={onNewChatPress}
       />
       <View style={styles.content}>
-        {!isFetchedFirstTime && isRefreshing && (
-          <ScrollView
-            refreshControl={RefreshControl}
-            keyboardShouldPersistTaps="handled"
-          />
-        )}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
         {chats.length > (isFan ? 0 : 1)
           && (

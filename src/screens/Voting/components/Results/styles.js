@@ -50,4 +50,7 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
     marginLeft: 4,
   },
+  loader: {
+    margin: 15,
+  },
 });

@@ -179,12 +179,7 @@ function Fights() {
       <View style={styles.content}>
         <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
 
-        {!isFetchedFirstTime && isRefreshing && (
-          <ScrollView
-            refreshControl={RefreshControl}
-            keyboardShouldPersistTaps="handled"
-          />
-        )}
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
 
         {!!fights.length && (
           <FlatList
@@ -202,13 +197,13 @@ function Fights() {
         )}
 
         {isFetchedFirstTime && fights.length <= 1 && (
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          refreshControl={RefreshControl}
-          keyboardShouldPersistTaps="handled"
-        >
-          <EmptyView />
-        </ScrollView>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            refreshControl={RefreshControl}
+            keyboardShouldPersistTaps="handled"
+          >
+            <EmptyView />
+          </ScrollView>
         )}
       </View>
     </SafeAreaView>
