@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, SafeAreaView, FlatList, ActivityIndicator, ScrollView, RefreshControl, Platform } from 'react-native';
+import { View, SafeAreaView, FlatList, ActivityIndicator, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
 import Text from 'components/Text';
 import Header from 'components/Header';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import useToast from 'hooks/useToast';
 
@@ -151,6 +152,13 @@ const ChatsList = () => {
     return <Loader />;
   };
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   return (
     <SafeAreaView>
       <Header
@@ -161,7 +169,12 @@ const ChatsList = () => {
         onRightItemPress={onNewChatPress}
       />
       <View style={styles.content}>
-        {!isFetchedFirstTime && isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && (
+          <ScrollView
+            refreshControl={RefreshControl}
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
 
         {chats.length > (isFan ? 0 : 1)
           && (
@@ -175,6 +188,7 @@ const ChatsList = () => {
               onRefresh={onRefresh}
               ListFooterComponent={renderFooter}
               refreshing={isRefreshing}
+              refreshControl={RefreshControl}
               initialNumToRender={20}
             />
           )}
@@ -183,9 +197,7 @@ const ChatsList = () => {
           <ScrollView
             style={styles.flatList}
             contentContainerStyle={styles.emptyScroll}
-            refreshControl={
-              <RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />
-            }
+            refreshControl={RefreshControl}
             keyboardShouldPersistTaps="handled"
           >
             {!isFan && chats.length

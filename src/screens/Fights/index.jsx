@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { SafeAreaView, View, FlatList, ActivityIndicator, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import * as fightApi from 'resources/fight/fight.api';
@@ -8,6 +8,7 @@ import Header from 'components/Header';
 import Text from 'components/Text';
 import Toggle from 'components/Toggle';
 import FightItem from 'components/FightItem';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import useToast from 'hooks/useToast';
 
@@ -163,6 +164,13 @@ function Fights() {
     await fetchNewItems({ refresh: true, statuses: item.statuses });
   }, [fetchNewItems]);
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -171,7 +179,12 @@ function Fights() {
       <View style={styles.content}>
         <Toggle items={toggleItems} onSelect={onToggleSelect} selectedItemId={selectedToggleItem.id} />
 
-        {!isFetchedFirstTime && isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && (
+          <ScrollView
+            refreshControl={RefreshControl}
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
 
         {!!fights.length && (
           <FlatList
@@ -184,13 +197,14 @@ function Fights() {
             ListFooterComponent={renderFooter}
             onRefresh={onRefresh}
             refreshing={isRefreshing}
+            refreshControl={RefreshControl}
           />
         )}
 
         {isFetchedFirstTime && fights.length <= 1 && (
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
-          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+          refreshControl={RefreshControl}
           keyboardShouldPersistTaps="handled"
         >
           <EmptyView />

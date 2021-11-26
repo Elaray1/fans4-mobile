@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import {
-  SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, Platform, ScrollView, Modal,
+  SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator, ScrollView, Modal, Platform,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +17,7 @@ import Header from 'components/Header';
 import SearchInput from 'components/SearchInput';
 import Text from 'components/Text';
 import ConfirmedIosPurchase from 'components/ConfirmedIosPurhase';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import * as userApi from 'resources/user/user.api';
 import { FIGHTER_TYPES, USER_TYPES } from 'resources/user/user.constants';
@@ -280,7 +281,12 @@ function SearchFighters() {
     </TouchableOpacity>
   ) : null;
 
-  const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -313,7 +319,12 @@ function SearchFighters() {
           placeholder={t('SearchFighters.search')}
         />
 
-        {((!isFetchedFirstTime && isRefreshing) || isSearching) && <Loader />}
+        {((!isFetchedFirstTime && isRefreshing) || isSearching) && (
+        <ScrollView
+          refreshControl={RefreshControl}
+          keyboardShouldPersistTaps="handled"
+        />
+        )}
 
         {(!!fighters.length && !isSearching) && (
           <FlatList
@@ -324,6 +335,7 @@ function SearchFighters() {
             onEndReached={fetchNewItems}
             onRefresh={onRefresh}
             refreshing={isRefreshing}
+            refreshControl={RefreshControl}
             style={styles.fightersList}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={searchValue ? null : Fans4Account}
@@ -334,7 +346,7 @@ function SearchFighters() {
         {(!isSearching && (isFetchedFirstTime && fighters.length <= (searchValue ? 0 : 1))) && (
           <ScrollView
             contentContainerStyle={styles.emptyScroll}
-            refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
+            refreshControl={RefreshControl}
             keyboardShouldPersistTaps="handled"
           >
             <EmptyView />

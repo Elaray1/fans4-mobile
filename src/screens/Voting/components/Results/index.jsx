@@ -2,7 +2,7 @@ import React, {
   useState, useCallback, useEffect,
 } from 'react';
 import {
-  View, SafeAreaView, FlatList, ScrollView, RefreshControl, ActivityIndicator, TouchableOpacity, Alert,
+  View, SafeAreaView, FlatList, ScrollView, ActivityIndicator, TouchableOpacity, Alert,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -20,6 +20,7 @@ import { ITEM_TYPES } from 'components/Header/Header.constants';
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
 import Text from 'components/Text';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 
 import PlusIcon from 'assets/icons/grey-plus';
@@ -157,6 +158,13 @@ const Results = () => {
     );
   };
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -167,7 +175,12 @@ const Results = () => {
       />
 
       <View style={styles.content}>
-        {!isFetchedFirstTime && isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && (
+          <ScrollView
+            refreshControl={RefreshControl}
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
 
         {!!fights.length && (
           <FlatList
@@ -180,13 +193,14 @@ const Results = () => {
             ListFooterComponent={renderFooter}
             onRefresh={onRefresh}
             refreshing={isRefreshing}
+            refreshControl={RefreshControl}
           />
         )}
 
         {isFetchedFirstTime && !fights.length && (
           <ScrollView
             contentContainerStyle={styles.scrollView}
-            refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+            refreshControl={RefreshControl}
             keyboardShouldPersistTaps="handled"
           >
             <EmptyView />

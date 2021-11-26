@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, Platform,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -22,6 +22,7 @@ import UnreadChatIcon from 'assets/icons/unread-chat.svg';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import useToast from 'hooks/useToast';
 
@@ -260,6 +261,13 @@ function Activity() {
     );
   };
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   const filteredActivitiesArray = useMemo(() => activitiesArray
     .filter(activity => selectedFilters.includes(activity.type)), [activitiesArray, selectedFilters]);
 
@@ -283,7 +291,13 @@ function Activity() {
       />
       )}
       <View style={styles.content}>
-        {!isFetchedFirstTime && isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && (
+          <ScrollView
+            contentContainerStyle={styles.emptyScroll}
+            refreshControl={RefreshControl}
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
 
         {!!filteredActivitiesArray.length && (
           <FlatList
@@ -297,13 +311,14 @@ function Activity() {
             ListFooterComponent={renderFooter}
             onRefresh={onRefresh}
             refreshing={isRefreshing}
+            refreshControl={RefreshControl}
           />
         )}
 
         {isFetchedFirstTime && !filteredActivitiesArray.length && (
           <ScrollView
             contentContainerStyle={styles.emptyScroll}
-            refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
+            refreshControl={RefreshControl}
             keyboardShouldPersistTaps="handled"
           >
             <EmptyView />

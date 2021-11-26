@@ -2,7 +2,7 @@ import React, {
   useState, useCallback, useEffect, useMemo,
 } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, TouchableOpacity, ScrollView, RefreshControl,
+  SafeAreaView, View, FlatList, ActivityIndicator, TouchableOpacity, ScrollView,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ import { USER_TYPES } from 'resources/user/user.constants';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import Toggle from 'components/Toggle';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import useToast from 'hooks/useToast';
 
@@ -266,6 +267,13 @@ function Events() {
     );
   };
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -278,7 +286,12 @@ function Events() {
       <View style={styles.content}>
         <Toggle items={tabs} onSelect={onToggleSelect} selectedItemId={selectedTab.id} />
 
-        {!isFetchedFirstTime && isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && (
+          <ScrollView
+            refreshControl={RefreshControl}
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
 
 
         {!!events.length && (
@@ -292,13 +305,14 @@ function Events() {
             ListFooterComponent={renderFooter}
             onRefresh={onRefresh}
             refreshing={isRefreshing}
+            refreshControl={RefreshControl}
           />
         )}
 
         {isFetchedFirstTime && !events.length && (
           <ScrollView
             contentContainerStyle={styles.scrollView}
-            refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+            refreshControl={RefreshControl}
             keyboardShouldPersistTaps="handled"
           >
             <EmptyView />

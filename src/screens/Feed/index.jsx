@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, AppState, Platform,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, AppState,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -22,6 +22,7 @@ import isSubscribedService from 'services/isSubscribed.service';
 import Header from 'components/Header';
 import Post from 'components/Post';
 import Text from 'components/Text';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import useToast from 'hooks/useToast';
 
@@ -233,6 +234,13 @@ function Feed() {
     </View>
   );
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -241,6 +249,14 @@ function Feed() {
         onRightItemPress={onSearchFighters}
         rightItemIcon={SearchFightersIcon}
       />
+
+      {!isFetchedFirstTime && isRefreshing && (
+        <ScrollView
+          contentContainerStyle={styles.emptyScroll}
+          refreshControl={RefreshControl}
+          keyboardShouldPersistTaps="handled"
+        />
+      )}
 
       <View style={styles.content}>
         {!!posts.length && (
@@ -254,6 +270,7 @@ function Feed() {
             ListFooterComponent={renderFooter}
             onRefresh={onRefresh}
             refreshing={isRefreshing}
+            refreshControl={RefreshControl}
             viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
             onViewableItemsChanged={updateViewableItems}
           />
@@ -262,7 +279,7 @@ function Feed() {
         {isFetchedFirstTime && !posts.length && (
           <ScrollView
             contentContainerStyle={styles.emptyScroll}
-            refreshControl={<RefreshControl refreshing={Platform.OS === 'ios' && isRefreshing} onRefresh={onRefresh} />}
+            refreshControl={RefreshControl}
             keyboardShouldPersistTaps="handled"
           >
             {!fightersList?.length ? <NoSubscriptions /> : <NoPosts />}
