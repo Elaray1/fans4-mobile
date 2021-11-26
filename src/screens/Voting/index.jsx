@@ -32,42 +32,49 @@ function Voting({ route }) {
 
   const fight = route?.params?.fight;
 
+  const fetchFightsForVoting = useCallback(async () => {
+    setLoading(true);
+
+    if (fight) {
+      let pageMode = userType === USER_TYPES.FIGHTER ? PAGE_MODES.RESULTS : PAGE_MODES.VOTER;
+
+      if (pageMode === PAGE_MODES.VOTER) {
+        try {
+          const fights = await fightApi.getFightsForVoting();
+          if (!fights.length) {
+            pageMode = PAGE_MODES.RESULTS;
+          }
+        } catch (error) {
+          console.error(error);
+          showFailure();
+        }
+      }
+
+      setMode(pageMode);
+      return pageMode;
+    }
+
+    try {
+      const fights = await fightApi.getFightsForVoting();
+      if (fights.length > 0) {
+        setMode(PAGE_MODES.VOTER);
+      }
+    } catch (error) {
+      console.error(error);
+      showFailure();
+      return;
+    }
+
+    setLoading(false);
+  }, [showFailure, fight, userType]);
+
   useEffect(() => {
     async function init() {
-      if (fight) {
-        let pageMode = userType === USER_TYPES.FIGHTER ? PAGE_MODES.RESULTS : PAGE_MODES.VOTER;
-
-        if (pageMode === PAGE_MODES.VOTER) {
-          try {
-            const fights = await fightApi.getFightsForVoting();
-            if (!fights.length) {
-              pageMode = PAGE_MODES.RESULTS;
-            }
-          } catch (error) {
-            console.error(error);
-            showFailure();
-          }
-        }
-
-        setMode(pageMode);
-        return;
-      }
-
-      try {
-        const fights = await fightApi.getFightsForVoting();
-        if (fights.length > 0) {
-          setMode(PAGE_MODES.VOTER);
-        }
-      } catch (error) {
-        console.error(error);
-        showFailure();
-        return;
-      }
-      setLoading(false);
+      await fetchFightsForVoting();
     }
 
     init();
-  }, [showFailure, fight, userType]);
+  }, []);
 
   const Loader = () => (
     <View style={styles.loader}>
@@ -93,7 +100,7 @@ function Voting({ route }) {
   }
 
   if (mode === PAGE_MODES.RESULTS) {
-    return <Results firstFight={fight} />;
+    return <Results onPullToRefresh={fetchFightsForVoting} />;
   }
 }
 

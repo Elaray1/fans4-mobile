@@ -16,8 +16,6 @@ import ChatsList from 'screens/ChatsList';
 import NewVoting from 'screens/NewVoting';
 import Voting from 'screens/Voting';
 
-import ScrollToTop from 'components/ScrollToTop';
-
 import * as messageSelectors from 'resources/message/message.selectors';
 
 import config from 'resources/config';
@@ -29,10 +27,6 @@ const Tab = createBottomTabNavigator();
 function renderTabBar(props) {
   return <BottomTabBar {...props} />;
 }
-
-const scrollToTopWrapper = (children) => {
-  return <ScrollToTop>{children}</ScrollToTop>;
-};
 
 const optionsByScreen = {
   feed: { icon: FeedIcon },
@@ -53,29 +47,18 @@ function FanTabNavigator() {
       tabBar={renderTabBar}
       lazy={false}
     >
-      <Tab.Screen name="Feed" options={optionsByScreen.feed}>
-        {props => scrollToTopWrapper(<Feed {...props} />)}
-      </Tab.Screen>
+      <Tab.Screen name="Feed" options={optionsByScreen.feed} component={Feed} />
       <Tab.Screen
         name="Voting"
         options={optionsByScreen.voting}
-      >
-        {props => scrollToTopWrapper(config.mode === 'PROD'
-          ? <NewVoting {...props} /> : <Voting {...props} />)}
-      </Tab.Screen>
-      <Tab.Screen name="Events" options={optionsByScreen.events}>
-        {props => scrollToTopWrapper(<Events {...props} />)}
-      </Tab.Screen>
-      {/* TODO: replace Account component with Chats component */}
+        component={config.mode === 'PROD' ? NewVoting : Voting}
+      />
+      <Tab.Screen name="Events" options={optionsByScreen.events} component={Events} />
       {config.mode !== 'PROD'
       && (
-      <Tab.Screen name="Chats" options={chatsOptions}>
-        {props => scrollToTopWrapper(<ChatsList {...props} />)}
-      </Tab.Screen>
+      <Tab.Screen name="Chats" options={chatsOptions} component={ChatsList} />
       )}
-      <Tab.Screen name="Account" options={optionsByScreen.account}>
-        {props => scrollToTopWrapper(<Account {...props} />)}
-      </Tab.Screen>
+      <Tab.Screen name="Account" options={optionsByScreen.account} component={Account} />
     </Tab.Navigator>
   );
 }
