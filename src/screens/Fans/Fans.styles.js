@@ -8,9 +8,6 @@ export default StyleSheet.create({
   screen: {
     ...commonStyles.screen,
   },
-  loader: {
-    paddingVertical: 10,
-  },
   listItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -53,5 +50,8 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     color: colors.textSecondary,
     fontWeight: fonts.weight.medium,
+  },
+  loader: {
+    margin: 15,
   },
 });

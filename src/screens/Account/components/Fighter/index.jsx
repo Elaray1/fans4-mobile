@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { View, TouchableOpacity, FlatList, ActivityIndicator, AppState, ScrollView } from 'react-native';
+import { View, TouchableOpacity, FlatList, ActivityIndicator, AppState } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -339,26 +339,26 @@ function FighterAccount({ postId }) {
     />
   );
 
+  const Loader = () => (
+    <View style={styles.refreshLoader}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
+
   return (
     <>
       {isBankAccountWarning && (
-      <Modal
-        title={t('Account.updateBankAccount')}
-        text={t('Account.toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails')}
-        closeButtonText={t('Account.later')}
-        submitButtonText={t('Account.update')}
-        onClose={onCloseBankAccountModal}
-        onSubmit={onUpdateBankAccount}
-      />
-      )}
-
-      {!isFetchedFirstTime && isRefreshing && (
-        <ScrollView
-          refreshControl={RefreshControl}
-          keyboardShouldPersistTaps="handled"
+        <Modal
+          title={t('Account.updateBankAccount')}
+          text={t('Account.toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails')}
+          closeButtonText={t('Account.later')}
+          submitButtonText={t('Account.update')}
+          onClose={onCloseBankAccountModal}
+          onSubmit={onUpdateBankAccount}
         />
       )}
 
+      {!isFetchedFirstTime && isRefreshing && <Loader />}
 
       {postsCount !== null && fansCount !== null && (
         <FlatList

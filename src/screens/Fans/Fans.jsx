@@ -4,7 +4,7 @@ import {
   View,
   StatusBar,
   FlatList,
-  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import useToast from 'hooks/useToast';
@@ -90,6 +90,8 @@ function Fans() {
     />
   );
 
+  const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
@@ -98,12 +100,7 @@ function Fans() {
         leftItemType="backArrow"
       />
 
-      {!isFetchedFirstTime && isRefreshing && (
-        <ScrollView
-          refreshControl={RefreshControl}
-          keyboardShouldPersistTaps="handled"
-        />
-      )}
+      {!isFetchedFirstTime && isRefreshing && <Loader />}
 
       {!!fans.length && (
         <FlatList
