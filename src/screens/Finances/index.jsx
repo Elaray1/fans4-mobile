@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
-  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, AppState, Platform, RefreshControl,
+  SafeAreaView, ScrollView, View, TouchableOpacity, ActivityIndicator, AppState, Platform,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useSelector } from 'react-redux';
@@ -23,6 +23,7 @@ import Header from 'components/Header';
 import Modal from 'components/Modal';
 import StripeAccountStatus from 'components/StripeAccountStatus';
 import Button from 'components/Button';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 import BankAccountModal from 'screens/Finances/components/BankAccountModal';
 
 import useToast from 'hooks/useToast';
@@ -353,12 +354,16 @@ function Finances() {
     </View>
   );
 
-  const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
-
-
   const webViewStateChangeProps = useMemo(() => (Platform.OS === 'ios'
     ? { onShouldStartLoadWithRequest: onWebViewStateChange }
     : { onNavigationStateChange: onWebViewStateChange }), [onWebViewStateChange]);
+
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing || isFetchedFirstTime}
+      onRefresh={onRefresh}
+    />
+  );
 
   return (
     <>
@@ -402,15 +407,10 @@ function Finances() {
                 contentContainerStyle={styles.scrollContent}
                 style={styles.scrollView}
                 showsVerticalScrollIndicator={false}
-                refreshControl={(
-                  <RefreshControl
-                    refreshing={isFetchedFirstTime && isRefreshing}
-                    onRefresh={onRefresh}
-                  />
-                )}
+                refreshControl={RefreshControl}
                 keyboardShouldPersistTaps="handled"
               >
-                {!isFetchedFirstTime ? <Loader /> : (
+                {isFetchedFirstTime && (
                   <>
                     <WithdrawalMethod />
                     {income?.length ? <Income /> : <EmptyView />}

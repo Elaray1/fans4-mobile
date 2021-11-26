@@ -8,8 +8,6 @@ import {
   FlatList,
   ActivityIndicator,
   ScrollView,
-  RefreshControl,
-  Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -26,6 +24,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import SearchInput from 'components/SearchInput';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 
@@ -184,6 +183,13 @@ function NewChat({ route }) {
     onRefreshChatsList();
   }, [navigation, onRefreshChatsList]);
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
@@ -199,7 +205,12 @@ function NewChat({ route }) {
           placeholder={t('NewChat.search')}
         />
 
-        {!isFetchedFirstTime && isRefreshing && <Loader />}
+        {!isFetchedFirstTime && isRefreshing && (
+          <ScrollView
+            refreshControl={RefreshControl}
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
 
         {!!chats.length
         && (
@@ -214,6 +225,7 @@ function NewChat({ route }) {
           onRefresh={onRefresh}
           ListFooterComponent={renderFooter}
           refreshing={isRefreshing}
+          refreshControl={RefreshControl}
           initialNumToRender={20}
         />
         )}
@@ -222,12 +234,7 @@ function NewChat({ route }) {
         <ScrollView
           style={styles.flatList}
           contentContainerStyle={styles.emptyScroll}
-          refreshControl={(
-            <RefreshControl
-              refreshing={Platform.OS === 'ios' && isRefreshing}
-              onRefresh={onRefresh}
-            />
-            )}
+          refreshControl={RefreshControl}
           keyboardShouldPersistTaps="handled"
         >
           <EmptyView />

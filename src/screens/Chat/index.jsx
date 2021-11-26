@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, KeyboardAvoidingView, Platform,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -21,6 +21,7 @@ import * as messageActions from 'resources/message/message.actions';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import Input from 'components/Input';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import useToast from 'hooks/useToast';
 
@@ -389,6 +390,13 @@ function Chat({ route }) {
     return <Loader />;
   };
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <KeyboardAvoidingView
@@ -424,6 +432,7 @@ function Chat({ route }) {
                   ListFooterComponent={renderFooter}
                   onRefresh={onRefresh}
                   refreshing={isRefreshing}
+                  refreshControl={RefreshControl}
                   style={[styles.horizontalPaddings, isMessageToBeScrolledRef.current && styles.hidden]}
                   onViewableItemsChanged={onViewableItemsChanged}
                   viewabilityConfig={viewConfigRef.current}
@@ -445,7 +454,7 @@ function Chat({ route }) {
             {isFetchedFirstTime && !messagesWithUnreadLabel.length && (
               <ScrollView
                 contentContainerStyle={styles.scrollView}
-                refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+                refreshControl={RefreshControl}
                 keyboardShouldPersistTaps="handled"
                 style={[styles.horizontalPaddings, styles.contentMargin]}
               >

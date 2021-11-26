@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, StatusBar, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
+import { SafeAreaView, View, StatusBar, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -12,6 +12,7 @@ import Profile from 'components/FighterAccount/Profile';
 import Statistic from 'components/FighterAccount/Statistic';
 import Biography from 'components/FighterAccount/Biography';
 import PersonalInfo from 'components/FighterAccount/PersonalInfo';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import * as userApi from 'resources/user/user.api';
 import * as userSelectors from 'resources/user/user.selectors';
@@ -102,6 +103,13 @@ function Fighter({ fighterId }) {
     await refreshContent();
   }, [refreshContent]);
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
@@ -115,12 +123,7 @@ function Fighter({ fighterId }) {
         <ScrollView
           style={styles.content}
           contentContainerStyle={styles.scrollContent}
-          refreshControl={(
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
-            />
-          )}
+          refreshControl={RefreshControl}
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.flatListHeader}>
@@ -171,10 +174,11 @@ function Fighter({ fighterId }) {
         </ScrollView>
       )}
 
-      {!isFetchedFirstTime && (
-      <View style={styles.loaderWrapper}>
-        <ActivityIndicator color={colors.primary} size="large" />
-      </View>
+      {!isFetchedFirstTime && isRefreshing && (
+        <ScrollView
+          refreshControl={RefreshControl}
+          keyboardShouldPersistTaps="handled"
+        />
       )}
     </SafeAreaView>
   );

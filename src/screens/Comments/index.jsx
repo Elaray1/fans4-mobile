@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, RefreshControl, KeyboardAvoidingView, Platform,
+  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ import Header from 'components/Header';
 import Comment from 'components/Comment';
 import Text from 'components/Text';
 import Input from 'components/Input';
+import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import useToast from 'hooks/useToast';
 
@@ -220,6 +221,13 @@ function Comments({ route }) {
     return <Loader />;
   };
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <KeyboardAvoidingView
@@ -246,13 +254,14 @@ function Comments({ route }) {
                 ListFooterComponent={renderFooter}
                 onRefresh={onRefresh}
                 refreshing={isRefreshing}
+                refreshControl={RefreshControl}
               />
             )}
 
             {isFetchedFirstTime && !comments.length && (
               <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}
-                refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+                refreshControl={RefreshControl}
                 keyboardShouldPersistTaps="handled"
               >
                 <EmptyView />
