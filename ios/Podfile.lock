@@ -694,12 +694,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Amplitude: 263118b9e691e73a1c864b05bb08a3aff3636d16
-  amplitude-react-native: c53cf1d7daa5f27b88678e0889e3792583fbd321
+  amplitude-react-native: 1e1a0ebabb98479e8e8f683f288b8407073fa5cc
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: 4e876614dd8b2c923abe0c1a0d04d655ec79fed9
+  FBReactNativeSpec: 879dd87072131b34e17c2c08d973bd1dabe8e823
   Firebase: 54cdc8bc9c9b3de54f43dab86e62f5a76b47034f
   FirebaseAnalytics: 4751d6a49598a2b58da678cc07df696bcd809ab9
   FirebaseCore: 31f389c37ac1ea52454a53d3081f2d7019485a4a
@@ -725,16 +725,16 @@ SPEC CHECKSUMS:
   React-jsi: 67747b9722f6dab2ffe15b011bcf6b3f2c3f1427
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
-  react-native-background-upload: 5f4e6bab5543471d6510d52b695a4bd52fafad51
-  react-native-cameraroll: 88f4e62d9ecd0e1f253abe4f685474f2ea14bfa2
+  react-native-background-upload: ca1622ad18a8f8f4492ce8329051ccfc24795250
+  react-native-cameraroll: 7c6c7ca84844f93b3dac9a87670bbad6541684ec
   react-native-config: 72d948053a442779b3178fddd571e37f118ef606
   react-native-cookies: 6004d512ffc6f2c498c5b70cda0bc040350c0585
   react-native-date-picker: 242eec7af56cea5fb2706d5db5d3837060b3884b
-  react-native-netinfo: 07e8299fff4d2bea17d00b519d4f9c67c7dbbe9b
-  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
+  react-native-netinfo: f46274b6e3c4656a2b71e0ab5a4e1147f3c63149
+  react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
-  react-native-video: a4c2635d0802f983594b7057e1bce8f442f0ad28
-  react-native-webview: 133a6a5149f963259646e710b4545c67ef35d7c9
+  react-native-video: 77ce22be7abff9e373527ca10106a99dea3ba56c
+  react-native-webview: b176c6404ad40d10cfc818be41c053f85a72d751
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
   React-RCTAnimation: 6a2e76ab50c6f25b428d81b76a5a45351c4d77aa
@@ -747,20 +747,20 @@ SPEC CHECKSUMS:
   React-RCTVibration: 24600e3b1aaa77126989bc58b6747509a1ba14f3
   React-runtimeexecutor: a9904c6d0218fb9f8b19d6dd88607225927668f9
   ReactCommon: 149906e01aa51142707a10665185db879898e966
-  RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
-  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNColorMatrixImageFilters: bad88a55a2b1ea57efcaff5a03297d25bd83947e
-  RNCPushNotificationIOS: 61a7c72bd1ebad3568025957d001e0f0e7b32191
-  RNDeviceInfo: 41a8c8a41ae0e70d85cbe652cd5318150cb2cc40
+  RNCAsyncStorage: cb9a623793918c6699586281f0b51cbc38f046f9
+  RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
+  RNColorMatrixImageFilters: fdeaf2451ff8f7aa76679a9951b969e6c8adeede
+  RNCPushNotificationIOS: 5b1cf9ad2aaa107ecb92d5d2d7005ba521b2b97a
+  RNDeviceInfo: 6d24c244896857a89685312335e5ae344d6c9699
   RNFastImage: a7384db75df352500261e8e8f1ac2026def26102
   RNFBAnalytics: 8ba84c2d31c64374d054c8621b998f25145ffddc
   RNFBApp: 64c90ab78b6010ed5c3ade026dfe5ff6442c21fd
   RNFBCrashlytics: 1de18b8cc36d9bcf86407c4a354399228cc84a61
   RNFBMessaging: 35a027803f202ecaf911e66a940ca0c5690cb6a0
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNIap: f632e0685e37759e1a63651868d38fd08efe9a87
+  RNIap: 59590c874c42ea9681fd20d4c8db2845a4742536
   RNImageCropPicker: e641bf83ac47324994cac139bde74635ec52c17c
-  RNLocalize: 43f6c30d8e19ad92282ae434d310fb463b31f419
+  RNLocalize: 47e22ef8c36df1d572e42a87c8ae22e3fcf551dd
   RNReanimated: 241c586663f44f19a53883c63375fdd041253960
   RNScreens: e8e8dd0588b5da0ab57dcca76ab9b2d8987757e0
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
