@@ -47,4 +47,7 @@ export default StyleSheet.create({
     color: colors.primaryButtonText,
     fontWeight: fonts.weight.bold,
   },
+  loader: {
+    margin: 15,
+  },
 });

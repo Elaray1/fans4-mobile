@@ -4,9 +4,12 @@ import { RefreshControl } from 'react-native';
 
 import colors from 'themes/colors';
 
-function CustomRefreshControl({ refreshing, onRefresh }) {
+function CustomRefreshControl(props) {
+  const { refreshing, onRefresh } = props;
+
   return (
     <RefreshControl
+      {...props}
       refreshing={refreshing}
       onRefresh={onRefresh}
       tintColor={colors.white}
@@ -16,11 +19,11 @@ function CustomRefreshControl({ refreshing, onRefresh }) {
 
 CustomRefreshControl.propTypes = {
   refreshing: PropTypes.bool.isRequired,
-  onRefresh: PropTypes.bool.isRequired,
+  onRefresh: PropTypes.func.isRequired,
 };
 
 CustomRefreshControl.defaultProps = {
 
 };
 
-export default CustomRefreshControl;
+export default React.memo(CustomRefreshControl);

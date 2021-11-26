@@ -205,40 +205,35 @@ function NewChat({ route }) {
           placeholder={t('NewChat.search')}
         />
 
-        {!isFetchedFirstTime && isRefreshing && (
-          <ScrollView
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
+
+        {!!chats.length && (
+          <FlatList
+            style={styles.flatList}
+            data={chats}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            onEndReached={fetchChats}
+            onEndReachedThreshold={0.3}
+            ItemSeparatorComponent={renderItemSeparator}
+            onRefresh={onRefresh}
+            ListFooterComponent={renderFooter}
+            refreshing={isRefreshing}
             refreshControl={RefreshControl}
             keyboardShouldPersistTaps="handled"
+            initialNumToRender={20}
           />
         )}
 
-        {!!chats.length
-        && (
-        <FlatList
-          style={styles.flatList}
-          data={chats}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          onEndReached={fetchChats}
-          onEndReachedThreshold={0.3}
-          ItemSeparatorComponent={renderItemSeparator}
-          onRefresh={onRefresh}
-          ListFooterComponent={renderFooter}
-          refreshing={isRefreshing}
-          refreshControl={RefreshControl}
-          initialNumToRender={20}
-        />
-        )}
-
         {isFetchedFirstTime && !chats.length && (
-        <ScrollView
-          style={styles.flatList}
-          contentContainerStyle={styles.emptyScroll}
-          refreshControl={RefreshControl}
-          keyboardShouldPersistTaps="handled"
-        >
-          <EmptyView />
-        </ScrollView>
+          <ScrollView
+            style={styles.flatList}
+            contentContainerStyle={styles.emptyScroll}
+            refreshControl={RefreshControl}
+            keyboardShouldPersistTaps="handled"
+          >
+            <EmptyView />
+          </ScrollView>
         )}
 
       </View>

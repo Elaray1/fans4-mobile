@@ -38,4 +38,7 @@ export default StyleSheet.create({
   emptyScroll: {
     flexGrow: 1,
   },
+  loader: {
+    margin: 15,
+  },
 });

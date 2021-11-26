@@ -1,10 +1,6 @@
-import React, {
-  useState, useCallback, useEffect, useMemo,
-} from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  View, SafeAreaView, FlatList, ScrollView, ActivityIndicator, TouchableOpacity,
-} from 'react-native';
+import { View, SafeAreaView, FlatList, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -177,36 +173,31 @@ const FighterVoting = ({ route }) => {
       />
 
       <View style={styles.content}>
-        {!isFetchedFirstTime && isRefreshing && (
-          <ScrollView
+        {!isFetchedFirstTime && isRefreshing && <Loader />}
+
+        {!!updatedFights.length && (
+          <FlatList
+            data={updatedFights}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            onEndReachedThreshold={0.3}
+            onEndReached={fetchNewItems}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={renderFooter}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
             refreshControl={RefreshControl}
-            keyboardShouldPersistTaps="handled"
           />
         )}
 
-        {!!updatedFights.length && (
-        <FlatList
-          data={updatedFights}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          onEndReachedThreshold={0.3}
-          onEndReached={fetchNewItems}
-          showsVerticalScrollIndicator={false}
-          ListFooterComponent={renderFooter}
-          onRefresh={onRefresh}
-          refreshing={isRefreshing}
-          refreshControl={RefreshControl}
-        />
-        )}
-
         {isFetchedFirstTime && !updatedFights.length && (
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          refreshControl={RefreshControl}
-          keyboardShouldPersistTaps="handled"
-        >
-          <EmptyView />
-        </ScrollView>
+          <ScrollView
+            contentContainerStyle={styles.scrollView}
+            refreshControl={RefreshControl}
+            keyboardShouldPersistTaps="handled"
+          >
+            <EmptyView />
+          </ScrollView>
         )}
       </View>
 
