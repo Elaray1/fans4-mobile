@@ -24,6 +24,7 @@ import { MEDIA_TYPES } from './UploadMediaButton.constants';
 const WIDTH_HEIGHT_RATIO = 0.8;
 const HEIGHT_WIDTH_RATIO = 1.25;
 
+const smartAlbums = ['UserLibrary', 'Panoramas', 'Videos', 'Bursts']; // default library albums except "PhotoStream"
 function UploadMediaButton({
   handleMediaUpload,
   onDelete,
@@ -93,11 +94,13 @@ function UploadMediaButton({
       height: 335,
       multiple: false,
       forceJpg: true,
+      smartAlbums,
     } : {
       mediaType,
       compressVideoPreset: 'Passthrough',
       multiple: false,
       writeTempFile: false,
+      smartAlbums,
     };
 
     try {
