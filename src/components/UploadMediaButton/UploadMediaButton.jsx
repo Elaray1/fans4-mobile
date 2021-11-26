@@ -65,15 +65,22 @@ function UploadMediaButton({
   }, [handleMediaUpload]);
 
   const handleCameraError = useCallback((error) => {
-    showFailure();
-    console.log('media button error:', error);
+    console.log(error.code);
 
     if (error.code === 'E_NO_CAMERA_PERMISSION') {
       setAllowModalData({
         title: t('UploadMediaButton.accessToCameraNeeded'),
         text: t('UploadMediaButton.provideAccessToTheCamera'),
       });
+
+      return;
     }
+    if (error.code === 'E_PICKER_CANCELLED') {
+      return;
+    }
+
+    showFailure();
+    console.log('media button error:', error);
   }, [showFailure, t]);
 
   const onUploadFromGallery = useCallback(async () => {
@@ -160,6 +167,7 @@ function UploadMediaButton({
 
       setErrorText(null);
     } catch (error) {
+      console.log(error);
       handleCameraError(error);
     }
 
