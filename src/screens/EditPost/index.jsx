@@ -42,7 +42,7 @@ function EditPost({ route }) {
   } = route?.params;
 
   const isSaveButtonDisabled = isLoading
-  || (!postText)
+  || (!media && !postText)
   || (postText === initialPostText);
 
   const saveButtonProps = isSaveButtonDisabled
@@ -103,7 +103,7 @@ function EditPost({ route }) {
     try {
       await postApi.editPost({
         postId,
-        text: postText,
+        text: postText || null,
       });
 
       showSuccess(t('ChangePost.updated'));
@@ -124,6 +124,10 @@ function EditPost({ route }) {
       navigation.goBack();
     }
   }, [postText, initialPostText, navigation]);
+
+  const onContinueEditing = useCallback(() => {
+    setIsDiscardConfirmationModal(false);
+  }, []);
 
   const onDiscardChanges = useCallback(() => {
     navigation.goBack();
@@ -170,9 +174,9 @@ function EditPost({ route }) {
         <Modal
           title={t('ChangePost.unsavedChanges')}
           text={t('ChangePost.youHaveUnsavedChanges')}
-          closeButtonText={t('ChangePost.saveChanges')}
+          closeButtonText={postText ? t('ChangePost.saveChanges') : t('ChangePost.continueEditing')}
           submitButtonText={t('ChangePost.discard')}
-          onClose={onPressSave}
+          onClose={postText ? onPressSave : onContinueEditing}
           onSubmit={onDiscardChanges}
         />
       )}
