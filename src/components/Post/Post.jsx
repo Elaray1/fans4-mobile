@@ -156,7 +156,7 @@ function Post({
     setIsEditPostModal(false);
   }, []);
 
-  const onVideoLoaded = useCallback(async ({ startLoadingDate, endLoadingDate }) => {
+  const onVideoStarted = useCallback(async ({ startLoadingDate, endLoadingDate }) => {
     const delayMs = moment(endLoadingDate).diff(startLoadingDate);
 
     const { type: networkType } = await NetInfo.fetch();
@@ -280,7 +280,7 @@ function Post({
             height={media.height}
             duration={media.duration}
             viewable={viewable}
-            onVideoLoaded={onVideoLoaded}
+            onVideoStarted={onVideoStarted}
           />
         </View>
       );

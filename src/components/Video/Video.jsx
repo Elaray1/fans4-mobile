@@ -20,7 +20,7 @@ const CONTROLS_SHOWN_DURATION = 2 * 1000;
 
 const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
 
-function Video({ source, width, height, posterSource, duration, viewable, onVideoLoaded }) {
+function Video({ source, width, height, posterSource, duration, viewable, onVideoStarted }) {
   const isFocused = useIsFocused();
 
   const [paused, setPaused] = useState(true);
@@ -28,6 +28,7 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
   const [playedTime, setPlayedTime] = useState(0);
 
   const [startLoadingDate, setStartLoadingDate] = useState(null);
+  const [endLoadingDate, setEndLoadingDate] = useState(null);
 
   const [isControlsShown, setIsControlsShown] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -62,6 +63,14 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
 
     hideControlsWithTimeout();
   }, [hideControlsWithTimeout, isPosterShown]);
+
+  useEffect(() => {
+    if (startLoadingDate && endLoadingDate && onVideoStarted && !paused) {
+      onVideoStarted({ startLoadingDate, endLoadingDate });
+      setStartLoadingDate(null);
+      setEndLoadingDate(null);
+    }
+  }, [startLoadingDate, endLoadingDate, onVideoStarted, paused]);
 
   const pause = useCallback(() => {
     setPaused(true);
@@ -109,14 +118,13 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
   }, [seekToMakeThumbnail]);
 
   const updateTiming = useCallback(({ currentTime, playableDuration }) => {
-    if (onVideoLoaded && startLoadingDate && playableDuration > 0) {
-      onVideoLoaded({ startLoadingDate, endLoadingDate: moment().toDate() });
-      setStartLoadingDate(null);
+    if (!endLoadingDate && playableDuration > 0) {
+      setEndLoadingDate(moment().toDate());
     }
 
     setPlayedTime(currentTime);
     playedTimeAsRef.current = currentTime;
-  }, [startLoadingDate, onVideoLoaded]);
+  }, [endLoadingDate]);
 
   const toggleFullScreen = useCallback(() => {
     if (setIsPosterShown) {
@@ -241,14 +249,14 @@ Video.propTypes = {
   height: PropTypes.number.isRequired,
   duration: PropTypes.number,
   viewable: PropTypes.bool,
-  onVideoLoaded: PropTypes.func,
+  onVideoStarted: PropTypes.func,
 };
 
 Video.defaultProps = {
   posterSource: null,
   duration: 0,
   viewable: false,
-  onVideoLoaded: null,
+  onVideoStarted: null,
 };
 
 export default React.memo(Video);
