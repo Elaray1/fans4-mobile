@@ -360,7 +360,7 @@ function Finances() {
 
   const RefreshControl = (
     <CustomRefreshControl
-      refreshing={isRefreshing || isFetchedFirstTime}
+      refreshing={isRefreshing}
       onRefresh={onRefresh}
     />
   );
