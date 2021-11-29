@@ -748,7 +748,8 @@
     "unsavedChanges": "Unsaved changes",
     "youHaveUnsavedChanges": "You have unsaved changes. Are you sure you want to discard them?",
     "saveChanges": "Save changes",
-    "discard": "Discard"
+    "discard": "Discard",
+    "continueEditing": "Continue editing"
   },
   "UploadingMethodModal": {
     "uploadFromGallery": "Upload from Gallery",
