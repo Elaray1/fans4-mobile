@@ -195,7 +195,7 @@ function SearchFighters() {
 
     const isFighterInActiveSubscription = userType === USER_TYPES.FAN
     && !!supportedFighters.find(fighter => item._id === fighter._id
-      && isSubscribedService.isSubscribed({ subscriptionToFighter: fighter }));
+      && !isSubscribedService.isSubscriptionWillBeStopped({ subscriptionToFighter: fighter }));
 
     return (
       <TouchableOpacity
