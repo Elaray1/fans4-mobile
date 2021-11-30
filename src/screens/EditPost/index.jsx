@@ -174,9 +174,9 @@ function EditPost({ route }) {
         <Modal
           title={t('ChangePost.unsavedChanges')}
           text={t('ChangePost.youHaveUnsavedChanges')}
-          closeButtonText={postText ? t('ChangePost.saveChanges') : t('ChangePost.continueEditing')}
+          closeButtonText={!media && !postText ? t('ChangePost.continueEditing') : t('ChangePost.saveChanges')}
           submitButtonText={t('ChangePost.discard')}
-          onClose={postText ? onPressSave : onContinueEditing}
+          onClose={!media && !postText ? onContinueEditing : onPressSave}
           onSubmit={onDiscardChanges}
         />
       )}
