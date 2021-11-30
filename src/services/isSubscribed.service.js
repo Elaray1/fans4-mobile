@@ -7,6 +7,12 @@ class IsSubscribedService {
 
     return !isRenewalDatePassed || (subscriptionToFighter.autorenewal && !isGracePeriodEndDatePassed);
   }
+
+  isSubscriptionWillBeStopped({ subscriptionToFighter }) {
+    return subscriptionToFighter
+    && !subscriptionToFighter.autorenewal
+    && moment(subscriptionToFighter.renewalDate).isAfter(moment());
+  }
 }
 
 export default new IsSubscribedService();
