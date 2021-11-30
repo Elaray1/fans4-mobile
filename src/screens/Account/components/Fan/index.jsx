@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, ScrollView, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { View, ScrollView, ActivityIndicator, TouchableOpacity, Platform, FlatList } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
@@ -30,6 +30,9 @@ const FanAccount = () => {
   const { t } = useTranslation();
   const { showFailure } = useToast();
   const navigation = useNavigation();
+
+  const listRef = useRef(null);
+  useScrollToTop(listRef);
 
   const [isLoading, setIsLoading] = useState(false);
   const [fighters, setFighters] = useState([]);
@@ -84,7 +87,7 @@ const FanAccount = () => {
     </View>
   );
 
-  const supportedFighterView = (item, i) => {
+  const renderItem = ({ item, index }) => {
     const subscription = userSubscriptions.find(s => s._id === item._id);
 
     if (!subscription) {
@@ -103,7 +106,7 @@ const FanAccount = () => {
       <TouchableOpacity
         onPress={() => goToFighterAccount(item._id)}
         activeOpacity={0.7}
-        style={[styles.fighter, i !== (fighters.length - 1) && styles.line]}
+        style={[styles.fighter, index !== (fighters.length - 1) && styles.line]}
         key={item._id}
       >
         {item.status === USER_STATUSES.BLOCKED ? (
@@ -154,6 +157,8 @@ const FanAccount = () => {
     );
   };
 
+  const keyExtractor = useCallback(item => item._id, []);
+
   return (
     <ScrollView
       style={styles.content}
@@ -186,7 +191,12 @@ const FanAccount = () => {
             {t('AccountFan.YourSubscriptions')}
           </Text>
 
-          {fighters.map(supportedFighterView)}
+          <FlatList
+            ref={listRef}
+            data={fighters}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+          />
         </View>
       )}
       {Platform.OS === 'android'

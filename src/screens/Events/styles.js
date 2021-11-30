@@ -108,7 +108,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: colors.gray,
     borderRadius: 5,
-    marginLeft: -80,
+    marginLeft: -40,
   },
   votingCardsIndicator: {
     position: 'absolute',

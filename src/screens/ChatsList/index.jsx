@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { View, SafeAreaView, FlatList, ActivityIndicator, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 
 import Text from 'components/Text';
 import Header from 'components/Header';
@@ -35,6 +35,9 @@ const ChatsList = () => {
   const navigation = useNavigation();
 
   const userType = useSelector(userSelectors.getUserType);
+
+  const listRef = useRef(null);
+  useScrollToTop(listRef);
 
   const [chats, setChats] = useState([]);
   const [page, setPage] = useState(INITIAL_PAGE);
@@ -174,6 +177,7 @@ const ChatsList = () => {
         {chats.length > (isFan ? 0 : 1)
           && (
             <FlatList
+              ref={listRef}
               style={styles.flatList}
               data={chats}
               keyExtractor={keyExtractor}

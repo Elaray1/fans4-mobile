@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, TouchableOpacity, FlatList, ActivityIndicator, AppState } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 
 import colors from 'themes/colors';
 
@@ -43,6 +43,7 @@ function FighterAccount({ postId }) {
   const { showFailure } = useToast();
 
   const postsListRef = useRef(null);
+  useScrollToTop(postsListRef);
 
   const userId = useSelector(userSelectors.getUserId);
   const isBankAccountWarning = useSelector(userSelectors.getIsBankAccountWarning);
