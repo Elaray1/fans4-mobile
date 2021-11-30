@@ -2,10 +2,11 @@ import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { View, SafeAreaView, FlatList, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { useNavigation } from '@react-navigation/native';
 
+import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as fightApi from 'resources/fight/fight.api';
@@ -27,6 +28,7 @@ import styles from './styles';
 const PER_PAGE_COUNT = 20;
 
 const FighterVoting = ({ route }) => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { showFailure } = useToast();
@@ -52,7 +54,9 @@ const FighterVoting = ({ route }) => {
     const readVotingCards = async () => {
       if (isVotingCardsIndicator) {
         try {
-          await fightApi.readVotingCards();
+          const updatedUser = await fightApi.readVotingCards();
+
+          dispatch(userActions.setUserData(updatedUser));
         } catch (error) {
           console.error(error);
         }
@@ -60,7 +64,7 @@ const FighterVoting = ({ route }) => {
     };
 
     readVotingCards();
-  }, [isVotingCardsIndicator]);
+  }, [isVotingCardsIndicator, dispatch]);
 
   const navigateToFightersList = useCallback(() => {
     navigation.navigate('Tabs', {
