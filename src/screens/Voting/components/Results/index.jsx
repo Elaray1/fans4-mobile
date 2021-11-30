@@ -1,5 +1,5 @@
 import React, {
-  useState, useCallback, useEffect,
+  useState, useCallback, useEffect, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -44,7 +44,11 @@ const Results = ({ onPullToRefresh }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { showFailure } = useToast();
+
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
+
+  const listRef = useRef(null);
+  useScrollToTop(listRef);
 
   const [fights, setFights] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -193,6 +197,7 @@ const Results = ({ onPullToRefresh }) => {
 
         {!!fights.length && (
           <FlatList
+            ref={listRef}
             data={fights}
             renderItem={renderItem}
             keyExtractor={keyExtractor}

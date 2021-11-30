@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   SafeAreaView, View, FlatList, ActivityIndicator, ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import * as activityApi from 'resources/activity/activity.api';
@@ -45,6 +45,9 @@ function Activity() {
   const { showFailure } = useToast();
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
+
+  const listRef = useRef(null);
+  useScrollToTop(listRef);
 
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
@@ -296,6 +299,7 @@ function Activity() {
 
         {!!filteredActivitiesArray.length && (
           <FlatList
+            ref={listRef}
             data={filteredActivitiesArray}
             renderItem={renderItem}
             keyExtractor={keyExtractor}

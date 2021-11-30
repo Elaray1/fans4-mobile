@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, AppState,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 
@@ -62,6 +62,9 @@ function Feed() {
   const { showFailure } = useToast();
 
   const fightersList = useSelector(userSelectors.getSupportedFighters);
+
+  const listRef = useRef(null);
+  useScrollToTop(listRef);
 
   const [posts, setPosts] = useState([]);
   const [viewablePosts, setViewablePosts] = useState({});
@@ -255,6 +258,7 @@ function Feed() {
       <View style={styles.content}>
         {!!posts.length && (
           <FlatList
+            ref={listRef}
             data={posts}
             renderItem={renderItem}
             keyExtractor={keyExtractor}

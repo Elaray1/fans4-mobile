@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   SafeAreaView, View, FlatList, ActivityIndicator, TouchableOpacity, ScrollView,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import moment from 'moment-timezone';
 import Config from 'react-native-config';
@@ -44,6 +44,9 @@ function Events() {
 
   const userType = useSelector(userSelectors.getUserType);
   const isVotingCardsIndicator = useSelector(userSelectors.getVotingCardsIndicator);
+
+  const listRef = useRef(null);
+  useScrollToTop(listRef);
 
   const [events, setEvents] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -291,6 +294,7 @@ function Events() {
 
         {!!events.length && (
           <FlatList
+            ref={listRef}
             data={events}
             renderItem={renderItem}
             keyExtractor={keyExtractor}

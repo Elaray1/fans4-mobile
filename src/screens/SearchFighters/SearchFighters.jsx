@@ -5,7 +5,7 @@ import {
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash.debounce';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
@@ -46,6 +46,9 @@ function SearchFighters() {
 
   const userType = useSelector(userSelectors.getUserType);
   const supportedFighters = useSelector(userSelectors.getSupportedFighters);
+
+  const listRef = useRef(null);
+  useScrollToTop(listRef);
 
   const [fans4Account, setFans4Account] = useState(null);
   const [fighters, setFighters] = useState([]);
@@ -331,6 +334,7 @@ function SearchFighters() {
 
         {(!!fighters.length && !isSearching) && (
           <FlatList
+            ref={listRef}
             data={fighters}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
