@@ -4,6 +4,12 @@ export const checkIfIosTransactionProcessed = ({ appleTransactionId }) => apiCli
   appleTransactionId,
 });
 
+export const checkIfIosSubscriptionExists = ({
+  receipt, fighterId,
+}) => apiClient.put('payments/ios-subcsription', {
+  receipt, fighterId,
+});
+
 export const verifyAppleReceipt = ({ receipt, fighterId, productId }) => apiClient
   .post('payments/ios-subscription-payment', {
     productId,

@@ -119,8 +119,27 @@ const useSubscribing = ({ fighterId }) => {
 
   const subscribe = useCallback(async () => {
     setIsMakingPurchase(true);
-
     try {
+      // check if this subscription exists on apple id account
+      const purchases = await inAppPurhaseService.getAvailablePurchases();
+
+      if (purchases.length) {
+        const { isUserWithThisSubscriptionExists } = await paymentsApi.checkIfIosSubscriptionExists({
+          receipt: purchases[0].transactionReceipt,
+          fighterId,
+        });
+
+        if (isUserWithThisSubscriptionExists) {
+          Alert.alert(
+            t('Fighter.unsubscribe'),
+            // eslint-disable-next-line max-len
+            `${t('Fighter.subscriptionExists1')} ${addSuffixToNumber(getIosSubscriptionNumberFromProductId(subscriptionAppleProductId || 'fighter.subscription.0'))} ${t('Fighter.subscriptionExists2')}`,
+            [{ text: t('Fighter.ok'), onPress: () => setIsMakingPurchase(false) }],
+          );
+          return;
+        }
+      }
+
       let fetchedUser;
 
       try {
@@ -179,7 +198,7 @@ const useSubscribing = ({ fighterId }) => {
       setIsMakingPurchase(false);
       dispatch(purchasesActions.finishPurchaseProcessing());
     }
-  }, [dispatch, fighterId, showFailure, t]);
+  }, [dispatch, fighterId, showFailure, t, subscriptionAppleProductId]);
 
   const toggleSubscriptionState = useCallback(() => {
     if (isSubscriptionActive || isSubsscriptionInGracePeriod) {
