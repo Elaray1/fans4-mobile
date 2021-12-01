@@ -444,7 +444,9 @@
     "youWillBeRedirectedToResubscribeTo1": "Your subscription for the ",
     "youWillBeRedirectedToResubscribeTo2": " fighter will be renewed",
     "resubscribe": "Resubscribe",
-    "noPossibilityToResubscribe": "You cannot resubscribe to this Fighter in the app."
+    "noPossibilityToResubscribe": "You cannot resubscribe to this Fighter in the app.",
+    "subscriptionExists1": "Subscription for",
+    "subscriptionExists2": "fighter already exists under this Apple ID. Please sign in under your another account."
   },
   "Fans4Account": {
     "profile": "Profile",

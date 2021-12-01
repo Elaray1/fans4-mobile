@@ -77,6 +77,12 @@ class InAppPurchaseService {
     await storage.removeItem(productId);
   }
 
+  async getAvailablePurchases() {
+    const availablePurchases = await iap.getAvailablePurchases();
+
+    return availablePurchases;
+  }
+
   getAvailableSubscriptionProductIds() {
     return subscriptionProductIds;
   }
