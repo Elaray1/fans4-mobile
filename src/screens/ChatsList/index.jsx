@@ -10,6 +10,8 @@ import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import useToast from 'hooks/useToast';
 
+import * as socketService from 'services/socket.service';
+
 import * as chatApi from 'resources/chat/chat.api';
 
 import * as userSelectors from 'resources/user/user.selectors';
@@ -127,6 +129,13 @@ const ChatsList = () => {
   const onRefresh = useCallback(async () => {
     await fetchChats({ refresh: true });
   }, [fetchChats]);
+
+  useEffect(() => {
+    socketService.on('chatList:updated', onRefresh);
+    return () => {
+      socketService.removeListener('chatList:updated', onRefresh);
+    };
+  }, [onRefresh]);
 
   const onNewMessages = useCallback(({ chat }) => {
     setChats((oldChats) => {
