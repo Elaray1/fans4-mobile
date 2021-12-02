@@ -129,9 +129,10 @@ const ChatsList = () => {
   }, [fetchChats]);
 
   const onNewMessages = useCallback(({ chat }) => {
+    const isChatWithFans4 = !isFan && !!chat.participants.find(participant => participant._id === FANS4_ACCOUNT._id);
     setChats((oldChats) => {
       const newChats = oldChats.filter(c => c._id !== chat._id);
-      newChats.splice(isFan || chat._id === FANS4_ACCOUNT._id ? 0 : 1, 0, chat);
+      newChats.splice(isFan || isChatWithFans4 ? 0 : 1, 0, chat);
       return newChats;
     });
   }, [isFan]);
