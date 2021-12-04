@@ -75,7 +75,9 @@ function ChangeBiography() {
     try {
       const user = await userApi.updateUserInfo({
         about: value,
-        isIntroVideo: Boolean(uploadingMedia),
+        ...(!_.isEqual(initialMedia, uploadingMedia) && {
+          isIntroVideo: !!uploadingMedia,
+        }),
       });
 
       dispatch(userActions.setUserData(user));
@@ -109,6 +111,7 @@ function ChangeBiography() {
     t,
     uploadingMedia,
     onUploadProgress,
+    initialMedia,
   ]);
 
   const handleMediaUpload = useCallback((media, poster) => {
