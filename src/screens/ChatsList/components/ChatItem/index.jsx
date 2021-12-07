@@ -31,6 +31,7 @@ const ChatItem = ({ chat, setNewChat, onRefreshChats }) => {
 
   const { unreadMessagesNumber } = participants.find(u => u._id === userId);
   const { name: chatName, avatarUrl, _id } = participants.find(u => u._id !== userId);
+  const isFans4 = _id === 'fans4';
 
   useEffect(() => {
     socketService.emit('subscribe', `chat-${chat._id}`);
@@ -54,19 +55,21 @@ const ChatItem = ({ chat, setNewChat, onRefreshChats }) => {
   }, [chat, navigation, _id, chatName, avatarUrl, unreadMessagesNumber, onRefreshChats]);
 
   return (
-    <TouchableOpacity style={_id === 'fans4' ? styles.fans4Chat : styles.chat} onPress={onChatPress}>
+    <TouchableOpacity style={isFans4 ? styles.fans4Chat : styles.chat} onPress={onChatPress}>
       {avatarUrl && (
       <FastImage
         source={{ uri: avatarUrl }}
         style={[
-          _id === 'fans4' ? styles.fans4Photo : styles.photoImage,
+          isFans4 ? styles.fans4Photo : styles.photoImage,
           userType === USER_TYPES.FAN && isChatClosed && styles.opacityImage,
         ]}
       />
       )}
       <View style={styles.chatInfo}>
         <View style={[styles.row, styles.topRow]}>
-          <Text style={[styles.name, isChatClosed && styles.closedChatText]}>{chatName}</Text>
+          <Text style={[styles.name, isChatClosed && styles.closedChatText]}>
+            { isFans4 ? `${chatName} Support` : chatName}
+          </Text>
           {chat?.lastMessage?.createdOn && !isChatClosed
          && <Text style={styles.time}>{formatTime(chat.lastMessage.createdOn)}</Text>}
         </View>
@@ -75,7 +78,12 @@ const ChatItem = ({ chat, setNewChat, onRefreshChats }) => {
             <Text style={[styles.message, isChatClosed && styles.closedChatText]}>
               {toFixLength({ text: chat.lastMessage.text, length: 50 })}
             </Text>
-          ) : <Text style={styles.text}>{`${t('ChatsList.startChattingWith')} ${chatName}`}</Text>}
+          ) : (
+            <Text style={styles.text}>{`${t('ChatsList.startChattingWith')} ${isFans4
+              ? `${chatName} Support`
+              : chatName}`}
+            </Text>
+          )}
           {Boolean(unreadMessagesNumber) && (
           <View style={styles.counter}>
             <Text style={styles.counterText}>{unreadMessagesNumber}</Text>

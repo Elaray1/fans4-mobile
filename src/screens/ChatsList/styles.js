@@ -19,6 +19,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  textWithIcon: {
+    flexDirection: 'row',
+  },
   illustration: {
     width: 250,
     height: 250,
