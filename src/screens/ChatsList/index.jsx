@@ -21,6 +21,7 @@ import { USER_TYPES } from 'resources/user/user.constants';
 
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 import NewChatIcon from 'assets/icons/new-chat.svg';
+import NewChatGreyIcon from 'assets/icons/new-chat-grey.svg';
 
 import colors from 'themes/colors';
 
@@ -57,7 +58,20 @@ const ChatsList = () => {
     <View style={styles.emptyView}>
       <NoFightsIllustration style={styles.illustration} />
       <Text style={styles.titleText}>{t(isFan ? 'ChatsList.noSubscriptions' : 'ChatsList.startChatting')}</Text>
-      <Text style={styles.text}>{t(isFan ? 'ChatsList.subscribe' : 'ChatsList.clickTheIcon')}</Text>
+
+      {isFan
+        ? <Text style={styles.text}> {t('ChatsList.subscribe')}</Text>
+        : (
+          <>
+            <View style={styles.textWithIcon}>
+              <Text style={styles.text}> {t('ChatsList.clickTheIcon1')}</Text>
+              <NewChatGreyIcon />
+              <Text style={styles.text}> {t('ChatsList.clickTheIcon2')}</Text>
+            </View>
+            <Text style={styles.text}> {t('ChatsList.clickTheIcon2')}</Text>
+          </>
+        )
+        }
     </View>
   );
 

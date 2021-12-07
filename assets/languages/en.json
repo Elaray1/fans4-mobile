@@ -611,7 +611,7 @@
     "vote": "Vote",
     "youVoted": "You voted",
     "ok": "OK",
-    "subscription": "Propose a fight!",
+    "subscription": "Subscription",
     "youHaveToBeSubscribed": "To propose a fight you have to be subscribed to a Fighter.",
     "created": "Fight was sent to admin for review",
     "voted": "Fight already created, we saved your vote",
@@ -698,9 +698,9 @@
     "messageNotSentPleaseTryAgain": "Message not sent. Please try again",
     "newMessage": "new message",
     "newMessages": "new messages",
-    "fighterSubscriptionEndText": "The chat is only available for fans and their fighters.",
-    "fanSubscriptionEndText": "The chat is only available for fans and their fighters. Become their fan to continue chatting.",
-    "fighterIsBlocked": "This fighter is blocked. You have no more possibility to send and receive messages."
+    "fighterSubscriptionEndText": "The chat is only available for Fans and their Fighters.",
+    "fanSubscriptionEndText": "The chat is only available for fans and their fighters. Resubscribe to continue chatting.",
+    "fighterIsBlocked": "This Fighter is blocked. Chat functionality with this Fighter has been disabled."
   },
   "SubscriptionPosibilities": {
     "subscriptionPossibility1": "Full access to Fighter's content",
@@ -710,10 +710,12 @@
   },
   "ChatsList": {
     "chats": "Chats",
-    "startChatting": "Start chatting with your fans",
-    "clickTheIcon": "Click the icon in the right hand corner to start a conversation.",
-    "noSubscriptions": "No subscriptions, yet",
-    "subscribe": "Subscribe to your favorite fighters and start a chat!",
+    "startChatting": "Start chatting with your Fans",
+    "clickTheIcon1": "Click the icon ",
+    "clickTheIcon2": "in the right-hand corner",
+    "clickTheIcon3": "to start a conversation.",
+    "noSubscriptions": "No subscriptions yet",
+    "subscribe": "Subscribe to your favorite Fighters and start a conversation!",
     "startChattingWith": "Start chatting with"
   },
   "NewChat": {
