@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 import { commonStyles } from 'themes/commonStyles';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+import metrics from 'themes/metrics';
 
 export default StyleSheet.create({
   screen: {
@@ -12,7 +13,7 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
   },
   flatList: {
-    height: '92%',
+    height: metrics.screenHeight - metrics.tabBarHeight - 160, // header + margins
   },
   emptyView: {
     marginTop: 30,
