@@ -143,8 +143,8 @@ android {
         applicationId "com.fans4"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 99
-        versionName "1.2.70"
+        versionCode 100
+        versionName "1.2.71"
     }
     splits {
         abi {
