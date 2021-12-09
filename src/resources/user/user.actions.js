@@ -6,7 +6,7 @@ import { setItem, clear } from 'helpers/storage';
 import getInitialScreen from 'helpers/getInitialScreen';
 import * as rootNavigation from 'helpers/rootNavigation';
 
-import * as sockets from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 import analyticsService from 'services/analytics.service';
 
 import {
@@ -29,9 +29,16 @@ export const emailSignUp = ({
 
   config.accessToken = accessToken;
 
-  sockets.disconnect();
-  sockets.connect();
-  sockets.emit('subscribe', `user-${user._id}`);
+  websocketsService.disconnect();
+  websocketsService.connect({
+    query: {
+      accessToken,
+    },
+    onConnect: () => {
+      websocketsService.emit('subscribe', `user-${user._id}`);
+    },
+  });
+
 
   await Promise.all([
     setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
@@ -85,9 +92,16 @@ export const emailSignIn = ({
   });
   config.accessToken = accessToken;
 
-  sockets.disconnect();
-  sockets.connect();
-  sockets.emit('subscribe', `user-${user._id}`);
+  websocketsService.disconnect();
+  websocketsService.connect({
+    query: {
+      accessToken,
+    },
+    onConnect: () => {
+      websocketsService.emit('subscribe', `user-${user._id}`);
+    },
+  });
+
 
   await Promise.all([
     setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken),
@@ -171,9 +185,16 @@ export const logout = () => async (dispatch) => {
 
   await clear();
   config.accessToken = null;
-  sockets.disconnect();
-  sockets.connect();
-  sockets.emit('subscribe', `device-${deviceId}`);
+  websocketsService.disconnect();
+  websocketsService.connect({
+    query: {
+      deviceId: getMaskedDeviceId(),
+    },
+    onConnect: () => {
+      websocketsService.emit('subscribe', `device-${deviceId}`);
+    },
+  });
+
 
   dispatch({ type: USER_LOGGED_OUT });
 };

@@ -11,7 +11,7 @@ import * as activityApi from 'resources/activity/activity.api';
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 
-import * as socketService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import * as messageSelectors from 'resources/message/message.selectors';
 
@@ -170,10 +170,10 @@ function Activity() {
     activities.thisWeek, activities.thisMonth]);
 
   useEffect(() => {
-    socketService.on('activity:created', onActivityCreated);
+    websocketsService.on('activity:created', onActivityCreated);
 
     return () => {
-      socketService.removeListener('activity:created', onActivityCreated);
+      websocketsService.off('activity:created', onActivityCreated);
     };
   }, [onActivityCreated]);
 

@@ -11,7 +11,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 import * as userApi from 'resources/user/user.api';
 import { USER_STATUSES, SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
 
-import * as socketService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import useToast from 'hooks/useToast';
 
@@ -65,7 +65,7 @@ const FanAccount = () => {
   }, [dispatch, showFailure, updateUserSubscriptions, userSubscriptions]);
 
   useEffect(() => {
-    socketService.on('supportedFighter:status-updated', ({ _id, status }) => {
+    websocketsService.on('supportedFighter:status-updated', ({ _id, status }) => {
       const updatedFighters = fighters.map((f) => {
         if (f._id !== _id) {
           return f;

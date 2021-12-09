@@ -13,7 +13,7 @@ import { formatTime } from 'components/Post/Post.helpers';
 import { CHAT_STATUSES } from 'resources/chat/chat.constants';
 import { USER_TYPES } from 'resources/user/user.constants';
 
-import * as socketService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import Text from 'components/Text';
 
@@ -34,11 +34,11 @@ const ChatItem = ({ chat, setNewChat, onRefreshChats }) => {
   const isFans4 = _id === 'fans4';
 
   useEffect(() => {
-    socketService.emit('subscribe', `chat-${chat._id}`);
-    socketService.on(`chat-${chat._id}-message:created`, setNewChat);
+    websocketsService.emit('subscribe', `chat-${chat._id}`);
+    websocketsService.on(`chat-${chat._id}-message:created`, setNewChat);
     return () => {
-      socketService.emit('unsubscribe', `chat-${chat._id}`);
-      socketService.removeListener(`chat-${chat._id}-message:created`, setNewChat);
+      websocketsService.emit('unsubscribe', `chat-${chat._id}`);
+      websocketsService.off(`chat-${chat._id}-message:created`, setNewChat);
     };
   }, [chat._id, setNewChat]);
 

@@ -13,7 +13,7 @@ import ErrorIcon from 'assets/icons/error.svg';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
-import * as socketService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import * as messageApi from 'resources/message/message.api';
 import * as messageActions from 'resources/message/message.actions';
@@ -217,18 +217,18 @@ function Chat({ route }) {
   }, [messages, timeouts, removeTimeouts]);
 
   useEffect(() => {
-    socketService.on(`chat-${chatId}-message:created`, updateMessageList);
-    socketService.on(`chat-${chatId}-typing`, onUserTyping);
+    websocketsService.on(`chat-${chatId}-message:created`, updateMessageList);
+    websocketsService.on(`chat-${chatId}-typing`, onUserTyping);
     return () => {
-      socketService.removeListener(`chat-${chatId}-message:created`, updateMessageList);
-      socketService.removeListener(`chat-${chatId}-typing`, onUserTyping);
+      websocketsService.off(`chat-${chatId}-message:created`, updateMessageList);
+      websocketsService.off(`chat-${chatId}-typing`, onUserTyping);
     };
   }, [updateMessageList, chatId, onUserTyping]);
 
   const onMessageTextChange = useCallback((messageText) => {
     setMessageValue(messageText);
     const name = user.role.type === USER_TYPES.FIGHTER ? user.fullName : user.role.biography.nickname;
-    socketService.emit('emit', {
+    websocketsService.emit('emit', {
       roomId: `chat-${chatId}`,
       eventName: `chat-${chatId}-typing`,
       data: { user: { name } },

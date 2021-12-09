@@ -13,7 +13,7 @@ import * as accountApi from 'resources/account/account.api';
 import * as payoutApi from 'resources/payout/payout.api';
 
 import analyticsService from 'services/analytics.service';
-import * as socketsService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import PlusIcon from 'assets/icons/plus';
 import EditIcon from 'assets/icons/pencil';
@@ -96,8 +96,8 @@ function Finances() {
       setAccount(updatedAccount);
     };
 
-    socketsService.on('account:updated', updateAccount);
-    return () => socketsService.removeListener('account:updated', updateAccount);
+    websocketsService.on('account:updated', updateAccount);
+    return () => websocketsService.off('account:updated', updateAccount);
   }, []);
 
   useEffect(() => {

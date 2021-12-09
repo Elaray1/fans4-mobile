@@ -22,7 +22,7 @@ import * as userActions from 'resources/user/user.actions';
 import * as postActions from 'resources/post/post.actions';
 
 import analyticsService from 'services/analytics.service';
-import * as socketService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import * as rootNavigation from 'helpers/rootNavigation';
 
@@ -98,18 +98,18 @@ function FighterAccount({ postId }) {
 
 
   useEffect(() => {
-    socketService.on('post:status-updated', refreshPosts);
+    websocketsService.on('post:status-updated', refreshPosts);
 
     return () => {
-      socketService.removeListener('post:status-updated', refreshPosts);
+      websocketsService.off('post:status-updated', refreshPosts);
     };
   }, [refreshPosts]);
 
   useEffect(() => {
-    socketService.on('fighter:subscribers-updated', refreshFansCount);
+    websocketsService.on('fighter:subscribers-updated', refreshFansCount);
 
     return () => {
-      socketService.removeListener('fighter:subscribers-updated', refreshFansCount);
+      websocketsService.off('fighter:subscribers-updated', refreshFansCount);
     };
   }, [refreshFansCount]);
 

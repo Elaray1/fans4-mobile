@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 
-import * as socketService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
@@ -40,7 +40,7 @@ function EmailConfirmation() {
   const checkEmailIntervalTimerRef = useRef();
 
   useEffect(() => {
-    socketService.on('email:verified', async (updatedUser) => {
+    websocketsService.on('email:verified', async (updatedUser) => {
       await dispatch(userActions.setUserData(updatedUser));
       navigation.navigate('BiographicalData');
     });

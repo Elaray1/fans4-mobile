@@ -1,63 +1,60 @@
 import io from 'socket.io-client';
-import { AppState } from 'react-native';
-import { getMaskedDeviceId } from 'helpers/deviceInfo';
 
 import config from 'resources/config';
 
-let socket; // eslint-disable-line import/no-mutable-exports
+class WebsocketsService {
+  connect({ query, onConnect }) {
+    this._socket = io(config.webSocketUrl, {
+      transports: ['websocket'],
+      query,
+    });
 
-export const emit = (event, ...args) => {
-  if (!socket) return;
-  socket.emit(event, ...args);
-};
+    this._socket.on('connect', () => {
+      console.log('websockets connected');
 
-export const on = (event, callback) => {
-  if (!socket) return;
-  socket.on(event, callback);
-};
+      if (onConnect) {
+        onConnect();
+      }
+    });
 
-export const removeListener = (event, callback) => {
-  if (!socket) return;
-  socket.removeListener(event, callback);
-};
+    this._socket.on('disconnect', () => {
+      console.log('websockets disconnected');
+    });
 
-export const connect = async () => {
-  socket = io(config.webSocketUrl, {
-    transports: ['websocket'],
-    query: {
-      accessToken: config.accessToken,
-      deviceId: getMaskedDeviceId(),
-    },
-  });
-
-  socket.connect();
-
-  socket.on('connect', () => {
-    console.log('WS connected');
-  });
-
-  socket.on('disconnect', () => {
-    console.log('WS disconnected');
-  });
-};
-
-export const disconnect = () => {
-  if (!socket) return;
-  socket.disconnect();
-};
-
-export const disconnected = () => {
-  return !socket || socket.disconnected;
-};
-
-export const connected = () => {
-  return socket && socket.connected;
-};
-
-const connectSocketsIfNeeded = () => {
-  if (disconnected()) {
-    connect();
+    this._socket.connect();
   }
-};
 
-AppState.addEventListener('change', connectSocketsIfNeeded);
+  disconnect() {
+    if (this._socket) {
+      this._socket.disconnect();
+    }
+
+    this._socket = null;
+  }
+
+  emit(event, ...args) {
+    if (!this._socket) {
+      return;
+    }
+
+    this._socket.emit(event, ...args);
+  }
+
+  on(event, callback) {
+    if (!this._socket) {
+      return;
+    }
+
+    this._socket.on(event, callback);
+  }
+
+  off(event, callback) {
+    if (!this._socket) {
+      return;
+    }
+
+    this._socket.removeListener(event, callback);
+  }
+}
+
+export default new WebsocketsService();

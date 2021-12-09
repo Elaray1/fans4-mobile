@@ -16,12 +16,13 @@ import getInitialScreen from 'helpers/getInitialScreen';
 import * as rootNavigation from 'helpers/rootNavigation';
 
 import analyticsService from 'services/analytics.service';
-import * as socketsService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 import pushNotificationService from 'services/pushNotification.service';
 import inAppPurhaseService from 'services/inAppPurhase.service.ios';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
+import * as userApi from 'resources/user/user.api';
 
 import * as paymentApi from 'resources/payment/payment.api';
 
@@ -59,7 +60,7 @@ const init = async (dispatch) => {
   // so we clear cookies in order to prevent mixing authorization cookies
   // with other authorization methods
   try {
-    cookies.clearAll();
+    await cookies.clearAll();
   } catch (err) {
     console.log('Clearing cookies error:', err);
   }
@@ -71,17 +72,33 @@ const init = async (dispatch) => {
     config.accessToken = accessToken;
 
     try {
-      user = await dispatch(userActions.getUserData());
-      socketsService.connect();
-      socketsService.emit('subscribe', `user-${user._id}`);
+      user = await userApi.getUserData();
+
+      websocketsService.connect({
+        query: {
+          accessToken,
+        },
+        onConnect: () => {
+          websocketsService.emit('subscribe', `user-${user._id}`);
+        },
+      });
+
+
+      dispatch(userActions.setUserData(user));
     } catch (err) {
       console.log('Fetching user on start error:', err.message);
     }
   }
 
   if (!user) {
-    socketsService.connect();
-    socketsService.emit('subscribe', `device-${getMaskedDeviceId()}`);
+    websocketsService.connect({
+      query: {
+        deviceId: getMaskedDeviceId(),
+      },
+      onConnect: () => {
+        websocketsService.emit('subscribe', `device-${getMaskedDeviceId()}`);
+      },
+    });
   }
 
 
@@ -214,21 +231,21 @@ function AppNavigation() {
   useEffect(() => {
     const handle = async () => {
       if (userAuthenticated) {
-        socketsService.on('user:status-updated', handleUserStatusUpdated);
-        socketsService.on('fighter:updated', handleFighterUpdated);
-        socketsService.on('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
-        socketsService.on('user:updated', handleUserUpdated);
-        socketsService.on('user:unread-messages-updated', handleUserUnreadMessagesUpdated);
+        websocketsService.on('user:status-updated', handleUserStatusUpdated);
+        websocketsService.on('fighter:updated', handleFighterUpdated);
+        websocketsService.on('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
+        websocketsService.on('user:updated', handleUserUpdated);
+        websocketsService.on('user:unread-messages-updated', handleUserUnreadMessagesUpdated);
 
         pushNotificationService.startNotificationHandling(pushNotificationHandlersByType);
       } else {
         pushNotificationService.stopNotificationHandling();
 
-        socketsService.removeListener('user:status-updated', handleUserStatusUpdated);
-        socketsService.removeListener('fighter:updated', handleFighterUpdated);
-        socketsService.removeListener('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
-        socketsService.removeListener('user:updated', handleUserUpdated);
-        socketsService.removeListener('user:unread-messages-updated', handleUserUnreadMessagesUpdated);
+        websocketsService.off('user:status-updated', handleUserStatusUpdated);
+        websocketsService.off('fighter:updated', handleFighterUpdated);
+        websocketsService.off('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
+        websocketsService.off('user:updated', handleUserUpdated);
+        websocketsService.off('user:unread-messages-updated', handleUserUnreadMessagesUpdated);
       }
     };
 

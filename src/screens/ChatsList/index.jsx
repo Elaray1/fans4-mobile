@@ -10,7 +10,7 @@ import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import useToast from 'hooks/useToast';
 
-import * as socketService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import * as chatApi from 'resources/chat/chat.api';
 
@@ -145,9 +145,9 @@ const ChatsList = () => {
   }, [fetchChats]);
 
   useEffect(() => {
-    socketService.on('chatList:updated', onRefresh);
+    websocketsService.on('chatList:updated', onRefresh);
     return () => {
-      socketService.removeListener('chatList:updated', onRefresh);
+      websocketsService.off('chatList:updated', onRefresh);
     };
   }, [onRefresh]);
 

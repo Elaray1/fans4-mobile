@@ -7,7 +7,7 @@ import { useNavigation, useIsFocused } from '@react-navigation/native';
 import * as rootNavigation from 'helpers/rootNavigation';
 import { getMaskedDeviceId } from 'helpers/deviceInfo';
 
-import * as socketService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import * as userApi from 'resources/user/user.api';
 
@@ -66,8 +66,8 @@ function ResetPasswordLink({ route }) {
   }, [isFocused, navigation, checkToken]);
 
   useEffect(() => {
-    socketService.on('email:password-reset', handleReceivingResetToken);
-    return () => socketService.removeListener('email:password-reset', handleReceivingResetToken);
+    websocketsService.on('email:password-reset', handleReceivingResetToken);
+    return () => websocketsService.off('email:password-reset', handleReceivingResetToken);
   }, []);
 
   const onLinkPress = useCallback(() => {

@@ -7,7 +7,7 @@ import colors from 'themes/colors';
 
 import Text from 'components/Text';
 
-import * as socketService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import styles from './styles';
 
@@ -26,9 +26,9 @@ const Statistic = ({
   }, []);
 
   useEffect(() => {
-    socketService.on('fans:updated', updateFansCount);
+    websocketsService.on('fans:updated', updateFansCount);
     return () => {
-      socketService.removeListener('fans:update', updateFansCount);
+      websocketsService.off('fans:update', updateFansCount);
     };
   }, [updateFansCount]);
 

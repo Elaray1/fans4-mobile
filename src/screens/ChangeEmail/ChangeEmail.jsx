@@ -9,7 +9,7 @@ import _get from 'lodash/get';
 import Header from 'components/Header';
 import Input from 'components/Input';
 
-import * as socketService from 'services/socket.service';
+import websocketsService from 'services/socket.service';
 
 import * as userActions from 'resources/user/user.actions';
 
@@ -39,9 +39,9 @@ function ChangeEmail() {
   }, [dispatch]);
 
   useEffect(() => {
-    socketService.on('new-email:verified', newEmailVerified);
+    websocketsService.on('new-email:verified', newEmailVerified);
     return () => {
-      socketService.removeListener('new-email:verified', newEmailVerified);
+      websocketsService.off('new-email:verified', newEmailVerified);
     };
   }, [newEmailVerified]);
 
