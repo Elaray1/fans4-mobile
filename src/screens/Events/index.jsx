@@ -7,8 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import moment from 'moment-timezone';
-import Config from 'react-native-config';
-
 
 import * as eventApi from 'resources/event/event.api';
 import * as userSelectors from 'resources/user/user.selectors';
@@ -281,7 +279,7 @@ function Events() {
     <SafeAreaView style={styles.screen}>
       <Header
         title={t('Events.events')}
-        rightItem={userType === USER_TYPES.FIGHTER && Config.APP_ENV !== 'PROD' ? <RightItem /> : undefined}
+        rightItem={userType === USER_TYPES.FIGHTER ? <RightItem /> : undefined}
         rightItemText={userType === USER_TYPES.FAN ? t('Events.voting') : undefined}
         onRightItemPress={userType === USER_TYPES.FAN ? navigateToVoting : undefined}
       />

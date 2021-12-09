@@ -28,8 +28,6 @@ import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
 
-import config from 'resources/config';
-
 import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
 
 import ActivityItem from './components/ActivityItem';
@@ -280,7 +278,7 @@ function Activity() {
         title={t('Activity.activity')}
         titleIcon={<ArrowDownIcon style={styles.headerIcon} />}
         onTitlePress={onPressActivivtyFilters}
-        rightItemType={config.mode === 'PROD' ? null : 'icon'} // TODO: remove when tested
+        rightItemType="icon"
         rightItemIcon={isUnreadMessages ? UnreadChatIcon : ChatIcon}
         onRightItemPress={onChatsPress}
       />

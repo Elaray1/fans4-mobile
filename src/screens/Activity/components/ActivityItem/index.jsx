@@ -19,8 +19,6 @@ import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
 import { formatTime } from 'components/Post/Post.helpers';
 import { toFixLength } from 'helpers/modifyText';
 
-import config from 'resources/config';
-
 import styles from './styles';
 
 function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
@@ -56,15 +54,13 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
         </View>
         {showTime && <Text style={styles.time}>{formatTime(createdOn)}</Text>}
       </View>
-      {config.mode !== 'PROD'
-      && (
+
       <TouchableOpacity
         onPress={onPressSayHi}
         activeOpacity={0.7}
       >
         <Text style={styles.sayHi}>{t('ActivityItem.sayHi')}</Text>
       </TouchableOpacity>
-      )}
     </View>
   ), [data.author.fullName, t, onPressSayHi, createdOn, showTime]);
 
