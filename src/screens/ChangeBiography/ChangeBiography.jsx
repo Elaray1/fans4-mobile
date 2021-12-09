@@ -5,7 +5,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import _ from 'lodash';
 
 import Bin from 'assets/icons/bin.svg';
 
@@ -20,7 +19,6 @@ import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userApi from 'resources/user/user.api';
 
-import * as introVideoSelectors from 'store/introVideo/introVideo.selectors';
 import * as introVideoActions from 'store/introVideo/introVideo.actions';
 
 import { MEDIA_TYPES } from 'components/UploadMediaButton/UploadMediaButton.constants';
@@ -39,17 +37,17 @@ function ChangeBiography() {
   const dispatch = useDispatch();
   const { showFailure, showSuccess } = useToast();
 
-  const uploadingIntroVideo = useSelector(introVideoSelectors.getIntroVideo);
-  const initialValue = useSelector(userSelectors.getUserBiographyAbout);
-  const initialMedia = useSelector(userSelectors.getUserIntroVideo);
+  const savedBiographyText = useSelector(userSelectors.getUserBiographyAbout);
+  const savedIntroVideo = useSelector(userSelectors.getUserIntroVideo);
 
-  const [value, setValue] = useState(initialValue);
+  const [biographyText, setBiographyText] = useState(savedBiographyText);
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadingMedia, setUploadingMedia] = useState(initialMedia);
+  const [uploadingIntroVideo, setUploadingIntroVideo] = useState(null);
+  const [isSavedIntroVideoShown, setIsSavedIntroVideoShown] = useState(true);
 
   const isSaveButtonDisabled = isLoading
-  || (!value && !uploadingMedia)
-  || (initialValue === value && initialMedia === uploadingMedia);
+    || (!biographyText && !uploadingIntroVideo)
+    || (savedBiographyText === biographyText && !uploadingIntroVideo && isSavedIntroVideoShown);
 
   const saveButtonProps = isSaveButtonDisabled
     ? { rightItemStyle: styles.disabledText }
@@ -59,35 +57,33 @@ function ChangeBiography() {
     await dispatch(introVideoActions.updateUploadingIntroVideoData({ id, data, file, progress, status }));
   }, [dispatch]);
 
-  const onBinPress = useCallback(() => {
-    setUploadingMedia(null);
+  const hideSavedIntroVideo = useCallback(() => {
+    setIsSavedIntroVideoShown(false);
   }, []);
 
   const onPressSave = useCallback(async () => {
     setIsLoading(true);
 
     const params = {};
-    if (uploadingMedia) {
-      params.width = uploadingMedia.width.toString();
-      params.height = uploadingMedia.height.toString();
+    if (uploadingIntroVideo) {
+      params.width = uploadingIntroVideo.width.toString();
+      params.height = uploadingIntroVideo.height.toString();
     }
 
     try {
       const user = await userApi.updateUserInfo({
-        about: value,
-        ...(!_.isEqual(initialMedia, uploadingMedia) && {
-          isIntroVideo: !!uploadingMedia,
-        }),
+        about: biographyText,
+        isIntroVideo: Boolean(isSavedIntroVideoShown),
       });
 
       dispatch(userActions.setUserData(user));
 
-      if (uploadingMedia) {
-        const uri = Platform.OS === 'ios' ? uploadingMedia.path : uploadingMedia.path.replace('file://', '');
+      if (uploadingIntroVideo) {
+        const uri = Platform.OS === 'ios' ? uploadingIntroVideo.path : uploadingIntroVideo.path.replace('file://', '');
 
-        await userApi.addIntroVideo(params, uploadingMedia && {
+        await userApi.addIntroVideo(params, uploadingIntroVideo && {
           name: 'file',
-          type: uploadingMedia.mime,
+          type: uploadingIntroVideo.mime,
           uri,
         }, { onUploadProgress });
       }
@@ -104,60 +100,65 @@ function ChangeBiography() {
 
     navigation.goBack();
   }, [dispatch,
-    value,
+    biographyText,
     navigation,
     showSuccess,
     showFailure,
     t,
-    uploadingMedia,
+    uploadingIntroVideo,
     onUploadProgress,
-    initialMedia,
+    isSavedIntroVideoShown,
   ]);
 
   const handleMediaUpload = useCallback((media, poster) => {
     setIsLoading(true);
-    setUploadingMedia(media);
+    setUploadingIntroVideo(media);
 
     setIsLoading(false);
-  }, [setUploadingMedia]);
+  }, []);
 
   const onDelete = useCallback(() => {
-    setUploadingMedia(null);
-  }, [setUploadingMedia]);
+    setUploadingIntroVideo(null);
+  }, []);
 
-  const posterSource = useMemo(() => {
+  const savedIntroVideoPosterSource = useMemo(() => {
     return {
-      uri: initialMedia?.posterStorageUrl,
+      uri: savedIntroVideo?.posterStorageUrl,
     };
-  }, [initialMedia?.posterStorageUrl]);
+  }, [savedIntroVideo?.posterStorageUrl]);
 
-  const source = useMemo(() => {
+  const savedIntroVideoSource = useMemo(() => {
     return {
-      uri: initialMedia?.storageUrl,
+      uri: savedIntroVideo?.cloudflareHlsLink,
     };
-  }, [initialMedia?.storageUrl]);
+  }, [savedIntroVideo?.cloudflareHlsLink]);
 
-  const introVideoView = useCallback(() => {
-    return initialMedia && (_.isEqual(initialMedia, uploadingMedia)) ? (
+  let videoView;
+
+  if (savedIntroVideo && isSavedIntroVideoShown) {
+    videoView = (
       <View style={styles.videoContainer}>
         <Viewable>
           <Video
-            posterSource={posterSource}
-            source={source}
-            width={uploadingMedia.width}
-            height={uploadingMedia.height}
-            duration={uploadingMedia.duration}
+            posterSource={savedIntroVideoPosterSource}
+            source={savedIntroVideoSource}
+            width={savedIntroVideo.width}
+            height={savedIntroVideo.height}
+            duration={savedIntroVideo.duration}
           />
         </Viewable>
+
         <TouchableOpacity
           style={styles.bin}
           activeOpacity={0.7}
-          onPress={onBinPress}
+          onPress={hideSavedIntroVideo}
         >
           <Bin />
         </TouchableOpacity>
       </View>
-    ) : (
+    );
+  } else {
+    videoView = (
       <UploadMediaButton
         label={t('ChangeBiography.introVideo')}
         handleMediaUpload={handleMediaUpload}
@@ -166,13 +167,12 @@ function ChangeBiography() {
         onDelete={onDelete}
       />
     );
-  }, [initialMedia, uploadingMedia, posterSource, source, onBinPress,
-    t, handleMediaUpload, onDelete]);
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
       <Header
-        title={(initialValue || initialMedia)
+        title={(savedBiographyText || savedIntroVideo)
           ? t('ChangeBiography.changeBiography')
           : t('ChangeBiography.addBiography')}
         leftItemType="backArrow"
@@ -182,25 +182,29 @@ function ChangeBiography() {
         rightItemDisabled={isSaveButtonDisabled}
         {...saveButtonProps}
       />
+
       <ScrollView
         style={styles.content}
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        {!uploadingIntroVideo && introVideoView()}
+        {videoView}
+
         <Input
           label={t('ChangeBiography.biography')}
-          value={value}
-          onChange={setValue}
+          value={biographyText}
+          onChange={setBiographyText}
           maxLength={300}
           style={styles.input}
           multiline
           numberOfLines={20}
         />
+
         <View style={styles.textContainer}>
           <Text style={styles.grayText}>{t('ChangeBiography.descriptionText')}</Text>
         </View>
       </ScrollView>
+
       {isLoading && (
         <>
           <View style={styles.loader}>
