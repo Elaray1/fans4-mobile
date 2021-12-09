@@ -202,7 +202,7 @@ const ChatsList = () => {
           && (
             <FlatList
               ref={listRef}
-              style={styles.flatList}
+              style={isFan ? styles.flatListFan : styles.flatListFighter}
               data={chats}
               keyExtractor={keyExtractor}
               renderItem={renderItem}
@@ -218,7 +218,7 @@ const ChatsList = () => {
 
         {isFetchedFirstTime && chats.length <= (isFan ? 0 : 1) && (
           <ScrollView
-            style={styles.flatList}
+            style={isFan ? styles.flatListFan : styles.flatListFighter}
             contentContainerStyle={styles.emptyScroll}
             refreshControl={RefreshControl}
             keyboardShouldPersistTaps="handled"

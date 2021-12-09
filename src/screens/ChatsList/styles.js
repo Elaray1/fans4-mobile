@@ -12,8 +12,11 @@ export default StyleSheet.create({
     marginTop: 10,
     paddingHorizontal: 20,
   },
-  flatList: {
+  flatListFan: {
     height: metrics.screenHeight - metrics.tabBarHeight - 160, // header + margins
+  },
+  flatListFighter: {
+    height: metrics.screenHeight - 140, // header + margins
   },
   emptyView: {
     marginTop: 30,
