@@ -142,3 +142,6 @@ export const updateLastUsedOs = () => {
 
   return apiClient.put('users/os', { lastUsedOs });
 };
+
+export const deleteBiographyText = () => apiClient.delete('users/biography-text');
+export const deleteIntroVideo = () => apiClient.delete('users/intro-video');

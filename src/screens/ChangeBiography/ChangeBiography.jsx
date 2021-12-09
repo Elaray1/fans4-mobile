@@ -46,7 +46,6 @@ function ChangeBiography() {
   const [isSavedIntroVideoShown, setIsSavedIntroVideoShown] = useState(true);
 
   const isSaveButtonDisabled = isLoading
-    || (!biographyText && !uploadingIntroVideo)
     || (savedBiographyText === biographyText && !uploadingIntroVideo && isSavedIntroVideoShown);
 
   const saveButtonProps = isSaveButtonDisabled
@@ -64,30 +63,40 @@ function ChangeBiography() {
   const onPressSave = useCallback(async () => {
     setIsLoading(true);
 
-    const params = {};
-    if (uploadingIntroVideo) {
-      params.width = uploadingIntroVideo.width.toString();
-      params.height = uploadingIntroVideo.height.toString();
-    }
-
     try {
-      const user = await userApi.updateUserInfo({
-        about: biographyText,
-        isIntroVideo: Boolean(isSavedIntroVideoShown),
-      });
+      const isBiographyTextUpdated = biographyText !== savedBiographyText;
+      const isBiographyTextDeleted = !biographyText;
+      const isIntroVideoDeleted = !uploadingIntroVideo && !isSavedIntroVideoShown && savedIntroVideo;
 
-      dispatch(userActions.setUserData(user));
+      let updatedUserPromise = Promise.resolve();
+
+      if (isBiographyTextDeleted) {
+        updatedUserPromise = userApi.deleteBiographyText();
+      } else if (isBiographyTextUpdated) {
+        updatedUserPromise = userApi.updateUserInfo({ about: biographyText });
+      }
 
       if (uploadingIntroVideo) {
-        const uri = Platform.OS === 'ios' ? uploadingIntroVideo.path : uploadingIntroVideo.path.replace('file://', '');
+        const params = {};
+        params.width = uploadingIntroVideo.width.toString();
+        params.height = uploadingIntroVideo.height.toString();
 
-        await userApi.addIntroVideo(params, uploadingIntroVideo && {
+        const uri = Platform.OS === 'ios'
+          ? uploadingIntroVideo.path
+          : uploadingIntroVideo.path.replace('file://', '');
+
+        const addIntroVideoUploading = userApi.addIntroVideo(params, uploadingIntroVideo && {
           name: 'file',
           type: uploadingIntroVideo.mime,
           uri,
         }, { onUploadProgress });
+
+        updatedUserPromise = addIntroVideoUploading;
+      } else if (isIntroVideoDeleted) {
+        updatedUserPromise = userApi.deleteIntroVideo();
       }
 
+      dispatch(userActions.setUserData(await updatedUserPromise));
       showSuccess(t('ChangeBiography.updated'));
     } catch (err) {
       console.error('Updating biography error:', err);
@@ -100,6 +109,9 @@ function ChangeBiography() {
 
     navigation.goBack();
   }, [dispatch,
+    savedBiographyText,
+    savedIntroVideo,
+    isSavedIntroVideoShown,
     biographyText,
     navigation,
     showSuccess,
@@ -107,7 +119,6 @@ function ChangeBiography() {
     t,
     uploadingIntroVideo,
     onUploadProgress,
-    isSavedIntroVideoShown,
   ]);
 
   const handleMediaUpload = useCallback((media, poster) => {
