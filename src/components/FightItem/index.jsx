@@ -120,8 +120,8 @@ function FightItem({
         <Text style={[styles.text, styles.recordText]}>
           {`${firstFighterRecord.wins}-${firstFighterRecord.losses}-${firstFighterRecord.draws}`}
         </Text>
-        <Text style={styles.text}>
-          {titleCase(fight.fightersType)}
+        <Text style={styles.fightType}>
+          {titleCase(fight.fightersType)} | {fight.fightersWeightCategory}
         </Text>
         <Text style={[styles.text, styles.recordText]}>
           {`${secondFighterRecord.wins}-${secondFighterRecord.losses}-${secondFighterRecord.draws}`}
