@@ -14,11 +14,12 @@ export default StyleSheet.create({
     paddingTop: 30,
   },
   qrContainer: {
-    height: 365,
+    paddingVertical: 30,
     backgroundColor: colors.grayBlock,
     alignItems: 'center',
     justifyContent: 'space-evenly',
     borderRadius: 20,
+    marginBottom: 20,
   },
   title: {
     textAlign: 'center',
@@ -38,5 +39,6 @@ export default StyleSheet.create({
     lineHeight: fonts.lineHeight.regular,
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
+    marginTop: 20,
   },
 });

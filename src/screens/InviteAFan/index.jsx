@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -15,6 +15,8 @@ import config from 'resources/config';
 import analyticsService from 'services/analytics.service';
 
 import styles from './InviteAFan.styles';
+
+const windowHeight = Dimensions.get('window').height;
 
 const InviteAFan = () => {
   const { t } = useTranslation();
@@ -48,7 +50,7 @@ const InviteAFan = () => {
           </Text>
         </View>
         <View style={styles.qrContainer}>
-          <QRCode link={link} size={270} />
+          <QRCode link={link} size={windowHeight < 600 ? 200 : 270} />
           <Text style={styles.name}>{fullName}</Text>
         </View>
         <Share message={link}>
