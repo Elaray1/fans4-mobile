@@ -139,6 +139,23 @@ function Fighter({ fighterId }) {
     }, {}));
   }, [setViewablePosts]);
 
+  const onUpdateCommentsCount = useCallback(async (postId) => {
+    try {
+      const updatedPost = await postApi.getPost(postId);
+
+      const updatedPosts = posts.map((post) => {
+        if (post._id === updatedPost._id) {
+          return updatedPost;
+        }
+        return post;
+      });
+
+      setPosts(updatedPosts);
+    } catch (error) {
+      showFailure();
+    }
+  }, [showFailure, posts]);
+
   const renderItem = ({ item }) => {
     const isDisabled = !userSubscriptions.map(f => f._id).includes(item.author._id);
     return (
@@ -151,6 +168,7 @@ function Fighter({ fighterId }) {
         checkedOn={item.checkedOn}
         likedUsers={item.likedUsers}
         commentsCount={item.commentsCount}
+        onUpdateCommentsCount={() => onUpdateCommentsCount(item._id)}
         disabled={isDisabled}
         createdOn={item.createdOn}
         editedOn={item.editedOn}
