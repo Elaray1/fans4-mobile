@@ -168,7 +168,7 @@ function Fighter({ fighterId }) {
         checkedOn={item.checkedOn}
         likedUsers={item.likedUsers}
         commentsCount={item.commentsCount}
-        onUpdateCommentsCount={() => onUpdateCommentsCount(item._id)}
+        onUpdateCommentsCount={onUpdateCommentsCount}
         disabled={isDisabled}
         createdOn={item.createdOn}
         editedOn={item.editedOn}
