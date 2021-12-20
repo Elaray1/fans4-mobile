@@ -12,21 +12,22 @@ export default StyleSheet.create({
     borderRadius: 5,
   },
   loadingPostText: {
-    color: colors.textSecondary,
-    fontSize: fonts.size.caption,
+    color: colors.primary,
+    fontSize: fonts.size.small,
     fontFamily: fonts.family.medium,
     fontWeight: fonts.weight.medium,
   },
   progressBarContainer: {
-    height: 8,
+    height: 10,
     backgroundColor: hexToRgba(colors.primary, 0.15),
-    borderRadius: 4,
+    borderRadius: 5,
     marginTop: 12,
   },
   progressBar: {
-    height: 8,
+    height: 10,
     backgroundColor: colors.primary,
-    borderRadius: 4,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
   },
   loadingErrorContainer: {
     flexDirection: 'row',
