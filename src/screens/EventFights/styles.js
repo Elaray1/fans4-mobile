@@ -118,12 +118,10 @@ export default StyleSheet.create({
   },
   photoImage: {
     width: '100%',
-    height: 168,
   },
   eventImageContainer: {
     position: 'relative',
     width: '100%',
-    height: 168,
     marginBottom: 16,
   },
   imageStatus: {
