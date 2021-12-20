@@ -42,12 +42,10 @@ export default StyleSheet.create({
   },
   photoImage: {
     width: '100%',
-    height: 128,
   },
   imageContainer: {
     position: 'relative',
     width: '100%',
-    height: 128,
     marginBottom: 16,
   },
   imageStatus: {

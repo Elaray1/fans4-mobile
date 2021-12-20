@@ -35,6 +35,9 @@ const TABS = { UPCOMING: 'upcoming', PAST: 'past' };
 
 const PER_PAGE_COUNT = 20;
 
+const posterAspectRatio = 16 / 9;
+const aspectRatioStyle = { aspectRatio: posterAspectRatio };
+
 function Events() {
   const { t } = useTranslation();
   const { showFailure } = useToast();
@@ -197,9 +200,9 @@ function Events() {
         activeOpacity={0.7}
         style={styles.event}
       >
-        <View style={styles.imageContainer}>
+        <View style={[styles.imageContainer, aspectRatioStyle]}>
           <FastImage
-            style={styles.photoImage}
+            style={[styles.photoImage, aspectRatioStyle]}
             source={{ uri: item.imageUrl }}
           />
 

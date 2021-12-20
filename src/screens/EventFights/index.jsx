@@ -38,6 +38,9 @@ import styles from './styles';
 
 const PER_PAGE_COUNT = 10;
 
+const posterAspectRatio = 16 / 9;
+const aspectRatioStyle = { aspectRatio: posterAspectRatio };
+
 function EventFights({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
@@ -172,9 +175,9 @@ function EventFights({ route }) {
         <View
           style={styles.event}
         >
-          <View style={styles.eventImageContainer}>
+          <View style={[styles.eventImageContainer, aspectRatioStyle]}>
             <FastImage
-              style={styles.photoImage}
+              style={[styles.photoImage, aspectRatioStyle]}
               source={{ uri: event.imageUrl }}
             />
             {event.status === EVENT_STATUSES.CANCELED
