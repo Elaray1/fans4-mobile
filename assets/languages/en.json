@@ -740,7 +740,10 @@
     "deletePost": "Delete post",
     "thisPostWillNoLongerBeAvailableForYouAndYourFans": "This post will no longer be available for you and your fans.",
     "edited": "edited",
-    "processing": "Processing..."
+    "processing": "Processing...",
+    "videoFailedToProcess": "Video failed to process.",
+    "pleaseTryAgain": "Please try again.",
+    "tryAgain": "Try again"
   },
   "ChangePost": {
     "editPost": "Edit Post",

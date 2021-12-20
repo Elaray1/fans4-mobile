@@ -7,15 +7,17 @@ import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   processingText: {
-    color: colors.grayText,
+    textAlign: 'center',
+    color: colors.primary,
     fontSize: fonts.size.caption,
+    fontFamily: fonts.family.base,
     fontWeight: fonts.weight.medium,
-    marginBottom: 12,
+    marginTop: 4,
   },
   processingMediaContainer: {
     width: '100%',
     height: 185,
-    backgroundColor: '#54565E',
+    backgroundColor: colors.processingBackground,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
@@ -128,5 +130,14 @@ export default StyleSheet.create({
     marginLeft: 4,
     color: colors.grayText,
     fontSize: fonts.size.caption,
+  },
+  tryAgain: {
+    marginTop: 12,
+  },
+  tryAgainText: {
+    color: colors.link,
+    fontSize: fonts.size.small,
+    fontWeight: fonts.weight.bold,
+    fontFamily: fonts.family.bold,
   },
 });

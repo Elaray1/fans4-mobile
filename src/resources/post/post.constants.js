@@ -13,4 +13,5 @@ export const POST_STATUSES = {
   PENDING: 'pending',
   DECLINED: 'declined',
   REMOVED: 'removed',
+  PROCESSING_ERROR: 'processing_error',
 };

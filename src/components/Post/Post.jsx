@@ -74,6 +74,8 @@ function Post({
   const [isRemoveFromFeedConfirmationModal, setIsRemoveFromFeedConfirmationModal] = useState(false);
   const [isRemovePostConfirmationModal, setIsRemovePostConfirmationModal] = useState(false);
 
+  const [isProcessingErrorPostButtonDisabled, setIsProcessingErrorPostButtonDisabled] = useState(false);
+
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
   const isSubscribedOrAuthor = userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id);
 
@@ -215,6 +217,18 @@ function Post({
     navigation.navigate('EditPost', { postId: _id });
   }, [navigation, _id]);
 
+  const onNavigateToAddPost = useCallback(async () => {
+    setIsProcessingErrorPostButtonDisabled(true);
+    try {
+      const updatedPost = await postApi.removeProcessingErrorPost(_id);
+      onHidePostFromFeed(updatedPost);
+    } catch (error) {
+      showFailure();
+    }
+    navigation.navigate('NewPost');
+    setIsProcessingErrorPostButtonDisabled(false);
+  }, [navigation, _id, showFailure, onHidePostFromFeed]);
+
   const authorView = author ? (
     <View style={styles.postHeader}>
       <TouchableOpacity
@@ -230,7 +244,10 @@ function Post({
         </Text>
       </TouchableOpacity>
 
-      {isPostAuthor && (
+      {isPostAuthor
+      && !status === POST_STATUSES.PROCESSING
+      && !status === POST_STATUSES.PROCESSING_ERROR
+      && (
         <TouchableOpacity onPress={onOpenEditPostModal}>
           <DotsIcon />
         </TouchableOpacity>
@@ -264,9 +281,27 @@ function Post({
     } else if (status === POST_STATUSES.PROCESSING) {
       mediaView = (
         <>
-          <Text style={styles.processingText}>{t('Post.processing')}</Text>
           <View style={styles.processingMediaContainer}>
-            <ActivityIndicator size="small" color="white" />
+            <ActivityIndicator size="large" color="white" />
+            <Text style={styles.processingText}>{t('Post.processing')}</Text>
+          </View>
+        </>
+      );
+    } else if (status === POST_STATUSES.PROCESSING_ERROR) {
+      mediaView = (
+        <>
+          <View style={styles.processingMediaContainer}>
+            <View>
+              <Text style={styles.processingText}>{t('Post.videoFailedToProcess')}</Text>
+              <Text style={styles.processingText}>{t('Post.pleaseTryAgain')}</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.tryAgain}
+              onPress={onNavigateToAddPost}
+              disabled={isProcessingErrorPostButtonDisabled}
+            >
+              <Text style={styles.tryAgainText}>{t('Post.tryAgain')}</Text>
+            </TouchableOpacity>
           </View>
         </>
       );

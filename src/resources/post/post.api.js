@@ -49,3 +49,6 @@ export const editPost = ({ postId, text }) => apiClient
   .put(`posts/${postId}`, { text });
 
 export const getVideoLink = _id => apiClient.get(`posts/${_id}/video`);
+
+export const removeProcessingErrorPost = _id => apiClient
+  .delete(`posts/${_id}/processing-error`);

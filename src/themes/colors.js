@@ -61,6 +61,8 @@ const colors = {
   message: '#404249',
 
   lightButton: '#404040',
+
+  processingBackground: '#35353B',
 };
 
 export default colors;
