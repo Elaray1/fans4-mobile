@@ -17,6 +17,10 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  errorButton: {
+    borderWidth: 1,
+    borderColor: colors.error,
+  },
   text: {
     color: colors.white,
     fontFamily: fonts.family.base,

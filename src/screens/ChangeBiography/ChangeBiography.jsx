@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   SafeAreaView, ScrollView, Platform, View, ActivityIndicator, TouchableOpacity,
 } from 'react-native';
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Bin from 'assets/icons/bin.svg';
+import CrossIcon from 'assets/icons/cross.svg';
 
 import Header from 'components/Header';
 import Input from 'components/Input';
@@ -21,6 +22,9 @@ import * as userApi from 'resources/user/user.api';
 
 import * as introVideoActions from 'store/introVideo/introVideo.actions';
 
+import * as introVideoSelectors from 'store/introVideo/introVideo.selectors';
+
+import { MEDIA_UPLOADING_STATUSES } from 'helpers/constants';
 import { MEDIA_TYPES } from 'components/UploadMediaButton/UploadMediaButton.constants';
 
 import analyticsService from 'services/analytics.service';
@@ -37,6 +41,8 @@ function ChangeBiography() {
   const dispatch = useDispatch();
   const { showFailure, showSuccess } = useToast();
 
+  const currentUserProcessingIntroVideo = useSelector(userSelectors.getUserProcessingIntroVideo);
+  const uploadingIntroVideoData = useSelector(introVideoSelectors.getIntroVideo);
   const savedBiographyText = useSelector(userSelectors.getUserBiographyAbout);
   const savedIntroVideo = useSelector(userSelectors.getUserIntroVideo);
 
@@ -52,8 +58,27 @@ function ChangeBiography() {
     ? { rightItemStyle: styles.disabledText }
     : {};
 
-  const onUploadProgress = useCallback(async ({ id, data, file, progress, status }) => {
-    await dispatch(introVideoActions.updateUploadingIntroVideoData({ id, data, file, progress, status }));
+  useEffect(() => {
+    const init = async () => {
+      try {
+        if (uploadingIntroVideoData?.status === MEDIA_UPLOADING_STATUSES.COMPLETED) {
+          await dispatch(userActions.getUserData());
+          await dispatch(introVideoActions.removeUploadingIntroVideoData());
+        }
+      } catch (error) {
+        showFailure();
+      }
+    };
+
+    init();
+  }, [uploadingIntroVideoData?.status, dispatch, showFailure]);
+
+  const onUploadStart = useCallback(async ({ data, file, progress, status, uploadId }) => {
+    await dispatch(introVideoActions.startUploadingIntroVideoData({ data, file, progress, status, uploadId }));
+  }, [dispatch]);
+
+  const onUploadProgress = useCallback(async ({ id, data, file, progress, status, uploadId }) => {
+    await dispatch(introVideoActions.updateUploadingIntroVideoData({ id, data, file, progress, status, uploadId }));
   }, [dispatch]);
 
   const hideSavedIntroVideo = useCallback(() => {
@@ -66,7 +91,11 @@ function ChangeBiography() {
     try {
       const isBiographyTextUpdated = biographyText !== savedBiographyText;
       const isBiographyTextDeleted = !biographyText;
-      const isIntroVideoDeleted = !uploadingIntroVideo && !isSavedIntroVideoShown && savedIntroVideo;
+      const isIntroVideoDeleted = (!uploadingIntroVideo
+        && !isSavedIntroVideoShown
+        && savedIntroVideo
+        && !uploadingIntroVideoData)
+        || uploadingIntroVideoData?.status === MEDIA_UPLOADING_STATUSES.ERROR;
 
       let updatedUserPromise = Promise.resolve();
 
@@ -76,7 +105,7 @@ function ChangeBiography() {
         updatedUserPromise = userApi.updateUserInfo({ about: biographyText });
       }
 
-      if (uploadingIntroVideo) {
+      if (uploadingIntroVideo && !uploadingIntroVideoData) {
         const params = {};
         params.width = uploadingIntroVideo.width.toString();
         params.height = uploadingIntroVideo.height.toString();
@@ -89,7 +118,7 @@ function ChangeBiography() {
           name: 'file',
           type: uploadingIntroVideo.mime,
           uri,
-        }, { onUploadProgress });
+        }, { onUploadProgress, onUploadStart });
 
         updatedUserPromise = addIntroVideoUploading;
       } else if (isIntroVideoDeleted) {
@@ -107,6 +136,10 @@ function ChangeBiography() {
 
     analyticsService.logEvent({ name: analyticsService.events.FIGHTER_BIOGRAPHY_ADDED });
 
+    if (uploadingIntroVideoData?.status === MEDIA_UPLOADING_STATUSES.ERROR) {
+      await dispatch(introVideoActions.removeUploadingIntroVideoData());
+    }
+
     navigation.goBack();
   }, [dispatch,
     savedBiographyText,
@@ -119,18 +152,39 @@ function ChangeBiography() {
     t,
     uploadingIntroVideo,
     onUploadProgress,
+    onUploadStart,
+    uploadingIntroVideoData,
   ]);
 
-  const handleMediaUpload = useCallback((media, poster) => {
+  const handleMediaUpload = useCallback(async (media, poster) => {
     setIsLoading(true);
+
+    if (uploadingIntroVideoData?.status === MEDIA_UPLOADING_STATUSES.ERROR) {
+      await dispatch(introVideoActions.removeUploadingIntroVideoData());
+    }
+
+    if (currentUserProcessingIntroVideo?.videoProcessingError) {
+      await userApi.deleteProcessingIntroVideo();
+    }
+
     setUploadingIntroVideo(media);
 
     setIsLoading(false);
-  }, []);
+  }, [uploadingIntroVideoData?.status, dispatch, currentUserProcessingIntroVideo?.videoProcessingError]);
 
   const onDelete = useCallback(() => {
     setUploadingIntroVideo(null);
   }, []);
+
+  const onCancelIntroVideoUploading = useCallback(async () => {
+    hideSavedIntroVideo();
+
+    try {
+      await dispatch(introVideoActions.cancelUploadingIntroVideoData(uploadingIntroVideoData?.uploadId));
+    } catch (error) {
+      showFailure();
+    }
+  }, [dispatch, showFailure, uploadingIntroVideoData?.uploadId, hideSavedIntroVideo]);
 
   const savedIntroVideoPosterSource = useMemo(() => {
     return {
@@ -146,7 +200,51 @@ function ChangeBiography() {
 
   let videoView;
 
-  if (savedIntroVideo && isSavedIntroVideoShown) {
+  const ErrorUploadMediaButton = (
+    <UploadMediaButton
+      label={t('ChangeBiography.introVideo')}
+      handleMediaUpload={handleMediaUpload}
+      mediaType={MEDIA_TYPES.VIDEO}
+      style={styles.uploadButton}
+      onDelete={onDelete}
+      errorLabelText={t('ChangeBiography.videoFailedToUpload')}
+    />
+  );
+
+  if (currentUserProcessingIntroVideo) {
+    if (currentUserProcessingIntroVideo.videoProcessingError) {
+      videoView = ErrorUploadMediaButton;
+    } else {
+      videoView = (
+        <View style={styles.processingIntroVideoContainer}>
+          <ActivityIndicator size="large" color="white" />
+          <Text style={styles.processingText}>{t('Account.processing')}</Text>
+        </View>
+      );
+    }
+  } else if (uploadingIntroVideoData?.status === MEDIA_UPLOADING_STATUSES.UPLOADING) {
+    videoView = (
+      <View style={styles.uploadingContainer}>
+        <Text style={styles.loadingPostText}>
+          {t('ChangeBiography.videoIsLoading')}
+        </Text>
+        <View style={styles.progressBarContainer}>
+          <View style={[styles.progressBar, { width: `${uploadingIntroVideoData.progress}%` }]} />
+        </View>
+        {uploadingIntroVideoData.progress !== 100 && (
+        <TouchableOpacity
+          style={styles.crossIcon}
+          activeOpacity={0.7}
+          onPress={onCancelIntroVideoUploading}
+        >
+          <CrossIcon />
+        </TouchableOpacity>
+        )}
+      </View>
+    );
+  } else if (uploadingIntroVideoData?.status === MEDIA_UPLOADING_STATUSES.ERROR) {
+    videoView = ErrorUploadMediaButton;
+  } else if (savedIntroVideo && isSavedIntroVideoShown) {
     videoView = (
       <View style={styles.videoContainer}>
         <Viewable>

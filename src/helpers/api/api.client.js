@@ -109,7 +109,7 @@ export const postWithFileRequest = httpRequest('postWithFile');
 export const putRequest = httpRequest('put');
 export const deleteRequest = httpRequest('delete');
 
-const postWithFileInBackgroundRequest = async (url, data, file, { onUploadProgress }) => {
+const postWithFileInBackgroundRequest = async (url, data, file, { onUploadProgress, onUploadStart }) => {
   const backgroundUploader = Platform.OS === 'ios' ? backgroundUploaderIOS : backgroundUploaderAndroid;
   let urlWithSlash = url;
 
@@ -132,15 +132,25 @@ const postWithFileInBackgroundRequest = async (url, data, file, { onUploadProgre
     },
   };
 
-  const handlerUploadError = (event) => {
+  const handlerUploadError = ({ event, uploadId }) => {
     if (onUploadProgress) {
-      onUploadProgress({ id: event.id, data, file, status: MEDIA_UPLOADING_STATUSES.ERROR });
+      onUploadProgress({ id: event.id, data, file, status: MEDIA_UPLOADING_STATUSES.ERROR, uploadId });
     }
 
     console.error(`Error: ${event.error}`);
   };
 
   return backgroundUploader.startUpload(options).then((uploadId) => {
+    if (onUploadStart) {
+      onUploadStart({
+        data,
+        file,
+        progress: 0,
+        status: MEDIA_UPLOADING_STATUSES.UPLOADING,
+        uploadId,
+      });
+    }
+
     backgroundUploader.addListener('progress', uploadId, (event) => {
       if (onUploadProgress) {
         onUploadProgress({
@@ -149,27 +159,24 @@ const postWithFileInBackgroundRequest = async (url, data, file, { onUploadProgre
           file,
           progress: event.progress,
           status: MEDIA_UPLOADING_STATUSES.UPLOADING,
+          uploadId,
         });
       }
     });
 
     backgroundUploader.addListener('error', uploadId, (event) => {
-      handlerUploadError(event);
-    });
-
-    backgroundUploader.addListener('cancelled', uploadId, (event) => {
-      handlerUploadError(event);
+      handlerUploadError({ event, uploadId });
     });
 
 
     backgroundUploader.addListener('completed', uploadId, (event) => {
       if (event.responseCode !== 200) {
-        handlerUploadError(event);
+        handlerUploadError({ event, uploadId });
         return;
       }
 
       if (onUploadProgress) {
-        onUploadProgress({ id: event.id, data, file, status: MEDIA_UPLOADING_STATUSES.COMPLETED });
+        onUploadProgress({ id: event.id, data, file, status: MEDIA_UPLOADING_STATUSES.COMPLETED, uploadId });
       }
     });
   }).catch((err) => {

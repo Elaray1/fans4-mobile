@@ -33,6 +33,7 @@ function UploadMediaButton({
   croppingAvatar,
   canUploadFromCamera,
   style,
+  errorLabelText,
 }) {
   const { showFailure } = useToast();
   const { t } = useTranslation();
@@ -233,12 +234,13 @@ function UploadMediaButton({
   }, [onDelete, t]);
 
   let contentView = null;
+  const error = errorText || errorLabelText;
 
   if (!media) {
     contentView = (
       <>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, error && styles.errorButton]}
           onPress={canUploadFromCamera ? onOpenUploadingMethodModal : onUploadFromGallery}
           activeOpacity={0.7}
         >
@@ -246,9 +248,9 @@ function UploadMediaButton({
           <PaperclipIcon />
         </TouchableOpacity>
 
-        {errorText && (
+        {error && (
           <View style={styles.error}>
-            <Text style={styles.errorText}>{errorText}</Text>
+            <Text style={styles.errorText}>{error}</Text>
           </View>
         )}
       </>
@@ -329,6 +331,7 @@ UploadMediaButton.propTypes = {
   croppingAvatar: PropTypes.bool,
   canUploadFromCamera: PropTypes.bool,
   style: PropTypes.shape(),
+  errorLabelText: PropTypes.string,
 };
 
 UploadMediaButton.defaultProps = {
@@ -336,6 +339,7 @@ UploadMediaButton.defaultProps = {
   croppingAvatar: false,
   canUploadFromCamera: false,
   style: {},
+  errorLabelText: null,
 };
 
 export default React.memo(UploadMediaButton);

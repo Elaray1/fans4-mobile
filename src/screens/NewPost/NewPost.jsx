@@ -54,8 +54,8 @@ function NewPost() {
     rootNavigation.resetToScreen('AppStack', 'Account');
   }, []);
 
-  const onUploadProgress = useCallback(async ({ id, data, file, progress, status }) => {
-    await dispatch(postActions.updateUploadingPostsData({ id, data, file, progress, status }));
+  const onUploadProgress = useCallback(async ({ id, data, file, progress, status, uploadId }) => {
+    await dispatch(postActions.updateUploadingPostsData({ id, data, file, progress, status, uploadId }));
   }, [dispatch]);
 
   const submit = useCallback(async () => {
