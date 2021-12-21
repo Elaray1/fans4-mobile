@@ -128,9 +128,9 @@ export const suggestFight = ({ firstFighterId, secondFighterId }) => apiClient
 export const getPasswordResetToken = ({ deviceId, email }) => apiClient
   .get('users/password-reset-token-checking', { deviceId, email });
 
-export const addIntroVideo = (data, file, { onUploadProgress }) => {
+export const addIntroVideo = (data, file, { onUploadProgress, onUploadStart }) => {
   return apiClient.postWithFileInBackground('users/intro-video', data, file,
-    { onUploadProgress });
+    { onUploadProgress, onUploadStart });
 };
 
 export const acceptTermsOfUse = () => {
@@ -144,4 +144,7 @@ export const updateLastUsedOs = () => {
 };
 
 export const deleteBiographyText = () => apiClient.delete('users/biography-text');
+
 export const deleteIntroVideo = () => apiClient.delete('users/intro-video');
+
+export const deleteProcessingIntroVideo = () => apiClient.delete('users/processing-intro-video');

@@ -26,8 +26,8 @@ function UploadingPosts() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const onUploadProgress = useCallback(async ({ id, data, file, progress, status }) => {
-    await dispatch(postActions.updateUploadingPostsData({ id, data, file, progress, status }));
+  const onUploadProgress = useCallback(async ({ id, data, file, progress, status, uploadId }) => {
+    await dispatch(postActions.updateUploadingPostsData({ id, data, file, progress, status, uploadId }));
   }, [dispatch]);
 
   const onReuploadPost = useCallback(async (item) => {

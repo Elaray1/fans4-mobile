@@ -46,10 +46,15 @@ const Biography = ({
   const [isOpen, setIsOpen] = useState(currentUserId === userId ? !(biography && introVideo) : Boolean(introVideo));
   const [isLoading, setIsLoading] = useState(false);
 
-
-  const onUploadProgress = useCallback(async ({ id, data, file, progress, status }) => {
-    await dispatch(introVideoActions.updateUploadingIntroVideoData({ id, data, file, progress, status }));
+  const onUploadStart = useCallback(async ({ data, file, progress, status, uploadId }) => {
+    await dispatch(introVideoActions.startUploadingIntroVideoData({ data, file, progress, status, uploadId }));
   }, [dispatch]);
+
+  const onUploadProgress = useCallback(async ({ id, data, file, progress, status, uploadId }) => {
+    if (uploadingIntroVideo) {
+      await dispatch(introVideoActions.updateUploadingIntroVideoData({ id, data, file, progress, status, uploadId }));
+    }
+  }, [dispatch, uploadingIntroVideo]);
 
   useEffect(() => {
     const init = async () => {
@@ -65,12 +70,13 @@ const Biography = ({
   const onReuploadPost = useCallback(async () => {
     setIsLoading(true);
     try {
-      await userApi.addIntroVideo(uploadingIntroVideo?.data, uploadingIntroVideo?.file, { onUploadProgress });
+      await userApi.addIntroVideo(uploadingIntroVideo?.data, uploadingIntroVideo?.file,
+        { onUploadProgress, onUploadStart });
     } catch (error) {
       showFailure();
     }
     setIsLoading(false);
-  }, [onUploadProgress, uploadingIntroVideo?.data, uploadingIntroVideo?.file, showFailure]);
+  }, [onUploadProgress, uploadingIntroVideo?.data, uploadingIntroVideo?.file, showFailure, onUploadStart]);
 
   const onBiographyPress = () => {
     setIsOpen(!isOpen);
@@ -106,7 +112,7 @@ const Biography = ({
 
     if (uploadingIntroVideo?.status === MEDIA_UPLOADING_STATUSES.ERROR) {
       return (
-        <View style={styles.uploadingContainer}>
+        <View style={[styles.uploadingContainer, styles.uploadingFailedContainer]}>
           <View>
             <Text style={styles.loadingPostText}>
               {t('Account.videoFailedToUpload')}
@@ -135,8 +141,8 @@ const Biography = ({
       return (
         <View style={styles.introVideo}>
           <View style={styles.processingIntroVideoContainer}>
-            <ActivityIndicator size="small" color="white" />
-            <Text style={styles.processingText}>Processing...</Text>
+            <ActivityIndicator size="large" color="white" />
+            <Text style={styles.processingText}>{t('Account.processing')}</Text>
           </View>
         </View>
       );
