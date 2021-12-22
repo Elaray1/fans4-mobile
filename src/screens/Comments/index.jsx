@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as commentApi from 'resources/comment/comment.api';
@@ -195,14 +195,7 @@ function Comments({ route }) {
   }, []);
 
   const onGoBack = useCallback(async () => {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'Account',
-        params: {
-          postId: null,
-        },
-      }),
-    );
+    navigation.navigate('Account', { postId: null });
   }, [navigation]);
 
   const EmptyView = () => (
