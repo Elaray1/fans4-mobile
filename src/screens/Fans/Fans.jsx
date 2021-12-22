@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import useToast from 'hooks/useToast';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import * as userApi from 'resources/user/user.api';
 
@@ -93,14 +93,7 @@ function Fans() {
   );
 
   const onGoBack = useCallback(async () => {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'Account',
-        params: {
-          postId: null,
-        },
-      }),
-    );
+    navigation.navigate('Account', { postId: null });
   }, [navigation]);
 
   const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
