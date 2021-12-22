@@ -59,6 +59,7 @@ function EventFights({ route }) {
   const userType = useSelector(userSelectors.getUserType);
 
   const isFan = userType === USER_TYPES.FAN;
+  const isCancelledOrPast = event.status === EVENT_STATUSES.CANCELED || event.status === EVENT_STATUSES.PAST;
 
   useEffect(() => {
     if (isFan) {
@@ -138,16 +139,6 @@ function EventFights({ route }) {
 
   const keyExtractor = useCallback(item => item._id, []);
 
-  const renderItem = ({ item }) => {
-    return (
-      <FightItem
-        fight={item}
-        isCountdownShown
-        viewType={item.status === FIGHT_STATUSES.PAST ? FIGHT_VIEW_TYPE.EVENT_PAST : FIGHT_VIEW_TYPE.EVENT_UPCOMING}
-      />
-    );
-  };
-
   const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
 
   const renderFooter = () => {
@@ -164,6 +155,24 @@ function EventFights({ route }) {
   const isLive = event.status === EVENT_STATUSES.PAST
   && event.fights.some(fight => !fight.results);
   const isUpcoming = event.status === EVENT_STATUSES.UPCOMING;
+
+  const renderItem = ({ item }) => {
+    const indexOfFightWithoutResults = fights.map(f => f.results || 0).indexOf(0);
+    let isShowText = false;
+    if (indexOfFightWithoutResults) {
+      isShowText = item._id === fights[indexOfFightWithoutResults - 1]._id;
+    }
+    return (
+      <>
+        <FightItem
+          fight={item}
+          isCountdownShown
+          viewType={item.status === FIGHT_STATUSES.PAST ? FIGHT_VIEW_TYPE.EVENT_PAST : FIGHT_VIEW_TYPE.EVENT_UPCOMING}
+        />
+        {isLive && isShowText && <Text style={styles.stayTuned}>{t('Events.stayTuned')}</Text>}
+      </>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -212,7 +221,6 @@ function EventFights({ route }) {
             )}
           </View>
         </View>
-        {isLive && <Text style={styles.stayTuned}>{t('Events.stayTuned')}</Text>}
         {isLoading && <Loader />}
         {!isLoading && !!fights.length
           && (
@@ -228,7 +236,7 @@ function EventFights({ route }) {
               refreshing={isRefreshing}
             />
           )}
-        {!isLoading && !fights.length && (
+        {!isLoading && !fights.length && !isCancelledOrPast && (
           <ScrollView
             contentContainerStyle={styles.noFightsContainer}
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
