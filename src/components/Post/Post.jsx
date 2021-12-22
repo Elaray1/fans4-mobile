@@ -245,8 +245,8 @@ function Post({
       </TouchableOpacity>
 
       {isPostAuthor
-      && !status === POST_STATUSES.PROCESSING
-      && !status === POST_STATUSES.PROCESSING_ERROR
+      && !(status === POST_STATUSES.PROCESSING)
+      && !(status === POST_STATUSES.PROCESSING_ERROR)
       && (
         <TouchableOpacity onPress={onOpenEditPostModal}>
           <DotsIcon />
@@ -329,7 +329,6 @@ function Post({
             <Text style={styles.description}>
               {text}
             </Text>
-            {editedOn && <Text style={[styles.description, styles.editedLabel]}>({t('Post.edited')})</Text>}
           </View>
         )}
       </>
@@ -340,7 +339,6 @@ function Post({
         <Text style={styles.description}>
           {text}
         </Text>
-        {editedOn && <Text style={[styles.description, styles.editedLabel]}>({t('Post.edited')})</Text>}
       </View>
     );
   } else {
