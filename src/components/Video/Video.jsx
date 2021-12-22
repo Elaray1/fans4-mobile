@@ -49,15 +49,22 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   const isVideoInEndedState = useRef(false);
   const isSeekedToLiveOnStart = useRef(false);
 
+  const onProgressBarPositionChange = useCallback((event) => {
+    clearTimeout(controlsShowingTimeout?.current);
+
+    const newCurrectTime = (event.nativeEvent.locationX) / progressBarWidth * duration;
+    setPlayedTime(newCurrectTime);
+    playedTimeAsRef.current = newCurrectTime;
+    videoRef.current.seek(newCurrectTime);
+  }, [duration]);
+
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (event) => {
-      clearTimeout(controlsShowingTimeout?.current);
-
-      const newCurrectTime = (event.nativeEvent.locationX) / progressBarWidth * duration;
-      setPlayedTime(newCurrectTime);
-      playedTimeAsRef.current = newCurrectTime;
-      videoRef.current.seek(newCurrectTime);
+      onProgressBarPositionChange(event);
+    },
+    onPanResponderRelease: (event) => {
+      onProgressBarPositionChange(event);
     },
   });
 
