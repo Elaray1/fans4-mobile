@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as commentApi from 'resources/comment/comment.api';
@@ -39,6 +40,7 @@ const keyboardVerticalOffset = Platform.OS === 'ios' ? 0 : 16;
 function Comments({ route }) {
   const { t } = useTranslation();
   const { showFailure } = useToast();
+  const navigation = useNavigation();
 
   const userType = useSelector(userSelectors.getUserType);
 
@@ -192,6 +194,17 @@ function Comments({ route }) {
     setIsInputFocused(false);
   }, []);
 
+  const onGoBack = useCallback(async () => {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'Account',
+        params: {
+          postId: null,
+        },
+      }),
+    );
+  }, [navigation]);
+
   const EmptyView = () => (
     <View style={styles.emptyView}>
       <NoCommentsIllustration style={styles.illustration} />
@@ -239,6 +252,7 @@ function Comments({ route }) {
           <Header
             title={t('Comments.comments')}
             leftItemType="backArrow"
+            onLeftItemPress={onGoBack}
           />
           <View style={styles.content}>
             {!isFetchedFirstTime && isRefreshing && <Loader />}
