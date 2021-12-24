@@ -1,21 +1,22 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { AppState } from 'react-native';
+import { AppState, View, SafeAreaView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as rootNavigation from 'helpers/rootNavigation';
 
-import IllustrationScreen from 'components/IllustrationScreen';
+import Header from 'components/Header';
+import Text from 'components/Text';
 
 import PendingIllustration from 'assets/illustrations/verification-pending.svg';
 
-import styles from './styles';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userApi from 'resources/user/user.api';
 import { USER_STATUSES } from 'resources/user/user.constants';
+import styles from './styles';
 
 function VerificationPending() {
   const { t } = useTranslation();
@@ -24,6 +25,7 @@ function VerificationPending() {
   const dispatch = useDispatch();
 
   const userType = useSelector(userSelectors.getUserType);
+  const userEmail = useSelector(userSelectors.getUserEmail);
 
   const checkVerificationIntervalTimerRef = useRef();
 
@@ -102,12 +104,39 @@ function VerificationPending() {
   }, [navigation, dispatch, userType]);
 
   return (
-    <IllustrationScreen
-      description={t('VerificationPending.description')}
-      title={t('VerificationPending.title')}
-      illustration={<PendingIllustration style={styles.illustration} />}
-      onBackButtonPress={goToSignIn}
-    />
+    <SafeAreaView>
+      <Header
+        leftItemType="backArrow"
+        onLeftItemPress={goToSignIn}
+      />
+      <View style={styles.container}>
+        <PendingIllustration style={styles.illustration} />
+        <Text style={styles.title}>{t('VerificationPending.title')}</Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{t('VerificationPending.whileWeVerify')}</Text>
+          <View style={styles.pointsContainer}>
+            <View style={styles.pointContainer}>
+              <View style={styles.numberContainer}><Text style={styles.number}>1</Text></View>
+              <View>
+                <Text style={styles.title}>{t('VerificationPending.point1Title')}</Text>
+                <Text style={styles.text}>
+                  {t('VerificationPending.point1TextPart1')}
+                  {userEmail}
+                  {t('VerificationPending.point1TextPart2')}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.pointContainer}>
+              <View style={styles.numberContainer}><Text style={styles.number}>2</Text></View>
+              <View>
+                <Text style={styles.title}>{t('VerificationPending.point2Title')}</Text>
+                <Text style={styles.text}>{t('VerificationPending.point2Text')}</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
