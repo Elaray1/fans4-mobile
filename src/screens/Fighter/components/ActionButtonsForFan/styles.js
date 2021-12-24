@@ -6,7 +6,6 @@ export default StyleSheet.create({
   subscribedButton: {
     height: 40,
     marginBottom: 20,
-    marginTop: 20,
   },
   noMargin: {
     marginBottom: 0,
