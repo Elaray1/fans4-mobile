@@ -144,12 +144,18 @@ const ChatsList = () => {
     await fetchChats({ refresh: true });
   }, [fetchChats]);
 
+  const onUpdateChat = useCallback((chat) => {
+    setChats(oldChats => oldChats.map(oldChat => (oldChat._id === chat._id ? chat : oldChat)));
+  }, []);
+
   useEffect(() => {
+    websocketsService.on('chat:updated', onUpdateChat);
     websocketsService.on('chatList:updated', onRefresh);
     return () => {
+      websocketsService.on('chat:updated', onUpdateChat);
       websocketsService.off('chatList:updated', onRefresh);
     };
-  }, [onRefresh]);
+  }, [onRefresh, onUpdateChat]);
 
   const onNewMessages = useCallback(({ chat }) => {
     const isChatWithFans4 = !isFan && !!chat.participants.find(participant => participant._id === FANS4_ACCOUNT._id);
