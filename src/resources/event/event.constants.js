@@ -5,3 +5,9 @@ export const EVENT_STATUSES = {
   CANCELED: 'canceled',
   DELETED: 'deleted',
 };
+
+export const LIVE_STREAM_STATUSES = {
+  PENDING: 'pending',
+  LIVE: 'live',
+  FINISHED: 'finished',
+};

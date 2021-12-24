@@ -1,3 +1,5 @@
+#import "Orientation.h"
+
 #import "AppDelegate.h"
 
 #import <React/RCTBridge.h>
@@ -126,6 +128,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 handleEventsForBackgroundURLSession:(NSString *)identifier
   completionHandler:(void (^)(void))completionHandler {
   [[VydiaRNFileUploader sharedInstance] setBackgroundSessionCompletionHandler:completionHandler];
+}
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+  return [Orientation getOrientation];
 }
 
 @end

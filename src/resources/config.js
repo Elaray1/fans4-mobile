@@ -22,10 +22,19 @@ const getWebUrl = () => {
   return Platform.OS === 'android' ? Config.ANDROID_WEB_URL : Config.IOS_WEB_URL;
 };
 
+const getLiveStreamPlayerUrl = () => {
+  if (Config.APP_ENV !== 'DEV') {
+    return Config.LIVE_STREAM_PLAYER_URL;
+  }
+
+  return Platform.OS === 'android' ? Config.ANDROID_LIVE_STREAM_PLAYER_URL : Config.IOS_LIVE_STREAM_PLAYER_URL;
+};
+
 export default {
   apiUrl: getApiUrl(),
   webSocketUrl: getSocketUrl(),
   webUrl: getWebUrl(),
+  liveStreamPlayerUrl: getLiveStreamPlayerUrl(),
   mode: Config.APP_ENV,
   applicationId: 'fans4',
 };

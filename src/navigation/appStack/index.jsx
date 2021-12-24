@@ -46,6 +46,7 @@ import LikesList from 'screens/LikesList';
 import FightWasSentToReview from 'screens/FightWasSentToReview';
 import EditPost from 'screens/EditPost';
 import FighterVoting from 'screens/FighterVoting';
+import EventLiveStreamAndroid from 'screens/EventLiveStreamAndroid';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -175,6 +176,7 @@ function AppScreens() {
         <AppStack.Screen name="FightWasSentToReview" component={FightWasSentToReview} />
         <AppStack.Screen name="EditPost" component={EditPost} />
         <AppStack.Screen name="FighterVoting" component={FighterVoting} />
+        <AppStack.Screen name="EventLiveStreamAndroid" component={EventLiveStreamAndroid} />
       </AppStack.Navigator>
     </>
   );

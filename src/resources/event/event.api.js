@@ -1,19 +1,20 @@
 import { apiClient } from 'helpers/api';
 
-export const getEvents = ({
-  page, perPage, statuses, withoutResults, notPastByDate,
+export const getEventsForFan = ({
+  page, perPage, past,
 }) => apiClient
   .get('events', {
     page,
     perPage,
-    ...(statuses && { statuses }),
-    ...(withoutResults && { withoutResults }),
-    ...(notPastByDate && { notPastByDate }),
+    ...(past && { past }),
   });
 
-export const getEventsForCurrentFighter = ({ withoutResults, page, perPage }) => apiClient
+export const getEventsForCurrentFighter = ({ past, page, perPage }) => apiClient
   .get('events/current-fighter', {
     page,
     perPage,
-    ...(withoutResults && { withoutResults }),
+    ...(past && { past }),
   });
+
+export const getStreamLinkByEventId = _id => apiClient
+  .get(`events/${_id}/stream-link`);

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useMemo, useEffect } from 'react';
+import React, { useCallback, useRef, useState, useMemo, useEffect, useImperativeHandle } from 'react';
 import { TouchableOpacity, Pressable, View, Text, Modal, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import ReactNativeVideo from 'react-native-video';
@@ -20,10 +20,12 @@ const CONTROLS_SHOWN_DURATION = 2 * 1000;
 
 const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
 
-function Video({ source, width, height, posterSource, duration, viewable, onVideoStarted }) {
+const Video = React.forwardRef(({ source, width, height, posterSource, duration, onReadyToPlay,
+  viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen,
+}, ref) => {
   const isFocused = useIsFocused();
 
-  const [paused, setPaused] = useState(true);
+  const [paused, setPaused] = useState(!playOnStart);
   const [renderingWidth, setRenderingWidth] = useState(0);
   const [playedTime, setPlayedTime] = useState(0);
 
@@ -38,6 +40,7 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
   const videoRef = useRef(null);
   const controlsShowingTimeout = useRef(null);
   const isVideoInEndedState = useRef(false);
+  const isSeekedToLiveOnStart = useRef(false);
 
   const hideControlsWithTimeout = useCallback(() => {
     clearTimeout(controlsShowingTimeout?.current);
@@ -64,6 +67,12 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
     hideControlsWithTimeout();
   }, [hideControlsWithTimeout, isPosterShown]);
 
+  useImperativeHandle(ref, () => ({
+    showFullScreen: () => {
+      videoRef.current.presentFullscreenPlayer();
+    },
+  }));
+
   useEffect(() => {
     if (startLoadingDate && endLoadingDate && onVideoStarted && !paused) {
       onVideoStarted({ startLoadingDate, endLoadingDate });
@@ -76,11 +85,6 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
     setPaused(true);
     hideControlsWithTimeout();
   }, [hideControlsWithTimeout]);
-
-  const onFullscreenPlayerDidDismiss = useCallback(() => {
-    setPaused(true);
-    setIsControlsShown(true);
-  }, []);
 
   const showControls = useCallback(() => {
     setIsControlsShown(true);
@@ -113,18 +117,31 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
     setStartLoadingDate(moment().toDate());
   }, []);
 
-  const handleOnLoadEvent = useCallback(({ duration: videoDuration }) => {
-    seekToMakeThumbnail(videoDuration);
-  }, [seekToMakeThumbnail]);
+  const showFullScreen = useCallback(() => {
+    videoRef.current.presentFullscreenPlayer();
+  }, []);
 
-  const updateTiming = useCallback(({ currentTime, playableDuration }) => {
+  const handleOnLoadEvent = useCallback(({ duration: videoDuration, currentPosition }) => {
+    seekToMakeThumbnail(videoDuration);
+
+    if (onReadyToPlay) {
+      onReadyToPlay();
+    }
+  }, [seekToMakeThumbnail, onReadyToPlay]);
+
+  const updateTiming = useCallback(({ currentTime, playableDuration, seekableDuration }) => {
     if (!endLoadingDate && playableDuration > 0) {
       setEndLoadingDate(moment().toDate());
     }
 
     setPlayedTime(currentTime);
     playedTimeAsRef.current = currentTime;
-  }, [endLoadingDate]);
+
+    if (isLive && !isSeekedToLiveOnStart.current) {
+      isSeekedToLiveOnStart.current = true;
+      videoRef.current.seek(seekableDuration);
+    }
+  }, [endLoadingDate, isLive]);
 
   const toggleFullScreen = useCallback(() => {
     if (setIsPosterShown) {
@@ -132,13 +149,26 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
     }
 
     if (isFullScreen) {
-      setPaused(true);
+      if (pauseOnFullScreen) {
+        setPaused(true);
+      }
+
       clearTimeout(controlsShowingTimeout?.current);
     }
 
     setIsFullScreen(!isFullScreen);
     setPlayedTime(playedTimeAsRef.current);
-  }, [isFullScreen]);
+  }, [isFullScreen, pauseOnFullScreen]);
+
+  const onFullscreenPlayerWillDismiss = useCallback(() => {
+    if (pauseOnFullScreen) {
+      pause();
+    }
+
+    if (onExitFullScreen) {
+      onExitFullScreen();
+    }
+  }, [pause, pauseOnFullScreen, onExitFullScreen]);
 
   useDidUpdate(() => {
     setPlayedTime(playedTimeAsRef.current);
@@ -148,15 +178,12 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
     }
   }, [isFullScreen]);
 
-  const showFullScreen = useCallback(() => {
-    videoRef.current.presentFullscreenPlayer();
-  }, []);
-
   useEffect(() => {
     if (!paused && (!viewable || !isFocused)) {
       pause();
     }
   }, [viewable, pause, paused, isFocused]);
+
 
   const renderingHeight = width / height < MAX_VERTICAL_VIDEO_ASPECT_RATIO
     ? renderingWidth * (1 / MAX_VERTICAL_VIDEO_ASPECT_RATIO)
@@ -180,7 +207,8 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
       >
         {(!posterSource || !isPosterShown || viewable) && (
           <ReactNativeVideo
-            onFullscreenPlayerDidDismiss={onFullscreenPlayerDidDismiss}
+            muted={muted}
+            onFullscreenPlayerWillDismiss={onFullscreenPlayerWillDismiss}
             onLoadStart={handleOnLoadStartEvent}
             onLoad={handleOnLoadEvent}
             ref={videoRef}
@@ -237,7 +265,7 @@ function Video({ source, width, height, posterSource, duration, viewable, onVide
       </View>
     </Container>
   );
-}
+});
 
 Video.propTypes = {
   posterSource: PropTypes.object,
@@ -250,6 +278,12 @@ Video.propTypes = {
   duration: PropTypes.number,
   viewable: PropTypes.bool,
   onVideoStarted: PropTypes.func,
+  playOnStart: PropTypes.bool,
+  isLive: PropTypes.bool,
+  muted: PropTypes.bool,
+  onExitFullScreen: PropTypes.func,
+  pauseOnFullScreen: PropTypes.bool,
+  onReadyToPlay: PropTypes.func,
 };
 
 Video.defaultProps = {
@@ -257,6 +291,12 @@ Video.defaultProps = {
   duration: 0,
   viewable: false,
   onVideoStarted: null,
+  playOnStart: false,
+  isLive: false,
+  onExitFullScreen: undefined,
+  muted: false,
+  pauseOnFullScreen: true,
+  onReadyToPlay: undefined,
 };
 
 export default React.memo(Video);

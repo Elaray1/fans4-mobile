@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 
 import * as eventApi from 'resources/event/event.api';
 import * as userSelectors from 'resources/user/user.selectors';
-import { EVENT_STATUSES } from 'resources/event/event.constants';
+import { EVENT_STATUSES, LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
 import { USER_TYPES } from 'resources/user/user.constants';
 
 import Header from 'components/Header';
@@ -128,15 +128,10 @@ function Events() {
           ({
             events: fetchedEvents,
             totalCount: fetchedTotalCount,
-          } = await eventApi.getEvents({
-            isFan: userType === USER_TYPES.FAN,
+          } = await eventApi.getEventsForFan({
             page: fetchingPage,
             perPage: PER_PAGE_COUNT,
-            statuses: selectedTab.name === TABS.UPCOMING
-              ? [EVENT_STATUSES.UPCOMING, EVENT_STATUSES.CANCELED, EVENT_STATUSES.PAST]
-              : [EVENT_STATUSES.PAST],
-            withoutResults: selectedTab.name === TABS.UPCOMING,
-            notPastByDate: selectedTab.name === TABS.UPCOMING,
+            past: selectedTab.name !== TABS.UPCOMING,
           }));
         } else {
           ({
@@ -145,7 +140,7 @@ function Events() {
           } = await eventApi.getEventsForCurrentFighter({
             page: fetchingPage,
             perPage: PER_PAGE_COUNT,
-            withoutResults: selectedTab.name === TABS.UPCOMING,
+            past: selectedTab.name !== TABS.UPCOMING,
           }));
         }
 
@@ -192,7 +187,7 @@ function Events() {
     const progress = `${(item.fights.filter(fight => fight.results !== undefined).length) / item.fights.length * 100}%`;
 
     const isLive = item.status === EVENT_STATUSES.PAST
-      && item.fights.some(fight => !fight.results);
+      && item.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED;
 
     return (
       <TouchableOpacity
@@ -291,7 +286,6 @@ function Events() {
         <Toggle items={tabs} onSelect={onToggleSelect} selectedItemId={selectedTab.id} />
 
         {!isFetchedFirstTime && isRefreshing && <Loader />}
-
 
         {!!events.length && (
           <FlatList
