@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
-  SafeAreaView, ScrollView, Platform, View, ActivityIndicator, TouchableOpacity,
+  SafeAreaView, ScrollView, Platform, View, ActivityIndicator, TouchableOpacity, KeyboardAvoidingView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -297,21 +297,23 @@ function ChangeBiography() {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        {videoView}
+        <KeyboardAvoidingView behavior="position" style={styles.keyboardAvoiding}>
+          {videoView}
 
-        <Input
-          label={t('ChangeBiography.biography')}
-          value={biographyText}
-          onChange={setBiographyText}
-          maxLength={300}
-          style={styles.input}
-          multiline
-          numberOfLines={20}
-        />
+          <Input
+            label={t('ChangeBiography.biography')}
+            value={biographyText}
+            onChange={setBiographyText}
+            maxLength={300}
+            style={styles.input}
+            multiline
+            numberOfLines={20}
+          />
 
-        <View style={styles.textContainer}>
-          <Text style={styles.grayText}>{t('ChangeBiography.descriptionText')}</Text>
-        </View>
+          <View style={styles.textContainer}>
+            <Text style={styles.grayText}>{t('ChangeBiography.descriptionText')}</Text>
+          </View>
+        </KeyboardAvoidingView>
       </ScrollView>
 
       {isLoading && (

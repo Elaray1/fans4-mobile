@@ -102,4 +102,7 @@ export default StyleSheet.create({
     marginTop: 5,
     marginBottom: 12,
   },
+  keyboardAvoiding: {
+    flex: 1,
+  },
 });
