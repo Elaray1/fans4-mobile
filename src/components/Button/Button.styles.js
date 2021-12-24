@@ -46,7 +46,8 @@ export default StyleSheet.create({
   },
   secondaryButton: {
     borderColor: colors.primary,
-    backgroundColor: colors.white,
+    borderWidth: 1,
+    backgroundColor: 'transparent',
   },
   secondaryButtonTitle: {
     color: colors.primary,
