@@ -291,6 +291,9 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
               {...panResponder.panHandlers}
             >
               <View style={[styles.progressBar, { width: `${playedTime / duration * 100}%` }]} />
+              <View style={styles.progressBarCircleWrapper}>
+                <View style={styles.progressBarCircle} />
+              </View>
             </View>
             )}
           </>
