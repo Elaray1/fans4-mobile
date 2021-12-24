@@ -65,7 +65,7 @@ const EmptyView = ({ isFan, isRefreshing, onRefresh }) => {
       refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={styles.noFightsTitle}>{t('EventFights.stayedTunedForFightCard')}</Text>
+      <Text style={styles.noFightsTitle}>{t('EventFights.stayedTunedForFight')}</Text>
       {content}
     </ScrollView>
   );
