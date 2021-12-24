@@ -271,14 +271,14 @@ function FighterAccount({ postId }) {
   }, [page, isAllPostsLoaded, posts]);
 
   const updateIsScrollNeeded = useCallback(async () => {
-    // if (postId) {
-    //   postsListRef.current.scrollToOffset({ offset: 0, animated: true });
-    //   const wait = new Promise(resolve => setTimeout(resolve, 300));
-    //   wait.then(async () => {
-    //     await refreshPosts();
-    //     setPostIdToBeScrolled(postId);
-    //   });
-    // }
+    if (postId) {
+      postsListRef.current.scrollToOffset({ offset: 0, animated: true });
+      const wait = new Promise(resolve => setTimeout(resolve, 300));
+      wait.then(async () => {
+        await refreshPosts();
+        setPostIdToBeScrolled(postId);
+      });
+    }
   }, [postId, refreshPosts]);
 
   useEffect(() => {

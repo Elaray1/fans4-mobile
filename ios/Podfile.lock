@@ -725,12 +725,12 @@ SPEC CHECKSUMS:
   React-jsi: 67747b9722f6dab2ffe15b011bcf6b3f2c3f1427
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
-  react-native-background-upload: 5f4e6bab5543471d6510d52b695a4bd52fafad51
+  react-native-background-upload: ca1622ad18a8f8f4492ce8329051ccfc24795250
   react-native-cameraroll: 88f4e62d9ecd0e1f253abe4f685474f2ea14bfa2
   react-native-config: 72d948053a442779b3178fddd571e37f118ef606
   react-native-cookies: 6004d512ffc6f2c498c5b70cda0bc040350c0585
   react-native-date-picker: 242eec7af56cea5fb2706d5db5d3837060b3884b
-  react-native-netinfo: 07e8299fff4d2bea17d00b519d4f9c67c7dbbe9b
+  react-native-netinfo: f46274b6e3c4656a2b71e0ab5a4e1147f3c63149
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-video: a4c2635d0802f983594b7057e1bce8f442f0ad28
