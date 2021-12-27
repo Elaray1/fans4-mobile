@@ -2,14 +2,13 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
+import { variables } from 'themes/commonStyles';
 
 import hexToRgba from 'helpers/hexToRgba';
 
-import { variables } from 'themes/commonStyles';
-
 const { width } = Dimensions.get('window');
 
-const progressBarWidth = width - variables.paddingHorizontal * 2;
+const progressBarWidth = width - variables.paddingHorizontal;
 
 export default StyleSheet.create({
   container: {
@@ -133,21 +132,6 @@ export default StyleSheet.create({
     color: colors.white,
     fontSize: fonts.size.regular,
   },
-  progressBarContainer: {
-    alignItems: 'flex-end',
-    width: progressBarWidth,
-    height: 10,
-    marginTop: 12,
-    borderRadius: 5,
-    backgroundColor: colors.white,
-  },
-  progressBar: {
-    height: 10,
-    borderRadius: 5,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    backgroundColor: hexToRgba(colors.gray, 0.7),
-  },
   timeContainer: {
     height: 28,
     justifyContent: 'center',
@@ -161,5 +145,41 @@ export default StyleSheet.create({
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
     fontSize: fonts.size.caption,
+  },
+  progressBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: progressBarWidth,
+    position: 'absolute',
+    bottom: 16,
+    height: 6,
+    backgroundColor: hexToRgba(colors.primary, 0.15),
+    borderRadius: 5,
+  },
+  progressBar: {
+    height: 6,
+    backgroundColor: colors.primary,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+  },
+  progressBarCircleWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 16,
+    height: 16,
+    backgroundColor: colors.primary,
+    borderRadius: 100,
+  },
+  progressBarCircle: {
+    width: 6,
+    height: 6,
+    backgroundColor: colors.main,
+    borderRadius: 100,
+  },
+  fullScreenTimingContainer: {
+    bottom: 34,
+  },
+  fullScreenIconContainer: {
+    bottom: 34,
   },
 });

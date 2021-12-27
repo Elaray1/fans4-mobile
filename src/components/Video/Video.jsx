@@ -1,9 +1,10 @@
 import React, { useCallback, useRef, useState, useMemo, useEffect, useImperativeHandle } from 'react';
-import { TouchableOpacity, Pressable, View, Text, Modal, Platform } from 'react-native';
+import { TouchableOpacity, Pressable, View, Text, Modal, Platform, Dimensions, PanResponder } from 'react-native';
 import PropTypes from 'prop-types';
 import ReactNativeVideo from 'react-native-video';
 import FastImage from 'react-native-fast-image';
 import { useIsFocused } from '@react-navigation/native';
+
 import moment from 'moment';
 
 import PlayIcon from 'assets/icons/play';
@@ -13,10 +14,16 @@ import CloseVideoFullScreenIcon from 'assets/icons/closeVideoFullScreen';
 
 import useDidUpdate from 'hooks/useDidUpdate';
 
+import { variables } from 'themes/commonStyles';
+
 import styles from './Video.styles';
 
 const MAX_VERTICAL_VIDEO_ASPECT_RATIO = 4 / 5;
 const CONTROLS_SHOWN_DURATION = 2 * 1000;
+
+const { width: windowWidth } = Dimensions.get('window');
+
+const progressBarWidth = windowWidth - variables.paddingHorizontal;
 
 const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
 
@@ -41,6 +48,25 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   const controlsShowingTimeout = useRef(null);
   const isVideoInEndedState = useRef(false);
   const isSeekedToLiveOnStart = useRef(false);
+
+  const onProgressBarPositionChange = useCallback((event) => {
+    clearTimeout(controlsShowingTimeout?.current);
+
+    const newCurrectTime = (event.nativeEvent.locationX) / progressBarWidth * duration;
+    setPlayedTime(newCurrectTime);
+    playedTimeAsRef.current = newCurrectTime;
+    videoRef.current.seek(newCurrectTime);
+  }, [duration]);
+
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: (event) => {
+      onProgressBarPositionChange(event);
+    },
+    onPanResponderRelease: (event) => {
+      onProgressBarPositionChange(event);
+    },
+  });
 
   const hideControlsWithTimeout = useCallback(() => {
     clearTimeout(controlsShowingTimeout?.current);
@@ -248,16 +274,28 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
               </View>
             )}
 
-            <View style={styles.timingContainer}>
+            <View style={[styles.timingContainer, isFullScreen && styles.fullScreenTimingContainer]}>
               <Text style={[styles.timingText, styles.playedTimeText]}>{formatDuration(playedTime)}</Text>
               <Text style={[styles.timingText, styles.durationText]}> / {formatDuration(duration)}</Text>
             </View>
 
-            <View style={styles.toggleFullScreenIconContainer}>
+            <View style={[styles.toggleFullScreenIconContainer, isFullScreen && styles.fullScreenIconContainer]}>
               <TouchableOpacity onPress={Platform.OS === 'ios' ? showFullScreen : toggleFullScreen}>
                 {isFullScreen ? <CloseVideoFullScreenIcon /> : <OpenVideoFullScreenIcon />}
               </TouchableOpacity>
             </View>
+
+            {isFullScreen && (
+            <View
+              style={styles.progressBarContainer}
+              {...panResponder.panHandlers}
+            >
+              <View style={[styles.progressBar, { width: `${playedTime / duration * 100}%` }]} />
+              <View style={styles.progressBarCircleWrapper}>
+                <View style={styles.progressBarCircle} />
+              </View>
+            </View>
+            )}
           </>
         )}
 
