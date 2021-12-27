@@ -9,13 +9,14 @@ export default StyleSheet.create({
     ...commonStyles.screen,
   },
   content: {
-    marginTop: 10,
     paddingHorizontal: 20,
   },
   flatListFan: {
+    paddingTop: 10,
     height: metrics.screenHeight - metrics.tabBarHeight - 160, // header + margins
   },
   flatListFighter: {
+    paddingTop: 10,
     height: metrics.screenHeight - 140, // header + margins
   },
   emptyView: {

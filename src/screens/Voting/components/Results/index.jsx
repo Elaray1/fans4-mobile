@@ -198,6 +198,7 @@ const Results = ({ onPullToRefresh }) => {
         {!!fights.length && (
           <FlatList
             ref={listRef}
+            style={styles.fights}
             data={fights}
             renderItem={renderItem}
             keyExtractor={keyExtractor}

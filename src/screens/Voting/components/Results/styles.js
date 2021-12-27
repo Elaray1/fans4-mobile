@@ -9,7 +9,6 @@ export default StyleSheet.create({
   },
   content: {
     ...commonStyles.screenContent,
-    marginTop: 30,
   },
   scrollView: {
     flexGrow: 1,
@@ -52,5 +51,8 @@ export default StyleSheet.create({
   },
   loader: {
     margin: 15,
+  },
+  fights: {
+    paddingTop: 30,
   },
 });

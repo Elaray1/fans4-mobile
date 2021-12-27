@@ -259,6 +259,7 @@ function Feed() {
         {!!posts.length && (
           <FlatList
             ref={listRef}
+            style={styles.posts}
             data={posts}
             renderItem={renderItem}
             keyExtractor={keyExtractor}

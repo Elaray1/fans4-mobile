@@ -9,7 +9,6 @@ export default StyleSheet.create({
   },
   content: {
     ...commonStyles.screenContent,
-    marginTop: 30,
   },
   post: {
     marginBottom: 10,
@@ -39,5 +38,8 @@ export default StyleSheet.create({
   },
   loader: {
     margin: 15,
+  },
+  posts: {
+    paddingTop: 30,
   },
 });

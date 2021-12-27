@@ -104,9 +104,6 @@ export default StyleSheet.create({
   newMessageContainer: {
     marginVertical: 16,
   },
-  hidden: {
-    opacity: 0,
-  },
   closingReasonContainer: {
     flexDirection: 'row',
     paddingHorizontal: 26,
