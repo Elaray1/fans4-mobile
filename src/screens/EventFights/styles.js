@@ -98,11 +98,12 @@ export default StyleSheet.create({
   },
   imageStatus: {
     position: 'absolute',
-    bottom: 12,
-    left: 12,
-    backgroundColor: colors.error,
-    justifyContent: 'center',
+    left: 10,
+    bottom: 10,
+    display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.error,
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 5,
@@ -110,6 +111,7 @@ export default StyleSheet.create({
   imageText: {
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
+    fontSize: fonts.size.caption,
   },
   stayTuned: {
     textAlign: 'center',
