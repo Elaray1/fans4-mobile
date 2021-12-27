@@ -38,6 +38,8 @@ import * as purchasesActions from 'store/purchases/purchases.actions';
 
 import colors from 'themes/colors';
 
+import OfflineBanner from 'components/OfflineBanner';
+
 import AppScreens from './appStack';
 import AuthScreens from './authStack';
 
@@ -368,6 +370,8 @@ function AppNavigation() {
         linking={linking}
         onStateChange={trackScreensOpening}
       >
+        <OfflineBanner />
+
         <Stack.Navigator initialRouteName={userAuthenticated ? 'AppStack' : 'AuthStack'} headerMode="none">
           <Stack.Screen name="AppStack" component={AppScreens} />
           <Stack.Screen name="AuthStack" component={AuthScreens} />

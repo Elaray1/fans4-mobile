@@ -775,5 +775,9 @@
     "noFightsYet": "No fights yet",
     "description":"There are no fights on voting now.\n\n If you want a matchup you can choose a Fighter (opponent) and apply for a fight.",
     "chooseFighter": "Choose Fighter"
+  },
+  "OfflineBanner": {
+    "youAreOffline1": "You are offline. Check your internet",
+    "youAreOffline2": "connection to load the content."
   }
 }

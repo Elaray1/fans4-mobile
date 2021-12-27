@@ -63,6 +63,8 @@ const colors = {
   lightButton: '#404040',
 
   processingBackground: '#35353B',
+
+  offlineBannerBackground: '#707070',
 };
 
 export default colors;
