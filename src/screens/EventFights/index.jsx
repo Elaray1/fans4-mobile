@@ -54,8 +54,6 @@ function EventFights({ route }) {
   const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState(isLiveStream && Platform.OS === 'ios');
   const [isLiveStreamShownIos, setIsLiveStreamShownIos] = useState(false);
 
-  const isCancelledOrPast = event.status === EVENT_STATUSES.CANCELED || event.status === EVENT_STATUSES.PAST;
-
   const [eventStreamLink, setEventStreamLink] = useState(null);
 
   const onReadyToPlayIos = useCallback(() => {
@@ -105,25 +103,19 @@ function EventFights({ route }) {
     return <Loader />;
   };
 
-  const isStayTunedShown = event.fights.filter(f => !f.results);
-
   const renderItem = ({ item }) => {
     const indexOfFightWithoutResults = fights.map(f => f.results || 0).indexOf(0);
 
-    let isShowText = false;
-    if (indexOfFightWithoutResults) {
-      isShowText = item._id === fights[indexOfFightWithoutResults - 1]._id;
-    }
+    const isShowText = item._id === fights[indexOfFightWithoutResults]?._id;
 
     return (
       <>
+        {isLive && isShowText && <Text style={styles.stayTuned}>{t('Events.stayTuned')}</Text>}
         <FightItem
           fight={item}
           isCountdownShown
           viewType={item.status === FIGHT_STATUSES.PAST ? FIGHT_VIEW_TYPE.EVENT_PAST : FIGHT_VIEW_TYPE.EVENT_UPCOMING}
         />
-
-        {isLive && isShowText && <Text style={styles.stayTuned}>{t('Events.stayTuned')}</Text>}
       </>
     );
   };
@@ -185,10 +177,9 @@ function EventFights({ route }) {
           </TouchableOpacity>
         </View>
 
-        {isStayTunedShown && <Text style={styles.stayTuned}>{t('Events.stayTuned')}</Text>}
         {isLoading && <Loader />}
 
-        {!isLoading && !!fights.length && !isCancelledOrPast && (
+        {!isLoading && !!fights.length && (
           <FlatList
             data={fights}
             renderItem={renderItem}
