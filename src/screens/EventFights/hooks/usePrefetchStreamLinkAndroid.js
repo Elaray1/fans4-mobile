@@ -2,11 +2,12 @@ import { useEffect } from 'react';
 import Platform from 'react-native';
 
 import * as eventApi from 'resources/event/event.api';
+import { LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
 
 
-const usePrefetchLinkAndroid = ({ eventId, setEventStreamLink }) => {
+const usePrefetchLinkAndroid = ({ eventId, setEventStreamLink, eventLiveStreamStatus }) => {
   useEffect(() => {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios' || eventLiveStreamStatus !== LIVE_STREAM_STATUSES.LIVE) {
       return;
     }
 
@@ -16,7 +17,7 @@ const usePrefetchLinkAndroid = ({ eventId, setEventStreamLink }) => {
     };
 
     getStreamLink();
-  }, [eventId, setEventStreamLink]);
+  }, [eventId, setEventStreamLink, eventLiveStreamStatus]);
 };
 
 export default usePrefetchLinkAndroid;

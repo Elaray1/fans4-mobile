@@ -74,7 +74,11 @@ function EventFights({ route }) {
     fetchNewItems,
   } = useFetchItems({ eventId: event._id });
 
-  usePrefetchStreamLinkAndroid({ eventId: event._id, setEventStreamLink });
+  usePrefetchStreamLinkAndroid({
+    eventId: event._id,
+    setEventStreamLink,
+    eventLiveStreamStatus: event.liveStream.status,
+  });
 
   const onShowLiveStream = useCallback(() => {
     if (Platform.OS === 'ios') {
@@ -92,6 +96,8 @@ function EventFights({ route }) {
   }, [navigation, event.name, event._id, eventStreamLink]);
 
   const keyExtractor = useCallback(item => item._id, []);
+
+  console.log('isRefresing', isRefreshing);
 
   const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
 
@@ -193,7 +199,13 @@ function EventFights({ route }) {
           />
         )}
 
-        {!isLoading && !fights.length && <EmptyView isFan isRefreshing onRefresh={onRefresh} />}
+        {!isLoading && !fights.length && (
+          <EmptyView
+            isFan={isFan}
+            isRefreshing={isRefreshing}
+            onRefresh={onRefresh}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
