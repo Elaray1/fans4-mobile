@@ -201,16 +201,16 @@ function Events() {
             source={{ uri: item.imageUrl }}
           />
 
-          {item.status === EVENT_STATUSES.CANCELED && moment().isBefore(item.date) && (
+          {item.status === EVENT_STATUSES.CANCELLED && moment().isBefore(item.date) && (
           <View style={styles.imageStatus}>
-            <Text style={styles.imageText}>{t('Events.canceled')}</Text>
+            <Text style={styles.imageText}>{t('Events.cancelled')}</Text>
           </View>
           )}
 
           {isLive && (
             <View style={styles.live}>
               <LiveIcon />
-              <Text>Live</Text>
+              <Text>{t('Events.live')}</Text>
             </View>
           )}
 

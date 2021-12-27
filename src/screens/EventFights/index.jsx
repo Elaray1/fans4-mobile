@@ -135,9 +135,9 @@ function EventFights({ route }) {
           >
             <FastImage style={[styles.photoImage, aspectRatioStyle]} source={{ uri: event.imageUrl }} />
 
-            {event.status === EVENT_STATUSES.CANCELED && moment().isBefore(event.date) && (
+            {event.status === EVENT_STATUSES.CANCELLED && moment().isBefore(event.date) && (
               <View style={styles.imageStatus}>
-                <Text style={styles.imageText}>{t('Events.canceled')}</Text>
+                <Text style={styles.imageText}>{t('Events.cancelled')}</Text>
               </View>
             )}
 

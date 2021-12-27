@@ -28,7 +28,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   button: {
-    marginTop: 20,
+    position: 'absolute',
+    bottom: 0,
   },
   text: {
     fontSize: fonts.size.caption,

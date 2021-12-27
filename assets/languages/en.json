@@ -316,7 +316,7 @@
     "linkText": "Back to sign in page"
   },
   "ForgotPassword": {
-    "title": "Forgot password",
+    "title": "Forgot Password",
     "inputLabel": "Email",
     "button": "Send Me a Reset Link",
     "link": "Back to sign in page",
@@ -480,7 +480,7 @@
     "couldntLoadTheEventsPullToRefresh": "Couldn’t load the events. Pull to refresh.",
     "upcoming": "Upcoming",
     "past": "Past",
-    "canceled": "Canceled",
+    "cancelled": "Cancelled",
     "noEventsYet": "No events yet",
     "fanUpcoming": "Check back to view the first live event!",
     "fanPast": "Once we hold an event, it will be shown on this page.",
@@ -632,7 +632,7 @@
     "description": "Check back to see which fights are in voting! \n\n Want to see your Fighter in an upcoming fight?"
   },
   "ProposeAFight": {
-    "ProposeAFight": "Propose A Fight",
+    "ProposeAFight": "Propose a Fight",
     "next": "Next",
     "create": "Create",
     "chooseOpponent": "Choose an opponent for this figh",
@@ -711,7 +711,7 @@
   },
   "SubscriptionPosibilities": {
     "subscriptionPossibility1": "Full access to Fighter's content",
-    "subscriptionPossibility2": "Proposing fighter matchups",
+    "subscriptionPossibility2": "Proposing Fighter matchups",
     "subscriptionPossibility3": "Voting for fights in future events",
     "subscriptionPossibility4": "Exclusive live-streaming events"
   },

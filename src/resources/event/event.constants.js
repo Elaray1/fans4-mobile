@@ -2,7 +2,7 @@ export const EVENT_STATUSES = {
   DRAFT: 'draft',
   UPCOMING: 'upcoming',
   PAST: 'past',
-  CANCELED: 'canceled',
+  CANCELLED: 'cancelled',
   DELETED: 'deleted',
 };
 

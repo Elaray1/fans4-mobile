@@ -192,7 +192,7 @@ function SearchFighters() {
 
   const fans4Source = useMemo(() => ({ uri: fans4Account?.avatarUrl }), [fans4Account?.avatarUrl]);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
     const { nickname } = item.role.biography;
     const { cityName, stateCode } = item.role.biography.hometown;
 
@@ -244,7 +244,7 @@ function SearchFighters() {
           )}
         </View>
 
-        <View style={styles.line} />
+        {index !== fighters.length - 1 && <View style={styles.line} />}
       </TouchableOpacity>
     );
   };
