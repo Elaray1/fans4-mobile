@@ -213,6 +213,11 @@ const pushNotificationHandlersByType = {
 
     rootNavigation.navigate('EventFights', { event: parsedEvent });
   },
+  [PUSH_NOTIFICATION_TYPES.EVENT_PUBLISHED]: ({ event }) => {
+    const parsedEvent = JSON.parse(event);
+
+    rootNavigation.navigate('EventFights', { event: parsedEvent });
+  },
 };
 
 function AppNavigation() {
