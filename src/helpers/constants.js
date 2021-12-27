@@ -15,6 +15,7 @@ export const PUSH_NOTIFICATION_TYPES = {
   FAN_PROPOSED_FIGHT_IN_VOTING: 'fan_proposed_fight_in_voting',
   FAN_PROPOSED_FIGHT_IN_UPCOMING_EVENT: 'fan_proposed_fight_in_upcoming_event',
   FAN_VOTED_FIGHT_IN_UPCOMING_EVENT: 'fan_voted_fight_in_upcoming_event',
+  EVENT_PUBLISHED: 'event_published',
 };
 
 export const FANS4_ACCOUNT = {
