@@ -210,6 +210,21 @@ const pushNotificationHandlersByType = {
 
     rootNavigation.navigate('EventFights', { event: parsedEvent });
   },
+  [PUSH_NOTIFICATION_TYPES.FIGHTER_IN_EVENT_FIGHT]: ({ event }) => {
+    const parsedEvent = JSON.parse(event);
+
+    rootNavigation.navigate('EventFights', { event: parsedEvent });
+  },
+  [PUSH_NOTIFICATION_TYPES.NEW_EVENT_FIGHT_ADDED]: ({ event }) => {
+    const parsedEvent = JSON.parse(event);
+
+    rootNavigation.navigate('EventFights', { event: parsedEvent });
+  },
+  [PUSH_NOTIFICATION_TYPES.NEW_EVENT_FIGHTS_ADDED]: ({ event }) => {
+    const parsedEvent = JSON.parse(event);
+
+    rootNavigation.navigate('EventFights', { event: parsedEvent });
+  },
 };
 
 function AppNavigation() {
