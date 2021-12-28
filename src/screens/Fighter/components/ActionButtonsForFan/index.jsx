@@ -79,7 +79,7 @@ const ActionButtonsForFan = ({ fighter, subscribe, unsubscribe, resubscribe }) =
         <Button
           title={t('Fighter.proposeAFight')}
           style={styles.applyButton}
-          type="secondary"
+          type={isResubcribeShown ? 'secondary' : 'primary'}
           onPress={goToProposeAFight}
         />
       );
