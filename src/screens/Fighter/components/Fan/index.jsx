@@ -298,7 +298,7 @@ function Fighter({ fighterId }) {
           style={styles.content}
           data={posts}
           keyExtractor={keyExtractor}
-          renderItem={(posts || !isSubscribed) ? renderItem : renderNoPosts}
+          renderItem={posts ? renderItem : renderNoPosts}
           ItemSeparatorComponent={renderItemSeparator}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
