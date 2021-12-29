@@ -22,7 +22,7 @@ export const addDateSepatorsToMessages = (messages) => {
   return messages.reduce((acc, message) => {
     acc.push(message);
 
-    const firstMessage = firstDayMessages.find(firstDayMessage => firstDayMessage._id === message._id);
+    const firstMessage = firstDayMessages.find(firstDayMessage => firstDayMessage?._id === message._id);
     if (firstMessage) {
       acc.push({
         isDateSeparator: true,
