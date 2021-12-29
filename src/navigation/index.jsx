@@ -77,12 +77,8 @@ const init = async (dispatch) => {
       user = await userApi.getUserData();
 
       websocketsService.connect({
-        query: {
-          accessToken,
-        },
-        onConnect: () => {
-          websocketsService.emit('subscribe', `user-${user._id}`);
-        },
+        query: { accessToken },
+        rooms: [`user-${user._id}`],
       });
 
 
@@ -94,12 +90,8 @@ const init = async (dispatch) => {
 
   if (!user) {
     websocketsService.connect({
-      query: {
-        deviceId: getMaskedDeviceId(),
-      },
-      onConnect: () => {
-        websocketsService.emit('subscribe', `device-${getMaskedDeviceId()}`);
-      },
+      query: { deviceId: getMaskedDeviceId() },
+      rooms: [`device-${getMaskedDeviceId()}`],
     });
   }
 

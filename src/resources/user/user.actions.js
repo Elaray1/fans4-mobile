@@ -31,12 +31,8 @@ export const emailSignUp = ({
 
   websocketsService.disconnect();
   websocketsService.connect({
-    query: {
-      accessToken,
-    },
-    onConnect: () => {
-      websocketsService.emit('subscribe', `user-${user._id}`);
-    },
+    query: { accessToken },
+    rooms: [`user-${user._id}`],
   });
 
 
@@ -94,12 +90,8 @@ export const emailSignIn = ({
 
   websocketsService.disconnect();
   websocketsService.connect({
-    query: {
-      accessToken,
-    },
-    onConnect: () => {
-      websocketsService.emit('subscribe', `user-${user._id}`);
-    },
+    query: { accessToken },
+    rooms: [`user-${user._id}`],
   });
 
 
@@ -184,15 +176,12 @@ export const logout = () => async (dispatch) => {
   }
 
   await clear();
+
   config.accessToken = null;
   websocketsService.disconnect();
   websocketsService.connect({
-    query: {
-      deviceId: getMaskedDeviceId(),
-    },
-    onConnect: () => {
-      websocketsService.emit('subscribe', `device-${deviceId}`);
-    },
+    query: { deviceId: getMaskedDeviceId() },
+    rooms: [`device-${deviceId}`],
   });
 
 

@@ -18,3 +18,6 @@ export const getEventsForCurrentFighter = ({ past, page, perPage }) => apiClient
 
 export const getStreamLinkByEventId = _id => apiClient
   .get(`events/${_id}/stream-link`);
+
+export const getEvent = _id => apiClient
+  .get(`events/${_id}`);

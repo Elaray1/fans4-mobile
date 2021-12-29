@@ -1,5 +1,6 @@
 export const ITEM_TYPES = {
   BACK_ARROW: 'backArrow',
+  CLOSE: 'close',
   MENU: 'menu',
   ICON: 'icon',
   TEXT: 'text',

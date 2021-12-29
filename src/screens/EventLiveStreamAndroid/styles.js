@@ -24,6 +24,20 @@ export default StyleSheet.create({
   },
   webView: {
     marginTop: 1,
-    backgroundColor: colors.black,
+    backgroundColor: colors.green,
+    flex: 1,
+  },
+  horizontalModeHeader: {
+    position: 'absolute',
+    top: 20,
+    left: 21,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  horizontalModeTitle: {
+    marginLeft: 16,
+  },
+  webViewPressableContainer: {
+    flex: 1,
   },
 });

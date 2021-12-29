@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, View, FlatList, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -14,13 +14,14 @@ import * as userSelectors from 'resources/user/user.selectors';
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
 import Text from 'components/Text';
+import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
 
 import colors from 'themes/colors';
 
 import { EVENT_STATUSES, LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 import { USER_TYPES } from 'resources/user/user.constants';
-import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
+
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
@@ -33,6 +34,7 @@ import LiveStreamPlayerIos from './components/LiveStreamPlayerIos';
 import useAnalytics from './hooks/useAnalytics';
 import useFetchItems from './hooks/useFetchItems';
 import usePrefetchStreamLinkAndroid from './hooks/usePrefetchStreamLinkAndroid';
+import useEventUpdated from './hooks/useEventUpdated';
 
 const posterAspectRatio = 16 / 9;
 const aspectRatioStyle = { aspectRatio: posterAspectRatio };
@@ -41,7 +43,8 @@ function EventFights({ route }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const { event } = route?.params;
+  const { event: prefetchedEvent } = route?.params;
+  const [event, setEvent] = useState(prefetchedEvent);
 
   const userType = useSelector(userSelectors.getUserType);
   const isFan = userType === USER_TYPES.FAN;
@@ -65,6 +68,8 @@ function EventFights({ route }) {
   }, []);
 
   useAnalytics({ isFan, eventId: event._id });
+  useEventUpdated({ eventId: event._id, onEventUpdated: setEvent });
+  usePrefetchStreamLinkAndroid({ eventId: event._id, setEventStreamLink, streamStatus: event.liveStream.status });
 
   const {
     fights,
@@ -74,11 +79,6 @@ function EventFights({ route }) {
     fetchNewItems,
   } = useFetchItems({ eventId: event._id });
 
-  usePrefetchStreamLinkAndroid({
-    eventId: event._id,
-    setEventStreamLink,
-    eventLiveStreamStatus: event.liveStream.status,
-  });
 
   const onShowLiveStream = useCallback(() => {
     if (Platform.OS === 'ios') {
@@ -97,7 +97,6 @@ function EventFights({ route }) {
 
   const keyExtractor = useCallback(item => item._id, []);
 
-  console.log('isRefresing', isRefreshing);
 
   const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
 
