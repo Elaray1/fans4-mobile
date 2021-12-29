@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import BackArrowIcon from 'assets/icons/back-arrow';
 import MenuIcon from 'assets/icons/menu';
 import DotsIcon from 'assets/icons/dots';
-
+import CloseWithBackgroundIcon from 'assets/icons/close-with-background';
 
 import { ITEM_TYPES } from 'components/Header/Header.constants';
 
@@ -37,6 +37,9 @@ function Icon({
       break;
     case ITEM_TYPES.DOTS:
       IconItem = DotsIcon;
+      break;
+    case ITEM_TYPES.CLOSE:
+      IconItem = CloseWithBackgroundIcon;
       break;
     default:
       break;

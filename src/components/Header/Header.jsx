@@ -36,6 +36,7 @@ function Header({
     style: leftItemStyle,
     imageUrl: leftItemImageUrl,
   };
+
   const rightItemProps = {
     onPress: rightItemDisabled ? null : onRightItemPress,
     style: rightItemStyle,
@@ -48,6 +49,7 @@ function Header({
     text: leftItemText,
     icon: leftItemIcon,
   });
+
   const updatedRightItem = rightItem || GetHeaderItem({
     type: rightItemType,
     props: rightItemProps,

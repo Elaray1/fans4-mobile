@@ -24,6 +24,7 @@ export const GetHeaderItem = ({ type, props, text, icon }) => {
     case ITEM_TYPES.MENU:
     case ITEM_TYPES.ICON:
     case ITEM_TYPES.DOTS:
+    case ITEM_TYPES.CLOSE:
       item = <Icon {...props} type={type} icon={icon} />;
       break;
     case ITEM_TYPES.TEXT:
