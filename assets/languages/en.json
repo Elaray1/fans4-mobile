@@ -779,5 +779,9 @@
   "OfflineBanner": {
     "youAreOffline1": "You are offline. Check your internet",
     "youAreOffline2": "connection to load the content."
+  },
+  "CountdownTimer": {
+    "liveIn": "Live in",
+    "waitingForLiveStreaming": "Waiting for live-streaming to start"
   }
 }
