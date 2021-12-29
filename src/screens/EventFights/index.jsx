@@ -30,6 +30,7 @@ import styles from './styles';
 import EmptyView from './components/EmptyView';
 import LiveStreamBar from './components/LiveStreamBar';
 import LiveStreamPlayerIos from './components/LiveStreamPlayerIos';
+import CountdownTimer from './components/CountdownTimer';
 
 import useAnalytics from './hooks/useAnalytics';
 import useFetchItems from './hooks/useFetchItems';
@@ -58,6 +59,8 @@ function EventFights({ route }) {
   const [isLiveStreamShownIos, setIsLiveStreamShownIos] = useState(false);
 
   const [eventStreamLink, setEventStreamLink] = useState(null);
+
+  const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
 
   const onReadyToPlayIos = useCallback(() => {
     setIsLiveStreamLoadingIos(false);
@@ -124,35 +127,59 @@ function EventFights({ route }) {
     );
   };
 
+  const onOpenCountdownTimer = useCallback(() => {
+    setIsCountdownTimerModalVisible(true);
+  }, []);
+
+  const onCloseCountTimerModal = useCallback(() => {
+    setIsCountdownTimerModalVisible(false);
+  }, []);
+
+  const onPressEventPoster = useCallback(() => {
+    if (isLiveStream && !isLiveStreamLoadingIos) {
+      onShowLiveStream();
+    } else if (event.status === EVENT_STATUSES.UPCOMING
+      || event.status === EVENT_STATUSES.PAST) {
+      onOpenCountdownTimer();
+    }
+  }, [onShowLiveStream, onOpenCountdownTimer,
+    isLiveStream, isLiveStreamLoadingIos, event.status]);
+
   return (
-    <SafeAreaView style={styles.screen}>
-      <Header
-        title={event.name}
-        leftItemType="backArrow"
+    <>
+      <CountdownTimer
+        visible={isCountdownTimerModalVisible}
+        event={event}
+        onClose={onCloseCountTimerModal}
       />
+      <SafeAreaView style={styles.screen}>
+        <Header
+          title={event.name}
+          leftItemType="backArrow"
+        />
 
-      <View style={styles.content}>
-        <View style={styles.event}>
-          <TouchableOpacity
-            style={[styles.eventImageContainer, aspectRatioStyle]}
-            onPress={isLiveStream && !isLiveStreamLoadingIos ? onShowLiveStream : undefined}
-          >
-            <FastImage style={[styles.photoImage, aspectRatioStyle]} source={{ uri: event.imageUrl }} />
+        <View style={styles.content}>
+          <View style={styles.event}>
+            <TouchableOpacity
+              style={[styles.eventImageContainer, aspectRatioStyle]}
+              onPress={onPressEventPoster}
+            >
+              <FastImage style={[styles.photoImage, aspectRatioStyle]} source={{ uri: event.imageUrl }} />
 
-            {event.status === EVENT_STATUSES.CANCELLED && moment().isBefore(event.date) && (
+              {event.status === EVENT_STATUSES.CANCELLED && moment().isBefore(event.date) && (
               <View style={styles.imageStatus}>
                 <Text style={styles.imageText}>{t('Events.cancelled')}</Text>
               </View>
-            )}
+              )}
 
-            {isLive && (
+              {isLive && (
               <LiveStreamBar
                 fightsWithResultsCount={event.fights.filter(fight => fight.results !== undefined).length}
                 fightsCount={event.fights.length}
               />
-            )}
+              )}
 
-            {isLiveStream && (
+              {isLiveStream && (
               <LiveStreamPlayerIos
                 ref={streamVideoRefIos}
                 eventId={event._id}
@@ -160,9 +187,9 @@ function EventFights({ route }) {
                 onExitFullScreen={onExitFullScreenIos}
                 onReadyToPlay={onReadyToPlayIos}
               />
-            )}
+              )}
 
-            {isUpcoming && (
+              {isUpcoming && (
               <View style={styles.upcoming}>
                 <LiveIcon />
 
@@ -171,19 +198,19 @@ function EventFights({ route }) {
                   {`${t('Events.in')} ${event.location.cityName}, ${event.location.stateCode}`}
                 </Text>
               </View>
-            )}
+              )}
 
-            {isLiveStreamLoadingIos && (
+              {isLiveStreamLoadingIos && (
               <View style={styles.loaderContainer}>
                 <ActivityIndicator size="large" color={colors.primary} />
               </View>
-            )}
-          </TouchableOpacity>
-        </View>
+              )}
+            </TouchableOpacity>
+          </View>
 
-        {isLoading && <Loader />}
+          {isLoading && <Loader />}
 
-        {!isLoading && !!fights.length && (
+          {!isLoading && !!fights.length && (
           <FlatList
             data={fights}
             renderItem={renderItem}
@@ -195,21 +222,21 @@ function EventFights({ route }) {
             onRefresh={onRefresh}
             refreshing={isRefreshing}
           />
-        )}
-
-        {!isLoading
-        && event.status !== EVENT_STATUSES.CANCELLED
-        && event.status !== EVENT_STATUSES.PAST
-        && !fights.length
-        && (
-          <EmptyView
-            isFan={isFan}
-            isRefreshing={isRefreshing}
-            onRefresh={onRefresh}
-          />
-        )}
-      </View>
-    </SafeAreaView>
+          )}
+          {!isLoading
+          && event.status !== EVENT_STATUSES.CANCELLED
+          && event.status !== EVENT_STATUSES.PAST
+          && !fights.length
+          && (
+            <EmptyView
+              isFan={isFan}
+              isRefreshing={isRefreshing}
+              onRefresh={onRefresh}
+            />
+          )}
+        </View>
+      </SafeAreaView>
+    </>
   );
 }
 
