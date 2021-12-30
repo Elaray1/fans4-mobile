@@ -24,14 +24,16 @@ const posterContainerStyles = {
 
 const addZeroToNumber = number => (number.toString().length < 2 ? `0${number}` : number);
 
-const formateCountedownTime = (ms) => {
+const formateCountdownTime = (ms) => {
   if (ms <= 0) {
     return '00:00:00';
   }
 
   const tempTime = moment.duration(ms);
 
-  const days = tempTime.days();
+  let days = tempTime.asDays();
+  days = days < 1 ? 0 : Math.ceil(days);
+
   if (days > 0) {
     return `${days} day${days > 1 ? 's' : ''}`;
   }
@@ -84,7 +86,7 @@ const CountdownTimer = ({ visible, event, onClose }) => {
               {dateDiff && (
                 <>
                   <Text style={styles.countdownTitle}>
-                    {`${t('CountdownTimer.liveIn')} ${formateCountedownTime(dateDiff)}`}
+                    {`${t('CountdownTimer.liveIn')} ${formateCountdownTime(dateDiff)}`}
                   </Text>
                   <Text style={styles.countdownText}>
                     {dateDiff > 0
