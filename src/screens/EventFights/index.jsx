@@ -197,7 +197,11 @@ function EventFights({ route }) {
           />
         )}
 
-        {!isLoading && !fights.length && (
+        {!isLoading
+        && event.status !== EVENT_STATUSES.CANCELLED
+        && event.status !== EVENT_STATUSES.PAST
+        && !fights.length
+        && (
           <EmptyView
             isFan={isFan}
             isRefreshing={isRefreshing}
