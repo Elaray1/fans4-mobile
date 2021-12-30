@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, View, FlatList, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -96,7 +96,6 @@ function EventFights({ route }) {
   }, [navigation, event.name, event._id, eventStreamLink]);
 
   const keyExtractor = useCallback(item => item._id, []);
-
 
   const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
 
