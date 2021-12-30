@@ -181,6 +181,9 @@ function ChangeBiography() {
 
     try {
       await dispatch(introVideoActions.cancelUploadingIntroVideoData(uploadingIntroVideoData?.uploadId));
+
+      const updatedUser = await userApi.deleteIntroVideo();
+      dispatch(userActions.setUserData(updatedUser));
     } catch (error) {
       showFailure();
     }

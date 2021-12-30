@@ -9,7 +9,7 @@ class WebsocketsService {
       query,
     });
 
-    this.rooms = [] || rooms;
+    this.rooms = rooms || [];
 
     this._socket.on('connect', () => {
       console.log('websockets connected');
