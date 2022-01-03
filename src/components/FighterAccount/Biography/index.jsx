@@ -158,6 +158,7 @@ const Biography = ({
               width={introVideo.width}
               height={introVideo.height}
               duration={introVideo.duration}
+              viewable
             />
           </Viewable>
         </View>

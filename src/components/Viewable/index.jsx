@@ -37,6 +37,7 @@ function Viewable({ children }) {
       renderItem={renderItem}
       onViewableItemsChanged={onViewableItemsChanged}
       viewabilityConfig={VIDEO_VIEWABILITY_CONFIG}
+      removeClippedSubviews={false}
     />
   );
 

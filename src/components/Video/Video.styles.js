@@ -146,12 +146,16 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.bold,
     fontSize: fonts.size.caption,
   },
+  progressBarWrapper: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    bottom: 16,
+  },
   progressBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     width: progressBarWidth,
-    position: 'absolute',
-    bottom: 16,
     height: 6,
     backgroundColor: hexToRgba(colors.primary, 0.15),
     borderRadius: 5,
@@ -169,6 +173,7 @@ export default StyleSheet.create({
     height: 16,
     backgroundColor: colors.primary,
     borderRadius: 100,
+    marginLeft: -10,
   },
   progressBarCircle: {
     width: 6,

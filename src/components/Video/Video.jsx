@@ -12,8 +12,6 @@ import PauseIcon from 'assets/icons/pause';
 import OpenVideoFullScreenIcon from 'assets/icons/openVideoFullScreen';
 import CloseVideoFullScreenIcon from 'assets/icons/closeVideoFullScreen';
 
-import useDidUpdate from 'hooks/useDidUpdate';
-
 import { variables } from 'themes/commonStyles';
 
 import styles from './Video.styles';
@@ -52,10 +50,15 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   const onProgressBarPositionChange = useCallback((event) => {
     clearTimeout(controlsShowingTimeout?.current);
 
-    const newCurrectTime = (event.nativeEvent.locationX) / progressBarWidth * duration;
+    const locationXDuration = (event.nativeEvent.locationX) / progressBarWidth * duration;
+    const isVideoEnded = locationXDuration >= duration;
+
+    const newCurrectTime = isVideoEnded ? duration : locationXDuration;
     setPlayedTime(newCurrectTime);
     playedTimeAsRef.current = newCurrectTime;
     videoRef.current.seek(newCurrectTime);
+
+    isVideoInEndedState.current = isVideoEnded;
   }, [duration]);
 
   const panResponder = PanResponder.create({
@@ -178,12 +181,13 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
       if (pauseOnFullScreen) {
         setPaused(true);
       }
-
       clearTimeout(controlsShowingTimeout?.current);
     }
 
     setIsFullScreen(!isFullScreen);
+
     setPlayedTime(playedTimeAsRef.current);
+    videoRef.current.seek(playedTimeAsRef.current);
   }, [isFullScreen, pauseOnFullScreen]);
 
   const onFullscreenPlayerWillDismiss = useCallback(() => {
@@ -196,19 +200,11 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
     }
   }, [pause, pauseOnFullScreen, onExitFullScreen]);
 
-  useDidUpdate(() => {
-    setPlayedTime(playedTimeAsRef.current);
-
-    if (videoRef.current) {
-      videoRef.current.seek(playedTimeAsRef.current);
-    }
-  }, [isFullScreen]);
-
   useEffect(() => {
-    if (!paused && (!viewable || !isFocused)) {
+    if (!paused && (!viewable || !isFocused) && !isFullScreen) {
       pause();
     }
-  }, [viewable, pause, paused, isFocused]);
+  }, [viewable, pause, paused, isFocused, isFullScreen]);
 
 
   const renderingHeight = width / height < MAX_VERTICAL_VIDEO_ASPECT_RATIO
@@ -286,15 +282,20 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
             </View>
 
             {isFullScreen && (
-            <View
-              style={styles.progressBarContainer}
-              {...panResponder.panHandlers}
-            >
-              <View style={[styles.progressBar, { width: `${playedTime / duration * 100}%` }]} />
-              <View style={styles.progressBarCircleWrapper}>
-                <View style={styles.progressBarCircle} />
+              <View
+                style={styles.progressBarWrapper}
+                {...panResponder.panHandlers}
+                hitSlop={{ top: 15, bottom: 15, left: 0, right: 0 }}
+              >
+                <View
+                  style={styles.progressBarContainer}
+                >
+                  <View style={[styles.progressBar, { width: `${playedTime / duration * 100}%` }]} />
+                  <View style={styles.progressBarCircleWrapper}>
+                    <View style={styles.progressBarCircle} />
+                  </View>
+                </View>
               </View>
-            </View>
             )}
           </>
         )}
