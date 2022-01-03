@@ -19,6 +19,7 @@ import styles from './Video.styles';
 
 const MAX_VERTICAL_VIDEO_ASPECT_RATIO = 4 / 5;
 const CONTROLS_SHOWN_DURATION = 2 * 1000;
+const PROGRESS_BAR_PADDING = 16;
 
 const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
 
@@ -45,7 +46,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   const isSeekedToLiveOnStart = useRef(false);
 
   const { width: windowWidth } = useWindowDimensions();
-  const progressBarWidth = windowWidth - 16;
+  const progressBarWidth = windowWidth - PROGRESS_BAR_PADDING;
 
   const onProgressBarPositionChange = useCallback((event) => {
     isVideoInEndedState.current = false;
@@ -293,6 +294,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
               <View
                 style={[styles.progressBarContainer, progressBarContainerWidthStyle]}
                 {...panResponder.panHandlers}
+                hitSlop={{ top: 15, bottom: 15, left: 0, right: 0 }}
               >
                 <View style={[styles.progressBar, progressBarWidthStyle]}>
                   <View style={styles.progressBarCircleWrapper}>
