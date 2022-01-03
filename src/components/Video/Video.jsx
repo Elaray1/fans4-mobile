@@ -48,26 +48,41 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   const { width: windowWidth } = useWindowDimensions();
   const progressBarWidth = windowWidth - PROGRESS_BAR_PADDING;
 
-  const onProgressBarPositionChange = useCallback((event) => {
-    isVideoInEndedState.current = false;
-
+  const onProgressBarPositionChanging = useCallback((event) => {
     clearTimeout(controlsShowingTimeout?.current);
 
-    const newCurrectTime = (event.nativeEvent.locationX) / progressBarWidth * duration;
+    const locationXDuration = (event.nativeEvent.pageX) / progressBarWidth * duration;
+    const isVideoEnded = locationXDuration >= duration;
+
+    const newCurrectTime = isVideoEnded ? duration : locationXDuration;
+
+    setPlayedTime(newCurrectTime);
+  }, [duration, progressBarWidth]);
+
+  const onProgressBarPositionChanged = useCallback((event) => {
+    clearTimeout(controlsShowingTimeout?.current);
+
+    const locationXDuration = (event.nativeEvent.pageX) / progressBarWidth * duration;
+    const isVideoEnded = locationXDuration >= duration;
+
+    const newCurrectTime = isVideoEnded ? duration : locationXDuration;
 
     setPlayedTime(newCurrectTime);
     playedTimeAsRef.current = newCurrectTime;
+
+    isVideoInEndedState.current = isVideoEnded;
 
     videoRef.current.seek(newCurrectTime);
   }, [duration, progressBarWidth]);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
+    onShouldBlockNativeResponder: () => true,
     onPanResponderMove: (event) => {
-      onProgressBarPositionChange(event);
+      onProgressBarPositionChanging(event);
     },
-    onPanResponderRelease: (event) => {
-      onProgressBarPositionChange(event);
+    onPanResponderEnd: (event) => {
+      onProgressBarPositionChanged(event);
     },
   });
 
