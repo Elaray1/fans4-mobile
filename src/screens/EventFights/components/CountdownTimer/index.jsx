@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Modal, View, Dimensions } from 'react-native';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Modal, View, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import FastImage from 'react-native-fast-image';
@@ -14,13 +14,7 @@ import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
 import styles from './styles';
 
-const { width } = Dimensions.get('window');
-
 const posterAspectRatio = 16 / 9;
-const posterContainerStyles = {
-  width,
-  height: width / posterAspectRatio,
-};
 
 const addZeroToNumber = number => (number.toString().length < 2 ? `0${number}` : number);
 
@@ -47,6 +41,13 @@ const formateCountdownTime = (ms) => {
 
 const CountdownTimer = ({ visible, event, onClose }) => {
   const { t } = useTranslation();
+
+  const { width } = useWindowDimensions();
+
+  const posterContainerStyles = useMemo(() => ({
+    width,
+    height: width / posterAspectRatio,
+  }), [width]);
 
   const eventDate = moment(event.date);
 
