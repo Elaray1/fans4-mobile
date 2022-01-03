@@ -138,8 +138,10 @@ function EventFights({ route }) {
   const onPressEventPoster = useCallback(() => {
     if (isLiveStream && !isLiveStreamLoadingIos) {
       onShowLiveStream();
-    } else if (event.status === EVENT_STATUSES.UPCOMING
-      || event.status === EVENT_STATUSES.PAST) {
+      return;
+    }
+
+    if ([EVENT_STATUSES.UPCOMING, EVENT_STATUSES.PAST].includes(event.status)) {
       onOpenCountdownTimer();
     }
   }, [onShowLiveStream, onOpenCountdownTimer,
