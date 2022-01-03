@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, FlatList, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
+import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import LiveIcon from 'assets/icons/live.svg';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
 import Text from 'components/Text';

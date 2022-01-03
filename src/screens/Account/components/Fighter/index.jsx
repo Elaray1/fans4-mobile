@@ -1,12 +1,13 @@
 import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { View, TouchableOpacity, FlatList, ActivityIndicator, AppState } from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator, AppState } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 
 import colors from 'themes/colors';
 
+import FlatList from 'components/FlatList';
 import Text from 'components/Text';
 import Post from 'components/Post';
 import Modal from 'components/Modal';

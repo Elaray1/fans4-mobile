@@ -3,7 +3,6 @@ import {
   SafeAreaView,
   View,
   StatusBar,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import * as userApi from 'resources/user/user.api';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import CustomRefreshControl from 'components/CustomRefreshControl';

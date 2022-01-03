@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { View, SafeAreaView, FlatList, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -12,6 +12,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 import * as fightApi from 'resources/fight/fight.api';
 import { FIGHT_STATUSES, FIGHT_SORT_OPTIONS } from 'resources/fight/fight.constants';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
 import Text from 'components/Text';

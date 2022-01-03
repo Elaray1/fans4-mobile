@@ -5,7 +5,6 @@ import {
   View,
   StatusBar,
   TouchableOpacity,
-  FlatList,
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
@@ -21,6 +20,7 @@ import * as chatApi from 'resources/chat/chat.api';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import SearchInput from 'components/SearchInput';

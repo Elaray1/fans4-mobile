@@ -1,15 +1,13 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import {
   SafeAreaView,
   View,
   StatusBar,
-  FlatList,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-import * as postApi from 'resources/post/post.api';
-
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Text from 'components/Text';
 

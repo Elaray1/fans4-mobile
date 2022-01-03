@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform,
+  SafeAreaView, View, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,6 +18,7 @@ import websocketsService from 'services/socket.service';
 import * as messageApi from 'resources/message/message.api';
 import * as messageActions from 'resources/message/message.actions';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import Input from 'components/Input';

@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {
-  FlatList,
-} from 'react-native';
+
+import FlatList from 'components/FlatList';
 
 const VIDEO_VIEWABILITY_CONFIG = { waitForInteraction: true, itemVisiblePercentThreshold: 1 };
 

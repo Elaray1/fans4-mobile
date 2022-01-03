@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  View, SafeAreaView, FlatList, ScrollView, ActivityIndicator, TouchableOpacity, Alert,
+  View, SafeAreaView, ScrollView, ActivityIndicator, TouchableOpacity, Alert,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -18,6 +18,7 @@ import analyticsService from 'services/analytics.service';
 
 import { ITEM_TYPES } from 'components/Header/Header.constants';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
 import Text from 'components/Text';

@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, StatusBar, ActivityIndicator, FlatList, Modal } from 'react-native';
+import { SafeAreaView, View, StatusBar, ActivityIndicator, Modal } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 
 import colors from 'themes/colors';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import Profile from 'components/FighterAccount/Profile';

@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform,
+  SafeAreaView, View, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import * as commentApi from 'resources/comment/comment.api';
 
 import analyticsService from 'services/analytics.service';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Comment from 'components/Comment';
 import Text from 'components/Text';

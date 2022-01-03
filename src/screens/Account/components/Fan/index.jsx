@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { View, ScrollView, ActivityIndicator, TouchableOpacity, Platform, FlatList } from 'react-native';
+import { View, ScrollView, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +15,7 @@ import websocketsService from 'services/socket.service';
 
 import useToast from 'hooks/useToast';
 
+import FlatList from 'components/FlatList';
 import Text from 'components/Text';
 import GrayscaledImage from 'components/GrayscaledImage';
 

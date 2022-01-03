@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import {
-  SafeAreaView, View, FlatList, TouchableOpacity, ActivityIndicator, ScrollView, Modal, Platform,
+  SafeAreaView, View, TouchableOpacity, ActivityIndicator, ScrollView, Modal, Platform,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 import SuccessIcon from 'assets/icons/success_24x24.svg';
 import AddFighterIcon from 'assets/icons/add-man.svg';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import SearchInput from 'components/SearchInput';
 import Text from 'components/Text';
@@ -22,6 +23,7 @@ import CustomRefreshControl from 'components/CustomRefreshControl';
 import * as userApi from 'resources/user/user.api';
 import { FIGHTER_TYPES, USER_TYPES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
+
 
 import { toFixLength } from 'helpers/modifyText';
 import { FANS4_ACCOUNT } from 'helpers/constants';

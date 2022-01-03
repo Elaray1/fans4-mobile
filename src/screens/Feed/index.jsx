@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView, AppState,
+  SafeAreaView, View, ActivityIndicator, ScrollView, AppState,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
@@ -19,6 +19,7 @@ import * as postApi from 'resources/post/post.api';
 
 import isSubscribedService from 'services/isSubscribed.service';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Post from 'components/Post';
 import Text from 'components/Text';

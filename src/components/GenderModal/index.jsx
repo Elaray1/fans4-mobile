@@ -8,13 +8,13 @@ import {
   Modal,
   Pressable,
   TouchableOpacity,
-  FlatList,
 } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
 import { FAN_GENDERS } from 'resources/user/user.constants';
 
+import FlatList from 'components/FlatList';
 import Text from 'components/Text';
 
 import TickIcon from 'assets/icons/tick.svg';

@@ -6,13 +6,13 @@ import {
   View,
   Modal,
   Pressable,
-  FlatList,
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import debounce from 'lodash.debounce';
 import { useTranslation } from 'react-i18next';
 
+import FlatList from 'components/FlatList';
 import Text from 'components/Text';
 import SearchInput from 'components/SearchInput';
 

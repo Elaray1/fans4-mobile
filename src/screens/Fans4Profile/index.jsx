@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import { View, ActivityIndicator, SafeAreaView, StatusBar, FlatList } from 'react-native';
+import { View, ActivityIndicator, SafeAreaView, StatusBar } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import FastImage from 'react-native-fast-image';
 
+import FlatList from 'components/FlatList';
 import Text from 'components/Text';
 import Header from 'components/Header';
 import Post from 'components/Post';

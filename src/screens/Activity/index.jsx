@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, ScrollView,
+  SafeAreaView, View, ActivityIndicator, ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused, useNavigation, useScrollToTop } from '@react-navigation/native';
@@ -20,6 +20,7 @@ import NoAcitivtiesIllustration from 'assets/illustrations/no-events.svg';
 import ChatIcon from 'assets/icons/chat.svg';
 import UnreadChatIcon from 'assets/icons/unread-chat.svg';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import CustomRefreshControl from 'components/CustomRefreshControl';

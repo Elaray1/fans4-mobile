@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import {
-  SafeAreaView, View, FlatList, ActivityIndicator, TouchableOpacity, ScrollView,
+  SafeAreaView, View, ActivityIndicator, TouchableOpacity, ScrollView,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import * as userSelectors from 'resources/user/user.selectors';
 import { EVENT_STATUSES, LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
 import { USER_TYPES } from 'resources/user/user.constants';
 
+import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Text from 'components/Text';
 import Toggle from 'components/Toggle';

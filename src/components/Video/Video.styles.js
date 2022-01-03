@@ -1,14 +1,8 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
-import { variables } from 'themes/commonStyles';
-
 import hexToRgba from 'helpers/hexToRgba';
-
-const { width } = Dimensions.get('window');
-
-const progressBarWidth = width - variables.paddingHorizontal;
 
 export default StyleSheet.create({
   container: {
@@ -153,9 +147,9 @@ export default StyleSheet.create({
     bottom: 16,
   },
   progressBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: progressBarWidth,
+    position: 'absolute',
+    left: 8,
+    bottom: 16,
     height: 6,
     backgroundColor: hexToRgba(colors.primary, 0.15),
     borderRadius: 5,
@@ -167,6 +161,9 @@ export default StyleSheet.create({
     borderBottomLeftRadius: 5,
   },
   progressBarCircleWrapper: {
+    position: 'absolute',
+    top: -5,
+    right: -2,
     alignItems: 'center',
     justifyContent: 'center',
     width: 16,

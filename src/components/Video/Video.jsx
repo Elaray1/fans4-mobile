@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState, useMemo, useEffect, useImperativeHandle } from 'react';
-import { TouchableOpacity, Pressable, View, Text, Modal, Platform, Dimensions, PanResponder } from 'react-native';
+import { TouchableOpacity, Pressable, View, Text, Modal, Platform,
+  PanResponder, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import ReactNativeVideo from 'react-native-video';
 import FastImage from 'react-native-fast-image';
@@ -12,16 +13,12 @@ import PauseIcon from 'assets/icons/pause';
 import OpenVideoFullScreenIcon from 'assets/icons/openVideoFullScreen';
 import CloseVideoFullScreenIcon from 'assets/icons/closeVideoFullScreen';
 
-import { variables } from 'themes/commonStyles';
+import useOrientation from './hooks/useOrientation';
 
 import styles from './Video.styles';
 
 const MAX_VERTICAL_VIDEO_ASPECT_RATIO = 4 / 5;
 const CONTROLS_SHOWN_DURATION = 2 * 1000;
-
-const { width: windowWidth } = Dimensions.get('window');
-
-const progressBarWidth = windowWidth - variables.paddingHorizontal;
 
 const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
 
@@ -47,19 +44,21 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   const isVideoInEndedState = useRef(false);
   const isSeekedToLiveOnStart = useRef(false);
 
+  const { width: windowWidth } = useWindowDimensions();
+  const progressBarWidth = windowWidth - 16;
+
   const onProgressBarPositionChange = useCallback((event) => {
+    isVideoInEndedState.current = false;
+
     clearTimeout(controlsShowingTimeout?.current);
 
-    const locationXDuration = (event.nativeEvent.locationX) / progressBarWidth * duration;
-    const isVideoEnded = locationXDuration >= duration;
+    const newCurrectTime = (event.nativeEvent.locationX) / progressBarWidth * duration;
 
-    const newCurrectTime = isVideoEnded ? duration : locationXDuration;
     setPlayedTime(newCurrectTime);
     playedTimeAsRef.current = newCurrectTime;
-    videoRef.current.seek(newCurrectTime);
 
-    isVideoInEndedState.current = isVideoEnded;
-  }, [duration]);
+    videoRef.current.seek(newCurrectTime);
+  }, [duration, progressBarWidth]);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -219,7 +218,16 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
 
   const posterStyle = useMemo(() => [videoStyle, viewable && styles.posterOverVideo], [viewable, videoStyle]);
 
+  useOrientation({ isFullScreen });
+
   const Container = isFullScreen ? Modal : View;
+
+  const progressBarContainerWidthStyle = useMemo(() => ({ width: progressBarWidth }), [progressBarWidth]);
+
+  const progressBarWidthStyle = useMemo(() => ({
+    // 10 pixes is needed to adjust seeking anchor position
+    width: Math.max((playedTime / duration) * progressBarWidth, 10),
+  }), [playedTime, duration, progressBarWidth]);
 
   return (
     <Container visible style={!isFullScreen && styles.container}>
@@ -283,14 +291,10 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
 
             {isFullScreen && (
               <View
-                style={styles.progressBarWrapper}
+                style={[styles.progressBarContainer, progressBarContainerWidthStyle]}
                 {...panResponder.panHandlers}
-                hitSlop={{ top: 15, bottom: 15, left: 0, right: 0 }}
               >
-                <View
-                  style={styles.progressBarContainer}
-                >
-                  <View style={[styles.progressBar, { width: `${playedTime / duration * 100}%` }]} />
+                <View style={[styles.progressBar, progressBarWidthStyle]}>
                   <View style={styles.progressBarCircleWrapper}>
                     <View style={styles.progressBarCircle} />
                   </View>
