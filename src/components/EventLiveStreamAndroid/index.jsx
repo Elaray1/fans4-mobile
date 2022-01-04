@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 import { View, ActivityIndicator, useWindowDimensions,
-  TouchableOpacity, TouchableWithoutFeedback, Animated } from 'react-native';
+  TouchableOpacity, TouchableWithoutFeedback, Animated, StatusBar } from 'react-native';
 
 import PropTypes from 'prop-types';
 import { WebView } from 'react-native-webview';
@@ -98,6 +98,7 @@ const EventLiveStreamAndroid = ({
         }],
       }]}
     >
+      {!isPortraitOrientation && <StatusBar hidden />}
       {isPortraitOrientation && (
       <Header
         title={eventName}
@@ -134,12 +135,12 @@ const EventLiveStreamAndroid = ({
       </View>
 
       {!isPortraitOrientation && isHorizontalModeHeaderShown && (
-      <View style={styles.horizontalModeHeader}>
-        <TouchableOpacity activeOpacity={0.7} onPress={onClose}>
-          <CloseWithBackgroundIcon />
-        </TouchableOpacity>
-        <Text style={styles.horizontalModeTitle}>{eventName}</Text>
-      </View>
+        <View style={styles.horizontalModeHeader}>
+          <TouchableOpacity activeOpacity={0.7} onPress={onClose}>
+            <CloseWithBackgroundIcon />
+          </TouchableOpacity>
+          <Text style={styles.horizontalModeTitle}>{eventName}</Text>
+        </View>
       )}
     </Animated.View>
   );
