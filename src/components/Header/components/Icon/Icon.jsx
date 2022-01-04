@@ -62,7 +62,7 @@ Icon.propTypes = {
   icon: PropTypes.func,
   onPress: PropTypes.func,
   style: PropTypes.shape(),
-  type: PropTypes.oneOf([ITEM_TYPES.BACK_ARROW, ITEM_TYPES.MENU, ITEM_TYPES.DOTS, ITEM_TYPES.ICON]),
+  type: PropTypes.oneOf([ITEM_TYPES.BACK_ARROW, ITEM_TYPES.MENU, ITEM_TYPES.DOTS, ITEM_TYPES.ICON, ITEM_TYPES.CLOSE]),
 };
 
 Icon.defaultProps = {

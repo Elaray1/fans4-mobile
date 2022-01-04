@@ -74,9 +74,9 @@ const EventLiveStreamAndroid = ({
   const { width, height } = useWindowDimensions();
   const isPortraitOrientation = height > width;
 
-  const liveStreamSource = useMemo(() => ({
+  const liveStreamSource = useMemo(() => (eventStreamLink ? {
     uri: `${config.liveStreamPlayerUrl}/?link=${eventStreamLink}`,
-  }), [eventStreamLink]);
+  } : null), [eventStreamLink]);
 
   const [isHorizontalModeHeaderShown, setIsHorizontalModeHeaderShown] = useState(true);
   const { prolongControlsShowing } = useHorizontalModeHeader({
@@ -121,6 +121,7 @@ const EventLiveStreamAndroid = ({
             onMessage={onWebViewMessage}
             source={liveStreamSource}
             mediaPlaybackRequiresUserAction={false}
+            androidHardwareAccelerationDisabled
           />
         </TouchableWithoutFeedback>
         )}
