@@ -98,7 +98,7 @@ const EventLiveStreamAndroid = ({
         }],
       }]}
     >
-      {!isPortraitOrientation && <StatusBar hidden />}
+      {!isPortraitOrientation && visible && <StatusBar hidden />}
       {isPortraitOrientation && (
       <Header
         title={eventName}
