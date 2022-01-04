@@ -17,6 +17,7 @@ import websocketsService from 'services/socket.service';
 
 import * as messageApi from 'resources/message/message.api';
 import * as messageActions from 'resources/message/message.actions';
+import * as chatApi from 'resources/chat/chat.api';
 
 import FlatList from 'components/FlatList';
 import Header from 'components/Header';
@@ -61,9 +62,10 @@ function Chat({ route }) {
     userFullName: otherUserFullName,
     userAvatar: otherUserAvatar,
     chatId,
-    unreadMessagesCount,
+    unreadMessagesCount: unreadMessages,
     onGoBack,
     closingReason,
+    isFromNotification,
   } = route?.params;
 
   const textByClosingReason = useMemo(() => (closingReason ? {
@@ -76,6 +78,7 @@ function Chat({ route }) {
   const [messages, setMessages] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [messageValue, setMessageValue] = useState('');
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(unreadMessages || 0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -159,6 +162,10 @@ function Chat({ route }) {
   useEffect(() => {
     const fetchMessages = async () => {
       await fetchNewItems({ refresh: true });
+      if (isFromNotification) {
+        const chat = await chatApi.getChatByParticipantIds([otherUserId, user._id]);
+        setUnreadMessagesCount(chat.participants.find(p => p._id === user._id).unreadMessagesNumber);
+      }
     };
 
     fetchMessages();
@@ -327,8 +334,24 @@ function Chat({ route }) {
     if (onGoBack) {
       onGoBack();
     }
+    if (isFromNotification) {
+      if (user.role.type === USER_TYPES.FIGHTER) {
+        navigation.reset({
+          index: 1,
+          routes: [{ name: 'AppStack', params: { screen: 'Activity' } }, {
+            name: 'AppStack',
+            state: {
+              routes: [{ name: 'ChatsList' }],
+            },
+          }],
+        });
+        return;
+      }
+      navigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'Account' } }] });
+      return;
+    }
     navigation.goBack();
-  }, [navigation, onGoBack]);
+  }, [isFromNotification, navigation, onGoBack, user.role.type]);
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
@@ -514,8 +537,9 @@ Chat.propTypes = {
       userFullName: PropTypes.string.isRequired,
       userAvatar: PropTypes.string,
       chatId: PropTypes.string.isRequired,
-      unreadMessagesCount: PropTypes.number.isRequired,
+      unreadMessagesCount: PropTypes.number,
       onGoBack: PropTypes.func,
+      isFromNotification: PropTypes.bool,
     }),
   }).isRequired,
 };

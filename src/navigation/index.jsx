@@ -225,6 +225,20 @@ const pushNotificationHandlersByType = {
 
     rootNavigation.navigate('EventFights', { event: parsedEvent });
   },
+  [PUSH_NOTIFICATION_TYPES.NEW_MESSAGE]: ({ chat, userId }) => {
+    const parsedChat = JSON.parse(chat);
+
+    const otherUser = parsedChat.participants.find(p => p._id !== userId);
+
+    rootNavigation.navigate('Chat', {
+      userId: otherUser._id,
+      userFullName: otherUser.name,
+      userAvatar: otherUser.avatarUrl,
+      chatId: parsedChat._id,
+      isFromNotification: true,
+      closingReason: parsedChat.closingReason,
+    });
+  },
 };
 
 function AppNavigation() {
