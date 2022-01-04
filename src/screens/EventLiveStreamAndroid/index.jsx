@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
-import { SafeAreaView, View, ActivityIndicator, useWindowDimensions,
-  TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react';
+import { View, ActivityIndicator, useWindowDimensions,
+  TouchableOpacity, TouchableWithoutFeedback, Animated } from 'react-native';
 
 import PropTypes from 'prop-types';
-import { useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import Orientation from 'react-native-orientation-locker';
 
@@ -21,17 +20,40 @@ import useHorizontalModeHeader from './hooks/useHorizontaModeHeader';
 
 import styles from './styles';
 
-const EventLiveStreamAndroid = ({ route }) => {
-  const { eventId, eventName, eventStreamLink: prefetchedEventStreamLink } = route.params;
+const initialAnimationValue = -50;
 
-  const navigation = useNavigation();
+const EventLiveStreamAndroid = ({
+  visible,
+  eventId,
+  eventName,
+  eventStreamLink: prefetchedEventStreamLink,
+  onClose,
+}) => {
+  const animation = useRef(new Animated.Value(initialAnimationValue)).current;
 
   const [eventStreamLink, setEventStreamLink] = useState(prefetchedEventStreamLink);
   const [isLoading, setIsLoading] = useState(true);
 
-  const goBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+
+  useEffect(() => {
+    if (visible) {
+      setIsLoading(true);
+      Animated.timing(animation, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        setIsLoading(false);
+      });
+    } else {
+      Animated.timing(animation, {
+        toValue: initialAnimationValue,
+        duration: 10,
+        useNativeDriver: true,
+      }).start();
+      setIsLoading(true);
+    }
+  }, [animation, visible]);
 
   useEffect(() => {
     const getStreamLink = async () => {
@@ -69,60 +91,65 @@ const EventLiveStreamAndroid = ({ route }) => {
   }, [prolongControlsShowing]);
 
   return (
-    <>
-      <SafeAreaView style={styles.screen}>
-        {isPortraitOrientation && (
-          <Header
-            title={eventName}
-            leftItemType="close"
-            onLeftItemPress={goBack}
+    <Animated.View
+      style={[styles.wrapper, !visible && { height: 0, width: 0 }, {
+        transform: [{
+          translateY: animation,
+        }],
+      }]}
+    >
+      {isPortraitOrientation && (
+      <Header
+        title={eventName}
+        leftItemType="close"
+        onLeftItemPress={onClose}
+      />
+      )}
+
+      <View style={styles.container}>
+        {eventStreamLink && (
+        <TouchableWithoutFeedback
+          onPress={prolongControlsShowing}
+          style={[styles.webViewPressableContainer, isLoading && { width: 0, height: 0 }]}
+        >
+          <WebView
+            scrollEnabled={false}
+            nestedScrollEnabled={false}
+            cacheEnabled={false}
+            allowsFullscreenVideo
+            style={styles.webView}
+            onMessage={onWebViewMessage}
+            source={liveStreamSource}
+            mediaPlaybackRequiresUserAction={false}
           />
+        </TouchableWithoutFeedback>
         )}
 
-        <View style={styles.container}>
-          {eventStreamLink && (
-            <TouchableWithoutFeedback onPress={prolongControlsShowing} style={styles.webViewPressableContainer}>
-              <WebView
-                scrollEnabled={false}
-                nestedScrollEnabled={false}
-                cacheEnabled={false}
-                allowsFullscreenVideo
-                style={styles.webView}
-                onMessage={onWebViewMessage}
-                source={liveStreamSource}
-                mediaPlaybackRequiresUserAction={false}
-              />
-            </TouchableWithoutFeedback>
-          )}
-
-          {(!eventStreamLink || isLoading) && (
-            <View style={styles.loadingView}>
-              <ActivityIndicator size="large" color={colors.primary} />
-            </View>
-          )}
+        {(!eventStreamLink || isLoading) && (
+        <View style={styles.loadingView}>
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
-
-        {!isPortraitOrientation && isHorizontalModeHeaderShown && (
-          <View style={styles.horizontalModeHeader}>
-            <TouchableOpacity activeOpacity={0.7} onPress={goBack}>
-              <CloseWithBackgroundIcon />
-            </TouchableOpacity>
-            <Text style={styles.horizontalModeTitle}>{eventName}</Text>
-          </View>
         )}
-      </SafeAreaView>
-    </>
+      </View>
+
+      {!isPortraitOrientation && isHorizontalModeHeaderShown && (
+      <View style={styles.horizontalModeHeader}>
+        <TouchableOpacity activeOpacity={0.7} onPress={onClose}>
+          <CloseWithBackgroundIcon />
+        </TouchableOpacity>
+        <Text style={styles.horizontalModeTitle}>{eventName}</Text>
+      </View>
+      )}
+    </Animated.View>
   );
 };
 
 EventLiveStreamAndroid.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({
-      eventId: PropTypes.string.isRequired,
-      eventName: PropTypes.string.isRequired,
-      eventStreamLink: PropTypes.string,
-    }),
-  }).isRequired,
+  visible: PropTypes.bool.isRequired,
+  eventId: PropTypes.string.isRequired,
+  eventName: PropTypes.string.isRequired,
+  eventStreamLink: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default React.memo(EventLiveStreamAndroid);

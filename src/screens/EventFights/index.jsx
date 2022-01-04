@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -15,13 +15,14 @@ import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
 import Text from 'components/Text';
-import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
+import EventLiveStreamAndroidModal from 'screens/EventLiveStreamAndroid';
 
 import colors from 'themes/colors';
 
 import { EVENT_STATUSES, LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 import { USER_TYPES } from 'resources/user/user.constants';
+import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
 
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
@@ -62,6 +63,8 @@ function EventFights({ route }) {
   const [eventStreamLink, setEventStreamLink] = useState(null);
 
   const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
+  const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(false);
+  const [isAndroidStreamModal, setIsAndroidStreamModal] = useState(false);
 
   const onReadyToPlayIos = useCallback(() => {
     setIsLiveStreamLoadingIos(false);
@@ -92,12 +95,8 @@ function EventFights({ route }) {
       return;
     }
 
-    navigation.navigate('EventLiveStreamAndroid', {
-      eventId: event._id,
-      eventName: event.name,
-      eventStreamLink,
-    });
-  }, [navigation, event.name, event._id, eventStreamLink]);
+    setIsAndroidStreamModalVisible(true);
+  }, []);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -148,6 +147,24 @@ function EventFights({ route }) {
   }, [onShowLiveStream, onOpenCountdownTimer,
     isLiveStream, isLiveStreamLoadingIos, event.status]);
 
+  const onCloseAndroidStreamModal = useCallback(() => {
+    setIsAndroidStreamModalVisible(false);
+  }, []);
+
+  const onGoBack = useCallback(async () => {
+    setIsAndroidStreamModal(false);
+    navigation.goBack();
+  }, [navigation]);
+
+  // Render EventLiveStreamAndroidModal after first render to avoid app crash
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      setTimeout(() => {
+        setIsAndroidStreamModal(true);
+      }, 500);
+    }
+  }, []);
+
   return (
     <>
       <CountdownTimer
@@ -155,10 +172,22 @@ function EventFights({ route }) {
         event={event}
         onClose={onCloseCountTimerModal}
       />
+      {Platform.OS === 'android' && eventStreamLink && isAndroidStreamModal
+      && (
+      <EventLiveStreamAndroidModal
+        visible={isAndroidStreamModalVisible}
+        eventId={event._id}
+        eventName={event.name}
+        eventStreamLink={eventStreamLink}
+        onClose={onCloseAndroidStreamModal}
+      />
+      )
+      }
       <SafeAreaView style={styles.screen}>
         <Header
           title={event.name}
           leftItemType="backArrow"
+          onLeftItemPress={onGoBack}
         />
 
         <View style={styles.content}>
