@@ -1,12 +1,13 @@
 import { StyleSheet } from 'react-native';
 
-import { commonStyles } from 'themes/commonStyles';
 import colors from 'themes/colors';
 
 
 export default StyleSheet.create({
-  screen: {
-    ...commonStyles.screen,
+  wrapper: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: colors.main,
   },
   container: {
     flex: 1,
@@ -25,7 +26,6 @@ export default StyleSheet.create({
   webView: {
     marginTop: 1,
     backgroundColor: colors.black,
-    flex: 1,
   },
   horizontalModeHeader: {
     position: 'absolute',
@@ -38,6 +38,5 @@ export default StyleSheet.create({
     marginLeft: 16,
   },
   webViewPressableContainer: {
-    flex: 1,
   },
 });
