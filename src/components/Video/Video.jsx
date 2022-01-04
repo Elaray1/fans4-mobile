@@ -38,6 +38,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   const [isControlsShown, setIsControlsShown] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isPosterShown, setIsPosterShown] = useState(true);
+  const [isRewinding, setIsRewinding] = useState(false);
 
   const playedTimeAsRef = useRef(0);
   const videoRef = useRef(null);
@@ -50,6 +51,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
 
   const onProgressBarPositionChanging = useCallback((event) => {
     clearTimeout(controlsShowingTimeout?.current);
+    setIsRewinding(true);
 
     const locationXDuration = (event.nativeEvent.pageX) / progressBarWidth * duration;
     const isVideoEnded = locationXDuration >= duration;
@@ -61,6 +63,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
 
   const onProgressBarPositionChanged = useCallback((event) => {
     clearTimeout(controlsShowingTimeout?.current);
+    setIsRewinding(false);
 
     const locationXDuration = (event.nativeEvent.pageX) / progressBarWidth * duration;
     const isVideoEnded = locationXDuration >= duration;
@@ -174,6 +177,10 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   }, [seekToMakeThumbnail, onReadyToPlay]);
 
   const updateTiming = useCallback(({ currentTime, playableDuration, seekableDuration }) => {
+    if (isRewinding) {
+      return;
+    }
+
     if (!endLoadingDate && playableDuration > 0) {
       setEndLoadingDate(moment().toDate());
     }
@@ -185,7 +192,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
       isSeekedToLiveOnStart.current = true;
       videoRef.current.seek(seekableDuration);
     }
-  }, [endLoadingDate, isLive]);
+  }, [endLoadingDate, isLive, isRewinding]);
 
   const toggleFullScreen = useCallback(() => {
     if (setIsPosterShown) {
