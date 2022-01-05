@@ -22,6 +22,14 @@ import styles from './styles';
 
 const initialAnimationValue = -50;
 
+const muteSound = (isMuted) => {
+  return `
+    document.querySelectorAll('video').forEach(audio => {
+      audio.muted = ${isMuted};
+    });
+    true;`;
+};
+
 const EventLiveStreamAndroid = ({
   visible,
   eventId,
@@ -29,6 +37,7 @@ const EventLiveStreamAndroid = ({
   eventStreamLink: prefetchedEventStreamLink,
   onClose,
 }) => {
+  const webViewRef = useRef();
   const animation = useRef(new Animated.Value(initialAnimationValue)).current;
 
   const [eventStreamLink, setEventStreamLink] = useState(prefetchedEventStreamLink);
@@ -38,6 +47,7 @@ const EventLiveStreamAndroid = ({
   useEffect(() => {
     if (visible) {
       setIsLoading(true);
+      webViewRef.current?.injectJavaScript(muteSound(false));
       Animated.timing(animation, {
         toValue: 0,
         duration: 500,
@@ -46,6 +56,9 @@ const EventLiveStreamAndroid = ({
         setIsLoading(false);
       });
     } else {
+      if (webViewRef.current) {
+        webViewRef.current.injectJavaScript(muteSound(true));
+      }
       Animated.timing(animation, {
         toValue: initialAnimationValue,
         duration: 10,
@@ -90,6 +103,7 @@ const EventLiveStreamAndroid = ({
     }
   }, [prolongControlsShowing]);
 
+
   return (
     <Animated.View
       style={[styles.wrapper, !visible && { height: 0, width: 0 }, {
@@ -114,6 +128,7 @@ const EventLiveStreamAndroid = ({
           style={[styles.webViewPressableContainer, isLoading && { width: 0, height: 0 }]}
         >
           <WebView
+            ref={webViewRef}
             scrollEnabled={false}
             nestedScrollEnabled={false}
             cacheEnabled={false}
@@ -123,6 +138,7 @@ const EventLiveStreamAndroid = ({
             source={liveStreamSource}
             mediaPlaybackRequiresUserAction={false}
             androidHardwareAccelerationDisabled
+            injectedJavaScript={muteSound(false)}
           />
         </TouchableWithoutFeedback>
         )}

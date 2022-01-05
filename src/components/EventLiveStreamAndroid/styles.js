@@ -26,6 +26,7 @@ export default StyleSheet.create({
   webView: {
     marginTop: 1,
     backgroundColor: colors.black,
+    flex: 1,
   },
   horizontalModeHeader: {
     position: 'absolute',
@@ -38,5 +39,6 @@ export default StyleSheet.create({
     marginLeft: 16,
   },
   webViewPressableContainer: {
+    flex: 1,
   },
 });

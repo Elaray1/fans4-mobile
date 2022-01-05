@@ -164,8 +164,7 @@ function EventFights({ route }) {
         eventStreamLink={eventStreamLink}
         onClose={onCloseAndroidStreamModal}
       />
-      )
-      }
+      )}
       <SafeAreaView style={styles.screen}>
         <Header
           title={event.name}
