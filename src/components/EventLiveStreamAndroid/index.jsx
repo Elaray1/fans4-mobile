@@ -138,7 +138,7 @@ const EventLiveStreamAndroid = ({
             source={liveStreamSource}
             mediaPlaybackRequiresUserAction={false}
             androidHardwareAccelerationDisabled
-            injectedJavaScript={muteSound(false)}
+            injectedJavaScript={muteSound(true)}
           />
         </TouchableWithoutFeedback>
         )}
