@@ -253,12 +253,20 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   }), [playedTime, duration, progressBarWidth]);
 
   return (
-    <Container visible style={!isFullScreen && styles.container}>
-      <View
-        style={isFullScreen ? styles.fullScreenContainer : styles.container}
-        onLayout={handleRenderedContainerLayout}
+    <>
+      <Container
+        visible
+        style={!isFullScreen && styles.container}
+        {...Platform.OS === 'android' && {
+          onRequestClose: toggleFullScreen,
+          statusBarTranslucent: true,
+        }}
       >
-        {(!posterSource || !isPosterShown || viewable) && (
+        <View
+          style={isFullScreen ? styles.fullScreenContainer : styles.container}
+          onLayout={handleRenderedContainerLayout}
+        >
+          {(!posterSource || !isPosterShown || viewable) && (
           <ReactNativeVideo
             muted={muted}
             onFullscreenPlayerWillDismiss={onFullscreenPlayerWillDismiss}
@@ -277,42 +285,42 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
             progressUpdateInterval={300}
             onProgress={updateTiming}
           />
-        )}
+          )}
 
-        {posterSource && isPosterShown && (
+          {posterSource && isPosterShown && (
           <FastImage style={posterStyle} source={posterSource} />
-        )}
+          )}
 
-        {isControlsShown && (
-          <>
-            {paused && (
+          {isControlsShown && (
+            <>
+              {paused && (
               <View style={styles.playControlContainer}>
                 <TouchableOpacity onPress={play} activeOpacity={0.7}>
                   <PlayIcon />
                 </TouchableOpacity>
               </View>
-            )}
+              )}
 
-            {!paused && (
+              {!paused && (
               <View style={styles.playControlContainer}>
                 <TouchableOpacity onPress={pause} activeOpacity={0.7}>
                   <PauseIcon />
                 </TouchableOpacity>
               </View>
-            )}
+              )}
 
-            <View style={[styles.timingContainer, isFullScreen && styles.fullScreenTimingContainer]}>
-              <Text style={[styles.timingText, styles.playedTimeText]}>{formatDuration(playedTime)}</Text>
-              <Text style={[styles.timingText, styles.durationText]}> / {formatDuration(duration)}</Text>
-            </View>
+              <View style={[styles.timingContainer, isFullScreen && styles.fullScreenTimingContainer]}>
+                <Text style={[styles.timingText, styles.playedTimeText]}>{formatDuration(playedTime)}</Text>
+                <Text style={[styles.timingText, styles.durationText]}> / {formatDuration(duration)}</Text>
+              </View>
 
-            <View style={[styles.toggleFullScreenIconContainer, isFullScreen && styles.fullScreenIconContainer]}>
-              <TouchableOpacity onPress={Platform.OS === 'ios' ? showFullScreen : toggleFullScreen}>
-                {isFullScreen ? <CloseVideoFullScreenIcon /> : <OpenVideoFullScreenIcon />}
-              </TouchableOpacity>
-            </View>
+              <View style={[styles.toggleFullScreenIconContainer, isFullScreen && styles.fullScreenIconContainer]}>
+                <TouchableOpacity onPress={Platform.OS === 'ios' ? showFullScreen : toggleFullScreen}>
+                  {isFullScreen ? <CloseVideoFullScreenIcon /> : <OpenVideoFullScreenIcon />}
+                </TouchableOpacity>
+              </View>
 
-            {isFullScreen && (
+              {isFullScreen && (
               <View
                 style={[styles.progressBarContainer, progressBarContainerWidthStyle]}
                 {...panResponder.panHandlers}
@@ -324,13 +332,14 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
                   </View>
                 </View>
               </View>
-            )}
-          </>
-        )}
+              )}
+            </>
+          )}
 
-        {!isControlsShown && <Pressable style={styles.toggleControlsShowingContainer} onPress={showControls} />}
-      </View>
-    </Container>
+          {!isControlsShown && <Pressable style={styles.toggleControlsShowingContainer} onPress={showControls} />}
+        </View>
+      </Container>
+    </>
   );
 });
 
