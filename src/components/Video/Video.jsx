@@ -24,7 +24,7 @@ const PROGRESS_BAR_PADDING = 16;
 const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
 
 const Video = React.forwardRef(({ source, width, height, posterSource, duration, onReadyToPlay,
-  viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen,
+  viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen, onError,
 }, ref) => {
   const isFocused = useIsFocused();
 
@@ -286,6 +286,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
             resizeMode="cover"
             progressUpdateInterval={300}
             onProgress={updateTiming}
+            onError={onError}
           />
           )}
 
@@ -362,6 +363,7 @@ Video.propTypes = {
   onExitFullScreen: PropTypes.func,
   pauseOnFullScreen: PropTypes.bool,
   onReadyToPlay: PropTypes.func,
+  onError: PropTypes.func,
 };
 
 Video.defaultProps = {
@@ -375,6 +377,7 @@ Video.defaultProps = {
   muted: false,
   pauseOnFullScreen: true,
   onReadyToPlay: undefined,
+  onError: undefined,
 };
 
 export default React.memo(Video);

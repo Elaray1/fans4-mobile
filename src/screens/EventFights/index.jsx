@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -22,7 +22,6 @@ import { EVENT_STATUSES, LIVE_STREAM_STATUSES } from 'resources/event/event.cons
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 import { USER_TYPES } from 'resources/user/user.constants';
 import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
-
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
@@ -63,6 +62,8 @@ function EventFights({ route }) {
   const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
   const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(false);
 
+  const [isShowLiveStreamIOSWhenLoaded, setIsShowLiveStreamIOSWhenLoaded] = useState(false);
+
   const onReadyToPlayIos = useCallback(() => {
     setIsLiveStreamLoadingIos(false);
   }, []);
@@ -80,8 +81,17 @@ function EventFights({ route }) {
   } = useFetchItems({ eventId: event._id });
 
   const onEventUpdated = useCallback((updatedEvent) => {
-    setEvent(updatedEvent);
+    // Show live stream if countdown timer modal was opened
+    if (Platform.OS === 'ios') {
+      const isLiveEventStream = updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
 
+      if (isLiveEventStream) {
+        setIsLiveStreamLoadingIos(true);
+        setIsShowLiveStreamIOSWhenLoaded(true);
+      }
+    }
+
+    setEvent(updatedEvent);
     onRefresh();
   }, [onRefresh]);
 
@@ -100,6 +110,19 @@ function EventFights({ route }) {
 
     setIsAndroidStreamModalVisible(true);
   }, []);
+
+  useEffect(() => {
+    if (isShowLiveStreamIOSWhenLoaded && !isLiveStreamLoadingIos) {
+      setIsShowLiveStreamIOSWhenLoaded(false);
+
+      if (isCountdownTimerModalVisible) {
+        setIsCountdownTimerModalVisible(false);
+        setTimeout(() => {
+          onShowLiveStream();
+        }, 0);
+      }
+    }
+  }, [isShowLiveStreamIOSWhenLoaded, isLiveStreamLoadingIos, onShowLiveStream, isCountdownTimerModalVisible]);
 
   const keyExtractor = useCallback(item => item._id, []);
 

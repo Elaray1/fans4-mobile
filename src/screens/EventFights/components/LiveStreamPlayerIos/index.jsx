@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 
@@ -9,28 +9,34 @@ import Video from 'components/Video';
 import styles from './styles';
 
 const LiveStreamPlayerIos = React.forwardRef(({ eventId, muted, onReadyToPlay, onExitFullScreen }, ref) => {
+  const [key, setKey] = useState(1);
   const [eventStreamLink, setEventStreamLink] = useState(null);
   const [width, setWidth] = useState(1920);
   const [height, setHeight] = useState(1080);
 
-  useEffect(() => {
-    const getStreamLink = async () => {
-      if (!eventStreamLink) {
-        const { link, width: streamWidth, height: streamHeight } = await eventApi.getStreamLinkByEventId(eventId);
+  const getStreamLink = useCallback(async ({ refresh } = {}) => {
+    if (!eventStreamLink || refresh) {
+      const { link, width: streamWidth, height: streamHeight } = await eventApi.getStreamLinkByEventId(eventId);
 
-        setEventStreamLink(link);
-        setWidth(streamWidth);
-        setHeight(streamHeight);
-      }
-    };
-
-    getStreamLink();
+      setEventStreamLink(link);
+      setWidth(streamWidth);
+      setHeight(streamHeight);
+    }
   }, [eventStreamLink, eventId]);
+
+  const onVideoError = useCallback(() => {
+    getStreamLink({ refresh: true });
+    setKey(k => k + 1);
+  }, [getStreamLink]);
+
+  useEffect(() => {
+    getStreamLink();
+  }, [getStreamLink]);
 
   const videoSource = useMemo(() => ({ uri: eventStreamLink }), [eventStreamLink]);
 
   return (
-    <View style={styles.videoContainer}>
+    <View style={styles.videoContainer} key={key}>
       <Video
         ref={ref}
         isLive
@@ -43,6 +49,7 @@ const LiveStreamPlayerIos = React.forwardRef(({ eventId, muted, onReadyToPlay, o
         onExitFullScreen={onExitFullScreen}
         pauseOnFullScreen={false}
         onReadyToPlay={onReadyToPlay}
+        onError={onVideoError}
       />
     </View>
   );
