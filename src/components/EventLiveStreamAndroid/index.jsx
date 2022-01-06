@@ -14,6 +14,8 @@ import Text from 'components/Text';
 
 import colors from 'themes/colors';
 
+import useIsConnected from 'hooks/useIsConnected';
+
 import useHorizontalModeHeader from './hooks/useHorizontaModeHeader';
 import useOrientation from './hooks/useOrientation';
 import useStreamLink from './hooks/useStreamLink';
@@ -41,12 +43,24 @@ const EventLiveStreamAndroid = ({
 }) => {
   const webViewRef = useRef();
   const animation = useRef(new Animated.Value(initialAnimationValue)).current;
+  const [key, setKey] = useState(1);
 
   const [eventStreamLink, setEventStreamLink] = useState(prefetchedEventStreamLink);
   const [isLoading, setIsLoading] = useState(true);
 
+  const isConnected = useIsConnected();
+
   useOrientation();
   useStreamLink({ eventStreamLink, eventId, setEventStreamLink });
+
+  useEffect(() => {
+    if (!isConnected) {
+      setIsLoading(true);
+      return;
+    }
+
+    setIsLoading(false);
+  }, [isConnected]);
 
   useEffect(() => {
     if (visible) {
@@ -90,11 +104,20 @@ const EventLiveStreamAndroid = ({
   });
 
   const onWebViewMessage = useCallback((msg) => {
+    if (msg.nativeEvent.data.includes('consoleError')) {
+      setIsLoading(true);
+      setKey(k => k + 1);
+    }
+
     if (msg.nativeEvent.data === 'video_started') {
       prolongControlsShowing();
       setIsLoading(false);
     }
   }, [prolongControlsShowing]);
+
+  const onWebViewError = useCallback(() => {
+    setKey(k => k + 1);
+  }, []);
 
 
   return (
@@ -121,6 +144,7 @@ const EventLiveStreamAndroid = ({
             style={[styles.webViewPressableContainer, isLoading && emptySizeStyles]}
           >
             <WebView
+              key={key}
               ref={webViewRef}
               scrollEnabled={false}
               nestedScrollEnabled={false}
@@ -132,6 +156,7 @@ const EventLiveStreamAndroid = ({
               mediaPlaybackRequiresUserAction={false}
               androidHardwareAccelerationDisabled
               injectedJavaScript={muteSound(true)}
+              onError={onWebViewError}
             />
           </TouchableWithoutFeedback>
         )}
