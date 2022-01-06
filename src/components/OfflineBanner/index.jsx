@@ -1,29 +1,24 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
   Animated,
 } from 'react-native';
-import NetInfo from '@react-native-community/netinfo';
 import { useTranslation } from 'react-i18next';
 
 import OfflineIcon from 'assets/icons/offline';
+
+import useIsConnected from 'hooks/useIsConnected';
 
 import styles from './styles';
 
 const initialAnimationValue = -50;
 
 function OfflineBanner() {
-  const [isConnected, setIsConneted] = useState(false);
+  const isConnected = useIsConnected();
   const { t } = useTranslation();
 
   const animation = useRef(new Animated.Value(initialAnimationValue)).current;
-
-  useEffect(() => {
-    NetInfo.addEventListener((state) => {
-      setIsConneted(state.isConnected);
-    });
-  }, []);
 
   useEffect(() => {
     if (!isConnected) {
