@@ -155,15 +155,14 @@ function EventFights({ route }) {
         event={event}
         onClose={onCloseCountTimerModal}
       />
-      {Platform.OS === 'android' && eventStreamLink
-      && (
-      <EventLiveStreamAndroidModal
-        visible={isAndroidStreamModalVisible}
-        eventId={event._id}
-        eventName={event.name}
-        eventStreamLink={eventStreamLink}
-        onClose={onCloseAndroidStreamModal}
-      />
+      {Platform.OS === 'android' && eventStreamLink && (
+        <EventLiveStreamAndroidModal
+          visible={isAndroidStreamModalVisible}
+          eventId={event._id}
+          eventName={event.name}
+          eventStreamLink={eventStreamLink}
+          onClose={onCloseAndroidStreamModal}
+        />
       )}
       <SafeAreaView style={styles.screen}>
         <Header
@@ -193,13 +192,13 @@ function EventFights({ route }) {
               )}
 
               {Platform.OS === 'ios' && isLiveStream && (
-              <LiveStreamPlayerIos
-                ref={streamVideoRefIos}
-                eventId={event._id}
-                muted={!isLiveStreamShownIos}
-                onExitFullScreen={onExitFullScreenIos}
-                onReadyToPlay={onReadyToPlayIos}
-              />
+                <LiveStreamPlayerIos
+                  ref={streamVideoRefIos}
+                  eventId={event._id}
+                  muted={!isLiveStreamShownIos}
+                  onExitFullScreen={onExitFullScreenIos}
+                  onReadyToPlay={onReadyToPlayIos}
+                />
               )}
 
               {isUpcoming && (
