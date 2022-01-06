@@ -71,10 +71,6 @@ function EventFights({ route }) {
     setIsLiveStreamShownIos(false);
   }, []);
 
-  useAnalytics({ isFan, eventId: event._id });
-  useEventUpdated({ eventId: event._id, onEventUpdated: setEvent });
-  usePrefetchStreamLinkAndroid({ eventId: event._id, setEventStreamLink, streamStatus: event.liveStream.status });
-
   const {
     fights,
     isLoading,
@@ -82,6 +78,18 @@ function EventFights({ route }) {
     onRefresh,
     fetchNewItems,
   } = useFetchItems({ eventId: event._id });
+
+  const onEventUpdated = useCallback((updatedEvent) => {
+    setEvent(updatedEvent);
+
+    if (event.fights !== updatedEvent.fights) {
+      onRefresh();
+    }
+  }, [event.fights, onRefresh]);
+
+  useAnalytics({ isFan, eventId: event._id });
+  useEventUpdated({ eventId: event._id, onEventUpdated });
+  usePrefetchStreamLinkAndroid({ eventId: event._id, setEventStreamLink, streamStatus: event.liveStream.status });
 
 
   const onShowLiveStream = useCallback(() => {
