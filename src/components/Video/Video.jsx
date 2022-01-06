@@ -252,15 +252,17 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
     width: Math.max((playedTime / duration) * progressBarWidth, 10),
   }), [playedTime, duration, progressBarWidth]);
 
+  const androidModalProps = useMemo(() => ({
+    onRequestClose: toggleFullScreen,
+    statusBarTranslucent: true,
+  }), [toggleFullScreen]);
+
   return (
     <>
       <Container
         visible
         style={!isFullScreen && styles.container}
-        {...Platform.OS === 'android' && {
-          onRequestClose: toggleFullScreen,
-          statusBarTranslucent: true,
-        }}
+        {...Platform.OS === 'android' && androidModalProps}
       >
         <View
           style={isFullScreen ? styles.fullScreenContainer : styles.container}
