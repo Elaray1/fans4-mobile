@@ -52,6 +52,9 @@ export default StyleSheet.create({
   lineMargin: {
     marginVertical: 20,
   },
+  space: {
+    height: 10,
+  },
   blockTitle: {
     fontSize: fonts.size.small,
     lineHeight: fonts.lineHeight.small,

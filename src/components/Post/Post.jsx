@@ -77,7 +77,10 @@ function Post({
   const [isProcessingErrorPostButtonDisabled, setIsProcessingErrorPostButtonDisabled] = useState(false);
 
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
-  const isSubscribedOrAuthor = userType === USER_TYPES.FIGHTER || userSubscriptions.some(f => f._id === author._id);
+
+  const isSubscribedOrAuthor = userType === USER_TYPES.FIGHTER
+  || userSubscriptions.some(f => f._id === author._id)
+  || author._id === 'fans4';
 
   const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1} others` : ''}`;
   const isPostAuthor = userId === author?._id;
