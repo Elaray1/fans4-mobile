@@ -179,7 +179,7 @@ function Events() {
   }, [selectedTab.id]);
 
   const onEventPress = useCallback((event) => {
-    navigation.navigate('EventFights', { event });
+    navigation.navigate('EventFights', { event, isNeedToFetchEvent: true });
   }, [navigation]);
 
   const keyExtractor = useCallback(item => item._id, []);

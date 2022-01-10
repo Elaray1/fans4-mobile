@@ -67,7 +67,7 @@ const CountdownTimer = ({ visible, event, onClose }) => {
   }, [eventDate]);
 
   return (
-    <Modal visible={visible}>
+    <Modal visible={visible} animationType="slide">
       <View style={styles.container}>
         <View style={styles.header}>
           <Header

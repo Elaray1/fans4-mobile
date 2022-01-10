@@ -23,10 +23,20 @@ const PROGRESS_BAR_PADDING = 16;
 
 const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
 
+let keyCounter = 0;
+const updateVideoKey = (value) => {
+  keyCounter += 1;
+
+  return `${value}-${keyCounter}`;
+};
+
 const Video = React.forwardRef(({ source, width, height, posterSource, duration, onReadyToPlay,
-  viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen, onError,
+  viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen,
 }, ref) => {
   const isFocused = useIsFocused();
+
+  const [key, setKey] = useState(undefined);
+  const [updateTimeoutId, setUpdateTimeoutId] = useState(null);
 
   const [paused, setPaused] = useState(!playOnStart);
   const [renderingWidth, setRenderingWidth] = useState(0);
@@ -222,6 +232,17 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
     }
   }, [pause, pauseOnFullScreen, onExitFullScreen]);
 
+  const onError = useCallback(() => {
+    if (!updateTimeoutId) {
+      // Using setTimeout to decrease renders count
+      const id = setTimeout(() => {
+        setUpdateTimeoutId();
+        setKey(updateVideoKey(source?.uri));
+      }, 2000);
+      setUpdateTimeoutId(id);
+    }
+  }, [source, updateTimeoutId]);
+
   useEffect(() => {
     if (!paused && (!viewable || !isFocused) && !isFullScreen) {
       pause();
@@ -270,6 +291,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
         >
           {(!posterSource || !isPosterShown || viewable) && (
           <ReactNativeVideo
+            key={key}
             muted={muted}
             onFullscreenPlayerWillDismiss={onFullscreenPlayerWillDismiss}
             onLoadStart={handleOnLoadStartEvent}
@@ -363,7 +385,6 @@ Video.propTypes = {
   onExitFullScreen: PropTypes.func,
   pauseOnFullScreen: PropTypes.bool,
   onReadyToPlay: PropTypes.func,
-  onError: PropTypes.func,
 };
 
 Video.defaultProps = {
@@ -377,7 +398,6 @@ Video.defaultProps = {
   muted: false,
   pauseOnFullScreen: true,
   onReadyToPlay: undefined,
-  onError: undefined,
 };
 
 export default React.memo(Video);

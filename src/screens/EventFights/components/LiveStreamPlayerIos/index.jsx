@@ -9,13 +9,12 @@ import Video from 'components/Video';
 import styles from './styles';
 
 const LiveStreamPlayerIos = React.forwardRef(({ eventId, muted, onReadyToPlay, onExitFullScreen }, ref) => {
-  const [key, setKey] = useState(1);
   const [eventStreamLink, setEventStreamLink] = useState(null);
   const [width, setWidth] = useState(1920);
   const [height, setHeight] = useState(1080);
 
-  const getStreamLink = useCallback(async ({ refresh } = {}) => {
-    if (!eventStreamLink || refresh) {
+  const getStreamLink = useCallback(async () => {
+    if (!eventStreamLink) {
       const { link, width: streamWidth, height: streamHeight } = await eventApi.getStreamLinkByEventId(eventId);
 
       setEventStreamLink(link);
@@ -24,11 +23,6 @@ const LiveStreamPlayerIos = React.forwardRef(({ eventId, muted, onReadyToPlay, o
     }
   }, [eventStreamLink, eventId]);
 
-  const onVideoError = useCallback(() => {
-    getStreamLink({ refresh: true });
-    setKey(k => k + 1);
-  }, [getStreamLink]);
-
   useEffect(() => {
     getStreamLink();
   }, [getStreamLink]);
@@ -36,7 +30,7 @@ const LiveStreamPlayerIos = React.forwardRef(({ eventId, muted, onReadyToPlay, o
   const videoSource = useMemo(() => ({ uri: eventStreamLink }), [eventStreamLink]);
 
   return (
-    <View style={styles.videoContainer} key={key}>
+    <View style={styles.videoContainer}>
       <Video
         ref={ref}
         isLive
@@ -49,7 +43,6 @@ const LiveStreamPlayerIos = React.forwardRef(({ eventId, muted, onReadyToPlay, o
         onExitFullScreen={onExitFullScreen}
         pauseOnFullScreen={false}
         onReadyToPlay={onReadyToPlay}
-        onError={onVideoError}
       />
     </View>
   );
