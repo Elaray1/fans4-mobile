@@ -82,10 +82,8 @@ function EventFights({ route }) {
   const onEventUpdated = useCallback((updatedEvent) => {
     setEvent(updatedEvent);
 
-    if (event.fights !== updatedEvent.fights) {
-      onRefresh();
-    }
-  }, [event.fights, onRefresh]);
+    onRefresh();
+  }, [onRefresh]);
 
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
