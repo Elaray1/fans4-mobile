@@ -39,7 +39,11 @@ export default StyleSheet.create({
   loader: {
     margin: 15,
   },
+  postsWhenRefreshing: {
+    paddingBottom: 20,
+  },
   posts: {
     paddingTop: 30,
+    paddingBottom: 20,
   },
 });
