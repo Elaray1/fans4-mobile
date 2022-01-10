@@ -10,6 +10,8 @@ import LiveIcon from 'assets/icons/live.svg';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
+import * as eventApi from 'resources/event/event.api';
+
 import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
@@ -43,7 +45,7 @@ const aspectRatioStyle = { aspectRatio: posterAspectRatio };
 function EventFights({ route }) {
   const { t } = useTranslation();
 
-  const { event: prefetchedEvent } = route?.params;
+  const { event: prefetchedEvent, isNeedToFetchEvent } = route?.params;
   const [event, setEvent] = useState(prefetchedEvent);
 
   const userType = useSelector(userSelectors.getUserType);
@@ -62,10 +64,16 @@ function EventFights({ route }) {
   const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
   const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(false);
 
-  const [isShowLiveStreamIOSWhenLoaded, setIsShowLiveStreamIOSWhenLoaded] = useState(false);
+  useEffect(() => {
+    const updateEventData = async () => {
+      const updatedEvent = await eventApi.getEvent(prefetchedEvent._id);
+      setEvent(updatedEvent);
+    };
 
-  const onReadyToPlayIos = useCallback(() => {
-    setIsLiveStreamLoadingIos(false);
+    if (isNeedToFetchEvent) {
+      updateEventData();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onExitFullScreenIos = useCallback(() => {
@@ -83,17 +91,16 @@ function EventFights({ route }) {
   const onEventUpdated = useCallback((updatedEvent) => {
     // Show live stream if countdown timer modal was opened
     if (Platform.OS === 'ios') {
-      const isLiveEventStream = updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
+      const isLiveUpdatedEventStream = updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
 
-      if (isLiveEventStream) {
+      if (isLiveUpdatedEventStream && !isLiveStream) {
         setIsLiveStreamLoadingIos(true);
-        setIsShowLiveStreamIOSWhenLoaded(true);
       }
     }
 
     setEvent(updatedEvent);
     onRefresh();
-  }, [onRefresh]);
+  }, [onRefresh, isLiveStream]);
 
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
@@ -110,19 +117,6 @@ function EventFights({ route }) {
 
     setIsAndroidStreamModalVisible(true);
   }, []);
-
-  useEffect(() => {
-    if (isShowLiveStreamIOSWhenLoaded && !isLiveStreamLoadingIos) {
-      setIsShowLiveStreamIOSWhenLoaded(false);
-
-      if (isCountdownTimerModalVisible) {
-        setIsCountdownTimerModalVisible(false);
-        setTimeout(() => {
-          onShowLiveStream();
-        }, 0);
-      }
-    }
-  }, [isShowLiveStreamIOSWhenLoaded, isLiveStreamLoadingIos, onShowLiveStream, isCountdownTimerModalVisible]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -176,6 +170,18 @@ function EventFights({ route }) {
   const onCloseAndroidStreamModal = useCallback(() => {
     setIsAndroidStreamModalVisible(false);
   }, []);
+
+  const onReadyToPlayIos = useCallback(() => {
+    setIsLiveStreamLoadingIos(false);
+
+    if (isCountdownTimerModalVisible) {
+      setIsCountdownTimerModalVisible(false);
+      // Using setTimeout to open stream modal after closing countdown modal
+      setTimeout(() => {
+        onShowLiveStream();
+      }, 0);
+    }
+  }, [onShowLiveStream, isCountdownTimerModalVisible]);
 
   return (
     <>
