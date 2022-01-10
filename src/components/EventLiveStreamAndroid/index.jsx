@@ -28,8 +28,8 @@ const emptySizeStyles = { height: 0, width: 0 };
 
 const muteSound = (isMuted) => {
   return `
-    document.querySelectorAll('video').forEach(audio => {
-      audio.muted = ${isMuted};
+    document.querySelectorAll('video').forEach(video => {
+      video.muted = ${isMuted};
     });
     true;`;
 };
@@ -106,6 +106,7 @@ const EventLiveStreamAndroid = ({
   const onWebViewMessage = useCallback((msg) => {
     if (msg.nativeEvent.data.includes('consoleError')) {
       setIsLoading(true);
+
       // Updating key to force webview rerender if an error occured
       setKey(k => k + 1);
     }
@@ -156,8 +157,8 @@ const EventLiveStreamAndroid = ({
               onMessage={onWebViewMessage}
               source={liveStreamSource}
               mediaPlaybackRequiresUserAction={false}
-              androidHardwareAccelerationDisabled
-              injectedJavaScript={muteSound(true)}
+              androidLayerType={visible ? 'hardware' : 'software'}
+              injectedJavaScript={visible ? muteSound(false) : muteSound(true)}
               onError={onWebViewError}
             />
           </TouchableWithoutFeedback>
