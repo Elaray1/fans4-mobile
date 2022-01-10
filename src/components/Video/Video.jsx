@@ -36,7 +36,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   const isFocused = useIsFocused();
 
   const [key, setKey] = useState(undefined);
-  const [updateTimeoutId, setUpdateTimeoutId] = useState(null);
+  const timeoutId = useRef();
 
   const [paused, setPaused] = useState(!playOnStart);
   const [renderingWidth, setRenderingWidth] = useState(0);
@@ -233,15 +233,15 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   }, [pause, pauseOnFullScreen, onExitFullScreen]);
 
   const onError = useCallback(() => {
-    if (!updateTimeoutId) {
+    if (!timeoutId.current) {
       // Using setTimeout to decrease renders count
       const id = setTimeout(() => {
-        setUpdateTimeoutId();
+        timeoutId.current = null;
         setKey(updateVideoKey(source?.uri));
       }, 2000);
-      setUpdateTimeoutId(id);
+      timeoutId.current = id;
     }
-  }, [source, updateTimeoutId]);
+  }, [source]);
 
   useEffect(() => {
     if (!paused && (!viewable || !isFocused) && !isFullScreen) {
