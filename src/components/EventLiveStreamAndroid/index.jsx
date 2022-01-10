@@ -106,6 +106,7 @@ const EventLiveStreamAndroid = ({
   const onWebViewMessage = useCallback((msg) => {
     if (msg.nativeEvent.data.includes('consoleError')) {
       setIsLoading(true);
+      // Updating key to force webview rerender if an error occured
       setKey(k => k + 1);
     }
 
@@ -116,6 +117,7 @@ const EventLiveStreamAndroid = ({
   }, [prolongControlsShowing]);
 
   const onWebViewError = useCallback(() => {
+    // Updating key to force webview rerender if an error occured
     setKey(k => k + 1);
   }, []);
 
