@@ -30,7 +30,7 @@ function OfflineBanner() {
     } else {
       Animated.timing(animation, {
         toValue: initialAnimationValue,
-        duration: 10,
+        duration: 500,
         useNativeDriver: true,
       }).start();
     }
@@ -58,4 +58,4 @@ function OfflineBanner() {
   );
 }
 
-export default OfflineBanner;
+export default React.memo(OfflineBanner);
