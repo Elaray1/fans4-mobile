@@ -251,7 +251,7 @@ function EventFights({ route }) {
 
                 <Text style={styles.upcomingText}>
                   {`${t('Events.liveOn')} ${toLocalDateAndTime(event)} `}
-                  {`${t('Events.in')} ${event.location.cityName}, ${event.location.stateCode}`}
+                  {`${event.location.cityName}, ${event.location.stateCode}`}
                 </Text>
               </View>
               )}
