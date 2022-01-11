@@ -151,8 +151,11 @@ function SignIn({ route }) {
   }, [navigation, userType]);
 
   const onPressForgotPassword = useCallback(() => {
-    navigation.navigate('ForgotPassword', { userType });
-  }, [navigation, userType]);
+    navigation.navigate('ForgotPassword', {
+      userType,
+      ...validateEmail(emailValue) && { email: emailValue },
+    });
+  }, [navigation, userType, emailValue]);
 
 
   return (

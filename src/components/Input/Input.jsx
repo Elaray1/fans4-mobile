@@ -42,7 +42,7 @@ function Input({
   autoFocus,
   autogrowHeight,
 }) {
-  const [focused, setFocused] = useState(false);
+  const [focused, setFocused] = useState(autoFocus);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
 
   const inputRef = useRef(null);

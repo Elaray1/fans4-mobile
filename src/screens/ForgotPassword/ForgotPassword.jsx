@@ -30,14 +30,20 @@ function ForgotPassword({ route }) {
   const navigation = useNavigation();
   const { showFailure } = useToast();
 
-  const { userType } = route.params;
+  const { userType, email: initialEmail } = route.params;
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(initialEmail || '');
   const [isLoading, setIsLoading] = useState(false);
 
-  const onBackToSignIn = useCallback(() => {
-    navigation.navigate('SignIn');
-  }, [navigation]);
+  const [isInputFocused, setIsInputFocused] = useState(!initialEmail);
+
+  const onInputFocus = useCallback(() => {
+    setIsInputFocused(true);
+  }, []);
+
+  const onInputBlur = useCallback(() => {
+    setIsInputFocused(false);
+  }, []);
 
   const onButtonPress = useCallback(async () => {
     setIsLoading(true);
@@ -70,6 +76,9 @@ function ForgotPassword({ route }) {
               value={email}
               onChange={setEmail}
               autoCapitalize="none"
+              autoFocus={isInputFocused}
+              onFocus={onInputFocus}
+              onBlur={onInputBlur}
             />
           </View>
           <View style={styles.buttonContainer}>
@@ -77,11 +86,6 @@ function ForgotPassword({ route }) {
               title={t('ForgotPassword.button')}
               onPress={onButtonPress}
               disabled={!validateEmail(email) || isLoading}
-            />
-            <Button
-              title={t('ForgotPassword.link')}
-              onPress={onBackToSignIn}
-              type="link"
             />
           </View>
         </View>
@@ -94,6 +98,7 @@ ForgotPassword.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       userType: PropTypes.oneOf(Object.values(USER_TYPES)),
+      email: PropTypes.string,
     }),
   }).isRequired,
 };
