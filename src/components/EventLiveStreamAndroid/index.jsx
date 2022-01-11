@@ -34,12 +34,20 @@ const muteSound = (isMuted) => {
     true;`;
 };
 
+const pause = () => {
+  return `
+    document.querySelectorAll('video').forEach(video => {
+      video.pause();
+    });`;
+};
+
 const EventLiveStreamAndroid = ({
   visible,
   eventId,
   eventName,
   eventStreamLink: prefetchedEventStreamLink,
   onClose,
+  isPaused,
 }) => {
   const webViewRef = useRef();
   const animation = useRef(new Animated.Value(initialAnimationValue)).current;
@@ -61,6 +69,12 @@ const EventLiveStreamAndroid = ({
 
     setIsLoading(false);
   }, [isConnected]);
+
+  useEffect(() => {
+    if (isPaused) {
+      webViewRef.current.injectJavaScript(pause());
+    }
+  }, [isPaused]);
 
   useEffect(() => {
     if (visible) {
@@ -189,6 +203,7 @@ EventLiveStreamAndroid.propTypes = {
   eventName: PropTypes.string.isRequired,
   eventStreamLink: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
+  isPaused: PropTypes.bool.isRequired,
 };
 
 export default React.memo(EventLiveStreamAndroid);

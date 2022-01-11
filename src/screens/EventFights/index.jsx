@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
+import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform, AppState } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
@@ -56,6 +56,7 @@ function EventFights({ route }) {
   const isLive = event.status === EVENT_STATUSES.PAST && event.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED;
 
   const streamVideoRefIos = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
   const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState(isLiveStream && Platform.OS === 'ios');
   const [isLiveStreamShownIos, setIsLiveStreamShownIos] = useState(false);
 
@@ -183,6 +184,12 @@ function EventFights({ route }) {
     }
   }, [onShowLiveStream, isCountdownTimerModalVisible]);
 
+  AppState.addEventListener('change', (state) => {
+    if (state !== 'active') {
+      setIsPaused(true);
+    }
+  });
+
   return (
     <>
       <CountdownTimer
@@ -197,6 +204,7 @@ function EventFights({ route }) {
           eventName={event.name}
           eventStreamLink={eventStreamLink}
           onClose={onCloseAndroidStreamModal}
+          isPaused={isPaused}
         />
       )}
       <SafeAreaView style={styles.screen}>
@@ -233,6 +241,7 @@ function EventFights({ route }) {
                   muted={!isLiveStreamShownIos}
                   onExitFullScreen={onExitFullScreenIos}
                   onReadyToPlay={onReadyToPlayIos}
+                  isPaused={isPaused}
                 />
               )}
 
