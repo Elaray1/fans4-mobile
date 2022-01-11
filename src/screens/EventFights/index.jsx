@@ -89,14 +89,19 @@ function EventFights({ route }) {
   } = useFetchItems({ eventId: event._id });
 
   const onEventUpdated = useCallback((updatedEvent) => {
+    const isLiveUpdatedEventStream = updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
     // Show live stream if countdown timer modal was opened
-    if (Platform.OS === 'ios') {
-      const isLiveUpdatedEventStream = updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
-
-      if (isLiveUpdatedEventStream && !isLiveStream) {
+    if (isLiveUpdatedEventStream && !isLiveStream) {
+      if (Platform.OS === 'ios') {
         setIsLiveStreamLoadingIos(true);
       }
+
+      if (Platform.OS === 'android') {
+        setIsCountdownTimerModalVisible(false);
+        setIsAndroidStreamModalVisible(true);
+      }
     }
+
 
     setEvent(updatedEvent);
     onRefresh();

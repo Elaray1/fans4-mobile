@@ -43,10 +43,12 @@ const EventLiveStreamAndroid = ({
 }) => {
   const webViewRef = useRef();
   const animation = useRef(new Animated.Value(initialAnimationValue)).current;
-  const [key, setKey] = useState(1);
+  const intervalRef = useRef();
 
+  const [key, setKey] = useState(1);
   const [eventStreamLink, setEventStreamLink] = useState(prefetchedEventStreamLink);
   const [isLoading, setIsLoading] = useState(true);
+  const [isStarted, setIsStarted] = useState(false);
 
   const isConnected = useIsConnected();
 
@@ -59,8 +61,11 @@ const EventLiveStreamAndroid = ({
       return;
     }
 
+    if (isStarted) {
+      setIsLoading(false);
+    }
     setIsLoading(false);
-  }, [isConnected]);
+  }, [isConnected, isStarted]);
 
   useEffect(() => {
     if (visible) {
@@ -72,15 +77,15 @@ const EventLiveStreamAndroid = ({
         duration: 500,
         useNativeDriver: true,
       }).start(() => {
-        setIsLoading(false);
+        if (isStarted) {
+          setIsLoading(false);
+        }
       });
 
       return;
     }
 
-    if (webViewRef.current) {
-      webViewRef.current.injectJavaScript(muteSound(true));
-    }
+    webViewRef.current?.injectJavaScript(muteSound(true));
 
     Animated.timing(animation, {
       toValue: initialAnimationValue,
@@ -89,7 +94,21 @@ const EventLiveStreamAndroid = ({
     }).start();
 
     setIsLoading(true);
-  }, [animation, visible]);
+  }, [animation, visible, isStarted]);
+
+  // Updating webview if stream didn't start in 30 sec
+  useEffect(() => {
+    if (isStarted) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      setKey(k => k + 1);
+    }, 30000);
+    intervalRef.current = intervalId;
+  }, [isStarted]);
 
   const { width, height } = useWindowDimensions();
   const isPortraitOrientation = height > width;
@@ -114,6 +133,7 @@ const EventLiveStreamAndroid = ({
     if (msg.nativeEvent.data === 'video_started') {
       prolongControlsShowing();
       setIsLoading(false);
+      setIsStarted(true);
     }
   }, [prolongControlsShowing]);
 
