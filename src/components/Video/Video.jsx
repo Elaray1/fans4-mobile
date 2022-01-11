@@ -31,7 +31,7 @@ const updateVideoKey = (value) => {
 };
 
 const Video = React.forwardRef(({ source, width, height, posterSource, duration, onReadyToPlay,
-  viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen,
+  viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen, isPaused,
 }, ref) => {
   const isFocused = useIsFocused();
 
@@ -244,6 +244,12 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   }, [source]);
 
   useEffect(() => {
+    if (isPaused) {
+      setPaused(true);
+    }
+  }, [isPaused]);
+
+  useEffect(() => {
     if (!paused && (!viewable || !isFocused) && !isFullScreen) {
       pause();
     }
@@ -385,6 +391,7 @@ Video.propTypes = {
   onExitFullScreen: PropTypes.func,
   pauseOnFullScreen: PropTypes.bool,
   onReadyToPlay: PropTypes.func,
+  isPaused: PropTypes.bool.isRequired,
 };
 
 Video.defaultProps = {
