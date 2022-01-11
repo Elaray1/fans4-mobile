@@ -60,11 +60,12 @@ const EventLiveStreamAndroid = ({
 
   const isConnected = useIsConnected();
 
-  useOrientation();
+  useOrientation({ isVisible: visible });
   useStreamLink({ eventStreamLink, eventId, setEventStreamLink });
 
   useEffect(() => {
     if (!isConnected) {
+      webViewRef.current?.injectJavaScript(muteSound(true));
       setIsLoading(true);
       return;
     }
@@ -72,8 +73,12 @@ const EventLiveStreamAndroid = ({
     if (isStarted) {
       setIsLoading(false);
     }
-    setIsLoading(false);
-  }, [isConnected, isStarted]);
+
+    if (visible) {
+      webViewRef.current?.injectJavaScript(muteSound(false));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected]);
 
   useEffect(() => {
     if (isPaused) {
@@ -137,6 +142,8 @@ const EventLiveStreamAndroid = ({
   });
 
   const onWebViewMessage = useCallback((msg) => {
+    console.log(msg);
+
     if (msg.nativeEvent.data.includes('consoleError')) {
       setIsLoading(true);
 
@@ -152,6 +159,7 @@ const EventLiveStreamAndroid = ({
   }, [prolongControlsShowing]);
 
   const onWebViewError = useCallback(() => {
+    console.log('ERROR');
     // Updating key to force webview rerender if an error occured
     setKey(k => k + 1);
   }, []);
