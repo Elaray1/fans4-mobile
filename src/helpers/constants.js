@@ -20,6 +20,7 @@ export const PUSH_NOTIFICATION_TYPES = {
   NEW_EVENT_FIGHT_ADDED: 'new_event_fight_added',
   NEW_EVENT_FIGHTS_ADDED: 'new_event_fights_added',
   NEW_MESSAGE: 'new_message',
+  LIVE_EVENT_STARTED: 'live_event_started',
 };
 
 export const FANS4_ACCOUNT = {

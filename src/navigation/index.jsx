@@ -225,6 +225,11 @@ const pushNotificationHandlersByType = {
 
     rootNavigation.navigate('EventFights', { event: parsedEvent });
   },
+  [PUSH_NOTIFICATION_TYPES.LIVE_EVENT_STARTED]: ({ event }) => {
+    const parsedEvent = JSON.parse(event);
+
+    rootNavigation.navigate('EventFights', { event: parsedEvent });
+  },
   [PUSH_NOTIFICATION_TYPES.NEW_MESSAGE]: ({ chat, userId }) => {
     const parsedChat = JSON.parse(chat);
 
