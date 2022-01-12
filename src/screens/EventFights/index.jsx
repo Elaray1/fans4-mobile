@@ -45,7 +45,7 @@ const aspectRatioStyle = { aspectRatio: posterAspectRatio };
 function EventFights({ route }) {
   const { t } = useTranslation();
 
-  const { event: prefetchedEvent, isNeedToFetchEvent } = route?.params;
+  const { event: prefetchedEvent, isNeedToFetchEvent, isOpenStreamModal } = route?.params;
   const [event, setEvent] = useState(prefetchedEvent);
 
   const userType = useSelector(userSelectors.getUserType);
@@ -64,6 +64,8 @@ function EventFights({ route }) {
 
   const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
   const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(false);
+
+  const [isOpenStreamModalNeeded, setIsOpenStreamModalNeeded] = useState(isOpenStreamModal);
 
   useEffect(() => {
     const updateEventData = async () => {
@@ -189,6 +191,13 @@ function EventFights({ route }) {
     }
   }, [onShowLiveStream, isCountdownTimerModalVisible]);
 
+  useEffect(() => {
+    if (isOpenStreamModalNeeded && isLiveStream && !isLiveStreamLoadingIos) {
+      onShowLiveStream();
+      setIsOpenStreamModalNeeded(false);
+    }
+  }, [isOpenStreamModalNeeded, onShowLiveStream, isLiveStream, isLiveStreamLoadingIos]);
+
   AppState.addEventListener('change', (state) => {
     if (state !== 'active') {
       setIsPaused(true);
@@ -305,6 +314,8 @@ EventFights.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       event: PropTypes.shape().isRequired,
+      isNeedToFetchEvent: PropTypes.bool,
+      isOpenStreamModal: PropTypes.bool,
     }),
   }).isRequired,
 };
