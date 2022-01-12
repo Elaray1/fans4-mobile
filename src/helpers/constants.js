@@ -16,6 +16,8 @@ export const PUSH_NOTIFICATION_TYPES = {
   FAN_PROPOSED_FIGHT_IN_UPCOMING_EVENT: 'fan_proposed_fight_in_upcoming_event',
   FAN_VOTED_FIGHT_IN_UPCOMING_EVENT: 'fan_voted_fight_in_upcoming_event',
   EVENT_PUBLISHED: 'event_published',
+  EVENT_CANCELLED: 'event_cancelled',
+  EVENT_POSTPONED: 'event_postponed',
   FIGHTER_IN_EVENT_FIGHT: 'fighter_in_event_fight',
   NEW_EVENT_FIGHT_ADDED: 'new_event_fight_added',
   NEW_EVENT_FIGHTS_ADDED: 'new_event_fights_added',
