@@ -201,7 +201,9 @@ function EventFights({ route }) {
   AppState.addEventListener('change', (state) => {
     if (state !== 'active') {
       setIsPaused(true);
+      return;
     }
+    setIsPaused(false);
   });
 
   return (
