@@ -51,9 +51,7 @@ const EventLiveStreamAndroid = ({
 }) => {
   const webViewRef = useRef();
   const animation = useRef(new Animated.Value(initialAnimationValue)).current;
-  const intervalRef = useRef();
 
-  const [key, setKey] = useState(1);
   const [eventStreamLink, setEventStreamLink] = useState(prefetchedEventStreamLink);
   const [isLoading, setIsLoading] = useState(true);
   const [isStarted, setIsStarted] = useState(false);
@@ -108,26 +106,12 @@ const EventLiveStreamAndroid = ({
 
     Animated.timing(animation, {
       toValue: initialAnimationValue,
-      duration: 10,
+      duration: 500,
       useNativeDriver: true,
     }).start();
 
     setIsLoading(true);
   }, [animation, visible, isStarted]);
-
-  // Updating webview if stream didn't start in 30 sec
-  useEffect(() => {
-    if (isStarted) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-      return;
-    }
-
-    const intervalId = setInterval(() => {
-      setKey(k => k + 1);
-    }, 30000);
-    intervalRef.current = intervalId;
-  }, [isStarted]);
 
   const { width, height } = useWindowDimensions();
   const isPortraitOrientation = height > width;
@@ -142,13 +126,10 @@ const EventLiveStreamAndroid = ({
   });
 
   const onWebViewMessage = useCallback((msg) => {
-    console.log(msg);
-
     if (msg.nativeEvent.data.includes('consoleError')) {
       setIsLoading(true);
 
-      // Updating key to force webview rerender if an error occured
-      setKey(k => k + 1);
+      webViewRef.current.reload();
     }
 
     if (msg.nativeEvent.data === 'video_started') {
@@ -159,9 +140,7 @@ const EventLiveStreamAndroid = ({
   }, [prolongControlsShowing]);
 
   const onWebViewError = useCallback(() => {
-    console.log('ERROR');
-    // Updating key to force webview rerender if an error occured
-    setKey(k => k + 1);
+    webViewRef.current.reload();
   }, []);
 
 
@@ -189,7 +168,6 @@ const EventLiveStreamAndroid = ({
             style={[styles.webViewPressableContainer, isLoading && emptySizeStyles]}
           >
             <WebView
-              key={key}
               ref={webViewRef}
               scrollEnabled={false}
               nestedScrollEnabled={false}
@@ -199,6 +177,7 @@ const EventLiveStreamAndroid = ({
               onMessage={onWebViewMessage}
               source={liveStreamSource}
               mediaPlaybackRequiresUserAction={false}
+              // using androidLayerType to avoid app crashes when webview isn't visible
               androidLayerType={visible ? 'hardware' : 'software'}
               injectedJavaScript={visible ? muteSound(false) : muteSound(true)}
               onError={onWebViewError}

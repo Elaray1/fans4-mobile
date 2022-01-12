@@ -1,8 +1,10 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
 import hexToRgba from 'helpers/hexToRgba';
+
+const isIOS = Platform.OS === 'ios';
 
 export default StyleSheet.create({
   container: {
@@ -13,7 +15,7 @@ export default StyleSheet.create({
   },
   header: {
     position: 'absolute',
-    top: 47,
+    top: isIOS ? 47 : 0,
     width: '100%',
     zIndex: 1,
     elevation: 1,
