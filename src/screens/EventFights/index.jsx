@@ -195,7 +195,7 @@ function EventFights({ route }) {
         event={event}
         onClose={onCloseCountTimerModal}
       />
-      {Platform.OS === 'android' && eventStreamLink && (
+      {Platform.OS === 'android' && (
         <EventLiveStreamAndroidModal
           visible={isAndroidStreamModalVisible}
           eventId={event._id}
