@@ -94,4 +94,4 @@ SearchInput.defaultProps = {
   style: {},
 };
 
-export default SearchInput;
+export default React.memo(SearchInput);

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import {
-  TextInput, View, Text as RNText, TouchableOpacity, Pressable,
+  TextInput, View, Text as RNText, TouchableOpacity, Pressable, Platform,
 } from 'react-native';
 import getKeyboardType from 'helpers/getKeyboardType';
 
@@ -46,6 +46,14 @@ function Input({
   const [isPasswordVisible, setPasswordVisible] = useState(false);
 
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (autoFocus && Platform.OS === 'android') {
+      setTimeout(() => inputRef.current.focus(), 100);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const focusIfMulitlone = useCallback(() => {
     if (multiline && inputRef.current) {
       inputRef.current.focus();
@@ -93,7 +101,7 @@ function Input({
         ]}
       >
         <TextInput
-          ref={multiline ? inputRef : undefined}
+          ref={inputRef}
           value={value}
           placeholder={placeholder}
           placeholderTextColor={colors.disabledText}
@@ -206,4 +214,4 @@ Input.defaultProps = {
   autogrowHeight: false,
 };
 
-export default Input;
+export default React.memo(Input);
