@@ -69,6 +69,7 @@ const EventLiveStreamAndroid = ({
     }
 
     if (isStarted) {
+      webViewRef?.current.reload();
       setIsLoading(false);
     }
 
