@@ -84,8 +84,7 @@ function Chat({ route }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [isInputFocused, setIsInputFocused] = useState(true);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const [timeouts, setTimeouts] = useState([]);
 
@@ -252,7 +251,6 @@ function Chat({ route }) {
   }, []);
 
   const onSendMessage = useCallback(async () => {
-    setIsButtonDisabled(true);
     try {
       const message = await messageApi.sendMessage({
         text: messageValue,
@@ -267,8 +265,7 @@ function Chat({ route }) {
     } catch (error) {
       showFailure(t('Chat.messageNotSentPleaseTryAgain'));
     }
-    setIsButtonDisabled(false);
-  }, [messages, showFailure, t, messageValue, chatId]);
+  }, [messageValue, chatId, messages, showFailure, t]);
 
   const onUserAvatarPress = useCallback(() => {
     if (otherUserId === 'fans4') {
@@ -516,7 +513,6 @@ function Chat({ route }) {
                         multilineStyle={styles.multiline}
                         buttonTitle={t('Chat.send')}
                         onButtonPress={onSendMessage}
-                        disabled={isButtonDisabled}
                         autoFocus={isInputFocused}
                       />
                     )}
