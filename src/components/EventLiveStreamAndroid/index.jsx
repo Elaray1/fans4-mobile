@@ -59,7 +59,7 @@ const EventLiveStreamAndroid = ({
   const isConnected = useIsConnected();
 
   useOrientation({ isVisible: visible });
-  useStreamLink({ eventStreamLink, eventId, setEventStreamLink });
+  useStreamLink({ eventStreamLink, eventId, setEventStreamLink, visible });
 
   useEffect(() => {
     if (!isConnected) {
@@ -127,6 +127,8 @@ const EventLiveStreamAndroid = ({
   });
 
   const onWebViewMessage = useCallback((msg) => {
+    console.log(msg.nativeEvent.data);
+
     if (msg.nativeEvent.data.includes('consoleError')) {
       setIsLoading(true);
 
