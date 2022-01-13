@@ -234,6 +234,7 @@ function EventFights({ route }) {
             <TouchableOpacity
               style={[styles.eventImageContainer, aspectRatioStyle]}
               onPress={onPressEventPoster}
+              disabled={isLiveStreamLoadingIos}
             >
               <FastImage style={[styles.photoImage, aspectRatioStyle]} source={{ uri: event.imageUrl }} />
 
