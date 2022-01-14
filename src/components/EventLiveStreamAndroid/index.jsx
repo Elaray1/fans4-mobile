@@ -11,6 +11,7 @@ import CloseWithBackgroundIcon from 'assets/icons/close-with-background.svg';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
+import FullScreenLoader from 'components/FullScreenLoader';
 
 import colors from 'themes/colors';
 
