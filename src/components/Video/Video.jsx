@@ -32,6 +32,7 @@ const updateVideoKey = (value) => {
 
 const Video = React.forwardRef(({ source, width, height, posterSource, duration, onReadyToPlay,
   viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen, isPaused,
+  onFullscreenPlayerDidPresent,
 }, ref) => {
   const isFocused = useIsFocused();
 
@@ -315,6 +316,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
             progressUpdateInterval={300}
             onProgress={updateTiming}
             onError={onError}
+            onFullscreenPlayerDidPresent={onFullscreenPlayerDidPresent}
           />
           )}
 
@@ -392,6 +394,7 @@ Video.propTypes = {
   pauseOnFullScreen: PropTypes.bool,
   onReadyToPlay: PropTypes.func,
   isPaused: PropTypes.bool.isRequired,
+  onFullscreenPlayerDidPresent: PropTypes.func,
 };
 
 Video.defaultProps = {
@@ -405,6 +408,7 @@ Video.defaultProps = {
   muted: false,
   pauseOnFullScreen: true,
   onReadyToPlay: undefined,
+  onFullscreenPlayerDidPresent: undefined,
 };
 
 export default React.memo(Video);

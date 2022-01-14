@@ -8,7 +8,14 @@ import Video from 'components/Video';
 
 import styles from './styles';
 
-const LiveStreamPlayerIos = React.forwardRef(({ eventId, muted, onReadyToPlay, onExitFullScreen, isPaused }, ref) => {
+const LiveStreamPlayerIos = React.forwardRef(({
+  eventId,
+  muted,
+  onReadyToPlay,
+  onExitFullScreen,
+  isPaused,
+  onFullscreenOpened,
+}, ref) => {
   const [eventStreamLink, setEventStreamLink] = useState(null);
   const [width, setWidth] = useState(1920);
   const [height, setHeight] = useState(1080);
@@ -44,6 +51,7 @@ const LiveStreamPlayerIos = React.forwardRef(({ eventId, muted, onReadyToPlay, o
         pauseOnFullScreen={false}
         isPaused={isPaused}
         onReadyToPlay={onReadyToPlay}
+        onFullscreenPlayerDidPresent={onFullscreenOpened}
       />
     </View>
   );
@@ -55,6 +63,7 @@ LiveStreamPlayerIos.propTypes = {
   onReadyToPlay: PropTypes.func.isRequired,
   onExitFullScreen: PropTypes.func.isRequired,
   isPaused: PropTypes.bool.isRequired,
+  onFullscreenOpened: PropTypes.bool.isRequired,
 };
 
 export default React.memo(LiveStreamPlayerIos);

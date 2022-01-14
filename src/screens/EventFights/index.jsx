@@ -17,6 +17,7 @@ import Header from 'components/Header';
 import FightItem from 'components/FightItem';
 import Text from 'components/Text';
 import EventLiveStreamAndroidModal from 'components/EventLiveStreamAndroid';
+import FullScreenLoader from 'components/FullScreenLoader';
 
 import colors from 'themes/colors';
 
@@ -66,6 +67,7 @@ function EventFights({ route }) {
   const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(false);
 
   const [isOpenStreamModalNeeded, setIsOpenStreamModalNeeded] = useState(isOpenStreamModal);
+  const [isFullScreenLoader, setIsFullScreenLoader] = useState(false);
 
   useEffect(() => {
     const updateEventData = async () => {
@@ -184,12 +186,17 @@ function EventFights({ route }) {
 
     if (isCountdownTimerModalVisible) {
       setIsCountdownTimerModalVisible(false);
+      setIsFullScreenLoader(true);
       // Using setTimeout to open stream modal after closing countdown modal
       setTimeout(() => {
         onShowLiveStream();
       }, 0);
     }
   }, [onShowLiveStream, isCountdownTimerModalVisible]);
+
+  const onFullscreenOpened = useCallback(() => {
+    setIsFullScreenLoader(false);
+  }, []);
 
   useEffect(() => {
     if (isOpenStreamModalNeeded && isLiveStream && !isLiveStreamLoadingIos) {
@@ -213,6 +220,7 @@ function EventFights({ route }) {
         event={event}
         onClose={onCloseCountTimerModal}
       />
+      {Platform.OS === 'ios' && isFullScreenLoader && <FullScreenLoader />}
       {Platform.OS === 'android' && (
         <EventLiveStreamAndroidModal
           visible={isAndroidStreamModalVisible}
@@ -259,6 +267,7 @@ function EventFights({ route }) {
                   onExitFullScreen={onExitFullScreenIos}
                   onReadyToPlay={onReadyToPlayIos}
                   isPaused={isPaused}
+                  onFullscreenOpened={onFullscreenOpened}
                 />
               )}
 
