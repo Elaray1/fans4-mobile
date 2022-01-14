@@ -58,6 +58,7 @@ function EventFights({ route }) {
 
   const streamVideoRefIos = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [goToLive, setGoToLive] = useState(false);
   const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState(isLiveStream && Platform.OS === 'ios');
   const [isLiveStreamShownIos, setIsLiveStreamShownIos] = useState(false);
 
@@ -208,9 +209,11 @@ function EventFights({ route }) {
   AppState.addEventListener('change', (state) => {
     if (state !== 'active') {
       setIsPaused(true);
+      setGoToLive(false);
       return;
     }
     setIsPaused(false);
+    setGoToLive(true);
   });
 
   return (
@@ -229,6 +232,7 @@ function EventFights({ route }) {
           eventStreamLink={eventStreamLink}
           onClose={onCloseAndroidStreamModal}
           isPaused={isPaused}
+          goToLive={goToLive}
         />
       )}
       <SafeAreaView style={styles.screen}>
