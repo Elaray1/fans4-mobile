@@ -42,6 +42,13 @@ const pause = () => {
     });`;
 };
 
+const goLive = () => {
+  return `
+    document.querySelectorAll('video').forEach(video => {
+      video.play();
+    });`;
+};
+
 const EventLiveStreamAndroid = ({
   visible,
   eventId,
@@ -49,6 +56,7 @@ const EventLiveStreamAndroid = ({
   eventStreamLink: prefetchedEventStreamLink,
   onClose,
   isPaused,
+  goToLive,
 }) => {
   const webViewRef = useRef();
   const animation = useRef(new Animated.Value(initialAnimationValue)).current;
@@ -85,6 +93,12 @@ const EventLiveStreamAndroid = ({
       webViewRef.current.injectJavaScript(pause());
     }
   }, [isPaused]);
+
+  useEffect(() => {
+    if (goToLive) {
+      webViewRef.current.injectJavaScript(goLive());
+    }
+  }, [goToLive]);
 
   useEffect(() => {
     if (visible) {
@@ -215,6 +229,7 @@ EventLiveStreamAndroid.propTypes = {
   eventStreamLink: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   isPaused: PropTypes.bool.isRequired,
+  goToLive: PropTypes.bool.isRequired,
 };
 
 export default React.memo(EventLiveStreamAndroid);
