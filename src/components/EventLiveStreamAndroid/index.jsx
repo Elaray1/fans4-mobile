@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 import { View, ActivityIndicator, useWindowDimensions,
-  TouchableOpacity, TouchableWithoutFeedback, Animated, StatusBar } from 'react-native';
+  TouchableOpacity, TouchableWithoutFeedback, Animated, StatusBar, AppState } from 'react-native';
 
 import PropTypes from 'prop-types';
 import { WebView } from 'react-native-webview';
@@ -44,9 +44,8 @@ const pause = () => {
 
 const goLive = () => {
   return `
-    document.querySelectorAll('video').forEach(video => {
-      video.play();
-    });`;
+    const event = new CustomEvent('go_to_live');
+    window.dispatchEvent(evt);`;
 };
 
 const EventLiveStreamAndroid = ({
@@ -56,7 +55,6 @@ const EventLiveStreamAndroid = ({
   eventStreamLink: prefetchedEventStreamLink,
   onClose,
   isPaused,
-  goToLive,
 }) => {
   const webViewRef = useRef();
   const animation = useRef(new Animated.Value(initialAnimationValue)).current;
@@ -93,12 +91,6 @@ const EventLiveStreamAndroid = ({
       webViewRef.current.injectJavaScript(pause());
     }
   }, [isPaused]);
-
-  useEffect(() => {
-    if (goToLive) {
-      webViewRef.current.injectJavaScript(goLive());
-    }
-  }, [goToLive]);
 
   useEffect(() => {
     if (visible) {
@@ -160,6 +152,12 @@ const EventLiveStreamAndroid = ({
   const onWebViewError = useCallback(() => {
     webViewRef.current.reload();
   }, []);
+
+  AppState.addEventListener('change', (state) => {
+    if (state === 'active') {
+      webViewRef.current.injectJavaScript(goLive());
+    }
+  });
 
 
   return (
@@ -229,7 +227,6 @@ EventLiveStreamAndroid.propTypes = {
   eventStreamLink: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   isPaused: PropTypes.bool.isRequired,
-  goToLive: PropTypes.bool.isRequired,
 };
 
 export default React.memo(EventLiveStreamAndroid);
