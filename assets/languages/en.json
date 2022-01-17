@@ -490,7 +490,8 @@
     "stayTuned": "Stay tuned for results.",
     "voting": "Voting",
     "liveOn": "Live on",
-    "in": "in"
+    "in": "in",
+    "videoWillBeAvailableSoon": "Video will be available soon"
   },
   "EventFights": {
     "couldntLoadTheFightsPullToRefresh": "Couldn’t load the fights. Pull to refresh.",
