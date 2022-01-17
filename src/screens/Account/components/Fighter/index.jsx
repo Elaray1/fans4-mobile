@@ -215,6 +215,10 @@ function FighterAccount({ postId }) {
     setPosts(prevPosts => prevPosts.map(post => (post._id === updatedPost._id ? updatedPost : post)));
   }, []);
 
+  const onGoBackFromComments = useCallback(() => {
+    navigation.navigate('Account', { postId: null });
+  }, [navigation]);
+
   const renderItem = ({ item }) => {
     const props = {
       ...(userId !== item.author._id && {
@@ -236,6 +240,7 @@ function FighterAccount({ postId }) {
         editedOn={item.editedOn}
         author={item.author}
         onHidePostFromFeed={onHidePostFromFeed}
+        onGoBackFromComments={onGoBackFromComments}
         {...props}
       />
     );

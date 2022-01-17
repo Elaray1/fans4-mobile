@@ -51,9 +51,9 @@ function Post({
   disabled,
   viewable,
   onUpdateCommentsCount,
+  onGoBackFromComments,
   onHidePostFromFeed,
   createdOn,
-  editedOn,
 }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -79,8 +79,8 @@ function Post({
   const iconsColor = disabled ? colors.whiteDisabled : colors.white;
 
   const isSubscribedOrAuthor = userType === USER_TYPES.FIGHTER
-  || userSubscriptions.some(f => f._id === author._id)
-  || author._id === 'fans4';
+  || !!userSubscriptions.length
+  || author._id === FANS4_ACCOUNT._id;
 
   const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1} others` : ''}`;
   const isPostAuthor = userId === author?._id;
@@ -248,8 +248,8 @@ function Post({
       </TouchableOpacity>
 
       {isPostAuthor
-      && !(status === POST_STATUSES.PROCESSING)
-      && !(status === POST_STATUSES.PROCESSING_ERROR)
+      && (status !== POST_STATUSES.PROCESSING)
+      && (status !== POST_STATUSES.PROCESSING_ERROR)
       && (
         <TouchableOpacity onPress={onOpenEditPostModal}>
           <DotsIcon />
@@ -353,8 +353,8 @@ function Post({
   }
 
   const onCommentsPress = useCallback(() => {
-    navigation.navigate('Comments', { postId: _id, onUpdateCommentsCount });
-  }, [navigation, _id, onUpdateCommentsCount]);
+    navigation.navigate('Comments', { postId: _id, onUpdateCommentsCount, onGoBack: onGoBackFromComments });
+  }, [navigation, _id, onUpdateCommentsCount, onGoBackFromComments]);
 
   const onLikePress = useCallback(async () => {
     try {
@@ -512,8 +512,8 @@ Post.propTypes = {
   disabled: PropTypes.bool,
   viewable: PropTypes.bool,
   createdOn: PropTypes.string,
-  editedOn: PropTypes.string,
   onUpdateCommentsCount: PropTypes.func,
+  onGoBackFromComments: PropTypes.func,
   onHidePostFromFeed: PropTypes.func,
 };
 
@@ -523,13 +523,13 @@ Post.defaultProps = {
   author: null,
   checkedOn: null,
   createdOn: null,
-  editedOn: null,
   likedUsers: [],
   commentsCount: 0,
   disabled: false,
   viewable: false,
   onUpdateCommentsCount: () => null,
   onHidePostFromFeed: () => null,
+  onGoBackFromComments: undefined,
 };
 
 export default React.memo(Post);
