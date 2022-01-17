@@ -53,10 +53,11 @@ function EventFights({ route }) {
 
   const userType = useSelector(userSelectors.getUserType);
   const isFan = userType === USER_TYPES.FAN;
-  const isUpcoming = event.status === EVENT_STATUSES.UPCOMING;
 
   const isLiveStream = event.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
   const isLive = event.status === EVENT_STATUSES.PAST && event.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED;
+  const isUpcoming = event.status === EVENT_STATUSES.UPCOMING;
+  const isLiveStreamFinished = event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED;
 
   const streamVideoRefIos = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -271,9 +272,21 @@ function EventFights({ route }) {
             <TouchableOpacity
               style={[styles.eventImageContainer, aspectRatioStyle]}
               onPress={onPressEventPoster}
-              disabled={isLiveStreamLoadingIos}
+              disabled={isLiveStreamLoadingIos || isLiveStreamFinished}
             >
               <FastImage style={[styles.photoImage, aspectRatioStyle]} source={{ uri: event.imageUrl }} />
+
+              {Platform.OS === 'ios' && (
+                <LiveStreamPlayerIos
+                  ref={streamVideoRefIos}
+                  eventId={event._id}
+                  muted={!isLiveStreamShownIos}
+                  onExitFullScreen={onExitFullScreenIos}
+                  onReadyToPlay={onReadyToPlayIos}
+                  isPaused={isPaused}
+                  onFullscreenOpened={onFullscreenOpened}
+                />
+              )}
 
               {event.status === EVENT_STATUSES.CANCELLED && moment().isBefore(event.date) && (
               <View style={styles.imageStatus}>
@@ -288,26 +301,20 @@ function EventFights({ route }) {
               />
               )}
 
-              {Platform.OS === 'ios' && (
-              <LiveStreamPlayerIos
-                ref={streamVideoRefIos}
-                eventId={event._id}
-                muted={!isLiveStreamShownIos}
-                onExitFullScreen={onExitFullScreenIos}
-                onReadyToPlay={onReadyToPlayIos}
-                isPaused={isPaused}
-                onFullscreenOpened={onFullscreenOpened}
-              />
-              )}
-
               {isUpcoming && (
-              <View style={styles.upcoming}>
+              <View style={styles.posterLabel}>
                 <LiveIcon />
 
-                <Text style={styles.upcomingText}>
+                <Text style={styles.posterLabelText}>
                   {`${t('Events.liveOn')} ${toLocalDateAndTime(event)} `}
                   {`${event.location.cityName}, ${event.location.stateCode}`}
                 </Text>
+              </View>
+              )}
+
+              {isLiveStreamFinished && (
+              <View style={[styles.posterLabel, styles.streamFinished]}>
+                <Text style={styles.posterLabelText}>{t('Events.videoWillBeAvailableSoon')}</Text>
               </View>
               )}
 

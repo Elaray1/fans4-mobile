@@ -62,7 +62,7 @@ export default StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.primary,
   },
-  upcoming: {
+  posterLabel: {
     position: 'absolute',
     flexDirection: 'row',
     alignItems: 'center',
@@ -75,11 +75,16 @@ export default StyleSheet.create({
     backgroundColor: hexToRgba(colors.gray, 0.5),
     borderRadius: 5,
   },
-  upcomingText: {
+  posterLabelText: {
     marginLeft: 5,
     fontSize: fonts.size.caption,
     fontFamily: fonts.family.bold,
     fontWeight: fonts.weight.bold,
+  },
+  streamFinished: {
+    width: undefined,
+    paddingLeft: 12,
+    paddingRight: 12,
   },
   event: {
     alignItems: 'center',
