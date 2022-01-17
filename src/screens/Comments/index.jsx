@@ -48,6 +48,7 @@ function Comments({ route }) {
   const {
     postId,
     onUpdateCommentsCount,
+    onGoBack,
   } = route?.params;
 
   const [comments, setComments] = useState([]);
@@ -195,9 +196,14 @@ function Comments({ route }) {
     setIsInputFocused(false);
   }, []);
 
-  const onGoBack = useCallback(async () => {
-    navigation.navigate('Account', { postId: null });
-  }, [navigation]);
+  const onGoBackPress = useCallback(async () => {
+    if (onGoBack) {
+      onGoBack();
+      return;
+    }
+
+    navigation.goBack();
+  }, [navigation, onGoBack]);
 
   const EmptyView = () => (
     <View style={styles.emptyView}>
@@ -246,7 +252,7 @@ function Comments({ route }) {
           <Header
             title={t('Comments.comments')}
             leftItemType="backArrow"
-            onLeftItemPress={onGoBack}
+            onLeftItemPress={onGoBackPress}
           />
           <View style={styles.content}>
             {!isFetchedFirstTime && isRefreshing && <Loader />}
@@ -313,6 +319,7 @@ Comments.propTypes = {
     params: PropTypes.shape({
       postId: PropTypes.string.isRequired,
       onUpdateCommentsCount: PropTypes.func,
+      onGoBack: PropTypes.func,
     }),
   }).isRequired,
 };

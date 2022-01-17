@@ -158,7 +158,8 @@ function Fighter({ fighterId }) {
   }, [showFailure, posts]);
 
   const renderItem = ({ item }) => {
-    const isDisabled = !userSubscriptions.map(f => f._id).includes(item.author._id);
+    const isDisabled = !userSubscriptions.length;
+
     return (
       <Post
         _id={item._id}
@@ -228,7 +229,7 @@ function Fighter({ fighterId }) {
       <View style={styles.line} />
 
       <Text style={[styles.blockTitle, styles.postsTitle]}>{t('Account.Posts')}</Text>
-      {!userSubscriptions.map(f => f._id).includes(fighterId)
+      {!userSubscriptions.length
          && <Text style={styles.grayText}>{t('Account.subscribeToFighter')}</Text>}
     </View>
   );

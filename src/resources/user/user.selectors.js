@@ -50,7 +50,7 @@ export const getSupportedFighters = createSelector(
   getAllSupportedFighters,
   fighters => fighters
     && fighters.filter(fighter => fighter._id !== FANS4_ACCOUNT._id
-      && isSubscribedService.isSubscribed({ subscriptionToFighter: fighter })),
+    && isSubscribedService.isSubscribed({ subscriptionToFighter: fighter })),
 );
 
 export const getUserName = ({ user }) => user?.role?.biography?.userName;

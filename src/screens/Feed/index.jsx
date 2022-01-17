@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { SafeAreaView, View, ActivityIndicator, ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
