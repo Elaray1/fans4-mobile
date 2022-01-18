@@ -203,9 +203,9 @@ function Events() {
           />
 
           {item.status === EVENT_STATUSES.CANCELLED && moment().isBefore(item.date) && (
-          <View style={styles.imageStatus}>
-            <Text style={styles.imageText}>{t('Events.cancelled')}</Text>
-          </View>
+            <View style={styles.imageStatus}>
+              <Text style={styles.imageText}>{t('Events.cancelled')}</Text>
+            </View>
           )}
 
           {isLive && (

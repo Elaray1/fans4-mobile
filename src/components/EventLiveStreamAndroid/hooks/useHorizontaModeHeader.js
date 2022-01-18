@@ -1,21 +1,26 @@
-import { useCallback, useRef, useEffect } from 'react';
+import { useCallback, useRef, useEffect, useState } from 'react';
 
 const CONTROLS_SHOWN_TIMEOUT = 2000;
 
-const useHorizontalModeHeader = ({ onHorizontalModeHeaderToggled }) => {
+const useHorizontalModeHeader = () => {
+  const [isHorizontalModeHeaderShown, setIsHorizontalModeHeaderShown] = useState(true);
+
   const controlsShownTimeoutRef = useRef(null);
 
   const prolongControlsShowing = useCallback(() => {
-    onHorizontalModeHeaderToggled(true);
+    setIsHorizontalModeHeaderShown(true);
     clearInterval(controlsShownTimeoutRef.current);
-    controlsShownTimeoutRef.current = setTimeout(() => onHorizontalModeHeaderToggled(false), CONTROLS_SHOWN_TIMEOUT);
-  }, [onHorizontalModeHeaderToggled]);
+
+    controlsShownTimeoutRef.current = setTimeout(() => {
+      setIsHorizontalModeHeaderShown(false);
+    }, CONTROLS_SHOWN_TIMEOUT);
+  }, []);
 
   useEffect(() => {
     prolongControlsShowing();
   }, [prolongControlsShowing]);
 
-  return { prolongControlsShowing };
+  return { prolongControlsShowing, isHorizontalModeHeaderShown };
 };
 
 export default useHorizontalModeHeader;
