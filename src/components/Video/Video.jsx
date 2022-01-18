@@ -126,6 +126,9 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   }, [hideControlsWithTimeout, isPosterShown]);
 
   useImperativeHandle(ref, () => ({
+    closeFullScreen: () => {
+      videoRef.current.dismissFullscreenPlayer();
+    },
     showFullScreen: () => {
       videoRef.current.presentFullscreenPlayer();
     },
@@ -271,7 +274,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
 
   useOrientation({ isFullScreen });
 
-  const Container = isFullScreen ? Modal : View;
+  const Container = isFullScreen && Platform.OS === 'android' ? Modal : View;
 
   const progressBarContainerWidthStyle = useMemo(() => ({ width: progressBarWidth }), [progressBarWidth]);
 

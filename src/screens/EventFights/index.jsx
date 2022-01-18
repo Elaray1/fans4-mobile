@@ -1,10 +1,11 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform, AppState } from 'react-native';
+import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform, AppState, Alert } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 import LiveIcon from 'assets/icons/live.svg';
 
@@ -45,8 +46,9 @@ const aspectRatioStyle = { aspectRatio: posterAspectRatio };
 
 function EventFights({ route }) {
   const { t } = useTranslation();
+  const navigation = useNavigation();
 
-  const { event: prefetchedEvent, isNeedToFetchEvent, isOpenStreamModal } = route?.params;
+  const { event: prefetchedEvent, isNeedToFetchEvent, isOpenStreamModal, goBackWhenStreamFinished } = route?.params;
   const [event, setEvent] = useState(prefetchedEvent);
 
   const userType = useSelector(userSelectors.getUserType);
@@ -85,6 +87,26 @@ function EventFights({ route }) {
     setIsLiveStreamShownIos(false);
   }, []);
 
+  const onCloseStream = useCallback(() => {
+    streamVideoRefIos.current.closeFullScreen();
+
+    if (goBackWhenStreamFinished) {
+      navigation.goBack();
+    }
+  }, [navigation, goBackWhenStreamFinished]);
+
+  const closeStreamAlert = useCallback(() => {
+    Alert.alert(
+      t('EventFights.liveStreamHasEnded'),
+      t('EventFights.videoWillBeAvailableSoon'),
+      [
+        {
+          text: t('EventFights.ok'),
+          onPress: onCloseStream,
+        }],
+    );
+  }, [onCloseStream, t]);
+
   const {
     fights,
     isLoading,
@@ -107,10 +129,17 @@ function EventFights({ route }) {
       }
     }
 
+    // Live stream finished (IOS)
+    if (updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.FINISHED
+      && event.liveStream.status === LIVE_STREAM_STATUSES.LIVE
+      && isLiveStreamShownIos) {
+      closeStreamAlert();
+    }
+
 
     setEvent(updatedEvent);
     onRefresh();
-  }, [onRefresh, isLiveStream]);
+  }, [onRefresh, isLiveStream, closeStreamAlert, isLiveStreamShownIos, event.liveStream.status]);
 
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
@@ -259,16 +288,16 @@ function EventFights({ route }) {
               />
               )}
 
-              {Platform.OS === 'ios' && isLiveStream && (
-                <LiveStreamPlayerIos
-                  ref={streamVideoRefIos}
-                  eventId={event._id}
-                  muted={!isLiveStreamShownIos}
-                  onExitFullScreen={onExitFullScreenIos}
-                  onReadyToPlay={onReadyToPlayIos}
-                  isPaused={isPaused}
-                  onFullscreenOpened={onFullscreenOpened}
-                />
+              {Platform.OS === 'ios' && (
+              <LiveStreamPlayerIos
+                ref={streamVideoRefIos}
+                eventId={event._id}
+                muted={!isLiveStreamShownIos}
+                onExitFullScreen={onExitFullScreenIos}
+                onReadyToPlay={onReadyToPlayIos}
+                isPaused={isPaused}
+                onFullscreenOpened={onFullscreenOpened}
+              />
               )}
 
               {isUpcoming && (
@@ -328,6 +357,7 @@ EventFights.propTypes = {
       event: PropTypes.shape().isRequired,
       isNeedToFetchEvent: PropTypes.bool,
       isOpenStreamModal: PropTypes.bool,
+      goBackWhenStreamFinished: PropTypes.bool,
     }),
   }).isRequired,
 };
