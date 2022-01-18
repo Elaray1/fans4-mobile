@@ -49,6 +49,7 @@ function Activity() {
   useScrollToTop(listRef);
 
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
+  const userId = useSelector(userSelectors.getUserId);
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
 
   const [activities, setActivities] = useState({
@@ -279,7 +280,7 @@ function Activity() {
         title={t('Activity.activity')}
         titleIcon={<ArrowDownIcon style={styles.headerIcon} />}
         onTitlePress={onPressActivivtyFilters}
-        rightItemType="icon"
+        rightItemType={userId === 'fans4' ? null : 'icon'}
         rightItemIcon={isUnreadMessages ? UnreadChatIcon : ChatIcon}
         onRightItemPress={onChatsPress}
       />
