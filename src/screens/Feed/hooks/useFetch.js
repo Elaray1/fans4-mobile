@@ -13,6 +13,7 @@ const useFetch = () => {
   const { showFailure } = useToast();
 
   const [posts, setPosts] = useState([]);
+  const [liveStreamEvents, setLiveStreamEvents] = useState([]);
 
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
@@ -40,11 +41,15 @@ const useFetch = () => {
         const {
           posts: fetchedPosts,
           totalCount: fetchedTotalCount,
+          liveStreamEvents: fetchedLiveStreamEvents,
         } = await postApi.getMyFeedPosts({
           page: fetchingPage,
           perPage: PER_PAGE_COUNT,
         });
 
+        setLiveStreamEvents(fetchedLiveStreamEvents);
+
+        console.log('fetchedLiveStreamEvents', fetchedLiveStreamEvents);
         setPage(page + 1);
         setTotalCount(fetchedTotalCount);
         setPosts([...currentPosts, ...fetchedPosts]);
@@ -69,6 +74,7 @@ const useFetch = () => {
   }, [fetchNewItems]);
 
   return {
+    liveStreamEvents,
     onRefresh,
     isRefreshing,
     isLoading,
