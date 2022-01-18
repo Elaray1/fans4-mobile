@@ -10,6 +10,8 @@ import CrossIcon from 'assets/icons/cross';
 import Text from 'components/Text';
 import Header from 'components/Header';
 
+import { LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
+
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
 import styles from './styles';
@@ -39,7 +41,7 @@ const formateCountdownTime = (ms) => {
   return `${hours}:${minutes}:${seconds}`;
 };
 
-const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, onClose }) => {
+const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, onClose, eventLiveStreamStatus }) => {
   const { t } = useTranslation();
 
   const { width } = useWindowDimensions();
@@ -55,6 +57,8 @@ const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, on
 
   const intervalId = useRef();
 
+  const isStreamEnded = eventLiveStreamStatus === LIVE_STREAM_STATUSES.FINISHED;
+
   useEffect(() => {
     const setTime = () => {
       const currentDate = moment();
@@ -63,12 +67,18 @@ const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, on
       setDateDiff(dateDiffInMilliseconds);
     };
 
-    intervalId.current = setInterval(() => {
-      setTime();
-    }, 1000);
+    if (!isStreamEnded) {
+      if (eventDate < moment()) {
+        setDateDiff(0);
+        return;
+      }
+      intervalId.current = setInterval(() => {
+        setTime();
+      }, 1000);
 
-    return () => clearInterval(intervalId.current);
-  }, [eventDateAsMoment]);
+      return () => clearInterval(intervalId.current);
+    }
+  }, [eventDate, isStreamEnded, eventDateAsMoment]);
 
   return (
     <View style={styles.container}>
@@ -112,6 +122,7 @@ CountdownTimer.propTypes = {
   eventImageUrl: PropTypes.string.isRequired,
   eventDate: PropTypes.string.isRequired,
   eventTimezone: PropTypes.string.isRequired,
+  eventLiveStreamStatus: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

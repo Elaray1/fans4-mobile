@@ -45,6 +45,7 @@ const EventLiveStreamAndroid = React.forwardRef(({
   eventDate,
   eventTimezone,
   eventImageUrl,
+  eventLiveStreamStatus,
 }, ref) => {
   const webViewRef = useRef();
   const [isLoading, setIsLoading] = useState(true);
@@ -171,6 +172,7 @@ const EventLiveStreamAndroid = React.forwardRef(({
           eventDate={eventDate}
           eventTimezone={eventTimezone}
           eventName={eventName}
+          eventLiveStreamStatus={eventLiveStreamStatus}
         />
       )}
     </Animated.View>
@@ -190,6 +192,7 @@ EventLiveStreamAndroid.propTypes = {
   visible: PropTypes.bool.isRequired,
   eventId: PropTypes.string.isRequired,
   eventName: PropTypes.string.isRequired,
+  eventLiveStreamStatus: PropTypes.string.isRequired,
   eventImageUrl: PropTypes.string,
   eventDate: PropTypes.string,
   eventTimezone: PropTypes.string,
