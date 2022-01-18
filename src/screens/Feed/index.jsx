@@ -1,8 +1,10 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useMemo } from 'react';
 import { SafeAreaView, View, ActivityIndicator, ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import _ from 'lodash';
+import moment from 'moment';
 
 import NoPostsIllustration from 'assets/illustrations/no-events';
 import SearchFightersIcon from 'assets/icons/search-people';
@@ -24,6 +26,9 @@ import colors from 'themes/colors';
 import useFetch from './hooks/useFetch';
 import useSubscriptionUpdated from './hooks/useSubscriptionUpdated';
 import useViewableItems from './hooks/useViewableItems';
+import useEventsLiveStreamsUpdated from './hooks/useEventsLiveStreamsUpdated';
+
+import WatchLiveStreamBanner from './components/WatchLiveStreamBanner';
 
 import styles from './styles';
 
@@ -47,12 +52,12 @@ function Feed() {
     isFetchedFirstTime,
     fetchNewItems,
     posts,
+    liveStreamEvents: preloadedLiveStreamEvents,
   } = useFetch();
 
   useSubscriptionUpdated({ fetchNewItems, isFetchedFirstTime, onRefresh });
   const { updateViewableItems, viewableItemsState } = useViewableItems();
-
-  const keyExtractor = useCallback(item => item._id, []);
+  const liveStreamEvents = useEventsLiveStreamsUpdated({ posts, preloadedEvents: preloadedLiveStreamEvents });
 
   const onUpdateCommentsCount = useCallback(async (postId) => {
     try {
@@ -76,35 +81,44 @@ function Feed() {
     navigation.navigate('SearchFighters');
   }, [navigation]);
 
+  const keyExtractor = useCallback((item) => {
+    const isEvent = !!item.liveStream;
+    return isEvent ? `event_${item._id}` : `post_${item._id}`;
+  }, []);
+
   const renderItem = ({ item }) => {
+    const isEvent = !!item.liveStream;
+
+    if (isEvent) {
+      return <WatchLiveStreamBanner event={item} />;
+    }
+
     return (
-      <View style={styles.post} key={item._id}>
-        <Post
-          _id={item._id}
-          media={item.media}
-          text={item.text}
-          status={item.status}
-          checkedOn={item.checkedOn}
-          author={item.author}
-          likedUsers={item.likedUsers}
-          commentsCount={item.commentsCount}
-          viewable={!!viewableItemsState[item._id]}
-          createdOn={item.createdOn}
-          editedOn={item.editedOn}
-          onUpdateCommentsCount={onUpdateCommentsCount}
-        />
-      </View>
+      <Post
+        _id={item._id}
+        media={item.media}
+        text={item.text}
+        status={item.status}
+        checkedOn={item.checkedOn}
+        author={item.author}
+        likedUsers={item.likedUsers}
+        commentsCount={item.commentsCount}
+        viewable={!!viewableItemsState[item._id]}
+        createdOn={item.createdOn}
+        editedOn={item.editedOn}
+        onUpdateCommentsCount={onUpdateCommentsCount}
+      />
     );
   };
 
   const Loader = () => <View style={styles.loader}><ActivityIndicator size="large" color={colors.primary} /></View>;
 
   const renderFooter = () => {
-    if (isRefreshing || !isLoading) {
-      return null;
+    if (isLoading && !isRefreshing) {
+      return <Loader />;
     }
 
-    return <Loader />;
+    return null;
   };
 
   const NoSubscriptions = () => (
@@ -130,6 +144,13 @@ function Feed() {
     />
   );
 
+  const items = useMemo(() => {
+    return _.sortBy([...posts, ...liveStreamEvents], (item) => {
+      const isEvent = !!item.liveStream;
+      return isEvent ? -moment(item.liveStream.startedOn).unix() : -moment(item.createdOn).unix();
+    });
+  }, [posts, liveStreamEvents]);
+
   return (
     <SafeAreaView style={styles.screen}>
       <Header
@@ -142,11 +163,11 @@ function Feed() {
       {!isFetchedFirstTime && isRefreshing && <Loader />}
 
       <View style={styles.content}>
-        {!!posts.length && (
+        {!!items.length && (
           <FlatList
             ref={listRef}
-            contentContainerStyle={isRefreshing ? styles.postsWhenRefreshing : styles.posts}
-            data={posts}
+            contentContainerStyle={styles.posts}
+            data={items}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             onEndReachedThreshold={0.3}
@@ -158,10 +179,11 @@ function Feed() {
             refreshControl={RefreshControl}
             viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
             onViewableItemsChanged={updateViewableItems}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
           />
         )}
 
-        {isFetchedFirstTime && !posts.length && (
+        {isFetchedFirstTime && !items.length && (
           <ScrollView
             contentContainerStyle={styles.emptyScroll}
             refreshControl={RefreshControl}

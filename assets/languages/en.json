@@ -475,6 +475,11 @@
     "onceFighterWillAddPostsYouWillSeeThemHere": "Check back for exclusive Fighter content!",
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh."
   },
+  "WatchLiveStreamBanner": {
+    "isLive": "is LIVE!",
+    "watchLive": "Watch live",
+    "live": "Live"
+  },
   "Events": {
     "events": "Events",
     "couldntLoadTheEventsPullToRefresh": "Couldn’t load the events. Pull to refresh.",

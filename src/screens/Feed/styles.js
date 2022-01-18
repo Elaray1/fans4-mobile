@@ -10,9 +10,6 @@ export default StyleSheet.create({
   content: {
     ...commonStyles.screenContent,
   },
-  post: {
-    marginBottom: 10,
-  },
   noSubscriptions: {
     flex: 1,
     alignItems: 'center',
@@ -39,11 +36,17 @@ export default StyleSheet.create({
   loader: {
     margin: 15,
   },
-  postsWhenRefreshing: {
-    paddingBottom: 20,
-  },
   posts: {
-    paddingTop: 30,
-    paddingBottom: 20,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  separator: {
+    height: 16,
+  },
+  watchLiveStreamBannerContainerOnBottom: {
+    marginTop: 16,
+  },
+  watchLiveStreamBannerContainerOnTop: {
+    marginBottom: 16,
   },
 });
