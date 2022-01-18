@@ -67,7 +67,7 @@ function EventFights({ route }) {
   const [eventStreamLink, setEventStreamLink] = useState(null);
 
   const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
-  const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(false);
+  const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(!!isOpenStreamModal);
 
   const [isOpenStreamModalNeeded, setIsOpenStreamModalNeeded] = useState(isOpenStreamModal);
   const [isFullScreenLoader, setIsFullScreenLoader] = useState(false);
@@ -145,7 +145,6 @@ function EventFights({ route }) {
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
   usePrefetchStreamLinkAndroid({ eventId: event._id, setEventStreamLink, streamStatus: event.liveStream.status });
-
 
   const onShowLiveStream = useCallback(() => {
     if (Platform.OS === 'ios') {
@@ -240,6 +239,7 @@ function EventFights({ route }) {
       setIsPaused(true);
       return;
     }
+
     setIsPaused(false);
   });
 
@@ -250,7 +250,9 @@ function EventFights({ route }) {
         event={event}
         onClose={onCloseCountTimerModal}
       />
+
       {Platform.OS === 'ios' && isFullScreenLoader && <FullScreenLoader />}
+
       {Platform.OS === 'android' && (
         <EventLiveStreamAndroidModal
           visible={isAndroidStreamModalVisible}
@@ -261,6 +263,7 @@ function EventFights({ route }) {
           isPaused={isPaused}
         />
       )}
+
       <SafeAreaView style={styles.screen}>
         <Header
           title={event.name}
@@ -289,39 +292,39 @@ function EventFights({ route }) {
               )}
 
               {event.status === EVENT_STATUSES.CANCELLED && moment().isBefore(event.date) && (
-              <View style={styles.imageStatus}>
-                <Text style={styles.imageText}>{t('Events.cancelled')}</Text>
-              </View>
+                <View style={styles.imageStatus}>
+                  <Text style={styles.imageText}>{t('Events.cancelled')}</Text>
+                </View>
               )}
 
               {isLive && (
-              <LiveStreamBar
-                fightsWithResultsCount={event.fights.filter(fight => fight.results !== undefined).length}
-                fightsCount={event.fights.length}
-              />
+                <LiveStreamBar
+                  fightsWithResultsCount={event.fights.filter(fight => fight.results !== undefined).length}
+                  fightsCount={event.fights.length}
+                />
               )}
 
               {isUpcoming && (
-              <View style={styles.posterLabel}>
-                <LiveIcon />
+                <View style={styles.posterLabel}>
+                  <LiveIcon />
 
-                <Text style={styles.posterLabelText}>
-                  {`${t('Events.liveOn')} ${toLocalDateAndTime(event)} `}
-                  {`${event.location.cityName}, ${event.location.stateCode}`}
-                </Text>
-              </View>
+                  <Text style={styles.posterLabelText}>
+                    {`${t('Events.liveOn')} ${toLocalDateAndTime(event)} `}
+                    {`${event.location.cityName}, ${event.location.stateCode}`}
+                  </Text>
+                </View>
               )}
 
               {isLiveStreamFinished && (
-              <View style={[styles.posterLabel, styles.streamFinished]}>
-                <Text style={styles.posterLabelText}>{t('Events.videoWillBeAvailableSoon')}</Text>
-              </View>
+                <View style={[styles.posterLabel, styles.streamFinished]}>
+                  <Text style={styles.posterLabelText}>{t('Events.videoWillBeAvailableSoon')}</Text>
+                </View>
               )}
 
               {isLiveStreamLoadingIos && (
-              <View style={styles.loaderContainer}>
-                <ActivityIndicator size="large" color={colors.primary} />
-              </View>
+                <View style={styles.loaderContainer}>
+                  <ActivityIndicator size="large" color={colors.primary} />
+                </View>
               )}
             </TouchableOpacity>
           </View>

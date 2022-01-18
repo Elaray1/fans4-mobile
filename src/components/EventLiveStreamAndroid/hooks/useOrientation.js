@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 import Orientation from 'react-native-orientation-locker';
 
-const useOrientation = ({ isVisible }) => {
+const useOrientation = ({ visible }) => {
   useEffect(() => {
-    if (isVisible) {
+    if (visible) {
       Orientation.unlockAllOrientations();
     } else {
       Orientation.lockToPortrait();
     }
 
     return () => Orientation.lockToPortrait();
-  }, [isVisible]);
+  }, [visible]);
 };
 
 export default useOrientation;

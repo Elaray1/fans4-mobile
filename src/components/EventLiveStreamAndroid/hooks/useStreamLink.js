@@ -1,18 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import * as eventApi from 'resources/event/event.api';
 
-const useStreamLink = ({ setEventStreamLink, eventStreamLink, eventId, visible }) => {
+const useStreamLink = ({ eventId, prefetchedEventStreamLink }) => {
+  const [eventStreamLink, setEventStreamLink] = useState(prefetchedEventStreamLink);
+
   useEffect(() => {
     const getStreamLink = async () => {
-      if (!eventStreamLink && visible) {
+      if (!eventStreamLink) {
         const { link } = await eventApi.getStreamLinkByEventId(eventId);
         setEventStreamLink(link);
       }
     };
 
     getStreamLink();
-  }, [eventStreamLink, eventId, setEventStreamLink, visible]);
+  }, [eventStreamLink, eventId]);
+
+  return eventStreamLink;
 };
 
 export default useStreamLink;

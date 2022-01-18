@@ -4,14 +4,15 @@ import colors from 'themes/colors';
 
 
 export default StyleSheet.create({
-  wrapper: {
-    height: '100%',
-    width: '100%',
-    backgroundColor: colors.main,
-  },
   container: {
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    position: 'absolute',
+    zIndex: 10000,
+  },
+  webViewContainer: {
     flex: 1,
-    backgroundColor: colors.black,
   },
   loadingView: {
     position: 'absolute',
@@ -24,8 +25,6 @@ export default StyleSheet.create({
     backgroundColor: colors.black,
   },
   webView: {
-    marginTop: 1,
-    backgroundColor: colors.black,
     flex: 1,
   },
   horizontalModeHeader: {

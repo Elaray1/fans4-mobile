@@ -8,6 +8,7 @@ export default StyleSheet.create({
   headerWrapper: {
     paddingHorizontal: variables.paddingHorizontal,
     flexDirection: 'column',
+    backgroundColor: colors.main,
   },
   header: {
     flexDirection: 'row',

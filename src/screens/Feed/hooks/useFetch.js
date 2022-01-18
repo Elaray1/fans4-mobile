@@ -49,7 +49,6 @@ const useFetch = () => {
 
         setLiveStreamEvents(fetchedLiveStreamEvents);
 
-        console.log('fetchedLiveStreamEvents', fetchedLiveStreamEvents);
         setPage(page + 1);
         setTotalCount(fetchedTotalCount);
         setPosts([...currentPosts, ...fetchedPosts]);
