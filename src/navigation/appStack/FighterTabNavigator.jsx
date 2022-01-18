@@ -28,9 +28,10 @@ function renderTabBar(props) {
 
 function FighterTabNavigator() {
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
+  const userId = useSelector(userSelectors.getUserId);
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
 
-  const activityIcon = (isUnreadActivities || isUnreadMessages)
+  const activityIcon = ((isUnreadActivities || isUnreadMessages) && userId !== 'fans4')
     ? UnreadActivityIcon
     : ActivityIcon;
 
