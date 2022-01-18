@@ -142,18 +142,24 @@ function EventFights({ route }) {
       }
     }
 
-    // Live stream finished (IOS)
+    // Live stream finished
     if (updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING
-      && event.liveStream.status === LIVE_STREAM_STATUSES.LIVE
-      && isLiveStreamShownIos) {
-      closeStreamAlert();
+      && event.liveStream.status === LIVE_STREAM_STATUSES.LIVE) {
+      // IOS
+      if (isLiveStreamShownIos) {
+        closeStreamAlert();
+      } else if (isAndroidStreamModalVisible) {
+        // Android
+        setIsAndroidStreamModalVisible(false);
+        setIsCountdownTimerModalVisible(true);
+      }
     }
 
 
     setEvent(updatedEvent);
     onRefresh();
-  }, [onRefresh, isLiveStream, closeStreamAlert,
-    isLiveStreamShownIos, event.liveStream.status, isCountdownTimerModalVisible]);
+  }, [onRefresh, isLiveStream, closeStreamAlert, isLiveStreamShownIos,
+    event.liveStream.status, isAndroidStreamModalVisible, isCountdownTimerModalVisible]);
 
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
@@ -268,6 +274,7 @@ function EventFights({ route }) {
             eventDate={event.date}
             eventTimezone={event.location.timezone}
             onClose={onCloseCountTimerModal}
+            eventLiveStreamStatus={event.liveStream.status}
           />
         </Modal>
       )}
@@ -284,6 +291,7 @@ function EventFights({ route }) {
           eventDate={event.date}
           eventTimezone={event.location.timezone}
           eventStreamLink={eventStreamLink}
+          eventLiveStreamStatus={event.liveStream.status}
           onClose={onCloseAndroidStreamModal}
           isCountdownShown={event.liveStream.status === LIVE_STREAM_STATUSES.PENDING}
           onCloseCountdown={onCloseAndroidStreamModal}

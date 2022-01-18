@@ -791,6 +791,8 @@
   },
   "CountdownTimer": {
     "liveIn": "Live in",
-    "waitingForLiveStreaming": "Waiting for live-streaming to start"
+    "waitingForLiveStreaming": "Waiting for live-streaming to start",
+    "liveStreamHasEnded": "Live-stream has ended",
+    "videoWillBeAvailableSoon": "Video will be available soon"
   }
 }

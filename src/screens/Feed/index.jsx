@@ -185,6 +185,7 @@ function Feed() {
           visible={isAndroidStreamModalVisible}
           eventId={liveStreamEvent._id}
           eventName={liveStreamEvent.name}
+          eventLiveStreamStatus={liveStreamEvent.liveStream.status}
           onClose={onCloseAndroidStreamModal}
         />
       )}
