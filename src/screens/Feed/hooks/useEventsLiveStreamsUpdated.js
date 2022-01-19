@@ -13,9 +13,7 @@ const useEventsLiveStreamsUpdated = ({ posts, preloadedEvents }) => {
 
   useEffect(() => {
     websocketsService.joinRoom('events');
-    websocketsService.on('events:liveStreamsUpdated', (events) => {
-      setEventsWithLiveStream(events);
-    });
+    websocketsService.on('events:liveStreamsUpdated', setEventsWithLiveStream);
 
     return () => {
       websocketsService.off('events:liveStreamsUpdated', setEventsWithLiveStream);

@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import useIsConnected from 'hooks/useIsConnected';
 import useDidUpdate from 'hooks/useDidUpdate';
 
@@ -22,13 +20,6 @@ const useUpdateWebviewOnConnectionChanged = ({ webViewRef, setIsLoading, visible
 
     webViewRef.current?.reload();
   }, [isConnected, setIsLoading, webViewRef]);
-
-
-  useEffect(() => {
-    if (visible) {
-      webViewRef.current?.injectJavaScript(muteSound(false));
-    }
-  }, [visible, webViewRef]);
 };
 
 export default useUpdateWebviewOnConnectionChanged;

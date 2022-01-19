@@ -24,6 +24,7 @@ const WatchLiveStreamBanner = ({ event }) => {
       event,
       isNeedToFetchEvent: false,
       isOpenStreamModal: true,
+      goBackWhenStreamFinished: true,
     });
   }, [navigation, event]);
 
