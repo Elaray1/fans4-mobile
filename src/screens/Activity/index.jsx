@@ -52,6 +52,8 @@ function Activity() {
   const userId = useSelector(userSelectors.getUserId);
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
 
+  const isFans4 = userId === 'fans4';
+
   const [activities, setActivities] = useState({
     today: [],
     yesterday: [],
@@ -280,7 +282,7 @@ function Activity() {
         title={t('Activity.activity')}
         titleIcon={<ArrowDownIcon style={styles.headerIcon} />}
         onTitlePress={onPressActivivtyFilters}
-        rightItemType={userId === 'fans4' ? null : 'icon'}
+        rightItemType={isFans4 ? null : 'icon'}
         rightItemIcon={isUnreadMessages ? UnreadChatIcon : ChatIcon}
         onRightItemPress={onChatsPress}
       />

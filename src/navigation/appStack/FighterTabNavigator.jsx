@@ -30,8 +30,9 @@ function FighterTabNavigator() {
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
   const userId = useSelector(userSelectors.getUserId);
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
+  const isFans4 = userId === 'fans4';
 
-  const activityIcon = ((isUnreadActivities || isUnreadMessages) && userId !== 'fans4')
+  const activityIcon = ((isUnreadActivities || isUnreadMessages) && !isFans4)
     ? UnreadActivityIcon
     : ActivityIcon;
 
