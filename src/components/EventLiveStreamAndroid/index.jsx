@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useMemo, useRef, useImperativeHandle } from 'react';
 import { View, ActivityIndicator, useWindowDimensions,
   TouchableOpacity, TouchableWithoutFeedback, Animated, StatusBar } from 'react-native';
-
 import PropTypes from 'prop-types';
 import { WebView } from 'react-native-webview';
 
@@ -13,6 +12,8 @@ import Header from 'components/Header';
 import Text from 'components/Text';
 
 import colors from 'themes/colors';
+
+import useDidUpdate from 'hooks/useDidUpdate';
 
 import useHorizontalModeHeader from './hooks/useHorizontaModeHeader';
 import useOrientation from './hooks/useOrientation';
@@ -38,12 +39,11 @@ const EventLiveStreamAndroid = React.forwardRef(({
   eventName,
   eventStreamLink: prefetchedEventStreamLink,
   onClose,
-  isPaused,
 }, ref) => {
   const webViewRef = useRef();
   const [isLoading, setIsLoading] = useState(true);
 
-  const { eventStreamLink, updateStreamLink } = useStreamLink({
+  const { eventStreamLink, reloadCurrentStreamLink, fetchStreamLink } = useStreamLink({
     prefetchedEventStreamLink,
     eventId,
     visible,
@@ -51,16 +51,21 @@ const EventLiveStreamAndroid = React.forwardRef(({
   });
 
   const { prolongControlsShowing, isHorizontalModeHeaderShown } = useHorizontalModeHeader();
-  const pause = useIsPaused({ isPaused, webViewRef });
-  const animation = useVisibilityChanged({ visible, webViewRef, pause });
+  const animation = useVisibilityChanged({ visible, webViewRef });
 
+  useIsPaused({ webViewRef });
   useOrientation({ visible });
   useUpdateWebviewOnConnectionChanged({ webViewRef, visible, setIsLoading });
   useGoLiveOnForeground({ webViewRef });
 
   useImperativeHandle(ref, () => ({
-    updateStreamLink,
+    reloadCurrentStreamLink,
   }));
+
+  useDidUpdate(() => {
+    fetchStreamLink();
+    webViewRef.current.reload();
+  }, [eventId]);
 
   const { width, height } = useWindowDimensions();
   const isPortraitOrientation = height > width;
@@ -92,6 +97,7 @@ const EventLiveStreamAndroid = React.forwardRef(({
 
   const onWebViewError = useCallback((err) => {
     console.log('webview error:', err);
+    setIsLoading(true);
     webViewRef.current.reload();
   }, []);
 
@@ -165,7 +171,6 @@ EventLiveStreamAndroid.propTypes = {
   eventName: PropTypes.string.isRequired,
   eventStreamLink: PropTypes.string,
   onClose: PropTypes.func.isRequired,
-  isPaused: PropTypes.bool.isRequired,
 };
 
 export default React.memo(EventLiveStreamAndroid);

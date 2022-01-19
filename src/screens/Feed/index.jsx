@@ -1,5 +1,5 @@
-import React, { useCallback, useRef, useMemo } from 'react';
-import { SafeAreaView, View, ActivityIndicator, ScrollView } from 'react-native';
+import React, { useCallback, useRef, useMemo, useState } from 'react';
+import { SafeAreaView, View, ActivityIndicator, ScrollView, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ import Header from 'components/Header';
 import Post from 'components/Post';
 import Text from 'components/Text';
 import CustomRefreshControl from 'components/CustomRefreshControl';
+import EventLiveStreamAndroidModal from 'components/EventLiveStreamAndroid';
 
 import useToast from 'hooks/useToast';
 
@@ -27,12 +28,13 @@ import useFetch from './hooks/useFetch';
 import useSubscriptionUpdated from './hooks/useSubscriptionUpdated';
 import useViewableItems from './hooks/useViewableItems';
 import useEventsLiveStreamsUpdated from './hooks/useEventsLiveStreamsUpdated';
+import useEventsLiveStreamAndroid from './hooks/useEventLiveStreamAndroid';
 
 import WatchLiveStreamBanner from './components/WatchLiveStreamBanner';
 
 import styles from './styles';
 
-const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
+const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0, waitForInteraction: false };
 
 function Feed() {
   const navigation = useNavigation();
@@ -40,6 +42,7 @@ function Feed() {
   const { showFailure } = useToast();
 
   const fightersList = useSelector(userSelectors.getSupportedFighters);
+  const [liveStreamEvent, setLiveStreamEvent] = useState();
 
   const listRef = useRef(null);
   useScrollToTop(listRef);
@@ -55,9 +58,20 @@ function Feed() {
     liveStreamEvents: preloadedLiveStreamEvents,
   } = useFetch();
 
+
   useSubscriptionUpdated({ fetchNewItems, isFetchedFirstTime, onRefresh });
-  const { updateViewableItems, viewableItemsState } = useViewableItems();
   const liveStreamEvents = useEventsLiveStreamsUpdated({ posts, preloadedEvents: preloadedLiveStreamEvents });
+
+  const {
+    isAndroidStreamModalVisible,
+    setIsAndroidStreamModalVisible,
+    onCloseAndroidStreamModal,
+  } = useEventsLiveStreamAndroid();
+
+  const {
+    updateViewableItems,
+    viewableItemsState,
+  } = useViewableItems({ setLiveStreamEvent, isAndroidStreamModalVisible });
 
   const onUpdateCommentsCount = useCallback(async (postId) => {
     try {
@@ -81,6 +95,15 @@ function Feed() {
     navigation.navigate('SearchFighters');
   }, [navigation]);
 
+
+  const onLiveStreamBannerPress = useCallback((event) => {
+    if (event._id !== liveStreamEvent._id) {
+      setLiveStreamEvent(event);
+    }
+
+    setIsAndroidStreamModalVisible(true);
+  }, [liveStreamEvent?._id, setIsAndroidStreamModalVisible]);
+
   const keyExtractor = useCallback((item) => {
     const isEvent = !!item.liveStream;
     return isEvent ? `event_${item._id}` : `post_${item._id}`;
@@ -90,7 +113,7 @@ function Feed() {
     const isEvent = !!item.liveStream;
 
     if (isEvent) {
-      return <WatchLiveStreamBanner event={item} />;
+      return <WatchLiveStreamBanner onPress={onLiveStreamBannerPress} event={item} />;
     }
 
     return (
@@ -153,6 +176,15 @@ function Feed() {
 
   return (
     <SafeAreaView style={styles.screen}>
+      {Platform.OS === 'android' && liveStreamEvent && (
+        <EventLiveStreamAndroidModal
+          visible={isAndroidStreamModalVisible}
+          eventId={liveStreamEvent._id}
+          eventName={liveStreamEvent.name}
+          onClose={onCloseAndroidStreamModal}
+        />
+      )}
+
       <Header
         title={t('Feed.feed')}
         rightItemType="icon"

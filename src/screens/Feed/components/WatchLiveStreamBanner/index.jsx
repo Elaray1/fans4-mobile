@@ -1,6 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
@@ -11,25 +10,19 @@ import Text from 'components/Text';
 
 import styles from './styles';
 
-const WatchLiveStreamBanner = ({ event }) => {
+const WatchLiveStreamBanner = ({ event, onPress }) => {
   const { t } = useTranslation();
-  const navigation = useNavigation();
 
   const posterSource = useMemo(() => {
     return { uri: event.imageUrl };
   }, [event.imageUrl]);
 
-  const onEventPress = useCallback(() => {
-    navigation.navigate('EventFights', {
-      event,
-      isNeedToFetchEvent: false,
-      isOpenStreamModal: true,
-      goBackWhenStreamFinished: true,
-    });
-  }, [navigation, event]);
+  const onContainerPress = useCallback(() => {
+    onPress(event);
+  }, [onPress, event]);
 
   return (
-    <TouchableOpacity onPress={onEventPress} style={styles.container}>
+    <TouchableOpacity onPress={onContainerPress} style={styles.container}>
       <View>
         <FastImage style={styles.poster} source={posterSource} />
 
@@ -48,6 +41,7 @@ const WatchLiveStreamBanner = ({ event }) => {
 
 WatchLiveStreamBanner.propTypes = {
   event: PropTypes.shape().isRequired,
+  onPress: PropTypes.func.isRequired,
 };
 
 export default React.memo(WatchLiveStreamBanner);
