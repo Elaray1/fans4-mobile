@@ -9,12 +9,16 @@ import LiveIcon from 'assets/icons/live.svg';
 import Text from 'components/Text';
 import LiveStreamPlayerIos from 'components/LiveStreamPlayerIos';
 
+import { LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
+
 import colors from 'themes/colors';
 
 import styles from './styles';
 
 const WatchLiveStreamBanner = ({ event, onPress }) => {
   const { t } = useTranslation();
+
+  const isLiveStream = event.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
 
   const posterSource = useMemo(() => {
     return { uri: event.imageUrl };
@@ -46,6 +50,7 @@ const WatchLiveStreamBanner = ({ event, onPress }) => {
             ref={streamVideoRefIos}
             eventId={event._id}
             onReadyToPlay={onReadyToPlayIos}
+            isLiveStream={isLiveStream}
           />
         )}
 
