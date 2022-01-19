@@ -126,7 +126,7 @@ function EventFights({ route }) {
       }
 
       if (Platform.OS === 'android') {
-        liveStreamAndroidModalRef.current?.updateStreamLink();
+        liveStreamAndroidModalRef.current?.reloadCurrentStreamLink();
 
         if (isCountdownTimerModalVisible) {
           setIsCountdownTimerModalVisible(false);
@@ -240,14 +240,16 @@ function EventFights({ route }) {
     }
   }, [isOpenStreamModalNeeded, onShowLiveStream, isLiveStream, isLiveStreamLoadingIos]);
 
-  AppState.addEventListener('change', (state) => {
-    if (state !== 'active') {
-      setIsPaused(true);
-      return;
-    }
+  useEffect(() => {
+    AppState.addEventListener('change', (state) => {
+      if (state !== 'active') {
+        setIsPaused(true);
+        return;
+      }
 
-    setIsPaused(false);
-  });
+      setIsPaused(false);
+    });
+  }, []);
 
   return (
     <>
@@ -267,7 +269,6 @@ function EventFights({ route }) {
           eventName={event.name}
           eventStreamLink={eventStreamLink}
           onClose={onCloseAndroidStreamModal}
-          isPaused={isPaused}
         />
       )}
 

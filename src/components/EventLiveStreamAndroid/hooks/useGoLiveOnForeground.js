@@ -5,7 +5,7 @@ import { AppState } from 'react-native';
 const goLive = () => {
   return `
     const event = new CustomEvent('go_to_live');
-    window.dispatchEvent(evt);`;
+    window.dispatchEvent(event);`;
 };
 
 const useGoLiveOnForeground = ({ webViewRef }) => {

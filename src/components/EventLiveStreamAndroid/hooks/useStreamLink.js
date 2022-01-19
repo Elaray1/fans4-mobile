@@ -5,19 +5,23 @@ import * as eventApi from 'resources/event/event.api';
 const useStreamLink = ({ eventId, prefetchedEventStreamLink, setIsLoading }) => {
   const [eventStreamLink, setEventStreamLink] = useState(prefetchedEventStreamLink);
 
-  const updateStreamLink = useCallback(async () => {
-    if (!eventStreamLink) {
-      setIsLoading(true);
+  const fetchStreamLink = useCallback(async () => {
+    setIsLoading(true);
 
-      const { link } = await eventApi.getStreamLinkByEventId(eventId);
-      setEventStreamLink(link);
+    const { link } = await eventApi.getStreamLinkByEventId(eventId);
+    setEventStreamLink(link);
+  }, [eventId, setIsLoading]);
+
+  const reloadCurrentStreamLink = useCallback(async () => {
+    if (!eventStreamLink) {
+      fetchStreamLink();
     }
-  }, [eventId, eventStreamLink, setIsLoading]);
+  }, [eventStreamLink, fetchStreamLink]);
 
   useEffect(() => {
-    updateStreamLink();
-  }, [updateStreamLink, setIsLoading]);
+    reloadCurrentStreamLink();
+  }, [reloadCurrentStreamLink]);
 
-  return { eventStreamLink, updateStreamLink };
+  return { eventStreamLink, reloadCurrentStreamLink, fetchStreamLink };
 };
 export default useStreamLink;
