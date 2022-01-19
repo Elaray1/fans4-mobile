@@ -68,6 +68,7 @@ function EventFights({ route }) {
 
   const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
   const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(!!isOpenStreamModal);
+  const liveStreamAndroidModalRef = useRef();
 
   const [isOpenStreamModalNeeded, setIsOpenStreamModalNeeded] = useState(isOpenStreamModal);
   const [isFullScreenLoader, setIsFullScreenLoader] = useState(false);
@@ -125,8 +126,12 @@ function EventFights({ route }) {
       }
 
       if (Platform.OS === 'android') {
-        setIsCountdownTimerModalVisible(false);
-        setIsAndroidStreamModalVisible(true);
+        liveStreamAndroidModalRef.current?.updateStreamLink();
+
+        if (isCountdownTimerModalVisible) {
+          setIsCountdownTimerModalVisible(false);
+          setIsAndroidStreamModalVisible(true);
+        }
       }
     }
 
@@ -140,7 +145,8 @@ function EventFights({ route }) {
 
     setEvent(updatedEvent);
     onRefresh();
-  }, [onRefresh, isLiveStream, closeStreamAlert, isLiveStreamShownIos, event.liveStream.status]);
+  }, [onRefresh, isLiveStream, closeStreamAlert,
+    isLiveStreamShownIos, event.liveStream.status, isCountdownTimerModalVisible]);
 
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
@@ -255,6 +261,7 @@ function EventFights({ route }) {
 
       {Platform.OS === 'android' && (
         <EventLiveStreamAndroidModal
+          ref={liveStreamAndroidModalRef}
           visible={isAndroidStreamModalVisible}
           eventId={event._id}
           eventName={event.name}

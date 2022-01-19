@@ -37,8 +37,8 @@ export default StyleSheet.create({
     margin: 15,
   },
   posts: {
-    marginTop: 20,
-    marginBottom: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   separator: {
     height: 16,

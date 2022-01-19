@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, useRef } from 'react';
+import React, { useCallback, useState, useMemo, useRef, useImperativeHandle } from 'react';
 import { View, ActivityIndicator, useWindowDimensions,
   TouchableOpacity, TouchableWithoutFeedback, Animated, StatusBar } from 'react-native';
 
@@ -32,18 +32,24 @@ const muteSound = (isMuted) => {
     true;`;
 };
 
-const EventLiveStreamAndroid = ({
+const EventLiveStreamAndroid = React.forwardRef(({
   visible,
   eventId,
   eventName,
   eventStreamLink: prefetchedEventStreamLink,
   onClose,
   isPaused,
-}) => {
+}, ref) => {
   const webViewRef = useRef();
   const [isLoading, setIsLoading] = useState(true);
 
-  const eventStreamLink = useStreamLink({ prefetchedEventStreamLink, eventId, visible });
+  const { eventStreamLink, updateStreamLink } = useStreamLink({
+    prefetchedEventStreamLink,
+    eventId,
+    visible,
+    setIsLoading,
+  });
+
   const { prolongControlsShowing, isHorizontalModeHeaderShown } = useHorizontalModeHeader();
   const pause = useIsPaused({ isPaused, webViewRef });
   const animation = useVisibilityChanged({ visible, webViewRef, pause });
@@ -51,6 +57,10 @@ const EventLiveStreamAndroid = ({
   useOrientation({ visible });
   useUpdateWebviewOnConnectionChanged({ webViewRef, visible, setIsLoading });
   useGoLiveOnForeground({ webViewRef });
+
+  useImperativeHandle(ref, () => ({
+    updateStreamLink,
+  }));
 
   const { width, height } = useWindowDimensions();
   const isPortraitOrientation = height > width;
@@ -126,7 +136,7 @@ const EventLiveStreamAndroid = ({
           </TouchableWithoutFeedback>
         )}
 
-        {(!eventStreamLink || isLoading) && (
+        {isLoading && (
           <View style={styles.loadingView}>
             <ActivityIndicator size="large" color={colors.primary} />
           </View>
@@ -143,7 +153,7 @@ const EventLiveStreamAndroid = ({
       )}
     </Animated.View>
   );
-};
+});
 
 EventLiveStreamAndroid.defaultProps = {
   eventStreamLink: PropTypes.null,
