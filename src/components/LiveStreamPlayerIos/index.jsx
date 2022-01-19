@@ -13,6 +13,7 @@ const LiveStreamPlayerIos = React.forwardRef(({
   onReadyToPlay,
   onExitFullScreen,
   onFullscreenOpened,
+  isLiveStream,
 }, ref) => {
   const [eventStreamLink, setEventStreamLink] = useState(null);
   const [width, setWidth] = useState(1920);
@@ -24,14 +25,14 @@ const LiveStreamPlayerIos = React.forwardRef(({
   const videoRef = useRef();
 
   const getStreamLink = useCallback(async () => {
-    if (!eventStreamLink) {
+    if (!eventStreamLink && isLiveStream) {
       const { link, width: streamWidth, height: streamHeight } = await eventApi.getStreamLinkByEventId(eventId);
 
       setEventStreamLink(link);
       setWidth(streamWidth);
       setHeight(streamHeight);
     }
-  }, [eventStreamLink, eventId]);
+  }, [eventStreamLink, eventId, isLiveStream]);
 
   useImperativeHandle(ref, () => ({
     closeFullScreen: () => {
@@ -98,16 +99,17 @@ const LiveStreamPlayerIos = React.forwardRef(({
   );
 });
 
-LiveStreamPlayerIos.defaultProps = {
-  onExitFullScreen: undefined,
-  onFullscreenOpened: undefined,
-};
-
 LiveStreamPlayerIos.propTypes = {
   eventId: PropTypes.string.isRequired,
   onReadyToPlay: PropTypes.func.isRequired,
   onExitFullScreen: PropTypes.func,
   onFullscreenOpened: PropTypes.bool,
+  isLiveStream: PropTypes.bool.isRequired,
+};
+
+LiveStreamPlayerIos.defaultProps = {
+  onExitFullScreen: undefined,
+  onFullscreenOpened: undefined,
 };
 
 export default React.memo(LiveStreamPlayerIos);

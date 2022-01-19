@@ -299,6 +299,7 @@ function EventFights({ route }) {
                   onExitFullScreen={onExitFullScreenIos}
                   onReadyToPlay={onReadyToPlayIos}
                   onFullscreenOpened={onFullscreenOpened}
+                  isLiveStream={isLiveStream}
                 />
               )}
 
