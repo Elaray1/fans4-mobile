@@ -68,7 +68,7 @@ const ChatsList = () => {
               <NewChatGreyIcon />
               <Text style={styles.text}> {t('ChatsList.clickTheIcon2')}</Text>
             </View>
-            <Text style={styles.text}> {t('ChatsList.clickTheIcon2')}</Text>
+            <Text style={styles.text}> {t('ChatsList.clickTheIcon3')}</Text>
           </>
         )
         }
