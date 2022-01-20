@@ -372,9 +372,9 @@ function Post({
 
   const onSeeLikes = useCallback(() => {
     if (isSubscribedOrAuthor) {
-      navigation.navigate('LikesList', { likedUsers: likedUsersState });
+      navigation.navigate('LikesList', { postId: _id, likedUsers: likedUsersState });
     }
-  }, [isSubscribedOrAuthor, likedUsersState, navigation]);
+  }, [_id, isSubscribedOrAuthor, likedUsersState, navigation]);
 
   return (
     <>
