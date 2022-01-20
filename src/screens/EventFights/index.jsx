@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
 import LiveIcon from 'assets/icons/live.svg';
+import PlayIcon from 'assets/icons/play-mini.svg';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -39,8 +40,10 @@ import LiveStreamBar from './components/LiveStreamBar';
 
 import useAnalytics from './hooks/useAnalytics';
 import useFetchItems from './hooks/useFetchItems';
-import usePrefetchStreamLinkAndroid from './hooks/usePrefetchStreamLinkAndroid';
+import usePrefetchStreamLink from './hooks/usePrefetchStreamLink';
 import useEventUpdated from './hooks/useEventUpdated';
+
+import formatDuration from './helpers/formatDuration';
 
 const posterAspectRatio = 16 / 9;
 const aspectRatioStyle = { aspectRatio: posterAspectRatio };
@@ -56,8 +59,11 @@ function EventFights({ route }) {
   const isFan = userType === USER_TYPES.FAN;
 
   const isLiveStream = event.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
-  const isLive = event.status === EVENT_STATUSES.PAST && event.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED;
+  const isLive = event.status === EVENT_STATUSES.PAST
+  && event.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED
+  && event.liveStream.status !== LIVE_STREAM_STATUSES.PROCESSING;
   const isUpcoming = event.status === EVENT_STATUSES.UPCOMING;
+  const isLiveStreamProcessing = event.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING;
   const isLiveStreamFinished = event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED;
 
   const streamVideoRefIos = useRef(null);
@@ -151,7 +157,8 @@ function EventFights({ route }) {
 
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
-  usePrefetchStreamLinkAndroid({ eventId: event._id, setEventStreamLink, streamStatus: event.liveStream.status });
+  usePrefetchStreamLink({ eventId: event._id, setEventStreamLink, streamStatus: event.liveStream.status });
+
 
   const onShowLiveStream = useCallback(() => {
     if (Platform.OS === 'ios') {
@@ -326,10 +333,21 @@ function EventFights({ route }) {
                 </View>
               )}
 
+              {isLiveStreamProcessing && (
+              <View style={[styles.posterLabel, styles.streamFinished]}>
+                <Text style={styles.posterLabelText}>{t('Events.videoWillBeAvailableSoon')}</Text>
+              </View>
+              )}
+
               {isLiveStreamFinished && (
-                <View style={[styles.posterLabel, styles.streamFinished]}>
-                  <Text style={styles.posterLabelText}>{t('Events.videoWillBeAvailableSoon')}</Text>
-                </View>
+              <View style={[styles.posterLabel, styles.streamFinished]}>
+                <PlayIcon />
+                <Text style={styles.posterLabelText}>{eventStreamLink
+                  ? formatDuration(event.liveStream.duration)
+                  // TODO: add loader or smthing else
+                  : '00:00'}
+                </Text>
+              </View>
               )}
 
               {isLiveStreamLoadingIos && (

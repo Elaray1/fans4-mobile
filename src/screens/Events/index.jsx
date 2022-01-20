@@ -188,7 +188,8 @@ function Events() {
     const progress = `${(item.fights.filter(fight => fight.results !== undefined).length) / item.fights.length * 100}%`;
 
     const isLive = item.status === EVENT_STATUSES.PAST
-      && item.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED;
+      && item.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED
+      && item.liveStream.status !== LIVE_STREAM_STATUSES.PROCESSING;
 
     return (
       <TouchableOpacity
