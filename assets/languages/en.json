@@ -192,13 +192,13 @@
     },
     "fan": {
       "question1": "Why are some features not available to me?",
-      "answer1": "Some features are only available with a subscription to Fans4. For example, viewing a Fighter's exclusive content or proposing a fight between Fighters is only available once you are subscribed.",
+      "answer1": "Some features are only available with a subscription to Fans4. For example, viewing all Fighter exclusive content or proposing a fight between your Fighters is only available once you are subscribed to at least one Fighter.",
       "question2": "When can I start pairing and voting for my Fighter?",
       "answer2": "Playing matchmaker is a very unique and exciting feature of the Fans4 app. Very soon you will enjoy added features and functionality on Fans4!",
       "question3": "When is the next live event and how to I watch it?",
       "answer3": "We are planning for a Fans4 event in the first quarter of 2022. Stay tuned for more details including live streaming options.",
       "question4": "How can I propose a fight?",
-      "answer4": "To do this, you have to go to Voting > Propose > Choose your Fighter > Next > Choose opponent > Submit. Then your proposal will be sent for admin review. You can track proposal status on 'your proposals' tab on Voting page."
+      "answer4": "You can propose a fight only with the Fighters who you are subscribed to. To do this, go to Voting > Propose > Choose your Fighter > Next > Choose opponent > Submit. Once approved, you will be able to vote your Fighter in for the next event. Be sure to track the proposal status on 'Your Proposals' tab on the Voting page."
     }
   },
   "SettingsModal": {
@@ -446,7 +446,7 @@
     "ok": "OK",
     "youSubscribedToThisFighterInIos": "You subscribed to this fighter in iOS mobile app. Please go to Apple subscriptions to unsubscribe",
     "unsubscribeText1": "Your subscription to the ",
-    "unsubscribeText2": " Fighter will be cancelled, but you can still access their content until ",
+    "unsubscribeText2": " Fighter will be cancelled, but you will have full access until ",
     "keepIt": "Keep it",
     "youWillBeRedirectedToResubscribeTo1": "Your subscription for the ",
     "youWillBeRedirectedToResubscribeTo2": " fighter will be renewed",
@@ -470,9 +470,9 @@
   "Feed": {
     "feed": "Feed",
     "noSubscriptionsYet": "No subscriptions yet",
-    "beSureToSubscribe": "Become a Fan for full access to your Fighter's content, pairing, and voting for live events!",
+    "beSureToSubscribe": "Become a Fan for full access to Fighter exclusive content, pairing, and voting for live events!",
     "noPostsYet": "No posts yet",
-    "onceFighterWillAddPostsYouWillSeeThemHere": "Check back to view your Fighter's first exclusive post!",
+    "onceFighterWillAddPostsYouWillSeeThemHere": "Check back for exclusive Fighter content!",
     "couldntRefreshTheFeedPullToRefresh": "Couldn’t refresh the feed. Pull to refresh."
   },
   "Events": {
@@ -714,8 +714,8 @@
     "fighterIsBlocked": "This Fighter is blocked. Chat functionality with this Fighter has been disabled."
   },
   "SubscriptionPosibilities": {
-    "subscriptionPossibility1": "Full access to Fighter's content",
-    "subscriptionPossibility2": "Proposing Fighter matchups",
+    "subscriptionPossibility1": "Full access to all Fighter content",
+    "subscriptionPossibility2": "Proposing your Fighter matchups",
     "subscriptionPossibility3": "Voting for fights in future events",
     "subscriptionPossibility4": "Exclusive live-streaming events"
   },
