@@ -5,9 +5,10 @@ import * as eventApi from 'resources/event/event.api';
 import { LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
 
 
-const usePrefetchLinkAndroid = ({ eventId, setEventStreamLink, streamStatus }) => {
+const usePrefetchLink = ({ eventId, setEventStreamLink, streamStatus }) => {
   useEffect(() => {
-    if (Platform.OS === 'ios' || streamStatus !== LIVE_STREAM_STATUSES.LIVE) {
+    if (streamStatus !== LIVE_STREAM_STATUSES.FINISHED
+      && (Platform.OS === 'ios' || streamStatus !== LIVE_STREAM_STATUSES.LIVE)) {
       return;
     }
 
@@ -20,4 +21,4 @@ const usePrefetchLinkAndroid = ({ eventId, setEventStreamLink, streamStatus }) =
   }, [eventId, setEventStreamLink, streamStatus]);
 };
 
-export default usePrefetchLinkAndroid;
+export default usePrefetchLink;
