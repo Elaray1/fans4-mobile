@@ -10,6 +10,7 @@ import CloseWithBackgroundIcon from 'assets/icons/close-with-background.svg';
 
 import Header from 'components/Header';
 import Text from 'components/Text';
+import CountdownTimer from 'components/CountdownTimer';
 
 import colors from 'themes/colors';
 
@@ -39,6 +40,11 @@ const EventLiveStreamAndroid = React.forwardRef(({
   eventName,
   eventStreamLink: prefetchedEventStreamLink,
   onClose,
+  isCountdownShown,
+  onCloseCountdown,
+  eventDate,
+  eventTimezone,
+  eventImageUrl,
 }, ref) => {
   const webViewRef = useRef();
   const [isLoading, setIsLoading] = useState(true);
@@ -157,20 +163,40 @@ const EventLiveStreamAndroid = React.forwardRef(({
           <Text style={styles.horizontalModeTitle}>{eventName}</Text>
         </View>
       )}
+
+      {isCountdownShown && (
+        <CountdownTimer
+          onClose={onCloseCountdown}
+          eventImageUrl={eventImageUrl}
+          eventDate={eventDate}
+          eventTimezone={eventTimezone}
+          eventName={eventName}
+        />
+      )}
     </Animated.View>
   );
 });
 
 EventLiveStreamAndroid.defaultProps = {
   eventStreamLink: PropTypes.null,
+  isCountdownShown: false,
+  onCloseCountdown: undefined,
+  eventImageUrl: null,
+  eventDate: null,
+  eventTimezone: null,
 };
 
 EventLiveStreamAndroid.propTypes = {
   visible: PropTypes.bool.isRequired,
   eventId: PropTypes.string.isRequired,
   eventName: PropTypes.string.isRequired,
+  eventImageUrl: PropTypes.string,
+  eventDate: PropTypes.string,
+  eventTimezone: PropTypes.string,
   eventStreamLink: PropTypes.string,
   onClose: PropTypes.func.isRequired,
+  isCountdownShown: PropTypes.bool,
+  onCloseCountdown: PropTypes.func,
 };
 
 export default React.memo(EventLiveStreamAndroid);

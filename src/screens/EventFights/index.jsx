@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
+import { SafeAreaView, View, ActivityIndicator, TouchableOpacity,
+  Platform, AppState, Alert, Modal } from 'react-native';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform, AppState, Alert } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
@@ -19,13 +20,14 @@ import FightItem from 'components/FightItem';
 import Text from 'components/Text';
 import EventLiveStreamAndroidModal from 'components/EventLiveStreamAndroid';
 import FullScreenLoader from 'components/FullScreenLoader';
+import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
+import CountdownTimer from 'components/CountdownTimer';
 
 import colors from 'themes/colors';
 
 import { EVENT_STATUSES, LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
 import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 import { USER_TYPES } from 'resources/user/user.constants';
-import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
@@ -34,7 +36,6 @@ import styles from './styles';
 import EmptyView from './components/EmptyView';
 import LiveStreamBar from './components/LiveStreamBar';
 import LiveStreamPlayerIos from './components/LiveStreamPlayerIos';
-import CountdownTimer from './components/CountdownTimer';
 
 import useAnalytics from './hooks/useAnalytics';
 import useFetchItems from './hooks/useFetchItems';
@@ -201,7 +202,7 @@ function EventFights({ route }) {
   }, []);
 
   const onPressEventPoster = useCallback(() => {
-    if (isLiveStream && !isLiveStreamLoadingIos) {
+    if (isLiveStream || Platform.OS === 'android') {
       onShowLiveStream();
       return;
     }
@@ -210,7 +211,7 @@ function EventFights({ route }) {
       onOpenCountdownTimer();
     }
   }, [onShowLiveStream, onOpenCountdownTimer,
-    isLiveStream, isLiveStreamLoadingIos, event.status]);
+    isLiveStream, event.status]);
 
   const onCloseAndroidStreamModal = useCallback(() => {
     setIsAndroidStreamModalVisible(false);
@@ -253,11 +254,21 @@ function EventFights({ route }) {
 
   return (
     <>
-      <CountdownTimer
-        visible={isCountdownTimerModalVisible}
-        event={event}
-        onClose={onCloseCountTimerModal}
-      />
+      {Platform.OS === 'ios' && (
+        <Modal
+          visible={isCountdownTimerModalVisible}
+          animationType="slide"
+          onRequestClose={onCloseCountTimerModal}
+        >
+          <CountdownTimer
+            eventImageUrl={event.imageUrl}
+            eventName={event.name}
+            eventDate={event.date}
+            eventTimezone={event.location.timezone}
+            onClose={onCloseCountTimerModal}
+          />
+        </Modal>
+      )}
 
       {Platform.OS === 'ios' && isFullScreenLoader && <FullScreenLoader />}
 
@@ -266,9 +277,14 @@ function EventFights({ route }) {
           ref={liveStreamAndroidModalRef}
           visible={isAndroidStreamModalVisible}
           eventId={event._id}
+          eventImageUrl={event.imageUrl}
           eventName={event.name}
+          eventDate={event.date}
+          eventTimezone={event.location.timezone}
           eventStreamLink={eventStreamLink}
           onClose={onCloseAndroidStreamModal}
+          isCountdownShown={event.liveStream.status === LIVE_STREAM_STATUSES.PENDING}
+          onCloseCountdown={onCloseAndroidStreamModal}
         />
       )}
 
