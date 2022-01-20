@@ -21,3 +21,6 @@ export const getStreamLinkByEventId = _id => apiClient
 
 export const getEvent = _id => apiClient
   .get(`events/${_id}`);
+
+export const getEventVideos = _id => apiClient
+  .get(`events/${_id}/live-stream/videos`);

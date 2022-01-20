@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import getLocation from '../../getLocation';
 import formatDuration from '../../formatDuration';
 import { FIGHT_RESULT_LABELS } from '../../constants';
 
