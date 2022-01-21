@@ -8,6 +8,8 @@ import { useIsFocused } from '@react-navigation/native';
 
 import moment from 'moment';
 
+import useDidUpdate from 'hooks/useDidUpdate';
+
 import PlayIcon from 'assets/icons/play';
 import PauseIcon from 'assets/icons/pause';
 import OpenVideoFullScreenIcon from 'assets/icons/openVideoFullScreen';
@@ -20,24 +22,16 @@ import styles from './Video.styles';
 const MAX_VERTICAL_VIDEO_ASPECT_RATIO = 4 / 5;
 const CONTROLS_SHOWN_DURATION = 2 * 1000;
 const PROGRESS_BAR_PADDING = 16;
+const PROGRESS_BAR_HIT_SLOP = { top: 15, bottom: 15, left: 0, right: 0 };
 
 const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
 
-let keyCounter = 0;
-const updateVideoKey = (value) => {
-  keyCounter += 1;
-
-  return `${value}-${keyCounter}`;
-};
 
 const Video = React.forwardRef(({ source, width, height, posterSource, duration, onReadyToPlay,
   viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen, isPaused,
   onFullscreenPlayerDidPresent,
 }, ref) => {
   const isFocused = useIsFocused();
-
-  const [key, setKey] = useState(undefined);
-  const timeoutId = useRef();
 
   const [paused, setPaused] = useState(!playOnStart);
   const [renderingWidth, setRenderingWidth] = useState(0);
@@ -119,8 +113,6 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
     }
 
     setPaused(false);
-    setPaused(true);
-    setPaused(false);
 
     hideControlsWithTimeout();
   }, [hideControlsWithTimeout, isPosterShown]);
@@ -182,7 +174,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
     videoRef.current.presentFullscreenPlayer();
   }, []);
 
-  const handleOnLoadEvent = useCallback(({ duration: videoDuration, currentPosition }) => {
+  const handleOnLoadEvent = useCallback(({ duration: videoDuration }) => {
     seekToMakeThumbnail(videoDuration);
 
     if (onReadyToPlay) {
@@ -236,25 +228,18 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
     }
   }, [pause, pauseOnFullScreen, onExitFullScreen]);
 
-  const onError = useCallback(() => {
-    if (!timeoutId.current) {
-      // Using setTimeout to decrease renders count
-      const id = setTimeout(() => {
-        timeoutId.current = null;
-        setKey(updateVideoKey(source?.uri));
-      }, 2000);
-      timeoutId.current = id;
-    }
-  }, [source]);
+  const [videoKey, setVideoKey] = useState(0);
 
-  useEffect(() => {
-    if (isPaused) {
-      setPaused(true);
-    }
+  const onError = useCallback(() => {
+    setVideoKey(videoKey + 1);
+  }, [videoKey]);
+
+  useDidUpdate(() => {
+    setPaused(isPaused);
   }, [isPaused]);
 
   useEffect(() => {
-    if (!paused && (!viewable || !isFocused) && !isFullScreen) {
+    if (!paused && !isFullScreen && (!viewable || !isFocused)) {
       pause();
     }
   }, [viewable, pause, paused, isFocused, isFullScreen]);
@@ -300,27 +285,27 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
           onLayout={handleRenderedContainerLayout}
         >
           {(!posterSource || !isPosterShown || viewable) && (
-          <ReactNativeVideo
-            key={key}
-            muted={muted}
-            onFullscreenPlayerWillDismiss={onFullscreenPlayerWillDismiss}
-            onLoadStart={handleOnLoadStartEvent}
-            onLoad={handleOnLoadEvent}
-            ref={videoRef}
-            onEnd={handleVideoPlayingEnded}
-            style={videoStyle}
-            source={source}
-            ignoreSilentSwitch="ignore"
-            volume={1}
-            playInBackground
-            playWhenInactive
-            paused={paused}
-            resizeMode="cover"
-            progressUpdateInterval={300}
-            onProgress={updateTiming}
-            onError={onError}
-            onFullscreenPlayerDidPresent={onFullscreenPlayerDidPresent}
-          />
+            <ReactNativeVideo
+              key={videoKey}
+              muted={muted}
+              onFullscreenPlayerWillDismiss={onFullscreenPlayerWillDismiss}
+              onLoadStart={handleOnLoadStartEvent}
+              onLoad={handleOnLoadEvent}
+              ref={videoRef}
+              onEnd={handleVideoPlayingEnded}
+              style={videoStyle}
+              source={source}
+              ignoreSilentSwitch="ignore"
+              volume={1}
+              playInBackground
+              playWhenInactive
+              paused={paused}
+              resizeMode="cover"
+              progressUpdateInterval={300}
+              onProgress={updateTiming}
+              onError={onError}
+              onFullscreenPlayerDidPresent={onFullscreenPlayerDidPresent}
+            />
           )}
 
           {posterSource && isPosterShown && (
@@ -330,19 +315,19 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
           {isControlsShown && (
             <>
               {paused && (
-              <View style={styles.playControlContainer}>
-                <TouchableOpacity onPress={play} activeOpacity={0.7}>
-                  <PlayIcon />
-                </TouchableOpacity>
-              </View>
+                <View style={styles.playControlContainer}>
+                  <TouchableOpacity onPress={play} activeOpacity={0.7}>
+                    <PlayIcon />
+                  </TouchableOpacity>
+                </View>
               )}
 
               {!paused && (
-              <View style={styles.playControlContainer}>
-                <TouchableOpacity onPress={pause} activeOpacity={0.7}>
-                  <PauseIcon />
-                </TouchableOpacity>
-              </View>
+                <View style={styles.playControlContainer}>
+                  <TouchableOpacity onPress={pause} activeOpacity={0.7}>
+                    <PauseIcon />
+                  </TouchableOpacity>
+                </View>
               )}
 
               <View style={[styles.timingContainer, isFullScreen && styles.fullScreenTimingContainer]}>
@@ -357,17 +342,17 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
               </View>
 
               {isFullScreen && (
-              <View
-                style={[styles.progressBarContainer, progressBarContainerWidthStyle]}
-                {...panResponder.panHandlers}
-                hitSlop={{ top: 15, bottom: 15, left: 0, right: 0 }}
-              >
-                <View style={[styles.progressBar, progressBarWidthStyle]}>
-                  <View style={styles.progressBarCircleWrapper}>
-                    <View style={styles.progressBarCircle} />
+                <View
+                  style={[styles.progressBarContainer, progressBarContainerWidthStyle]}
+                  {...panResponder.panHandlers}
+                  hitSlop={PROGRESS_BAR_HIT_SLOP}
+                >
+                  <View style={[styles.progressBar, progressBarWidthStyle]}>
+                    <View style={styles.progressBarCircleWrapper}>
+                      <View style={styles.progressBarCircle} />
+                    </View>
                   </View>
                 </View>
-              </View>
               )}
             </>
           )}
