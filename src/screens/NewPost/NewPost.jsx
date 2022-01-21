@@ -13,6 +13,8 @@ import UploadMediaButton from 'components/UploadMediaButton';
 import * as postApi from 'resources/post/post.api';
 import * as postActions from 'resources/post/post.actions';
 
+import useIsConnected from 'hooks/useIsConnected';
+
 import * as rootNavigation from 'helpers/rootNavigation';
 
 import analyticsService from 'services/analytics.service';
@@ -25,11 +27,12 @@ const TEXT_NUMBER_OF_LINES = 4;
 function NewPost() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const isConnected = useIsConnected();
 
   const [text, setText] = useState('');
   const [uploadingMedia, setUploadingMedia] = useState(null);
   const [loading, setLoading] = useState(null);
-  const isSubmitDisabled = loading || (text === '' && !uploadingMedia);
+  const isSubmitDisabled = loading || (text === '' && !uploadingMedia) || !isConnected;
 
   const onChangeText = useCallback(newText => setText(newText), []);
   const handleMediaUpload = useCallback((media) => {
