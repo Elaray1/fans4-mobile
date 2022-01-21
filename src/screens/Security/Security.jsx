@@ -35,6 +35,10 @@ function Security() {
         [field]: [],
       });
     } else {
+      if (!inputValue) {
+        return;
+      }
+
       setInputErrors({
         ...inputErrors,
         [field]: [t('Security.PasswordMustContainAtLeast6Characters')],
@@ -134,6 +138,7 @@ function Security() {
             type="password"
             onBlur={() => onPasswordBlur('oldPassword', oldPassword)}
             errors={inputErrors.oldPassword}
+            autoFocus
           />
         </View>
         <Input
