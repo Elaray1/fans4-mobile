@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import useDidUpdate from 'hooks/useDidUpdate';
 import Orientation from 'react-native-orientation-locker';
 
 const useOrientation = ({ isFullScreen }) => {
-  useEffect(() => {
+  useDidUpdate(() => {
     if (isFullScreen) {
       Orientation.unlockAllOrientations();
     } else {
