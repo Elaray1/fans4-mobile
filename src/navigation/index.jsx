@@ -171,81 +171,81 @@ AppState.addEventListener('change', async (appState) => {
 
 const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
-    rootNavigation.navigate('Account');
+    rootNavigation.push('Account');
   },
   [PUSH_NOTIFICATION_TYPES.FIGHTER_REGISTRATION_APPROVED]: () => {
-    rootNavigation.navigate('VerificationSuccessful');
+    rootNavigation.push('VerificationSuccessful');
   },
   [PUSH_NOTIFICATION_TYPES.FIGHTER_REGISTRATION_DECLINED]: () => {
-    rootNavigation.navigate('VerificationFailed');
+    rootNavigation.push('VerificationFailed');
   },
   [PUSH_NOTIFICATION_TYPES.STRIPE_PAYOUT_ACCOUNT_STATUS_CHANGED]: () => {
-    rootNavigation.navigate('Finances');
+    rootNavigation.push('Finances');
   },
   [PUSH_NOTIFICATION_TYPES.NEW_SUBSCRIBER]: () => {
-    rootNavigation.navigate('Activity');
+    rootNavigation.push('Activity');
   },
   [PUSH_NOTIFICATION_TYPES.FIGHTER_IN_FIGHT_VOTING]: ({ fight }) => {
     const parsedFight = JSON.parse(fight);
 
-    rootNavigation.navigate('FighterVoting', { fight: parsedFight });
+    rootNavigation.push('FighterVoting', { fight: parsedFight });
   },
   [PUSH_NOTIFICATION_TYPES.FAN_PROPOSED_FIGHT_IN_VOTING]: ({ fight }) => {
     const parsedFight = JSON.parse(fight);
 
-    rootNavigation.navigate('Voting', { fight: parsedFight });
+    rootNavigation.push('Voting', { fight: parsedFight });
   },
   [PUSH_NOTIFICATION_TYPES.FAN_PROPOSED_FIGHT_IN_UPCOMING_EVENT]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
 
-    rootNavigation.navigate('EventFights', { event: parsedEvent });
+    rootNavigation.push('EventFights', { event: parsedEvent });
   },
   [PUSH_NOTIFICATION_TYPES.FAN_VOTED_FIGHT_IN_UPCOMING_EVENT]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
 
-    rootNavigation.navigate('EventFights', { event: parsedEvent });
+    rootNavigation.push('EventFights', { event: parsedEvent });
   },
   [PUSH_NOTIFICATION_TYPES.EVENT_PUBLISHED]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
 
-    rootNavigation.navigate('EventFights', { event: parsedEvent });
+    rootNavigation.push('EventFights', { event: parsedEvent });
   },
   [PUSH_NOTIFICATION_TYPES.EVENT_CANCELLED]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
 
-    rootNavigation.navigate('EventFights', { event: parsedEvent });
+    rootNavigation.push('EventFights', { event: parsedEvent });
   },
   [PUSH_NOTIFICATION_TYPES.EVENT_POSTPONED]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
 
-    rootNavigation.navigate('EventFights', { event: parsedEvent });
+    rootNavigation.push('EventFights', { event: parsedEvent });
   },
   [PUSH_NOTIFICATION_TYPES.FIGHTER_IN_EVENT_FIGHT]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
 
-    rootNavigation.navigate('EventFights', { event: parsedEvent });
+    rootNavigation.push('EventFights', { event: parsedEvent });
   },
   [PUSH_NOTIFICATION_TYPES.NEW_EVENT_FIGHT_ADDED]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
 
-    rootNavigation.navigate('EventFights', { event: parsedEvent });
+    rootNavigation.push('EventFights', { event: parsedEvent });
   },
   [PUSH_NOTIFICATION_TYPES.NEW_EVENT_FIGHTS_ADDED]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
 
-    rootNavigation.navigate('EventFights', { event: parsedEvent });
+    rootNavigation.push('EventFights', { event: parsedEvent });
   },
   [PUSH_NOTIFICATION_TYPES.LIVE_EVENT_STARTED]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
 
-    rootNavigation.navigate('EventFights', { event: parsedEvent, isOpenStreamModal: true });
+    rootNavigation.push('EventFights', { event: parsedEvent, isOpenStreamModal: true });
   },
   [PUSH_NOTIFICATION_TYPES.NEW_MESSAGE]: ({ chat, userId }) => {
     const parsedChat = JSON.parse(chat);
 
     const otherUser = parsedChat.participants.find(p => p._id !== userId);
 
-    rootNavigation.navigate('Chat', {
+    rootNavigation.push('Chat', {
       userId: otherUser._id,
       userFullName: otherUser.name,
       userAvatar: otherUser.avatarUrl,
