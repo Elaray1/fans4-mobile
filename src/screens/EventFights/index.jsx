@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { SafeAreaView, View, ActivityIndicator, TouchableOpacity,
-  Platform, AppState, Alert, Modal } from 'react-native';
+  Platform, Alert, Modal } from 'react-native';
 import PropTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,7 @@ import EventLiveStreamAndroidModal from 'components/EventLiveStreamAndroid';
 import FullScreenLoader from 'components/FullScreenLoader';
 import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
 import CountdownTimer from 'components/CountdownTimer';
+import LiveStreamPlayerIos from 'components/LiveStreamPlayerIos';
 
 import colors from 'themes/colors';
 
@@ -35,7 +36,6 @@ import styles from './styles';
 
 import EmptyView from './components/EmptyView';
 import LiveStreamBar from './components/LiveStreamBar';
-import LiveStreamPlayerIos from './components/LiveStreamPlayerIos';
 
 import useAnalytics from './hooks/useAnalytics';
 import useFetchItems from './hooks/useFetchItems';
@@ -61,7 +61,6 @@ function EventFights({ route }) {
   const isLiveStreamFinished = event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED;
 
   const streamVideoRefIos = useRef(null);
-  const [isPaused, setIsPaused] = useState(false);
   const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState(isLiveStream && Platform.OS === 'ios');
   const [isLiveStreamShownIos, setIsLiveStreamShownIos] = useState(false);
 
@@ -124,6 +123,7 @@ function EventFights({ route }) {
     if (isLiveUpdatedEventStream && !isLiveStream) {
       if (Platform.OS === 'ios') {
         setIsLiveStreamLoadingIos(true);
+        streamVideoRefIos.current.reload();
       }
 
       if (Platform.OS === 'android') {
@@ -241,17 +241,6 @@ function EventFights({ route }) {
     }
   }, [isOpenStreamModalNeeded, onShowLiveStream, isLiveStream, isLiveStreamLoadingIos]);
 
-  useEffect(() => {
-    AppState.addEventListener('change', (state) => {
-      if (state !== 'active') {
-        setIsPaused(true);
-        return;
-      }
-
-      setIsPaused(false);
-    });
-  }, []);
-
   return (
     <>
       {Platform.OS === 'ios' && (
@@ -307,10 +296,8 @@ function EventFights({ route }) {
                 <LiveStreamPlayerIos
                   ref={streamVideoRefIos}
                   eventId={event._id}
-                  muted={!isLiveStreamShownIos}
                   onExitFullScreen={onExitFullScreenIos}
                   onReadyToPlay={onReadyToPlayIos}
-                  isPaused={isPaused}
                   onFullscreenOpened={onFullscreenOpened}
                 />
               )}

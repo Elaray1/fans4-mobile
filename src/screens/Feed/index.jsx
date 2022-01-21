@@ -34,7 +34,7 @@ import WatchLiveStreamBanner from './components/WatchLiveStreamBanner';
 
 import styles from './styles';
 
-const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0, waitForInteraction: false };
+const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
 function Feed() {
   const navigation = useNavigation();
@@ -95,8 +95,7 @@ function Feed() {
     navigation.navigate('SearchFighters');
   }, [navigation]);
 
-
-  const onLiveStreamBannerPress = useCallback((event) => {
+  const onLiveStreamBannerPressAndroid = useCallback((event) => {
     if (event._id !== liveStreamEvent._id) {
       setLiveStreamEvent(event);
     }
@@ -113,7 +112,12 @@ function Feed() {
     const isEvent = !!item.liveStream;
 
     if (isEvent) {
-      return <WatchLiveStreamBanner onPress={onLiveStreamBannerPress} event={item} />;
+      return (
+        <WatchLiveStreamBanner
+          onPress={Platform.OS === 'android' ? onLiveStreamBannerPressAndroid : undefined}
+          event={item}
+        />
+      );
     }
 
     return (
