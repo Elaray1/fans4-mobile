@@ -439,11 +439,7 @@ function Chat({ route }) {
           <View style={styles.content}>
             {!!messagesWithUnreadLabel.length && (
               <>
-                {isMessageToBeScrolledRef.current && (
-                  <View>
-                    <Loader />
-                  </View>
-                )}
+                {isMessageToBeScrolledRef.current && <Loader />}
                 <FlatList
                   ref={messagesListRef}
                   data={messagesWithUnreadLabel}
