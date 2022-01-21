@@ -22,7 +22,7 @@
     "Password": "Password",
     "SignUp": "Sign Up",
     "AlreadyHaveAccount": "Already have an account?",
-    "SignIn": "Sign in",
+    "LogIn": "Log in",
     "EmailIsInvalid": "Email is invalid",
     "PasswordMustContainAtLeast6Characters": "Password must contain at least 6 characters"
   },
@@ -35,12 +35,12 @@
     "EmailHasBeenSent": "Email has been sent"
   },
   "SignIn": {
-    "SignInAsFighter": "Sign in as a Fighter",
-    "SignInAsFan": "Sign in as a Fan",
+    "LogInAsFighter": "Log in as a Fighter",
+    "LogInAsFan": "Log in as a Fan",
     "Email": "Email",
     "Password": "Password",
     "ForgotPassword?": "Forgot password?",
-    "SignIn": "Sign In",
+    "LogIn": "Log In",
     "DontHaveAccount?": "Don’t have an account?",
     "SignUp": "Sign up",
     "EmailIsInvalid": "Email is invalid",
@@ -80,7 +80,7 @@
     "title": "Verification Failed",
     "description": "Sorry, your verification has failed. If you think that this may be an error, please contact Support.",
     "buttonText": "Contact Support",
-    "linkText": "Back to sign in page"
+    "linkText": "Back to log in page"
   },
   "OnBoarding1": {
     "fan": {
@@ -313,31 +313,31 @@
     "title": "Your Account Is Blocked",
     "description": "Your account has been blocked. If you think that this may be an error, please contact Support.",
     "buttonText": "Contact Support",
-    "linkText": "Back to sign in page"
+    "linkText": "Back to log in page"
   },
   "ForgotPassword": {
     "title": "Forgot Password",
     "inputLabel": "Email",
     "button": "Send Me a Reset Link",
-    "link": "Back to sign in page",
+    "link": "Back to log in page",
     "text": "Please enter the email address associated with your Fans4 account."
   },
   "ResetPassword": {
     "title": "Reset Link Sent",
     "description_0": "A link to reset your password has been sent to ",
     "description_1": ". Please check your Inbox.",
-    "linkText": "Back to sign in page"
+    "linkText": "Back to log in page"
   },
   "PasswordReseted": {
     "title": "Password Updated",
     "description": "Use your new password to log in.",
-    "linkText": "Back to sign in page"
+    "linkText": "Back to log in page"
   },
   "ChangePassword": {
     "title": "Change Password",
     "inputLabel": "New Password",
     "button": "Save Password",
-    "link": "Back to sign in page",
+    "link": "Back to log in page",
     "text": "Please enter new password"
   },
   "ChangeEmail": {

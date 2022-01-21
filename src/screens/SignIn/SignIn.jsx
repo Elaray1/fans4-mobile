@@ -183,7 +183,7 @@ function SignIn({ route }) {
                   </View>
                 </TouchableOpacity>
                 <Text style={styles.title}>
-                  {userType === USER_TYPES.FIGHTER ? t('SignIn.SignInAsFighter') : t('SignIn.SignInAsFan')}
+                  {userType === USER_TYPES.FIGHTER ? t('SignIn.LogInAsFighter') : t('SignIn.LogInAsFan')}
                 </Text>
               </View>
 
@@ -223,7 +223,7 @@ function SignIn({ route }) {
 
             <View style={styles.signInButtonWrapper}>
               <Button
-                title={t('SignIn.SignIn')}
+                title={t('SignIn.LogIn')}
                 disabled={!emailValue
                   || !passwordValue
                   || !!inputErrors.email.length
