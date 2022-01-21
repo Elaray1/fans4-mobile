@@ -15,6 +15,8 @@ import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import * as postApi from 'resources/post/post.api';
 
+import useToast from 'hooks/useToast';
+
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 
 import colors from 'themes/colors';
@@ -23,16 +25,22 @@ import styles from './styles';
 
 function LikesList({ route }) {
   const { t } = useTranslation();
+  const { showFailure } = useToast();
+
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [likedUsers, setLikedUsers] = useState(route?.params?.likedUsers || []);
   const { postId } = route.params;
 
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
-    const fetchedPost = await postApi.getPost(postId);
-    setLikedUsers(fetchedPost.likedUsers);
+    try {
+      const fetchedPost = await postApi.getPost(postId);
+      setLikedUsers(fetchedPost.likedUsers);
+    } catch {
+      showFailure(t('Fights.couldntRefreshTheFeedPullToRefresh'));
+    }
     setIsRefreshing(false);
-  }, [postId]);
+  }, [postId, showFailure, t]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -85,7 +93,7 @@ function LikesList({ route }) {
         )
         : (
           <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={styles.scrollView}
             refreshControl={RefreshControl}
             keyboardShouldPersistTaps="handled"
           >
