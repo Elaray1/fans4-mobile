@@ -2,15 +2,12 @@ import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import {
   SafeAreaView, View, ActivityIndicator, TouchableOpacity, ScrollView,
 } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import moment from 'moment-timezone';
 
 import * as eventApi from 'resources/event/event.api';
 import * as userSelectors from 'resources/user/user.selectors';
-import { EVENT_STATUSES, LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
 import { USER_TYPES } from 'resources/user/user.constants';
 
 import FlatList from 'components/FlatList';
@@ -21,23 +18,19 @@ import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import useToast from 'hooks/useToast';
 
-import LiveIcon from 'assets/icons/live.svg';
 import NoEventsIllustration from 'assets/illustrations/no-events.svg';
 
 import colors from 'themes/colors';
 
-import { toLocalDateAndTime } from 'helpers/toLocalTime';
-
 import analyticsService from 'services/analytics.service';
+
+import EventItem from './components/EventItem';
 
 import styles from './styles';
 
 const TABS = { UPCOMING: 'upcoming', PAST: 'past' };
 
 const PER_PAGE_COUNT = 20;
-
-const posterAspectRatio = 16 / 9;
-const aspectRatioStyle = { aspectRatio: posterAspectRatio };
 
 function Events() {
   const { t } = useTranslation();
@@ -178,61 +171,11 @@ function Events() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTab.id]);
 
-  const onEventPress = useCallback((event) => {
-    navigation.navigate('EventFights', { event, isNeedToFetchEvent: true });
-  }, [navigation]);
-
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
-    const progress = `${(item.fights.filter(fight => fight.results !== undefined).length) / item.fights.length * 100}%`;
-
-    const isLive = item.status === EVENT_STATUSES.PAST
-      && item.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED
-      && item.liveStream.status !== LIVE_STREAM_STATUSES.PROCESSING;
-
     return (
-      <TouchableOpacity
-        onPress={() => onEventPress(item)}
-        activeOpacity={0.7}
-        style={styles.event}
-      >
-        <View style={[styles.imageContainer, aspectRatioStyle]}>
-          <FastImage
-            style={[styles.photoImage, aspectRatioStyle]}
-            source={{ uri: item.imageUrl }}
-          />
-
-          {item.status === EVENT_STATUSES.CANCELLED && moment().isBefore(item.date) && (
-            <View style={styles.imageStatus}>
-              <Text style={styles.imageText}>{t('Events.cancelled')}</Text>
-            </View>
-          )}
-
-          {isLive && (
-            <View style={styles.live}>
-              <LiveIcon />
-              <Text>{t('Events.live')}</Text>
-            </View>
-          )}
-
-          {isLive && (
-            <View style={styles.line}>
-              <View style={[styles.progress, {
-                width: progress,
-              }]}
-              />
-            </View>
-          )}
-        </View>
-        <View>
-          <Text style={styles.titleText}>{item.name}</Text>
-          <Text style={styles.text}>{toLocalDateAndTime(item)}</Text>
-          <Text style={styles.text}>
-            {`${item.location.cityName}, ${item.location.stateCode}`}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <EventItem event={item} activeTab={selectedTab} />
     );
   };
 

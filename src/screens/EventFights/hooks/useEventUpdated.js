@@ -12,10 +12,10 @@ const useEventUpdated = ({ onEventUpdated, eventId }) => {
     };
 
     websocketsService.joinRoom(`event-${eventId}`);
-    websocketsService.on('event:updated', updateEvent);
+    websocketsService.on(`event-${eventId}:updated`, updateEvent);
 
     return () => {
-      websocketsService.off('event:updated', updateEvent);
+      websocketsService.off(`event-${eventId}:updated`, updateEvent);
       websocketsService.leaveRoom(`event-${eventId}`);
     };
   }, [eventId, onEventUpdated]);
