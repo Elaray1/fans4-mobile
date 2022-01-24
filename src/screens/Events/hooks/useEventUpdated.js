@@ -5,7 +5,6 @@ import websocketsService from 'services/socket.service';
 const useEventUpdated = ({ onEventUpdated, eventId }) => {
   useEffect(() => {
     const updateEvent = (updatedEvent) => {
-      console.log('EVENT UPDATED', updatedEvent._id);
       onEventUpdated(updatedEvent);
     };
 
