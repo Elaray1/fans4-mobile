@@ -37,6 +37,8 @@ import { FANS4_ACCOUNT } from 'helpers/constants';
 
 import { formatCount, formatTime } from './Post.helpers';
 
+import useLikes from './hooks/useLikes';
+
 import styles from './Post.styles';
 
 function Post({
@@ -63,12 +65,6 @@ function Post({
   const userType = useSelector(userSelectors.getUserType);
   const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
 
-  const [likesCount, setLikesCount] = useState(likedUsers.length);
-  const [likedUsersState, setLikedUsersState] = useState(likedUsers);
-  const [isLiked, setIsLiked] = useState(likedUsersState.some(u => u._id === userId));
-  const [likedNames, setLikedNames] = useState(likedUsersState.length === 2
-    ? `${likedUsersState[1]?.name} and ${likedUsersState[0]?.name}`
-    : likedUsersState[0]?.name);
 
   const [isEditPostModal, setIsEditPostModal] = useState(false);
   const [isRemoveFromFeedConfirmationModal, setIsRemoveFromFeedConfirmationModal] = useState(false);
@@ -82,19 +78,18 @@ function Post({
   || !!userSubscriptions.length
   || author._id === FANS4_ACCOUNT._id;
 
+  const {
+    setLikedUsersState,
+    likedUsersState,
+    likesCount,
+    isLiked,
+    likedNames,
+  } = useLikes({ likedUsers, userId });
+
   const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1} others` : ''}`;
   const isPostAuthor = userId === author?._id;
 
   const [videoLink, setVideoLink] = useState(null);
-
-  useEffect(() => {
-    setLikesCount(likedUsersState.length);
-    setIsLiked(likedUsersState.some(u => u._id === userId));
-
-    setLikedNames(likedUsersState.length === 2
-      ? `${likedUsersState[1]?.name} and ${likedUsersState[0]?.name}`
-      : likedUsersState[0]?.name);
-  }, [userId, likedUsersState]);
 
   const mediaType = media && media.type;
 
@@ -222,12 +217,14 @@ function Post({
 
   const onNavigateToAddPost = useCallback(async () => {
     setIsProcessingErrorPostButtonDisabled(true);
+
     try {
       const updatedPost = await postApi.removeProcessingErrorPost(_id);
       onHidePostFromFeed(updatedPost);
     } catch (error) {
       showFailure();
     }
+
     navigation.navigate('NewPost');
     setIsProcessingErrorPostButtonDisabled(false);
   }, [navigation, _id, showFailure, onHidePostFromFeed]);
@@ -359,16 +356,18 @@ function Post({
   const onLikePress = useCallback(async () => {
     try {
       let updatedPost;
+
       if (isLiked) {
         updatedPost = await postApi.removeLikeFromPost(_id);
       } else {
         updatedPost = await postApi.likePost(_id);
       }
+
       setLikedUsersState(updatedPost.likedUsers);
     } catch (error) {
       showFailure();
     }
-  }, [isLiked, _id, showFailure]);
+  }, [isLiked, _id, showFailure, setLikedUsersState]);
 
   const onSeeLikes = useCallback(() => {
     if (isSubscribedOrAuthor) {
@@ -416,6 +415,7 @@ function Post({
       >
         {authorView}
         {contentContainerView}
+
         {status === POST_STATUSES.APPROVED && (
           <View style={[styles.status, styles.approvedStatus]}>
             <View>
@@ -434,6 +434,7 @@ function Post({
                   )}
                 </>
               )}
+
               <View style={styles.postActions}>
                 <TouchableOpacity
                   onPress={onLikePress}
@@ -447,12 +448,13 @@ function Post({
                       fill={iconsColor}
                     />
                   ) : <LikeIcon stroke={iconsColor} />}
-                  {Boolean(likesCount)
-                  && (
-                  <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(likesCount)}
-                  </Text>
+
+                  {Boolean(likesCount) && (
+                    <Text style={[styles.postActionText, disabled && styles.disabled]}>{formatCount(likesCount)}
+                    </Text>
                   )}
                 </TouchableOpacity>
+
                 <TouchableOpacity
                   onPress={onCommentsPress}
                   activeOpacity={0.7}
