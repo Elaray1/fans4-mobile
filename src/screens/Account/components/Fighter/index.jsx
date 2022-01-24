@@ -134,6 +134,8 @@ function FighterAccount({ postId }) {
     } catch (err) {
       console.log('Account screen initialization error:', err);
       showFailure();
+      setIsRefreshing(false);
+
       return;
     }
 
