@@ -116,7 +116,10 @@ const pushNotificationService = new PushNotificationService(userApi);
 
 PushNotification.configure({
   onNotification(notification) {
-    if (notification.foreground && pushNotificationService.notificationHandlers[notification.data.type]) {
+    if (notification.foreground
+      // BOOLEAN: If the notification was opened by the user from the notification area or not
+      && notification.userInteraction
+      && pushNotificationService.notificationHandlers[notification.data.type]) {
       pushNotificationService.notificationHandlers[notification.data.type](notification.data);
     }
 
