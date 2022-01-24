@@ -11,6 +11,9 @@ export default StyleSheet.create({
   loader: {
     paddingVertical: 10,
   },
+  scrollView: {
+    flexGrow: 1,
+  },
   listItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',

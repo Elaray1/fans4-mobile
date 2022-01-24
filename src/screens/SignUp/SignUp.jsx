@@ -239,7 +239,7 @@ function SignUp({ route }) {
                 <Text style={styles.signInText}>{t('SignUp.AlreadyHaveAccount')}</Text>
                 <Button
                   type="link"
-                  title={t('SignUp.SignIn')}
+                  title={t('SignUp.LogIn')}
                   onPress={onPressSignIn}
                   style={styles.signInTextLinkWrapper}
                 />

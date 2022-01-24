@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   SafeAreaView,
   View,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +11,11 @@ import { useTranslation } from 'react-i18next';
 import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Text from 'components/Text';
+import CustomRefreshControl from 'components/CustomRefreshControl';
+
+import * as postApi from 'resources/post/post.api';
+
+import useToast from 'hooks/useToast';
 
 import NoFightsIllustration from 'assets/illustrations/no-events.svg';
 
@@ -19,8 +25,22 @@ import styles from './styles';
 
 function LikesList({ route }) {
   const { t } = useTranslation();
+  const { showFailure } = useToast();
 
-  const { likedUsers } = route.params;
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [likedUsers, setLikedUsers] = useState(route?.params?.likedUsers || []);
+  const { postId } = route.params;
+
+  const onRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      const fetchedPost = await postApi.getPost(postId);
+      setLikedUsers(fetchedPost.likedUsers);
+    } catch {
+      showFailure(t('Fights.couldntRefreshTheFeedPullToRefresh'));
+    }
+    setIsRefreshing(false);
+  }, [postId, showFailure, t]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -43,6 +63,13 @@ function LikesList({ route }) {
     </View>
   );
 
+  const RefreshControl = (
+    <CustomRefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
@@ -59,9 +86,20 @@ function LikesList({ route }) {
             ItemSeparatorComponent={renderItemSeparator}
             onEndReachedThreshold={0.3}
             initialNumToRender={1000}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
+            refreshControl={RefreshControl}
           />
         )
-        : <EmptyView />
+        : (
+          <ScrollView
+            contentContainerStyle={styles.scrollView}
+            refreshControl={RefreshControl}
+            keyboardShouldPersistTaps="handled"
+          >
+            <EmptyView />
+          </ScrollView>
+        )
       }
     </SafeAreaView>
   );
@@ -71,6 +109,7 @@ LikesList.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       likedUsers: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+      postId: PropTypes.string.isRequired,
     }),
   }).isRequired,
 };

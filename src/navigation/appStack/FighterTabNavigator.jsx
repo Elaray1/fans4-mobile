@@ -18,6 +18,8 @@ import Activity from 'screens/Activity';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as messageSelectors from 'resources/message/message.selectors';
 
+import { FANS4_ACCOUNT } from 'helpers/constants';
+
 import BottomTabBar from './BottomTabBar';
 
 const Tab = createBottomTabNavigator();
@@ -28,9 +30,11 @@ function renderTabBar(props) {
 
 function FighterTabNavigator() {
   const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
+  const userId = useSelector(userSelectors.getUserId);
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
+  const isFans4 = userId === FANS4_ACCOUNT._id;
 
-  const activityIcon = (isUnreadActivities || isUnreadMessages)
+  const activityIcon = ((isUnreadActivities || isUnreadMessages) && !isFans4)
     ? UnreadActivityIcon
     : ActivityIcon;
 
