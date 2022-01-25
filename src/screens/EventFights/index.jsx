@@ -60,8 +60,8 @@ function EventFights({ route }) {
 
   const isLiveStream = event.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
   const isLive = event.status === EVENT_STATUSES.PAST
-  && event.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED
-  && event.liveStream.status !== LIVE_STREAM_STATUSES.PROCESSING;
+    && event.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED
+    && event.liveStream.status !== LIVE_STREAM_STATUSES.PROCESSING;
   const isUpcoming = event.status === EVENT_STATUSES.UPCOMING;
   const isLiveStreamProcessing = event.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING;
   const isLiveStreamFinished = event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED;
@@ -335,20 +335,20 @@ function EventFights({ route }) {
               )}
 
               {isLiveStreamProcessing && (
-              <View style={[styles.posterLabel, styles.streamFinished]}>
-                <Text style={styles.posterLabelText}>{t('Events.videoWillBeAvailableSoon')}</Text>
-              </View>
+                <View style={[styles.posterLabel, styles.streamFinished]}>
+                  <Text style={styles.posterLabelText}>{t('Events.videoWillBeAvailableSoon')}</Text>
+                </View>
               )}
 
               {isLiveStreamFinished && (
-              <View style={[styles.posterLabel, styles.streamFinished]}>
-                <PlayIcon />
-                <Text style={styles.posterLabelText}>{eventStreamLink
-                  ? formatDuration(event.liveStream.duration)
-                  // TODO: add loader or smthing else
-                  : '00:00'}
-                </Text>
-              </View>
+                <View style={[styles.posterLabel, styles.streamFinished]}>
+                  <PlayIcon />
+                  <Text style={styles.posterLabelText}>{eventStreamLink
+                    ? formatDuration(event.liveStream.duration)
+                    // TODO: add loader or smthing else
+                    : '00:00'}
+                  </Text>
+                </View>
               )}
 
               {isLiveStreamLoadingIos && (
