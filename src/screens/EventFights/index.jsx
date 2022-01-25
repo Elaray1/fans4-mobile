@@ -143,7 +143,7 @@ function EventFights({ route }) {
     }
 
     // Live stream finished (IOS)
-    if (updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.FINISHED
+    if (updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING
       && event.liveStream.status === LIVE_STREAM_STATUSES.LIVE
       && isLiveStreamShownIos) {
       closeStreamAlert();
