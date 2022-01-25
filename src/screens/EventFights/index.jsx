@@ -248,6 +248,12 @@ function EventFights({ route }) {
     }
   }, [isOpenStreamModalNeeded, onShowLiveStream, isLiveStream, isLiveStreamLoadingIos]);
 
+  const PosterLoader = () => (
+    <View style={styles.loaderContainer}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
+
   return (
     <>
       {Platform.OS === 'ios' && (
@@ -340,22 +346,15 @@ function EventFights({ route }) {
                 </View>
               )}
 
-              {isLiveStreamFinished && (
+              {isLiveStreamFinished && eventStreamLink && (
                 <View style={[styles.posterLabel, styles.streamFinished]}>
                   <PlayIcon />
-                  <Text style={styles.posterLabelText}>{eventStreamLink
-                    ? formatDuration(event.liveStream.duration)
-                    // TODO: add loader or smthing else
-                    : '00:00'}
+                  <Text style={styles.posterLabelText}>{formatDuration(event.liveStream.duration)}
                   </Text>
                 </View>
               )}
 
-              {isLiveStreamLoadingIos && (
-                <View style={styles.loaderContainer}>
-                  <ActivityIndicator size="large" color={colors.primary} />
-                </View>
-              )}
+              {(isLiveStreamLoadingIos || (isLiveStreamFinished && !eventStreamLink)) && <PosterLoader />}
             </TouchableOpacity>
           </View>
 
