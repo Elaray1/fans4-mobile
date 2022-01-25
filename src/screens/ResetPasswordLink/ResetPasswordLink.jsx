@@ -34,7 +34,7 @@ function ResetPasswordLink({ route }) {
     let resetPasswordToken;
 
     try {
-      const res = await userApi.getPasswordResetToken({ deviceId: getMaskedDeviceId(), email, userType });
+      const res = await userApi.getPasswordResetToken({ deviceId: getMaskedDeviceId(), email });
       resetPasswordToken = res && res.resetPasswordToken;
     } catch (err) {
       console.error('getting password reset token error:', err);
