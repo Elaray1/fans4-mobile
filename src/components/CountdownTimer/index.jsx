@@ -103,7 +103,13 @@ const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, on
           <View style={styles.posterBackgroundColor} />
 
           <View style={[styles.countdownTextContainer, posterContainerStyles]}>
-            {dateDiff && (
+            {isStreamEnded && (
+              <>
+                <Text style={styles.countdownTitle}>{t('CountdownTimer.liveStreamHasEnded')}</Text>
+                <Text style={styles.countdownText}>{t('CountdownTimer.videoWillBeAvailableSoon')}</Text>
+              </>
+            )}
+            {dateDiff !== null && !isStreamEnded && (
               <>
                 <Text style={styles.countdownTitle}>
                   {`${t('CountdownTimer.liveIn')} ${formateCountdownTime(dateDiff)}`}
@@ -112,7 +118,7 @@ const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, on
                   {dateDiff > 0
                     ? toLocalDateAndTime({ date: eventDate, location: { timezone: eventTimezone } })
                     : t('CountdownTimer.waitingForLiveStreaming')
-                  }
+                    }
                 </Text>
               </>
             )}
