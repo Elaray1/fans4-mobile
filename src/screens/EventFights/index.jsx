@@ -134,32 +134,20 @@ function EventFights({ route }) {
 
       if (Platform.OS === 'android') {
         liveStreamAndroidModalRef.current?.reloadCurrentStreamLink();
-
-        if (isCountdownTimerModalVisible) {
-          setIsCountdownTimerModalVisible(false);
-          setIsAndroidStreamModalVisible(true);
-        }
       }
     }
 
-    // Live stream finished
+    // Live stream finished (IOS)
     if (updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING
-      && event.liveStream.status === LIVE_STREAM_STATUSES.LIVE) {
-      // IOS
-      if (isLiveStreamShownIos) {
-        closeStreamAlert();
-      } else if (isAndroidStreamModalVisible) {
-        // Android
-        setIsAndroidStreamModalVisible(false);
-        setIsCountdownTimerModalVisible(true);
-      }
+      && event.liveStream.status === LIVE_STREAM_STATUSES.LIVE
+      && isLiveStreamShownIos) {
+      closeStreamAlert();
     }
 
 
     setEvent(updatedEvent);
     onRefresh();
-  }, [onRefresh, isLiveStream, closeStreamAlert, isLiveStreamShownIos,
-    event.liveStream.status, isAndroidStreamModalVisible, isCountdownTimerModalVisible]);
+  }, [onRefresh, isLiveStream, closeStreamAlert, isLiveStreamShownIos, event.liveStream.status]);
 
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
@@ -281,7 +269,7 @@ function EventFights({ route }) {
 
       {Platform.OS === 'ios' && isFullScreenLoader && <FullScreenLoader />}
 
-      {Platform.OS === 'android' && isLiveStream && (
+      {Platform.OS === 'android' && (
         <EventLiveStreamAndroidModal
           ref={liveStreamAndroidModalRef}
           visible={isAndroidStreamModalVisible}

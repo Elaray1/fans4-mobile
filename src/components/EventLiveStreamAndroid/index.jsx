@@ -16,6 +16,8 @@ import colors from 'themes/colors';
 
 import useDidUpdate from 'hooks/useDidUpdate';
 
+import { LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
+
 import useHorizontalModeHeader from './hooks/useHorizontaModeHeader';
 import useOrientation from './hooks/useOrientation';
 import useStreamLink from './hooks/useStreamLink';
@@ -25,6 +27,7 @@ import useVisibilityChanged from './hooks/useVisibilityChanged';
 import styles from './styles';
 import useIsPaused from './hooks/useIsPaused';
 import useGoLiveOnForeground from './hooks/useGoLiveOnForeground';
+
 
 const muteSound = (isMuted) => {
   return `
@@ -40,7 +43,6 @@ const EventLiveStreamAndroid = React.forwardRef(({
   eventName,
   eventStreamLink: prefetchedEventStreamLink,
   onClose,
-  isCountdownShown,
   onCloseCountdown,
   eventDate,
   eventTimezone,
@@ -80,6 +82,9 @@ const EventLiveStreamAndroid = React.forwardRef(({
   const liveStreamSource = useMemo(() => (eventStreamLink ? {
     uri: `${config.liveStreamPlayerUrl}/?link=${eventStreamLink}`,
   } : null), [eventStreamLink]);
+
+  const isCountdownShown = eventLiveStreamStatus === LIVE_STREAM_STATUSES.PENDING
+    || eventLiveStreamStatus === LIVE_STREAM_STATUSES.PROCESSING;
 
   const onWebViewMessage = useCallback((msg) => {
     console.log('webview message:', msg.nativeEvent.data);
@@ -181,7 +186,6 @@ const EventLiveStreamAndroid = React.forwardRef(({
 
 EventLiveStreamAndroid.defaultProps = {
   eventStreamLink: PropTypes.null,
-  isCountdownShown: false,
   onCloseCountdown: undefined,
   eventImageUrl: null,
   eventDate: null,
@@ -198,7 +202,6 @@ EventLiveStreamAndroid.propTypes = {
   eventTimezone: PropTypes.string,
   eventStreamLink: PropTypes.string,
   onClose: PropTypes.func.isRequired,
-  isCountdownShown: PropTypes.bool,
   onCloseCountdown: PropTypes.func,
 };
 

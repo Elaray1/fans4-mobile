@@ -57,7 +57,7 @@ const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, on
 
   const intervalId = useRef();
 
-  const isStreamEnded = eventLiveStreamStatus === LIVE_STREAM_STATUSES.FINISHED;
+  const isStreamEnded = eventLiveStreamStatus === LIVE_STREAM_STATUSES.PROCESSING;
   const isNeedToUpdateTime = !isStreamEnded && eventDate > moment();
 
   const setTime = useCallback(() => {
