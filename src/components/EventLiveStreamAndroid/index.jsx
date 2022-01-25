@@ -85,6 +85,7 @@ const EventLiveStreamAndroid = React.forwardRef(({
 
   const isCountdownShown = eventLiveStreamStatus === LIVE_STREAM_STATUSES.PENDING
     || eventLiveStreamStatus === LIVE_STREAM_STATUSES.PROCESSING;
+  const isLiveStream = eventLiveStreamStatus === LIVE_STREAM_STATUSES.LIVE;
 
   const onWebViewMessage = useCallback((msg) => {
     console.log('webview message:', msg.nativeEvent.data);
@@ -132,7 +133,7 @@ const EventLiveStreamAndroid = React.forwardRef(({
       )}
 
       <View style={styles.webViewContainer}>
-        {eventStreamLink && (
+        {isLiveStream && eventStreamLink && (
           <TouchableWithoutFeedback
             onPress={prolongControlsShowing}
             style={styles.webViewPressableContainer}
