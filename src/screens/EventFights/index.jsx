@@ -281,7 +281,7 @@ function EventFights({ route }) {
 
       {Platform.OS === 'ios' && isFullScreenLoader && <FullScreenLoader />}
 
-      {Platform.OS === 'android' && (
+      {Platform.OS === 'android' && isLiveStream && (
         <EventLiveStreamAndroidModal
           ref={liveStreamAndroidModalRef}
           visible={isAndroidStreamModalVisible}
