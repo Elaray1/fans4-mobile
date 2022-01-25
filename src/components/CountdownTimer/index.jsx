@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -58,27 +58,33 @@ const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, on
   const intervalId = useRef();
 
   const isStreamEnded = eventLiveStreamStatus === LIVE_STREAM_STATUSES.FINISHED;
+  const isNeedToUpdateTime = !isStreamEnded && eventDate > moment();
+
+  const setTime = useCallback(() => {
+    const currentDate = moment();
+    const dateDiffInMilliseconds = eventDateAsMoment.diff(currentDate);
+
+    setDateDiff(dateDiffInMilliseconds);
+  }, [eventDateAsMoment]);
 
   useEffect(() => {
-    const setTime = () => {
-      const currentDate = moment();
-      const dateDiffInMilliseconds = eventDateAsMoment.diff(currentDate);
+    if (isNeedToUpdateTime) {
+      setTime();
+      return;
+    }
 
-      setDateDiff(dateDiffInMilliseconds);
-    };
+    setDateDiff(0);
+  }, [isNeedToUpdateTime, setTime]);
 
-    if (!isStreamEnded) {
-      if (eventDate < moment()) {
-        setDateDiff(0);
-        return;
-      }
+  useEffect(() => {
+    if (isNeedToUpdateTime) {
       intervalId.current = setInterval(() => {
         setTime();
       }, 1000);
 
       return () => clearInterval(intervalId.current);
     }
-  }, [eventDate, isStreamEnded, eventDateAsMoment]);
+  }, [isNeedToUpdateTime, setTime]);
 
   return (
     <View style={styles.container}>
