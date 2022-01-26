@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import {
   View, TouchableOpacity,
 } from 'react-native';
@@ -37,8 +37,8 @@ function EventItem({ event: initialEvent, activeTab }) {
       && (updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.FINISHED
       || updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING);
 
-    const isEventVisible = !(isPast && activeTab !== TABS.PAST);
-    setVisible(isEventVisible);
+    const isEventOnTheSameTab = isPast === (activeTab === TABS.PAST);
+    setVisible(isEventOnTheSameTab);
 
     setEvent(updatedEvent);
   }, [activeTab]);
@@ -48,6 +48,10 @@ function EventItem({ event: initialEvent, activeTab }) {
   const onEventPress = useCallback(() => {
     navigation.navigate('EventFights', { event, isNeedToFetchEvent: true });
   }, [navigation, event]);
+
+  const posterSource = useMemo(() => {
+    return { uri: event.imageUrl };
+  }, [event.imageUrl]);
 
   if (!visible) {
     return null;
@@ -68,7 +72,7 @@ function EventItem({ event: initialEvent, activeTab }) {
       <View style={[styles.imageContainer, aspectRatioStyle]}>
         <FastImage
           style={[styles.photoImage, aspectRatioStyle]}
-          source={{ uri: event.imageUrl }}
+          source={posterSource}
         />
 
         {event.status === EVENT_STATUSES.CANCELLED && moment().isBefore(event.date) && (
