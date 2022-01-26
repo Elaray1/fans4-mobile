@@ -109,6 +109,7 @@ const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, on
                 <Text style={styles.countdownText}>{t('CountdownTimer.videoWillBeAvailableSoon')}</Text>
               </>
             )}
+
             {dateDiff !== null && !isStreamEnded && (
               <>
                 <Text style={styles.countdownTitle}>

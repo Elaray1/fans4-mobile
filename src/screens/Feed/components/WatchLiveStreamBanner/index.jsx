@@ -24,7 +24,7 @@ const WatchLiveStreamBanner = ({ event, onPress }) => {
     return { uri: event.imageUrl };
   }, [event.imageUrl]);
 
-  const [isStreamLoading, setIsStreamLoading] = useState(true);
+  const [isStreamLoading, setIsStreamLoading] = useState(Platform.OS === 'ios');
   const streamVideoRefIos = useRef();
 
   const onContainerPress = useCallback(() => {
