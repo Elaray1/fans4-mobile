@@ -658,7 +658,8 @@
   "LegalInformation": {
     "legalInformation": "Legal Information",
     "termsOfUse": "Terms of Use",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "subscriptionInformation": "Subscriptions"
   },
   "SettingsPrivacyPolicy": {
     "privacyPolicy": "Privacy Policy"
@@ -794,5 +795,12 @@
     "waitingForLiveStreaming": "Waiting for live-streaming to start",
     "liveStreamHasEnded": "Live-stream has ended",
     "videoWillBeAvailableSoon": "Video will be available soon"
+  },
+  "SubscriptionInformation": {
+    "title": "Subscriptions",
+    "description1": "Monthly subscription is available for $8.49/month per Fighter.",
+    "description2": "You can subscribe to up to 20 Fighters in the app.",
+    "description3": "You will see your subscription to the 1st, 2nd and subsequent Fighters in your Apple settings. Payment will be charged separately for each subscription to your Apple account at the confirmation of purchase. Your account will be charged for renewal of each subscription within the 24-hours prior to the end of the current period.",
+    "description4": "Autorenewal of each subscription may be turned off at any time by going to your Apple settings after the purchase. You will still have access to your favorite Fighter till the end of subscription period after subscription cancellation."
   }
 }

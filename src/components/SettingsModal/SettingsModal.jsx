@@ -163,24 +163,24 @@ function SettingsModal({
             </View>
 
             {!isFan && (
-            <View>
-              <TouchableOpacity
-                style={styles.settingsOption}
-                onPress={onFinancesPress}
-                activeOpacity={0.7}
-              >
-                <FinancesIcon style={styles.settingIcon} />
-                <View>
-                  <Text style={styles.settingTitle}>
-                    {t('SettingsModal.finances')}
-                  </Text>
-                  <Text style={styles.settingText}>
-                    {t('SettingsModal.manageBankAccount')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-              <View style={styles.line} />
-            </View>
+              <View>
+                <TouchableOpacity
+                  style={styles.settingsOption}
+                  onPress={onFinancesPress}
+                  activeOpacity={0.7}
+                >
+                  <FinancesIcon style={styles.settingIcon} />
+                  <View>
+                    <Text style={styles.settingTitle}>
+                      {t('SettingsModal.finances')}
+                    </Text>
+                    <Text style={styles.settingText}>
+                      {t('SettingsModal.manageBankAccount')}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <View style={styles.line} />
+              </View>
             )}
 
             <View>
