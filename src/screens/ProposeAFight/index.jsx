@@ -19,6 +19,9 @@ import colors from 'themes/colors';
 
 import { toFixLength } from 'helpers/modifyText';
 
+import useIsConnected from 'hooks/useIsConnected';
+import useToast from 'hooks/useToast';
+
 import Fighter from './components/fighter';
 
 import styles from './styles';
@@ -26,6 +29,9 @@ import styles from './styles';
 const ProposeAFight = ({ route }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const isConnected = useIsConnected();
+  const { showFailure } = useToast();
+
   const [fightersStep1, setFightersStep1] = useState([]);
   const [fightersStep2, setFightersStep2] = useState([]);
   const [firstFighter, setFirstFighter] = useState(null);
@@ -55,7 +61,7 @@ const ProposeAFight = ({ route }) => {
 
       const { fighters: fetchedFighters } = await userApi.getFightersForFight({
         opponentId: !isStep1 ? firstFighter._id : null,
-        search: !isStep1 ? search : null,
+        search: isStep1 ? null : search,
       });
 
       if (isStep1) {
@@ -72,10 +78,10 @@ const ProposeAFight = ({ route }) => {
       }
     } catch (error) {
       console.error('Fetching fighters error:', error);
-    } finally {
-      setIsLoading(false);
+      showFailure();
     }
-  }, [firstFighter?._id, isStep1, preselectedFighterId, search]);
+    setIsLoading(false);
+  }, [firstFighter?._id, isStep1, preselectedFighterId, search, showFailure]);
 
   useEffect(() => {
     const fetchFighters = async () => {
@@ -103,7 +109,7 @@ const ProposeAFight = ({ route }) => {
     }
   }, [firstFighter?._id, secondFighter?._id, navigation]);
 
-  const disabled = (isStep1 && !firstFighter) || (!isStep1 && !secondFighter);
+  const disabled = (isStep1 && !firstFighter) || (!isStep1 && !secondFighter) || !isConnected;
 
   const Loader = () => <View style={styles.loader}><ActivityIndicator size="small" color={colors.primary} /></View>;
 
