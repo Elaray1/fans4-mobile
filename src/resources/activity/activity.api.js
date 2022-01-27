@@ -5,3 +5,6 @@ export const getUserActivities = ({ page, perPage }) => apiClient
 
 export const readActivities = () => apiClient
   .put('activities/read');
+
+export const getIsUnreadActivities = () => apiClient
+  .get('activities/is-unread');

@@ -7,13 +7,14 @@ import { useIsFocused, useNavigation, useScrollToTop } from '@react-navigation/n
 import { useTranslation } from 'react-i18next';
 
 import * as activityApi from 'resources/activity/activity.api';
+import * as activityActions from 'resources/activity/activity.actions';
+import * as activitySelectors from 'resources/activity/activity.selectors';
 
-import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 
-import websocketsService from 'services/socket.service';
-
 import * as messageSelectors from 'resources/message/message.selectors';
+
+import websocketsService from 'services/socket.service';
 
 import ArrowDownIcon from 'assets/icons/arrow-down.svg';
 import NoAcitivtiesIllustration from 'assets/illustrations/no-events.svg';
@@ -48,7 +49,7 @@ function Activity() {
   const listRef = useRef(null);
   useScrollToTop(listRef);
 
-  const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
+  const isUnreadActivities = useSelector(activitySelectors.getIsUnreadActivities);
   const userId = useSelector(userSelectors.getUserId);
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
 
@@ -144,15 +145,19 @@ function Activity() {
 
   useEffect(() => {
     const readActivities = async () => {
-      const user = await activityApi.readActivities();
+      try {
+        await activityApi.readActivities();
 
-      dispatch(userActions.setUserData(user));
+        await dispatch(activityActions.setIsUnreadActivities(false));
+      } catch (err) {
+        showFailure();
+      }
     };
 
     if (isUnreadActivities && isFocused) {
       readActivities();
     }
-  }, [dispatch, isUnreadActivities, isFocused]);
+  }, [dispatch, isUnreadActivities, isFocused, showFailure]);
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -163,15 +168,17 @@ function Activity() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onActivityCreated = useCallback((activity) => {
+  const onActivityCreated = useCallback(async (activity) => {
     setActivities({
       today: [activity, ...activities.today],
       yesterday: activities.yesterday,
       thisWeek: activities.thisWeek,
       thisMonth: activities.thisMonth,
     });
+
+    await dispatch(activityActions.setIsUnreadActivities(true));
   }, [activities.today, activities.yesterday,
-    activities.thisWeek, activities.thisMonth]);
+    activities.thisWeek, activities.thisMonth, dispatch]);
 
   useEffect(() => {
     websocketsService.on('activity:created', onActivityCreated);
