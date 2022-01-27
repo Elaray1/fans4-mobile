@@ -28,9 +28,12 @@ import * as paymentApi from 'resources/payment/payment.api';
 
 import * as messageActions from 'resources/message/message.actions';
 
+import * as activityApi from 'resources/activity/activity.api';
+import * as activityActions from 'resources/activity/activity.actions';
+
 import useToast from 'hooks/useToast';
 
-import { USER_STATUSES } from 'resources/user/user.constants';
+import { USER_TYPES, USER_STATUSES } from 'resources/user/user.constants';
 
 import config from 'resources/config';
 import store from 'store';
@@ -93,6 +96,9 @@ const init = async (dispatch) => {
       query: { deviceId: getMaskedDeviceId() },
       rooms: [`device-${getMaskedDeviceId()}`],
     });
+  } else if (user.role.type === USER_TYPES.FIGHTER) {
+    const { isUnreadActivities } = await activityApi.getIsUnreadActivities();
+    store.dispatch(activityActions.setIsUnreadActivities(isUnreadActivities));
   }
 
 
@@ -148,10 +154,6 @@ const handleUserUpdated = (user) => {
 };
 
 const handleFighterUpdated = (user) => {
-  store.dispatch(userActions.setUserData(user));
-};
-
-const handleUserActivityIndicatorUpdated = (user) => {
   store.dispatch(userActions.setUserData(user));
 };
 
@@ -276,7 +278,6 @@ function AppNavigation() {
       if (userAuthenticated) {
         websocketsService.on('user:status-updated', handleUserStatusUpdated);
         websocketsService.on('fighter:updated', handleFighterUpdated);
-        websocketsService.on('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
         websocketsService.on('user:updated', handleUserUpdated);
         websocketsService.on('user:unread-messages-updated', handleUserUnreadMessagesUpdated);
 
@@ -286,7 +287,6 @@ function AppNavigation() {
 
         websocketsService.off('user:status-updated', handleUserStatusUpdated);
         websocketsService.off('fighter:updated', handleFighterUpdated);
-        websocketsService.off('user:activity-indicator-updated', handleUserActivityIndicatorUpdated);
         websocketsService.off('user:updated', handleUserUpdated);
         websocketsService.off('user:unread-messages-updated', handleUserUnreadMessagesUpdated);
       }

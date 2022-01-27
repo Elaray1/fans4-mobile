@@ -317,9 +317,9 @@ function Fighter({ fighterId }) {
       )}
 
       {!isFetchedFirstTime && (
-      <View style={styles.loaderWrapper}>
-        <ActivityIndicator color={colors.primary} size="large" />
-      </View>
+        <View style={styles.loaderWrapper}>
+          <ActivityIndicator color={colors.primary} size="large" />
+        </View>
       )}
     </SafeAreaView>
   );

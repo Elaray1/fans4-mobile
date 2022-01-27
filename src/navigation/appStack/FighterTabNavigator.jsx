@@ -17,6 +17,7 @@ import Activity from 'screens/Activity';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as messageSelectors from 'resources/message/message.selectors';
+import * as activitySelectors from 'resources/activity/activity.selectors';
 
 import { FANS4_ACCOUNT } from 'helpers/constants';
 
@@ -29,7 +30,7 @@ function renderTabBar(props) {
 }
 
 function FighterTabNavigator() {
-  const isUnreadActivities = useSelector(userSelectors.getUserActivityIndicator);
+  const isUnreadActivities = useSelector(activitySelectors.getIsUnreadActivities);
   const userId = useSelector(userSelectors.getUserId);
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
   const isFans4 = userId === FANS4_ACCOUNT._id;
