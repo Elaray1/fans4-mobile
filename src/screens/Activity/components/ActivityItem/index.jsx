@@ -21,7 +21,7 @@ import { toFixLength } from 'helpers/modifyText';
 
 import styles from './styles';
 
-function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
+function ActivityItem({ createdOn, type, data, title, showTime, isLast, isGroupped }) {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -35,15 +35,19 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
       unreadMessagesCount: chat.participants.find(p => p._id === userId).unreadMessagesNumber,
       userFullName: data.author?.fullName,
     });
-  }, [data.author?.fullName, navigation, data.author._id, userId]);
+  }, [data.author?.fullName, navigation, data.author?._id, userId]);
 
   const onCommentPress = useCallback(() => {
-    navigation.navigate('Comments', { postId: data.post?._id });
-  }, [data.post?._id, navigation]);
+    const postId = isGroupped ? data[0].post?._id : data.post?._id;
+
+    navigation.navigate('Comments', { postId });
+  }, [data, navigation, isGroupped]);
 
   const onPostPress = useCallback(() => {
-    navigation.navigate('Account', { postId: data.post?._id });
-  }, [data.post?._id, navigation]);
+    const postId = isGroupped ? data[0].post?._id : data.post?._id;
+
+    navigation.navigate('Account', { postId });
+  }, [data, navigation, isGroupped]);
 
   const NewFanView = useCallback(() => (
     <View style={[styles.activityContainer, styles.alignItemsCenter]}>
@@ -62,7 +66,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
         <Text style={styles.sayHi}>{t('ActivityItem.sayHi')}</Text>
       </TouchableOpacity>
     </View>
-  ), [data.author.fullName, t, onPressSayHi, createdOn, showTime]);
+  ), [data.author?.fullName, t, onPressSayHi, createdOn, showTime]);
 
   const NewPostCommentView = useCallback(() => (
     <TouchableOpacity
@@ -76,73 +80,105 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast }) {
           <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.commented')}</Text>
         </View>
         {data.comment.text && (
-        <Text style={[styles.text, styles.commentText]}>
-          {toFixLength({ text: data.comment.text, length: 110 })}
-        </Text>
+          <Text style={[styles.text, styles.commentText]}>
+            {toFixLength({ text: data.comment.text, length: 110 })}
+          </Text>
         )}
         {data.post.text && (
-        <View style={styles.textPostContainer}>
-          <Text style={[styles.text, styles.postText]}>{toFixLength({ text: data.post.text, length: 100 })}</Text>
-          {data.post.media && (
-          <FastImage
-            style={styles.postImage}
-            source={{ uri: data.post.media.posterStorageUrl || data.post.media.storageUrl }}
-          />
-          )}
-        </View>
+          <View style={styles.textPostContainer}>
+            <Text style={[styles.text, styles.postText]}>{toFixLength({ text: data.post.text, length: 100 })}</Text>
+            {data.post.media && (
+              <FastImage
+                style={styles.postImage}
+                source={{ uri: data.post.media.posterStorageUrl || data.post.media.storageUrl }}
+              />
+            )}
+          </View>
         )}
         {showTime && <Text style={[styles.time, styles.timeMargin]}>{formatTime(createdOn)}</Text>}
       </View>
       {!data.post.text && data.post.media && (
-      <FastImage
-        style={styles.postImage}
-        source={{ uri: data.post.media.posterStorageUrl || data.post.media.storageUrl }}
-      />
+        <FastImage
+          style={styles.postImage}
+          source={{ uri: data.post.media.posterStorageUrl || data.post.media.storageUrl }}
+        />
       )}
     </TouchableOpacity>
   ), [
-    data.author.fullName, t, createdOn, showTime,
+    data.author?.fullName, t, createdOn, showTime,
     data.post?.media, data.comment?.text,
     data.post?.text, onCommentPress,
   ]);
 
-  const NewPostLikeView = useCallback(() => (
-    <TouchableOpacity
-      onPress={onPostPress}
-      style={styles.activityContainer}
-      activeOpacity={0.7}
-    >
-      <View>
-        <View style={styles.textContainer}>
+  const NewPostLikeView = useCallback(() => {
+    const { post } = isGroupped ? data[0] : data;
+
+    let activityTitleText = null;
+    if (isGroupped) {
+      if (data.length === 2) {
+        activityTitleText = (
+          <>
+            <Text style={styles.textBold}>{data[0].author.fullName} </Text>
+            <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.and')} </Text>
+            <Text style={styles.textBold}>{data[1].author.fullName} </Text>
+            <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.likedYourPost')}</Text>
+          </>
+        );
+      } else {
+        activityTitleText = (
+          <>
+            <Text style={styles.textBold}>{data[0].author.fullName} </Text>
+            <Text style={styles.textBold}>{t('ActivityItem.and')} </Text>
+            <Text style={styles.textBold}>{data.length - 1} </Text>
+            <Text style={styles.textBold}>{t('ActivityItem.others')} </Text>
+            <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.likedYourPost')}</Text>
+          </>
+        );
+      }
+    } else {
+      activityTitleText = (
+        <>
           <Text style={styles.textBold}>{data.author.fullName} </Text>
           <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.likedYourPost')}</Text>
+        </>
+      );
+    }
+
+    return (
+      <TouchableOpacity
+        onPress={onPostPress}
+        style={styles.activityContainer}
+        activeOpacity={0.7}
+      >
+        <View>
+          <View style={styles.textContainer}>
+            {activityTitleText}
+          </View>
+          {post.text && (
+            <View style={styles.textPostContainer}>
+              <Text style={[styles.text, styles.textMaxWidth]}>
+                {toFixLength({ text: post.text, length: 100 })}
+              </Text>
+              {post.media && (
+                <FastImage
+                  style={styles.postImage}
+                  source={{ uri: post.media.posterStorageUrl || post.media.storageUrl }}
+                />
+              )}
+            </View>
+          )}
+          {showTime && <Text style={[styles.time, styles.timeMargin]}>{formatTime(createdOn)}</Text>}
         </View>
-        {data.post.text && (
-        <View style={styles.textPostContainer}>
-          <Text style={[styles.text, styles.textMaxWidth]}>{toFixLength({ text: data.post.text, length: 100 })}</Text>
-          {data.post.media && (
+        {!post.text && post.media && (
           <FastImage
             style={styles.postImage}
-            source={{ uri: data.post.media.posterStorageUrl || data.post.media.storageUrl }}
+            source={{ uri: post.media.posterStorageUrl || post.media.storageUrl }}
           />
-          )}
-        </View>
         )}
-        {showTime && <Text style={[styles.time, styles.timeMargin]}>{formatTime(createdOn)}</Text>}
-      </View>
-      {!data.post.text && data.post.media && (
-      <FastImage
-        style={styles.postImage}
-        source={{ uri: data.post.media.posterStorageUrl || data.post.media.storageUrl }}
-      />
-      )}
-    </TouchableOpacity>
-  ), [
-    data.author.fullName, t, createdOn, showTime,
-    data.post?.media,
-    data.post?.text,
-    onPostPress,
-  ]);
+      </TouchableOpacity>
+    );
+  }, [data, createdOn, isGroupped,
+    showTime, t, onPostPress]);
 
 
   const viewByType = useMemo(() => ({
@@ -167,12 +203,14 @@ ActivityItem.propTypes = {
   title: PropTypes.string,
   showTime: PropTypes.bool,
   isLast: PropTypes.bool,
+  isGroupped: PropTypes.bool,
 };
 
 ActivityItem.defaultProps = {
   title: null,
   showTime: false,
   isLast: false,
+  isGroupped: false,
 };
 
 
