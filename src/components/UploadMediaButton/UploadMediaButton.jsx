@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { TouchableOpacity, View, Image, Alert, Platform, Linking } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import ImagePicker from 'react-native-image-crop-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import analyticsService from 'services/analytics.service';
 import _ from 'lodash';
 
@@ -24,7 +25,8 @@ import { MEDIA_TYPES } from './UploadMediaButton.constants';
 const WIDTH_HEIGHT_RATIO = 0.8;
 const HEIGHT_WIDTH_RATIO = 1.25;
 
-const smartAlbums = ['UserLibrary', 'Panoramas', 'Videos', 'Bursts']; // default library albums except "PhotoStream"
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 function UploadMediaButton({
   handleMediaUpload,
   onDelete,
@@ -86,43 +88,28 @@ function UploadMediaButton({
   }, [showFailure, t]);
 
   const onUploadFromGallery = useCallback(async () => {
-    const options = croppingAvatar ? {
-      cropping: Platform.OS === 'android' ? true : 'cropit',
-      mediaType: MEDIA_TYPES.PHOTO,
-      cropperCircleOverlay: true,
-      avoidEmptySpaceAroundImage: false,
-      width: 335,
-      height: 335,
-      multiple: false,
-      forceJpg: true,
-      smartAlbums,
-    } : {
-      mediaType,
-      compressVideoPreset: 'Passthrough',
-      multiple: false,
-      writeTempFile: false,
-      smartAlbums,
-    };
-
     try {
-      let mediaData = await ImagePicker.openPicker(options);
-      mediaData.path = Platform.OS === 'ios' ? mediaData.sourceURL : mediaData.path;
+      const { assets } = await launchImageLibrary({ mediaType: croppingAvatar ? 'photo' : 'mixed' });
+      let [mediaData] = assets;
+
+      mediaData.path = mediaData.uri;
+      mediaData.mime = mediaData.type;
 
       if (mediaData.mime.includes('image')) {
         const { width, height, path } = mediaData;
 
         if (width / height < WIDTH_HEIGHT_RATIO || croppingAvatar) {
           const croppedHeight = width * HEIGHT_WIDTH_RATIO;
-
+          await sleep(500); // it needs timeout after image picker
           mediaData = await ImagePicker.openCropper({
             cropperCircleOverlay: !!croppingAvatar,
             path,
-            height: !croppingAvatar ? croppedHeight : 335,
-            width: !croppingAvatar ? width : 335,
+            height: croppingAvatar ? 335 : croppedHeight,
+            width: croppingAvatar ? 335 : width,
           });
         }
       } else {
-        mediaData.duration = parseInt(mediaData.duration / 1000, 10);
+        mediaData.duration = parseInt(mediaData.duration, 10);
       }
 
       onNewMediaSet(mediaData);
@@ -144,7 +131,7 @@ function UploadMediaButton({
     });
 
     onCloseUploadingMethodModal(false);
-  }, [onNewMediaSet, t, mediaType, croppingAvatar, onCloseUploadingMethodModal]);
+  }, [croppingAvatar, onCloseUploadingMethodModal, onNewMediaSet, t]);
 
   const onUploadPhotoFromCamera = useCallback(async () => {
     const options = {
