@@ -28,12 +28,9 @@ import * as paymentApi from 'resources/payment/payment.api';
 
 import * as messageActions from 'resources/message/message.actions';
 
-import * as activityApi from 'resources/activity/activity.api';
-import * as activityActions from 'resources/activity/activity.actions';
-
 import useToast from 'hooks/useToast';
 
-import { USER_TYPES, USER_STATUSES } from 'resources/user/user.constants';
+import { USER_STATUSES } from 'resources/user/user.constants';
 
 import config from 'resources/config';
 import store from 'store';
@@ -96,9 +93,6 @@ const init = async (dispatch) => {
       query: { deviceId: getMaskedDeviceId() },
       rooms: [`device-${getMaskedDeviceId()}`],
     });
-  } else if (user.role.type === USER_TYPES.FIGHTER) {
-    const { isUnreadActivities } = await activityApi.getIsUnreadActivities();
-    store.dispatch(activityActions.setIsUnreadActivities(isUnreadActivities));
   }
 
 

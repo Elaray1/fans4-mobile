@@ -71,6 +71,19 @@ function Activity() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
+  useEffect(() => {
+    const fetchIsUnreadActivities = async () => {
+      try {
+        const { isUnreadActivities: fetchedIsUnreadActivities } = await activityApi.getIsUnreadActivities();
+        dispatch(activityActions.setIsUnreadActivities(fetchedIsUnreadActivities));
+      } catch (error) {
+        showFailure();
+      }
+    };
+
+    fetchIsUnreadActivities();
+  }, [dispatch, showFailure]);
+
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;
     let currentActivities = {
