@@ -697,7 +697,9 @@
     "becameYourFan": "became your Fan!",
     "sayHi": "Say hi!",
     "commented": "commented:",
-    "likedYourPost": "liked your post"
+    "likedYourPost": "liked your post",
+    "and": "and",
+    "others": "others"
   },
   "FiltersModal": {
     "allActivity": "All activity",

@@ -297,7 +297,9 @@ function EventFights({ route }) {
             <TouchableOpacity
               style={[styles.eventImageContainer, aspectRatioStyle]}
               onPress={onPressEventPoster}
-              disabled={isLiveStreamLoadingIos || isLiveStreamFinished}
+              disabled={isLiveStreamLoadingIos
+                || isLiveStreamFinished
+                || isLiveStreamProcessing}
             >
               <FastImage style={[styles.photoImage, aspectRatioStyle]} source={{ uri: event.imageUrl }} />
 
@@ -357,17 +359,17 @@ function EventFights({ route }) {
           {isLoading && <Loader />}
 
           {!isLoading && !!fights.length && (
-          <FlatList
-            data={fights}
-            renderItem={renderItem}
-            keyExtractor={keyExtractor}
-            onEndReachedThreshold={0.3}
-            onEndReached={fetchNewItems}
-            showsVerticalScrollIndicator={false}
-            ListFooterComponent={renderFooter}
-            onRefresh={onRefresh}
-            refreshing={isRefreshing}
-          />
+            <FlatList
+              data={fights}
+              renderItem={renderItem}
+              keyExtractor={keyExtractor}
+              onEndReachedThreshold={0.3}
+              onEndReached={fetchNewItems}
+              showsVerticalScrollIndicator={false}
+              ListFooterComponent={renderFooter}
+              onRefresh={onRefresh}
+              refreshing={isRefreshing}
+            />
           )}
           {!isLoading
           && event.status !== EVENT_STATUSES.CANCELLED

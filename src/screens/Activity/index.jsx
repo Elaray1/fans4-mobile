@@ -200,55 +200,151 @@ function Activity() {
         title={item.title}
         showTime={item.showTime}
         isLast={item.isLast}
+        isGroupped={item.isGroupped}
       />
     );
   };
+
+  const createActivityKey = useCallback(({ title, postId, type }) => {
+    return title === t('Activity.thisMonth')
+      ? `${type}_${postId}_this-month`
+      : `${type}_${postId}`;
+  }, [t]);
+
+  const grouppedActivities = useMemo(() => {
+    const grouppedByTypeAndPostActivitiesObj = [
+      { title: t('Activity.today') },
+      ...activities.today,
+      { title: t('Activity.yesterday') },
+      ...activities.yesterday,
+      { title: t('Activity.thisWeek') },
+      ...activities.thisWeek,
+      { title: t('Activity.thisMonth') },
+      ...activities.thisMonth,
+    ].reduce((acc, activity) => {
+      if (activity.title) {
+        acc.title = activity.title;
+        return acc;
+      }
+
+      if (activity.type !== ACTIVITY_TYPES.NEW_POST_LIKE) {
+        return acc;
+      }
+
+      const newPostLikeActivityKey = createActivityKey({
+        title: acc.title,
+        postId: activity.data.post._id,
+        type: activity.type,
+      });
+
+      if (acc.grouppedActivities[newPostLikeActivityKey]) {
+        acc.grouppedActivities[newPostLikeActivityKey].activities.push(activity);
+      } else {
+        acc.grouppedActivities[newPostLikeActivityKey] = {
+          title: acc.title,
+          key: newPostLikeActivityKey,
+          activities: [activity],
+        };
+      }
+
+      return acc;
+    }, { title: null, grouppedActivities: {} }).grouppedActivities;
+
+    return Object.keys(grouppedByTypeAndPostActivitiesObj).map((key) => {
+      if (grouppedByTypeAndPostActivitiesObj[key].activities.length < 2) {
+        return null;
+      }
+
+      return {
+        ...grouppedByTypeAndPostActivitiesObj[key],
+        key,
+        isInserted: false,
+      };
+    }).filter(el => !!el);
+  }, [activities.today, activities.yesterday, activities.thisWeek,
+    activities.thisMonth, t, createActivityKey]);
+
+  const formatteActivityData = useCallback(({ index, activity, title, activitiesLength }) => {
+    const newPostLikeActivityKey = createActivityKey({
+      title,
+      postId: activity.data.post?._id,
+      type: activity.type,
+    });
+
+    const grouppedActivityIndex = grouppedActivities.findIndex((el) => {
+      return el.key === newPostLikeActivityKey;
+    });
+    if (grouppedActivityIndex !== -1) {
+      if (grouppedActivities[grouppedActivityIndex].isInserted) {
+        return null;
+      }
+
+      activity.isGroupped = true;
+
+      const [newestActivityInGroup] = grouppedActivities[grouppedActivityIndex].activities;
+      activity._id = newestActivityInGroup._id;
+      activity.createdOn = newestActivityInGroup.createdOn;
+      activity.type = newestActivityInGroup.type;
+      activity.data = grouppedActivities[grouppedActivityIndex].activities.map((el => el.data));
+
+      grouppedActivities[grouppedActivityIndex].isInserted = true;
+    }
+
+    if (index === 0) {
+      activity.title = title;
+    } else if (index === activitiesLength - 1) {
+      activity.isLast = true;
+    }
+
+    return activity;
+  }, [grouppedActivities, createActivityKey]);
 
   const activitiesArray = useMemo(() => {
     const todayActivities = activities.today
       .map((item, index) => {
         item.showTime = true;
-        if (index === 0) {
-          return { ...item, title: t('Activity.today') };
-        }
-        if (index === activities.today.length - 1) {
-          return { ...item, isLast: true };
-        }
-        return item;
-      });
-    const yesterdayActivities = activities.yesterday
-      .map((item, index) => {
-        if (index === 0) {
-          return { ...item, title: t('Activity.yesterday') };
-        }
-        if (index === activities.yesterday.length - 1) {
-          return { ...item, isLast: true };
-        }
-        return item;
-      });
-    const thisWeekActivities = activities.thisWeek
-      .map((item, index) => {
-        if (index === 0) {
-          return { ...item, title: t('Activity.thisWeek') };
-        }
-        if (index === activities.thisWeek.length - 1) {
-          return { ...item, isLast: true };
-        }
-        return item;
-      });
-    const thisMonthActivities = activities.thisMonth
-      .map((item, index) => {
-        if (index === 0) {
-          return { ...item, title: t('Activity.thisMonth') };
-        }
-        if (index === activities.thisMonth.length - 1) {
-          return { ...item, isLast: true };
-        }
-        return item;
+
+        return formatteActivityData({
+          index,
+          activity: item,
+          title: t('Activity.today'),
+          activitiesLength: activities.today.length,
+        });
       });
 
-    return [...todayActivities, ...yesterdayActivities, ...thisWeekActivities, ...thisMonthActivities];
-  }, [activities.today, activities.yesterday, activities.thisWeek, activities.thisMonth, t]);
+    const yesterdayActivities = activities.yesterday
+      .map((item, index) => {
+        return formatteActivityData({
+          index,
+          activity: item,
+          title: t('Activity.yesterday'),
+          activitiesLength: activities.yesterday.length,
+        });
+      });
+
+    const thisWeekActivities = activities.thisWeek
+      .map((item, index) => {
+        return formatteActivityData({
+          index,
+          activity: item,
+          title: t('Activity.thisWeek'),
+          activitiesLength: activities.thisWeek.length,
+        });
+      });
+
+    const thisMonthActivities = activities.thisMonth
+      .map((item, index) => {
+        return formatteActivityData({
+          index,
+          activity: item,
+          title: t('Activity.thisMonth'),
+          activitiesLength: activities.thisMonth.length,
+        });
+      });
+
+    return [...todayActivities, ...yesterdayActivities, ...thisWeekActivities, ...thisMonthActivities]
+      .filter(el => !!el);
+  }, [activities.today, activities.yesterday, activities.thisWeek, activities.thisMonth, t, formatteActivityData]);
 
   const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
 
