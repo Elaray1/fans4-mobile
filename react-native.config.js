@@ -13,6 +13,11 @@ module.exports = {
         },
       },
     },
+    'react-native-background-upload-android': {
+      platforms: {
+        ios: null, // Disable autolinking for react-native-background-upload-android in ios
+      },
+    },
   },
   project: {
     android: {},
