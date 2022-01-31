@@ -119,7 +119,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast, isGroupp
         activityTitleText = (
           <>
             <Text style={styles.textBold}>{data[0].author.fullName} </Text>
-            <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.and')} </Text>
+            <Text style={styles.textBold}>{t('ActivityItem.and')} </Text>
             <Text style={styles.textBold}>{data[1].author.fullName} </Text>
             <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.likedYourPost')}</Text>
           </>
