@@ -25,3 +25,6 @@ export const likeComment = _id => apiClient
 
 export const removeLikeFromComment = _id => apiClient
   .delete(`comments/${_id}/likes`);
+
+export const getCommentsById = _id => apiClient
+  .get(`comments/${_id}/id`);
