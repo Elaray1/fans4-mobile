@@ -98,13 +98,17 @@ function Events() {
     </View>
   );
 
-  const fetchNewItems = useCallback(async ({ refresh, eventTypes } = {}) => {
+  const fetchNewItems = useCallback(async ({ refresh, tabChange } = {}) => {
     let fetchingPage = 1;
     let currentEvents = [];
 
     if (!refresh) {
       fetchingPage = page;
       currentEvents = events;
+    }
+
+    if (tabChange) {
+      setEvents([]);
     }
 
     if (fetchingPage === 1 || currentEvents.length < totalCount) {
@@ -164,7 +168,7 @@ function Events() {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      await fetchNewItems({ refresh: true });
+      await fetchNewItems({ refresh: true, tabChange: true });
     };
 
     fetchEvents();
@@ -191,7 +195,6 @@ function Events() {
   const onToggleSelect = useCallback(async (item) => {
     setIsFetchedFirstTime(false);
     setSelectedTab(item);
-    // await fetchNewItems({ refresh: true, eventTypes: item.eventTypes });
   }, []);
 
   const navigateToVoting = useCallback(() => {
