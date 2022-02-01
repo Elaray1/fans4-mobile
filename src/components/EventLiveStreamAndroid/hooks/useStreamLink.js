@@ -2,8 +2,8 @@ import { useEffect, useState, useCallback } from 'react';
 
 import * as eventApi from 'resources/event/event.api';
 
-const useStreamLink = ({ eventId, prefetchedEventStreamLink, setIsLoading }) => {
-  const [eventStreamLink, setEventStreamLink] = useState(prefetchedEventStreamLink);
+const useStreamLink = ({ eventId, setIsLoading }) => {
+  const [eventStreamLink, setEventStreamLink] = useState(null);
 
   const fetchStreamLink = useCallback(async () => {
     setIsLoading(true);

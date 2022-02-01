@@ -41,7 +41,6 @@ const EventLiveStreamAndroid = React.forwardRef(({
   visible,
   eventId,
   eventName,
-  eventStreamLink: prefetchedEventStreamLink,
   onClose,
   onCloseCountdown,
   eventDate,
@@ -53,7 +52,6 @@ const EventLiveStreamAndroid = React.forwardRef(({
   const [isLoading, setIsLoading] = useState(true);
 
   const { eventStreamLink, reloadCurrentStreamLink, fetchStreamLink } = useStreamLink({
-    prefetchedEventStreamLink,
     eventId,
     visible,
     setIsLoading,
@@ -186,7 +184,6 @@ const EventLiveStreamAndroid = React.forwardRef(({
 });
 
 EventLiveStreamAndroid.defaultProps = {
-  eventStreamLink: PropTypes.null,
   onCloseCountdown: undefined,
   eventImageUrl: null,
   eventDate: null,
@@ -201,7 +198,6 @@ EventLiveStreamAndroid.propTypes = {
   eventImageUrl: PropTypes.string,
   eventDate: PropTypes.string,
   eventTimezone: PropTypes.string,
-  eventStreamLink: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onCloseCountdown: PropTypes.func,
 };

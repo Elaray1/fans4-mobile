@@ -133,4 +133,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
+  finishedVideoContainer: {
+    width: 0,
+    height: 0,
+    overflow: 'hidden',
+  },
 });

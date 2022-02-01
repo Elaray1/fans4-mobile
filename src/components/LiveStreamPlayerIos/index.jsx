@@ -19,7 +19,6 @@ const LiveStreamPlayerIos = React.forwardRef(({
   const [width, setWidth] = useState(1920);
   const [height, setHeight] = useState(1080);
 
-  const [isPaused, setIsPaused] = useState(false);
   const [isLiveStreamShownIos, setIsLiveStreamShownIos] = useState(false);
 
   const videoRef = useRef();
@@ -65,10 +64,11 @@ const LiveStreamPlayerIos = React.forwardRef(({
   useEffect(() => {
     AppState.addEventListener('change', (state) => {
       if (state !== 'active') {
-        setIsPaused(true);
+        videoRef.current.play();
         return;
       }
-      setIsPaused(false);
+
+      videoRef.current.pause();
     });
   }, []);
 
@@ -91,7 +91,6 @@ const LiveStreamPlayerIos = React.forwardRef(({
         muted={!isLiveStreamShownIos}
         onExitFullScreen={onExitFullScreenIos}
         pauseOnFullScreen={false}
-        isPaused={isPaused}
         onReadyToPlay={onReadyToPlay}
         onFullscreenPlayerDidPresent={onFullscreenOpenedIos}
       />
@@ -103,7 +102,7 @@ LiveStreamPlayerIos.propTypes = {
   eventId: PropTypes.string.isRequired,
   onReadyToPlay: PropTypes.func.isRequired,
   onExitFullScreen: PropTypes.func,
-  onFullscreenOpened: PropTypes.bool,
+  onFullscreenOpened: PropTypes.func,
   isLiveStream: PropTypes.bool.isRequired,
 };
 
