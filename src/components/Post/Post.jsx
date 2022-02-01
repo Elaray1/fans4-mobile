@@ -135,9 +135,7 @@ function Post({
       return null;
     }
 
-    return {
-      uri: videoLink,
-    };
+    return { uri: videoLink };
   }, [media, videoLink]);
 
   const onPressFighter = useCallback(() => {
@@ -462,13 +460,11 @@ function Post({
                   disabled={disabled}
                 >
                   <CommentIcon stroke={iconsColor} />
-                  {Boolean(commentsCount)
-                  && (
-                  <Text style={[styles.postActionText, disabled && styles.disabled]}>
-                    {formatCount(commentsCount)}
-                  </Text>
-                  )
-                  }
+                  {Boolean(commentsCount) && (
+                    <Text style={[styles.postActionText, disabled && styles.disabled]}>
+                      {formatCount(commentsCount)}
+                    </Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </View>

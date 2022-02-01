@@ -7,8 +7,7 @@ import FastImage from 'react-native-fast-image';
 import { useIsFocused } from '@react-navigation/native';
 
 import moment from 'moment';
-
-import useDidUpdate from 'hooks/useDidUpdate';
+import 'moment-duration-format';
 
 import PlayIcon from 'assets/icons/play';
 import PauseIcon from 'assets/icons/pause';
@@ -24,11 +23,12 @@ const CONTROLS_SHOWN_DURATION = 2 * 1000;
 const PROGRESS_BAR_PADDING = 16;
 const PROGRESS_BAR_HIT_SLOP = { top: 15, bottom: 15, left: 0, right: 0 };
 
-const formatDuration = seconds => moment(moment.duration(seconds, 's').asMilliseconds()).format('mm:ss');
+const formatDuration = seconds => moment.duration(seconds, 's')
+  .format(seconds >= 3600 ? 'hh:mm:ss' : 'mm:ss', { trim: false });
 
 
 const Video = React.forwardRef(({ source, width, height, posterSource, duration, onReadyToPlay,
-  viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen, isPaused,
+  viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen,
   onFullscreenPlayerDidPresent,
 }, ref) => {
   const isFocused = useIsFocused();
@@ -119,10 +119,26 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
 
   useImperativeHandle(ref, () => ({
     closeFullScreen: () => {
-      videoRef.current.dismissFullscreenPlayer();
+      if (Platform.OS === 'ios') {
+        videoRef.current.dismissFullscreenPlayer();
+        return;
+      }
+
+      setIsFullScreen(false);
     },
     showFullScreen: () => {
-      videoRef.current.presentFullscreenPlayer();
+      if (Platform.OS === 'ios') {
+        videoRef.current.presentFullscreenPlayer();
+        return;
+      }
+
+      setIsFullScreen(true);
+    },
+    pause: () => {
+      setPaused(true);
+    },
+    play: () => {
+      setPaused(false);
     },
   }));
 
@@ -230,13 +246,10 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
 
   const [videoKey, setVideoKey] = useState(0);
 
-  const onError = useCallback(() => {
+  const onError = useCallback((err) => {
+    console.log('onVideo error:', err);
     setVideoKey(videoKey + 1);
   }, [videoKey]);
-
-  useDidUpdate(() => {
-    setPaused(isPaused);
-  }, [isPaused]);
 
   useEffect(() => {
     if (!paused && !isFullScreen && (!viewable || !isFocused)) {
@@ -272,6 +285,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
     onRequestClose: toggleFullScreen,
     statusBarTranslucent: true,
   }), [toggleFullScreen]);
+
 
   return (
     <>
@@ -309,7 +323,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
           )}
 
           {posterSource && isPosterShown && (
-          <FastImage style={posterStyle} source={posterSource} />
+            <FastImage style={posterStyle} source={posterSource} />
           )}
 
           {isControlsShown && (
@@ -381,7 +395,6 @@ Video.propTypes = {
   onExitFullScreen: PropTypes.func,
   pauseOnFullScreen: PropTypes.bool,
   onReadyToPlay: PropTypes.func,
-  isPaused: PropTypes.bool.isRequired,
   onFullscreenPlayerDidPresent: PropTypes.func,
 };
 

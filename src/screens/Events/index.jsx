@@ -175,7 +175,7 @@ function Events() {
 
   const renderItem = ({ item }) => {
     return (
-      <EventItem event={item} activeTab={selectedTab} />
+      <EventItem event={item} activeTab={selectedTab.name} />
     );
   };
 

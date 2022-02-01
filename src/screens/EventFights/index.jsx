@@ -6,7 +6,6 @@ import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
 import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
 
 import LiveIcon from 'assets/icons/live.svg';
 import PlayIcon from 'assets/icons/play-mini.svg';
@@ -37,10 +36,10 @@ import styles from './styles';
 
 import EmptyView from './components/EmptyView';
 import LiveStreamBar from './components/LiveStreamBar';
+import FinishedStreamVideo from './components/FinishedStreamVideo';
 
 import useAnalytics from './hooks/useAnalytics';
 import useFetchItems from './hooks/useFetchItems';
-import usePrefetchStreamLink from './hooks/usePrefetchStreamLink';
 import useEventUpdated from './hooks/useEventUpdated';
 
 import formatDuration from './helpers/formatDuration';
@@ -50,9 +49,8 @@ const aspectRatioStyle = { aspectRatio: posterAspectRatio };
 
 function EventFights({ route }) {
   const { t } = useTranslation();
-  const navigation = useNavigation();
 
-  const { event: prefetchedEvent, isNeedToFetchEvent, isOpenStreamModal, goBackWhenStreamFinished } = route?.params;
+  const { event: prefetchedEvent, isNeedToFetchEvent, isOpenStreamModal } = route?.params;
   const [event, setEvent] = useState(prefetchedEvent);
 
   const userType = useSelector(userSelectors.getUserType);
@@ -66,11 +64,20 @@ function EventFights({ route }) {
   const isLiveStreamProcessing = event.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING;
   const isLiveStreamFinished = event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED;
 
+  const finishedStreamVideoRef = useRef();
+  const [playFinishedStreamWhenReady, setPlayFinishedStreamWhenReady] = useState(false);
+  const [isFinishedStreamReadyToPlay, setIsFinishedStreamReadyToPlay] = useState(false);
+  const onReadyToPlayFinishedStream = useCallback(() => {
+    setIsFinishedStreamReadyToPlay(true);
+
+    if (playFinishedStreamWhenReady) {
+      finishedStreamVideoRef.current.showFullScreen();
+    }
+  }, [playFinishedStreamWhenReady]);
+
   const streamVideoRefIos = useRef(null);
   const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState(isLiveStream && Platform.OS === 'ios');
   const [isLiveStreamShownIos, setIsLiveStreamShownIos] = useState(false);
-
-  const [eventStreamLink, setEventStreamLink] = useState(null);
 
   const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
   const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(!!isOpenStreamModal);
@@ -97,11 +104,7 @@ function EventFights({ route }) {
 
   const onCloseStream = useCallback(() => {
     streamVideoRefIos.current.closeFullScreen();
-
-    if (goBackWhenStreamFinished) {
-      navigation.goBack();
-    }
-  }, [navigation, goBackWhenStreamFinished]);
+  }, []);
 
   const closeStreamAlert = useCallback(() => {
     Alert.alert(
@@ -124,9 +127,9 @@ function EventFights({ route }) {
   } = useFetchItems({ eventId: event._id });
 
   const onEventUpdated = useCallback((updatedEvent) => {
-    const isLiveUpdatedEventStream = updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
-    // Show live stream if countdown timer modal was opened
-    if (isLiveUpdatedEventStream && !isLiveStream) {
+    const didBecomeLive = updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.LIVE && !isLiveStream;
+
+    if (didBecomeLive) {
       if (Platform.OS === 'ios') {
         setIsLiveStreamLoadingIos(true);
         streamVideoRefIos.current.reload();
@@ -137,10 +140,10 @@ function EventFights({ route }) {
       }
     }
 
-    // Live stream finished (IOS)
-    if (updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING
-      && event.liveStream.status === LIVE_STREAM_STATUSES.LIVE
-      && isLiveStreamShownIos) {
+    const didEnded = updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING
+      && event.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
+
+    if (didEnded && isLiveStreamShownIos) {
       closeStreamAlert();
     }
 
@@ -151,8 +154,6 @@ function EventFights({ route }) {
 
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
-  usePrefetchStreamLink({ eventId: event._id, setEventStreamLink, streamStatus: event.liveStream.status });
-
 
   const onShowLiveStream = useCallback(() => {
     if (Platform.OS === 'ios') {
@@ -180,11 +181,11 @@ function EventFights({ route }) {
   const renderItem = ({ item }) => {
     const indexOfFightWithoutResults = fights.map(f => f.results || 0).indexOf(0);
 
-    const isShowText = item._id === fights[indexOfFightWithoutResults]?._id;
+    const isStayTunedShown = item._id === fights[indexOfFightWithoutResults]?._id;
 
     return (
       <>
-        {isLive && isShowText && <Text style={styles.stayTuned}>{t('Events.stayTuned')}</Text>}
+        {isLive && isStayTunedShown && <Text style={styles.stayTuned}>{t('Events.stayTuned')}</Text>}
         <FightItem
           fight={item}
           isCountdownShown
@@ -194,7 +195,7 @@ function EventFights({ route }) {
     );
   };
 
-  const onOpenCountdownTimer = useCallback(() => {
+  const openCountdownTimer = useCallback(() => {
     setIsCountdownTimerModalVisible(true);
   }, []);
 
@@ -203,16 +204,28 @@ function EventFights({ route }) {
   }, []);
 
   const onPressEventPoster = useCallback(() => {
-    if (isLiveStream || Platform.OS === 'android') {
+    if (event.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED && (isLiveStream || Platform.OS === 'android')) {
       onShowLiveStream();
       return;
     }
 
-    if ([EVENT_STATUSES.UPCOMING, EVENT_STATUSES.PAST].includes(event.status)) {
-      onOpenCountdownTimer();
+    const isNotLiveYet = event.status === EVENT_STATUSES.UPCOMING
+      || event.liveStream.status === LIVE_STREAM_STATUSES.PENDING;
+
+    if (isNotLiveYet) {
+      openCountdownTimer();
+      return;
     }
-  }, [onShowLiveStream, onOpenCountdownTimer,
-    isLiveStream, event.status]);
+
+    if (event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED) {
+      if (isFinishedStreamReadyToPlay) {
+        finishedStreamVideoRef.current.showFullScreen();
+      } else {
+        setPlayFinishedStreamWhenReady(true);
+      }
+    }
+  }, [onShowLiveStream, openCountdownTimer,
+    isLiveStream, event.status, event.liveStream.status, isFinishedStreamReadyToPlay]);
 
   const onCloseAndroidStreamModal = useCallback(() => {
     setIsAndroidStreamModalVisible(false);
@@ -224,6 +237,7 @@ function EventFights({ route }) {
     if (isCountdownTimerModalVisible) {
       setIsCountdownTimerModalVisible(false);
       setIsFullScreenLoader(true);
+
       // Using setTimeout to open stream modal after closing countdown modal
       setTimeout(() => {
         onShowLiveStream();
@@ -278,11 +292,32 @@ function EventFights({ route }) {
           eventName={event.name}
           eventDate={event.date}
           eventTimezone={event.location.timezone}
-          eventStreamLink={eventStreamLink}
           eventLiveStreamStatus={event.liveStream.status}
           onClose={onCloseAndroidStreamModal}
           isCountdownShown={event.liveStream.status === LIVE_STREAM_STATUSES.PENDING}
           onCloseCountdown={onCloseAndroidStreamModal}
+        />
+      )}
+
+      {Platform.OS === 'ios' && (
+        <LiveStreamPlayerIos
+          ref={streamVideoRefIos}
+          eventId={event._id}
+          onExitFullScreen={onExitFullScreenIos}
+          onReadyToPlay={onReadyToPlayIos}
+          onFullscreenOpened={onFullscreenOpened}
+          isLiveStream={isLiveStream}
+        />
+      )}
+
+      {event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED && (
+        <FinishedStreamVideo
+          ref={finishedStreamVideoRef}
+          eventId={event._id}
+          width={event.liveStream.width}
+          height={event.liveStream.height}
+          duration={event.liveStream.duration}
+          onReadyToPlay={onReadyToPlayFinishedStream}
         />
       )}
 
@@ -297,22 +332,9 @@ function EventFights({ route }) {
             <TouchableOpacity
               style={[styles.eventImageContainer, aspectRatioStyle]}
               onPress={onPressEventPoster}
-              disabled={isLiveStreamLoadingIos
-                || isLiveStreamFinished
-                || isLiveStreamProcessing}
+              disabled={isLiveStreamLoadingIos || isLiveStreamProcessing}
             >
               <FastImage style={[styles.photoImage, aspectRatioStyle]} source={{ uri: event.imageUrl }} />
-
-              {Platform.OS === 'ios' && (
-                <LiveStreamPlayerIos
-                  ref={streamVideoRefIos}
-                  eventId={event._id}
-                  onExitFullScreen={onExitFullScreenIos}
-                  onReadyToPlay={onReadyToPlayIos}
-                  onFullscreenOpened={onFullscreenOpened}
-                  isLiveStream={isLiveStream}
-                />
-              )}
 
               {event.status === EVENT_STATUSES.CANCELLED && moment().isBefore(event.date) && (
                 <View style={styles.imageStatus}>
@@ -344,7 +366,7 @@ function EventFights({ route }) {
                 </View>
               )}
 
-              {isLiveStreamFinished && eventStreamLink && (
+              {isLiveStreamFinished && (
                 <View style={[styles.posterLabel, styles.streamFinished]}>
                   <PlayIcon />
                   <Text style={styles.posterLabelText}>{formatDuration(event.liveStream.duration)}
@@ -352,7 +374,9 @@ function EventFights({ route }) {
                 </View>
               )}
 
-              {(isLiveStreamLoadingIos || (isLiveStreamFinished && !eventStreamLink)) && <PosterLoader />}
+              {(isLiveStreamLoadingIos
+              || (playFinishedStreamWhenReady && !isFinishedStreamReadyToPlay))
+                && <PosterLoader />}
             </TouchableOpacity>
           </View>
 
@@ -371,11 +395,9 @@ function EventFights({ route }) {
               refreshing={isRefreshing}
             />
           )}
-          {!isLoading
-          && event.status !== EVENT_STATUSES.CANCELLED
-          && event.status !== EVENT_STATUSES.PAST
-          && !fights.length
-          && (
+
+          {!isLoading && event.status !== EVENT_STATUSES.CANCELLED
+          && event.status !== EVENT_STATUSES.PAST && !fights.length && (
             <EmptyView
               isFan={isFan}
               isRefreshing={isRefreshing}
@@ -394,7 +416,6 @@ EventFights.propTypes = {
       event: PropTypes.shape().isRequired,
       isNeedToFetchEvent: PropTypes.bool,
       isOpenStreamModal: PropTypes.bool,
-      goBackWhenStreamFinished: PropTypes.bool,
     }),
   }).isRequired,
 };
