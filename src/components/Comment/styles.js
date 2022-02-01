@@ -10,9 +10,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  firstLine: {
-    marginBottom: 12,
-  },
   fullNameContainer: {
     flexDirection: 'row',
   },
@@ -32,8 +29,13 @@ export default StyleSheet.create({
     fontWeight: fonts.weight.medium,
     maxWidth: 230,
   },
+  commentText: {
+    fontSize: fonts.size.small,
+    color: colors.white,
+  },
   date: {
     alignSelf: 'flex-end',
+    marginRight: 24,
   },
   line: {
     backgroundColor: colors.line,
