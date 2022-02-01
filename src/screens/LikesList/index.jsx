@@ -14,6 +14,7 @@ import Text from 'components/Text';
 import CustomRefreshControl from 'components/CustomRefreshControl';
 
 import * as postApi from 'resources/post/post.api';
+import * as commentApi from 'resources/comment/comment.api';
 
 import useToast from 'hooks/useToast';
 
@@ -29,18 +30,23 @@ function LikesList({ route }) {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [likedUsers, setLikedUsers] = useState(route?.params?.likedUsers || []);
-  const { postId } = route.params;
+  const { postId, commentId } = route.params;
 
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
     try {
-      const fetchedPost = await postApi.getPost(postId);
-      setLikedUsers(fetchedPost.likedUsers);
+      let fetchedData;
+      if (postId) {
+        fetchedData = await postApi.getPost(postId);
+      } else {
+        fetchedData = await commentApi.getCommentsById(commentId);
+      }
+      setLikedUsers(fetchedData.likedUsers);
     } catch {
       showFailure(t('Fights.couldntRefreshTheFeedPullToRefresh'));
     }
     setIsRefreshing(false);
-  }, [postId, showFailure, t]);
+  }, [commentId, postId, showFailure, t]);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -109,7 +115,8 @@ LikesList.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       likedUsers: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-      postId: PropTypes.string.isRequired,
+      postId: PropTypes.string,
+      commentId: PropTypes.string,
     }),
   }).isRequired,
 };

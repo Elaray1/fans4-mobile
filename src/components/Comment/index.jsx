@@ -84,6 +84,11 @@ function Comment({
     }
   }, [isLiked, data._id, showFailure]);
 
+  const onSeeLikes = useCallback(() => {
+    navigation.navigate('LikesList', { commentId: data._id, likedUsers: likedUsersState });
+  }, [data._id, likedUsersState, navigation]);
+
+
   return (
     <View
       style={styles.commentContainer}
@@ -147,10 +152,12 @@ function Comment({
           <Text style={[styles.secondaryText, styles.date]}>{formatTime(data.createdOn)}</Text>
           {!!likedUsersState.length
           && (
-            <Text style={styles.secondaryText}>{formatCount(likedUsersState.length)}
-              {' '}
-              {t(likedUsersState.length === 1 ? 'Comment.like' : 'Comment.likes')}
-            </Text>
+            <TouchableOpacity onPress={onSeeLikes}>
+              <Text style={styles.secondaryText}>{formatCount(likedUsersState.length)}
+                {' '}
+                {t(likedUsersState.length === 1 ? 'Comment.like' : 'Comment.likes')}
+              </Text>
+            </TouchableOpacity>
           )}
         </View>
         <TouchableOpacity onPress={onLikePress}>{isLiked ? (
