@@ -7,18 +7,19 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 
-
 import * as userSelectors from 'resources/user/user.selectors';
 
 import * as commentApi from 'resources/comment/comment.api';
 
 import EllipsisIcon from 'assets/icons/ellipsis';
+import LikeIcon from 'assets/icons/like';
 
 import Text from 'components/Text';
 
 import useToast from 'hooks/useToast';
-import { formatTime } from 'components/Post/Post.helpers';
+import { formatCount, formatTime } from 'components/Post/Post.helpers';
 
+import colors from 'themes/colors';
 import styles from './styles';
 
 function Comment({
@@ -36,6 +37,8 @@ function Comment({
 
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const [actionsPositionY, setActionsPositionY] = useState(null);
+  const [likedUsersState, setLikedUsersState] = useState(data.likedUsers);
+  const [isLiked, setIsLiked] = useState(likedUsersState.map(i => i._id).includes(userId));
 
   const onChooseCommentAction = useCallback(() => {
     if (!isActionsOpened && commentRef) {
@@ -63,6 +66,23 @@ function Comment({
     setIsActionsOpened(false);
     navigation.navigate('ReportComment', { commentId: data._id, postId: data.post._id });
   }, [navigation, data._id, data.post._id]);
+
+  const onLikePress = useCallback(async () => {
+    try {
+      let updatedPost;
+      if (isLiked) {
+        updatedPost = await commentApi.removeLikeFromComment(data._id);
+        setIsLiked(false);
+      } else {
+        updatedPost = await commentApi.likeComment(data._id);
+        setIsLiked(true);
+      }
+
+      setLikedUsersState(updatedPost.likedUsers);
+    } catch (error) {
+      showFailure();
+    }
+  }, [isLiked, data._id, showFailure]);
 
   return (
     <View
@@ -119,9 +139,27 @@ function Comment({
           )}
         </View>
       </View>
+      <View>
+        <Text style={styles.commentText}>{data.text}</Text>
+      </View>
       <View style={styles.commentLine}>
-        <Text style={styles.secondaryText}>{data.text}</Text>
-        <Text style={[styles.secondaryText, styles.date]}>{formatTime(data.createdOn)}</Text>
+        <View style={styles.fullNameContainer}>
+          <Text style={[styles.secondaryText, styles.date]}>{formatTime(data.createdOn)}</Text>
+          {!!likedUsersState.length
+          && (
+            <Text style={styles.secondaryText}>{formatCount(likedUsersState.length)}
+              {' '}
+              {t(likedUsersState.length === 1 ? 'Comment.like' : 'Comment.likes')}
+            </Text>
+          )}
+        </View>
+        <TouchableOpacity onPress={onLikePress}>{isLiked ? (
+          <LikeIcon
+            stroke={colors.white}
+            fill={colors.white}
+          />
+        ) : <LikeIcon stroke={colors.white} />}
+        </TouchableOpacity>
       </View>
       <View style={styles.line} />
     </View>
@@ -140,6 +178,7 @@ Comment.propTypes = {
     post: PropTypes.shape({
       _id: PropTypes.string.isRequired,
     }),
+    likedUsers: PropTypes.arrayOf(PropTypes.shape),
   }).isRequired,
   onDelete: PropTypes.func,
 };

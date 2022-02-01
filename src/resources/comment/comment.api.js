@@ -19,3 +19,9 @@ export const deleteComment = _id => apiClient
 
 export const reportComment = ({ _id, message, reason }) => apiClient
   .post(`comments/${_id}/report`, { message, reason });
+
+export const likeComment = _id => apiClient
+  .post(`comments/${_id}/likes`);
+
+export const removeLikeFromComment = _id => apiClient
+  .delete(`comments/${_id}/likes`);

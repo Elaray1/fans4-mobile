@@ -555,7 +555,9 @@
     "you": "you",
     "deleteComment": "Delete Comment",
     "commentDeleted": "Comment deleted.",
-    "reportThisComment": "Report this Comment"
+    "reportThisComment": "Report this Comment",
+    "like": "like",
+    "likes": "likes"
   },
   "Toast": {
     "somethingWentWrongPleaseTryAgain": "Something went wrong. Please try again."
