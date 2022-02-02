@@ -100,7 +100,7 @@ function UploadMediaButton({
 
         if (width / height < WIDTH_HEIGHT_RATIO || croppingAvatar) {
           const croppedHeight = width * HEIGHT_WIDTH_RATIO;
-          await sleep(500); // it needs timeout after image picker
+          await sleep(500); // we need time out because of icloud photos loading
           mediaData = await ImagePicker.openCropper({
             cropperCircleOverlay: !!croppingAvatar,
             path,
