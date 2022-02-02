@@ -43,7 +43,8 @@ function Events() {
   const listRef = useRef(null);
   useScrollToTop(listRef);
 
-  const [events, setEvents] = useState([]);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [pastEvents, setPastEvents] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
 
@@ -90,6 +91,8 @@ function Events() {
 
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
+  const isUpcomingShown = selectedTab.name === TABS.UPCOMING;
+
   const EmptyView = () => (
     <View style={styles.emptyView}>
       <NoEventsIllustration style={styles.illustration} />
@@ -98,17 +101,13 @@ function Events() {
     </View>
   );
 
-  const fetchNewItems = useCallback(async ({ refresh, tabChange } = {}) => {
+  const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;
     let currentEvents = [];
 
     if (!refresh) {
       fetchingPage = page;
-      currentEvents = events;
-    }
-
-    if (tabChange) {
-      setEvents([]);
+      currentEvents = isUpcomingShown ? upcomingEvents : pastEvents;
     }
 
     if (fetchingPage === 1 || currentEvents.length < totalCount) {
@@ -144,7 +143,11 @@ function Events() {
 
         setPage(fetchingPage + 1);
         setTotalCount(fetchedTotalCount);
-        setEvents([...currentEvents, ...(fetchedEvents || [])]);
+        if (isUpcomingShown) {
+          setUpcomingEvents([...currentEvents, ...(fetchedEvents || [])]);
+        } else {
+          setPastEvents([...currentEvents, ...(fetchedEvents || [])]);
+        }
       } catch (error) {
         console.error('error', error);
         showFailure(t('Events.couldntLoadTheEventsPullToRefresh'));
@@ -160,7 +163,9 @@ function Events() {
         setIsLoading(false);
       }
     }
-  }, [totalCount, page, events, userType, selectedTab.name, showFailure, t, isFetchedFirstTime]);
+  }, [totalCount, page, isUpcomingShown,
+    upcomingEvents, pastEvents, isFetchedFirstTime,
+    userType, selectedTab.name, showFailure, t]);
 
   const onRefresh = useCallback(async () => {
     await fetchNewItems({ refresh: true });
@@ -168,7 +173,7 @@ function Events() {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      await fetchNewItems({ refresh: true, tabChange: true });
+      await fetchNewItems({ refresh: true });
     };
 
     fetchEvents();
@@ -235,10 +240,10 @@ function Events() {
 
         {!isFetchedFirstTime && isRefreshing && <Loader />}
 
-        {!!events.length && (
+        {!!(isUpcomingShown ? upcomingEvents : pastEvents).length && (
           <FlatList
             ref={listRef}
-            data={events}
+            data={isUpcomingShown ? upcomingEvents : pastEvents}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             onEndReachedThreshold={0.3}
@@ -251,7 +256,7 @@ function Events() {
           />
         )}
 
-        {isFetchedFirstTime && !events.length && (
+        {isFetchedFirstTime && !(isUpcomingShown ? upcomingEvents : pastEvents).length && (
           <ScrollView
             contentContainerStyle={styles.scrollView}
             refreshControl={RefreshControl}
