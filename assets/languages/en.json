@@ -547,12 +547,12 @@
     "noCommentsYet": "No comments yet ",
     "beTheFirstFanToCommentOnThisPost": "Be the first Fan to comment on this post.",
     "addComment": "Add a comment",
+    "addCommentPlaceholder": "Add a comment...",
     "max160Characters": "max. 160 characters",
     "post": "Post",
     "nothingYet": "Check back to view your fans' first post."
   },
   "Comment": {
-    "you": "you",
     "deleteComment": "Delete Comment",
     "commentDeleted": "Comment deleted.",
     "reportThisComment": "Report this Comment",

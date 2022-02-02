@@ -8,9 +8,12 @@ export default StyleSheet.create({
     ...commonStyles.screen,
   },
   content: {
-    ...commonStyles.screenContent,
-    marginTop: 45,
+    marginTop: 30,
     flex: 1,
+  },
+  postContainer: {
+    marginBottom: 30,
+    marginHorizontal: 20,
   },
   emptyView: {
     flex: 1,
@@ -20,7 +23,7 @@ export default StyleSheet.create({
   illustration: {
     width: 250,
     height: 250,
-    marginVertical: 50,
+    marginVertical: 20,
   },
   titleText: {
     textAlign: 'center',
@@ -46,6 +49,7 @@ export default StyleSheet.create({
   },
   commentContainer: {
     paddingBottom: 16,
+    marginHorizontal: 20,
   },
   input: {
     height: null,

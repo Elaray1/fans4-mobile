@@ -1,11 +1,10 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  View, Modal, TouchableOpacity,
-} from 'react-native';
+import { View, TouchableOpacity, Animated } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -13,6 +12,8 @@ import * as commentApi from 'resources/comment/comment.api';
 
 import EllipsisIcon from 'assets/icons/ellipsis';
 import LikeIcon from 'assets/icons/like';
+import TrashIcon from 'assets/icons/trash';
+import ReportIcon from 'assets/icons/report';
 
 import Text from 'components/Text';
 
@@ -20,6 +21,8 @@ import useToast from 'hooks/useToast';
 import { formatCount, formatTime } from 'components/Post/Post.helpers';
 
 import colors from 'themes/colors';
+import EditCommentModal from './components/EditCommentModal';
+
 import styles from './styles';
 
 function Comment({
@@ -36,16 +39,39 @@ function Comment({
   const commentRef = useRef(null);
 
   const [isActionsOpened, setIsActionsOpened] = useState(false);
-  const [actionsPositionY, setActionsPositionY] = useState(null);
   const [likedUsersState, setLikedUsersState] = useState(data.likedUsers);
   const isLiked = likedUsersState.some(like => like._id === userId);
 
-  const onChooseCommentAction = useCallback(() => {
-    if (!isActionsOpened && commentRef) {
-      commentRef.current.measure((ox, oy, width, height, px, py) => setActionsPositionY(py));
+  const animation = useRef(new Animated.Value(0));
+
+  const [isNew, setIsNew] = useState(moment().diff(moment(data.createdOn), 's') < 1);
+
+  useEffect(() => {
+    if (isNew) {
+      Animated.timing(animation.current, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: false,
+      }).start();
+
+      setTimeout(
+        () => {
+          Animated.timing(animation.current, {
+            toValue: 0,
+            duration: 800,
+            useNativeDriver: false,
+          }).start(() => {
+            setIsNew(false);
+          });
+        },
+        3000,
+      );
     }
-    setIsActionsOpened(!isActionsOpened);
-  }, [isActionsOpened]);
+  }, [isNew]);
+
+  const onChooseCommentAction = useCallback(() => {
+    setIsActionsOpened(true);
+  }, []);
 
   const onCloseCommentAction = useCallback(() => {
     setIsActionsOpened(false);
@@ -82,10 +108,17 @@ function Comment({
     navigation.navigate('LikesList', { commentId: data._id, likedUsers: likedUsersState });
   }, [data._id, likedUsersState, navigation]);
 
+  const backgroundColor = animation.current.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['transparent', '#1F1F24'],
+  });
 
   return (
-    <View
-      style={styles.commentContainer}
+    <Animated.View
+      style={{
+        ...styles.commentContainer,
+        backgroundColor,
+      }}
       ref={commentRef}
       renderToHardwareTextureAndroid
       key={data._id}
@@ -95,54 +128,27 @@ function Comment({
       >
         <View style={styles.fullNameContainer}>
           <Text style={styles.fullNameText}>{data.author.fullName}</Text>
-          {isAuthor && <Text style={styles.youText}>{` (${t('Comment.you')})`}</Text>}
         </View>
         <View>
           <TouchableOpacity onPress={onChooseCommentAction} style={styles.dotButton}>
             <EllipsisIcon />
           </TouchableOpacity>
-          {isActionsOpened && (
-            <Modal
-              transparent
-              visible={isActionsOpened}
-              animationType="fade"
-              onRequestClose={() => {}}
-            >
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={onCloseCommentAction}
-                style={styles.closeModal}
-              >
-                <View
-                  style={[
-                    styles.actions,
-                    actionsPositionY && { top: actionsPositionY + 30 },
-                  ]}
-                >
-                  {isAuthor ? (
-                    <TouchableOpacity style={styles.clickableArea} activeOpacity={0.7} onPress={onDeleteComment}>
-                      <Text style={styles.actionsText}>
-                        {t('Comment.deleteComment')}
-                      </Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity style={styles.clickableArea} activeOpacity={0.7} onPress={onReportComment}>
-                      <Text style={styles.actionsText}>
-                        {t('Comment.reportThisComment')}
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              </TouchableOpacity>
-            </Modal>
-          )}
+
+          <EditCommentModal
+            onClose={onCloseCommentAction}
+            visible={isActionsOpened}
+            title={isAuthor ? t('Comment.deleteComment') : t('Comment.reportThisComment')}
+            onEdit={isAuthor ? onDeleteComment : onReportComment}
+            OptionIcon={isAuthor ? TrashIcon : ReportIcon}
+          />
+
         </View>
       </View>
       <View>
         <Text style={styles.commentText}>{data.text}</Text>
       </View>
       <View style={styles.commentLine}>
-        <View style={styles.fullNameContainer}>
+        <View style={styles.dateContainer}>
           <Text style={[styles.secondaryText, styles.date]}>{formatTime(data.createdOn)}</Text>
           {!!likedUsersState.length
           && (
@@ -163,7 +169,7 @@ function Comment({
         </TouchableOpacity>
       </View>
       <View style={styles.line} />
-    </View>
+    </Animated.View>
   );
 }
 

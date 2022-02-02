@@ -4,7 +4,8 @@ import fonts from 'themes/fonts';
 
 export default StyleSheet.create({
   commentContainer: {
-    marginBottom: 16,
+    paddingTop: 18,
+    paddingHorizontal: 20,
   },
   commentLine: {
     flexDirection: 'row',
@@ -12,26 +13,24 @@ export default StyleSheet.create({
   },
   fullNameContainer: {
     flexDirection: 'row',
+    marginBottom: 10,
+  },
+  dateContainer: {
+    flexDirection: 'row',
   },
   fullNameText: {
     fontSize: fonts.size.small,
-    fontFamily: fonts.family.bold,
-    fontWeight: fonts.weight.bold,
-  },
-  youText: {
-    fontSize: fonts.size.small,
-    fontWeight: fonts.weight.medium,
     color: colors.textSecondary,
   },
   secondaryText: {
     color: colors.textSecondary,
     fontSize: fonts.size.caption,
-    fontWeight: fonts.weight.medium,
     maxWidth: 230,
   },
   commentText: {
     fontSize: fonts.size.small,
     color: colors.white,
+    paddingBottom: 8,
   },
   date: {
     alignSelf: 'flex-end',

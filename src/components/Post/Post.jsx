@@ -56,6 +56,7 @@ function Post({
   onGoBackFromComments,
   onHidePostFromFeed,
   createdOn,
+  onCommentButtonPress,
 }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -454,7 +455,7 @@ function Post({
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={onCommentsPress}
+                  onPress={onCommentButtonPress ?? onCommentsPress}
                   activeOpacity={0.7}
                   style={[styles.postAction, styles.postActionRight]}
                   disabled={disabled}
@@ -513,6 +514,7 @@ Post.propTypes = {
   onUpdateCommentsCount: PropTypes.func,
   onGoBackFromComments: PropTypes.func,
   onHidePostFromFeed: PropTypes.func,
+  onCommentButtonPress: PropTypes.func,
 };
 
 Post.defaultProps = {
@@ -528,6 +530,7 @@ Post.defaultProps = {
   onUpdateCommentsCount: () => null,
   onHidePostFromFeed: () => null,
   onGoBackFromComments: undefined,
+  onCommentButtonPress: null,
 };
 
 export default React.memo(Post);

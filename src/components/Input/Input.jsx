@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect, forwardRef } from 'react';
 import {
   TextInput, View, Text as RNText, TouchableOpacity, Pressable, Platform,
 } from 'react-native';
@@ -15,7 +15,25 @@ import ClosedEyeIcon from 'assets/icons/closed-eye';
 
 import styles from './Input.styles';
 
-function Input({
+function useForwardedRef(ref) {
+  const innerRef = useRef(null);
+
+  useEffect(() => {
+    if (!ref) {
+      return;
+    }
+    if (typeof ref === 'function') {
+      ref(innerRef.current);
+    }
+    if (typeof ref === 'object') {
+      ref.current = innerRef.current;
+    }
+  });
+
+  return innerRef;
+}
+
+const Input = forwardRef(({
   type,
   label,
   onChange,
@@ -41,11 +59,11 @@ function Input({
   onButtonPress,
   autoFocus,
   autogrowHeight,
-}) {
+}, ref) => {
+  const inputRef = useForwardedRef(ref);
+
   const [focused, setFocused] = useState(autoFocus);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
-
-  const inputRef = useRef(null);
 
   useEffect(() => {
     if (autoFocus && Platform.OS === 'android') {
@@ -58,7 +76,7 @@ function Input({
     if (multiline && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [multiline]);
+  }, [multiline, inputRef]);
 
   const handleFocus = useCallback(() => {
     setFocused(true);
@@ -157,7 +175,7 @@ function Input({
         ))}
     </View>
   );
-}
+});
 
 Input.propTypes = {
   type: PropTypes.string,

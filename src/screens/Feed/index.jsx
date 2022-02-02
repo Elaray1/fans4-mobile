@@ -12,7 +12,6 @@ import SearchFightersIcon from 'assets/icons/search-people';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as postApi from 'resources/post/post.api';
 
-
 import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Post from 'components/Post';
