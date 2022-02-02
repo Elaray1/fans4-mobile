@@ -1,5 +1,5 @@
 import React, {
-  useState, useCallback, useEffect,
+  useState, useCallback, useEffect, useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -11,12 +11,14 @@ import { useNavigation } from '@react-navigation/native';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as commentApi from 'resources/comment/comment.api';
+import * as postApi from 'resources/post/post.api';
 
 import analyticsService from 'services/analytics.service';
 
 import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import Comment from 'components/Comment';
+import Post from 'components/Post';
 import Text from 'components/Text';
 import Input from 'components/Input';
 import CustomRefreshControl from 'components/CustomRefreshControl';
@@ -51,6 +53,7 @@ function Comments({ route }) {
     onGoBack,
   } = route?.params;
 
+  const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
@@ -60,7 +63,6 @@ function Comments({ route }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(true);
 
   useEffect(() => {
@@ -93,6 +95,7 @@ function Comments({ route }) {
               comments: fetchedOtherComments,
               totalCount: fetchedTotalCount,
             },
+            fetchedPost,
           ] = await Promise.all([
             commentApi.getPostComments({
               postId,
@@ -106,9 +109,11 @@ function Comments({ route }) {
               createdBy: CREATED_BY.OTHERS,
               sortOption: SORT_OPTIONS.CREATED_ON_ASC,
             }),
+            postApi.getPost(postId),
           ]);
           setTotalCount(fetchedTotalCount);
           setComments([...fetchedMyComments, ...fetchedOtherComments]);
+          setPost(fetchedPost);
         } else {
           setIsLoading(true);
 
@@ -147,7 +152,6 @@ function Comments({ route }) {
   }, [fetchNewItems]);
 
   const onCreateComment = useCallback(async () => {
-    setIsButtonDisabled(true);
     try {
       const comment = await commentApi.createComment({
         text: commentValue,
@@ -172,7 +176,6 @@ function Comments({ route }) {
     } catch (error) {
       showFailure();
     }
-    setIsButtonDisabled(false);
   }, [showFailure, postId, commentValue, comments, onUpdateCommentsCount, userType]);
 
   useEffect(() => {
@@ -241,6 +244,29 @@ function Comments({ route }) {
     />
   );
 
+  const inputRef = useRef();
+
+  const renderHeader = () => (
+    <View style={styles.postContainer}>
+      {!!post && (
+        <Post
+          _id={post._id}
+          media={post.media}
+          text={post.text}
+          status={post.status}
+          checkedOn={post.checkedOn}
+          author={post.author}
+          likedUsers={post.likedUsers}
+          commentsCount={post.commentsCount}
+          createdOn={post.createdOn}
+          editedOn={post.editedOn}
+          onUpdateCommentsCount={onUpdateCommentsCount}
+          onCommentButtonPress={() => inputRef.current?.focus()}
+        />
+      )}
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.screen}>
       <KeyboardAvoidingView
@@ -254,7 +280,9 @@ function Comments({ route }) {
             leftItemType="backArrow"
             onLeftItemPress={onGoBackPress}
           />
+
           <View style={styles.content}>
+
             {!isFetchedFirstTime && isRefreshing && <Loader />}
 
             {!!comments.length && (
@@ -266,6 +294,7 @@ function Comments({ route }) {
                 onEndReached={fetchNewItems}
                 showsVerticalScrollIndicator={false}
                 ListFooterComponent={renderFooter}
+                ListHeaderComponent={renderHeader}
                 onRefresh={onRefresh}
                 refreshing={isRefreshing}
                 refreshControl={RefreshControl}
@@ -278,6 +307,7 @@ function Comments({ route }) {
                 refreshControl={RefreshControl}
                 keyboardShouldPersistTaps="handled"
               >
+                {renderHeader()}
                 <EmptyView />
               </ScrollView>
             )}
@@ -287,7 +317,8 @@ function Comments({ route }) {
               <View style={styles.commentContainer}>
                 <View style={styles.line} />
                 <Text style={styles.secondaryText}>
-                  {`${t('Comments.addComment')} ${commentValue.length ? `(${t('Comments.max160Characters')})` : ''}`}
+                  {isInputFocused && t('Comments.addComment')}
+                  {isInputFocused && commentValue.length > 160 && ` (${t('Comments.max160Characters')})`}
                 </Text>
                 <Input
                   value={commentValue}
@@ -302,8 +333,9 @@ function Comments({ route }) {
                   multilineStyle={styles.multiline}
                   buttonTitle={t('Comments.post')}
                   onButtonPress={onCreateComment}
-                  disabled={isButtonDisabled}
                   autoFocus={isInputFocused}
+                  ref={inputRef}
+                  placeholder={t('Comments.addCommentPlaceholder')}
                 />
               </View>
             )}
