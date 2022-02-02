@@ -612,7 +612,8 @@
     "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method.",
     "updateBankAccount": "Update Bank Account",
     "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
-    "update": "Update"
+    "update": "Update",
+    "bankAccountShouldBeAdded": "Bank account should be added"
   },
   "BankAccountModal": {
     "updateBankAccount": "Update Bank Account",

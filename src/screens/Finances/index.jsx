@@ -53,13 +53,21 @@ function Finances() {
   const [isRefreshing, setIsRefreshing] = useState(true);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
+  const [isAccountCreating, setIsAccountCreating] = useState(false);
+
   const userId = useSelector(userSelectors.getUserId);
 
   const updateBankAccount = useCallback(async () => {
     setIsBankAccountModal(false);
-    const { accountLink } = await accountApi.createStripePayoutAccountUpdatingLink();
-    setWebViewUrl(accountLink);
-  }, []);
+
+    try {
+      const { accountLink } = await accountApi.createStripePayoutAccountUpdatingLink();
+      setWebViewUrl(accountLink);
+    } catch (err) {
+      console.error('creating stripe payout account err:', err);
+      showFailure();
+    }
+  }, [showFailure]);
 
   const getUserWithdrawalMethod = useCallback(async ({ isAddedScreen = false } = {}) => {
     setIsRefreshing(true);
@@ -121,6 +129,8 @@ function Finances() {
   }, []);
 
   const createStripePayoutAccount = useCallback(async () => {
+    setIsAccountCreating(true);
+
     try {
       const { accountLink: fetchedAccountLink } = await accountApi.createStripePayoutAccount();
       setWebViewUrl(fetchedAccountLink);
@@ -128,6 +138,8 @@ function Finances() {
       console.error('createStripePayoutAccount err', err);
       showFailure();
     }
+
+    setIsAccountCreating(false);
   }, [showFailure]);
 
   const deleteWithdrawalMethod = useCallback(() => {
@@ -207,7 +219,12 @@ function Finances() {
       try {
         await accountApi.saveStripePayoutAccount({ token, userId, stripeAccountId });
       } catch (err) {
-        showFailure(err);
+        showFailure(t('Finances.bankAccountShouldBeAdded'));
+
+        setIsRefreshing(false);
+        setWebViewUrl(null);
+
+        return;
       }
 
       setIsRefreshing(false);
@@ -220,7 +237,7 @@ function Finances() {
       setWebViewUrl(null);
       getUserWithdrawalMethod();
     }
-  }, [getUserWithdrawalMethod, showFailure, userId]);
+  }, [getUserWithdrawalMethod, showFailure, userId, t]);
 
   const onChangeBankAccountModalVisibility = useCallback(() => {
     setIsBankAccountModal(!isBankAccountModal);
@@ -317,14 +334,22 @@ function Finances() {
               activeOpacity={0.7}
               style={styles.addWithdrawalMethod}
             >
-              <PlusIcon style={styles.plus} />
-              <Text style={styles.title}>{t('Finances.addBankAccount')}</Text>
+
+              {isAccountCreating && <ActivityIndicator color={colors.primary} />}
+
+              {!isAccountCreating && (
+                <>
+                  <PlusIcon style={styles.plus} />
+                  <Text style={styles.title}>{t('Finances.addBankAccount')}</Text>
+                </>
+              )}
+
             </TouchableOpacity>
 
             {!!income && !!income.length && (
-            <Text style={[styles.secondaryText, styles.incomeText]}>
-              {t('Finances.incomeWillBePaidToByThisMethodMonthly')}
-            </Text>
+              <Text style={[styles.secondaryText, styles.incomeText]}>
+                {t('Finances.incomeWillBePaidToByThisMethodMonthly')}
+              </Text>
             )}
           </View>
         ));
