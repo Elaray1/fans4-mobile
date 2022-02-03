@@ -38,7 +38,7 @@ function Comment({
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const [actionsPositionY, setActionsPositionY] = useState(null);
   const [likedUsersState, setLikedUsersState] = useState(data.likedUsers);
-  const [isLiked, setIsLiked] = useState(likedUsersState.map(i => i._id).includes(userId));
+  const isLiked = likedUsersState.some(like => like._id === userId);
 
   const onChooseCommentAction = useCallback(() => {
     if (!isActionsOpened && commentRef) {
@@ -69,16 +69,10 @@ function Comment({
 
   const onLikePress = useCallback(async () => {
     try {
-      let updatedPost;
-      if (isLiked) {
-        updatedPost = await commentApi.removeLikeFromComment(data._id);
-        setIsLiked(false);
-      } else {
-        updatedPost = await commentApi.likeComment(data._id);
-        setIsLiked(true);
-      }
+      const toggleLike = isLiked ? commentApi.removeLikeFromComment : commentApi.likeComment;
+      const { likedUsers } = await toggleLike(data._id);
 
-      setLikedUsersState(updatedPost.likedUsers);
+      setLikedUsersState(likedUsers);
     } catch (error) {
       showFailure();
     }
