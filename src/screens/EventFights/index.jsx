@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
-import { SafeAreaView, View, ActivityIndicator, TouchableOpacity,
-  Platform, Alert, Modal } from 'react-native';
+import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform, Modal } from 'react-native';
 import PropTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +31,8 @@ import { USER_TYPES } from 'resources/user/user.constants';
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
+import useEventUpdated from 'hooks/useEventUpdated';
+
 import styles from './styles';
 
 import EmptyView from './components/EmptyView';
@@ -40,7 +41,6 @@ import FinishedStreamVideo from './components/FinishedStreamVideo';
 
 import useAnalytics from './hooks/useAnalytics';
 import useFetchItems from './hooks/useFetchItems';
-import useEventUpdated from './hooks/useEventUpdated';
 
 import formatDuration from './helpers/formatDuration';
 
@@ -77,7 +77,6 @@ function EventFights({ route }) {
 
   const streamVideoRefIos = useRef(null);
   const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState(isLiveStream && Platform.OS === 'ios');
-  const [isLiveStreamShownIos, setIsLiveStreamShownIos] = useState(false);
 
   const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
   const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(!!isOpenStreamModal);
@@ -97,26 +96,6 @@ function EventFights({ route }) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const onExitFullScreenIos = useCallback(() => {
-    setIsLiveStreamShownIos(false);
-  }, []);
-
-  const onCloseStream = useCallback(() => {
-    streamVideoRefIos.current.closeFullScreen();
-  }, []);
-
-  const closeStreamAlert = useCallback(() => {
-    Alert.alert(
-      t('EventFights.liveStreamHasEnded'),
-      t('EventFights.videoWillBeAvailableSoon'),
-      [
-        {
-          text: t('EventFights.ok'),
-          onPress: onCloseStream,
-        }],
-    );
-  }, [onCloseStream, t]);
 
   const {
     fights,
@@ -140,24 +119,15 @@ function EventFights({ route }) {
       }
     }
 
-    const didEnded = updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING
-      && event.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
-
-    if (didEnded && isLiveStreamShownIos) {
-      closeStreamAlert();
-    }
-
-
     setEvent(updatedEvent);
     onRefresh();
-  }, [onRefresh, isLiveStream, closeStreamAlert, isLiveStreamShownIos, event.liveStream.status]);
+  }, [onRefresh, isLiveStream]);
 
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
 
   const onShowLiveStream = useCallback(() => {
     if (Platform.OS === 'ios') {
-      setIsLiveStreamShownIos(true);
       streamVideoRefIos.current.showFullScreen();
 
       return;
@@ -303,10 +273,10 @@ function EventFights({ route }) {
         <LiveStreamPlayerIos
           ref={streamVideoRefIos}
           eventId={event._id}
-          onExitFullScreen={onExitFullScreenIos}
           onReadyToPlay={onReadyToPlayIos}
           onFullscreenOpened={onFullscreenOpened}
           isLiveStream={isLiveStream}
+          eventLiveStreamStatus={event.liveStream.status}
         />
       )}
 

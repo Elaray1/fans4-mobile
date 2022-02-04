@@ -14,7 +14,6 @@ const useViewableItems = ({ setLiveStreamEvent, isAndroidStreamModalVisible }) =
   }, [isAndroidStreamModalVisible]);
 
   const updateViewableItems = useCallback(({ viewableItems }) => {
-    console.log('paused updateViewableItems', viewableItems);
     setViewableItemsState(viewableItems.reduce((memo, item) => {
       memo[item.item._id] = true;
       return memo;

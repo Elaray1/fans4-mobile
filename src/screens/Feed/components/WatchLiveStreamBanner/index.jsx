@@ -9,6 +9,8 @@ import LiveIcon from 'assets/icons/live.svg';
 import Text from 'components/Text';
 import LiveStreamPlayerIos from 'components/LiveStreamPlayerIos';
 
+import useDidUpdate from 'hooks/useDidUpdate';
+
 import { LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
 
 import colors from 'themes/colors';
@@ -17,8 +19,6 @@ import styles from './styles';
 
 const WatchLiveStreamBanner = ({ event, onPress }) => {
   const { t } = useTranslation();
-
-  const isLiveStream = event.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
 
   const posterSource = useMemo(() => {
     return { uri: event.imageUrl };
@@ -37,20 +37,48 @@ const WatchLiveStreamBanner = ({ event, onPress }) => {
     }
   }, [onPress, event, isStreamLoading]);
 
+  const [wasWaitedForPreloadStream, setWasWaitedForPreloadStream] = useState(false);
+
   const onReadyToPlayIos = useCallback(() => {
     setIsStreamLoading(false);
+    setWasWaitedForPreloadStream(true);
   }, []);
 
+  const isLive = event.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
+  const isFullScreenOpenedIosRef = useRef(false);
+
+  const onFullscreenOpenedIos = useCallback(() => {
+    isFullScreenOpenedIosRef.current = true;
+  }, []);
+
+  const onExitFullScreenIos = useCallback(() => {
+    isFullScreenOpenedIosRef.current = false;
+  }, []);
+
+  useDidUpdate(() => {
+    if (!isFullScreenOpenedIosRef.current && isLive && Platform.OS === 'ios') {
+      setIsStreamLoading(true);
+      streamVideoRefIos.current.reload();
+      setWasWaitedForPreloadStream(false);
+    }
+  }, [isLive]);
 
   return (
-    <TouchableOpacity onPress={onContainerPress} style={styles.container}>
+    <TouchableOpacity
+      onPress={onContainerPress}
+      style={isLive && wasWaitedForPreloadStream
+        ? styles.container
+        : styles.hiddenContainer}
+    >
       <View>
         {Platform.OS === 'ios' && (
           <LiveStreamPlayerIos
             ref={streamVideoRefIos}
             eventId={event._id}
             onReadyToPlay={onReadyToPlayIos}
-            isLiveStream={isLiveStream}
+            eventLiveStreamStatus={event.liveStream.status}
+            onExitFullScreen={onExitFullScreenIos}
+            onFullscreenOpened={onFullscreenOpenedIos}
           />
         )}
 
@@ -78,7 +106,11 @@ const WatchLiveStreamBanner = ({ event, onPress }) => {
 
 WatchLiveStreamBanner.propTypes = {
   event: PropTypes.shape().isRequired,
-  onPress: PropTypes.func.isRequired,
+  onPress: PropTypes.func,
+};
+
+WatchLiveStreamBanner.defaultProps = {
+  onPress: undefined,
 };
 
 export default React.memo(WatchLiveStreamBanner);
