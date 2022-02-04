@@ -11,6 +11,7 @@ import SearchFightersIcon from 'assets/icons/search-people';
 
 import * as userSelectors from 'resources/user/user.selectors';
 import * as postApi from 'resources/post/post.api';
+import { LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
 
 import FlatList from 'components/FlatList';
 import Header from 'components/Header';
@@ -56,7 +57,6 @@ function Feed() {
     posts,
     liveStreamEvents: preloadedLiveStreamEvents,
   } = useFetch();
-
 
   useSubscriptionUpdated({ fetchNewItems, isFetchedFirstTime, onRefresh });
   const liveStreamEvents = useEventsLiveStreamsUpdated({ posts, preloadedEvents: preloadedLiveStreamEvents });
@@ -215,7 +215,16 @@ function Feed() {
             refreshControl={RefreshControl}
             viewabilityConfig={POSTS_VIEWABILITY_CONFIG}
             onViewableItemsChanged={updateViewableItems}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            ItemSeparatorComponent={({ leadingItem }) => {
+              const isHiddenEventWithFinishedStream = leadingItem.liveStream
+                && leadingItem.liveStream.status !== LIVE_STREAM_STATUSES.LIVE;
+
+              if (isHiddenEventWithFinishedStream) {
+                return null;
+              }
+
+              return <View style={styles.separator} />;
+            }}
           />
         )}
 

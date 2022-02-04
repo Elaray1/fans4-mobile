@@ -1,37 +1,55 @@
 import React, { useEffect, useState, useMemo, useCallback, useImperativeHandle, useRef } from 'react';
-import { AppState, View } from 'react-native';
+import { AppState, View, Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import * as eventApi from 'resources/event/event.api';
+import { LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
+
+import useEventUpdated from 'hooks/useEventUpdated';
 
 import Video from 'components/Video';
 
 import styles from './styles';
 
+const FINISHED_STREAM_STATUSES = [LIVE_STREAM_STATUSES.PROCESSING, LIVE_STREAM_STATUSES.FINISHED];
+
 const LiveStreamPlayerIos = React.forwardRef(({
   eventId,
+  eventLiveStreamStatus,
   onReadyToPlay,
   onExitFullScreen,
   onFullscreenOpened,
-  isLiveStream,
 }, ref) => {
+  const { t } = useTranslation();
+
   const [eventStreamLink, setEventStreamLink] = useState(null);
   const [width, setWidth] = useState(1920);
   const [height, setHeight] = useState(1080);
 
   const [isLiveStreamShownIos, setIsLiveStreamShownIos] = useState(false);
+  const [wasLiveStreamEndAlertShown, setWasLiveStreamEndAlertShown] = useState(false);
+  const [isFinishedStream, setIsFinishedStream] = useState(FINISHED_STREAM_STATUSES.includes(eventLiveStreamStatus));
+  const [isLiveStream, setIsLiveStream] = useState(eventLiveStreamStatus === LIVE_STREAM_STATUSES.LIVE);
+
+  const onEventUpdated = useCallback((updatedEvent) => {
+    setIsFinishedStream(FINISHED_STREAM_STATUSES.includes(updatedEvent.liveStream.status));
+    setIsLiveStream(updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.LIVE);
+  }, []);
+
+  useEventUpdated({ eventId, onEventUpdated });
 
   const videoRef = useRef();
 
   const getStreamLink = useCallback(async () => {
-    if (!eventStreamLink && isLiveStream) {
+    if (isLiveStream) {
       const { link, width: streamWidth, height: streamHeight } = await eventApi.getStreamLinkByEventId(eventId);
 
       setEventStreamLink(link);
       setWidth(streamWidth);
       setHeight(streamHeight);
     }
-  }, [eventStreamLink, eventId, isLiveStream]);
+  }, [eventId, isLiveStream]);
 
   useImperativeHandle(ref, () => ({
     closeFullScreen: () => {
@@ -40,8 +58,10 @@ const LiveStreamPlayerIos = React.forwardRef(({
     showFullScreen: () => {
       videoRef.current.showFullScreen();
     },
-    reload: () => {
-      getStreamLink();
+    reload: async () => {
+      setEventStreamLink(null);
+      setWasLiveStreamEndAlertShown(false);
+      await getStreamLink();
     },
   }));
 
@@ -78,22 +98,61 @@ const LiveStreamPlayerIos = React.forwardRef(({
 
   const videoSource = useMemo(() => ({ uri: eventStreamLink }), [eventStreamLink]);
 
+  const showStreamEndedAlert = useCallback(() => {
+    Alert.alert(t('EventFights.liveStreamHasEnded'), t('EventFights.videoWillBeAvailableSoon'), [
+      {
+        text: t('EventFights.ok'),
+      },
+    ]);
+  }, [t]);
+
+  const checkAndFinishStream = useCallback(async () => {
+    if (!wasLiveStreamEndAlertShown && isLiveStreamShownIos) {
+      if (isFinishedStream) {
+        videoRef.current.closeFullScreen();
+
+        setWasLiveStreamEndAlertShown(true);
+        showStreamEndedAlert();
+        return;
+      }
+
+      try {
+        const updatedEvent = await eventApi.getEvent(eventId);
+        onEventUpdated(updatedEvent);
+
+        if (updatedEvent.liveStream.status === LIVE_STREAM_STATUSES.PROCESSING) {
+          videoRef.current.closeFullScreen();
+
+          setWasLiveStreamEndAlertShown(true);
+          showStreamEndedAlert();
+        }
+      } catch (err) {
+        console.error('fetching event err:', err);
+      }
+    }
+  }, [showStreamEndedAlert, wasLiveStreamEndAlertShown,
+    isFinishedStream, isLiveStreamShownIos, eventId, onEventUpdated]);
+
   return (
     <View style={styles.videoContainer}>
-      <Video
-        ref={videoRef}
-        isLive
-        viewable
-        playOnStart
-        width={width}
-        height={height}
-        source={videoSource}
-        muted={!isLiveStreamShownIos}
-        onExitFullScreen={onExitFullScreenIos}
-        pauseOnFullScreen={false}
-        onReadyToPlay={onReadyToPlay}
-        onFullscreenPlayerDidPresent={onFullscreenOpenedIos}
-      />
+      {eventStreamLink && (
+        <Video
+          ref={videoRef}
+          isLive
+          viewable
+          playOnStart
+          width={width}
+          height={height}
+          source={videoSource}
+          muted={!isLiveStreamShownIos}
+          onExitFullScreen={onExitFullScreenIos}
+          pauseOnFullScreen={false}
+          onReadyToPlay={onReadyToPlay}
+          onFullscreenPlayerDidPresent={onFullscreenOpenedIos}
+          onStreamStopIos={checkAndFinishStream}
+          onStreamPlayableTimeReached={checkAndFinishStream}
+        />
+      )}
     </View>
   );
 });
@@ -103,7 +162,7 @@ LiveStreamPlayerIos.propTypes = {
   onReadyToPlay: PropTypes.func.isRequired,
   onExitFullScreen: PropTypes.func,
   onFullscreenOpened: PropTypes.func,
-  isLiveStream: PropTypes.bool.isRequired,
+  eventLiveStreamStatus: PropTypes.oneOf(Object.values(LIVE_STREAM_STATUSES)).isRequired,
 };
 
 LiveStreamPlayerIos.defaultProps = {

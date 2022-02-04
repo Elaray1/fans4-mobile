@@ -22,6 +22,7 @@ const MAX_VERTICAL_VIDEO_ASPECT_RATIO = 4 / 5;
 const CONTROLS_SHOWN_DURATION = 2 * 1000;
 const PROGRESS_BAR_PADDING = 16;
 const PROGRESS_BAR_HIT_SLOP = { top: 15, bottom: 15, left: 0, right: 0 };
+const MAXT_FORWARD_BUFFER_DURATION_IOS = 8 * 60 * 60;
 
 const formatDuration = seconds => moment.duration(seconds, 's')
   .format(seconds >= 3600 ? 'hh:mm:ss' : 'mm:ss', { trim: false });
@@ -30,12 +31,15 @@ const formatDuration = seconds => moment.duration(seconds, 's')
 const Video = React.forwardRef(({ source, width, height, posterSource, duration, onReadyToPlay,
   viewable, onVideoStarted, playOnStart, isLive, onExitFullScreen, muted, pauseOnFullScreen,
   onFullscreenPlayerDidPresent,
+  onStreamStopIos,
+  onStreamPlayableTimeReached,
 }, ref) => {
   const isFocused = useIsFocused();
 
   const [paused, setPaused] = useState(!playOnStart);
   const [renderingWidth, setRenderingWidth] = useState(0);
   const [playedTime, setPlayedTime] = useState(0);
+  const [wasReadyToPlay, setWasReadyToPlay] = useState(false);
 
   const [startLoadingDate, setStartLoadingDate] = useState(null);
   const [endLoadingDate, setEndLoadingDate] = useState(null);
@@ -191,6 +195,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   }, []);
 
   const handleOnLoadEvent = useCallback(({ duration: videoDuration }) => {
+    setWasReadyToPlay(true);
     seekToMakeThumbnail(videoDuration);
 
     if (onReadyToPlay) {
@@ -198,7 +203,19 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
     }
   }, [seekToMakeThumbnail, onReadyToPlay]);
 
+  const [wasPlayableTimeReached, setWasPlayableTimeReachded] = useState(false);
+
   const updateTiming = useCallback(({ currentTime, playableDuration, seekableDuration }) => {
+    const liveStreamEndedThreshold = 1;
+    const isPlayableTimeReached = playableDuration - currentTime < liveStreamEndedThreshold;
+
+    if (isLive && isPlayableTimeReached) {
+      if (onStreamPlayableTimeReached) {
+        onStreamPlayableTimeReached();
+        setWasPlayableTimeReachded(true);
+      }
+    }
+
     if (isRewinding) {
       return;
     }
@@ -214,7 +231,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
       isSeekedToLiveOnStart.current = true;
       videoRef.current.seek(seekableDuration);
     }
-  }, [endLoadingDate, isLive, isRewinding]);
+  }, [endLoadingDate, isLive, isRewinding, onStreamPlayableTimeReached]);
 
   const toggleFullScreen = useCallback(() => {
     if (setIsPosterShown) {
@@ -247,9 +264,23 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   const [videoKey, setVideoKey] = useState(0);
 
   const onError = useCallback((err) => {
-    console.log('onVideo error:', err);
+    console.log('on video error:', err);
+
+    const isStoppedStreamIos = isLive && Platform.OS === 'ios'
+      && wasReadyToPlay
+      && err.error.code === -1100
+      && err.error.localizedDescription === 'The requested URL was not found on this server.';
+
+    if (isStoppedStreamIos) {
+      if (wasPlayableTimeReached && onStreamStopIos) {
+        onStreamStopIos();
+      }
+
+      return;
+    }
+
     setVideoKey(videoKey + 1);
-  }, [videoKey]);
+  }, [isLive, videoKey, wasReadyToPlay, onStreamStopIos, wasPlayableTimeReached]);
 
   useEffect(() => {
     if (!paused && !isFullScreen && (!viewable || !isFocused)) {
@@ -315,10 +346,11 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
               playWhenInactive
               paused={paused}
               resizeMode="cover"
-              progressUpdateInterval={300}
+              progressUpdateInterval={200}
               onProgress={updateTiming}
               onError={onError}
               onFullscreenPlayerDidPresent={onFullscreenPlayerDidPresent}
+              preferredForwardBufferDuration={MAXT_FORWARD_BUFFER_DURATION_IOS}
             />
           )}
 
@@ -396,6 +428,8 @@ Video.propTypes = {
   pauseOnFullScreen: PropTypes.bool,
   onReadyToPlay: PropTypes.func,
   onFullscreenPlayerDidPresent: PropTypes.func,
+  onStreamStopIos: PropTypes.func,
+  onStreamPlayableTimeReached: PropTypes.func,
 };
 
 Video.defaultProps = {
@@ -410,6 +444,8 @@ Video.defaultProps = {
   pauseOnFullScreen: true,
   onReadyToPlay: undefined,
   onFullscreenPlayerDidPresent: undefined,
+  onStreamStopIos: undefined,
+  onStreamPlayableTimeReached: undefined,
 };
 
 export default React.memo(Video);

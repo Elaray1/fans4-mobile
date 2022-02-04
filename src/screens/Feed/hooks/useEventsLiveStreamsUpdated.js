@@ -4,7 +4,7 @@ import useDidUpdate from 'hooks/useDidUpdate';
 
 import websocketsService from 'services/socket.service';
 
-const useEventsLiveStreamsUpdated = ({ posts, preloadedEvents }) => {
+const useEventsLiveStreamsUpdated = ({ preloadedEvents }) => {
   const [eventsWithLiveStream, setEventsWithLiveStream] = useState(preloadedEvents || []);
 
   useDidUpdate(() => {
@@ -20,7 +20,6 @@ const useEventsLiveStreamsUpdated = ({ posts, preloadedEvents }) => {
       websocketsService.leaveRoom('events');
     };
   }, []);
-
 
   return eventsWithLiveStream;
 };

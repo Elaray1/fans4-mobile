@@ -9,6 +9,11 @@ export default StyleSheet.create({
     width: '100%',
     borderRadius: 5,
   },
+  hiddenContainer: {
+    overflow: 'hidden',
+    width: 0,
+    height: 0,
+  },
   poster: {
     width: '100%',
     aspectRatio: 16 / 9,
