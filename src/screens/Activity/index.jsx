@@ -284,32 +284,35 @@ function Activity() {
       type: activity.type,
     });
 
-    const grouppedActivityIndex = grouppedActivities.findIndex((el) => {
-      return el.key === newPostLikeActivityKey;
-    });
+    const formattedActivity = {
+      ...activity,
+    };
+
+    const grouppedActivityIndex = grouppedActivities.findIndex(a => a.key === newPostLikeActivityKey);
+
     if (grouppedActivityIndex !== -1) {
       if (grouppedActivities[grouppedActivityIndex].isInserted) {
         return null;
       }
 
-      activity.isGroupped = true;
+      formattedActivity.isGroupped = true;
 
       const [newestActivityInGroup] = grouppedActivities[grouppedActivityIndex].activities;
-      activity._id = newestActivityInGroup._id;
-      activity.createdOn = newestActivityInGroup.createdOn;
-      activity.type = newestActivityInGroup.type;
-      activity.data = grouppedActivities[grouppedActivityIndex].activities.map((el => el.data));
+      formattedActivity._id = newestActivityInGroup._id;
+      formattedActivity.createdOn = newestActivityInGroup.createdOn;
+      formattedActivity.type = newestActivityInGroup.type;
+      formattedActivity.data = grouppedActivities[grouppedActivityIndex].activities.map((el => el.data));
 
       grouppedActivities[grouppedActivityIndex].isInserted = true;
     }
 
     if (index === 0) {
-      activity.title = title;
+      formattedActivity.title = title;
     } else if (index === activitiesLength - 1) {
-      activity.isLast = true;
+      formattedActivity.isLast = true;
     }
 
-    return activity;
+    return formattedActivity;
   }, [grouppedActivities, createActivityKey]);
 
   const activitiesArray = useMemo(() => {
@@ -355,8 +358,12 @@ function Activity() {
         });
       });
 
-    return [...todayActivities, ...yesterdayActivities, ...thisWeekActivities, ...thisMonthActivities]
-      .filter(el => !!el);
+    return [
+      ...todayActivities,
+      ...yesterdayActivities,
+      ...thisWeekActivities,
+      ...thisMonthActivities,
+    ].filter(el => !!el);
   }, [activities.today, activities.yesterday, activities.thisWeek, activities.thisMonth, t, formatteActivityData]);
 
   const Loader = () => <View><ActivityIndicator size="large" color={colors.primary} /></View>;
