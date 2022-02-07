@@ -17,12 +17,12 @@ import analyticsService from 'services/analytics.service';
 
 import FlatList from 'components/FlatList';
 import Header from 'components/Header';
-import Comment from 'components/Comment';
 import Post from 'components/Post';
 import Text from 'components/Text';
 import Input from 'components/Input';
 import CustomRefreshControl from 'components/CustomRefreshControl';
 
+import { emitter } from 'services/emitter.service';
 import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
@@ -31,6 +31,8 @@ import { USER_TYPES } from 'resources/user/user.constants';
 import { CREATED_BY, SORT_OPTIONS } from 'resources/comment/comment.constants';
 
 import NoCommentsIllustration from 'assets/illustrations/no-events.svg';
+
+import CommentWithReplies from './components/CommentWithReplies';
 
 import styles from './styles';
 
@@ -41,6 +43,7 @@ const keyboardAvoidingViewBehavior = Platform.OS === 'ios' ? 'padding' : 'height
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 0 : 16;
 
 function Comments({ route }) {
+  const inputRef = useRef();
   const { t } = useTranslation();
   const { showFailure } = useToast();
   const navigation = useNavigation();
@@ -58,6 +61,8 @@ function Comments({ route }) {
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
   const [commentValue, setCommentValue] = useState('');
+  const [replyCommentId, setReplyCommentId] = useState(null);
+  const [replyCommentName, setReplyCommentName] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -156,10 +161,28 @@ function Comments({ route }) {
       const comment = await commentApi.createComment({
         text: commentValue,
         postId,
+        targetCommentId: replyCommentId,
       });
 
       setCommentValue('');
-      setComments([comment, ...comments]);
+      setReplyCommentId(null);
+      setReplyCommentName(null);
+      if (comment.originalComment) {
+        const newComments = comments.map((c) => {
+          if (c._id === comment.originalComment._id) {
+            if (c.replies?.length) {
+              c.replies.push(comment);
+            } else {
+              c.replies = [comment];
+            }
+            emitter.emit('new-reply', comment);
+          }
+          return c;
+        });
+        setComments(newComments);
+      } else {
+        setComments([comment, ...comments]);
+      }
 
       if (onUpdateCommentsCount) {
         onUpdateCommentsCount(postId);
@@ -176,7 +199,7 @@ function Comments({ route }) {
     } catch (error) {
       showFailure();
     }
-  }, [showFailure, postId, commentValue, comments, onUpdateCommentsCount, userType]);
+  }, [commentValue, postId, replyCommentId, comments, onUpdateCommentsCount, userType, showFailure]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -196,6 +219,8 @@ function Comments({ route }) {
   }, []);
 
   const onInputBlur = useCallback(() => {
+    setReplyCommentId(null);
+    setReplyCommentName(null);
     setIsInputFocused(false);
   }, []);
 
@@ -223,8 +248,13 @@ function Comments({ route }) {
   const keyExtractor = useCallback(item => item._id, []);
 
   const renderItem = ({ item }) => {
+    const onReply = (i) => {
+      setReplyCommentId(i._id);
+      setReplyCommentName(i.author.fullName);
+      inputRef.current?.focus();
+    };
     return (
-      <Comment data={item} onDelete={onDeleteComment} />
+      <CommentWithReplies item={item} onDelete={onDeleteComment} onReply={onReply} />
     );
   };
 
@@ -243,8 +273,6 @@ function Comments({ route }) {
       onRefresh={onRefresh}
     />
   );
-
-  const inputRef = useRef();
 
   const renderHeader = () => (
     <View style={styles.postContainer}>
@@ -317,7 +345,7 @@ function Comments({ route }) {
               <View style={styles.commentContainer}>
                 <View style={styles.line} />
                 <Text style={styles.secondaryText}>
-                  {isInputFocused && t('Comments.addComment')}
+                  {isInputFocused && (replyCommentName ? `Reply to ${replyCommentName}` : t('Comments.addComment'))}
                   {isInputFocused && commentValue.length > 160 && ` (${t('Comments.max160Characters')})`}
                 </Text>
                 <Input
