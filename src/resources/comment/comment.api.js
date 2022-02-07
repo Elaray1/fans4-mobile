@@ -11,8 +11,8 @@ export const getPostComments = ({
     sortOption,
   });
 
-export const createComment = ({ text, postId }) => apiClient
-  .post('comments', { text, postId });
+export const createComment = ({ text, postId, targetCommentId }) => apiClient
+  .post('comments', { text, postId, targetCommentId });
 
 export const deleteComment = _id => apiClient
   .delete(`comments/${_id}`);

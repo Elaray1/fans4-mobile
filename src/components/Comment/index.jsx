@@ -28,6 +28,7 @@ import styles from './styles';
 function Comment({
   data,
   onDelete,
+  onReply,
 }) {
   const { showFailure, showSuccess } = useToast();
   const { t } = useTranslation();
@@ -127,7 +128,10 @@ function Comment({
         style={[styles.commentLine, styles.firstLine]}
       >
         <View style={styles.fullNameContainer}>
-          <Text style={styles.fullNameText}>{data.author.fullName}</Text>
+          <Text style={styles.fullNameText}>{data.targetComment?.authorName
+            ? `${data.author.fullName} ▸ ${data.targetComment?.authorName}`
+            : data.author.fullName}
+          </Text>
         </View>
         <View>
           <TouchableOpacity onPress={onChooseCommentAction} style={styles.dotButton}>
@@ -160,13 +164,18 @@ function Comment({
             </TouchableOpacity>
           )}
         </View>
-        <TouchableOpacity onPress={onLikePress}>{isLiked ? (
-          <LikeIcon
-            stroke={colors.white}
-            fill={colors.white}
-          />
-        ) : <LikeIcon stroke={colors.white} />}
-        </TouchableOpacity>
+        <View style={styles.dateContainer}>
+          <TouchableOpacity onPress={onReply} style={styles.date}>
+            <Text style={styles.secondaryText}>{t('Comment.reply')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onLikePress}>{isLiked ? (
+            <LikeIcon
+              stroke={colors.white}
+              fill={colors.white}
+            />
+          ) : <LikeIcon stroke={colors.white} />}
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.line} />
     </Animated.View>
@@ -185,13 +194,19 @@ Comment.propTypes = {
     post: PropTypes.shape({
       _id: PropTypes.string.isRequired,
     }),
+    targetComment: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      authorName: PropTypes.string.isRequired,
+    }),
     likedUsers: PropTypes.arrayOf(PropTypes.shape),
   }).isRequired,
   onDelete: PropTypes.func,
+  onReply: PropTypes.func,
 };
 
 Comment.defaultProps = {
   onDelete: () => null,
+  onReply: () => null,
 };
 
 export default React.memo(Comment);

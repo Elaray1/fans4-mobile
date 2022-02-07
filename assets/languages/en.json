@@ -550,14 +550,17 @@
     "addCommentPlaceholder": "Add a comment...",
     "max160Characters": "max. 160 characters",
     "post": "Post",
-    "nothingYet": "Check back to view your fans' first post."
+    "nothingYet": "Check back to view your fans' first post.",
+    "see": "See",
+    "moreReplies": "more replies"
   },
   "Comment": {
     "deleteComment": "Delete Comment",
     "commentDeleted": "Comment deleted.",
     "reportThisComment": "Report this Comment",
     "like": "like",
-    "likes": "likes"
+    "likes": "likes",
+    "reply": "Reply"
   },
   "Toast": {
     "somethingWentWrongPleaseTryAgain": "Something went wrong. Please try again."
