@@ -21,6 +21,7 @@ import Post from 'components/Post';
 import Text from 'components/Text';
 import Input from 'components/Input';
 import CustomRefreshControl from 'components/CustomRefreshControl';
+import Comment from 'components/Comment';
 
 import { emitter } from 'services/emitter.service';
 import useToast from 'hooks/useToast';
@@ -31,8 +32,6 @@ import { USER_TYPES } from 'resources/user/user.constants';
 import { CREATED_BY, SORT_OPTIONS } from 'resources/comment/comment.constants';
 
 import NoCommentsIllustration from 'assets/illustrations/no-events.svg';
-
-import CommentWithReplies from './components/CommentWithReplies';
 
 import styles from './styles';
 
@@ -169,14 +168,13 @@ function Comments({ route }) {
       setReplyCommentName(null);
       if (comment.originalComment) {
         const newComments = comments.map((c) => {
-          if (c._id === comment.originalComment._id) {
-            if (c.replies?.length) {
-              c.replies.push(comment);
-            } else {
-              c.replies = [comment];
-            }
-            emitter.emit('new-reply', comment);
+          if (c._id !== comment.originalComment._id) {
+            return c;
           }
+          c.replies = (c.replies && c.replies.length) ? [...c.replies] : [];
+          c.replies.push(comment);
+
+          emitter.emit('new-reply', comment);
           return c;
         });
         setComments(newComments);
@@ -254,7 +252,7 @@ function Comments({ route }) {
       inputRef.current?.focus();
     };
     return (
-      <CommentWithReplies item={item} onDelete={onDeleteComment} onReply={onReply} />
+      <Comment item={item} onDelete={onDeleteComment} onReply={onReply} />
     );
   };
 
