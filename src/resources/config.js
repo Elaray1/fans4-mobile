@@ -37,4 +37,5 @@ export default {
   liveStreamPlayerUrl: getLiveStreamPlayerUrl(),
   mode: Config.APP_ENV,
   applicationId: 'fans4',
+  sentryDSN: Config.SENTRY_DSN,
 };
