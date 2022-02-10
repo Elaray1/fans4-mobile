@@ -32,6 +32,16 @@ export default StyleSheet.create({
     color: colors.textSecondary,
     fontSize: fonts.size.caption,
   },
+  whiteText: {
+    color: colors.white,
+    fontSize: fonts.size.small,
+  },
+  dash: {
+    borderLeftWidth: 2,
+    borderColor: colors.textSecondary,
+    paddingLeft: 8,
+    marginTop: 8,
+  },
   postText: {
     maxWidth: 270,
   },

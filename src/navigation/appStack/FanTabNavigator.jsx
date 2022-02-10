@@ -3,19 +3,21 @@ import { useSelector } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import FeedIcon from 'assets/icons/tab-bar/feed.svg';
-import MessageIcon from 'assets/icons/tab-bar/message.svg';
-import UnreadMessageIcon from 'assets/icons/tab-bar/unread-message.svg';
 import EventsIcon from 'assets/icons/tab-bar/events.svg';
 import VotingIcon from 'assets/icons/tab-bar/voting.svg';
 import AccountIcon from 'assets/icons/tab-bar/account.svg';
+import ActivityIcon from 'assets/icons/tab-bar/activity.svg';
+import UnreadActivityIcon from 'assets/icons/tab-bar/unread-activity.svg';
+
 
 import Feed from 'screens/Feed';
 import Events from 'screens/Events';
 import Account from 'screens/Account';
-import ChatsList from 'screens/ChatsList';
 import Voting from 'screens/Voting';
+import Activity from 'screens/Activity';
 
 import * as messageSelectors from 'resources/message/message.selectors';
+import * as activitySelectors from 'resources/activity/activity.selectors';
 
 import BottomTabBar from './BottomTabBar';
 
@@ -34,10 +36,14 @@ const optionsByScreen = {
 
 function FanTabNavigator() {
   const isUnreadMessages = useSelector(messageSelectors.getIsUnreadMessages);
+  const isUnreadActivities = useSelector(activitySelectors.getIsUnreadActivities);
 
-  const chatsIcon = isUnreadMessages ? UnreadMessageIcon : MessageIcon;
+  const activityIcon = (isUnreadActivities || isUnreadMessages)
+    ? UnreadActivityIcon
+    : ActivityIcon;
 
-  const chatsOptions = useMemo(() => ({ icon: chatsIcon }), [chatsIcon]);
+  const activityOptions = useMemo(() => ({ icon: activityIcon }), [activityIcon]);
+
   return (
     <Tab.Navigator
       initialRouteName="Feed"
@@ -51,7 +57,7 @@ function FanTabNavigator() {
         component={Voting}
       />
       <Tab.Screen name="Events" options={optionsByScreen.events} component={Events} />
-      <Tab.Screen name="Chats" options={chatsOptions} component={ChatsList} />
+      <Tab.Screen name="Activity" options={activityOptions} component={Activity} />
       <Tab.Screen name="Account" options={optionsByScreen.account} component={Account} />
     </Tab.Navigator>
   );
