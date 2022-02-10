@@ -4,13 +4,17 @@ import {
   View, TouchableOpacity, Modal, Pressable,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import _ from 'lodash';
 
 import SelectedFilterIcon from 'assets/icons/selected-filter';
 
+import * as userSelectors from 'resources/user/user.selectors';
+
 import Text from 'components/Text';
 
 import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import styles from './styles';
 
@@ -22,6 +26,10 @@ function FiltersModal({
 }) {
   const { t } = useTranslation();
 
+  const userType = useSelector(userSelectors.getUserType);
+
+  const isFighter = userType === USER_TYPES.FIGHTER;
+
   const filters = useMemo(() => [
     {
       title: t('FiltersModal.allActivity'),
@@ -29,17 +37,20 @@ function FiltersModal({
     },
     {
       title: t('FiltersModal.likes'),
-      types: [ACTIVITY_TYPES.NEW_POST_LIKE],
+      types: [ACTIVITY_TYPES.NEW_POST_LIKE, ACTIVITY_TYPES.NEW_COMMENT_LIKE],
     },
     {
       title: t('FiltersModal.commentsAndReplies'),
-      types: [ACTIVITY_TYPES.NEW_POST_COMMENT],
-    },
-    {
-      title: t('FiltersModal.newFans'),
-      types: [ACTIVITY_TYPES.NEW_FAN],
+      types: [ACTIVITY_TYPES.NEW_POST_COMMENT, ACTIVITY_TYPES.NEW_REPLY],
     },
   ], [t]);
+
+  if (isFighter) {
+    filters.push({
+      title: t('FiltersModal.newFans'),
+      types: [ACTIVITY_TYPES.NEW_FAN],
+    });
+  }
 
   const onCloseModal = useCallback(() => {
     onClose(selectedFilters);

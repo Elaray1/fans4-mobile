@@ -703,8 +703,14 @@
   "ActivityItem": {
     "becameYourFan": "became your Fan!",
     "sayHi": "Say hi!",
-    "commented": "commented:",
+    "commented": "commented on your post:",
+    "commentedOn": "commented on",
+    "post": "post:",
+    "replied": "replied to your comment:",
     "likedYourPost": "liked your post",
+    "likedYour": "liked your",
+    "reply": "reply",
+    "comment": "comment",
     "and": "and",
     "others": "others"
   },
