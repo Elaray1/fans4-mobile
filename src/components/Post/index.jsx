@@ -8,13 +8,18 @@ import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 
-import analyticsService from 'services/analytics.service';
-
 import * as userSelectors from 'resources/user/user.selectors';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import * as postApi from 'resources/post/post.api';
+import { MEDIA_TYPES, POST_STATUSES } from 'resources/post/post.constants';
 
 import * as videoPlaybackApi from 'resources/videoPlayback/videoPlayback.api';
+
+import { emitter, EMITTER_EVENTS } from 'services/emitter.service';
+import analyticsService from 'services/analytics.service';
+
+import config from 'resources/config';
 
 import Text from 'components/Text';
 import StatusBadge from 'components/StatusBadge';
@@ -27,19 +32,18 @@ import CommentIcon from 'assets/icons/comment';
 import LockIcon from 'assets/icons/lock';
 import DotsIcon from 'assets/icons/dots';
 
-import config from 'resources/config';
 
 import useToast from 'hooks/useToast';
+
 import colors from 'themes/colors';
-import { MEDIA_TYPES, POST_STATUSES } from 'resources/post/post.constants';
-import { USER_TYPES } from 'resources/user/user.constants';
+
 import { FANS4_ACCOUNT } from 'helpers/constants';
 
-import { formatCount, formatTime } from './Post.helpers';
+import { formatCount, formatTime } from './helpers';
 
 import useLikes from './hooks/useLikes';
 
-import styles from './Post.styles';
+import styles from './styles';
 
 function Post({
   _id,
@@ -85,7 +89,7 @@ function Post({
     likesCount,
     isLiked,
     likedNames,
-  } = useLikes({ likedUsers, userId });
+  } = useLikes({ likedUsers, userId, postId: _id });
 
   const likedByText = `Liked by ${likedNames} ${likesCount - 1 > 1 ? `and ${likesCount - 1} others` : ''}`;
   const isPostAuthor = userId === author?._id;
@@ -363,7 +367,9 @@ function Post({
       }
 
       setLikedUsersState(updatedPost.likedUsers);
-    } catch (error) {
+      emitter.emit(EMITTER_EVENTS.USER_TOGGLED_LIKE, { postId: _id });
+    } catch (err) {
+      console.error('like err:', err);
       showFailure();
     }
   }, [isLiked, _id, showFailure, setLikedUsersState]);

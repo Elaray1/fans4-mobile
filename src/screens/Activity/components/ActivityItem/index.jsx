@@ -16,7 +16,7 @@ import Text from 'components/Text';
 
 import { ACTIVITY_TYPES } from 'resources/activity/activity.constants';
 
-import { formatTime } from 'components/Post/Post.helpers';
+import { formatTime } from 'components/Post/helpers';
 import { toFixLength } from 'helpers/modifyText';
 
 import styles from './styles';

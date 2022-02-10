@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import Text from 'components/Text';
 
-import { emitter } from 'services/emitter.service';
+import { emitter, EMITTER_EVENTS } from 'services/emitter.service';
 
 import MainComment from './components/MainComment';
 
@@ -22,9 +22,9 @@ const Comment = ({ item, onReply, onDelete }) => {
         setIsOpen(true);
       }
     };
-    emitter.on('new-reply', onNewReply);
 
-    return () => emitter.off('new-reply', onNewReply);
+    emitter.on(EMITTER_EVENTS.NEW_REPLAY, onNewReply);
+    return () => emitter.off(EMITTER_EVENTS.NEW_REPLAY, onNewReply);
   }, [item._id]);
 
   const onSeeMore = useCallback(() => setIsOpen(true), []);
