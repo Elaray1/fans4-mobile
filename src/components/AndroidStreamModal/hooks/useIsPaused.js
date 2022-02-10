@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
-const pause = () => {
+const _pause = () => {
   return `
     const event = new CustomEvent('pause_stream');
     window.dispatchEvent(event);
@@ -10,6 +10,10 @@ const pause = () => {
 
 const useIsPaused = ({ webViewRef }) => {
   const [isPaused, setIsPaused] = useState();
+
+  const pause = useCallback(() => {
+    webViewRef.current.injectJavaScript(_pause());
+  }, [webViewRef]);
 
   useEffect(() => {
     AppState.addEventListener('change', (state) => {
@@ -25,9 +29,9 @@ const useIsPaused = ({ webViewRef }) => {
 
   useEffect(() => {
     if (isPaused) {
-      webViewRef.current.injectJavaScript(pause());
+      pause();
     }
-  }, [isPaused, webViewRef]);
+  }, [pause, isPaused, webViewRef]);
 
   return pause;
 };

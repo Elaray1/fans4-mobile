@@ -18,7 +18,7 @@ import Header from 'components/Header';
 import Post from 'components/Post';
 import Text from 'components/Text';
 import CustomRefreshControl from 'components/CustomRefreshControl';
-import EventLiveStreamAndroidModal from 'components/EventLiveStreamAndroid';
+import AndroidStreamModal from 'components/AndroidStreamModal';
 
 import useToast from 'hooks/useToast';
 
@@ -28,7 +28,7 @@ import useFetch from './hooks/useFetch';
 import useSubscriptionUpdated from './hooks/useSubscriptionUpdated';
 import useViewableItems from './hooks/useViewableItems';
 import useEventsLiveStreamsUpdated from './hooks/useEventsLiveStreamsUpdated';
-import useEventsLiveStreamAndroid from './hooks/useEventLiveStreamAndroid';
+import useAndroidStreamModal from './hooks/useAndroidStreamModal';
 
 import WatchLiveStreamBanner from './components/WatchLiveStreamBanner';
 
@@ -62,10 +62,11 @@ function Feed() {
   const liveStreamEvents = useEventsLiveStreamsUpdated({ posts, preloadedEvents: preloadedLiveStreamEvents });
 
   const {
-    isAndroidStreamModalVisible,
-    setIsAndroidStreamModalVisible,
-    onCloseAndroidStreamModal,
-  } = useEventsLiveStreamAndroid();
+    eventLiveStreamAndroidModalRef,
+    show: showAndroidStreamModal,
+    isVisible: isAndroidStreamModalVisible,
+    onClose: onAndroidStreamModalClose,
+  } = useAndroidStreamModal();
 
   const {
     updateViewableItems,
@@ -99,8 +100,8 @@ function Feed() {
       setLiveStreamEvent(event);
     }
 
-    setIsAndroidStreamModalVisible(true);
-  }, [liveStreamEvent?._id, setIsAndroidStreamModalVisible]);
+    showAndroidStreamModal();
+  }, [liveStreamEvent?._id, showAndroidStreamModal]);
 
   const keyExtractor = useCallback((item) => {
     const isEvent = !!item.liveStream;
@@ -177,15 +178,16 @@ function Feed() {
     });
   }, [posts, liveStreamEvents]);
 
+
   return (
     <SafeAreaView style={styles.screen}>
       {Platform.OS === 'android' && liveStreamEvent && (
-        <EventLiveStreamAndroidModal
-          visible={isAndroidStreamModalVisible}
+        <AndroidStreamModal
           eventId={liveStreamEvent._id}
           eventName={liveStreamEvent.name}
           eventLiveStreamStatus={liveStreamEvent.liveStream.status}
-          onClose={onCloseAndroidStreamModal}
+          ref={eventLiveStreamAndroidModalRef}
+          onAndroidStreamModalClose={onAndroidStreamModalClose}
         />
       )}
 

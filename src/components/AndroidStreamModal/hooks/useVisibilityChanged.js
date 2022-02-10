@@ -13,12 +13,12 @@ const muteSound = (isMuted) => {
   `;
 };
 
-const useVisibilityChanged = ({ visible, webViewRef }) => {
+const useVisibilityChanged = ({ isVisible, webViewRef }) => {
   const { height: windowHeight } = useWindowDimensions();
   const animation = useRef(new Animated.Value(windowHeight)).current;
 
   useDidUpdate(() => {
-    if (visible) {
+    if (isVisible) {
       Animated.timing(animation, {
         toValue: 0,
         duration: ANIMATION_DURATION,
@@ -37,7 +37,7 @@ const useVisibilityChanged = ({ visible, webViewRef }) => {
       duration: ANIMATION_DURATION,
       useNativeDriver: true,
     }).start();
-  }, [animation, visible, windowHeight]);
+  }, [animation, isVisible, windowHeight]);
 
   return animation;
 };

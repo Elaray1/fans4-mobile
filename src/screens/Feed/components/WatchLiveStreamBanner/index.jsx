@@ -37,7 +37,8 @@ const WatchLiveStreamBanner = ({ event, onPress }) => {
     }
   }, [onPress, event, isStreamLoading]);
 
-  const [wasWaitedForPreloadStream, setWasWaitedForPreloadStream] = useState(false);
+  // hidding banner before load first chunk is implemented only for ios
+  const [wasWaitedForPreloadStream, setWasWaitedForPreloadStream] = useState(Platform.OS === 'android');
 
   const onReadyToPlayIos = useCallback(() => {
     setIsStreamLoading(false);

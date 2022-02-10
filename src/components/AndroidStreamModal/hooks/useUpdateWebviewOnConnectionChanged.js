@@ -9,7 +9,7 @@ const muteSound = (isMuted) => {
     true;`;
 };
 
-const useUpdateWebviewOnConnectionChanged = ({ webViewRef, setIsLoading, visible }) => {
+const useUpdateWebviewOnConnectionChanged = ({ webViewRef, setIsLoading }) => {
   const isConnected = useIsConnected();
 
   useDidUpdate(() => {
