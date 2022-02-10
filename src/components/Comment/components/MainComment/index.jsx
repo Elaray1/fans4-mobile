@@ -18,7 +18,7 @@ import ReportIcon from 'assets/icons/report';
 import Text from 'components/Text';
 
 import useToast from 'hooks/useToast';
-import { formatCount, formatTime } from 'components/Post/Post.helpers';
+import { formatCount, formatTime } from 'components/Post/helpers';
 
 import colors from 'themes/colors';
 import EditCommentModal from '../EditCommentModal';

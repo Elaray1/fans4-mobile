@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import Text from 'components/Text';
 
-import { formatTime } from 'components/Post/Post.helpers';
+import { formatTime } from 'components/Post/helpers';
 
 import styles from './styles';
 

@@ -9,7 +9,7 @@ import FastImage from 'react-native-fast-image';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import { toFixLength } from 'helpers/modifyText';
-import { formatTime } from 'components/Post/Post.helpers';
+import { formatTime } from 'components/Post/helpers';
 import { CHAT_STATUSES } from 'resources/chat/chat.constants';
 import { USER_TYPES } from 'resources/user/user.constants';
 
@@ -57,13 +57,13 @@ const ChatItem = ({ chat, setNewChat, onRefreshChats }) => {
   return (
     <TouchableOpacity style={isFans4 ? styles.fans4Chat : styles.chat} onPress={onChatPress}>
       {avatarUrl && (
-      <FastImage
-        source={{ uri: avatarUrl }}
-        style={[
-          isFans4 ? styles.fans4Photo : styles.photoImage,
-          userType === USER_TYPES.FAN && isChatClosed && styles.opacityImage,
-        ]}
-      />
+        <FastImage
+          source={{ uri: avatarUrl }}
+          style={[
+            isFans4 ? styles.fans4Photo : styles.photoImage,
+            userType === USER_TYPES.FAN && isChatClosed && styles.opacityImage,
+          ]}
+        />
       )}
       <View style={styles.chatInfo}>
         <View style={[styles.row, styles.topRow]}>
@@ -85,9 +85,9 @@ const ChatItem = ({ chat, setNewChat, onRefreshChats }) => {
             </Text>
           )}
           {Boolean(unreadMessagesNumber) && (
-          <View style={styles.counter}>
-            <Text style={styles.counterText}>{unreadMessagesNumber}</Text>
-          </View>
+            <View style={styles.counter}>
+              <Text style={styles.counterText}>{unreadMessagesNumber}</Text>
+            </View>
           )}
         </View>
       </View>

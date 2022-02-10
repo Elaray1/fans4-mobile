@@ -23,7 +23,7 @@ import Input from 'components/Input';
 import CustomRefreshControl from 'components/CustomRefreshControl';
 import Comment from 'components/Comment';
 
-import { emitter } from 'services/emitter.service';
+import { emitter, EMITTER_EVENTS } from 'services/emitter.service';
 import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
@@ -171,10 +171,11 @@ function Comments({ route }) {
           if (c._id !== comment.originalComment._id) {
             return c;
           }
+
           c.replies = (c.replies && c.replies.length) ? [...c.replies] : [];
           c.replies.push(comment);
 
-          emitter.emit('new-reply', comment);
+          emitter.emit(EMITTER_EVENTS.NEW_REPLAY, comment);
           return c;
         });
         setComments(newComments);
