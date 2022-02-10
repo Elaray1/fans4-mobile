@@ -10,24 +10,22 @@ import LiveIcon from 'assets/icons/live.svg';
 import PlayIcon from 'assets/icons/play-mini.svg';
 
 import * as userSelectors from 'resources/user/user.selectors';
-
+import { USER_TYPES } from 'resources/user/user.constants';
 import * as eventApi from 'resources/event/event.api';
+import { EVENT_STATUSES, LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
+import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
 
 import FlatList from 'components/FlatList';
 import Header from 'components/Header';
 import FightItem from 'components/FightItem';
 import Text from 'components/Text';
-import EventLiveStreamAndroidModal from 'components/EventLiveStreamAndroid';
+import AndroidStreamModal from 'components/AndroidStreamModal';
 import FullScreenLoader from 'components/FullScreenLoader';
 import { FIGHT_VIEW_TYPE } from 'components/FightItem/constants';
 import CountdownTimer from 'components/CountdownTimer';
 import LiveStreamPlayerIos from 'components/LiveStreamPlayerIos';
 
 import colors from 'themes/colors';
-
-import { EVENT_STATUSES, LIVE_STREAM_STATUSES } from 'resources/event/event.constants';
-import { FIGHT_STATUSES } from 'resources/fight/fight.constants';
-import { USER_TYPES } from 'resources/user/user.constants';
 
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
@@ -79,11 +77,16 @@ function EventFights({ route }) {
   const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState(isLiveStream && Platform.OS === 'ios');
 
   const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
-  const [isAndroidStreamModalVisible, setIsAndroidStreamModalVisible] = useState(!!isOpenStreamModal);
   const liveStreamAndroidModalRef = useRef();
 
   const [isOpenStreamModalNeeded, setIsOpenStreamModalNeeded] = useState(isOpenStreamModal);
   const [isFullScreenLoader, setIsFullScreenLoader] = useState(false);
+
+  useEffect(() => {
+    if (isOpenStreamModal) {
+      liveStreamAndroidModalRef.show();
+    }
+  }, [isOpenStreamModal]);
 
   useEffect(() => {
     const updateEventData = async () => {
@@ -93,9 +96,15 @@ function EventFights({ route }) {
 
     if (isNeedToFetchEvent) {
       updateEventData();
+
+      if (Platform.OS === 'android') {
+        liveStreamAndroidModalRef.current.loadEvent();
+        return;
+      }
+
+      streamVideoRefIos.current.reload();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isNeedToFetchEvent, prefetchedEvent._id]);
 
   const {
     fights,
@@ -113,10 +122,6 @@ function EventFights({ route }) {
         setIsLiveStreamLoadingIos(true);
         streamVideoRefIos.current.reload();
       }
-
-      if (Platform.OS === 'android') {
-        liveStreamAndroidModalRef.current?.reloadCurrentStreamLink();
-      }
     }
 
     setEvent(updatedEvent);
@@ -133,7 +138,7 @@ function EventFights({ route }) {
       return;
     }
 
-    setIsAndroidStreamModalVisible(true);
+    liveStreamAndroidModalRef.current.show();
   }, []);
 
   const keyExtractor = useCallback(item => item._id, []);
@@ -197,10 +202,6 @@ function EventFights({ route }) {
   }, [onShowLiveStream, openCountdownTimer,
     isLiveStream, event.status, event.liveStream.status, isFinishedStreamReadyToPlay]);
 
-  const onCloseAndroidStreamModal = useCallback(() => {
-    setIsAndroidStreamModalVisible(false);
-  }, []);
-
   const onReadyToPlayIos = useCallback(() => {
     setIsLiveStreamLoadingIos(false);
 
@@ -254,18 +255,14 @@ function EventFights({ route }) {
       {Platform.OS === 'ios' && isFullScreenLoader && <FullScreenLoader />}
 
       {Platform.OS === 'android' && (
-        <EventLiveStreamAndroidModal
+        <AndroidStreamModal
           ref={liveStreamAndroidModalRef}
-          visible={isAndroidStreamModalVisible}
           eventId={event._id}
           eventImageUrl={event.imageUrl}
           eventName={event.name}
           eventDate={event.date}
           eventTimezone={event.location.timezone}
           eventLiveStreamStatus={event.liveStream.status}
-          onClose={onCloseAndroidStreamModal}
-          isCountdownShown={event.liveStream.status === LIVE_STREAM_STATUSES.PENDING}
-          onCloseCountdown={onCloseAndroidStreamModal}
         />
       )}
 
