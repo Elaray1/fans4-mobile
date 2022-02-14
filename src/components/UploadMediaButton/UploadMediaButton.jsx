@@ -89,7 +89,12 @@ function UploadMediaButton({
 
   const onUploadFromGallery = useCallback(async () => {
     try {
-      const { assets } = await launchImageLibrary({ mediaType: croppingAvatar ? 'photo' : 'mixed' });
+      const { assets, didCancel } = await launchImageLibrary({ mediaType: croppingAvatar ? 'photo' : 'mixed' });
+
+      if (didCancel) {
+        return;
+      }
+
       let [mediaData] = assets;
 
       mediaData.path = mediaData.uri;
@@ -123,7 +128,11 @@ function UploadMediaButton({
           title: t('UploadMediaButton.accessToGalleryNeeded'),
           text: t('UploadMediaButton.provideAccessToTheLibrary'),
         });
+
+        return;
       }
+
+      showFailure();
     }
 
     analyticsService.logEvent({
@@ -131,7 +140,7 @@ function UploadMediaButton({
     });
 
     onCloseUploadingMethodModal(false);
-  }, [croppingAvatar, onCloseUploadingMethodModal, onNewMediaSet, t]);
+  }, [croppingAvatar, onCloseUploadingMethodModal, onNewMediaSet, t, showFailure]);
 
   const onUploadPhotoFromCamera = useCallback(async () => {
     const options = {

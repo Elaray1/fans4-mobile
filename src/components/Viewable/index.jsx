@@ -45,7 +45,6 @@ function Viewable({ children }) {
 
 Viewable.propTypes = {
   children: PropTypes.element.isRequired,
-  onViewableChanged: PropTypes.bool.isRequired,
 };
 
 export default Viewable;

@@ -132,7 +132,7 @@ function FighterAccount({ postId }) {
       fetchedPostsCount = postsTotalCount;
       fetchedPosts = initPosts;
     } catch (err) {
-      console.log('Account screen initialization error:', err);
+      console.error('Account screen initialization error:', err);
       showFailure();
       setIsRefreshing(false);
 

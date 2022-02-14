@@ -415,7 +415,7 @@ Video.propTypes = {
   source: PropTypes.shape({
     uri: PropTypes.string.isRequired,
     headers: PropTypes.shape({}),
-  }).isRequired,
+  }),
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   duration: PropTypes.number,
@@ -433,6 +433,7 @@ Video.propTypes = {
 };
 
 Video.defaultProps = {
+  source: null,
   posterSource: null,
   duration: 0,
   viewable: false,

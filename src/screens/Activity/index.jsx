@@ -76,7 +76,8 @@ function Activity() {
       try {
         const { isUnreadActivities: fetchedIsUnreadActivities } = await activityApi.getIsUnreadActivities();
         dispatch(activityActions.setIsUnreadActivities(fetchedIsUnreadActivities));
-      } catch (error) {
+      } catch (err) {
+        console.error('fetch activities status error:', err);
         showFailure();
       }
     };

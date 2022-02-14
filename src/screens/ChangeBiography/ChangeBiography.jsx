@@ -235,13 +235,13 @@ function ChangeBiography() {
           <View style={[styles.progressBar, { width: `${uploadingIntroVideoData.progress}%` }]} />
         </View>
         {uploadingIntroVideoData.progress !== 100 && (
-        <TouchableOpacity
-          style={styles.crossIcon}
-          activeOpacity={0.7}
-          onPress={onCancelIntroVideoUploading}
-        >
-          <CrossIcon />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.crossIcon}
+            activeOpacity={0.7}
+            onPress={onCancelIntroVideoUploading}
+          >
+            <CrossIcon />
+          </TouchableOpacity>
         )}
       </View>
     );
