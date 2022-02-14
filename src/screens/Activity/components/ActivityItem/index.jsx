@@ -79,7 +79,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast, isGroupp
         style={styles.activityContainer}
         activeOpacity={0.7}
       >
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+        <View style={styles.newReplyContainer}>
           <View>
             <View style={styles.textContainer}>
               <Text style={styles.textBold}>{data.author.fullName} </Text>
@@ -123,7 +123,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast, isGroupp
           <Text style={styles.textBold}>{data.author.fullName} </Text>
           <Text style={[styles.text, styles.actionText]}>{
           isFan
-            ? `${t('ActivityItem.commentedOn')} ${data.post.authorName} ${t('ActivityItem.post')}`
+            ? `${t('ActivityItem.commentedOn')} ${data.post.author.fullName} ${t('ActivityItem.post')}`
             : t('ActivityItem.commented')
           }
           </Text>
@@ -149,7 +149,7 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast, isGroupp
         />
       )}
     </TouchableOpacity>
-  ), [onCommentPress, data.author?.fullName, data.post?.authorName,
+  ), [onCommentPress, data.author?.fullName, data.post?.author?.fullName,
     data.post?.text, data.post?.media, data.comment?.text, isFan, t, showTime, createdOn]);
 
   const NewPostLikeView = useCallback(() => {
