@@ -12,11 +12,11 @@ import TrashIcon from 'assets/icons/trash';
 
 import styles from './styles';
 
-function BankAccountModal({
+function PaymentMethodModal({
   onClose,
   visible,
-  onUpdateBankAccount,
-  onDeleteBankAccount,
+  onUpdatePaymentMethod,
+  onDeletePaymentMethod,
 }) {
   const { t } = useTranslation();
 
@@ -33,12 +33,12 @@ function BankAccountModal({
           <View>
             <TouchableOpacity
               style={styles.settingsOption}
-              onPress={onUpdateBankAccount}
+              onPress={onUpdatePaymentMethod}
               activeOpacity={0.7}
             >
               <EditIcon style={styles.settingIcon} />
               <Text style={styles.settingTitle}>
-                {t('BankAccountModal.updateBankAccount')}
+                {t('PaymentMethodModal.updatePaymentMethod')}
               </Text>
             </TouchableOpacity>
             <View style={styles.line} />
@@ -47,12 +47,12 @@ function BankAccountModal({
           <View>
             <TouchableOpacity
               style={styles.settingsOption}
-              onPress={onDeleteBankAccount}
+              onPress={onDeletePaymentMethod}
               activeOpacity={0.7}
             >
               <TrashIcon style={styles.settingIcon} />
               <Text style={styles.settingTitle}>
-                {t('BankAccountModal.deleteBankAccount')}
+                {t('PaymentMethodModal.deletePaymentMethod')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -62,11 +62,11 @@ function BankAccountModal({
   );
 }
 
-BankAccountModal.propTypes = {
+PaymentMethodModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
-  onUpdateBankAccount: PropTypes.func.isRequired,
-  onDeleteBankAccount: PropTypes.func.isRequired,
+  onUpdatePaymentMethod: PropTypes.func.isRequired,
+  onDeletePaymentMethod: PropTypes.func.isRequired,
 };
 
-export default React.memo(BankAccountModal);
+export default React.memo(PaymentMethodModal);

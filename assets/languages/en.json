@@ -294,7 +294,7 @@
     "addPost": "Add post",
     "subscribeToFighter": "Become a Fan for access to exclusive content!",
     "updateBankAccount": "Update Bank Account",
-    "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
+    "toContinueReceivingIncomeUpdateYourPaymentMethodWithMoreDetails": "To continue receiving income, update your payment method with more details.",
     "later": "Later",
     "update": "Update",
     "postIsLoading": "Post is loading...",
@@ -603,26 +603,27 @@
   },
   "Finances": {
     "finances": "Finances",
-    "addBankAccount": "Add Bank Account",
+    "addPaymentMethod": "Add Payment Method",
     "incomeWillBePaid": "Income will be paid by this method on a monthly basis. You can track all financial information in this section.",
     "bankAccount": "Bank Account",
+    "debitCard": "Debit Card",
     "noIncomeYet": "No income yet",
     "checkBack": "Check back to view how much you've earned!",
-    "bankAccountWillBeDeletedButWeWillStoreTheData": "Bank account will be deleted, but income history will be saved.",
+    "paymentMethodWillBeDeletedButWeWillStoreTheData": "Payment method will be deleted, but income history will be saved.",
     "cancel": "Cancel",
-    "deleteBankAccount": "Delete Bank Account",
+    "deletePaymentMethod": "Delete Payment Method",
     "delete": "Delete",
     "income": "Income",
     "perPeriod": "per month",
     "incomeWillBePaidToByThisMethodMonthly": "Income will be paid to by this method.",
-    "updateBankAccount": "Update Bank Account",
+    "updatePaymentMethod": "Update Payment Method",
     "toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails": "To continue receiving income, update your bank account with more details.",
     "update": "Update",
     "bankAccountShouldBeAdded": "Bank account should be added"
   },
-  "BankAccountModal": {
-    "updateBankAccount": "Update Bank Account",
-    "deleteBankAccount": "Delete Bank Account"
+  "PaymentMethodModal": {
+    "updatePaymentMethod": "Update Payment Method",
+    "deletePaymentMethod": "Delete Payment Method"
   },
   "Voting": {
     "voting": "Voting",
@@ -673,9 +674,9 @@
   "SettingsTermsOfUse": {
     "title": "Terms of Use"
   },
-  "BankAccountAdded": {
-    "title": "Bank Account Added",
-    "description": "Your account is under review. Once status changes to \"Active\", you will be able to receive funds into that account.",
+  "PaymentMethodAdded": {
+    "title": "Payment Method Added",
+    "description": "Your payment method is under review. Once status changes to \"Active\", you will be able to receive funds into that account.",
     "linkText": "Done",
     "header": "Finances"
   },

@@ -37,7 +37,7 @@ import SettingsTermsOfUse from 'screens/SettingsTermsOfUse';
 import SettingsPrivacyPolicy from 'screens/SettingsPrivacyPolicy';
 import SettingsSubscriptionInformation from 'screens/SettingsSubscriptionInformation';
 
-import BankAccountAdded from 'screens/BankAccountAdded';
+import PaymentMethodAdded from 'screens/PaymentMethodAdded';
 import Fans4Profile from 'screens/Fans4Profile';
 import FighterRecord from 'screens/FighterRecord';
 import SearchFighters from 'screens/SearchFighters';
@@ -167,7 +167,7 @@ function AppScreens() {
         <AppStack.Screen name="SettingsPrivacyPolicy" component={SettingsPrivacyPolicy} />
         <AppStack.Screen name="SettingsTermsOfUse" component={SettingsTermsOfUse} />
         <AppStack.Screen name="SettingsSubscriptionInformation" component={SettingsSubscriptionInformation} />
-        <AppStack.Screen name="BankAccountAdded" component={BankAccountAdded} />
+        <AppStack.Screen name="PaymentMethodAdded" component={PaymentMethodAdded} />
         <AppStack.Screen name="Fans4Profile" component={Fans4Profile} />
         <AppStack.Screen name="FighterRecord" component={FighterRecord} />
         <AppStack.Screen name="SearchFighters" component={SearchFighters} />

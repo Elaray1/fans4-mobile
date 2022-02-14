@@ -6,7 +6,7 @@ import IllustrationScreen from 'components/IllustrationScreen';
 
 import UpdatedIllustration from 'assets/illustrations/verification-successful';
 
-function BankAccountAdded() {
+function PaymentMethodAdded() {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
@@ -34,14 +34,14 @@ function BankAccountAdded() {
 
   return (
     <IllustrationScreen
-      headerText={t('BankAccountAdded.header')}
-      buttonText={t('BankAccountAdded.linkText')}
+      headerText={t('PaymentMethodAdded.header')}
+      buttonText={t('PaymentMethodAdded.linkText')}
       onButtonPress={onButtonPress}
-      description={t('BankAccountAdded.description')}
-      title={t('BankAccountAdded.title')}
+      description={t('PaymentMethodAdded.description')}
+      title={t('PaymentMethodAdded.title')}
       illustration={<UpdatedIllustration />}
     />
   );
 }
 
-export default React.memo(BankAccountAdded);
+export default React.memo(PaymentMethodAdded);

@@ -149,7 +149,7 @@ export default StyleSheet.create({
     color: colors.textSecondary,
     fontSize: fonts.size.small,
   },
-  bankAccountTitle: {
+  paymentMethodTitle: {
     flexDirection: 'row',
   },
   emptyViewImage,

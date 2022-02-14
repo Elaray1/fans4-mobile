@@ -24,7 +24,7 @@ import Modal from 'components/Modal';
 import StripeAccountStatus from 'components/StripeAccountStatus';
 import Button from 'components/Button';
 import CustomRefreshControl from 'components/CustomRefreshControl';
-import BankAccountModal from 'screens/Finances/components/BankAccountModal';
+import PaymentMethodModal from 'screens/Finances/components/PaymentMethodModal';
 
 import useToast from 'hooks/useToast';
 
@@ -48,7 +48,7 @@ function Finances() {
   const [income, setIncome] = useState(null);
   const [webViewUrl, setWebViewUrl] = useState(null);
   const [isConfirmationModal, setIsConfirmationModal] = useState(false);
-  const [isBankAccountModal, setIsBankAccountModal] = useState(false);
+  const [isPaymentMethodModal, setIsPaymentMethodModal] = useState(false);
 
   const [isRefreshing, setIsRefreshing] = useState(true);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
@@ -57,8 +57,8 @@ function Finances() {
 
   const userId = useSelector(userSelectors.getUserId);
 
-  const updateBankAccount = useCallback(async () => {
-    setIsBankAccountModal(false);
+  const updatePaymentMethod = useCallback(async () => {
+    setIsPaymentMethodModal(false);
 
     try {
       const { accountLink } = await accountApi.createStripePayoutAccountUpdatingLink();
@@ -82,7 +82,7 @@ function Finances() {
             name: 'AppStack',
             state: {
               routes: [{
-                name: 'BankAccountAdded',
+                name: 'PaymentMethodAdded',
               }],
             },
           }],
@@ -142,8 +142,8 @@ function Finances() {
     setIsAccountCreating(false);
   }, [showFailure]);
 
-  const deleteWithdrawalMethod = useCallback(() => {
-    setIsBankAccountModal(false);
+  const deletePaymentMethod = useCallback(() => {
+    setIsPaymentMethodModal(false);
     setIsConfirmationModal(true);
   }, []);
 
@@ -219,7 +219,7 @@ function Finances() {
       try {
         await accountApi.saveStripePayoutAccount({ token, userId, stripeAccountId });
       } catch (err) {
-        showFailure(t('Finances.bankAccountShouldBeAdded'));
+        showFailure();
 
         setIsRefreshing(false);
         setWebViewUrl(null);
@@ -237,11 +237,11 @@ function Finances() {
       setWebViewUrl(null);
       getUserWithdrawalMethod();
     }
-  }, [getUserWithdrawalMethod, showFailure, userId, t]);
+  }, [getUserWithdrawalMethod, showFailure, userId]);
 
-  const onChangeBankAccountModalVisibility = useCallback(() => {
-    setIsBankAccountModal(!isBankAccountModal);
-  }, [isBankAccountModal]);
+  const onChangePaymentMethodModalVisibility = useCallback(() => {
+    setIsPaymentMethodModal(!isPaymentMethodModal);
+  }, [isPaymentMethodModal]);
 
   useEffect(() => {
     if (isUserAuthenticated) {
@@ -277,17 +277,17 @@ function Finances() {
   );
 
   const withdrawalMethod = useMemo(() => {
-    const bankAccount = account?.typeMetadata?.bankAccount;
+    const paymentMethod = account?.typeMetadata?.bankAccount || account?.typeMetadata?.debitCard;
 
-    if (bankAccount) {
+    if (paymentMethod) {
       return {
-        title: t('Finances.bankAccount'),
-        text: `••••••••• ${account.typeMetadata.bankAccount.last4}`,
+        title: t(account?.typeMetadata?.bankAccount ? 'Finances.bankAccount' : 'Finances.debitCard'),
+        text: `••••••••• ${paymentMethod.last4}`,
       };
     }
 
     return null;
-  }, [account?.typeMetadata?.bankAccount, t]);
+  }, [account?.typeMetadata?.bankAccount, account?.typeMetadata?.debitCard, t]);
 
   const WithdrawalMethod = () => {
     return (
@@ -297,22 +297,22 @@ function Finances() {
             {account.status === ACCOUNT_STATUSES.RESTRICTED && (
               <View style={styles.updateContainer}>
                 <Text style={styles.updateTitle}>
-                  {t('Finances.updateBankAccount')}
+                  {t('Finances.updatePaymentMethod')}
                 </Text>
                 <Text style={styles.updateText}>
-                  {t('Finances.toContinueReceivingIncomeUpdateYourBankAccountWithMoreDetails')}
+                  {t('Finances.toContinueReceivingIncomeUpdateYourPaymentMethodWithMoreDetails')}
                 </Text>
                 <Button
                   title={t('Finances.update')}
                   style={styles.updateButton}
-                  onPress={updateBankAccount}
+                  onPress={updatePaymentMethod}
                 />
               </View>
             )}
 
             <View style={styles.withdrawalMethod}>
               <View>
-                <View style={styles.bankAccountTitle}>
+                <View style={styles.paymentMethodTitle}>
                   <Text style={[styles.title, styles.withdrawalMethodStatus]}>{withdrawalMethod.title}</Text>
                   <StripeAccountStatus status={account.status} />
                 </View>
@@ -321,7 +321,7 @@ function Finances() {
                 </Text>
               </View>
 
-              <TouchableOpacity onPress={onChangeBankAccountModalVisibility} activeOpacity={0.7}>
+              <TouchableOpacity onPress={onChangePaymentMethodModalVisibility} activeOpacity={0.7}>
                 <EditIcon />
               </TouchableOpacity>
             </View>
@@ -340,7 +340,7 @@ function Finances() {
               {!isAccountCreating && (
                 <>
                   <PlusIcon style={styles.plus} />
-                  <Text style={styles.title}>{t('Finances.addBankAccount')}</Text>
+                  <Text style={styles.title}>{t('Finances.addPaymentMethod')}</Text>
                 </>
               )}
 
@@ -396,8 +396,8 @@ function Finances() {
     <>
       {!isRefreshing && isConfirmationModal && (
         <Modal
-          title={t('Finances.deleteBankAccount')}
-          text={t('Finances.bankAccountWillBeDeletedButWeWillStoreTheData')}
+          title={t('Finances.deletePaymentMethod')}
+          text={t('Finances.paymentMethodWillBeDeletedButWeWillStoreTheData')}
           closeButtonText={t('Finances.cancel')}
           submitButtonText={t('Finances.delete')}
           onClose={onCloseConfirmationModal}
@@ -405,11 +405,11 @@ function Finances() {
         />
       )}
 
-      <BankAccountModal
-        visible={isBankAccountModal}
-        onClose={onChangeBankAccountModalVisibility}
-        onUpdateBankAccount={updateBankAccount}
-        onDeleteBankAccount={deleteWithdrawalMethod}
+      <PaymentMethodModal
+        visible={isPaymentMethodModal}
+        onClose={onChangePaymentMethodModalVisibility}
+        onUpdatePaymentMethod={updatePaymentMethod}
+        onDeletePaymentMethod={deletePaymentMethod}
       />
 
       <SafeAreaView style={styles.screen}>

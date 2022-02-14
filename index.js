@@ -8,7 +8,6 @@ import 'react-native-url-polyfill/auto'; // eslint-disable-line no-unused-vars
 import App from './src/App';
 import { name as appName } from './app';
 
-
 LogBox.ignoreLogs([
   /^Trying to load empty source/,
   /^VirtualizedLists should never be nested/,
