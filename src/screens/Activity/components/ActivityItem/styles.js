@@ -36,6 +36,11 @@ export default StyleSheet.create({
     color: colors.white,
     fontSize: fonts.size.small,
   },
+  newReplyContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
   dash: {
     borderLeftWidth: 2,
     borderColor: colors.textSecondary,
