@@ -55,7 +55,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
   const isVideoInEndedState = useRef(false);
   const isSeekedToLiveOnStart = useRef(false);
 
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const progressBarWidth = windowWidth - PROGRESS_BAR_PADDING;
 
   const onProgressBarPositionChanging = useCallback((event) => {
@@ -293,11 +293,20 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
     ? renderingWidth * (1 / MAX_VERTICAL_VIDEO_ASPECT_RATIO)
     : renderingWidth / (width / height);
 
-  const videoStyle = useMemo(() => ({
-    width: renderingWidth,
-    height: renderingHeight,
-    borderRadius: 5,
-  }), [renderingWidth, renderingHeight]);
+  const videoStyle = useMemo(() => {
+    if (!isFullScreen) {
+      return {
+        width: renderingWidth,
+        height: renderingHeight,
+        borderRadius: isFullScreen ? 0 : 5,
+      };
+    }
+
+    return {
+      width: windowWidth,
+      height: windowHeight,
+    };
+  }, [renderingWidth, renderingHeight, isFullScreen, windowWidth, windowHeight]);
 
   const posterStyle = useMemo(() => [videoStyle, viewable && styles.posterOverVideo], [viewable, videoStyle]);
 
@@ -316,7 +325,6 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
     onRequestClose: toggleFullScreen,
     statusBarTranslucent: true,
   }), [toggleFullScreen]);
-
 
   return (
     <>
@@ -345,7 +353,7 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
               playInBackground
               playWhenInactive
               paused={paused}
-              resizeMode="cover"
+              resizeMode={isFullScreen ? 'contain' : 'cover'}
               progressUpdateInterval={200}
               onProgress={updateTiming}
               onError={onError}
