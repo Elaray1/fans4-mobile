@@ -86,9 +86,9 @@ function Header({
         {updatedRightItem}
       </View>
       {isBottomLine && (
-      <View
-        style={[styles.line, { marginTop: (leftItemType || rightItemType) ? 18 : 23 }]}
-      />
+        <View
+          style={[styles.line, { marginTop: (leftItemType || rightItemType) ? 18 : 23 }]}
+        />
       )}
     </View>
   );

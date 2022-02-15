@@ -1,12 +1,19 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
 import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 import metrics from 'themes/metrics';
 
+const { height } = Dimensions.get('window');
+
+const isSmallScreen = height < 700;
+
+const headerHight = 130;
+
 export default StyleSheet.create({
   container: {
     justifyContent: 'center',
-    height: metrics.screenHeight - metrics.tabBarHeight,
+    height: metrics.screenHeight - metrics.tabBarHeight - headerHight,
   },
   text: {
     marginHorizontal: 20,
@@ -22,7 +29,7 @@ export default StyleSheet.create({
   fight: {
     paddingTop: 65,
     paddingBottom: 40,
-    height: 400,
+    height: isSmallScreen ? 336 : 400,
   },
   button: {
     borderColor: colors.primary,

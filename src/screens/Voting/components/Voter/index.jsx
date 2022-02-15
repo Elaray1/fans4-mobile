@@ -4,6 +4,8 @@ import { View, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-n
 import { useTranslation } from 'react-i18next';
 import Swiper from 'react-native-deck-swiper';
 
+import Header from 'components/Header';
+
 import * as fightApi from 'resources/fight/fight.api';
 
 import VoteYesIcon from 'assets/icons/vote-yes.svg';
@@ -106,8 +108,11 @@ const Voter = ({ onFightsToVoteEnded, firstFight }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
+    <SafeAreaView>
+      <Header
+        title={t('Voting.voting')}
+      />
+      <View style={styles.container}>
         <Text style={styles.text}>
           {t('Voting.wantToSeeThis')}
         </Text>
