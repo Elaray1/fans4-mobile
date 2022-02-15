@@ -210,7 +210,17 @@ function Comments({ route }) {
   }, []);
 
   const onDeleteComment = useCallback((deletedComment) => {
-    setComments(comments.filter(comment => comment._id !== deletedComment._id));
+    const updatedComments = comments.filter((comment) => {
+      return comment._id !== deletedComment._id;
+    }).map((c) => {
+      if (c.replies.length) {
+        c.replies = c.replies.filter((r) => {
+          return r._id !== deletedComment._id;
+        });
+      }
+      return c;
+    });
+    setComments(updatedComments);
   }, [comments]);
 
   const onInputFocus = useCallback(() => {
