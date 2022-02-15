@@ -12,10 +12,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 
-import { STORAGE_KEYS } from 'helpers/constants';
-import { getItem, setItem } from 'helpers/storage';
-
-import analyticsService from 'services/analytics.service';
 
 import * as userActions from 'resources/user/user.actions';
 import * as userApi from 'resources/user/user.api';
@@ -131,12 +127,6 @@ function SignUp({ route }) {
         }));
 
         await userApi.updateLastUsedOs();
-
-        const wasOpenedBefore = await getItem(STORAGE_KEYS.WAS_OPENED_BEFORE);
-        if (!wasOpenedBefore) {
-          await setItem(STORAGE_KEYS.WAS_OPENED_BEFORE, JSON.stringify(true));
-          analyticsService.logEvent({ name: analyticsService.events.FIRST_LAUNCH });
-        }
       } catch (err) {
         console.error('Signup error:', err);
         setIsLoading(false);
@@ -194,10 +184,10 @@ function SignUp({ route }) {
 
               <View style={styles.errorContainer}>
                 {!!apiError && (
-                <View style={styles.error}>
-                  <ErrorIcon />
-                  <Text style={styles.errorText}>{apiError}</Text>
-                </View>
+                  <View style={styles.error}>
+                    <ErrorIcon />
+                    <Text style={styles.errorText}>{apiError}</Text>
+                  </View>
                 )}
               </View>
 
