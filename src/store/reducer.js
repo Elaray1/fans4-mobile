@@ -8,6 +8,7 @@ import activity from 'resources/activity/activity.reducer';
 
 import purchases from './purchases/purchases.reducer';
 import introVideo from './introVideo/introVideo.reducer';
+import wasOpenedBefore from './wasOpenedBefore/reducer';
 
 const appReducer = combineReducers({
   user,
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
   introVideo,
   message,
   activity,
+  wasOpenedBefore,
 });
 
 const rootReducer = (state, action) => {

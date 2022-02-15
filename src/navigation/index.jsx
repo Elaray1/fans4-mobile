@@ -37,6 +37,7 @@ import useNotifications from './hooks/useNotifications';
 import useWebsockets from './hooks/useWebsockets';
 import useLaunchAnalyticsEvent from './hooks/useLaunchAnalyticsEvent';
 import useUpdateUser from './hooks/useUpdateUser';
+import useWasOpenedBefore from './hooks/useWasOpenedBefore';
 
 const NAVIGATOR_CONTAINER_THEME = {
   colors: {
@@ -117,6 +118,7 @@ function AppNavigation() {
   useWebsockets();
   useLaunchAnalyticsEvent();
   useUpdateUser();
+  useWasOpenedBefore();
 
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);

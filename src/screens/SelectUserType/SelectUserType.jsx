@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
-import { SafeAreaView, View, StatusBar, ScrollView } from 'react-native';
+import { SafeAreaView, View, StatusBar, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 
 import colors from 'themes/colors';
@@ -12,28 +14,33 @@ import Button from 'components/Button';
 
 import { USER_TYPES } from 'resources/user/user.constants';
 
-import { STORAGE_KEYS } from 'helpers/constants';
-import { getItem } from 'helpers/storage';
-
 import analyticsService from 'services/analytics.service';
 
+import * as wasOpenedBeforeSelectors from 'store/wasOpenedBefore/selectors';
+
 import styles from './SelectUserType.styles';
+
 
 function SelectUserType() {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const wasOpenedBefore = useSelector(wasOpenedBeforeSelectors.getWasOpenedBefore);
 
   const onChooseUserType = useCallback(async (userType) => {
     if (userType === USER_TYPES.FAN) {
-      navigation.navigate('SignIn', { userType });
+      const nextScreen = !wasOpenedBefore && Platform.OS === 'ios' ? 'SignUp' : 'SignIn';
+
+      navigation.navigate(nextScreen, { userType });
       analyticsService.logEvent({ name: analyticsService.events.IAM_FAN_PRESSED });
+
       return;
     }
 
-    const wasOpenedBefore = await getItem(STORAGE_KEYS.WAS_OPENED_BEFORE);
-    navigation.navigate(wasOpenedBefore ? 'SignIn' : 'SignUp', { userType });
+    const nextScreen = wasOpenedBefore ? 'SignIn' : 'SignUp';
+
+    navigation.navigate(nextScreen, { userType });
     analyticsService.logEvent({ name: analyticsService.events.IAM_FIGHTER_PRESSED });
-  }, [navigation]);
+  }, [navigation, wasOpenedBefore]);
 
   return (
     <SafeAreaView style={styles.screen}>
