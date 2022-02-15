@@ -42,6 +42,7 @@ function MainComment({
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const [likedUsersState, setLikedUsersState] = useState(data.likedUsers);
   const isLiked = likedUsersState.some(like => like._id === userId);
+  const [isLikeDisabled, setIsLikeDisabled] = useState(false);
 
   const animation = useRef(new Animated.Value(0));
 
@@ -95,6 +96,7 @@ function MainComment({
   }, [navigation, data._id, data.post._id]);
 
   const onLikePress = useCallback(async () => {
+    setIsLikeDisabled(true);
     try {
       const toggleLike = isLiked ? commentApi.removeLikeFromComment : commentApi.likeComment;
       const { likedUsers } = await toggleLike(data._id);
@@ -103,6 +105,7 @@ function MainComment({
     } catch (error) {
       showFailure();
     }
+    setIsLikeDisabled(false);
   }, [isLiked, data._id, showFailure]);
 
   const onSeeLikes = useCallback(() => {
@@ -168,7 +171,7 @@ function MainComment({
           <TouchableOpacity onPress={onReply} style={styles.date}>
             <Text style={styles.secondaryText}>{t('Comment.reply')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={onLikePress}>{isLiked ? (
+          <TouchableOpacity onPress={onLikePress} disabled={isLikeDisabled}>{isLiked ? (
             <LikeIcon
               stroke={colors.white}
               fill={colors.white}
