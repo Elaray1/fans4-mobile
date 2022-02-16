@@ -62,6 +62,7 @@ function Comments({ route }) {
   const [commentValue, setCommentValue] = useState('');
   const [replyCommentId, setReplyCommentId] = useState(null);
   const [replyCommentName, setReplyCommentName] = useState(null);
+  const [isPostButtonDisabled, setIsPostButtonDisabled] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -156,6 +157,7 @@ function Comments({ route }) {
   }, [fetchNewItems]);
 
   const onCreateComment = useCallback(async () => {
+    setIsPostButtonDisabled(true);
     try {
       const comment = await commentApi.createComment({
         text: commentValue,
@@ -198,6 +200,7 @@ function Comments({ route }) {
     } catch (error) {
       showFailure();
     }
+    setIsPostButtonDisabled(false);
   }, [commentValue, postId, replyCommentId, comments, onUpdateCommentsCount, userType, showFailure]);
 
   useEffect(() => {
@@ -373,6 +376,7 @@ function Comments({ route }) {
                   autoFocus={isInputFocused}
                   ref={inputRef}
                   placeholder={t('Comments.addCommentPlaceholder')}
+                  disabled={isPostButtonDisabled}
                 />
               </View>
             )}
