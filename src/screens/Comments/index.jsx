@@ -185,6 +185,11 @@ function Comments({ route }) {
         setComments([comment, ...comments]);
       }
 
+      setPost({
+        ...post,
+        commentsCount: post.commentsCount + 1,
+      });
+
       if (onUpdateCommentsCount) {
         onUpdateCommentsCount(postId);
       }
@@ -201,7 +206,7 @@ function Comments({ route }) {
       showFailure();
     }
     setIsPostButtonDisabled(false);
-  }, [commentValue, postId, replyCommentId, comments, onUpdateCommentsCount, userType, showFailure]);
+  }, [commentValue, postId, replyCommentId, post, onUpdateCommentsCount, userType, comments, showFailure]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -224,7 +229,11 @@ function Comments({ route }) {
       return c;
     });
     setComments(updatedComments);
-  }, [comments]);
+    setPost({
+      ...post,
+      commentsCount: post.commentsCount - 1,
+    });
+  }, [comments, post]);
 
   const onInputFocus = useCallback(() => {
     setIsInputFocused(true);
