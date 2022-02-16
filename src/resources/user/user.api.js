@@ -7,7 +7,10 @@ export const emailSignUp = ({
   email, password, userType,
 }) => apiClient
   .post('users/signup', {
-    email, password, userType,
+    email,
+    password,
+    userType,
+    isFromMobile: true,
   });
 
 export const sendEmailConfirmation = ({
@@ -148,3 +151,15 @@ export const deleteBiographyText = () => apiClient.delete('users/biography-text'
 export const deleteIntroVideo = () => apiClient.delete('users/intro-video');
 
 export const deleteProcessingIntroVideo = () => apiClient.delete('users/processing-intro-video');
+
+export const fillWelcomeForm = ({
+  gender,
+  fullName,
+  userName,
+  birthDate,
+}) => apiClient.post('users/welcome-form', {
+  gender,
+  fullName,
+  userName,
+  birthDate,
+});

@@ -253,10 +253,10 @@ function SettingsModal({
 
         {isLogoutConfirmationModal && (
           <ConfirmationModal
-            title={t('SettingsModal.logOut')}
-            text={t('SettingsModal.doYouWantToLogOutOfTheAccount')}
-            closeButtonText={t('SettingsModal.cancel')}
-            submitButtonText={t('SettingsModal.yes')}
+            title={t('logOutAlert.logOut')}
+            text={t('logOutAlert.doYouWantToLogOutOfTheAccount')}
+            closeButtonText={t('logOutAlert.cancel')}
+            submitButtonText={t('logOutAlert.yes')}
             onClose={onHideLogoutConfirmationModal}
             onSubmit={onLogOutPress}
           />

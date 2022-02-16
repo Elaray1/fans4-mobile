@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { SafeAreaView, ActivityIndicator, StatusBar, View } from 'react-native';
+import { SafeAreaView, ActivityIndicator, StatusBar, View, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { WebView } from 'react-native-webview';
 
 import colors from 'themes/colors';
@@ -12,6 +12,7 @@ import Button from 'components/Button';
 
 import { USER_TYPES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
+import * as userActions from 'resources/user/user.actions';
 
 import * as userApi from 'resources/user/user.api';
 
@@ -26,6 +27,7 @@ const TERMS_OF_USE_URL_SOURCE = { uri: 'https://www.fans4.com/terms-of-use' };
 function TermsOfUse() {
   const { showFailure } = useToast();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const userType = useSelector(userSelectors.getUserType);
@@ -51,6 +53,36 @@ function TermsOfUse() {
     });
   }, [isFan, navigation, showFailure]);
 
+  const goToSelectType = useCallback(async () => {
+    const logOutAndNavigate = async () => {
+      await dispatch(userActions.logout());
+
+      navigation.reset({
+        index: 1, // to simulate situation like user went from 'SelectUserType' screen
+        routes: [{
+          name: 'AuthStack',
+          state: {
+            routes: [{
+              name: 'SelectUserType',
+            }],
+          },
+        }, {
+          name: 'AuthStack',
+          state: {
+            routes: [{
+              name: 'SignIn',
+              params: { userType: USER_TYPES.FAN },
+            }],
+          },
+        }],
+      });
+    };
+
+    Alert.alert(t('logOutAlert.logOut'), t('logOutAlert.doYouWantToLogOutOfTheAccount'), [
+      { text: t('logOutAlert.cancel') },
+      { text: t('logOutAlert.yes'), onPress: logOutAndNavigate },
+    ]);
+  }, [dispatch, navigation, t]);
 
   const renderLoading = () => (
     <View style={styles.loadingView}>
@@ -62,7 +94,11 @@ function TermsOfUse() {
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
 
-      <Header leftItemType="backArrow" title={t('TermsOfUse.headerTitle')} />
+      <Header
+        leftItemType="backArrow"
+        title={t('TermsOfUse.headerTitle')}
+        onLeftItemPress={goToSelectType}
+      />
 
       <View style={styles.content}>
         <WebView

@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 class AnalyticsService {
   events = {
+    REGISTRATION_COMPLETED: 'registration_completed',
     SCREEN_OPENED: 'screen_opened',
     FIRST_LAUNCH: 'first_app_launch',
     LAUNCH: 'app_launch',
