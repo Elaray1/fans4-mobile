@@ -20,7 +20,6 @@ import * as wasOpenedBeforeSelectors from 'store/wasOpenedBefore/selectors';
 
 import styles from './SelectUserType.styles';
 
-
 function SelectUserType() {
   const { t } = useTranslation();
   const navigation = useNavigation();

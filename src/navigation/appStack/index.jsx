@@ -7,6 +7,7 @@ import moment from 'moment';
 
 import EmailConfirmation from 'screens/EmailConfirmation';
 import BiographicalData from 'screens/BiographicalData';
+import WelcomeForm from 'screens/WelcomeForm';
 import PersonalInfo from 'screens/PersonalInfo';
 import TermsOfUse from 'screens/TermsOfUse';
 import VerificationPending from 'screens/VerificationPending';
@@ -138,6 +139,7 @@ function AppScreens() {
         { /* Screens without tabs */}
         <AppStack.Screen name="EmailConfirmation" component={EmailConfirmation} />
         <AppStack.Screen name="BiographicalData" component={BiographicalData} />
+        <AppStack.Screen name="WelcomeForm" component={WelcomeForm} />
         <AppStack.Screen name="PersonalInfo" component={PersonalInfo} />
         <AppStack.Screen name="TermsOfUse" component={TermsOfUse} />
         <AppStack.Screen name="VerificationPending" component={VerificationPending} />

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity, Linking,
+  SafeAreaView, View, StatusBar, ScrollView, KeyboardAvoidingView, TouchableOpacity, Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -17,7 +17,6 @@ import Text from 'components/Text';
 import Button from 'components/Button';
 import Input from 'components/Input';
 
-import config from 'resources/config';
 import { USER_TYPES } from 'resources/user/user.constants';
 
 import * as userActions from 'resources/user/user.actions';
@@ -143,11 +142,7 @@ function SignIn({ route }) {
   }, [inputErrors, apiError]);
 
   const onPressSignUp = useCallback(() => {
-    if (userType === USER_TYPES.FIGHTER) {
-      navigation.navigate('SignUp', { userType });
-    } else {
-      Linking.openURL(`${config.webUrl}/signup`);
-    }
+    navigation.navigate('SignUp', { userType });
   }, [navigation, userType]);
 
   const onPressForgotPassword = useCallback(() => {
@@ -189,10 +184,10 @@ function SignIn({ route }) {
 
               <View style={styles.errorContainer}>
                 {!!apiError && (
-                <View style={styles.error}>
-                  <ErrorIcon />
-                  <Text style={styles.errorText}>{apiError}</Text>
-                </View>
+                  <View style={styles.error}>
+                    <ErrorIcon />
+                    <Text style={styles.errorText}>{apiError}</Text>
+                  </View>
                 )}
               </View>
 
@@ -233,7 +228,7 @@ function SignIn({ route }) {
                 isLoading={isLoading}
               />
 
-              {userType === USER_TYPES.FIGHTER && (
+              {(userType !== USER_TYPES.FAN || Platform.OS !== 'android') && (
                 <View style={styles.signUpTextWrapper}>
                   <Text style={styles.signUpText}>{t('SignIn.DontHaveAccount?')}</Text>
                   <Button

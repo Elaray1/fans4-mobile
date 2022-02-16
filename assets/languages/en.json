@@ -216,6 +216,9 @@
     "scanQRCode": "Scan QR code, share the link",
     "legalInformation": "Legal Information",
     "terms": "Terms of Use and Privacy Policy",
+    "logOut": "Log Out"
+  },
+  "logOutAlert": {
     "logOut": "Log Out",
     "doYouWantToLogOutOfTheAccount": "Do you want to log out of the account?",
     "cancel": "Cancel",
@@ -591,13 +594,15 @@
     "chooseFighters": "Choose Fighters",
     "paymentFailed": "Payment Failed"
   },
-  "genderPicker": {
+  "fanGenders": {
     "male": "Male",
     "female": "Female",
     "nonbinary": "Nonbinary",
-    "genders": "Genders",
     "other": "Other",
-    "preferNotToSay": "Prefer not to say",
+    "preferNotToSay": "Prefer not to say"
+  },
+  "genderPicker": {
+    "genders": "Genders",
     "cancel": "Cancel",
     "selectGender": "Select Gender"
   },
@@ -824,5 +829,16 @@
     "finishedStreamDescription": "To watch this event you have to be subscribed to a Fighter.",
     "ok": "OK",
     "chooseFighter": "Choose Fighter"
+  },
+  "WelcomeForm": {
+    "title": "Profile",
+    "fullName": "Full Name (not displayed on profile)",
+    "userName": "Username (will be displayed on profile)",
+    "birthDate": "Birth Date",
+    "gender": "Gender"
+  },
+  "GenderSelectModal": {
+    "cancel": "Cancel",
+    "selectGender": "Select Gender"
   }
 }

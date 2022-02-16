@@ -64,6 +64,7 @@ function CitySelectModal({
 
   const renderItem = ({ item }) => {
     const isSelected = item._id === selectedCityId;
+
     const selectItem = () => {
       setSelectedCityId(item._id);
       onSubmit({
@@ -71,6 +72,7 @@ function CitySelectModal({
         cityId: item._id,
       });
     };
+
     return (
       <TouchableOpacity
         activeOpacity={0.8}

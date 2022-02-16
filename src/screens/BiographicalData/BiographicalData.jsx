@@ -196,7 +196,6 @@ function BiographicalData() {
             />
           </View>
 
-
           <UploadMediaButton
             label={t('BiographicalData.profilePhoto')}
             handleMediaUpload={setPhoto}

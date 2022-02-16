@@ -29,11 +29,11 @@ function GenderModal({
   const genders = Object.values(FAN_GENDERS);
 
   const genderToTag = {
-    [FAN_GENDERS.MALE]: t('genderPicker.male'),
-    [FAN_GENDERS.FEMALE]: t('genderPicker.female'),
-    [FAN_GENDERS.NONBINARY]: t('genderPicker.nonbinary'),
-    [FAN_GENDERS.OTHER]: t('genderPicker.other'),
-    [FAN_GENDERS.PREFER_NOT_TO_SAY]: t('genderPicker.preferNotToSay'),
+    [FAN_GENDERS.MALE]: t('fanGenders.male'),
+    [FAN_GENDERS.FEMALE]: t('fanGenders.female'),
+    [FAN_GENDERS.NONBINARY]: t('fanGenders.nonbinary'),
+    [FAN_GENDERS.OTHER]: t('fanGenders.other'),
+    [FAN_GENDERS.PREFER_NOT_TO_SAY]: t('fanGenders.preferNotToSay'),
   };
 
   const [selectedGender, setSelectedGender] = useState(gender);

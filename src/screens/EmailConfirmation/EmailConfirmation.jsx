@@ -15,6 +15,7 @@ import websocketsService from 'services/socket.service';
 import * as userActions from 'resources/user/user.actions';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userApi from 'resources/user/user.api';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import colors from 'themes/colors';
 
@@ -42,9 +43,9 @@ function EmailConfirmation() {
   useEffect(() => {
     websocketsService.on('email:verified', async (updatedUser) => {
       await dispatch(userActions.setUserData(updatedUser));
-      navigation.navigate('BiographicalData');
+      navigation.navigate(userType === USER_TYPES.FIGHTER ? 'BiographicalData' : 'WelcomeForm');
     });
-  }, [dispatch, navigation]);
+  }, [dispatch, navigation, userType]);
 
   const checkIfConfirmed = useCallback(async () => {
     let updatedUser;
@@ -57,11 +58,11 @@ function EmailConfirmation() {
 
     if (updatedUser && updatedUser.appState.isEmailVerified) {
       dispatch(userActions.setUserData(updatedUser));
-      navigation.navigate('BiographicalData');
+      navigation.navigate(userType === USER_TYPES.FIGHTER ? 'BiographicalData' : 'WelcomeForm');
 
       clearInterval(checkEmailIntervalTimerRef.current);
     }
-  }, [navigation, dispatch]);
+  }, [navigation, dispatch, userType]);
 
   useEffect(() => {
     checkEmailIntervalTimerRef.current = setInterval(checkIfConfirmed, 3000);
