@@ -12,7 +12,7 @@ const useGoLiveOnForeground = ({ webViewRef }) => {
   useEffect(() => {
     AppState.addEventListener('change', (state) => {
       if (state === 'active') {
-        webViewRef.current.injectJavaScript(goLive());
+        webViewRef.current?.injectJavaScript(goLive());
       }
     });
   }, [webViewRef]);

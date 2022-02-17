@@ -42,6 +42,8 @@ function Feed() {
   const { showFailure } = useToast();
 
   const fightersList = useSelector(userSelectors.getSupportedFighters);
+  const isPaidSubscription = useSelector(userSelectors.getIsPaidSubscription);
+
   const [liveStreamEvent, setLiveStreamEvent] = useState();
 
   const listRef = useRef(null);
@@ -178,10 +180,9 @@ function Feed() {
     });
   }, [posts, liveStreamEvents]);
 
-
   return (
     <SafeAreaView style={styles.screen}>
-      {Platform.OS === 'android' && liveStreamEvent && (
+      {isPaidSubscription && Platform.OS === 'android' && liveStreamEvent && (
         <AndroidStreamModal
           eventId={liveStreamEvent._id}
           eventName={liveStreamEvent.name}

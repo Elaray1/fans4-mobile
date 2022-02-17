@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { InteractionManager, AppState } from 'react-native';
+import { InteractionManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
@@ -23,7 +23,6 @@ import * as userApi from 'resources/user/user.api';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import config from 'resources/config';
-import store from 'store';
 
 import colors from 'themes/colors';
 
@@ -37,6 +36,7 @@ import useIsUserBlocked from './hooks/useIsUserBlocked';
 import useNotifications from './hooks/useNotifications';
 import useWebsockets from './hooks/useWebsockets';
 import useLaunchAnalyticsEvent from './hooks/useLaunchAnalyticsEvent';
+import useUpdateUser from './hooks/useUpdateUser';
 
 const NAVIGATOR_CONTAINER_THEME = {
   colors: {
@@ -110,22 +110,13 @@ const linking = {
   },
 };
 
-AppState.addEventListener('change', async (appState) => {
-  if (appState === 'active') {
-    try {
-      await store.dispatch(userActions.getUserData());
-    } catch (err) {
-      console.error('Failed updating user after app went to foreground', err);
-    }
-  }
-});
-
 function AppNavigation() {
   useInAppPurchases();
   useIsUserBlocked();
   useNotifications();
   useWebsockets();
   useLaunchAnalyticsEvent();
+  useUpdateUser();
 
   const dispatch = useDispatch();
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);

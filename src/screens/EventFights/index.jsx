@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
-import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform, Modal } from 'react-native';
+import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform, Modal, Alert } from 'react-native';
 import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
@@ -30,6 +31,7 @@ import colors from 'themes/colors';
 import { toLocalDateAndTime } from 'helpers/toLocalTime';
 
 import useEventUpdated from 'hooks/useEventUpdated';
+import useDidUpdate from 'hooks/useDidUpdate';
 
 import styles from './styles';
 
@@ -47,11 +49,13 @@ const aspectRatioStyle = { aspectRatio: posterAspectRatio };
 
 function EventFights({ route }) {
   const { t } = useTranslation();
+  const navigation = useNavigation();
 
   const { event: prefetchedEvent, isNeedToFetchEvent, isOpenStreamModal } = route?.params;
   const [event, setEvent] = useState(prefetchedEvent);
 
   const userType = useSelector(userSelectors.getUserType);
+  const isPaidSubscription = useSelector(userSelectors.getIsPaidSubscription);
   const isFan = userType === USER_TYPES.FAN;
 
   const isLiveStream = event.liveStream.status === LIVE_STREAM_STATUSES.LIVE;
@@ -74,7 +78,9 @@ function EventFights({ route }) {
   }, [playFinishedStreamWhenReady]);
 
   const streamVideoRefIos = useRef(null);
-  const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState(isLiveStream && Platform.OS === 'ios');
+  const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState(isPaidSubscription
+    && isLiveStream
+    && Platform.OS === 'ios');
 
   const [isCountdownTimerModalVisible, setIsCountdownTimerModalVisible] = useState(false);
   const liveStreamAndroidModalRef = useRef();
@@ -82,11 +88,68 @@ function EventFights({ route }) {
   const [isOpenStreamModalNeeded, setIsOpenStreamModalNeeded] = useState(isOpenStreamModal);
   const [isFullScreenLoader, setIsFullScreenLoader] = useState(false);
 
-  useEffect(() => {
-    if (isOpenStreamModal) {
-      liveStreamAndroidModalRef.show();
+  const showSubscriptionAlert = useCallback(() => {
+    const alertDescription = event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED
+      ? t('BecomeFanAlert.finishedStreamDescription')
+      : t('BecomeFanAlert.liveStreamDescription');
+
+    const alertOptions = [
+      { text: t('BecomeFanAlert.ok') },
+    ];
+
+    if (Platform.OS === 'ios') {
+      alertOptions.push({
+        text: t('BecomeFanAlert.chooseFighter'),
+        onPress: () => navigation.navigate('SearchFighters'),
+      });
     }
-  }, [isOpenStreamModal]);
+
+    Alert.alert(t('BecomeFanAlert.title'), alertDescription, alertOptions);
+  }, [event.liveStream.status, navigation, t]);
+
+  const onShowLiveStream = useCallback(() => {
+    if (Platform.OS === 'ios') {
+      streamVideoRefIos.current.showFullScreen();
+
+      return;
+    }
+
+    liveStreamAndroidModalRef.current.show();
+  }, []);
+
+  useDidUpdate(() => {
+    if (isPaidSubscription && Platform.OS === 'ios') {
+      setIsLiveStreamLoadingIos(true);
+    }
+  }, [isPaidSubscription]);
+
+  useEffect(() => {
+    if (isOpenStreamModalNeeded && isFan && !isPaidSubscription) {
+      showSubscriptionAlert();
+      setIsOpenStreamModalNeeded(false);
+    }
+  }, [isFan, isPaidSubscription, showSubscriptionAlert, isOpenStreamModalNeeded]);
+
+  useEffect(() => {
+    if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded) {
+      liveStreamAndroidModalRef.show();
+      setIsOpenStreamModalNeeded(false);
+    }
+  }, [showSubscriptionAlert, isPaidSubscription, isFan, isOpenStreamModalNeeded]);
+
+  useEffect(() => {
+    if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded && isLiveStream && !isLiveStreamLoadingIos) {
+      onShowLiveStream();
+      setIsOpenStreamModalNeeded(false);
+    }
+  }, [
+    isOpenStreamModalNeeded,
+    onShowLiveStream,
+    isLiveStream,
+    isLiveStreamLoadingIos,
+    isFan,
+    isPaidSubscription,
+  ]);
 
   useEffect(() => {
     const updateEventData = async () => {
@@ -98,11 +161,11 @@ function EventFights({ route }) {
       updateEventData();
 
       if (Platform.OS === 'android') {
-        liveStreamAndroidModalRef.current.loadEvent();
+        liveStreamAndroidModalRef?.current?.loadEvent();
         return;
       }
 
-      streamVideoRefIos.current.reload();
+      streamVideoRefIos?.current?.reload();
     }
   }, [isNeedToFetchEvent, prefetchedEvent._id]);
 
@@ -120,7 +183,7 @@ function EventFights({ route }) {
     if (didBecomeLive) {
       if (Platform.OS === 'ios') {
         setIsLiveStreamLoadingIos(true);
-        streamVideoRefIos.current.reload();
+        streamVideoRefIos?.current?.reload();
       }
     }
 
@@ -130,16 +193,6 @@ function EventFights({ route }) {
 
   useAnalytics({ isFan, eventId: event._id });
   useEventUpdated({ eventId: event._id, onEventUpdated });
-
-  const onShowLiveStream = useCallback(() => {
-    if (Platform.OS === 'ios') {
-      streamVideoRefIos.current.showFullScreen();
-
-      return;
-    }
-
-    liveStreamAndroidModalRef.current.show();
-  }, []);
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -179,6 +232,11 @@ function EventFights({ route }) {
   }, []);
 
   const onPressEventPoster = useCallback(() => {
+    if (isFan && !isPaidSubscription) {
+      showSubscriptionAlert();
+      return;
+    }
+
     if (event.liveStream.status !== LIVE_STREAM_STATUSES.FINISHED && (isLiveStream || Platform.OS === 'android')) {
       onShowLiveStream();
       return;
@@ -200,7 +258,9 @@ function EventFights({ route }) {
       }
     }
   }, [onShowLiveStream, openCountdownTimer,
-    isLiveStream, event.status, event.liveStream.status, isFinishedStreamReadyToPlay]);
+    isLiveStream, event.status, event.liveStream.status, isFinishedStreamReadyToPlay,
+    isFan, isPaidSubscription, showSubscriptionAlert,
+  ]);
 
   const onReadyToPlayIos = useCallback(() => {
     setIsLiveStreamLoadingIos(false);
@@ -220,13 +280,6 @@ function EventFights({ route }) {
     setIsFullScreenLoader(false);
   }, []);
 
-  useEffect(() => {
-    if (isOpenStreamModalNeeded && isLiveStream && !isLiveStreamLoadingIos) {
-      onShowLiveStream();
-      setIsOpenStreamModalNeeded(false);
-    }
-  }, [isOpenStreamModalNeeded, onShowLiveStream, isLiveStream, isLiveStreamLoadingIos]);
-
   const PosterLoader = () => (
     <View style={styles.loaderContainer}>
       <ActivityIndicator size="large" color={colors.primary} />
@@ -235,57 +288,61 @@ function EventFights({ route }) {
 
   return (
     <>
-      {Platform.OS === 'ios' && (
-        <Modal
-          visible={isCountdownTimerModalVisible}
-          animationType="slide"
-          onRequestClose={onCloseCountTimerModal}
-        >
-          <CountdownTimer
-            eventImageUrl={event.imageUrl}
-            eventName={event.name}
-            eventDate={event.date}
-            eventTimezone={event.location.timezone}
-            onClose={onCloseCountTimerModal}
-            eventLiveStreamStatus={event.liveStream.status}
-          />
-        </Modal>
-      )}
+      {(!isFan || isPaidSubscription) && (
+        <>
+          {Platform.OS === 'ios' && (
+            <Modal
+              visible={isCountdownTimerModalVisible}
+              animationType="slide"
+              onRequestClose={onCloseCountTimerModal}
+            >
+              <CountdownTimer
+                eventImageUrl={event.imageUrl}
+                eventName={event.name}
+                eventDate={event.date}
+                eventTimezone={event.location.timezone}
+                onClose={onCloseCountTimerModal}
+                eventLiveStreamStatus={event.liveStream.status}
+              />
+            </Modal>
+          )}
 
-      {Platform.OS === 'ios' && isFullScreenLoader && <FullScreenLoader />}
+          {Platform.OS === 'ios' && isFullScreenLoader && <FullScreenLoader />}
 
-      {Platform.OS === 'android' && (
-        <AndroidStreamModal
-          ref={liveStreamAndroidModalRef}
-          eventId={event._id}
-          eventImageUrl={event.imageUrl}
-          eventName={event.name}
-          eventDate={event.date}
-          eventTimezone={event.location.timezone}
-          eventLiveStreamStatus={event.liveStream.status}
-        />
-      )}
+          {Platform.OS === 'android' && (
+            <AndroidStreamModal
+              ref={liveStreamAndroidModalRef}
+              eventId={event._id}
+              eventImageUrl={event.imageUrl}
+              eventName={event.name}
+              eventDate={event.date}
+              eventTimezone={event.location.timezone}
+              eventLiveStreamStatus={event.liveStream.status}
+            />
+          )}
 
-      {Platform.OS === 'ios' && (
-        <LiveStreamPlayerIos
-          ref={streamVideoRefIos}
-          eventId={event._id}
-          onReadyToPlay={onReadyToPlayIos}
-          onFullscreenOpened={onFullscreenOpened}
-          isLiveStream={isLiveStream}
-          eventLiveStreamStatus={event.liveStream.status}
-        />
-      )}
+          {Platform.OS === 'ios' && (
+            <LiveStreamPlayerIos
+              ref={streamVideoRefIos}
+              eventId={event._id}
+              onReadyToPlay={onReadyToPlayIos}
+              onFullscreenOpened={onFullscreenOpened}
+              isLiveStream={isLiveStream}
+              eventLiveStreamStatus={event.liveStream.status}
+            />
+          )}
 
-      {event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED && (
-        <FinishedStreamVideo
-          ref={finishedStreamVideoRef}
-          eventId={event._id}
-          width={event.liveStream.width}
-          height={event.liveStream.height}
-          duration={event.liveStream.duration}
-          onReadyToPlay={onReadyToPlayFinishedStream}
-        />
+          {event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED && (
+            <FinishedStreamVideo
+              ref={finishedStreamVideoRef}
+              eventId={event._id}
+              width={event.liveStream.width}
+              height={event.liveStream.height}
+              duration={event.liveStream.duration}
+              onReadyToPlay={onReadyToPlayFinishedStream}
+            />
+          )}
+        </>
       )}
 
       <SafeAreaView style={styles.screen}>

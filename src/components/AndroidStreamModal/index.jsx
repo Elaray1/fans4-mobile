@@ -177,11 +177,11 @@ const EventLiveStreamAndroid = React.forwardRef(({
       setIsEndedStreamViewShown(false);
 
       if (isVisible) {
-        webViewRef.current.injectJavaScript(muteSound(false));
+        webViewRef.current?.injectJavaScript(muteSound(false));
         return;
       }
 
-      webViewRef.current.injectJavaScript(muteSound(true));
+      webViewRef.current?.injectJavaScript(muteSound(true));
     }
   }, [prolongControlsShowing, isVisible, webViewRef, wasReadyToPlayback, checkAndHandleStreamEnd]);
 
@@ -191,7 +191,7 @@ const EventLiveStreamAndroid = React.forwardRef(({
     setIsLoading(true);
     setWasReadyToPlayback(false);
 
-    webViewRef.current.reload();
+    webViewRef.current?.reload();
   }, [webViewRef]);
 
   return (

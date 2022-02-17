@@ -12,7 +12,7 @@ const useIsPaused = ({ webViewRef }) => {
   const [isPaused, setIsPaused] = useState();
 
   const pause = useCallback(() => {
-    webViewRef.current.injectJavaScript(_pause());
+    webViewRef.current?.injectJavaScript(_pause());
   }, [webViewRef]);
 
   useEffect(() => {
