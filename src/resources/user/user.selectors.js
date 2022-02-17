@@ -54,4 +54,6 @@ export const getSupportedFighters = createSelector(
 
 export const getUserName = ({ user }) => user?.role?.biography?.userName;
 
+export const getIsPaidSubscription = createSelector(getSupportedFighters, fighters => fighters?.length > 0);
+
 /* Fans selectors: end */

@@ -817,5 +817,12 @@
     "description2": "You can subscribe to up to 20 Fighters in the app.",
     "description3": "You will see your subscription to the 1st, 2nd and subsequent Fighters in your Apple settings. Payment will be charged separately for each subscription to your Apple account at the confirmation of purchase. Your account will be charged for renewal of each subscription within the 24-hours prior to the end of the current period.",
     "description4": "Autorenewal of each subscription may be turned off at any time by going to your Apple settings after the purchase. You will still have access to your favorite Fighter till the end of subscription period after subscription cancellation."
+  },
+  "BecomeFanAlert": {
+    "title": "Become a Fan!",
+    "liveStreamDescription": "To watch this live-stream, you have to be subscribed to a Fighter.",
+    "finishedStreamDescription": "To watch this event you have to be subscribed to a Fighter.",
+    "ok": "OK",
+    "chooseFighter": "Choose Fighter"
   }
 }
