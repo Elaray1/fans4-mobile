@@ -150,7 +150,7 @@ function Comments({ route }) {
         setIsLoading(false);
       }
     }
-  }, [comments, page, totalCount, showFailure, t, postId, isFetchedFirstTime]);
+  }, [totalCount, page, comments, isFetchedFirstTime, postId, showFailure, t]);
 
   const onRefresh = useCallback(async () => {
     await fetchNewItems({ refresh: true });
@@ -295,7 +295,7 @@ function Comments({ route }) {
     />
   );
 
-  const renderHeader = () => (
+  const renderHeader = (
     <View style={styles.postContainer}>
       {!!post && (
         <Post
@@ -356,7 +356,7 @@ function Comments({ route }) {
                 refreshControl={RefreshControl}
                 keyboardShouldPersistTaps="handled"
               >
-                {renderHeader()}
+                {renderHeader}
                 <EmptyView />
               </ScrollView>
             )}
