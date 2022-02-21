@@ -14,6 +14,7 @@ import ErrorIcon from 'assets/icons/error.svg';
 import * as userSelectors from 'resources/user/user.selectors';
 
 import websocketsService from 'services/socket.service';
+import pushNotificationService from 'services/pushNotification.service';
 
 import * as messageApi from 'resources/message/message.api';
 import * as messageActions from 'resources/message/message.actions';
@@ -33,7 +34,6 @@ import NoMessagesIllustration from 'assets/illustrations/no-events.svg';
 
 import { USER_TYPES } from 'resources/user/user.constants';
 import { CLOSING_CHAT_REASONS } from 'resources/chat/chat.constants';
-
 
 import Message from './Message';
 
@@ -293,10 +293,12 @@ function Chat({ route }) {
     }).map(({ item }) => item._id);
 
     const newUpdatedMessages = await Promise.all(readedMessagesIndexes.map(async (messageId) => {
-      const message = await messageApi.readMessage(messageId);
+      const { updatedMessage, unreadChatsNumber } = await messageApi.readMessage(messageId);
+
+      pushNotificationService.setApplicationBadgeNumber(unreadChatsNumber);
 
       dispatch(messageActions.removeUnreadMessage(messageId));
-      return message;
+      return updatedMessage;
     }));
 
     if (newUpdatedMessages.length) {

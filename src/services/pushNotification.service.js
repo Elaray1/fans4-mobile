@@ -62,6 +62,10 @@ class PushNotificationService {
     }
   }
 
+  setApplicationBadgeNumber(number) {
+    PushNotification.setApplicationIconBadgeNumber(number);
+  }
+
   async startNotificationHandling(notificationHandlers) {
     this.notificationHandlers = notificationHandlers;
 
