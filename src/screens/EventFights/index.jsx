@@ -132,7 +132,7 @@ function EventFights({ route }) {
 
   useEffect(() => {
     if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded) {
-      liveStreamAndroidModalRef.show();
+      liveStreamAndroidModalRef.current?.show();
       setIsOpenStreamModalNeeded(false);
     }
   }, [showSubscriptionAlert, isPaidSubscription, isFan, isOpenStreamModalNeeded]);
