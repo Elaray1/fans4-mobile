@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useMemo, useState } from 'react';
 import { SafeAreaView, View, ActivityIndicator, ScrollView, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
@@ -36,7 +37,7 @@ import styles from './styles';
 
 const POSTS_VIEWABILITY_CONFIG = { minimumViewTime: 0, itemVisiblePercentThreshold: 0 };
 
-function Feed() {
+function Feed({ route }) {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const { showFailure } = useToast();
@@ -45,6 +46,8 @@ function Feed() {
   const isPaidSubscription = useSelector(userSelectors.getIsPaidSubscription);
 
   const [liveStreamEvent, setLiveStreamEvent] = useState();
+
+  const newPost = route?.params?.post;
 
   const listRef = useRef(null);
   useScrollToTop(listRef);
@@ -174,11 +177,16 @@ function Feed() {
   );
 
   const items = useMemo(() => {
-    return _.sortBy([...posts, ...liveStreamEvents], (item) => {
+    let feed = _.sortBy([...posts, ...liveStreamEvents], (item) => {
       const isEvent = !!item.liveStream;
       return isEvent ? -moment(item.liveStream.startedOn).unix() : -moment(item.createdOn).unix();
     });
-  }, [posts, liveStreamEvents]);
+    if (newPost) {
+      feed = feed.filter(i => i._id !== newPost._id);
+      feed.unshift(newPost);
+    }
+    return feed;
+  }, [posts, liveStreamEvents, newPost]);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -244,5 +252,13 @@ function Feed() {
     </SafeAreaView>
   );
 }
+
+Feed.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      post: PropTypes.shape(),
+    }),
+  }).isRequired,
+};
 
 export default React.memo(Feed);

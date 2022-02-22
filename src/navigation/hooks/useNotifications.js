@@ -9,7 +9,10 @@ import * as userSelectors from 'resources/user/user.selectors';
 
 const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
-    rootNavigation.push('Account');
+    rootNavigation.push('AppStack', {
+      screen: 'Tabs',
+      params: { screen: 'Account' },
+    });
   },
   [PUSH_NOTIFICATION_TYPES.FIGHTER_REGISTRATION_APPROVED]: () => {
     rootNavigation.push('VerificationSuccessful');
@@ -21,7 +24,10 @@ const pushNotificationHandlersByType = {
     rootNavigation.push('Finances');
   },
   [PUSH_NOTIFICATION_TYPES.NEW_SUBSCRIBER]: () => {
-    rootNavigation.push('Activity');
+    rootNavigation.push('AppStack', {
+      screen: 'Tabs',
+      params: { screen: 'Activity' },
+    });
   },
   [PUSH_NOTIFICATION_TYPES.FIGHTER_IN_FIGHT_VOTING]: ({ fight }) => {
     const parsedFight = JSON.parse(fight);
@@ -30,8 +36,10 @@ const pushNotificationHandlersByType = {
   },
   [PUSH_NOTIFICATION_TYPES.FAN_PROPOSED_FIGHT_IN_VOTING]: ({ fight }) => {
     const parsedFight = JSON.parse(fight);
-
-    rootNavigation.push('Voting', { fight: parsedFight });
+    rootNavigation.push('AppStack', {
+      screen: 'Tabs',
+      params: { screen: 'Voting', params: { fight: parsedFight } },
+    });
   },
   [PUSH_NOTIFICATION_TYPES.FAN_PROPOSED_FIGHT_IN_UPCOMING_EVENT]: ({ event }) => {
     const parsedEvent = JSON.parse(event);
@@ -90,6 +98,13 @@ const pushNotificationHandlersByType = {
       chatId: parsedChat._id,
       isFromNotification: true,
       closingReason: parsedChat.closingReason,
+    });
+  },
+  [PUSH_NOTIFICATION_TYPES.NEW_POST]: ({ post }) => {
+    const parsedPost = JSON.parse(post);
+    rootNavigation.push('AppStack', {
+      screen: 'Tabs',
+      params: { screen: 'Feed', params: { post: parsedPost } },
     });
   },
 };
