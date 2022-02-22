@@ -21,6 +21,7 @@ export const PUSH_NOTIFICATION_TYPES = {
   FIGHTER_IN_EVENT_FIGHT: 'fighter_in_event_fight',
   NEW_EVENT_FIGHT_ADDED: 'new_event_fight_added',
   NEW_EVENT_FIGHTS_ADDED: 'new_event_fights_added',
+  NEW_POST: 'new_post',
   NEW_MESSAGE: 'new_message',
   LIVE_EVENT_STARTED: 'live_event_started',
 };
