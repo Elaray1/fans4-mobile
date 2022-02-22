@@ -58,7 +58,7 @@ const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, on
   const intervalId = useRef();
 
   const isStreamEnded = eventLiveStreamStatus === LIVE_STREAM_STATUSES.PROCESSING;
-  const isNeedToUpdateTime = !isStreamEnded && eventDate > moment();
+  const isNeedToUpdateTime = !isStreamEnded && moment(eventDate).isAfter();
 
   const setTime = useCallback(() => {
     const currentDate = moment();
@@ -69,21 +69,13 @@ const CountdownTimer = ({ eventName, eventImageUrl, eventDate, eventTimezone, on
 
   useEffect(() => {
     if (isNeedToUpdateTime) {
-      setTime();
-      return;
-    }
-
-    setDateDiff(0);
-  }, [isNeedToUpdateTime, setTime]);
-
-  useEffect(() => {
-    if (isNeedToUpdateTime) {
       intervalId.current = setInterval(() => {
         setTime();
-      }, 1000);
+      }, 300);
 
       return () => clearInterval(intervalId.current);
     }
+    setDateDiff(0);
   }, [isNeedToUpdateTime, setTime]);
 
   return (
