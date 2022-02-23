@@ -300,8 +300,9 @@ function Fighter({ fighterId }) {
           style={styles.content}
           data={posts}
           keyExtractor={keyExtractor}
-          renderItem={posts ? renderItem : renderNoPosts}
+          renderItem={renderItem}
           ItemSeparatorComponent={renderItemSeparator}
+          ListEmptyComponent={renderNoPosts}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
           initialNumToRender={10}
