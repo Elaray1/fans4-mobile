@@ -51,6 +51,7 @@ function Voting({ route }) {
       }
 
       setMode(pageMode);
+      setLoading(false);
       return pageMode;
     }
 
