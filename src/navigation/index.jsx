@@ -35,7 +35,6 @@ import useInAppPurchases from './hooks/useInAppPurchases';
 import useIsUserBlocked from './hooks/useIsUserBlocked';
 import useNotifications from './hooks/useNotifications';
 import useWebsockets from './hooks/useWebsockets';
-import useLaunchAnalyticsEvent from './hooks/useLaunchAnalyticsEvent';
 import useUpdateUser from './hooks/useUpdateUser';
 import useWasOpenedBefore from './hooks/useWasOpenedBefore';
 
@@ -116,7 +115,6 @@ function AppNavigation() {
   useIsUserBlocked();
   useNotifications();
   useWebsockets();
-  useLaunchAnalyticsEvent();
   useUpdateUser();
   useWasOpenedBefore();
 
