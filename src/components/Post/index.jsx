@@ -146,10 +146,15 @@ function Post({
   const onPressFighter = useCallback(() => {
     if (author?._id === FANS4_ACCOUNT._id) {
       navigation.navigate('Fans4Profile');
+    } else if (author?._id === userId) {
+      navigation.navigate('AppStack', {
+        screen: 'Tabs',
+        params: { screen: 'Account' },
+      });
     } else {
       navigation.navigate('Fighter', { _id: author?._id });
     }
-  }, [navigation, author?._id]);
+  }, [author?._id, userId, navigation]);
 
   const onOpenEditPostModal = useCallback(() => {
     setIsEditPostModal(true);
