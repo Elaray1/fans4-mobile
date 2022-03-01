@@ -4,7 +4,7 @@ import colors from 'themes/colors';
 import fonts from 'themes/fonts';
 
 const { width: windowWidth } = Dimensions.get('window');
-
+const marginsAndImageWidth = 80;
 
 export default StyleSheet.create({
   title: {
@@ -22,6 +22,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 5,
+    width: windowWidth - marginsAndImageWidth,
   },
   textBold: {
     fontFamily: fonts.family.bold,
