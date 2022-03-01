@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-raw-text */
 import React, { useCallback, useMemo } from 'react';
 import {
   View, TouchableOpacity,
@@ -82,8 +83,9 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast, isGroupp
         <View style={styles.newReplyContainer}>
           <View>
             <View style={styles.textContainer}>
-              <Text style={styles.textBold}>{data.author.fullName} </Text>
-              <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.replied')}
+              <Text style={styles.textBold}>{data.author.fullName}
+                {' '}
+                <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.replied')}</Text>
               </Text>
             </View>
             {data.reply.text && (
@@ -120,12 +122,14 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast, isGroupp
     >
       <View>
         <View style={styles.textContainer}>
-          <Text style={styles.textBold}>{data.author.fullName} </Text>
-          <Text style={[styles.text, styles.actionText]}>{
+          <Text style={styles.textBold}>{data.author.fullName}
+            {' '}
+            <Text style={[styles.text, styles.actionText]}>{
           isFan
             ? `${t('ActivityItem.commentedOn')} ${data.post.author.fullName} ${t('ActivityItem.post')}`
             : t('ActivityItem.commented')
           }
+            </Text>
           </Text>
         </View>
         {data.comment.text && (
@@ -180,8 +184,10 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast, isGroupp
     } else {
       activityTitleText = (
         <>
-          <Text style={styles.textBold}>{data.author.fullName} </Text>
-          <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.likedYourPost')}</Text>
+          <Text style={styles.textBold}>{data.author.fullName}
+            {' '}
+            <Text style={[styles.text, styles.actionText]}>{t('ActivityItem.likedYourPost')}</Text>
+          </Text>
         </>
       );
     }
@@ -224,9 +230,11 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast, isGroupp
     >
       <View>
         <View style={styles.textContainer}>
-          <Text style={styles.textBold}>{data.author.fullName} </Text>
-          <Text style={[styles.text, styles.actionText]}>
-            {t('ActivityItem.likedYour')} {t(data.comment.isReply ? 'ActivityItem.reply' : 'ActivityItem.comment')}:
+          <Text style={styles.textBold}>{data.author.fullName}
+            {' '}
+            <Text style={[styles.text, styles.actionText]}>
+              {t('ActivityItem.likedYour')} {t(data.comment.isReply ? 'ActivityItem.reply' : 'ActivityItem.comment')}:
+            </Text>
           </Text>
         </View>
         {data.comment.text && (
