@@ -39,6 +39,7 @@ const Input = forwardRef(({
   onChange,
   maxLength,
   disabled,
+  disableOnlyButton,
   placeholder,
   blurOnSubmit,
   onFocus,
@@ -159,7 +160,7 @@ const Input = forwardRef(({
             type="link"
             title={buttonTitle}
             onPress={onButtonPress}
-            disabled={!value || disabled}
+            disabled={!value || disabled || disableOnlyButton}
             titleStyle={styles.buttonTitle}
             style={styles.button}
             disabledTitleStyle={styles.disabledTitleStyle}
@@ -203,6 +204,7 @@ Input.propTypes = {
   autoFocus: PropTypes.bool,
   multilineSmall: PropTypes.bool,
   autogrowHeight: PropTypes.bool,
+  disableOnlyButton: PropTypes.bool,
 };
 
 Input.defaultProps = {
@@ -230,6 +232,7 @@ Input.defaultProps = {
   autoFocus: false,
   multilineSmall: false,
   autogrowHeight: false,
+  disableOnlyButton: false,
 };
 
 export default React.memo(Input);
