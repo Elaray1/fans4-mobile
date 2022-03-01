@@ -83,6 +83,7 @@ function Chat({ route }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
+  const [isPostButtonDisabled, setIsPostButtonDisabled] = useState(false);
 
   const [isInputFocused, setIsInputFocused] = useState(false);
 
@@ -251,6 +252,7 @@ function Chat({ route }) {
   }, []);
 
   const onSendMessage = useCallback(async () => {
+    setIsPostButtonDisabled(true);
     try {
       const message = await messageApi.sendMessage({
         text: messageValue,
@@ -265,6 +267,7 @@ function Chat({ route }) {
     } catch (error) {
       showFailure(t('Chat.messageNotSentPleaseTryAgain'));
     }
+    setIsPostButtonDisabled(false);
   }, [messageValue, chatId, messages, showFailure, t]);
 
   const onUserAvatarPress = useCallback(() => {
@@ -512,6 +515,7 @@ function Chat({ route }) {
                         buttonTitle={t('Chat.send')}
                         onButtonPress={onSendMessage}
                         autoFocus={isInputFocused}
+                        disableOnlyButton={isPostButtonDisabled}
                       />
                     )}
                 </View>
