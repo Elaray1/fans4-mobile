@@ -47,7 +47,8 @@ function Feed({ route }) {
 
   const [liveStreamEvent, setLiveStreamEvent] = useState();
 
-  const newPost = route?.params?.post;
+  const postFromNotification = route?.params?.post;
+  const [newPost, setNewPost] = useState(postFromNotification);
 
   const listRef = useRef(null);
   useScrollToTop(listRef);
@@ -113,6 +114,11 @@ function Feed({ route }) {
     return isEvent ? `event_${item._id}` : `post_${item._id}`;
   }, []);
 
+  const onRefreshing = useCallback(() => {
+    setNewPost(null);
+    onRefresh();
+  }, [onRefresh]);
+
   const renderItem = ({ item }) => {
     const isEvent = !!item.liveStream;
 
@@ -172,7 +178,7 @@ function Feed({ route }) {
   const RefreshControl = (
     <CustomRefreshControl
       refreshing={isRefreshing}
-      onRefresh={onRefresh}
+      onRefresh={onRefreshing}
     />
   );
 
