@@ -99,12 +99,6 @@ export const completeOnboarding = () => {
 export const logout = ({ deviceId }) => apiClient
   .post('users/logout', { deviceId });
 
-export const forgotPassword = ({ email, deviceId, userType }) => apiClient
-  .post('users/password-reset-email', { email, deviceId, userType });
-
-export const resetPassword = ({ password, resetPasswordToken }) => apiClient
-  .put('users/password/reset', { password, resetPasswordToken });
-
 export const updatePassword = ({ oldPassword, newPassword }) => apiClient
   .put('users/password', { oldPassword, newPassword });
 
@@ -128,9 +122,6 @@ export const hideBankAccountWarning = () => apiClient
 
 export const suggestFight = ({ firstFighterId, secondFighterId }) => apiClient
   .post('fights/suggest', { firstFighterId, secondFighterId });
-
-export const getPasswordResetToken = ({ deviceId, email }) => apiClient
-  .get('users/password-reset-token-checking', { deviceId, email });
 
 export const addIntroVideo = (data, file, { onUploadProgress, onUploadStart }) => {
   return apiClient.postWithFileInBackground('users/intro-video', data, file,
@@ -164,3 +155,13 @@ export const fillWelcomeForm = ({
   userName,
   birthDate,
 });
+
+export const sendResetPasswordEmail = ({ email, userType }) => apiClient
+  .post('users/password/reset-email', { email, userType });
+
+export const resetPassword = ({ password, resetPasswordToken, userId, expirationDate }) => apiClient
+  .post('users/password/reset', { password, resetPasswordToken, userId, expirationDate });
+
+export const validateResetPasswordToken = ({ resetPasswordToken, userId, expirationDate }) => {
+  return apiClient.get('users/password/reset-token-validation', { resetPasswordToken, userId, expirationDate });
+};

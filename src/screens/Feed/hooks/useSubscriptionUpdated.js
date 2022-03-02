@@ -45,11 +45,13 @@ const checkIfSomeSubscriptionAddedOrRemoved = (oldSupportedFighters, newSupporte
 
 const useSubscriptionUpdated = ({ fetchNewItems, isFetchedFirstTime, onRefresh }) => {
   const dispatch = useDispatch();
+
   const fightersList = useSelector(userSelectors.getSupportedFighters);
+  const isUserAuthenticated = useSelector(userSelectors.getAuthenticated);
   const previousFightersList = usePrevious(fightersList);
 
   const updateSubscriptionIfNeeded = useCallback(async () => {
-    if (!isFetchedFirstTime) {
+    if (!isFetchedFirstTime || !isUserAuthenticated) {
       return;
     }
 
@@ -63,7 +65,7 @@ const useSubscriptionUpdated = ({ fetchNewItems, isFetchedFirstTime, onRefresh }
     } catch (err) {
       console.error('getting user data error:', err);
     }
-  }, [dispatch, fightersList, previousFightersList, onRefresh, isFetchedFirstTime]);
+  }, [dispatch, fightersList, previousFightersList, onRefresh, isFetchedFirstTime, isUserAuthenticated]);
 
   useEffect(() => {
     fetchNewItems({ refresh: true });

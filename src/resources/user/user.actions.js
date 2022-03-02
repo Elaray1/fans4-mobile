@@ -171,6 +171,12 @@ export const updatePassword = async ({ oldPassword, newPassword }) => {
 export const logout = () => async (dispatch) => {
   const deviceId = getMaskedDeviceId();
 
+  websocketsService.disconnect();
+  websocketsService.connect({
+    query: { deviceId },
+    rooms: [`device-${deviceId}`],
+  });
+
   try {
     await api.logout({ deviceId });
   } catch (err) {
@@ -179,15 +185,8 @@ export const logout = () => async (dispatch) => {
 
   await clear();
 
-  config.accessToken = null;
-  websocketsService.disconnect();
-  websocketsService.connect({
-    query: { deviceId: getMaskedDeviceId() },
-    rooms: [`device-${deviceId}`],
-  });
-
-
   dispatch({ type: USER_LOGGED_OUT });
+  config.accessToken = null;
 };
 
 export const updateEmail = ({ newEmail, password }) => async (dispatch) => {

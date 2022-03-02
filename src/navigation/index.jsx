@@ -1,42 +1,29 @@
-import React, { useCallback, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { InteractionManager } from 'react-native';
+import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import SplashScreen from 'react-native-splash-screen';
-import { ToastProvider } from 'react-native-fast-toast';
-import cookies from '@react-native-cookies/cookies';
 
 import 'react-native-gesture-handler';
 
-import { STORAGE_KEYS } from 'helpers/constants';
-import { getItem } from 'helpers/storage';
-import { getMaskedDeviceId } from 'helpers/deviceInfo';
-import getInitialScreen from 'helpers/getInitialScreen';
-import * as rootNavigation from 'helpers/rootNavigation';
-
-import analyticsService from 'services/analytics.service';
-import websocketsService from 'services/socket.service';
-
-import * as userActions from 'resources/user/user.actions';
-import * as userApi from 'resources/user/user.api';
-import * as userSelectors from 'resources/user/user.selectors';
-
-import config from 'resources/config';
-
 import colors from 'themes/colors';
+
+import * as userSelectors from 'resources/user/user.selectors';
+import * as rootNavigation from 'helpers/rootNavigation';
 
 import OfflineBanner from 'components/OfflineBanner';
 
 import AppScreens from './appStack';
 import AuthScreens from './authStack';
 
+import useInit from './hooks/useInit';
 import useInAppPurchases from './hooks/useInAppPurchases';
 import useIsUserBlocked from './hooks/useIsUserBlocked';
 import useNotifications from './hooks/useNotifications';
 import useWebsockets from './hooks/useWebsockets';
 import useUpdateUser from './hooks/useUpdateUser';
 import useWasOpenedBefore from './hooks/useWasOpenedBefore';
+import useTrackScreens from './hooks/useTrackScreens';
+import useDeepLink from './hooks/useDeepLink';
 
 const NAVIGATOR_CONTAINER_THEME = {
   colors: {
@@ -45,55 +32,6 @@ const NAVIGATOR_CONTAINER_THEME = {
 };
 
 const Stack = createStackNavigator();
-
-const init = async (dispatch) => {
-  // This is needed because react-native use cookies by default
-  // but actually we don't use cookies
-  // so we clear cookies in order to prevent mixing authorization cookies
-  // with other authorization methods
-  try {
-    await cookies.clearAll();
-  } catch (err) {
-    console.log('Clearing cookies error:', err);
-  }
-
-  let user;
-  const accessToken = await getItem(STORAGE_KEYS.ACCESS_TOKEN);
-
-  if (accessToken) {
-    config.accessToken = accessToken;
-
-    try {
-      user = await userApi.getUserData();
-
-      websocketsService.connect({
-        query: { accessToken },
-        rooms: [`user-${user._id}`],
-      });
-
-
-      dispatch(userActions.setUserData(user));
-    } catch (err) {
-      console.log('Fetching user on start error:', err.message);
-    }
-  }
-
-  if (!user) {
-    websocketsService.connect({
-      query: { deviceId: getMaskedDeviceId() },
-      rooms: [`device-${getMaskedDeviceId()}`],
-    });
-  }
-
-
-  if (rootNavigation.isInitialRoute()) {
-    const { stack, screen } = getInitialScreen(user);
-    rootNavigation.reset({ routes: [{ name: stack, params: { screen } }] });
-  }
-
-  // this is needed to hide splash screen after screen appearing animation
-  InteractionManager.runAfterInteractions(() => SplashScreen.hide());
-};
 
 const linking = {
   prefixes: [
@@ -111,58 +49,39 @@ const linking = {
 };
 
 function AppNavigation() {
+  const init = useInit();
+  const { trackScreens, routeNameRef } = useTrackScreens();
+
   useInAppPurchases();
   useIsUserBlocked();
   useNotifications();
   useWebsockets();
   useUpdateUser();
   useWasOpenedBefore();
+  useDeepLink();
 
-  const dispatch = useDispatch();
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
-
-  const routeNameRef = useRef();
 
   const onNavigatorReady = useCallback(async () => {
     routeNameRef.current = rootNavigation.navigationRef.current.getCurrentRoute().name;
-    await init(dispatch);
-  }, [dispatch]);
-
-  const userType = useSelector(userSelectors.getUserType);
-
-  const trackScreensOpening = useCallback(() => {
-    const previousRouteName = routeNameRef.current;
-    const currentRouteName = rootNavigation.navigationRef.current.getCurrentRoute().name;
-
-    if (previousRouteName !== currentRouteName) {
-      analyticsService.logEvent({
-        name: analyticsService.events.SCREEN_OPENED,
-        data: {
-          userType,
-        },
-      });
-    }
-
-    routeNameRef.current = currentRouteName;
-  }, [userType]);
+    await init();
+  }, [routeNameRef, init]);
 
   return (
-    <ToastProvider placement="top" offset={30}>
-      <NavigationContainer
-        theme={NAVIGATOR_CONTAINER_THEME}
-        ref={rootNavigation.navigationRef}
-        onReady={onNavigatorReady}
-        linking={linking}
-        onStateChange={trackScreensOpening}
-      >
-        <OfflineBanner />
+    <NavigationContainer
+      theme={NAVIGATOR_CONTAINER_THEME}
+      ref={rootNavigation.navigationRef}
+      onReady={onNavigatorReady}
+      onStateChange={trackScreens}
+      linking={linking}
+    >
+      <OfflineBanner />
 
-        <Stack.Navigator initialRouteName={userAuthenticated ? 'AppStack' : 'AuthStack'} headerMode="none">
-          <Stack.Screen name="AppStack" component={AppScreens} />
-          <Stack.Screen name="AuthStack" component={AuthScreens} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </ToastProvider>
+      <Stack.Navigator initialRouteName={userAuthenticated ? 'AppStack' : 'AuthStack'} headerMode="none">
+        <Stack.Screen name="AppStack" component={AppScreens} />
+        <Stack.Screen name="AuthStack" component={AuthScreens} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

@@ -1,46 +1,64 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 import IllustrationScreen from 'components/IllustrationScreen';
 import UpdatedIllustration from 'assets/illustrations/verification-successful';
-import * as rootNavigation from 'helpers/rootNavigation';
 import { USER_TYPES } from 'resources/user/user.constants';
+import * as userSelectors from 'resources/user/user.selectors';
 
 function PasswordReseted({ route }) {
   const { t } = useTranslation();
+  const navigation = useNavigation();
+
   const { userType } = route.params;
+  const isUserAuthenticated = useSelector(userSelectors.getAuthenticated);
 
   const onLinkPress = useCallback(() => {
-    // two routes(SelectUserType, SignIn) are inserted here
-    // for correct handling back action in SignIn screen
-    rootNavigation.reset({
-      index: 0,
-      routes: [
-        {
+    if (!isUserAuthenticated) {
+      navigation.reset({
+        index: 1,
+        routes: [{
           name: 'AuthStack',
           state: {
-            index: 1,
-            routes: [
-              {
-                name: 'SelectUserType',
-              },
-              {
-                name: 'SignIn',
-                params: {
-                  userType,
-                },
-              },
-            ],
+            routes: [{
+              name: 'SelectUserType',
+            }],
           },
+        }, {
+          name: 'AuthStack',
+          state: {
+            routes: [{
+              name: 'SignIn',
+              params: {
+                userType,
+              },
+            }],
+          },
+        }],
+      });
+
+      return;
+    }
+
+    navigation.reset({
+      index: 0,
+      routes: [{
+        name: 'AppStack',
+        state: {
+          routes: [{
+            name: 'Account',
+          }],
         },
-      ],
+      }],
     });
-  }, [userType]);
+  }, [userType, isUserAuthenticated, navigation]);
 
   return (
     <IllustrationScreen
-      linkText={t('PasswordReseted.linkText')}
+      linkText={isUserAuthenticated ? t('PasswordReseted.loggedLink') : t('PasswordReseted.unloggedLink')}
       onLinkPress={onLinkPress}
       description={t('PasswordReseted.description')}
       title={t('PasswordReseted.title')}
