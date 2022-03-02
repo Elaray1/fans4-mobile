@@ -334,13 +334,15 @@
   "PasswordReseted": {
     "title": "Password Updated",
     "description": "Use your new password to log in.",
-    "linkText": "Back to log in page"
+    "unloggedLink": "Back to log in page",
+    "loggedLink": "Back to your account"
   },
   "ChangePassword": {
     "title": "Change Password",
     "inputLabel": "New Password",
     "button": "Save Password",
-    "link": "Back to log in page",
+    "unloggedLink": "Back to log in page",
+    "loggedLink": "Back to your account",
     "text": "Please enter new password"
   },
   "ChangeEmail": {
@@ -843,5 +845,14 @@
   "GenderSelectModal": {
     "cancel": "Cancel",
     "selectGender": "Select Gender"
+  },
+  "ResetPasswordLinkExpired": {
+    "title": "Confirmation Link Expired",
+    "subtitle": "Sorry, this confirmation link has expired.",
+    "backToAccountPage": "Back to account page",
+    "backToLoginPage": "Back to log in page"
+  },
+  "handleDeepLink": {
+    "changeAccount": "Please log out to change the password for different account"
   }
 }

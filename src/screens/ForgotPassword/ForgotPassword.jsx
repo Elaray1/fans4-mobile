@@ -16,7 +16,6 @@ import Button from 'components/Button';
 import * as userApi from 'resources/user/user.api';
 
 import { validateEmail } from 'helpers/validate';
-import { getMaskedDeviceId } from 'helpers/deviceInfo';
 
 import { USER_TYPES } from 'resources/user/user.constants';
 
@@ -25,7 +24,6 @@ import useToast from 'hooks/useToast';
 import styles from './ForgotPassword.styles';
 
 function ForgotPassword({ route }) {
-  const deviceId = getMaskedDeviceId();
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { showFailure } = useToast();
@@ -49,7 +47,7 @@ function ForgotPassword({ route }) {
     setIsLoading(true);
 
     try {
-      await userApi.forgotPassword({ email, deviceId, userType });
+      await userApi.sendResetPasswordEmail({ email, userType });
       navigation.navigate('ResetPasswordLink', { email, userType });
     } catch (error) {
       console.error(error);
@@ -57,7 +55,7 @@ function ForgotPassword({ route }) {
     }
 
     setIsLoading(false);
-  }, [deviceId, email, navigation, userType, showFailure]);
+  }, [email, navigation, userType, showFailure]);
 
   return (
     <SafeAreaView style={styles.screen}>

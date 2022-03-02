@@ -4,5 +4,11 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:app.fans4.com</string>
+		<string>applinks:staging.fans4.com</string>
+		<string>applinks:localhost:3000</string>
+	</array>
 </dict>
 </plist>

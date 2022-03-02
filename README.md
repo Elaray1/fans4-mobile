@@ -7,3 +7,7 @@
 ### Fans4 official account credentials
 - **email: admin@fans4.com**
 - **password: H8YzyRnGzu**
+
+### How to test universal links locally
+1. Universal links doesn't works with https. In order to test on local host you need to use tools like ngrok and update configs accordingly
+2. Universal links can behave incorrectly if degugger is disabled
