@@ -52,3 +52,8 @@ jobs:
             --release-notes "$notes" \
             --groups "$firebaseGroups" \
             --token "$firebaseToken"
+
+      - name: Create bundle for uploading to Google Play
+        run: |
+          cd android && ./gradlew bundleRelease -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
+
