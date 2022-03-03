@@ -31,7 +31,7 @@ const WatchLiveStreamBanner = ({ event, onPress }) => {
   }, [event.imageUrl]);
 
   const [isStreamLoading, setIsStreamLoading] = useState(Platform.OS === 'ios' && isPaidSubscription);
-  const streamVideoRefIos = useRef();
+  const streamVideoRefIos = useRef(null);
 
   const showSubscriptionAlert = useCallback(() => {
     const alertDescription = event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED
