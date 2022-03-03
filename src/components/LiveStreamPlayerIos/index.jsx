@@ -84,11 +84,10 @@ const LiveStreamPlayerIos = React.forwardRef(({
   useEffect(() => {
     AppState.addEventListener('change', (state) => {
       if (state !== 'active') {
-        videoRef.current?.play();
+        videoRef.current?.pause();
         return;
       }
-
-      videoRef.current?.pause();
+      videoRef.current?.play();
     });
   }, []);
 
