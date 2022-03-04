@@ -57,6 +57,7 @@ const FinishedStreamVideo = React.forwardRef(({ eventId, width, height, duration
           height={height}
           duration={duration}
           onReadyToPlay={_onReadyToPlay}
+          playOnStart
         />
       )}
     </View>

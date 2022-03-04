@@ -251,7 +251,7 @@ function EventFights({ route }) {
     }
 
     if (event.liveStream.status === LIVE_STREAM_STATUSES.FINISHED) {
-      if (isFinishedStreamReadyToPlay) {
+      if (isFinishedStreamReadyToPlay || Platform.OS === 'android') {
         finishedStreamVideoRef.current.showFullScreen();
       } else {
         setPlayFinishedStreamWhenReady(true);
