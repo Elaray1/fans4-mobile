@@ -131,10 +131,17 @@ function EventFights({ route }) {
   }, [isFan, isPaidSubscription, showSubscriptionAlert, isOpenStreamModalNeeded]);
 
   useEffect(() => {
-    if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded) {
-      liveStreamAndroidModalRef.current?.show();
-      setIsOpenStreamModalNeeded(false);
+    async function init() {
+      if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded) {
+        if (Platform.OS === 'ios' && streamVideoRefIos) {
+          streamVideoRefIos.current?.showFullScreen();
+        } else {
+          liveStreamAndroidModalRef.current?.show();
+        }
+        setIsOpenStreamModalNeeded(false);
+      }
     }
+    init();
   }, [showSubscriptionAlert, isPaidSubscription, isFan, isOpenStreamModalNeeded]);
 
   useEffect(() => {
