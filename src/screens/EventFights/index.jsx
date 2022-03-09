@@ -133,7 +133,7 @@ function EventFights({ route }) {
   useEffect(() => {
     async function init() {
       if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded) {
-        if (Platform.OS === 'ios' && streamVideoRefIos) {
+        if (Platform.OS === 'ios') {
           streamVideoRefIos.current?.showFullScreen();
         } else {
           liveStreamAndroidModalRef.current?.show();
