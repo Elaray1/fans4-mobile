@@ -132,7 +132,7 @@ function EventFights({ route }) {
 
   useEffect(() => {
     async function init() {
-      if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded) {
+      if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded && !isLiveStreamFinished) {
         if (Platform.OS === 'ios') {
           streamVideoRefIos.current?.showFullScreen();
         } else {
@@ -142,7 +142,7 @@ function EventFights({ route }) {
       }
     }
     init();
-  }, [showSubscriptionAlert, isPaidSubscription, isFan, isOpenStreamModalNeeded]);
+  }, [showSubscriptionAlert, isPaidSubscription, isFan, isOpenStreamModalNeeded, isLiveStreamFinished]);
 
   useEffect(() => {
     if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded && isLiveStream && !isLiveStreamLoadingIos) {
