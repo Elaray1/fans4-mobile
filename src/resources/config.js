@@ -38,4 +38,5 @@ export default {
   mode: Config.APP_ENV,
   applicationId: 'fans4',
   sentryDSN: Config.SENTRY_DSN,
+  iosSubscriptionPrice: Config.IOS_SUBSCRIPTION_PRICE,
 };

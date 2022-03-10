@@ -6,12 +6,13 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 
+
+import config from 'resources/config';
 import * as userSelectors from 'resources/user/user.selectors';
+import { FIGHTING_STATUSES, USER_STATUSES } from 'resources/user/user.constants';
 
 import Text from 'components/Text';
 import Button from 'components/Button';
-
-import { FIGHTING_STATUSES, USER_STATUSES } from 'resources/user/user.constants';
 
 import isSubscribedService from 'services/isSubscribed.service';
 
@@ -85,7 +86,13 @@ const ActionButtonsForFan = ({ fighter, subscribe, unsubscribe, resubscribe }) =
       );
     }
   } else if (Platform.OS === 'ios' && fighter.status !== USER_STATUSES.BLOCKED) {
-    firstActionButton = <Button title={t('Fighter.subscribe')} style={styles.applyButton} onPress={subscribe} />;
+    firstActionButton = (
+      <Button
+        title={`${t('Fighter.subscribe1')}${config.iosSubscriptionPrice}${t('Fighter.subscribe2')}`}
+        style={styles.applyButton}
+        onPress={subscribe}
+      />
+    );
   }
 
   return (
