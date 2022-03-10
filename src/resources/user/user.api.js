@@ -4,12 +4,13 @@ import { Platform } from 'react-native';
 import { OS_PLATFORMS } from 'resources/user/user.constants';
 
 export const emailSignUp = ({
-  email, password, userType,
+  email, password, userType, deviceId,
 }) => apiClient
   .post('users/signup', {
     email,
     password,
     userType,
+    deviceId,
     isFromMobile: true,
   });
 
