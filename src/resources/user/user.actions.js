@@ -21,10 +21,12 @@ import * as api from './user.api';
 export const emailSignUp = ({
   email, password, userType,
 }) => async (dispatch) => {
+  const deviceId = getMaskedDeviceId();
   const { user, accessToken } = await api.emailSignUp({
     email,
     password,
     userType,
+    deviceId,
   });
 
   config.accessToken = accessToken;
