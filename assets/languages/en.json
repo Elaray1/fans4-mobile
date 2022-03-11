@@ -593,7 +593,9 @@
     "subscriptionExpiresOn": "Expires on",
     "youWillEnjoy": "Once you subscribe to a Fighter, you will enjoy:",
     "chooseFighters": "Choose Fighters",
-    "paymentFailed": "Payment Failed"
+    "paymentFailed": "Payment Failed",
+    "restorePurchases": "Restore Purchases",
+    "purchasesHaveBeenRestored": "Your purchases have been restored"
   },
   "fanGenders": {
     "male": "Male",

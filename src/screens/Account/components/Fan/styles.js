@@ -11,7 +11,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.line,
     paddingBottom: 24,
-    paddingTop: 30,
+    paddingTop: 24,
     marginBottom: 19,
   },
   name: {
@@ -104,5 +104,8 @@ export default StyleSheet.create({
     color: colors.error,
     fontSize: fonts.size.tiny,
     fontWeight: fonts.weight.bold,
+  },
+  restoreButton: {
+    marginTop: 24,
   },
 });

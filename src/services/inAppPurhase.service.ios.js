@@ -40,6 +40,7 @@ class InAppPurchaseService {
 
   async makePurchase(productId, metadata) {
     // it's required to fetch products before make actual purchase
+    // eslint-disable-next-line no-unused-vars
     const subscriptions = await this.getSubscriptions([productId]);
 
     const unfinishedPurchase = await storage.getItem(productId);
@@ -78,9 +79,7 @@ class InAppPurchaseService {
   }
 
   async getAvailablePurchases() {
-    const availablePurchases = await iap.getAvailablePurchases();
-
-    return availablePurchases;
+    return iap.getAvailablePurchases();
   }
 
   getAvailableSubscriptionProductIds() {

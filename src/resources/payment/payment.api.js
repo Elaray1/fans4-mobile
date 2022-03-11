@@ -21,3 +21,8 @@ export const notifyAboutIosProductLimit = ({ fighterId }) => apiClient.post(
   'payments/ios-product-limit-notification',
   { fighterId },
 );
+
+export const restoreIosPurchases = ({ receipt, productId }) => apiClient.put(
+  'payments/ios-purchases-restoration',
+  { receipt, productId },
+);

@@ -53,7 +53,7 @@ export default StyleSheet.create({
     color: colors.primary,
   },
   disabledSecondaryButton: {
-    backgroundColor: colors.white,
+    borderColor: hexToRgba(colors.primary, 0.4),
   },
   disabledSecondaryButtonTitle: {
     color: colors.disabledText,

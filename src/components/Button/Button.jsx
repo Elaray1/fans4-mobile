@@ -45,10 +45,11 @@ function Button({
       {isLoading ? <ActivityIndicator size="large" color={hexToRgba(colors.white, 0.4)} /> : (
         <View style={styles.buttonContainer}>
           {type === TYPES.DONE && (
-          <View style={{ marginRight: 8 }}>
-            <SuccessIcon />
-          </View>
+            <View style={{ marginRight: 8 }}>
+              <SuccessIcon />
+            </View>
           )}
+
           <Text
             style={[
               type !== TYPES.LINK && styles.buttonTitle,

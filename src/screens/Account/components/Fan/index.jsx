@@ -7,10 +7,12 @@ import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
-
 import * as userApi from 'resources/user/user.api';
 import { USER_STATUSES, SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
 
+import * as paymentApi from 'resources/payment/payment.api';
+
+import inAppPurhaseService from 'services/inAppPurhase.service.ios';
 import websocketsService from 'services/socket.service';
 
 import useToast from 'hooks/useToast';
@@ -18,6 +20,7 @@ import useToast from 'hooks/useToast';
 import FlatList from 'components/FlatList';
 import Text from 'components/Text';
 import GrayscaledImage from 'components/GrayscaledImage';
+import Button from 'components/Button';
 
 import { toFixLength } from 'helpers/modifyText';
 
@@ -29,7 +32,7 @@ import NoSubscriptions from '../NoSubscriptions';
 const FanAccount = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { showFailure } = useToast();
+  const { showFailure, showSuccess } = useToast();
   const navigation = useNavigation();
 
   const listRef = useRef(null);
@@ -81,6 +84,37 @@ const FanAccount = () => {
       setFighters(updatedFighters);
     });
   }, [fighters]);
+
+  const [isRestoringPurchases, setIsRestoringPurchases] = useState();
+
+  const restorePurchases = useCallback(async () => {
+    setIsRestoringPurchases(true);
+
+    try {
+      const purchases = await inAppPurhaseService.getAvailablePurchases();
+      if (!purchases || !purchases.length) {
+        showSuccess(t('AccountFan.purchasesHaveBeenRestored'));
+      }
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const purchase of purchases) {
+        // eslint-disable-next-line no-await-in-loop
+        await paymentApi.restoreIosPurchases({
+          receipt: purchase.transactionReceipt,
+          productId: purchase.productId,
+        });
+      }
+
+      showSuccess(t('AccountFan.purchasesHaveBeenRestored'));
+    } catch (err) {
+      if (err.code !== 'E_USER_CANCELLED') {
+        console.error('restoring purchases err:', err);
+        showFailure();
+      }
+    }
+
+    setIsRestoringPurchases(false);
+  }, [showFailure, showSuccess, t]);
 
   const Loader = () => (
     <View style={styles.loader}>
@@ -172,11 +206,21 @@ const FanAccount = () => {
         </View>
 
         <Text style={styles.grayText}>{fullName} • {email}</Text>
+
+        {Platform.OS === 'ios' && (
+          <Button
+            style={styles.restoreButton}
+            onPress={restorePurchases}
+            title={t('AccountFan.restorePurchases')}
+            type="secondary"
+            isLoading={isRestoringPurchases}
+          />
+        )}
       </View>
 
-      {isLoading && <Loader />}
+      {isLoading && !isRestoringPurchases && <Loader />}
 
-      {!isLoading && !fighters.length && (
+      {(!isLoading || isRestoringPurchases) && !fighters.length && (
         <>
           {Platform.OS === 'android' ? (
             <Text style={styles.title}>
@@ -186,7 +230,7 @@ const FanAccount = () => {
         </>
       )}
 
-      {!isLoading && !!fighters.length && (
+      {(!isLoading || isRestoringPurchases) && !!fighters.length && (
         <View style={styles.subscriptions}>
           <Text style={styles.title}>
             {t('AccountFan.YourSubscriptions')}
@@ -200,11 +244,10 @@ const FanAccount = () => {
           />
         </View>
       )}
-      {Platform.OS === 'android'
-      && (
-      <View style={styles.textContainer}>
-        <Text style={styles.grayText}>{t('AccountFan.YouCantSubscribe')}</Text>
-      </View>
+      {Platform.OS === 'android' && (
+        <View style={styles.textContainer}>
+          <Text style={styles.grayText}>{t('AccountFan.YouCantSubscribe')}</Text>
+        </View>
       )}
     </ScrollView>
   );
