@@ -94,6 +94,8 @@ const FanAccount = () => {
       const purchases = await inAppPurhaseService.getAvailablePurchases();
       if (!purchases || !purchases.length) {
         showSuccess(t('AccountFan.purchasesHaveBeenRestored'));
+        setIsRestoringPurchases(false);
+        return;
       }
 
       // eslint-disable-next-line no-restricted-syntax
