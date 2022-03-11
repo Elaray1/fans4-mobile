@@ -189,6 +189,7 @@ const useSubscribing = ({ fighterId }) => {
 
       dispatch(purchasesActions.startPurchaseProcessing());
     } catch (err) {
+      Alert.alert('Payment Error', err.message);
       if (err.code !== 'E_USER_CANCELLED') {
         showFailure();
       }
