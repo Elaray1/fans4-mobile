@@ -78,7 +78,7 @@ function EventFights({ route }) {
   }, [playFinishedStreamWhenReady]);
 
   const streamVideoRefIos = useRef(null);
-  const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState(isPaidSubscription
+  const [isLiveStreamLoadingIos, setIsLiveStreamLoadingIos] = useState((isPaidSubscription || !isFan)
     && isLiveStream
     && Platform.OS === 'ios');
 
@@ -122,41 +122,6 @@ function EventFights({ route }) {
       setIsLiveStreamLoadingIos(true);
     }
   }, [isPaidSubscription]);
-
-  useEffect(() => {
-    if (isOpenStreamModalNeeded && isFan && !isPaidSubscription) {
-      showSubscriptionAlert();
-      setIsOpenStreamModalNeeded(false);
-    }
-  }, [isFan, isPaidSubscription, showSubscriptionAlert, isOpenStreamModalNeeded]);
-
-  useEffect(() => {
-    async function init() {
-      if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded && !isLiveStreamFinished) {
-        if (Platform.OS === 'ios') {
-          streamVideoRefIos.current?.showFullScreen();
-        } else {
-          liveStreamAndroidModalRef.current?.show();
-        }
-        setIsOpenStreamModalNeeded(false);
-      }
-    }
-    init();
-  }, [showSubscriptionAlert, isPaidSubscription, isFan, isOpenStreamModalNeeded, isLiveStreamFinished]);
-
-  useEffect(() => {
-    if ((!isFan || isPaidSubscription) && isOpenStreamModalNeeded && isLiveStream && !isLiveStreamLoadingIos) {
-      onShowLiveStream();
-      setIsOpenStreamModalNeeded(false);
-    }
-  }, [
-    isOpenStreamModalNeeded,
-    onShowLiveStream,
-    isLiveStream,
-    isLiveStreamLoadingIos,
-    isFan,
-    isPaidSubscription,
-  ]);
 
   useEffect(() => {
     const updateEventData = async () => {
@@ -264,10 +229,17 @@ function EventFights({ route }) {
         setPlayFinishedStreamWhenReady(true);
       }
     }
-  }, [onShowLiveStream, openCountdownTimer,
-    isLiveStream, event.status, event.liveStream.status, isFinishedStreamReadyToPlay,
-    isFan, isPaidSubscription, showSubscriptionAlert,
-  ]);
+  }, [onShowLiveStream, openCountdownTimer, isLiveStream,
+    event.status, event.liveStream.status,
+    isFinishedStreamReadyToPlay, isFan,
+    isPaidSubscription, showSubscriptionAlert]);
+
+  useEffect(() => {
+    if (isOpenStreamModalNeeded && !isLiveStreamFinished && !isLiveStreamLoadingIos) {
+      onPressEventPoster();
+      setIsOpenStreamModalNeeded(false);
+    }
+  }, [isLiveStreamLoadingIos, onPressEventPoster, isLiveStreamFinished, isOpenStreamModalNeeded]);
 
   const onReadyToPlayIos = useCallback(() => {
     setIsLiveStreamLoadingIos(false);
