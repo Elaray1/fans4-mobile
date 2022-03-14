@@ -71,7 +71,6 @@ function Feed({ route }) {
     eventLiveStreamAndroidModalRef,
     show: showAndroidStreamModal,
     isVisible: isAndroidStreamModalVisible,
-    onClose: onAndroidStreamModalClose,
   } = useAndroidStreamModal();
 
   const {
@@ -101,13 +100,22 @@ function Feed({ route }) {
     navigation.navigate('SearchFighters');
   }, [navigation]);
 
+  const onAndroidModalClose = useCallback(() => {
+    navigation.setOptions({
+      tabBarVisible: true,
+    });
+  }, [navigation]);
+
   const onLiveStreamBannerPressAndroid = useCallback((event) => {
+    navigation.setOptions({
+      tabBarVisible: false,
+    });
     if (event._id !== liveStreamEvent._id) {
       setLiveStreamEvent(event);
     }
 
     showAndroidStreamModal();
-  }, [liveStreamEvent?._id, showAndroidStreamModal]);
+  }, [liveStreamEvent?._id, navigation, showAndroidStreamModal]);
 
   const keyExtractor = useCallback((item) => {
     const isEvent = !!item.liveStream;
@@ -202,7 +210,7 @@ function Feed({ route }) {
           eventName={liveStreamEvent.name}
           eventLiveStreamStatus={liveStreamEvent.liveStream.status}
           ref={eventLiveStreamAndroidModalRef}
-          onAndroidStreamModalClose={onAndroidStreamModalClose}
+          onClose={onAndroidModalClose}
         />
       )}
 
