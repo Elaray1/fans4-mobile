@@ -3,8 +3,7 @@ import { AppState } from 'react-native';
 
 const _pause = () => {
   return `
-    const event = new CustomEvent('pause_stream');
-    window.dispatchEvent(event);
+    window.dispatchEvent(new CustomEvent('pause_stream'));
   `;
 };
 
