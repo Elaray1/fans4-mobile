@@ -60,6 +60,7 @@ const Input = forwardRef(({
   onButtonPress,
   autoFocus,
   autogrowHeight,
+  hidePlaceholder,
 }, ref) => {
   const inputRef = useForwardedRef(ref);
 
@@ -123,7 +124,7 @@ const Input = forwardRef(({
           ref={inputRef}
           value={value}
           placeholder={placeholder}
-          placeholderTextColor={colors.disabledText}
+          placeholderTextColor={hidePlaceholder ? 'transparent' : colors.disabledText}
           textContentType={type}
           blurOnSubmit={blurOnSubmit}
           focused={focused}
@@ -205,6 +206,7 @@ Input.propTypes = {
   multilineSmall: PropTypes.bool,
   autogrowHeight: PropTypes.bool,
   disableOnlyButton: PropTypes.bool,
+  hidePlaceholder: PropTypes.bool,
 };
 
 Input.defaultProps = {
@@ -233,6 +235,7 @@ Input.defaultProps = {
   multilineSmall: false,
   autogrowHeight: false,
   disableOnlyButton: false,
+  hidePlaceholder: false,
 };
 
 export default React.memo(Input);

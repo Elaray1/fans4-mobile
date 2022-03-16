@@ -386,6 +386,7 @@ function Comments({ route }) {
                   ref={inputRef}
                   placeholder={t('Comments.addCommentPlaceholder')}
                   disabled={isPostButtonDisabled}
+                  hidePlaceholder={isInputFocused}
                 />
               </View>
             )}
