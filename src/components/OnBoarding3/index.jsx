@@ -33,7 +33,16 @@ function OnBoarding3(props) {
   const Illustration = userType === USER_TYPES.FAN ? FanIllustration : FighterIllustration;
 
   const onNext = useCallback(async () => {
-    navigation.reset({ routes: [{ name: 'AppStack', params: { screen: 'Account' } }] });
+    navigation.reset({
+      routes: [
+        {
+          name: 'AppStack',
+          params: {
+            screen: userType === USER_TYPES.FAN ? 'Feed' : 'Account',
+          },
+        },
+      ],
+    });
 
     try {
       await userApi.completeOnboarding();

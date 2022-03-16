@@ -35,6 +35,7 @@ function OnBoarding() {
   const OnboardingSteps = useMemo(() => {
     return [
       <OnBoarding1 {...onboardingStyles} onNext={onNextStep} />,
+
       <View style={styles.screen}>
         <TouchableOpacity
           onPress={onPreviousStep}
@@ -45,6 +46,7 @@ function OnBoarding() {
         </TouchableOpacity>
         <OnBoarding2 {...onboardingStyles} onNext={onNextStep} />
       </View>,
+
       <View style={styles.screen}>
         <TouchableOpacity
           onPress={onPreviousStep}
