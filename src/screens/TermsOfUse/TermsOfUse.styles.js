@@ -27,10 +27,6 @@ export default StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between',
   },
-  button: {
-    position: 'absolute',
-    bottom: 0,
-  },
   text: {
     fontSize: fonts.size.caption,
     color: colors.grayText,
@@ -40,5 +36,26 @@ export default StyleSheet.create({
     fontSize: fonts.size.small,
     fontWeight: fonts.weight.bold,
     marginBottom: 20,
+  },
+  logoutButton: {
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  webview: {
+    backgroundColor: colors.black,
+  },
+  updatedTermsWarningContainer: {
+    backgroundColor: colors.offlineBannerBackground,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  updatedTermsWarning: {
+    marginLeft: 16,
+    color: colors.white,
+    fontWeight: fonts.weight.medium,
+    fontSize: fonts.size.small,
+    flexShrink: 1,
   },
 });

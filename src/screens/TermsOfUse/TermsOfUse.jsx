@@ -7,10 +7,12 @@ import { WebView } from 'react-native-webview';
 
 import colors from 'themes/colors';
 
-import Header from 'components/Header';
 import Button from 'components/Button';
+import Text from 'components/Text';
 
-import { USER_TYPES } from 'resources/user/user.constants';
+import ErrorIcon from 'assets/icons/error.svg';
+
+import { USER_TYPES, USER_STATUSES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
 import * as userActions from 'resources/user/user.actions';
 
@@ -22,7 +24,7 @@ import useToast from 'hooks/useToast';
 
 import styles from './TermsOfUse.styles';
 
-const TERMS_OF_USE_URL_SOURCE = { uri: 'https://www.fans4.com/terms-of-use' };
+const TERMS_OF_USE_URL_SOURCE = { uri: 'https://www.fans4.com/terms-of-use-text-only' };
 
 function TermsOfUse() {
   const { showFailure } = useToast();
@@ -31,6 +33,8 @@ function TermsOfUse() {
   const { t } = useTranslation();
 
   const userType = useSelector(userSelectors.getUserType);
+  const isOnboardingCompleted = useSelector(userSelectors.getIsOnboardingCompleted);
+  const userStatus = useSelector(userSelectors.getUserStatus);
 
   const isFan = userType === USER_TYPES.FAN;
 
@@ -47,11 +51,27 @@ function TermsOfUse() {
       });
     }
 
+    let nextScreen;
+
+    if (isFan) {
+      if (isOnboardingCompleted) {
+        nextScreen = 'Feed';
+      } else {
+        nextScreen = 'OnBoarding';
+      }
+    } else if (userStatus === USER_STATUSES.PENDING) {
+      nextScreen = 'VerificationPending';
+    } else if (!isOnboardingCompleted) {
+      nextScreen = 'OnBoarding';
+    } else {
+      nextScreen = 'Account';
+    }
+
     navigation.reset({
       index: 0,
-      routes: [{ name: isFan ? 'OnBoarding' : 'VerificationPending' }],
+      routes: [{ name: nextScreen }],
     });
-  }, [isFan, navigation, showFailure]);
+  }, [isFan, navigation, showFailure, isOnboardingCompleted, userStatus]);
 
   const goToSelectType = useCallback(async () => {
     const logOutAndNavigate = async () => {
@@ -94,14 +114,16 @@ function TermsOfUse() {
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
 
-      <Header
-        leftItemType="backArrow"
-        title={t('TermsOfUse.headerTitle')}
-        onLeftItemPress={goToSelectType}
-      />
-
       <View style={styles.content}>
+        {isOnboardingCompleted && (
+          <View style={styles.updatedTermsWarningContainer}>
+            <ErrorIcon />
+            <Text style={styles.updatedTermsWarning}>{t('TermsOfUse.updatedTermsWarning')}</Text>
+          </View>
+        )}
+
         <WebView
+          style={styles.webview}
           source={TERMS_OF_USE_URL_SOURCE}
           startInLoadingState
           renderLoading={renderLoading}
@@ -111,6 +133,13 @@ function TermsOfUse() {
           title={t('TermsOfUse.buttonText')}
           onPress={onAccept}
           style={styles.button}
+        />
+
+        <Button
+          type="link"
+          title={t('TermsOfUse.logout')}
+          onPress={goToSelectType}
+          style={styles.logoutButton}
         />
       </View>
     </SafeAreaView>

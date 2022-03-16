@@ -51,6 +51,13 @@ export default (user) => {
       };
     }
 
+    if (!user.appState.isOnboardingCompleted) {
+      return {
+        stack: 'AppStack',
+        screen: 'OnBoarding',
+      };
+    }
+
     return {
       stack: 'AppStack',
       screen: 'Account',
