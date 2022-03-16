@@ -6,6 +6,7 @@ import * as rootNavigation from 'helpers/rootNavigation';
 import { PUSH_NOTIFICATION_TYPES } from 'helpers/constants';
 
 import * as userSelectors from 'resources/user/user.selectors';
+import * as eventApi from 'resources/event/event.api';
 
 const pushNotificationHandlersByType = {
   [PUSH_NOTIFICATION_TYPES.POST_STATUS_CHANGED]: () => {
@@ -81,10 +82,11 @@ const pushNotificationHandlersByType = {
 
     rootNavigation.push('EventFights', { event: parsedEvent });
   },
-  [PUSH_NOTIFICATION_TYPES.LIVE_EVENT_STARTED]: ({ event }) => {
+  [PUSH_NOTIFICATION_TYPES.LIVE_EVENT_STARTED]: async ({ event }) => {
     const parsedEvent = JSON.parse(event);
+    const updatedEvent = await eventApi.getEvent(parsedEvent._id);
 
-    rootNavigation.push('EventFights', { event: parsedEvent, isOpenStreamModal: true });
+    rootNavigation.push('EventFights', { event: updatedEvent, isOpenStreamModal: true });
   },
   [PUSH_NOTIFICATION_TYPES.NEW_MESSAGE]: ({ chat, userId }) => {
     const parsedChat = JSON.parse(chat);
