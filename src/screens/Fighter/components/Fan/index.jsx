@@ -183,7 +183,7 @@ function Fighter({ fighterId }) {
     <View style={styles.flatListHeader}>
       <Profile
         avatarUrl={fighter.avatarUrl}
-        fullName={fighter.fullName}
+        fullName={`${fighter.firstName} ${fighter.lastName}`}
         nickname={fighter.role.biography.nickname}
         location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
         status={fighter.status}

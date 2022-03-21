@@ -214,18 +214,18 @@ function SearchFighters() {
             />
             {item.role.fighterType === FIGHTER_TYPES.PRO
           && (
-          <View style={styles.proBadge}>
-            <Text style={styles.proBadgeText}>{t('SearchFighters.p')}</Text>
-          </View>
+            <View style={styles.proBadge}>
+              <Text style={styles.proBadgeText}>{t('SearchFighters.p')}</Text>
+            </View>
           )}
             <View>
-              <Text style={styles.fullName}>{item.fullName}</Text>
+              <Text style={styles.fullName}>{`${item.firstName} ${item.lastName}`}</Text>
               {nickname && (
-              <Text style={styles.nickname}>
-                “
-                {toFixLength({ text: nickname, length: 30 })}
-                ”
-              </Text>
+                <Text style={styles.nickname}>
+                  “
+                  {toFixLength({ text: nickname, length: 30 })}
+                  ”
+                </Text>
               )}
 
               <Text style={styles.city}>

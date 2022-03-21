@@ -114,7 +114,8 @@ export const setPushToken = async (token) => {
 };
 
 export const fillRegistrationForm = ({
-  fullName,
+  firstName,
+  lastName,
   nickname,
   gender,
   birthdate,
@@ -133,7 +134,8 @@ export const fillRegistrationForm = ({
   avatar,
 }) => async (dispatch) => {
   const user = await api.fillRegistrationForm({
-    fullName,
+    firstName,
+    lastName,
     nickname,
     gender,
     birthdate,

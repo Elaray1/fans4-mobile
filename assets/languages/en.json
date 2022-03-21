@@ -125,7 +125,8 @@
   },
   "BiographicalData": {
     "BiographicalData": "Biographical Data",
-    "firstAndLastName": "First and Last Name",
+    "firstName": "First Name",
+    "lastName": "Last Name",
     "nicknameOptional": "Nickname - optional",
     "birthdate": "Birth Date",
     "hometown": "Hometown",
@@ -247,7 +248,8 @@
   "ChangeFanInfo": {
     "nameUsernameGender": "Name, Username, Gender",
     "save": "Save",
-    "fullName": "Full Name (not shown on public profile)",
+    "firstName": "First Name (not shown on public profile)",
+    "lastName": "Last Name (not shown on public profile)",
     "username": "Username (will be displayed on your profile)",
     "gender": "Gender",
     "anErrorOccurred": "An error occurred"
@@ -835,7 +837,8 @@
   },
   "WelcomeForm": {
     "title": "Profile",
-    "fullName": "Full Name (not displayed on profile)",
+    "firstName": "First Name (not displayed on profile)",
+    "lastName": "Last Name (not displayed on profile)",
     "userName": "Username (will be displayed on profile)",
     "birthDate": "Birth Date",
     "gender": "Gender"

@@ -38,7 +38,8 @@ function BiographicalData() {
     { id: FIGHTER_GENDERS.FEMALE, value: t('BiographicalData.female') },
   ], [t]);
 
-  const [fullName, setFullName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [nickname, setNickname] = useState('');
   const [birthdate, setBirthDate] = useState(null);
   const [hometown, setHometown] = useState({ cityNameWithState: null, cityId: null });
@@ -80,7 +81,8 @@ function BiographicalData() {
 
   const onNext = useCallback(() => {
     navigation.navigate('PersonalInfo', {
-      fullName: titleCase(fullName),
+      firstName: titleCase(firstName),
+      lastName: titleCase(lastName),
       nickname,
       birthdate: dayjs(birthdate).format('MM/DD/YYYY'),
       cityId: hometown?.cityId,
@@ -90,9 +92,7 @@ function BiographicalData() {
         mime: photo?.mime,
       },
     });
-  }, [
-    birthdate, fullName, gender, hometown?.cityId, navigation, nickname, photo?.mime, photo?.path,
-  ]);
+  }, [birthdate, firstName, gender, hometown?.cityId, lastName, navigation, nickname, photo?.mime, photo?.path]);
 
   const goToSelectType = useCallback(async () => {
     await dispatch(userActions.logout());
@@ -152,9 +152,15 @@ function BiographicalData() {
       >
         <View>
           <Input
-            label={t('BiographicalData.firstAndLastName')}
-            value={fullName}
-            onChange={setFullName}
+            label={t('BiographicalData.firstName')}
+            value={firstName}
+            onChange={setFirstName}
+          />
+
+          <Input
+            label={t('BiographicalData.lastName')}
+            value={lastName}
+            onChange={setLastName}
           />
 
           <Input
@@ -208,7 +214,7 @@ function BiographicalData() {
         <Button
           style={styles.nextButton}
           title={t('BiographicalData.next')}
-          disabled={!fullName || !birthdate || !hometown?.cityNameWithState || !photo?.path}
+          disabled={!firstName || !lastName || !birthdate || !hometown?.cityNameWithState || !photo?.path}
           onPress={onNext}
         />
       </ScrollView>

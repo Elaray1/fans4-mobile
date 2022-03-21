@@ -141,7 +141,7 @@ function Fans4Profile() {
         <View style={styles.fans4Container}>
           <FastImage style={styles.fans4Image} source={source} />
           <View>
-            <Text style={styles.fans4FullName}>{fans4Account.fullName}</Text>
+            <Text style={styles.fans4FullName}>{`${fans4Account.firstName} ${fans4Account.lastName}`}</Text>
             <Text style={[styles.fans4Text, styles.textWidth]}>
               {t('Fans4Account.checkAllTheLatestNewsFromUs')}
             </Text>

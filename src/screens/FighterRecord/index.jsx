@@ -42,7 +42,8 @@ const FighterRecord = ({ route }) => {
   ], [t]);
 
   const {
-    fullName,
+    firstName,
+    lastName,
     nickname,
     birthdate,
     cityId,
@@ -84,7 +85,8 @@ const FighterRecord = ({ route }) => {
     setIsLoading(true);
     try {
       await dispatch(userActions.fillRegistrationForm({
-        fullName,
+        firstName,
+        lastName,
         nickname,
         gender,
         birthdate,
@@ -116,7 +118,8 @@ const FighterRecord = ({ route }) => {
       console.log(error);
     }
     setIsLoading(false);
-  }, [dispatch, fullName, nickname, gender, birthdate,
+  }, [dispatch, firstName,
+    lastName, nickname, gender, birthdate,
     cityId, weight, height, reach, type, record.wins,
     record.losses, record.draws, recordPro.wins,
     recordPro.losses, recordPro.draws, weightClasses,

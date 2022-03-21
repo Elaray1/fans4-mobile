@@ -153,7 +153,9 @@ const ProposeAFight = ({ route }) => {
                       style={styles.image}
                       source={{ uri: firstFighter.avatarUrl }}
                     />
-                    <Text style={styles.caption}>{toFixLength({ text: firstFighter.fullName, length: 30 })}</Text>
+                    <Text style={styles.caption}>
+                      {toFixLength({ text: `${firstFighter.firstName} ${firstFighter.lastName}`, length: 30 })}
+                    </Text>
                   </View>
                 )
                 : <View style={styles.fighterPicturePlaceholder} />
@@ -170,7 +172,9 @@ const ProposeAFight = ({ route }) => {
                       style={styles.image}
                       source={{ uri: secondFighter.avatarUrl }}
                     />
-                    <Text style={styles.caption}>{toFixLength({ text: secondFighter.fullName, length: 30 })}</Text>
+                    <Text style={styles.caption}>
+                      {toFixLength({ text: `${secondFighter.firstName} ${secondFighter.lastName}`, length: 30 })}
+                    </Text>
                   </View>
                 )
                 : <View style={styles.fighterPicturePlaceholder} />
