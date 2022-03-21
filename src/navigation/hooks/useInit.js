@@ -80,10 +80,7 @@ const useInit = () => {
       });
     }
 
-    showFailure(`isNavigatedToStartScreen: ${isNavigatedToStartScreen}`);
-
     if ((!initialUrl && rootNavigation.isInitialRoute()) || !isNavigatedToStartScreen) {
-      showFailure('GET INITIAL SCREEN');
       const { stack, screen } = getInitialScreen(user);
       rootNavigation.reset({ routes: [{ name: stack, params: { screen } }] });
     }
