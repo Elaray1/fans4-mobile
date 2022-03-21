@@ -71,7 +71,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   if (fighter.status === USER_STATUSES.BLOCKED) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${t('Fighter.fighterBlocked_0')} ${fighter.fullName} ${t('Fighter.fighterBlocked_1')}`}
+        {`${t('Fighter.fighterBlocked_0')} ${fighter.firstName} ${fighter.lastName} ${t('Fighter.fighterBlocked_1')}`}
       </Text>
     );
   }
@@ -79,7 +79,8 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   if (!isSameGender) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${t('Fighter.youCannotApplyForAFight_0')} ${fighter.fullName} ${t('Fighter.youCannotApplyForAFight_2')}`}
+        {`${t('Fighter.youCannotApplyForAFight_0')} ${fighter.firstName} ${fighter.lastName} ${
+          t('Fighter.youCannotApplyForAFight_2')}`}
       </Text>
     );
   }
@@ -87,7 +88,8 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   if (userFighterType !== fighter.role.fighterType) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${t('Fighter.youCannotApplyForAFight_0')} ${fighter.fullName} ${t('Fighter.youCannotApplyForAFight_3')}`}
+        {`${t('Fighter.youCannotApplyForAFight_0')} ${fighter.firstName} ${fighter.lastName} ${
+          t('Fighter.youCannotApplyForAFight_3')}`}
       </Text>
     );
   }
@@ -107,7 +109,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   if (userFightingStatus === FIGHTING_STATUSES.INJURED) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${t('Fighter.youInjured_0')} ${fighter.fullName} ${t('Fighter.youInjured_1')}`}
+        {`${t('Fighter.youInjured_0')} ${fighter.firstName} ${fighter.lastName} ${t('Fighter.youInjured_1')}`}
       </Text>
     );
   }
@@ -115,7 +117,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   if (userFightingStatus === FIGHTING_STATUSES.RECOVERY) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${t('Fighter.youRecovery_0')} ${fighter.fullName} ${t('Fighter.youRecovery_1')}`}
+        {`${t('Fighter.youRecovery_0')} ${fighter.firstName} ${fighter.lastName} ${t('Fighter.youRecovery_1')}`}
       </Text>
     );
   }
@@ -123,7 +125,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   if (fighter.role.fightingStatus === FIGHTING_STATUSES.INJURED) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${t('Fighter.fighterInjured_0')} ${fighter.fullName} ${t('Fighter.fighterInjured_1')}`}
+        {`${t('Fighter.fighterInjured_0')} ${fighter.firstName} ${fighter.lastName} ${t('Fighter.fighterInjured_1')}`}
       </Text>
     );
   }
@@ -131,7 +133,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
   if (fighter.role.fightingStatus === FIGHTING_STATUSES.RECOVERY) {
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${t('Fighter.fighterRecovery_0')} ${fighter.fullName} ${t('Fighter.fighterRecovery_1')}`}
+        {`${t('Fighter.fighterRecovery_0')} ${fighter.firstName} ${fighter.lastName} ${t('Fighter.fighterRecovery_1')}`}
       </Text>
     );
   }
@@ -142,7 +144,7 @@ const ApplyForAFight = ({ fighter, fight: initFight }) => {
 
     return (
       <Text style={styles.cannotApplyForAFightText}>
-        {`${warningTitleStart} ${fighter.fullName} ${wargningTitleEnd}`}
+        {`${warningTitleStart} ${fighter.firstName} ${fighter.lastName} ${wargningTitleEnd}`}
       </Text>
     );
   }

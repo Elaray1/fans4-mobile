@@ -130,7 +130,7 @@ function Fighter({ fighterId }) {
             <Profile
               status={fighter.status}
               avatarUrl={fighter.avatarUrl}
-              fullName={fighter.fullName}
+              fullName={`${fighter.firstName} ${fighter.lastName}`}
               nickname={fighter.role.biography.nickname}
               location={`${fighter.role.biography.hometown.cityName}, ${fighter.role.biography.hometown.stateCode}`}
               fightingStatus={fighter.status === USER_STATUSES.BLOCKED

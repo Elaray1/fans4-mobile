@@ -43,7 +43,8 @@ export const emailSignIn = ({
   });
 
 export const fillRegistrationForm = ({
-  fullName,
+  firstName,
+  lastName,
   nickname,
   gender,
   birthdate,
@@ -61,7 +62,8 @@ export const fillRegistrationForm = ({
   weightClasses,
 }, avatar) => {
   return apiClient.postWithFile('users/registration-form', {
-    fullName,
+    firstName,
+    lastName,
     nickname,
     gender,
     birthdate,
@@ -146,12 +148,14 @@ export const deleteProcessingIntroVideo = () => apiClient.delete('users/processi
 
 export const fillWelcomeForm = ({
   gender,
-  fullName,
+  firstName,
+  lastName,
   userName,
   birthDate,
 }) => apiClient.post('users/welcome-form', {
   gender,
-  fullName,
+  firstName,
+  lastName,
   userName,
   birthDate,
 });

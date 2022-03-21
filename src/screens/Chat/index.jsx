@@ -235,13 +235,15 @@ function Chat({ route }) {
 
   const onMessageTextChange = useCallback((messageText) => {
     setMessageValue(messageText);
-    const name = user.role.type === USER_TYPES.FIGHTER ? user.fullName : user.role.biography.nickname;
+    const name = user.role.type === USER_TYPES.FIGHTER
+      ? `${user.firstName} ${user.lastName}`
+      : user.role.biography.nickname;
     websocketsService.emit('emit', {
       roomId: `chat-${chatId}`,
       eventName: `chat-${chatId}-typing`,
       data: { user: { name } },
     });
-  }, [chatId, user.role.type, user.fullName, user.role.biography.nickname]);
+  }, [chatId, user.role.type, user.firstName, user.lastName, user.role.biography.nickname]);
 
   const onInputFocus = useCallback(() => {
     setIsInputFocused(true);

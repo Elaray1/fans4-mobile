@@ -54,15 +54,15 @@ const Fighter = ({
         />
         {fighter.role.fighterType === FIGHTER_TYPES.PRO
         && (
-        <View style={[styles.proLabel, isDisabled && styles.disabledProLabel]}>
-          <Text style={styles.proLabelText}>P</Text>
-        </View>
+          <View style={[styles.proLabel, isDisabled && styles.disabledProLabel]}>
+            <Text style={styles.proLabelText}>P</Text>
+          </View>
         )}
       </View>
 
       <View style={[styles.textContainer, isDisabled && styles.disabledTextContainer]}>
         <Text style={[styles.name, isDisabled && styles.opacity]}>
-          {fighter.fullName}
+          {`${fighter.firstName} ${fighter.lastName}`}
         </Text>
 
         <Text style={[styles.location, isDisabled && styles.opacity]}>

@@ -33,7 +33,8 @@ const WelcomeForm = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [fullName, setFullName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
 
   const [birthDate, setBirthDate] = useState(null);
@@ -88,7 +89,8 @@ const WelcomeForm = () => {
     try {
       const user = await userApi.fillWelcomeForm({
         gender: gender._id,
-        fullName,
+        firstName,
+        lastName,
         birthDate,
         userName,
       });
@@ -103,7 +105,7 @@ const WelcomeForm = () => {
     }
 
     setIsLoading(false);
-  }, [birthDate, fullName, userName, gender, showFailure, dispatch, navigation]);
+  }, [birthDate, firstName, lastName, userName, gender, showFailure, dispatch, navigation]);
 
   const goToSelectType = useCallback(async () => {
     await dispatch(userActions.logout());
@@ -160,9 +162,15 @@ const WelcomeForm = () => {
         <View>
           <Input
             ref={fullNameInputRef}
-            label={t('WelcomeForm.fullName')}
-            value={fullName}
-            onChange={setFullName}
+            label={t('WelcomeForm.firstName')}
+            value={firstName}
+            onChange={setFirstName}
+          />
+          <Input
+            ref={fullNameInputRef}
+            label={t('WelcomeForm.lastName')}
+            value={lastName}
+            onChange={setLastName}
           />
 
           <Input
@@ -200,7 +208,7 @@ const WelcomeForm = () => {
         <Button
           title={t('FighterRecord.submit')}
           isLoading={isLoading}
-          disabled={!fullName || !userName || !gender || !birthDate || isLoading}
+          disabled={!firstName || !lastName || !userName || !gender || !birthDate || isLoading}
           onPress={onSubmit}
         />
       </ScrollView>

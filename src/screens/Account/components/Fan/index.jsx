@@ -160,7 +160,7 @@ const FanAccount = () => {
 
         <View style={{ alignItems: 'flex-start' }}>
           <Text style={styles.fullName}>
-            {item.fullName}
+            {`${item.firstName} ${item.lastName}`}
           </Text>
 
           {nickname && (

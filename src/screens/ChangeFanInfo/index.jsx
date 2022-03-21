@@ -23,11 +23,13 @@ function ChangeFanInfo() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const userFullName = useSelector(userSelectors.getUserFullName);
+  const userFirstName = useSelector(userSelectors.getUserFirstName);
+  const userLastName = useSelector(userSelectors.getUserLastName);
   const userUserName = useSelector(userSelectors.getUserName);
   const userGender = useSelector(userSelectors.getUserGender);
 
-  const [fullNameValue, setFullName] = useState(userFullName);
+  const [firstNameValue, setFirstName] = useState(userFirstName);
+  const [lastNameValue, setLastName] = useState(userLastName);
   const [usernameValue, setUsername] = useState(userUserName);
   const [genderValue, setGender] = useState(userGender);
 
@@ -42,7 +44,8 @@ function ChangeFanInfo() {
   const [isGenderModalVisible, setIsGenderModalVisible] = useState(false);
 
   const [inputErrors, setInputErrors] = useState({
-    fullName: [],
+    firstName: [],
+    lastName: [],
     username: [],
     gender: [],
   });
@@ -66,9 +69,14 @@ function ChangeFanInfo() {
     }
   }, [inputErrors]);
 
-  const onFullNameChange = useCallback((value) => {
-    setFullName(value);
-    onChangeInputValue('fullName');
+  const onFirstNameChange = useCallback((value) => {
+    setFirstName(value);
+    onChangeInputValue('firstName');
+  }, [onChangeInputValue]);
+
+  const onLastNameChange = useCallback((value) => {
+    setLastName(value);
+    onChangeInputValue('lastName');
   }, [onChangeInputValue]);
 
   const onUsernameChange = useCallback((value) => {
@@ -90,10 +98,17 @@ function ChangeFanInfo() {
       });
     }
 
-    if (inputErrors.fullName.length) {
+    if (inputErrors.firstName.length) {
       setInputErrors({
         ...inputErrors,
-        fullName: [],
+        firstName: [],
+      });
+    }
+
+    if (inputErrors.lastName.length) {
+      setInputErrors({
+        ...inputErrors,
+        lastName: [],
       });
     }
 
@@ -109,7 +124,8 @@ function ChangeFanInfo() {
 
       try {
         await dispatch(userActions.updateUserInfo({
-          fullName: fullNameValue,
+          firstName: firstNameValue,
+          lastName: lastNameValue,
           userName: usernameValue,
           gender: genderValue,
         }));
@@ -135,13 +151,18 @@ function ChangeFanInfo() {
         setIsLoading(false);
       }
     }
-  }, [inputErrors, dispatch, fullNameValue, usernameValue, genderValue, navigation, t]);
+  }, [inputErrors, dispatch, firstNameValue, lastNameValue, usernameValue, genderValue, navigation, t]);
 
   const isSaveButtonDisabled = isLoading
-  || !fullNameValue
+  || !firstNameValue
+  || !lastNameValue
   || !usernameValue
-  || (fullNameValue === userFullName && usernameValue === userUserName && genderValue === userGender)
-  || !!inputErrors.fullName.length
+  || (firstNameValue === userFirstName
+    && lastNameValue === userLastName
+    && usernameValue === userUserName
+    && genderValue === userGender)
+  || !!inputErrors.firstName.length
+  || !!inputErrors.lastName.length
   || !!inputErrors.username.length;
 
   return (
@@ -168,10 +189,18 @@ function ChangeFanInfo() {
       >
         <View style={styles.emailInput}>
           <Input
-            label={t('ChangeFanInfo.fullName')}
-            value={fullNameValue}
-            onChange={onFullNameChange}
-            errors={inputErrors.fullName}
+            label={t('ChangeFanInfo.firstName')}
+            value={firstNameValue}
+            onChange={onFirstNameChange}
+            errors={inputErrors.firstName}
+          />
+        </View>
+        <View style={styles.emailInput}>
+          <Input
+            label={t('ChangeFanInfo.lastName')}
+            value={lastNameValue}
+            onChange={onLastNameChange}
+            errors={inputErrors.lastName}
           />
         </View>
         <View style={styles.emailInput}>

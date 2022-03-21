@@ -26,7 +26,8 @@ function PersonalInfo({ route }) {
   const { t } = useTranslation();
 
   const {
-    fullName,
+    firstName,
+    lastName,
     nickname,
     birthdate,
     cityId,
@@ -121,7 +122,8 @@ function PersonalInfo({ route }) {
 
   const onNextPress = useCallback(async () => {
     navigation.navigate('FighterRecord', {
-      fullName,
+      firstName,
+      lastName,
       nickname,
       birthdate,
       cityId,
@@ -135,7 +137,8 @@ function PersonalInfo({ route }) {
       reach,
       weightClasses: weightClasses.map(item => item.name),
     });
-  }, [birthdate, cityId, fullName, gender, height, navigation,
+  }, [birthdate, cityId, firstName,
+    lastName, gender, height, navigation,
     nickname, photo, reach, weight, weightClasses]);
 
   return (
@@ -241,7 +244,8 @@ function PersonalInfo({ route }) {
 PersonalInfo.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
-      fullName: PropTypes.string.isRequired,
+      firstName: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
       nickname: PropTypes.string,
       birthdate: PropTypes.string.isRequired,
       cityId: PropTypes.string.isRequired,

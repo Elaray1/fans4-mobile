@@ -15,7 +15,9 @@ export const getIsOnboardingCompleted = ({ user }) => {
 export const getUserId = ({ user }) => user?._id;
 export const getUserEmail = ({ user }) => user?.email;
 export const getUserType = ({ user }) => user?.role?.type;
-export const getUserFullName = ({ user }) => user?.fullName;
+export const getUserFullName = ({ user }) => user && `${user.firstName} ${user.lastName}`;
+export const getUserFirstName = ({ user }) => user?.firstName;
+export const getUserLastName = ({ user }) => user?.lastName;
 export const getUserNewEmail = ({ user }) => user?.appState?.newEmail;
 export const getUserStatus = ({ user }) => user?.status;
 export const getVotingCardsIndicator = ({ user }) => user?.appState.isUnreadVotingCards;
