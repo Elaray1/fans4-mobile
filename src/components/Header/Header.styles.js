@@ -55,4 +55,15 @@ export default StyleSheet.create({
     height: 32,
     borderRadius: 100,
   },
+  iosFailedPaymentBanner: {
+    paddingTop: 30,
+    paddingBottom: 18,
+    paddingHorizontal: 20,
+    backgroundColor: colors.errorBackground2,
+  },
+  iosFailedPaymentBannerText: {
+    color: colors.error,
+    fontSize: fonts.size.small,
+    textAlign: 'center',
+  },
 });

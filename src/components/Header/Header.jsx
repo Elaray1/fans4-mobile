@@ -1,6 +1,12 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { View, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import moment from 'moment';
+
+import { USER_TYPES, SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
+import * as userSelectors from 'resources/user/user.selectors';
 
 import Text from 'components/Text';
 
@@ -57,6 +63,10 @@ function Header({
     icon: rightItemIcon,
   });
 
+  const { t } = useTranslation();
+  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
+  const userType = useSelector(userSelectors.getUserType);
+
   const headerTitle = useMemo(() => (
     <>
       <Text style={styles.title}>{title}</Text>
@@ -64,12 +74,26 @@ function Header({
     </>
   ), [title, titleIcon]);
 
+  const isFanWithFailedIosSubscription = userType === USER_TYPES.FAN
+    && userSubscriptions.find(f => f.platform === SUBSCRIPTION_PLATFORMS.IOS
+    && f.autorenewal
+    && moment(f.renewalDate).isBefore(new Date())
+    && moment(f.gracePeriodEndDate).isAfter(new Date()));
+
   return (
-    <View style={styles.headerWrapper}>
-      <View style={styles.header}>
-        {updatedLeftItem}
-        {onTitlePress
-          ? (
+    <>
+      {isFanWithFailedIosSubscription && (
+        <View style={styles.iosFailedPaymentBanner}>
+          <Text style={styles.iosFailedPaymentBannerText}>
+            {t('AppStack.iosPaymentFailedBanner')}
+          </Text>
+        </View>
+      )}
+
+      <View style={styles.headerWrapper}>
+        <View style={styles.header}>
+          {updatedLeftItem}
+          {onTitlePress ? (
             <TouchableOpacity
               onPress={onTitlePress}
               activeOpacity={0.7}
@@ -77,20 +101,22 @@ function Header({
             >
               {headerTitle}
             </TouchableOpacity>
-          )
-          : (
+          ) : (
             <View style={titleIcon && styles.headerTitleConteiner}>
               {headerTitle}
             </View>
           )}
-        {updatedRightItem}
+          {updatedRightItem}
+        </View>
+
+        {isBottomLine && (
+          <View
+            style={[styles.line, { marginTop: (leftItemType || rightItemType) ? 18 : 23 }]}
+          />
+        )}
       </View>
-      {isBottomLine && (
-        <View
-          style={[styles.line, { marginTop: (leftItemType || rightItemType) ? 18 : 23 }]}
-        />
-      )}
-    </View>
+    </>
+
   );
 }
 

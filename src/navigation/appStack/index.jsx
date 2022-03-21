@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector, useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import moment from 'moment';
 
 import EmailConfirmation from 'screens/EmailConfirmation';
 import BiographicalData from 'screens/BiographicalData';
@@ -56,16 +53,12 @@ import * as userSelectors from 'resources/user/user.selectors';
 import * as messageApi from 'resources/message/message.api';
 import * as messageActions from 'resources/message/message.actions';
 
-import { USER_TYPES, SUBSCRIPTION_PLATFORMS } from 'resources/user/user.constants';
-
-import Text from 'components/Text';
+import { USER_TYPES } from 'resources/user/user.constants';
 
 import colors from 'themes/colors';
 
 import FighterTabNavigator from './FighterTabNavigator';
 import FanTabNavigator from './FanTabNavigator';
-
-import styles from './styles';
 
 const AppStack = createStackNavigator();
 
@@ -84,12 +77,9 @@ function Tabs() {
 }
 
 function AppScreens() {
-  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const userAuthenticated = useSelector(userSelectors.getAuthenticated);
-  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
-  const userType = useSelector(userSelectors.getUserType);
 
   useEffect(() => {
     const fetchUnreadMessages = async () => {
@@ -112,79 +102,62 @@ function AppScreens() {
     return null;
   }
 
-  const isFanWithFailedIosSubscription = userType === USER_TYPES.FAN
-    && userSubscriptions.find(f => f.platform === SUBSCRIPTION_PLATFORMS.IOS
-      && f.autorenewal
-      && moment(f.renewalDate).isBefore(moment())
-      && moment(f.gracePeriodEndDate).isAfter(moment()));
-
   return (
-    <>
-      {isFanWithFailedIosSubscription && (
-        <View style={styles.iosFailedPaymentBanner}>
-          <Text style={styles.iosFailedPaymentBannerText}>
-            {t('AppStack.iosPaymentFailedBanner')}
-          </Text>
-        </View>
-      )}
+    <AppStack.Navigator
+      headerMode="none"
+      screenOptions={SCREEN_OPTIONS}
+    >
 
-      <AppStack.Navigator
-        headerMode="none"
-        screenOptions={SCREEN_OPTIONS}
-      >
+      {/* <TABS> */}
+      <AppStack.Screen name="Tabs" component={Tabs} />
+      {/* <TABS /> */}
 
-        {/* <TABS> */}
-        <AppStack.Screen name="Tabs" component={Tabs} />
-        {/* <TABS /> */}
-
-        { /* Screens without tabs */}
-        <AppStack.Screen name="EmailConfirmation" component={EmailConfirmation} />
-        <AppStack.Screen name="BiographicalData" component={BiographicalData} />
-        <AppStack.Screen name="WelcomeForm" component={WelcomeForm} />
-        <AppStack.Screen name="PersonalInfo" component={PersonalInfo} />
-        <AppStack.Screen name="TermsOfUse" component={TermsOfUse} />
-        <AppStack.Screen name="VerificationPending" component={VerificationPending} />
-        <AppStack.Screen name="VerificationSuccessful" component={VerificationSuccessful} />
-        <AppStack.Screen name="VerificationFailed" component={VerificationFailed} />
-        <AppStack.Screen name="OnBoarding" component={OnBoarding} />
-        <AppStack.Screen name="ContactAdmin" component={ContactAdmin} />
-        <AppStack.Screen name="Support" component={Support} />
-        <AppStack.Screen name="ChangeBiography" component={ChangeBiography} />
-        <AppStack.Screen name="ChangeFanInfo" component={ChangeFanInfo} />
-        <AppStack.Screen name="AccountInformation" component={AccountInformation} />
-        <AppStack.Screen name="AccountBlocked" component={AccountBlocked} />
-        <AppStack.Screen name="Security" component={Security} />
-        <AppStack.Screen name="PasswordUpdated" component={PasswordUpdated} />
-        <AppStack.Screen name="ChangeEmail" component={ChangeEmail} />
-        <AppStack.Screen name="ConfirmYourEmailAddress" component={ConfirmYourEmailAddress} />
-        <AppStack.Screen name="Fans" component={Fans} />
-        <AppStack.Screen name="Fighter" component={Fighter} />
-        <AppStack.Screen name="InviteAFan" component={InviteAFan} />
-        <AppStack.Screen name="EventFights" component={EventFights} />
-        <AppStack.Screen name="Comments" component={Comments} />
-        <AppStack.Screen name="ReportComment" component={ReportComment} />
-        <AppStack.Screen name="ThanksForReporting" component={ThanksForReporting} />
-        <AppStack.Screen name="Finances" component={Finances} />
-        <AppStack.Screen name="ProposeAFight" component={ProposeAFight} />
-        <AppStack.Screen name="LegalInformation" component={LegalInformation} />
-        <AppStack.Screen name="SettingsPrivacyPolicy" component={SettingsPrivacyPolicy} />
-        <AppStack.Screen name="SettingsTermsOfUse" component={SettingsTermsOfUse} />
-        <AppStack.Screen name="SettingsSubscriptionInformation" component={SettingsSubscriptionInformation} />
-        <AppStack.Screen name="PaymentMethodAdded" component={PaymentMethodAdded} />
-        <AppStack.Screen name="Fans4Profile" component={Fans4Profile} />
-        <AppStack.Screen name="FighterRecord" component={FighterRecord} />
-        <AppStack.Screen name="SearchFighters" component={SearchFighters} />
-        <AppStack.Screen name="Chat" component={Chat} />
-        <AppStack.Screen name="ChatsList" component={ChatsList} />
-        <AppStack.Screen name="NewChat" component={NewChat} />
-        <AppStack.Screen name="LikesList" component={LikesList} />
-        <AppStack.Screen name="FightWasSentToReview" component={FightWasSentToReview} />
-        <AppStack.Screen name="EditPost" component={EditPost} />
-        <AppStack.Screen name="FighterVoting" component={FighterVoting} />
-        <AppStack.Screen name="ChangePassword" component={ChangePassword} />
-
-      </AppStack.Navigator>
-    </>
+      { /* Screens without tabs */}
+      <AppStack.Screen name="EmailConfirmation" component={EmailConfirmation} />
+      <AppStack.Screen name="BiographicalData" component={BiographicalData} />
+      <AppStack.Screen name="WelcomeForm" component={WelcomeForm} />
+      <AppStack.Screen name="PersonalInfo" component={PersonalInfo} />
+      <AppStack.Screen name="TermsOfUse" component={TermsOfUse} />
+      <AppStack.Screen name="VerificationPending" component={VerificationPending} />
+      <AppStack.Screen name="VerificationSuccessful" component={VerificationSuccessful} />
+      <AppStack.Screen name="VerificationFailed" component={VerificationFailed} />
+      <AppStack.Screen name="OnBoarding" component={OnBoarding} />
+      <AppStack.Screen name="ContactAdmin" component={ContactAdmin} />
+      <AppStack.Screen name="Support" component={Support} />
+      <AppStack.Screen name="ChangeBiography" component={ChangeBiography} />
+      <AppStack.Screen name="ChangeFanInfo" component={ChangeFanInfo} />
+      <AppStack.Screen name="AccountInformation" component={AccountInformation} />
+      <AppStack.Screen name="AccountBlocked" component={AccountBlocked} />
+      <AppStack.Screen name="Security" component={Security} />
+      <AppStack.Screen name="PasswordUpdated" component={PasswordUpdated} />
+      <AppStack.Screen name="ChangeEmail" component={ChangeEmail} />
+      <AppStack.Screen name="ConfirmYourEmailAddress" component={ConfirmYourEmailAddress} />
+      <AppStack.Screen name="Fans" component={Fans} />
+      <AppStack.Screen name="Fighter" component={Fighter} />
+      <AppStack.Screen name="InviteAFan" component={InviteAFan} />
+      <AppStack.Screen name="EventFights" component={EventFights} />
+      <AppStack.Screen name="Comments" component={Comments} />
+      <AppStack.Screen name="ReportComment" component={ReportComment} />
+      <AppStack.Screen name="ThanksForReporting" component={ThanksForReporting} />
+      <AppStack.Screen name="Finances" component={Finances} />
+      <AppStack.Screen name="ProposeAFight" component={ProposeAFight} />
+      <AppStack.Screen name="LegalInformation" component={LegalInformation} />
+      <AppStack.Screen name="SettingsPrivacyPolicy" component={SettingsPrivacyPolicy} />
+      <AppStack.Screen name="SettingsTermsOfUse" component={SettingsTermsOfUse} />
+      <AppStack.Screen name="SettingsSubscriptionInformation" component={SettingsSubscriptionInformation} />
+      <AppStack.Screen name="PaymentMethodAdded" component={PaymentMethodAdded} />
+      <AppStack.Screen name="Fans4Profile" component={Fans4Profile} />
+      <AppStack.Screen name="FighterRecord" component={FighterRecord} />
+      <AppStack.Screen name="SearchFighters" component={SearchFighters} />
+      <AppStack.Screen name="Chat" component={Chat} />
+      <AppStack.Screen name="ChatsList" component={ChatsList} />
+      <AppStack.Screen name="NewChat" component={NewChat} />
+      <AppStack.Screen name="LikesList" component={LikesList} />
+      <AppStack.Screen name="FightWasSentToReview" component={FightWasSentToReview} />
+      <AppStack.Screen name="EditPost" component={EditPost} />
+      <AppStack.Screen name="FighterVoting" component={FighterVoting} />
+      <AppStack.Screen name="ChangePassword" component={ChangePassword} />
+    </AppStack.Navigator>
   );
 }
 
