@@ -83,12 +83,13 @@ export const fillRegistrationForm = ({
 };
 
 export const updateUserInfo = ({
-  about, birthdate, fullName, userName, gender, isIntroVideo,
+  about, birthdate, firstName, lastName, userName, gender, isIntroVideo,
 }) => apiClient
   .put('users', {
     ...((about || about === '') && { about }),
     ...(birthdate && { birthdate }),
-    ...(fullName && { fullName }),
+    ...(firstName && { firstName }),
+    ...(lastName && { lastName }),
     ...(userName && { userName }),
     ...(gender && { gender }),
     ...(typeof isIntroVideo === 'boolean' && { isIntroVideo }),

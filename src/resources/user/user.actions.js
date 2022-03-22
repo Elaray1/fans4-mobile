@@ -157,10 +157,10 @@ export const fillRegistrationForm = ({
 };
 
 export const updateUserInfo = ({
-  about, birthdate, fullName, userName, gender,
+  about, birthdate, firstName, lastName, userName, gender,
 }) => async (dispatch) => {
   const user = await api.updateUserInfo({
-    about, birthdate, fullName, userName, gender,
+    about, birthdate, firstName, lastName, userName, gender,
   });
   dispatch({ type: SET_USER_DATA, user });
 };
