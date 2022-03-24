@@ -54,7 +54,7 @@ export default StyleSheet.create({
   updatedTermsWarning: {
     marginLeft: 16,
     color: colors.white,
-    fontWeight: fonts.weight.medium,
+    fontWeight: '400',
     fontSize: fonts.size.small,
     flexShrink: 1,
   },

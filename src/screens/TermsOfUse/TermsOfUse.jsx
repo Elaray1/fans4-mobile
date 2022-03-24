@@ -10,7 +10,7 @@ import colors from 'themes/colors';
 import Button from 'components/Button';
 import Text from 'components/Text';
 
-import ErrorIcon from 'assets/icons/error.svg';
+import ErrorIcon from 'assets/icons/error-white.svg';
 
 import { USER_TYPES, USER_STATUSES } from 'resources/user/user.constants';
 import * as userSelectors from 'resources/user/user.selectors';
@@ -69,7 +69,7 @@ function TermsOfUse() {
 
     navigation.reset({
       index: 0,
-      routes: [{ name: nextScreen }],
+      routes: [{ name: 'AppStack', params: { screen: nextScreen } }],
     });
   }, [isFan, navigation, showFailure, isOnboardingCompleted, userStatus]);
 
