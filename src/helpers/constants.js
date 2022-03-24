@@ -24,6 +24,7 @@ export const PUSH_NOTIFICATION_TYPES = {
   NEW_POST: 'new_post',
   NEW_MESSAGE: 'new_message',
   LIVE_EVENT_STARTED: 'live_event_started',
+  BEFORE_LIVE_EVENT: 'before_live_event',
 };
 
 export const FANS4_ACCOUNT = {

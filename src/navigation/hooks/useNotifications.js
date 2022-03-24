@@ -88,6 +88,11 @@ const pushNotificationHandlersByType = {
 
     rootNavigation.push('EventFights', { event: updatedEvent, isOpenStreamModal: true });
   },
+  [PUSH_NOTIFICATION_TYPES.BEFORE_LIVE_EVENT]: ({ event }) => {
+    const parsedEvent = JSON.parse(event);
+
+    rootNavigation.push('EventFights', { event: parsedEvent, isOpenSubscribeModal: true });
+  },
   [PUSH_NOTIFICATION_TYPES.NEW_MESSAGE]: ({ chat, userId }) => {
     const parsedChat = JSON.parse(chat);
 

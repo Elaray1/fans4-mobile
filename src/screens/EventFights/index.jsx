@@ -51,7 +51,7 @@ function EventFights({ route }) {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const { event: prefetchedEvent, isNeedToFetchEvent, isOpenStreamModal } = route?.params;
+  const { event: prefetchedEvent, isNeedToFetchEvent, isOpenStreamModal, isOpenSubscribeModal } = route?.params;
   const [event, setEvent] = useState(prefetchedEvent);
 
   const userType = useSelector(userSelectors.getUserType);
@@ -86,6 +86,7 @@ function EventFights({ route }) {
   const liveStreamAndroidModalRef = useRef();
 
   const [isOpenStreamModalNeeded, setIsOpenStreamModalNeeded] = useState(isOpenStreamModal);
+  const [isOpenSubscribeModalNeeded, setIsOpenSubscribeModalNeeded] = useState(isOpenSubscribeModal);
   const [isFullScreenLoader, setIsFullScreenLoader] = useState(false);
 
   const showSubscriptionAlert = useCallback(() => {
@@ -116,6 +117,13 @@ function EventFights({ route }) {
 
     liveStreamAndroidModalRef.current.show();
   }, []);
+
+  useEffect(() => {
+    if (isOpenSubscribeModalNeeded && !isPaidSubscription && isFan) {
+      showSubscriptionAlert();
+      setIsOpenSubscribeModalNeeded(false);
+    }
+  }, [isFan, isOpenSubscribeModalNeeded, isPaidSubscription, showSubscriptionAlert]);
 
   useDidUpdate(() => {
     if (isPaidSubscription && Platform.OS === 'ios') {
@@ -433,6 +441,7 @@ EventFights.propTypes = {
       event: PropTypes.shape().isRequired,
       isNeedToFetchEvent: PropTypes.bool,
       isOpenStreamModal: PropTypes.bool,
+      isOpenSubscribeModal: PropTypes.bool,
     }),
   }).isRequired,
 };
