@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
 import { SafeAreaView, View, ActivityIndicator, TouchableOpacity, Platform, Modal, Alert } from 'react-native';
 import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
@@ -178,8 +178,22 @@ function EventFights({ route }) {
     return <Loader />;
   };
 
+  const eventOrderedFights = useMemo(() => {
+    const ordered = [];
+
+    if (!fights || !fights.length) {
+      return ordered;
+    }
+
+    event?.fights?.forEach((f) => {
+      ordered.push(fights.find(ff => ff._id === f._id));
+    });
+
+    return ordered;
+  }, [fights, event?.fights]);
+
   const renderItem = ({ item }) => {
-    const indexOfFightWithoutResults = fights.map(f => f.results || 0).indexOf(0);
+    const indexOfFightWithoutResults = eventOrderedFights.map(f => f.results || 0).indexOf(0);
 
     const isStayTunedShown = item._id === fights[indexOfFightWithoutResults]?._id;
 
@@ -385,9 +399,9 @@ function EventFights({ route }) {
 
           {isLoading && <Loader />}
 
-          {!isLoading && !!fights.length && (
+          {!isLoading && !!eventOrderedFights.length && (
             <FlatList
-              data={fights}
+              data={eventOrderedFights}
               renderItem={renderItem}
               keyExtractor={keyExtractor}
               onEndReachedThreshold={0.3}
@@ -400,7 +414,7 @@ function EventFights({ route }) {
           )}
 
           {!isLoading && event.status !== EVENT_STATUSES.CANCELLED
-          && event.status !== EVENT_STATUSES.PAST && !fights.length && (
+          && event.status !== EVENT_STATUSES.PAST && !eventOrderedFights.length && (
             <EmptyView
               isFan={isFan}
               isRefreshing={isRefreshing}
