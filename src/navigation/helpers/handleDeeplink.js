@@ -10,6 +10,7 @@ export default ({ url, showFailure, userId: currentUserId, t }) => {
     const userType = parsedUrl.searchParams.get('userType');
 
     if (currentUserId && currentUserId !== userId) {
+      showFailure(t('handleDeepLink.changeAccount'));
       return false;
     }
 
