@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { SafeAreaView, ActivityIndicator, StatusBar, View, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -36,14 +36,22 @@ function TermsOfUse() {
   const isOnboardingCompleted = useSelector(userSelectors.getIsOnboardingCompleted);
   const userStatus = useSelector(userSelectors.getUserStatus);
 
+  const [isLoading, setIsLoading] = useState();
+
   const isFan = userType === USER_TYPES.FAN;
 
   const onAccept = useCallback(async () => {
+    setIsLoading(true);
+
     try {
       await userApi.acceptTermsOfUse();
     } catch (error) {
+      console.error(error);
       showFailure();
     }
+
+    setIsLoading(false);
+
 
     if (!isFan) {
       analyticsService.logEvent({
@@ -91,7 +99,7 @@ function TermsOfUse() {
           state: {
             routes: [{
               name: 'SignIn',
-              params: { userType: USER_TYPES.FAN },
+              params: { userType: isFan ? USER_TYPES.FAN : USER_TYPES.FIGHTER },
             }],
           },
         }],
@@ -102,7 +110,7 @@ function TermsOfUse() {
       { text: t('logOutAlert.cancel') },
       { text: t('logOutAlert.yes'), onPress: logOutAndNavigate },
     ]);
-  }, [dispatch, navigation, t]);
+  }, [dispatch, navigation, t, isFan]);
 
   const renderLoading = () => (
     <View style={styles.loadingView}>
@@ -114,13 +122,15 @@ function TermsOfUse() {
     <SafeAreaView style={styles.screen}>
       <StatusBar barStyle="light-content" backgroundColor={colors.main} />
 
+      {isOnboardingCompleted && (
+        <View style={styles.updatedTermsWarningContainer}>
+          <ErrorIcon />
+          <Text style={styles.updatedTermsWarning}>{t('TermsOfUse.updatedTermsWarning')}</Text>
+        </View>
+      )}
+
       <View style={styles.content}>
-        {isOnboardingCompleted && (
-          <View style={styles.updatedTermsWarningContainer}>
-            <ErrorIcon />
-            <Text style={styles.updatedTermsWarning}>{t('TermsOfUse.updatedTermsWarning')}</Text>
-          </View>
-        )}
+
 
         <WebView
           style={styles.webview}
@@ -133,6 +143,7 @@ function TermsOfUse() {
           title={t('TermsOfUse.buttonText')}
           onPress={onAccept}
           style={styles.button}
+          isLoading={isLoading}
         />
 
         <Button
