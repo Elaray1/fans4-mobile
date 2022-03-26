@@ -177,7 +177,11 @@ const ProposeAFight = ({ route }) => {
                     </Text>
                   </View>
                 )
-                : <View style={styles.fighterPicturePlaceholder} />
+                : (
+                  <TouchableOpacity onPress={setStepTwo}>
+                    <View style={styles.fighterPicturePlaceholder} />
+                  </TouchableOpacity>
+                )
               }
             </View>
           </View>

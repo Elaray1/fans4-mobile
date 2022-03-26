@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Platform, Alert } from 'react-native';
+import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
+import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
+
+import * as userSelectors from 'resources/user/user.selectors';
 
 import RadioButtonIcon from 'assets/icons/radio-button';
 import RadioButtonSelectedIcon from 'assets/icons/radio-button-selected';
+import LockIcon from 'assets/icons/lock.svg';
 
 import Text from 'components/Text';
 import StatusBadge from 'components/StatusBadge';
@@ -20,6 +26,12 @@ const Fighter = ({
   setFighter,
   firstFighterWeightClasses,
 }) => {
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+
+  const userSubscriptions = useSelector(userSelectors.getSupportedFighters);
+  const isSubscribed = userSubscriptions.find(f => f._id === fighter._id);
+
   let reason = null;
 
   if (firstFighterWeightClasses
@@ -36,16 +48,45 @@ const Fighter = ({
     reason = 'status';
   }
 
+  if (!isSubscribed) {
+    reason = 'noSubscription';
+  }
+
   const isDisabled = Boolean(reason);
 
   const record = fighter.role.fighterType === FIGHTER_TYPES.PRO
     ? fighter.role.profile.recordPro : fighter.role.profile.record;
 
+  const selectFighter = useCallback(() => {
+    if (!isSubscribed) {
+      const alertOptions = [
+        { text: t('BecomeFanAlert.ok') },
+      ];
+
+      if (Platform.OS === 'ios') {
+        alertOptions.push({
+          text: t('BecomeFanAlert.chooseFighter'),
+          onPress: () => navigation.navigate('SearchFighters'),
+        });
+      }
+
+      Alert.alert(
+        t('BecomeFanVotingAlert.title'),
+        t('BecomeFanVotingAlert.proposeFightDescription'),
+        alertOptions,
+      );
+
+      return;
+    }
+
+    setFighter(fighter);
+  }, [isSubscribed, fighter, setFighter, t, navigation]);
+
   return (
     <TouchableOpacity
       style={[styles.container, isSelected && styles.selected]}
-      onPress={() => setFighter(fighter)}
-      disabled={isDisabled}
+      onPress={selectFighter}
+      disabled={isDisabled && reason !== 'noSubscription'}
     >
       <View>
         <FastImage
@@ -96,6 +137,8 @@ const Fighter = ({
           }
         </>
       )}
+
+      {reason === 'noSubscription' && <LockIcon />}
     </TouchableOpacity>
   );
 };

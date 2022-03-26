@@ -647,9 +647,6 @@
     "noFights": "No fights, yet",
     "vote": "Vote",
     "youVoted": "You voted",
-    "ok": "OK",
-    "subscription": "Subscription",
-    "youHaveToBeSubscribed": "To propose a fight you have to be subscribed to a Fighter.",
     "created": "Fight was sent to admin for review",
     "voted": "Fight already created, we saved your vote",
     "pending": "Fight already is in admin review",
@@ -836,6 +833,12 @@
     "title": "Become a Fan!",
     "liveStreamDescription": "To watch this live-stream, you have to be subscribed to a Fighter.",
     "finishedStreamDescription": "To watch this event you have to be subscribed to a Fighter.",
+    "ok": "OK",
+    "chooseFighter": "Choose Fighter"
+  },
+  "BecomeFanVotingAlert": {
+    "title": "Become a Fan!",
+    "proposeFightDescription": "To propose a fight you have to be subscribed to a Fighter.",
     "ok": "OK",
     "chooseFighter": "Choose Fighter"
   },
