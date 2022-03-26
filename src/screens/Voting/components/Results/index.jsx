@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import {
-  View, SafeAreaView, ScrollView, ActivityIndicator, TouchableOpacity, Alert,
+  View, SafeAreaView, ScrollView, ActivityIndicator, TouchableOpacity, Alert, Platform,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -69,12 +69,21 @@ const Results = ({ onPullToRefresh }) => {
     if (userSubscriptions.length) {
       navigation.navigate('ProposeAFight');
     } else {
+      const alertOptions = [
+        { text: t('BecomeFanAlert.ok') },
+      ];
+
+      if (Platform.OS === 'ios') {
+        alertOptions.push({
+          text: t('BecomeFanAlert.chooseFighter'),
+          onPress: () => navigation.navigate('SearchFighters'),
+        });
+      }
+
       Alert.alert(
-        t('Voting.subscription'),
-        t('Voting.youHaveToBeSubscribed'),
-        [
-          { text: t('Voting.ok') },
-        ],
+        t('BecomeFanVotingAlert.title'),
+        t('BecomeFanVotingAlert.proposeFightDescription'),
+        alertOptions,
       );
     }
   }, [navigation, t, userSubscriptions?.length]);
