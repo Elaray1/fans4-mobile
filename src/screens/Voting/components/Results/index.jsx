@@ -118,6 +118,7 @@ const Results = ({ onPullToRefresh }) => {
           const pageMode = await onPullToRefresh();
 
           if (pageMode !== PAGE_MODES.RESULTS) {
+            setIsRefreshing(false);
             return;
           }
         }

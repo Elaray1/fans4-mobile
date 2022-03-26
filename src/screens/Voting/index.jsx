@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, SafeAreaView } from 'react-native';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -11,6 +12,7 @@ import useToast from 'hooks/useToast';
 
 import { USER_TYPES } from 'resources/user/user.constants';
 import colors from 'themes/colors';
+import Header from 'components/Header';
 
 import Voter from './components/Voter';
 import Results from './components/Results';
@@ -24,16 +26,20 @@ const PAGE_MODES = {
 
 function Voting({ route }) {
   const { showFailure } = useToast();
+  const { t } = useTranslation();
 
   const [loading, setLoading] = useState(true);
+
   const [mode, setMode] = useState(PAGE_MODES.RESULTS);
 
   const userType = useSelector(userSelectors.getUserType);
 
   const fight = route?.params?.fight;
 
-  const fetchFightsForVoting = useCallback(async () => {
-    setLoading(true);
+  const fetchFightsForVoting = useCallback(async ({ refreshing } = {}) => {
+    if (!refreshing) {
+      setLoading(true);
+    }
 
     if (fight) {
       let pageMode = userType === USER_TYPES.FIGHTER ? PAGE_MODES.RESULTS : PAGE_MODES.VOTER;
@@ -59,14 +65,18 @@ function Voting({ route }) {
       const fights = await fightApi.getFightsForVoting();
       if (fights.length > 0) {
         setMode(PAGE_MODES.VOTER);
+        setLoading(false);
+
+        return PAGE_MODES.VOTER;
       }
+
+      setLoading(false);
+      return PAGE_MODES.RESULTS;
     } catch (error) {
       console.error(error);
       showFailure();
-      return;
+      setLoading(false);
     }
-
-    setLoading(false);
   }, [showFailure, fight, userType]);
 
   useEffect(() => {
@@ -76,6 +86,10 @@ function Voting({ route }) {
 
     init();
   }, []);
+
+  const refresh = useCallback(() => {
+    return fetchFightsForVoting({ refreshing: true });
+  }, [fetchFightsForVoting]);
 
   const Loader = () => (
     <View style={styles.loader}>
@@ -88,7 +102,12 @@ function Voting({ route }) {
   }, []);
 
   if (loading) {
-    return <Loader />;
+    return (
+      <SafeAreaView style={styles.screen}>
+        <Header title={t('Voting.voting')} />
+        <Loader />
+      </SafeAreaView>
+    );
   }
 
   if (mode === PAGE_MODES.VOTER) {
@@ -101,7 +120,7 @@ function Voting({ route }) {
   }
 
   if (mode === PAGE_MODES.RESULTS) {
-    return <Results onPullToRefresh={fetchFightsForVoting} />;
+    return <Results onPullToRefresh={refresh} />;
   }
 }
 
