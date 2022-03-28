@@ -1,5 +1,5 @@
 import React, {
-  useState, useCallback, useEffect, useRef,
+  useState, useCallback, useEffect, useRef, useMemo,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -23,7 +23,6 @@ import Input from 'components/Input';
 import CustomRefreshControl from 'components/CustomRefreshControl';
 import Comment from 'components/Comment';
 
-import { emitter, EMITTER_EVENTS } from 'services/emitter.service';
 import useToast from 'hooks/useToast';
 
 import colors from 'themes/colors';
@@ -43,6 +42,7 @@ const keyboardVerticalOffset = Platform.OS === 'ios' ? 0 : 16;
 
 function Comments({ route }) {
   const inputRef = useRef();
+  const commentsListRef = useRef(null);
   const { t } = useTranslation();
   const { showFailure } = useToast();
   const navigation = useNavigation();
@@ -69,6 +69,7 @@ function Comments({ route }) {
   const [isFetchedFirstTime, setIsFetchedFirstTime] = useState(false);
 
   const [isInputFocused, setIsInputFocused] = useState(true);
+  const [height, setHeight] = useState(null);
 
   useEffect(() => {
     analyticsService.logEvent({
@@ -78,6 +79,14 @@ function Comments({ route }) {
       },
     });
   }, [postId]);
+
+  const [targetCommentId, setTargetCommentId] = useState(route?.params.commentId);
+  useEffect(() => {
+    setComments(cs => cs.map((c) => {
+      const areRepliesShown = c.replies?.some(r => r._id === targetCommentId);
+      return areRepliesShown ? { ...c, areRepliesShown } : c;
+    }));
+  }, [targetCommentId]);
 
   const fetchNewItems = useCallback(async ({ refresh } = {}) => {
     let fetchingPage = 1;
@@ -156,6 +165,65 @@ function Comments({ route }) {
     await fetchNewItems({ refresh: true });
   }, [fetchNewItems]);
 
+  const onReplyComment = useCallback((comment) => {
+    setReplyCommentId(comment._id);
+    setReplyCommentName(comment.author.fullName);
+    inputRef.current?.focus();
+  }, []);
+
+  const onShowMoreReplies = useCallback((originalCommentId) => {
+    setComments(
+      cs => cs.map(
+        c => (c._id === originalCommentId ? { ...c, areRepliesShown: true } : c),
+      ),
+    );
+  }, []);
+
+  const commentsToRender = useMemo(() => {
+    return comments.flatMap((comment) => {
+      if (comment.replies?.length > 0) {
+        return comment.areRepliesShown
+          ? [comment, ...comment.replies]
+          : [comment, comment.replies[0]];
+      }
+
+      return [comment];
+    }, []);
+  }, [comments]);
+
+  const scrollToComment = useCallback((id, callback) => {
+    const index = commentsToRender.findIndex(c => c._id === id);
+
+    if (index) {
+      commentsListRef.current.scrollToIndex({
+        index,
+        viewPosition: 0.5,
+        viewOffset: -(height + 30),
+      });
+      if (callback) {
+        callback();
+      }
+    }
+  }, [commentsToRender, height]);
+
+  useEffect(() => {
+    if (!targetCommentId) {
+      return;
+    }
+
+    async function init() {
+      const exists = commentsToRender.some(c => c._id === targetCommentId);
+
+      if (exists) {
+        scrollToComment(targetCommentId, () => setTargetCommentId(null));
+      } else {
+        await fetchNewItems();
+      }
+    }
+
+    init();
+  }, [commentsToRender, fetchNewItems, scrollToComment, targetCommentId]);
+
   const onCreateComment = useCallback(async () => {
     setIsPostButtonDisabled(true);
     try {
@@ -169,30 +237,25 @@ function Comments({ route }) {
       setReplyCommentId(null);
       setReplyCommentName(null);
       if (comment.originalComment) {
-        const newComments = comments.map((c) => {
-          if (c._id !== comment.originalComment._id) {
-            return c;
-          }
-
-          c.replies = (c.replies && c.replies.length) ? [...c.replies] : [];
-          c.replies.push(comment);
-
-          emitter.emit(EMITTER_EVENTS.NEW_REPLAY, comment);
-          return c;
-        });
-        setComments(newComments);
+        setComments(oldComments => oldComments.map((c) => {
+          return c._id === comment.originalComment._id
+            ? { ...c, replies: [...(c.replies || []), comment] }
+            : c;
+        }));
       } else {
-        setComments([comment, ...comments]);
+        setComments(oldComments => [comment, ...oldComments]);
       }
 
-      setPost({
-        ...post,
-        commentsCount: post.commentsCount + 1,
-      });
+      setPost(oldPost => ({
+        ...oldPost,
+        commentsCount: oldPost.commentsCount + 1,
+      }));
 
       if (onUpdateCommentsCount) {
         onUpdateCommentsCount(postId);
       }
+
+      setTargetCommentId(comment._id);
 
       if (userType === USER_TYPES.FAN) {
         analyticsService.logEvent({
@@ -206,7 +269,7 @@ function Comments({ route }) {
       showFailure();
     }
     setIsPostButtonDisabled(false);
-  }, [commentValue, postId, replyCommentId, post, onUpdateCommentsCount, userType, comments, showFailure]);
+  }, [commentValue, postId, replyCommentId, onUpdateCommentsCount, userType, showFailure]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -268,14 +331,24 @@ function Comments({ route }) {
 
   const keyExtractor = useCallback(item => item._id, []);
 
+  const commentsMap = useMemo(() => {
+    return comments.reduce((map, comment) => {
+      map[comment._id] = comment;
+      return map;
+    }, {});
+  }, [comments]);
+
+
   const renderItem = ({ item }) => {
-    const onReply = (i) => {
-      setReplyCommentId(i._id);
-      setReplyCommentName(i.author.fullName);
-      inputRef.current?.focus();
-    };
     return (
-      <Comment item={item} onDelete={onDeleteComment} onReply={onReply} />
+      <Comment
+        comment={item}
+        originalComment={commentsMap[item.originalComment?._id]}
+        onDelete={onDeleteComment}
+        onReply={onReplyComment}
+        onShowMoreReplies={onShowMoreReplies}
+        isTarget={item._id === targetCommentId}
+      />
     );
   };
 
@@ -296,7 +369,13 @@ function Comments({ route }) {
   );
 
   const renderHeader = (
-    <View style={styles.postContainer}>
+    <View
+      style={styles.postContainer}
+      onLayout={(event) => {
+        const { height: x } = event.nativeEvent.layout;
+        setHeight(x);
+      }}
+    >
       {!!post && (
         <Post
           _id={post._id}
@@ -336,7 +415,8 @@ function Comments({ route }) {
 
             {!!comments.length && (
               <FlatList
-                data={comments}
+                ref={commentsListRef}
+                data={commentsToRender}
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
                 onEndReachedThreshold={0.3}
@@ -347,6 +427,12 @@ function Comments({ route }) {
                 onRefresh={onRefresh}
                 refreshing={isRefreshing}
                 refreshControl={RefreshControl}
+                onScrollToIndexFailed={(info) => {
+                  const wait = new Promise(resolve => setTimeout(resolve, 500));
+                  wait.then(() => {
+                    commentsListRef.current?.scrollToIndex({ index: info.index, viewPosition: 0.5 });
+                  });
+                }}
               />
             )}
 
@@ -403,6 +489,7 @@ Comments.propTypes = {
       postId: PropTypes.string.isRequired,
       onUpdateCommentsCount: PropTypes.func,
       onGoBack: PropTypes.func,
+      commentId: PropTypes.string,
     }),
   }).isRequired,
 };

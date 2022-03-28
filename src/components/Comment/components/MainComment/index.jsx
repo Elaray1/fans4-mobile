@@ -4,7 +4,6 @@ import { View, TouchableOpacity, Animated } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import moment from 'moment';
 
 import * as userSelectors from 'resources/user/user.selectors';
 
@@ -29,6 +28,7 @@ function MainComment({
   data,
   onDelete,
   onReply,
+  isTarget,
 }) {
   const { showFailure, showSuccess } = useToast();
   const { t } = useTranslation();
@@ -46,10 +46,8 @@ function MainComment({
 
   const animation = useRef(new Animated.Value(0));
 
-  const [isNew, setIsNew] = useState(moment().diff(moment(data.createdOn), 's') < 1);
-
   useEffect(() => {
-    if (isNew) {
+    if (isTarget) {
       Animated.timing(animation.current, {
         toValue: 1,
         duration: 200,
@@ -62,14 +60,12 @@ function MainComment({
             toValue: 0,
             duration: 800,
             useNativeDriver: false,
-          }).start(() => {
-            setIsNew(false);
-          });
+          }).start();
         },
         3000,
       );
     }
-  }, [isNew]);
+  }, [isTarget]);
 
   const onChooseCommentAction = useCallback(() => {
     setIsActionsOpened(true);
@@ -205,11 +201,13 @@ MainComment.propTypes = {
   }).isRequired,
   onDelete: PropTypes.func,
   onReply: PropTypes.func,
+  isTarget: PropTypes.bool,
 };
 
 MainComment.defaultProps = {
   onDelete: () => null,
   onReply: () => null,
+  isTarget: false,
 };
 
 export default React.memo(MainComment);
