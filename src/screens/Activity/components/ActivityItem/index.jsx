@@ -44,8 +44,9 @@ function ActivityItem({ createdOn, type, data, title, showTime, isLast, isGroupp
 
   const onCommentPress = useCallback(() => {
     const postId = isGroupped ? data[0].post?._id : data.post?._id;
+    const commentId = isGroupped ? data[0].comment?._id : data.comment?._id;
 
-    navigation.navigate('Comments', { postId });
+    navigation.navigate('Comments', { postId, commentId });
   }, [data, navigation, isGroupped]);
 
   const onPostPress = useCallback(() => {
