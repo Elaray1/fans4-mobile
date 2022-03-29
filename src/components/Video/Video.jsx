@@ -196,12 +196,18 @@ const Video = React.forwardRef(({ source, width, height, posterSource, duration,
 
   const handleOnLoadEvent = useCallback(({ duration: videoDuration }) => {
     setWasReadyToPlay(true);
-    seekToMakeThumbnail(videoDuration);
+
+    if (!isLive) {
+      // it's needed for cases when there is no poster for video but we want show some preview
+      // so we rewind video a little in order to show some of first screens
+      // but in livestreaming case it can cause bug with black screen on ios
+      seekToMakeThumbnail(videoDuration);
+    }
 
     if (onReadyToPlay) {
       onReadyToPlay();
     }
-  }, [seekToMakeThumbnail, onReadyToPlay]);
+  }, [seekToMakeThumbnail, onReadyToPlay, isLive]);
 
   const [wasPlayableTimeReached, setWasPlayableTimeReachded] = useState(false);
 
