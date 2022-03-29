@@ -5,6 +5,7 @@ export const emitter = mitt();
 export const EMITTER_EVENTS = {
   NEW_REPLAY: 'new_replay',
   USER_TOGGLED_LIKE: 'user_toggled_like',
+  HIGHLIGHT_COMMENT: 'highlight_comment',
 };
 
 const eventValues = Object.values(EMITTER_EVENTS);

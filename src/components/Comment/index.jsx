@@ -9,7 +9,7 @@ import MainComment from './components/MainComment';
 
 import styles from './styles';
 
-const Comment = ({ comment, originalComment, onReply, onDelete, onShowMoreReplies, isTarget }) => {
+const Comment = ({ comment, originalComment, onReply, onDelete, onShowMoreReplies }) => {
   const { t } = useTranslation();
 
   const isReply = originalComment;
@@ -22,10 +22,9 @@ const Comment = ({ comment, originalComment, onReply, onDelete, onShowMoreReplie
   return (
     <View style={isReply && styles.repliesContainer}>
       <MainComment
-        data={comment}
+        comment={comment}
         onDelete={onDelete}
         onReply={() => onReply(comment)}
-        isTarget={isTarget}
       />
 
       {showButton && (
@@ -68,14 +67,12 @@ Comment.propTypes = {
   onDelete: PropTypes.func,
   onReply: PropTypes.func,
   onShowMoreReplies: PropTypes.func.isRequired,
-  isTarget: PropTypes.bool,
 };
 
 Comment.defaultProps = {
   originalComment: null,
   onDelete: () => null,
   onReply: () => null,
-  isTarget: false,
 };
 
 export default React.memo(Comment);

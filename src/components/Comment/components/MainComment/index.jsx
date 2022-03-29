@@ -5,8 +5,9 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 
-import * as userSelectors from 'resources/user/user.selectors';
+import { emitter, EMITTER_EVENTS } from 'services/emitter.service';
 
+import * as userSelectors from 'resources/user/user.selectors';
 import * as commentApi from 'resources/comment/comment.api';
 
 import EllipsisIcon from 'assets/icons/ellipsis';
@@ -25,29 +26,30 @@ import EditCommentModal from '../EditCommentModal';
 import styles from './styles';
 
 function MainComment({
-  data,
+  comment,
   onDelete,
   onReply,
-  isTarget,
 }) {
   const { showFailure, showSuccess } = useToast();
   const { t } = useTranslation();
   const navigation = useNavigation();
 
   const userId = useSelector(userSelectors.getUserId);
-  const isAuthor = data.author._id === userId;
+  const isAuthor = comment.author._id === userId;
 
   const commentRef = useRef(null);
 
   const [isActionsOpened, setIsActionsOpened] = useState(false);
-  const [likedUsersState, setLikedUsersState] = useState(data.likedUsers);
+  const [likedUsersState, setLikedUsersState] = useState(comment.likedUsers);
   const isLiked = likedUsersState.some(like => like._id === userId);
   const [isLikeDisabled, setIsLikeDisabled] = useState(false);
 
   const animation = useRef(new Animated.Value(0));
 
   useEffect(() => {
-    if (isTarget) {
+    const onHighlightComment = ({ commentId }) => {
+      if (comment._id !== commentId) return;
+
       Animated.timing(animation.current, {
         toValue: 1,
         duration: 200,
@@ -62,10 +64,14 @@ function MainComment({
             useNativeDriver: false,
           }).start();
         },
-        3000,
+        5000,
       );
-    }
-  }, [isTarget]);
+    };
+
+    emitter.on(EMITTER_EVENTS.HIGHLIGHT_COMMENT, onHighlightComment);
+
+    return () => emitter.off(EMITTER_EVENTS.HIGHLIGHT_COMMENT, onHighlightComment);
+  }, [comment._id]);
 
   const onChooseCommentAction = useCallback(() => {
     setIsActionsOpened(true);
@@ -78,35 +84,35 @@ function MainComment({
   const onDeleteComment = useCallback(async () => {
     setIsActionsOpened(false);
     try {
-      const comment = await commentApi.deleteComment(data._id);
+      const c = await commentApi.deleteComment(comment._id);
       showSuccess(t('Comment.commentDeleted'));
-      onDelete(comment);
+      onDelete(c);
     } catch (error) {
       showFailure();
     }
-  }, [data._id, onDelete, showFailure, showSuccess, t]);
+  }, [comment._id, onDelete, showFailure, showSuccess, t]);
 
   const onReportComment = useCallback(async () => {
     setIsActionsOpened(false);
-    navigation.navigate('ReportComment', { commentId: data._id, postId: data.post._id });
-  }, [navigation, data._id, data.post._id]);
+    navigation.navigate('ReportComment', { commentId: comment._id, postId: comment.post._id });
+  }, [navigation, comment._id, comment.post._id]);
 
   const onLikePress = useCallback(async () => {
     setIsLikeDisabled(true);
     try {
       const toggleLike = isLiked ? commentApi.removeLikeFromComment : commentApi.likeComment;
-      const { likedUsers } = await toggleLike(data._id);
+      const { likedUsers } = await toggleLike(comment._id);
 
       setLikedUsersState(likedUsers);
     } catch (error) {
       showFailure();
     }
     setIsLikeDisabled(false);
-  }, [isLiked, data._id, showFailure]);
+  }, [isLiked, comment._id, showFailure]);
 
   const onSeeLikes = useCallback(() => {
-    navigation.navigate('LikesList', { commentId: data._id, likedUsers: likedUsersState });
-  }, [data._id, likedUsersState, navigation]);
+    navigation.navigate('LikesList', { commentId: comment._id, likedUsers: likedUsersState });
+  }, [comment._id, likedUsersState, navigation]);
 
   const backgroundColor = animation.current.interpolate({
     inputRange: [0, 1],
@@ -121,15 +127,15 @@ function MainComment({
       }}
       ref={commentRef}
       renderToHardwareTextureAndroid
-      key={data._id}
+      key={comment._id}
     >
       <View
         style={[styles.commentLine, styles.firstLine]}
       >
         <View style={styles.fullNameContainer}>
-          <Text style={styles.fullNameText}>{data.targetComment?.authorName
-            ? `${data.author.fullName} ▸ ${data.targetComment?.authorName}`
-            : data.author.fullName}
+          <Text style={styles.fullNameText}>{comment.targetComment?.authorName
+            ? `${comment.author.fullName} ▸ ${comment.targetComment?.authorName}`
+            : comment.author.fullName}
           </Text>
         </View>
         <View>
@@ -148,11 +154,11 @@ function MainComment({
         </View>
       </View>
       <View>
-        <Text style={styles.commentText}>{data.text}</Text>
+        <Text style={styles.commentText}>{comment.text}</Text>
       </View>
       <View style={styles.commentLine}>
         <View style={styles.dateContainer}>
-          <Text style={[styles.secondaryText, styles.date]}>{formatTime(data.createdOn)}</Text>
+          <Text style={[styles.secondaryText, styles.date]}>{formatTime(comment.createdOn)}</Text>
           {!!likedUsersState.length
           && (
             <TouchableOpacity onPress={onSeeLikes}>
@@ -182,7 +188,7 @@ function MainComment({
 }
 
 MainComment.propTypes = {
-  data: PropTypes.shape({
+  comment: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
     author: PropTypes.shape({
@@ -201,13 +207,11 @@ MainComment.propTypes = {
   }).isRequired,
   onDelete: PropTypes.func,
   onReply: PropTypes.func,
-  isTarget: PropTypes.bool,
 };
 
 MainComment.defaultProps = {
   onDelete: () => null,
   onReply: () => null,
-  isTarget: false,
 };
 
 export default React.memo(MainComment);
