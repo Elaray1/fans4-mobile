@@ -178,7 +178,7 @@ const ProposeAFight = ({ route }) => {
                   </View>
                 )
                 : (
-                  <TouchableOpacity onPress={setStepTwo}>
+                  <TouchableOpacity disabled={!firstFighter} onPress={setStepTwo}>
                     <View style={styles.fighterPicturePlaceholder} />
                   </TouchableOpacity>
                 )
