@@ -631,7 +631,7 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 216;
+				CURRENT_PROJECT_VERSION = 217;
 				DEVELOPMENT_TEAM = TC6636PQ6N;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = (
@@ -721,7 +721,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.149;
+				MARKETING_VERSION = 1.8.150;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -770,7 +770,7 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 216;
+				CURRENT_PROJECT_VERSION = 217;
 				DEVELOPMENT_TEAM = TC6636PQ6N;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -861,7 +861,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.149;
+				MARKETING_VERSION = 1.8.150;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -886,7 +886,7 @@
 				CODE_SIGN_ENTITLEMENTS = fans4/fans4.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 216;
+				CURRENT_PROJECT_VERSION = 217;
 				DEVELOPMENT_TEAM = TC6636PQ6N;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = (
@@ -976,7 +976,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.149;
+				MARKETING_VERSION = 1.8.150;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
