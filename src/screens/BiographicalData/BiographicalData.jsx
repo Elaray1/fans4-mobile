@@ -161,6 +161,7 @@ function BiographicalData() {
             label={t('BiographicalData.lastName')}
             value={lastName}
             onChange={setLastName}
+            style={styles.inputWrapper}
           />
 
           <Input
