@@ -36,6 +36,7 @@ function EditPost({ route }) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isDiscardConfirmationModal, setIsDiscardConfirmationModal] = useState(false);
+  const [isGoBackDisabled, setIsGoBackDisabled] = useState(false);
 
   const {
     postId,
@@ -118,6 +119,7 @@ function EditPost({ route }) {
   }, [postText, navigation, showSuccess, showFailure, postId, t]);
 
   const onShowDiscardModal = useCallback(() => {
+    setIsGoBackDisabled(true);
     if (postText !== initialPostText) {
       setIsDiscardConfirmationModal(true);
     } else {
@@ -127,6 +129,7 @@ function EditPost({ route }) {
 
   const onContinueEditing = useCallback(() => {
     setIsDiscardConfirmationModal(false);
+    setIsGoBackDisabled(false);
   }, []);
 
   const onDiscardChanges = useCallback(() => {
@@ -189,6 +192,7 @@ function EditPost({ route }) {
           onLeftItemPress={onShowDiscardModal}
           onRightItemPress={onPressSave}
           rightItemDisabled={isSaveButtonDisabled}
+          leftItemDisabled={isGoBackDisabled}
           {...saveButtonProps}
         />
         <ScrollView
