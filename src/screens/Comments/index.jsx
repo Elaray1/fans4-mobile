@@ -14,6 +14,7 @@ import * as commentApi from 'resources/comment/comment.api';
 import * as postApi from 'resources/post/post.api';
 
 import analyticsService from 'services/analytics.service';
+import { emitter, EMITTER_EVENTS } from 'services/emitter.service';
 
 import FlatList from 'components/FlatList';
 import Header from 'components/Header';
@@ -40,6 +41,8 @@ const COMMENT_MAX_LEGHT = 160;
 const keyboardAvoidingViewBehavior = Platform.OS === 'ios' ? 'padding' : 'height';
 const keyboardVerticalOffset = Platform.OS === 'ios' ? 0 : 16;
 
+const sleep = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
+
 function Comments({ route }) {
   const inputRef = useRef();
   const commentsListRef = useRef(null);
@@ -51,6 +54,7 @@ function Comments({ route }) {
 
   const {
     postId,
+    commentId,
     onUpdateCommentsCount,
     onGoBack,
   } = route?.params;
@@ -63,6 +67,7 @@ function Comments({ route }) {
   const [replyCommentId, setReplyCommentId] = useState(null);
   const [replyCommentName, setReplyCommentName] = useState(null);
   const [isPostButtonDisabled, setIsPostButtonDisabled] = useState(false);
+  const [targetCommentId, setTargetCommentId] = useState(commentId);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -70,114 +75,6 @@ function Comments({ route }) {
 
   const [isInputFocused, setIsInputFocused] = useState(true);
   const [height, setHeight] = useState(null);
-
-  useEffect(() => {
-    analyticsService.logEvent({
-      name: analyticsService.events.FAN_OPENED_POST_COMMENTS,
-      data: {
-        postId,
-      },
-    });
-  }, [postId]);
-
-  const [targetCommentId, setTargetCommentId] = useState(route?.params.commentId);
-  useEffect(() => {
-    setComments(cs => cs.map((c) => {
-      const areRepliesShown = c.replies?.some(r => r._id === targetCommentId);
-      return areRepliesShown ? { ...c, areRepliesShown } : c;
-    }));
-  }, [targetCommentId]);
-
-  const fetchNewItems = useCallback(async ({ refresh } = {}) => {
-    let fetchingPage = 1;
-    let currentComments = [];
-
-    if (!refresh) {
-      fetchingPage = page;
-      currentComments = comments;
-    }
-
-    if (fetchingPage === 1 || currentComments.length < totalCount) {
-      try {
-        if (refresh) {
-          setIsRefreshing(true);
-          const [
-            {
-              comments: fetchedMyComments,
-            },
-            {
-              comments: fetchedOtherComments,
-              totalCount: fetchedTotalCount,
-            },
-            fetchedPost,
-          ] = await Promise.all([
-            commentApi.getPostComments({
-              postId,
-              createdBy: CREATED_BY.ME,
-              sortOption: SORT_OPTIONS.CREATED_ON_DESC,
-            }),
-            commentApi.getPostComments({
-              page: fetchingPage,
-              perPage: PER_PAGE_COUNT,
-              postId,
-              createdBy: CREATED_BY.OTHERS,
-              sortOption: SORT_OPTIONS.CREATED_ON_ASC,
-            }),
-            postApi.getPost(postId),
-          ]);
-          setTotalCount(fetchedTotalCount);
-          setComments([...fetchedMyComments, ...fetchedOtherComments]);
-          setPost(fetchedPost);
-        } else {
-          setIsLoading(true);
-
-          const {
-            comments: fetchedComments,
-            totalCount: fetchedTotalCount,
-          } = await commentApi.getPostComments({
-            page: fetchingPage,
-            perPage: PER_PAGE_COUNT,
-            postId,
-            createdBy: CREATED_BY.OTHERS,
-            sortOption: SORT_OPTIONS.CREATED_ON_ASC,
-          });
-          setTotalCount(fetchedTotalCount);
-          setComments([...currentComments, ...fetchedComments]);
-        }
-        setPage(fetchingPage + 1);
-      } catch (error) {
-        showFailure(t('Comments.couldntRefreshTheFeedPullToRefresh'));
-      }
-
-      if (!isFetchedFirstTime) {
-        setIsFetchedFirstTime(true);
-      }
-
-      if (refresh) {
-        setIsRefreshing(false);
-      } else {
-        setIsLoading(false);
-      }
-    }
-  }, [totalCount, page, comments, isFetchedFirstTime, postId, showFailure, t]);
-
-  const onRefresh = useCallback(async () => {
-    await fetchNewItems({ refresh: true });
-  }, [fetchNewItems]);
-
-  const onReplyComment = useCallback((comment) => {
-    setReplyCommentId(comment._id);
-    setReplyCommentName(comment.author.fullName);
-    inputRef.current?.focus();
-  }, []);
-
-  const onShowMoreReplies = useCallback((originalCommentId) => {
-    setComments(
-      cs => cs.map(
-        c => (c._id === originalCommentId ? { ...c, areRepliesShown: true } : c),
-      ),
-    );
-  }, []);
 
   const commentsToRender = useMemo(() => {
     return comments.flatMap((comment) => {
@@ -191,38 +88,128 @@ function Comments({ route }) {
     }, []);
   }, [comments]);
 
-  const scrollToComment = useCallback((id, callback) => {
-    const index = commentsToRender.findIndex(c => c._id === id);
+  useEffect(() => {
+    analyticsService.logEvent({
+      name: analyticsService.events.FAN_OPENED_POST_COMMENTS,
+      data: {
+        postId,
+      },
+    });
+  }, [postId]);
 
-    if (index) {
-      commentsListRef.current.scrollToIndex({
-        index,
-        viewPosition: 0.5,
-        viewOffset: -(height + 30),
-      });
-      if (callback) {
-        callback();
+  const refresh = useCallback(async () => {
+    try {
+      setIsRefreshing(true);
+
+      const [
+        fetchedPost,
+        {
+          comments: fetchedMyComments,
+        },
+        {
+          comments: fetchedOtherComments,
+          totalCount: fetchedTotalCount,
+        },
+      ] = await Promise.all([
+        postApi.getPost(postId),
+        commentApi.getPostComments({
+          postId,
+          createdBy: CREATED_BY.ME,
+          sortOption: SORT_OPTIONS.CREATED_ON_DESC,
+        }),
+        commentApi.getPostComments({
+          page: 1,
+          perPage: PER_PAGE_COUNT,
+          postId,
+          createdBy: CREATED_BY.OTHERS,
+          sortOption: SORT_OPTIONS.CREATED_ON_ASC,
+        }),
+        postApi.getPost(postId),
+      ]);
+      setPost(fetchedPost);
+      setComments([...fetchedMyComments, ...fetchedOtherComments]);
+      setTotalCount(fetchedTotalCount);
+
+      setIsFetchedFirstTime(true);
+      setPage(p => p + 1);
+    } catch (error) {
+      showFailure(t('Comments.couldntRefreshTheFeedPullToRefresh'));
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [postId, showFailure, t]);
+
+  const loadMoreComments = useCallback(async () => {
+    if (comments.length < totalCount) {
+      try {
+        setIsLoading(true);
+
+        const {
+          comments: fetchedComments,
+          totalCount: fetchedTotalCount,
+        } = await commentApi.getPostComments({
+          page,
+          perPage: PER_PAGE_COUNT,
+          postId,
+          createdBy: CREATED_BY.OTHERS,
+          sortOption: SORT_OPTIONS.CREATED_ON_ASC,
+        });
+        setTotalCount(fetchedTotalCount);
+        setComments(oldComments => [...oldComments, ...fetchedComments]);
+        setPage(p => p + 1);
+      } catch (error) {
+        showFailure(t('Comments.couldntRefreshTheFeedPullToRefresh'));
+      } finally {
+        setIsLoading(false);
       }
     }
-  }, [commentsToRender, height]);
+  }, [totalCount, page, comments, postId, showFailure, t]);
 
-  useEffect(() => {
+  const showReplies = useCallback((id) => {
+    setComments(cs => cs.map(c => (c._id === id ? { ...c, areRepliesShown: true } : c)));
+  }, []);
+
+  const focusTargetComment = useCallback(async () => {
     if (!targetCommentId) {
       return;
     }
 
-    async function init() {
-      const exists = commentsToRender.some(c => c._id === targetCommentId);
+    const targetIndex = commentsToRender.findIndex(c => c._id === targetCommentId);
+    if (targetIndex !== -1) {
+      commentsListRef.current.scrollToIndex({
+        index: targetIndex,
+        viewPosition: 0.5,
+        viewOffset: -(height + 30),
+      });
 
-      if (exists) {
-        scrollToComment(targetCommentId, () => setTargetCommentId(null));
-      } else {
-        await fetchNewItems();
+      emitter.emit(EMITTER_EVENTS.HIGHLIGHT_COMMENT, { commentId: targetCommentId });
+
+      setTargetCommentId(null);
+      return;
+    }
+
+    const originalComment = comments.find(c => c.replies?.some(r => r._id === targetCommentId));
+    if (originalComment) {
+      showReplies(originalComment._id);
+      return;
+    }
+
+    await loadMoreComments();
+  }, [comments, commentsToRender, height, loadMoreComments, showReplies, targetCommentId]);
+
+  const wait = useRef(Promise.resolve());
+  useEffect(() => {
+    async function init() {
+      if (!isFetchedFirstTime) {
+        await refresh();
+      }
+      if (targetCommentId) {
+        await focusTargetComment();
       }
     }
 
-    init();
-  }, [commentsToRender, fetchNewItems, scrollToComment, targetCommentId]);
+    wait.current = wait.current.then(init);
+  }, [isFetchedFirstTime, refresh, targetCommentId, focusTargetComment]);
 
   const onCreateComment = useCallback(async () => {
     setIsPostButtonDisabled(true);
@@ -271,32 +258,25 @@ function Comments({ route }) {
     setIsPostButtonDisabled(false);
   }, [commentValue, postId, replyCommentId, onUpdateCommentsCount, userType, showFailure]);
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      await fetchNewItems({ refresh: true });
-    };
-
-    fetchComments();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onDeleteComment = useCallback((deletedComment) => {
+    setComments(oldComments => oldComments
+      .filter(c => c._id !== deletedComment._id)
+      .map(c => (
+        c._id === deletedComment.originalComment?._id
+          ? { ...c, replies: c.replies.filter(r => r._id !== deletedComment._id) }
+          : c
+      )));
+    setPost(oldPost => ({
+      ...oldPost,
+      commentsCount: oldPost.commentsCount - 1,
+    }));
   }, []);
 
-  const onDeleteComment = useCallback((deletedComment) => {
-    const updatedComments = comments.filter((comment) => {
-      return comment._id !== deletedComment._id;
-    }).map((c) => {
-      if (c.replies.length) {
-        c.replies = c.replies.filter((r) => {
-          return r._id !== deletedComment._id;
-        });
-      }
-      return c;
-    });
-    setComments(updatedComments);
-    setPost({
-      ...post,
-      commentsCount: post.commentsCount - 1,
-    });
-  }, [comments, post]);
+  const onReplyComment = useCallback((comment) => {
+    setReplyCommentId(comment._id);
+    setReplyCommentName(comment.author.fullName);
+    inputRef.current?.focus();
+  }, []);
 
   const onInputFocus = useCallback(() => {
     setIsInputFocused(true);
@@ -346,8 +326,7 @@ function Comments({ route }) {
         originalComment={commentsMap[item.originalComment?._id]}
         onDelete={onDeleteComment}
         onReply={onReplyComment}
-        onShowMoreReplies={onShowMoreReplies}
-        isTarget={item._id === targetCommentId}
+        onShowMoreReplies={showReplies}
       />
     );
   };
@@ -364,7 +343,7 @@ function Comments({ route }) {
   const RefreshControl = (
     <CustomRefreshControl
       refreshing={isRefreshing}
-      onRefresh={onRefresh}
+      onRefresh={refresh}
     />
   );
 
@@ -420,17 +399,20 @@ function Comments({ route }) {
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
                 onEndReachedThreshold={0.3}
-                onEndReached={fetchNewItems}
+                onEndReached={loadMoreComments}
                 showsVerticalScrollIndicator={false}
                 ListFooterComponent={renderFooter}
                 ListHeaderComponent={renderHeader}
-                onRefresh={onRefresh}
+                onRefresh={refresh}
                 refreshing={isRefreshing}
                 refreshControl={RefreshControl}
                 onScrollToIndexFailed={(info) => {
-                  const wait = new Promise(resolve => setTimeout(resolve, 500));
-                  wait.then(() => {
+                  sleep().then(() => {
                     commentsListRef.current?.scrollToIndex({ index: info.index, viewPosition: 0.5 });
+                    const comment = commentsToRender[info.index];
+                    if (comment) {
+                      emitter.emit(EMITTER_EVENTS.HIGHLIGHT_COMMENT, { commentId: comment._id });
+                    }
                   });
                 }}
               />
