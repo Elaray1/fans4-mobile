@@ -171,6 +171,7 @@ const WelcomeForm = () => {
             label={t('WelcomeForm.lastName')}
             value={lastName}
             onChange={setLastName}
+            style={styles.inputWrapper}
           />
 
           <Input
