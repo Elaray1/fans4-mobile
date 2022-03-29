@@ -25,6 +25,7 @@ const Fighter = ({
   isSelected,
   setFighter,
   firstFighterWeightClasses,
+  isOpponent,
 }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -48,7 +49,7 @@ const Fighter = ({
     reason = 'status';
   }
 
-  if (!isSubscribed) {
+  if (!isSubscribed && !isOpponent) {
     reason = 'noSubscription';
   }
 
@@ -149,6 +150,7 @@ Fighter.propTypes = {
   isSelected: PropTypes.bool.isRequired,
   setFighter: PropTypes.func.isRequired,
   firstFighterWeightClasses: PropTypes.arrayOf(PropTypes.string),
+  isOpponent: PropTypes.bool.isRequired,
 };
 
 Fighter.defaultProps = {

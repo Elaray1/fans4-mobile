@@ -210,6 +210,7 @@ const ProposeAFight = ({ route }) => {
             <Fighter
               key={fighter._id}
               fighter={fighter}
+              isOpponent={!isStep1}
               isSelected={isStep1 ? fighter._id === firstFighter?._id : fighter._id === secondFighter?._id}
               setFighter={isStep1 ? setFirstFighter : setSecondFighter}
               firstFighterWeightClasses={isStep1 ? null : firstFighter?.role?.profile?.weightClasses}
