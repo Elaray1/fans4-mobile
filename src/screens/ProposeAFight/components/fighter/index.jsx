@@ -59,7 +59,7 @@ const Fighter = ({
     ? fighter.role.profile.recordPro : fighter.role.profile.record;
 
   const selectFighter = useCallback(() => {
-    if (!isSubscribed) {
+    if (!isSubscribed && !isOpponent) {
       const alertOptions = [
         { text: t('BecomeFanAlert.ok') },
       ];
